@@ -1,0 +1,2873 @@
+   @font-face {
+    font-family: Muli-Bold;
+    src: url('../../font/Muli-Bold.ttf');
+  }
+
+
+  @font-face {
+    font-family: Muli-ExtraLight;
+    src: url('../../font/Muli-ExtraLight.ttf');
+  }
+
+  @font-face {
+    font-family: Muli-Regular;
+    src: url('../../font/Muli-Regular.ttf');
+  }
+
+  @font-face {
+    font-family: Muli-Light;
+    src: url('../../font/Muli-Light.ttf');
+  } 
+ 
+  @font-face {
+    font-family: Muli;
+    src: url('../../font/Muli-Regular.ttf');
+  }
+  
+  .MuliLight{
+    font-family: Muli-Light;
+  }
+
+  .ExtraLight{
+    font-family: Muli-ExtraLight;
+  }
+  .Bold{
+    font-family: Muli-Bold !important; 
+  }
+ 
+  .Regular{
+    font-family: Muli-Regular;
+  }
+  
+
+  .Normal{
+    font: normal normal 300 16px/25px Muli;
+  }
+
+  .White_space_break{ 
+    white-space: break-spaces !important; 
+  }
+
+  .wordbreak_breakAll{
+    word-break: break-all !important;
+  }
+ 
+
+ body{
+    margin:0 !important;
+    font-family: Muli-Light !important; 
+    background-color: #ffffff !important; 
+    padding-right: 0px !important;
+    overflow: visible !important;
+} 
+ 
+
+.MuiTypography-root { 
+    font-family: Muli !important;
+}
+
+
+.MuiPaper-root.MuiMenu-paper.MuiPopover-paper.MuiPaper-elevation8.MuiPaper-rounded {
+    top: 77px !important;
+}
+
+
+
+/* Font size, Font weight , Font Family  */
+a   {
+    font-size : 16px !important; 
+    text-decoration: none;
+    color:#000;
+}  
+
+
+
+h1{
+    color:#000;
+    font-size:50px;
+    font-weight:bold;
+    margin: 0 0;
+    font-family: Muli-Bold;
+    
+}
+
+h2{
+   color:#000000;
+   font-size:35px;
+   letter-spacing: 0px; 
+   margin: 0 0;
+   font-family: Muli-Bold;
+}
+
+h3{
+   color:#000;
+   font-size:30px;
+   font-weight:bold;
+   margin: 0 0;
+}
+
+h4{
+   color:#000;
+   font-size:25px;
+   font-family: Muli-Bold;
+   margin: 0 0;
+}
+
+h5{
+   color:#000000;
+   font-size:20px;
+   letter-spacing: 0px; 
+   line-height: 30px;
+   margin: 0 0;
+}
+
+h6{  
+   font-size:18px; 
+   font-weight:bold;
+   margin: 0 0;
+}
+
+.White{
+    color: #fff;
+}
+.LightBlue{
+    color: #00E7FC;
+}
+
+.DarkBlue{
+    color: #02A6B5;
+}
+ 
+.Aquamarine{
+    color: #4FFEA3 !important;
+}
+
+.Darkgreen{
+    color: #329F39!important;
+}
+
+.Black{
+    color: black !important;
+}
+
+.LightBrown{
+    color:#737070
+}
+
+.hidden{
+    visibility: hidden;
+}
+
+.Gray{
+    color: #BBBBBB;
+}
+
+.BoxShadowNone{
+    box-shadow: none !important;
+}
+
+span{ 
+   font-size:14px;
+   letter-spacing: 0px;
+   font-family: Muli-Light;
+}
+
+.margin_0{
+    margin: 0 !important;
+}
+
+.Width_82{
+    width: 82% !important;
+}
+
+.Width_74 {
+    width: 74% !important;
+} 
+
+.Width_76{
+    width: 76% !important;
+}
+.Width_100{
+    width: 100px !important;
+}
+
+p{  
+   font-size : 14px; 
+   font-family: Muli-Light;
+   line-height: inherit; 
+}
+
+label{
+    font-size: 16px; 
+    color: #000000; 
+    display: block;
+    line-height: initial;
+} 
+
+select:focus {
+    outline: none;
+}
+
+.FloatRight{
+    float: right;
+}
+
+.FloatLeft{
+    float: left;
+}
+
+.DisplayNone{
+    display: none !important;
+}
+
+.DisplayBlock{
+    display: block !important;
+}
+
+.DisplayFlex{
+    display: flex !important;
+}
+
+.DisplayInline{display:inline !important}
+
+.DisplayTable{
+    display: table !important;
+}
+
+.Positionrelative{
+    position: relative !important;
+}
+
+
+.flexEnd{
+    align-items: flex-end;
+}
+
+
+.FSize_12{
+font-size:12px !important;
+}
+
+
+.FSize_13{
+font-size:13px;
+}
+
+.FSize_14{
+font-size:14px;
+}
+
+.FSize_15{
+font-size:15px;
+} 
+
+.FSize_16{
+    font-size:16px !important;
+}
+  
+ 
+.light{
+    font-weight: 300; 
+}
+
+
+/* End Font size, Font weight , Font Family  */
+
+
+/* Text  Color ClassName */
+
+.TextBrownColor{
+    color: #6E6C6C;
+}
+
+.TextNeonColor{
+    color: #4FFEA3;
+}
+.TextWhite{
+    color:#fff !important;
+} 
+.TextCeruleanColor{
+    color: #4FE7FC;
+}
+
+.TextGrayColor{
+    color: #F5F5F7;
+}
+
+.TextDrakGrayColor{
+    color: #A6A6A7;
+}
+
+.TextBlueColor{
+    color: #00E7FC;
+}
+
+.Text_center{
+    text-align: center;
+}
+
+.Text_left{
+    text-align: left;
+}
+
+.Text_right{
+    text-align: right;
+}
+
+.Flex_auto{
+    flex: auto;
+}
+
+.lineheight_40{
+    line-height: 40px; 
+}
+   
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #B8B6B6 !important;
+    font-size: 14px;
+    opacity: 1; 
+  }
+ 
+  ul{
+      list-style: none !important;
+  }
+
+/* End Text Color ClassName */
+
+
+/* Background  Color ClassName */
+
+.BgWhiteColor{
+    background-color: #fff !important;
+}
+.BgBlueColor{
+    background-color: #00E7FC;
+}
+
+.BgCeruleanColor{
+    background-color: #4FE7FC;
+}
+
+.BgNeonColor{
+    background-color: #4FFEA3 ;
+}
+
+.BgGrayColor{
+    background-color: #F5F5F7;
+}
+
+.BgBlackColor{
+    background-color: #0B0B0B;
+}
+
+.BgGradientColor{
+    background-color:  transparent linear-gradient(10deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
+}
+
+    .BgDarkGreen{
+        background-color: #00A66C;
+    }
+    .BgLightGreen{
+        background-color: #2FBE46;
+    }
+    .BgRed{
+        background-color: #F03800;
+    }
+    .BgYellow{
+        background-color: #DCB605;
+    }
+    .BgBlue{
+        background-color: #4086F4;
+    }
+    .BgDarkBlue{
+        background-color: #4175DF;
+    }
+ 
+  
+  .Blog:nth-child(6n+1) .Bgcolordynamic{
+    background-color: #00A66C;
+  } 
+
+  .Blog:nth-child(6n+2) .Bgcolordynamic{
+    background-color: #2FBE46; 
+  }  
+
+  .Blog:nth-child(6n+3) .Bgcolordynamic{
+    background-color: #F03800;
+  }
+
+  .Blog:nth-child(6n+4) .Bgcolordynamic{
+    background-color: #DCB605;
+  } 
+
+  .Blog:nth-child(6n+5) .Bgcolordynamic{
+    background-color: #4086F4;
+  }  
+
+  .Blog:nth-child(6n+6) .Bgcolordynamic{
+    background-color: #4175DF;
+  }
+
+  
+/* End Background Color ClassName */
+
+.Border_radius_50{
+    border-radius: 50% !important;
+}
+button span {
+    font-family: 'Muli-Regular' !important;
+}
+
+button.disabled span {
+    font-family: 'Muli-Light' !important;
+}
+
+.LikeColor{
+    color: #4FFEA3 !important;
+}
+
+.Border-1{border: 1px solid #00000033;}
+
+/* Button Style css */
+
+.BtnStyle_1{               
+    color:#041D1F !important; 
+    background-color:#00E7FC !important;
+    border-radius: 50px !important;
+    /* padding:1% 6% !important; */
+    font-size:14px !important; 
+    border: 1px solid #00E7FC !important;  
+    box-shadow: none !important;
+    width: 160px;
+    height: 50px;
+    text-align: center;
+    text-transform: none;
+    outline: none;
+  } 
+ 
+
+.BtnStyle_2{               
+    color:#041D1F !important; 
+    background-color:#4FE7FC !important;
+    border-radius: 50px !important;
+    /* padding:1% 6% !important; */
+    font-size:14px !important; 
+    border: 1px solid #4FE7FC !important;  
+    box-shadow: none !important;
+    width: 160px;
+    height: 50px;
+    text-align: center;
+    text-transform: none !important;
+    outline: none;
+  } 
+
+
+.BtnStyle_3{               
+    color: #041D1F !important;
+    background-color: #4FFEA3 !important;
+    border-radius: 25px !important;
+    /* padding: 10px; */
+    font-size:14px !important; 
+    border: 1px solid #4FFEA3 !important;  
+    box-shadow: none !important;
+    width: 160px;
+    height: 50px;
+    text-align: center;
+    text-transform: none !important;
+    outline: none;
+  } 
+ 
+  
+
+.BtnStyle_4{               
+    color:#041D1F !important; 
+    background-color:#F5F5F7 !important; 
+    border-radius: 50px !important;
+    /* padding: 10px; */
+    font-size:14px !important; 
+    border: 1px solid #F5F5F7 !important;  
+    box-shadow: none !important;    
+    width: 160px;
+    height: 50px;
+    text-align: center;
+    text-transform: none !important;
+    outline: none;
+  }  
+
+.BtnStyle_5{               
+    color:#041D1F !important; 
+    background: transparent linear-gradient(31deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
+    border-radius: 50px !important;
+    /* padding: 12px 20px; */
+    font-size:14px !important;
+    border: 1px solid #38f7bd !important;
+    box-shadow: none !important;
+    width: 160px;
+    height: 50px;
+    text-align: center;
+    text-transform: none !important;
+    outline: none;
+  } 
+ 
+
+  .BtnStyle_1:hover , .BtnStyle_2:hover, .BtnStyle_4:hover, .BtnStyle_5:hover ,.BtnStyle_6:hover, .BtnStyle_7:hover {
+    background: transparent !important;
+    border: 1px solid #4ffea3 !important;
+}
+
+
+  .BtnStyle_6{               
+    color:#041D1F !important; 
+    background-color:#fff !important; 
+    border-radius: 50px !important;
+    /* padding: 12px 20px; */
+    font-size:14px !important; 
+    border: 1px solid #fff !important;
+    box-shadow: none !important;
+    width: 160px;
+    height: 50px;
+    text-align: center;
+    text-transform: none !important; 
+    outline: none;
+  } 
+
+  .BtnStyle_6:hover {
+    background: transparent !important;
+    border: 1px solid #041D1F !important;
+}
+
+  .BtnStyle_7{                
+    background-color: #f5f5f700 !important;
+    border-radius: 50px !important; 
+    font-size:14px !important;
+    border: 1px solid #4b42423d !important;
+    color: #00E7FC !important;
+    box-shadow: none !important;
+    width: 160px;
+    height: 50px;
+    text-align: center;
+    text-transform: none !important; 
+    outline: none;
+  } 
+  
+
+  .BtnStyle_7:hover {
+    background: transparent !important;
+    border: 1px solid #00E7FC !important;
+}
+
+
+.BtnStyle_8{                  
+    color: #041D1F !important;
+    background-color: #F5F5F7 !important;
+    border-radius: 50px !important; 
+    font-size: 14px !important;
+    border: 1px solid #00000033 !important; 
+    box-shadow: none !important;
+    width: 160px;
+    height: 50px;
+    text-align: center;
+    text-transform: none !important;
+  } 
+ 
+  .BtnStyle_9{
+    width: 110px !important;
+    height: 40px !important;
+}
+
+
+.BtnStyle_10{
+    background: #F5F5F7 0% 0% no-repeat padding-box !important;
+    border: 1px solid #00000033 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    width: 54px;
+    height: 35px;
+}
+
+.BtnStyle_11{
+    color: #041D1F !important;    
+    background: transparent linear-gradient(121deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
+    border-radius: 50px !important; 
+    font-size: 16px !important;
+    font-weight: bold !important;
+    border: 1px solid #38f7bd !important;
+    box-shadow: none !important;
+    width: 250px;
+    height: 45px;   
+    text-align: center;
+    text-transform: none !important;
+    outline: none;
+}
+
+.LoadMore{    
+    width: auto !important;
+    height: auto !important;
+    padding: 15px 70px !important;} 
+
+.LoaderBtn{
+    color:#ffffff !important; 
+    background: transparent linear-gradient(31deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
+    border-radius: 50px !important;
+    /* padding: 12px 20px; */
+    font-size:14px !important;
+    border: 1px solid #38f7bd !important;
+    box-shadow: none !important;
+    width: 160px;
+    height: 50px;
+    text-align: center;
+    text-transform: none !important;
+    outline: none;
+}
+
+.Btn_12{
+    width: 90px !important;
+    height: 35px !important; 
+}
+
+section.Cart .FormGroup img{
+    padding: 0px 20px 0px 0px !important;
+    top: 10px;
+    position: relative;
+}
+
+.lineheight_24{
+    line-height: 26px;
+}
+
+
+.padding_0{
+    padding: 0px !important;
+}
+
+.padding_5{ padding: 5px !important;}
+.paddingleft_5{padding-left: 5px !important;}
+.paddingright_5{padding-right: 5px !important;}
+.paddingtop_5{padding-top: 5px !important;}
+.paddingbottom_5{padding-bottom: 5px !important;}
+
+.padding_10{ padding: 10px !important;}
+.paddingleft_10{padding-left: 10px !important;}
+.paddingright_10{padding-right: 10px !important;}
+.paddingtop_10{padding-top: 10px !important;}
+.paddingbottom_10{padding-bottom: 10px !important;}
+
+.padding_30{ padding: 30px !important;}
+.paddingleft_30{padding-left: 30px !important;}
+.paddingright_30{padding-right: 30px !important;}
+.paddingtop_30{padding-top: 30px !important;}
+.paddingbottom_30{padding-bottom: 30px !important;}
+
+
+ .padding{ padding: 15px !important;}
+ .paddingleft{padding-left: 15px !important;}
+ .paddingright{padding-right: 15px !important;}
+ .paddingtop{padding-top: 15px !important;}
+ .paddingbottom{padding-bottom: 15px !important;} 
+
+ .paddingleft_20{padding-left: 20px !important;}
+ .paddingright_20{padding-right: 20px !important;}
+ .paddingtop_20{padding-top: 20px !important;}
+ .paddingbottom_20{padding-bottom: 20px !important;}
+
+ .marginright_9{margin-right: 9px !important;}
+
+ .margin{ margin: 15px !important;}
+ .marginleft{margin-left: 15px !important;}
+ .marginright{margin-right: 15px !important;}
+ .margintop{margin-top: 15px !important;}
+ .marginbottom{margin-bottom: 15px !important;}
+
+ .marginleft_20{margin-left: 20px !important;}
+ .marginright_20{margin-right: 20px !important;}
+ .margintop_20{margin-top: 20px !important;}
+ .marginbottom_20{margin-bottom: 20px !important;}
+
+ .margin_30{ margin: 30px !important;}
+ .marginleft_30{margin-left: 30px !important;}
+ .marginright_30{margin-right: 30px !important;}
+ .margintop_30{margin-top: 30px !important;}
+ .marginbottom_30{margin-bottom: 30px !important;}
+ 
+
+ .Applieddronerslist{
+     padding: 40px 0 20px 0;
+     margin: 0 30px;
+ }
+
+ 
+  
+  .icon {
+    padding: 10px;
+    background: dodgerblue;
+    color: white;
+    min-width: 50px;
+    text-align: center;
+  }
+  
+
+  /* End Button Style css */
+ 
+
+  /* input form  */
+  input.PhoneInputInput {
+    flex: 1 1;
+    min-width: 0;
+    background: #F5F5F7 0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+    height: 40px;
+    padding: 5px;
+    display: block;
+    margin: 15px 0px;
+}
+  
+
+  .FormControl{
+    background: #F5F5F7 0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    border: 1px solid #F5F5F7;
+    width: 79%;
+    padding: 20px 0 20px 20px;
+    display: block;  
+    height: 0;
+    margin: 15px 0px;
+  }
+
+  .Link_Form{
+    background: #F5F5F7 0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    border: 1px solid #F5F5F7;
+    width: 79%;
+    padding: 20px 0px 20px 20px;
+    display: block;  
+    height: 0;
+    margin: 15px 0px 0px 0 !important;
+  } 
+
+  section.HiringDroners .FormControl, .Link_Form{ 
+    width: 85% !important; 
+  }
+
+  .Joblist_loading{
+    display: grid;
+    grid-template-columns: 0fr 2fr;
+    grid-template-rows: repeat(3, auto);
+    grid-column-gap: 1rem;
+  }
+
+
+  .socialIcons{ 
+    margin-right: 15px;
+    position: relative;
+    top: 15px;
+  }
+  .FormControlSocialIcons{
+    background: #F5F5F7 0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    border: none;
+    width: 77.5%;
+    height: 30px;
+    padding: 5px 15px;
+    display: inline;
+    margin: 10px 0px;
+    border: 1px solid #F5F5F7;
+  }
+
+  .Submit{ 
+    margin: 40px 0px 0 10px;
+  }
+
+  input.PhoneInputInput:focus, input.PhoneInputInput:hover{
+    outline: #ffffff !important;
+    border: 1px solid #ffffff !important; 
+  }
+
+  input:focus ,  textarea:focus , input:hover , textarea:hover{ 
+        outline: #4ffea3 !important;
+        border: 1px solid #4ffea3 !important; 
+  }  
+ 
+  span.MuiButtonBase-root.MuiIconButton-root.PrivateSwitchBase-root-1.MuiCheckbox-root.MuiCheckbox-colorSecondary.PrivateSwitchBase-checked-2.Mui-checked.MuiIconButton-colorSecondary {
+    color: #4ffea3 !important;
+}
+
+.MuiTypography-body1{    font: normal normal 300 16px/38px Muli !important;}
+
+  /* End input form */
+ 
+  /* Upload File */
+ 
+  section.TermsCondition{
+    padding: 50px 0;
+}
+
+  .Dragdrop{
+    background: #f5f5f7;
+    border-radius: 10px;
+    border: dashed 3px #f5f5f7;
+  }
+
+  .Dragdrop:hover {
+    background: #f5f5f7;
+    border-radius: 10px;
+    border: dashed 3px #ccc;
+}
+ 
+
+
+.Signup .Login{
+    margin: 20% auto;
+}
+.Signup .DronePerson{
+    margin: 10% auto;
+}
+
+section.Register .DronePerson img , section.Signup .DronePerson img{
+    width: 100% !important;
+} 
+.Register{
+    padding: 80px 0 0 0;
+}
+
+section.Signup button , section.Register button{
+    width: 45% !important;
+    padding: 12px 0;
+}
+
+.Dollar{
+    font-size: 30px;
+}
+
+.Month{font-size: 16px;} 
+
+h2.All_Text_center{padding: 50px 0;}
+
+.ContainerPackages .NormalUser{    
+    left: 20px;
+    position: relative;
+    text-align: center;
+    background: #fff;
+    border-radius: 175px;
+    box-shadow: 0px 3px 10px #0000000D;
+}
+.ContainerPackages .ProUserMonth{
+    left: 0px;
+    position: relative;
+    text-align: center;
+    background: #4FFEA3 0% 0% no-repeat padding-box;
+    border-radius: 175px;
+    box-shadow: 0px 3px 10px #0000000D;
+}
+
+.ContainerPackages .ProUserYear{
+    right: 20px;
+    position: relative;
+    text-align: center;
+    background: #fff;
+    border-radius: 175px;
+    box-shadow: 0px 3px 10px #0000000D;
+}
+
+main#SidebarHeader {
+    padding: 0 !important;
+}
+
+section.HiringDronersBanner .Text h2 ,section.HiringDronersBanner .Text h1  {
+    padding-bottom: 15px;
+}
+
+section.Profile.Hireprofile button {
+    margin-bottom: 0px;
+}
+
+section.HiringDroners button, section.PageNotFound button {
+    margin-right: 15px ;
+    margin-bottom: 15px ;
+}
+
+ 
+.UploadFile , .UpgradeProVersion, .Profile , .Cart{
+    padding: 40px 0;
+}
+ 
+
+
+.JobsList button, li.JobsList button , .UploadFile .BtnStyle_4{
+    margin-right: 10px;
+}
+
+.HiringDronersFliter{
+    padding-bottom: 30px;
+}
+
+section.tabs-content.Hireprofiletab .tabs-nav a {
+    padding: 20px !important;
+}
+
+section.HireJobList .JobDescription{
+    padding-left: 116px;
+    padding-top: 16px;
+} 
+section.HireDornerJobList .JobDescription{
+    padding-left: 93px;
+    padding-top: 16px;
+}
+ 
+
+.Profile .SocialIcon img, .ViewJob .SocialIcon img{
+    padding-right: 20px;
+}
+
+.ProfileTabModel .MuiAppBar-colorPrimary{  
+    box-shadow: none !important;
+    background-color: #fff !important;
+    color: black !important;
+}  
+
+.TabModel ul.Tabmodellist{
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+}
+
+
+.TabModel ul.Tabmodellist li{
+    padding-right: 50px;
+    list-style: none; 
+    cursor: pointer;
+}
+
+.tabs-nav ul span:nth-child(2) {
+    float: right;
+}
+/* 
+.FollowingList{
+    width: 50%;
+    float: left;
+}
+
+.FollowingBtn{
+    width: 50%;
+    float: right;
+} */
+
+/*  */
+
+textarea.FormControl.officePublic {
+    padding: 20px 0px 20px 20px !important;
+}
+
+.react-responsive-modal-modal{
+    max-width: 1024px !important;
+}
+ul.control-dots {
+    display: none !important;
+}
+
+.ListGroup {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+    border-radius: .25rem;
+}
+
+
+li.ListGroupItem{
+    padding: 20px 20px;
+    display: flex;
+    cursor: pointer;
+} 
+
+li.MyJobList , li.CartList{
+    padding: 40px 0px 10px 0;
+    display: flex;
+    cursor: pointer;
+    word-break: break-all;
+    margin: 0 30px;
+}
+
+div.CartUserDetail{
+    padding: 10px 0;
+    display: flex;
+    cursor: pointer;
+    word-break: break-all;
+    margin: 0;
+}
+
+.UsersListBody{
+    flex: 1 1;
+    position: relative;
+    min-width: 0;
+    display: flex;
+    margin: auto;
+}
+
+textarea.FormControl {
+    margin: 15px 0;
+    height: 60px;
+    width: 79%;
+    resize: none; 
+    padding: 20px 15px 20px 20px;
+}
+
+.joblistview td {
+    border-bottom: 0px solid #E2E2E2 !important;
+    padding: 25px 0 !important; 
+    vertical-align: initial;
+}
+
+section.HiringDroners textarea.FormControl , section.PublicProfile textarea.FormControl   {
+    height: 191px !important;
+}
+ 
+
+.Layout .Content .SidebarGroup .Sidebar .ListGroupItem figure {
+    margin-right: 1rem;
+}
+
+.Layout .Content .SidebarGroup .Sidebar .ListGroupItem .UsersListBody {
+    flex: 1 1;
+    position: relative;
+    min-width: 0;
+    display: flex;
+}
+
+.Layout .Content .SidebarGroup .Sidebar .ListGroupItem .UsersListBody>div:first-child {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1;
+}
+
+.Layout .Content .SidebarGroup .Sidebar .ListGroupItem .UsersListBody .UsersListAction { 
+    padding: 17px 30px;
+    display: flex;
+    cursor: pointer;
+}
+.UsersListBody div:first-child{
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1;
+}
+
+/*  */
+
+.BoxShadow{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 10px #0000001A;
+    padding: 5px 20px;
+}
+
+.Overlay{
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    z-index: 0;
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ProfileImg{
+    top: 0;
+    position: absolute;
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+    opacity: 0;
+}
+
+.CoverImg{
+    top: 0;
+    position: absolute;
+    border-radius: 50%;
+    height: 86%;
+    width: 86%;
+    opacity: 0;
+}
+ .cropperWrapper{
+    position: absolute;
+    top: 0;
+    width: 80%; 
+    padding: 40px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff; 
+    z-index: 2;
+    box-shadow: -1px 1px 9px 0px #0000002e, 1px 1px 9px #00000024;
+    justify-content: center;
+ }
+
+ .PublicProfileEdit .profileEditIcon {
+    top: 7% !important;
+    left: 16% !important;
+}
+
+
+ /*  */
+ 
+ section.UploadFile .form span{
+    font-family: Muli-Light !important;
+    font-weight: 400;
+    font-size: 14px !important;
+    padding: 0 0px 0 0 ;
+    margin-right: 0px;
+}
+
+
+.forgot_pw{
+    margin-top: -15px;
+}
+
+.forgot_pw span{
+    margin-right: 10px;
+}
+
+section.Register .Checkbox span {
+    font-size: 14px !important;
+    font-family: 'Muli-Light' !important;
+    bottom: 8px;
+} 
+
+.UploadText{
+    font-size: 16px;
+}
+
+
+.UploadFile .form .FormGroup{
+    margin-bottom: 20px;
+}
+
+.UploadFile .form div label{
+    font-family: Muli-Bold;
+    margin-left: 0 !important;
+    margin-right: 15px !important;
+}
+
+
+
+.Login .form div .BtnStyle_5, .Login .form div .LoaderBtn{
+    margin-top: 30px !important;
+    margin-bottom: 10px !important;
+}
+.fa-ul>li {
+    line-height: 2em !important;
+    position: relative;
+}
+
+
+li.dept {
+    line-height: 2em !important;
+}
+ 
+.ForUser{
+    margin-bottom: 20px;
+}
+
+.LoggedUser{
+    font-size: 16px;
+}
+
+.LoggedUser{
+    margin: 10px 0 5px;
+}
+.UsersListBody .FSize_14{
+    margin: 15px 0;
+    padding-right: 25%;
+    word-break: break-word;
+}
+.Charge{
+    padding-bottom: 20px;
+}
+
+.TotalAmount{
+    padding-top: 10px !important;
+    padding-bottom: 20px !important;
+}
+.NotFoundTitle{
+    font-size: 200px;
+    color: #cecece;
+}
+.NotFoundActions{
+    margin: 30px 0;
+}
+.NotFoundActions a {
+    margin: 10px;
+}
+
+/*  */
+form.form .FormControl { 
+    margin: 15px 0px 30px 0;
+}
+
+
+
+section.Register form.form .FormControl:focus , section.Register form.form .FormControl:hover , section.Register .Phonenumber:hover, section.Register .Phonenumber:focus {
+    outline: #4ffea3 !important;
+    border: 1px solid #4ffea3 !important;
+}
+ 
+section.Register form.form .FormControl , section.Signup form.form .FormControl { 
+    margin: 15px 0px 15px 0 !important; 
+    width: 73% !important;
+} 
+
+.Country{
+    width: 77% !important;
+    background: #F5F5F7 0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    border: 1px solid #F5F5F7;
+    padding: 12px 0 12px 20px;
+    display: block;
+    height: auto;
+    margin: 15px 0px 15px 0 !important;
+}
+ 
+section.PublicProfileEdit form.form .FormControl , section.PublicProfile form.form .FormControl {
+    margin: 15px 0px 15px 0 !important; 
+}
+
+section.UploadFile form.form .FormControl{
+    margin: 10px 0px 20px 0 !important; 
+}
+ 
+section.Register form.form .FormControl.PhoneInput  {
+    margin: 15px 0 0px 0 !important;
+}
+ 
+.Phonenumber , .password{
+    margin: 15px 0px 0px 0 !important; 
+    background: #F5F5F7 0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    border: 1px solid #F5F5F7;
+    width: 73%;
+    padding: 20px 0px 20px 20px;
+    display: flex;
+    height: 0; 
+}
+
+.SkeletonImg{
+    display: inline;
+    float: left; 
+    margin: 0 6px 15px 6px;  
+    border-radius: 15px !important; 
+}
+
+form.form select.FormControl.dropdown{ 
+    width: 87% !important;
+    height: auto !important;
+    padding: 13px 0 13px 20px !important;
+    background-image: url('../images/dropdown-bottom.svg');
+    background-position: right 47px center;
+    background-repeat: no-repeat; 
+    border: none; 
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none; 
+}
+
+.PrivateSwitchBase-root-12 {
+    padding: 0px !important;
+}
+
+form.form span.MuiButtonBase-root {
+    padding: 0px 10px 0 20px !important;
+}
+
+  
+
+section.HiringDronersFliter label {
+    padding-bottom: 11px;
+  }
+
+  .overlayBackgroundCoverImg{
+    border-radius: 50% !important;
+    background-color: transparent  !important;
+    height: auto !important;
+    width: 40% !important;
+    position: absolute; 
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(155%, 0px) !important;
+    z-index: -999;
+  } 
+
+  .BackgroundcoverImg{
+    width: 86% !important;
+    height: 86% !important; 
+  }
+
+  .coverEditIcon{ 
+    position: absolute;
+    top: 75%;
+    left: 30%;
+    z-index: 0;
+    text-align: center;
+} 
+
+section.Cart figure{ 
+    margin: 8px 15px 15px 6px !important;
+}
+
+  .profileEditIcon{ 
+      position: absolute;
+      top: 70px;
+      height: 30px;
+      left: 52px;
+      width: 30px; 
+      justify-content: center; 
+      z-index: 0;
+  } 
+
+  .MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthSm.MuiPaper-elevation24.MuiPaper-rounded{
+    min-width: 45% !important;
+    height: 497px !important;
+}
+
+.PopupHeader{
+    padding: 0 72px 20px 72px !important;
+}
+.PopupBody{
+    padding: 0px 72px 0px 72px !important;
+}
+
+.PopupFooter{ 
+    padding: 0px 72px 50px 72px !important; 
+} 
+
+input.FormControl.Popupmodel {
+    width: 95% !important;
+    border-radius: 20px !important;
+    padding: 20px 0px 20px 32px !important;
+    margin: 11px 0px !important;
+} 
+textarea.FormControl.Popupmodel{
+    height: 105px !important;  
+    width: 95% !important;
+    padding: 20px 0px 20px 32px !important;
+    border-radius: 18px;
+}
+
+.RadioGroup .FormControlLabel{
+    padding-right: 30px;
+}
+
+span.FormControlLabel{
+    font-family: 'Muli-Light' !important;
+    font-weight: 300; 
+    /* padding-right: 30px; */
+}
+
+section.Signup .VisibilityIcon{
+    top: 44%;
+    right: 25%;
+    position: absolute !important;
+}
+
+section.Register .VisibilityIcon{
+    top: 35%;
+    right: 25%;
+    position: absolute !important;
+}
+
+
+/* Blog */
+
+.BlogDeatail{
+    padding: 40px 0;
+}
+.BlogDeatailTitle{
+    margin-bottom: 50px;
+}
+.BlogDeatailSubTitle{
+    color: #2FBE46;
+}
+.BlogDeatailContent img{
+    width: 100%;
+    margin-bottom: 15px;
+}
+.BlogDeatailContent p{
+    line-height: 24px;
+}
+.Quote, blockquote{
+    width: 70%;
+    margin: 30px auto;
+    font-size: 16px;
+    line-height: 24px;
+    font-family: Muli-Bold;
+}
+.Quote::before, blockquote::before{
+    content:url('../images/left-quote.png');
+    position: absolute;
+    left: 70px;
+}
+.Quote::after, blockquote::after{
+    content:url('../images/right-quote.png');
+    position: absolute;
+    right: 70px;
+}
+.SubscribeDesc {
+    color: #616161;
+    line-height: 20px;
+    font-family: Muli-Light;
+}
+.Subscription{
+    background-color: #00E7FC;
+    padding: 45px 40px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px #0000001A;
+}
+.Subscription .FormControl{
+    width: 90%;
+    border-radius: 50px;
+    background-color: #fff;
+}
+.Subscription .BtnStyle_3{
+    width: 100%;
+    height: 42px;
+    font-family: MuliBold;
+    font-weight: bold !important;
+}
+.Subscription span{
+    font-weight: 600;
+}
+::placeholder{
+    font-family: Muli !important;
+}
+.BlogBtn{
+    padding: 10px 30px;
+    margin-top: 10px !important;
+    border: 1px solid #f5f5f7;
+    display: inline-block;
+    width: unset;
+    height: unset;
+}
+.BlogDeatailSidebar .BorderBottom{
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 0;
+    margin-bottom: 15px;
+}
+.BlogDeatailSidebar .SpaceBox{
+    margin-top: 40px;
+}
+.BlogDeatailSidebar .Trending .posts{
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.BlogDeatailSidebar .Trending .posts .ImageDiv{
+    float: left;
+    width: 33%;
+}
+.BlogDeatailSidebar .Trending .posts img{
+    width: 100px;
+    border-radius: 10px;
+}
+.BlogDeatailSidebar .Trending .posts .ContentDiv{
+    float: right;
+    width: 67%;
+    color: #000;
+}
+.BlogDeatailSidebar .Trending .posts p{
+    margin-top: 5px;
+    font-weight: 300;
+}
+.BlogDeatailSidebar .Trending .posts:hover .ContentDiv h6{
+    color: #2FBE46;
+}
+.BlogDeatail .ListBlogs .Content{
+    color: #fff;
+    padding: 30px 30px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    margin-bottom: 20px;
+    margin-top: -5px;
+}   
+.BlogDeatail .ListBlogs .BlogImage{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+.BlogDeatail .ListBlogs .Content .BlogDesc{
+    line-height: 20px;
+    font-weight: normal;
+}
+.BlogDeatail .ListBlogs .Content span{
+    font-size: 14px;
+    line-height: 22px;
+    margin-right: 20px;
+    font-weight: normal;
+}
+.BlogDeatail .ListBlogs .Content img{
+    margin-bottom: -4px;
+    margin-right: 5px;
+}
+
+/* Blog End */
+    
+
+.tabs-nav li.active, .tabs-navs li.active{
+    padding: 8px 25px;
+    background: transparent linear-gradient( 
+10deg
+ , #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
+    border-radius: 25px;
+    margin: 0 5px;
+}
+
+.SearchBar input:hover , .SearchBar input:focus{
+    outline: #00f37400 !important;
+    border: 1px solid #4ffea300 !important;
+}
+.SearchBar{
+    width: 100% !important;
+}
+
+section.HiringDroners textarea.FormControl {
+    padding: 20px 0 20px 20px !important;
+}
+    
+
+.wrapDrop {
+    background:#e7ded5;
+    box-shadow:3px 3px 3px rgba(0,0,0,.2);
+    cursor:pointer;
+    margin:0 auto;
+    max-width:225px;
+    padding:1rem;
+    position:relative;
+    width:75%;
+    z-index:3;
+    }
+    
+    .wrapDrop::after {
+    border-color:#695d52 transparent;
+    border-style:solid;
+    border-width:10px 10px 0;
+    content:"";
+    height:0;
+    margin-top:-4px;
+    position:absolute;
+    right:1rem;
+    top:50%;
+    width:0;
+    }
+    
+    .wrapDrop .drop {
+    background:#e7ded5;
+    box-shadow:3px 3px 3px rgba(0,0,0,.2);
+    display:none;
+    left:0;
+    list-style:none;
+    margin-top:0;
+    opacity:0;
+    padding-left:0;
+    pointer-events:none;
+    position:absolute;
+    right:0;
+    top:100%;
+    z-index:2;
+    }
+    
+    .wrapDrop .drop li a {
+    color:#695d52;
+    display:block;
+    padding:1rem;
+    text-decoration:none;
+    }
+    
+    .wrapDrop span {
+    color:#928579;
+    }
+    
+    .wrapDrop .drop li:hover a {
+    background-color:#695d52;
+    color:#e7ded5;
+    }
+    
+    .wrapDrop.active::after {
+    border-width:0 10px 10px;
+    }
+    
+    .wrapDrop.active .drop {
+    display:block;
+    opacity:1;
+    pointer-events:auto;
+    }
+
+    .SearchBar {
+        height: 48px;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+ 
+    .ViewJob .joblistview{
+        margin: auto 15% !important;
+    }
+    
+    .jtitlefilter input:hover, .jtitlefilter input:focus { outline: #ffffff !important; border: 1px solid #ffffff !important; }
+
+    .Jobdetail{
+        width: 100px !important;
+    }
+    .JobColon{
+        width: 40px !important;
+    }
+
+    .Desktop_popup{
+        display:none !important;
+    }
+    .Mobile_popup{
+        display: block !important;
+    }
+
+    
+ .PublicProfileEdit .profileEditIcon {
+    top: 7% !important;
+    left: 12% !important;
+}
+ 
+.Myjobslistdesktop ,.Purchasedlistdesktop , .Cartlistdesktop{ 
+    display: none;
+}
+
+.Myjobslistmobile , .Purchasedlistmobile , .Cartlistmobile{
+    display: block;
+}
+
+.Myjobslistmobile li.MyJobList , .Purchasedlistmobile li.MyJobList , .Cartlistmobile li.MyJobList { 
+    padding: 15px 15px 15px 5px;
+    display: flex;
+    cursor: pointer;
+    word-break: break-all; 
+    margin: 15px 0; 
+    border-bottom: 1px solid #00000047;
+ }
+
+ .UploadFile label.MuiFormControlLabel-root.Checkbox {
+    padding-top: 10px;
+    padding-right: 10px;
+}
+
+.UploadFile .Checkbox{
+    padding-top: 10px;
+    padding-right: 10px;
+}
+
+.EndUserProfile .ProfileImg , .EndUserProfile .profileEditIcon , .EndUserProfile  .coverEditIcon , .EndUserProfile .CoverImg{
+    display: none !important;
+}
+   
+.mobileBottomMenu{
+    display: none !important;
+}
+
+
+.ContainerPackages h2{
+    padding-top: 30px;
+    padding-bottom: 50px;
+}
+
+section.EndUserProfile form {
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+section.UploadFile .form label.MuiFormControlLabel-root {
+    margin-right: 15px !important;
+    margin-left: 0;
+    margin-bottom: 10px;
+}
+  
+
+  /* // Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575px) { 
+    h1{font-size:30px !important; }
+    h2{font-size:25px !important; }
+    h3{font-size:20px !important; }
+    h4{font-size:18px !important; line-height: initial !important;} 
+    h5{font-size:16px !important;} 
+    h6{font-size:14px !important;}  
+    p{font-size:14px !important;}
+    label{font-size: 14px !important;}  
+    span{font-size: 13px !important;}
+    .AvatarStateSuccess{margin-bottom: 0 !important;}
+    .Order_xs_1{order:1 !important}
+    .Order_xs_2{order:2 !important}
+    .textAlign_xs{text-align: center !important;}
+    .D_Block_xs{display: block !important;}
+    .D_None_xs{display: none !important;}
+    .pt_xs{padding-top: 15px !important;} 
+    .pb_xs{  padding-bottom: 15px !important;} 
+    .pl_xs{ padding-left: 15px !important; } 
+    .pr_xs{ padding-right: 15px !important; }
+
+    .paddingleft_90{padding-left: 90px !important;}
+    .paddingright_90{padding-right: 90px !important;}
+    .paddingtop_90{padding-top: 90px !important;}
+    .paddingbottom_90{padding-bottom: 90px !important;}
+
+    .p_xs_0{ padding: 0 !important;}
+    .pl_xs_0{padding-left: 0 !important;}
+    .pr_xs_0{padding-right: 0 !important;}
+    .pt_xs_0{padding-top: 0 !important;}
+    .pb_xs_0{padding-bottom: 0 !important;}
+    
+    .p_xs_50{ padding: 50px !important;}
+    .pl_xs_50{padding-left: 50px !important;}
+    .pr_xs_50{padding-right: 50px !important;}
+    .pt_xs_50{padding-top: 50px !important;}
+    .pb_xs_50{padding-bottom: 50px !important;}
+
+    .p_xs_30{ padding: 30px !important;}
+    .pl_xs_30{padding-left: 30px !important;}
+    .pr_xs_30{padding-right: 30px !important;}
+    .pt_xs_30{padding-top: 30px !important;}
+    .pb_xs_30{padding-bottom: 30px !important;} 
+
+    .PopupHeader{padding: 0px 20px 30px 20px !important;}
+    .PopupBody{padding: 0px 20px 15px 20px !important;}
+    .PopupFooter{padding: 0px 25px 30px 20px !important;} 
+
+    .ml_xs_auto{margin-left: auto !important; }
+    .mr_xs_auto{margin-right: auto !important; }
+    .LineHeight_normal_xs{line-height: normal !important;} 
+    .height_auto_xs{height: auto !important;} 
+    .BtnStyle_1 , .BtnStyle_2 , .BtnStyle_3 , .BtnStyle_4 , .BtnStyle_5 , .BtnStyle_6{                
+        width: 130px !important;
+        height: 40px !important; 
+    }  
+    button span{font-family: Muli-Bold !important;}
+
+    .LH_initial_xs{line-height: initial;}
+    
+    .SkeletonImg{
+        min-height: 100px;
+        min-width: 100% !important; 
+    }
+
+    .PublicProfileEditIcon{margin-bottom: 100px !important;}
+
+    .Btn_12{
+        width: 90px !important;
+        height: 40px !important;
+    }
+
+    .Text_left_xs{
+        text-align: left !important;
+    }
+
+    .Text_right_xs{
+        text-align: right !important;
+    }
+
+    .PublicProfileEdit .profileEditIcon {
+        top: 50% !important;
+        left: 35% !important;
+    }
+
+
+    section.Signup button , section.Register button{
+        width: 100% !important;
+        padding: 25px !important;
+    }
+     
+
+    .ContainerPackages .NormalUser,  .ContainerPackages .ProUserMonth , .ContainerPackages .ProUserYear  {     
+        left: 0;
+        right: 0; 
+        text-align: center;
+    }   
+    /* .ContainerPackages .NormalUser,  .ContainerPackages .ProUserMonth , .ContainerPackages .ProUserYear{     
+        border-radius: 15px;
+        margin-bottom: 15px;
+    }   */
+
+    header.tabs-navs {
+        margin: 20px 40px 20px 40px;
+    }
+
+    section.Filter{
+        padding: 80px 0 !important;
+    }
+
+    section.Register .DronePerson img , section.Signup .DronePerson img{
+        display: none;
+    } 
+ 
+    section.HiringDronersBanner img{
+        margin-left: auto !important; 
+        margin-right: auto !important;
+        display: block !important;
+    }
+
+    section.HiringDronersBanner .Text{ 
+        padding: 10% 0 0 0;
+        line-height: 57px;
+    }
+    section.HireJobList .JobDescription , section.HireDornerJobList .JobDescription{
+        padding-left: 0;
+    }
+    
+    .FormControlSocialIcons {  width: 100%;  }  
+
+    section.HiringDroners .FormControl, .Link_Form { 
+        width: 100% !important; 
+      }
+
+      .UploadFile button{
+            width: 45% !important;
+      }
+
+    .TabModel ul.Tabmodellist{
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        padding: 0;
+        overflow-x: scroll;
+        white-space: nowrap;
+        flex-wrap: inherit;
+    }
+
+    section.Followers .ListGroup img , section.Following .ListGroup img  {
+        width: 50px !important;
+        margin-right: 0px !important;
+    }
+
+    section.Followers li.ListGroupItem{
+        padding: 30px  10px; 
+    } 
+
+   .Country, .FormControl , .Width_82 , .Width_76 , .Width_74 , section.Register form.form .FormControl , section.Signup form.form .FormControl,  .Phonenumber , .password{ 
+        width: 100% !important; 
+      } 
+
+      form.form select.FormControl.dropdown {
+        width: 100% !important;
+    }
+    .FormControlSocialIcons { 
+        height: 40px !important; 
+    }
+
+    
+    section.HiringDronersFliter{
+        padding-top: 30px;
+    }
+    .FilterDropdown div {padding-bottom: 15px; }
+
+    .JobsList button, li.JobsList button  {
+        margin-bottom: 20px;
+    }
+ 
+    /* section.Profile .overlayBackgroundCoverImg , section.Profile .coverImg{display: none !important;} */
+
+    section.Profile .BackgroundcoverImg {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 50% !important; 
+    }
+   
+
+    .UploadText, .UploadText span, .UploadText a{
+        font-size: 12px !important;
+    }
+    .Dragdrop {
+        margin-bottom: 30px !important;
+    }
+    .Signup .Login{
+        margin: 0% auto;
+    }
+    .NotFoundTitle{
+        font-size: 115px !important;
+        color: #cecece;
+    }
+    .NotFoundActions a{
+        white-space: nowrap;
+    }
+
+    .joblistview td { 
+        padding: 10px  0 !important;
+    }
+
+    /*  */
+
+    .socialIcons {
+        margin-right: 0px;
+        display: none;
+    }
+
+
+    /* Blog */
+
+    .Quote::before, blockquote::before {
+        left: 15px;
+    }
+    .Quote::after, blockquote::after{
+        right: 15px;
+    }
+    .BlogDeatailTitle{
+        margin-bottom: 0px;
+    }
+    .Subscription{
+        padding: 40px 20px;
+        margin-top: 20px;
+    }    
+    .Subscription .BtnStyle_3{
+        width: 100% !important;
+        padding: 20px !important;
+    }
+    .Subscription .BtnStyle_3 span{
+        font-size: 15px !important;
+    } 
+
+    /* Blog end */
+
+    .Pagenotfound{
+        font-size: 100px !important;
+        color: #EFEFEF;
+    }
+    
+    .ViewJob tr{
+        box-shadow: none;
+        border-radius: 0;
+        margin-bottom: 0;
+        padding: 0;
+        display: flex;
+    }
+    .ViewJob .joblistview {    margin: 50px 0px 0 0 !important;}
+    
+    /* section.UpgradeProVersion .NormalUser , section.UpgradeProVersion  .ProUserYear {
+        box-shadow: none !important;
+        border: 3px solid #4ffea3;
+    } */
+    /* section.UpgradeProVersion .ProUserMonth , section.UpgradeProVersion .NormalUser , section.UpgradeProVersion  .ProUserYear {
+        margin: 15px 40px;
+    } */
+    section.Register .Checkbox span { 
+        bottom: 18px !important;
+    } 
+
+    .OfficeProfileEdit .profileEditIcon{
+        top: 11% !important;
+        left: 50px !important;
+    }
+    
+    section.Signup .VisibilityIcon{
+        top: 44%;
+        right: 3%;
+        position: absolute !important;
+    }
+    section.Register .VisibilityIcon{
+        top: 35%;
+        right: 3%;
+        position: absolute !important;
+    }
+    .mobileBottomMenu{
+        display: block !important;
+    }
+    .W_xs_100{width: 100% !important;}
+    .W_sm_70{width: 70% !important;}
+    .W_xs_45{width: 45% !important;}
+    .LoadMore {
+        width: auto !important;
+        height: auto !important;
+        padding: 15px 35px !important;
+    }
+    .horizontalScrollable > .Scrollablrow {
+        overflow-x: auto;
+        white-space: nowrap;
+        flex-wrap: inherit !important;
+    }
+    
+    .horizontalScrollable > .Scrollablrow > .Scrollablecol {
+        display: inline-block;
+        float: none;
+        flex: 0 0 360px !important;
+    }
+    .ListGroup{margin-bottom: 35px !important;}
+    .scrollableShadow{
+        background: -webkit-linear-gradient(0deg ,rgb(255 255 255 / 62%),rgba(255, 255, 255, 1));
+        height: 40px;
+        position: absolute;
+        pointer-events: none;
+        right: 0;
+        top: 25px;
+        width: 35px;
+        z-index: 2;
+        }
+
+        .M_ProfileCenter{
+            position: absolute;
+            bottom: 90%;
+            z-index: 1;
+            left: 40%;
+        }
+        .coverEditIcon {
+            top: 50% !important;
+            left: 30% !important;
+        }
+        .Profile .profileEditIcon {
+            top: 55px;
+            left: 40px;
+        }
+
+        section.PublicProfile.PublicProfileEdit.OfficeProfileEdit .M_ProfileCenter {
+            position: inherit;
+            bottom: 0;
+            z-index: 1;
+            left: 0;
+        }
+
+ } 
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767px) {  
+    h1{font-size:30px !important; }
+    h2{font-size:25px !important; }
+    h3{font-size:20px !important; } 
+    h4{font-size:18px !important; line-height: initial !important;} 
+    h5{font-size:16px !important;} 
+    h6{font-size:14px !important;}  
+    p{font-size:13px !important;}
+    label{font-size: 14px !important;}  
+    span{font-size: 13px !important;}
+
+    .Order_sm_1{order:1 !important}
+    .Order_sm_2{order:2 !important} 
+    .LH_initial_sm{line-height: initial !important;}
+    .textAlign_sm{text-align: center !important;} 
+    .D_Block_sm{display: block !important;}
+    .D_None_sm{display: none !important;}
+    .LineHeight_normal_sm{line-height: normal !important;} 
+    .height_auto_sm{ height: auto !important; }
+    .pt_sm{ padding-top: 15px !important;  } 
+    .pb_sm{ padding-bottom: 15px !important;  } 
+    .pl_sm{  padding-left: 15px !important;  } 
+    .pr_sm{  padding-right: 15px !important;} 
+
+    .paddingleft_90{padding-left: 90px !important;}
+    .paddingright_90{padding-right: 90px !important;}
+    .paddingtop_90{padding-top: 90px !important;}
+    .paddingbottom_90{padding-bottom: 90px !important;}
+
+    .p_sm_50{ padding: 50px !important;}
+    .pl_sm_50{padding-left: 50px !important;}
+    .pr_sm_50{padding-right: 50px !important;}
+    .pt_sm_50{padding-top: 50px !important;}
+    .pb_sm_50{padding-bottom: 50px !important;}
+
+    .p_sm_0{ padding: 0 !important;}
+    .pl_sm_0{padding-left: 0 !important;}
+    .pr_sm_0{padding-right: 0 !important;}
+    .pt_sm_0{padding-top: 0 !important;}
+    .pb_sm_0{padding-bottom: 0 !important;}
+
+    .ml_sm_auto{margin-left: auto !important; }
+    .mr_sm_auto{margin-right: auto !important; }
+
+    .max_sm_width{max-width: 100% !important;} 
+    .Text_left_sm{text-align: left !important;}
+ 
+    .AvatarStateSuccess{margin-bottom: 0 !important;}
+
+    .Text_right_sm{
+        text-align: right !important;
+    }
+
+    .BtnStyle_1 , .BtnStyle_2 , .BtnStyle_3 , .BtnStyle_4 , .BtnStyle_5 , .BtnStyle_6{                
+        width: 140px !important;
+        height: 45px !important;
+    } 
+
+        
+    .W_sm_100{width: 100% !important;}
+    .W_sm_70{width: 70% !important;}
+    .W_sm_45{width: 45% !important;}
+
+    .Btn_12{
+        width: 90px !important;
+        height: 45px !important;
+    }
+
+    .ContainerPackages .NormalUser,  .ContainerPackages .ProUserMonth , .ContainerPackages .ProUserYear  {     
+        left: 0;
+        right: 0;
+        text-align: center;
+    }      
+
+    .scrollableShadow{
+        background: -webkit-linear-gradient(0deg ,rgb(255 255 255 / 62%),rgba(255, 255, 255, 1));
+        height: 40px;
+        position: absolute;
+        pointer-events: none;
+        right: 0;
+        top: 15px;
+        width: 35px;
+        z-index: 2;
+        }
+
+        section.Followers .ListGroup img , section.Following .ListGroup img {
+        width: 50px !important;
+        margin-right: 0px !important;
+    }
+
+    /* .ContainerPackages .NormalUser,  .ContainerPackages .ProUserMonth , .ContainerPackages .ProUserYear{     
+        border-radius: 15px;
+        margin-bottom: 15px;
+    }       */
+
+    .SkeletonImg{
+        max-width: 45% !important; 
+        max-height: 200px;
+    }
+
+    header.tabs-navs {
+        margin: 20px 40px 20px 40px;
+    }
+
+    section.Filter{
+        padding: 80px 0 !important;
+    }
+
+    section.Register .DronePerson img , section.Signup .DronePerson img{
+        display: none;
+    } 
+
+    .Country, .FormControl , .Width_82 , .Width_76 , .Width_74 , section.Register form.form .FormControl , section.Signup form.form .FormControl,  .Phonenumber , .password{ 
+        width: 100% !important; 
+      }  
+
+    section.HiringDronersBanner img{
+        margin-left: auto !important; 
+        margin-right: auto !important;
+        display: block !important;
+    }
+
+    section.HiringDronersBanner .Text{ 
+        padding: 10% 0 0 0;
+        line-height: 57px;
+    }
+    section.HireJobList .JobDescription , section.HireDornerJobList .JobDescription{
+        padding-left: 0;
+    }
+
+    .FormControlSocialIcons {  width: 85%;  } 
+
+    section.HiringDroners .FormControl ,    form.form select.FormControl.dropdown, .Link_Form{ 
+        width: 100% !important;
+      } 
+    .TabModel ul.Tabmodellist{
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        padding: 0;
+        overflow-x: scroll;
+        white-space: nowrap;
+        flex-wrap: inherit;
+    }
+
+    .FormControlSocialIcons { 
+        height: 40px !important; 
+    }
+
+    section.HiringDronersFliter{
+        padding-top: 30px;
+    }
+    .FilterDropdown div {padding-bottom: 15px; }
+
+    .JobsList button, li.JobsList button  {
+        margin-bottom: 20px;
+    }  
+    .ListGroup{margin-bottom: 35px !important;}
+
+    /* section.Profile .overlayBackgroundCoverImg , section.Profile .coverImg{display: none !important;} */
+    section.Profile .BackgroundcoverImg {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 50% !important;
+    }
+    .PopupFooter{ 
+        padding: 0px 90px 50px 72px !important; 
+    } 
+
+    .joblistview td { 
+        padding: 10px  0 !important;
+    }
+    .UploadFile button{
+                width: 45% !important;
+        }
+
+    /*  */
+
+    .UploadText, .UploadText span, .UploadText a{
+        font-size: 14px !important;
+    }
+    .Dragdrop {
+        margin-bottom: 30px !important;
+    }
+    .Signup .Login{
+        margin: 0% auto;
+    }
+    .NotFoundTitle{
+        font-size: 160px !important;
+        color: #cecece;
+    } 
+    /*  */
+
+    /* Blog */
+    .Quote::before, blockquote::before {
+        left: 15px;
+    }
+    .Quote::after, blockquote::after{
+        right: 15px;
+    }
+    .BlogDeatailTitle{
+        margin-bottom: 0px;
+    }
+    .Subscription{
+        margin-top: 20px;
+    }    
+    .Subscription .BtnStyle_3{
+        width: 100% !important;
+        padding: 20px !important;
+    }
+    .Subscription .BtnStyle_3 span{
+        font-size: 15px !important;
+    }
+    .BtnStyle_4{ 
+        padding: 10px 20px 30px;
+    }
+    .BlogDeatailSidebar .Trending .posts .ImageDiv {
+        width: 25%;
+    }
+    .BlogDeatailSidebar .Trending .posts .ContentDiv {
+        width: 75%;
+    }
+    /* Blog end */
+    .Pagenotfound{
+        font-size: 180px !important;
+        color: #EFEFEF;
+    }
+    .ViewJob tr{
+        box-shadow: none;
+        border-radius: 0;
+        margin-bottom: 0;
+        padding: 0;
+        display: flex;
+    }
+    .ViewJob .joblistview {    margin: 50px 0px 0 0 !important;}
+    .PublicProfileEdit .profileEditIcon {
+        top: 50% !important;
+        left: 35% !important;
+    }
+    .OfficeProfileEdit .profileEditIcon{
+        top: 11% !important;
+        left: 10% !important;
+    }
+    /* section.UpgradeProVersion .NormalUser , section.UpgradeProVersion  .ProUserYear {
+        box-shadow: none !important;
+        border: 3px solid #4ffea3;
+    } */
+    /* section.UpgradeProVersion .ProUserMonth , section.UpgradeProVersion .NormalUser , section.UpgradeProVersion  .ProUserYear { 
+        margin: 15px 70px;
+    }  */
+    section.Signup .VisibilityIcon{
+        top: 44%;
+        right: 3%;
+        position: absolute !important;
+    }
+    section.Register .VisibilityIcon{
+        top: 35%;
+        right: 3%;
+        position: absolute !important;
+    }
+    .mobileBottomMenu{
+        display: block !important;
+    }
+       .LoadMore {
+        width: auto !important;
+        height: auto !important;
+        padding: 15px 70px !important;
+    }
+    .horizontalScrollable > .Scrollablrow {
+        overflow-x: auto;
+        white-space: nowrap;
+        flex-wrap: inherit !important;
+    }
+    
+    .horizontalScrollable > .Scrollablrow > .Scrollablecol {
+        display: inline-block;
+        float: none;
+        flex: 0 0 360px !important;
+    }
+    .M_ProfileCenter{
+        position: absolute;
+        bottom: 90%;
+        z-index: 1;
+        left: 41%;
+    }
+    .coverEditIcon {
+        top: 50% !important;
+        left: 39% !important;
+    }
+    .Profile .profileEditIcon {
+        top: 55px;
+        left: 40px;
+    }
+    section.PublicProfile.PublicProfileEdit.OfficeProfileEdit .M_ProfileCenter {
+        position: inherit;
+        bottom: 0;
+        z-index: 1;
+        left: 0;
+    }
+
+    .PublicProfileEditIcon{margin-bottom: 100px !important;}
+ }
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) { 
+    h1{font-size:30px !important; }
+    h2{font-size:25px !important; }
+    h3{font-size:20px !important; }
+    h4{font-size:18px !important; line-height: inherit;} 
+    h5{font-size:16px !important;} 
+    h6{font-size:14px !important;}  
+    p{font-size:13px !important;}
+    label{font-size: 14px !important;}  
+    span{font-size: 13px !important;}
+    .LineHeight_normal_md{line-height: normal !important;}
+    .BtnStyle_1 , .BtnStyle_2 , .BtnStyle_3 , .BtnStyle_4 , .BtnStyle_5 , .BtnStyle_6{                
+        width: 150px !important;
+        height: 45px !important;
+    } 
+    .LH_initialmd{line-height: initial !important;}
+    .Order_md_1{order:1 !important}
+    .Order_md_2{order:2 !important}
+
+    .Btn_12{
+        width: 90px !important;
+        height: 40px !important;
+    }
+
+    section.Register form.form .FormControl , .Country, section.Signup form.form .FormControl , .Phonenumber, .password{  
+        width: 76% !important;
+    } 
+
+    section.UploadFile .FormControl{
+        width: 100% !important;
+    }
+    
+
+    .ml_md_auto{margin-left: auto !important; }
+    .mr_md_auto{margin-right: auto !important; }
+
+    .D_Block_md{display: block !important;} 
+    .D_None_md{display: none !important;}
+    .pt_md{padding-top: 15px !important;} 
+    .pb_md{padding-bottom: 15px !important;} 
+    .pl_md{padding-left: 15px !important; } 
+    .pr_md{padding-right: 15px !important;} 
+    .p_md_0{ padding: 0 !important;}
+    .pl_md_0{padding-left: 0 !important;}
+    .pr_md_0{padding-right: 0 !important;}
+    .pt_md_0{padding-top: 0 !important;}
+    .pb_md_0{padding-bottom: 0 !important;} 
+    .Text_left_md{text-align: left !important;}
+    .Text_right_md{text-align: right !important;}
+    .ContainerPackages .NormalUser,  .ContainerPackages .ProUserMonth , .ContainerPackages .ProUserYear{     
+        left: 0;
+        right: 0; 
+    }   
+
+
+    .p_md_50{ padding: 50px !important;}
+    .pl_md_50{padding-left: 50px !important;}
+    .pr_md_50{padding-right: 50px !important;}
+    .pt_md_50{padding-top: 50px !important;}
+    .pb_md_50{padding-bottom: 50px !important;}
+
+    section.Filter{
+        padding: 80px 0 !important;
+    } 
+    .SkeletonImg{
+        max-width: 30% !important; 
+        max-height: 200px;
+    }
+    .ContainerPackages .NormalUser,  .ContainerPackages .ProUserMonth , .ContainerPackages .ProUserYear{     
+        border-radius: 175px;
+        margin-bottom: 15px;
+    }  
+ 
+    section.HiringDronersBanner img{
+        padding-top: 50px !important;
+        display: block !important;
+        width: 100%;
+    }
+    section.HiringDronersBanner .Text{ 
+        padding: 30% 0; 
+        line-height: 57px;
+    }
+    section.HireJobList .JobDescription , section.HireDornerJobList .JobDescription{
+        padding-left: 0;
+    }
+
+    .TabModel ul.Tabmodellist{
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        padding: 0;
+        overflow-x: scroll;
+        white-space: nowrap;
+        flex-wrap: inherit;
+    }
+    section.Followers .Avatar img ,section.Purchase .Avatar img ,section.Liked .Avatar img ,section.Cart .Avatar img  , section.Following .Avatar img , section.CartList .Avatar img{
+        width: 150px !important;
+        height: 150px !important; 
+    }  
+
+    section.HiringDroners .FormControl, .Link_Form ,  form.form select.FormControl.dropdown{
+        width: 100% !important;
+    }
+    .FormControlSocialIcons { 
+        height: 40px !important; 
+    }
+    section.HiringDronersFliter{
+        padding-top: 30px;
+    }
+     .FilterDropdown div {padding-bottom: 15px; }
+     
+    /* .JobsList button, li.JobsList button  {
+        margin-bottom: 20px;
+    } */
+    .FilterDropdown div{
+        margin-bottom: 20px;
+    } 
+
+    .coverEditIcon { 
+        top: 70% !important;
+        left: 20% !important; 
+    }
+    .PopupFooter{ 
+        padding: 0px 90px 50px 72px !important; 
+    } 
+
+    /*  */
+
+    .UploadText, .UploadText span, .UploadText a{
+        font-size: 15px !important;
+    }
+    .Dragdrop {
+        margin-bottom: 30px !important;
+    }
+    .Signup .Login{
+        margin: 0% auto;
+    }
+
+    .NotFoundTitle{
+        font-size: 160px !important;
+        color: #cecece;
+    }
+    /*  */
+
+    /* Blog */
+    .Quote::before, blockquote::before {
+        left: 15px;
+    }
+    .Quote::after, blockquote::after{
+        right: 15px;
+    }
+    .BlogDeatailTitle{
+        margin-bottom: 0px;
+    }
+    .Subscription{
+        margin-top: 20px;
+        padding: 35px 20px;
+    }    
+    .Subscription .FormControl {
+        width: 100%;
+    }
+    .Subscription .BtnStyle_3{
+        width: 100% !important;
+        padding: 20px !important;
+    }
+    .Subscription .BtnStyle_3 span{
+        font-size: 15px !important;
+    }
+    .BtnStyle_4{ 
+        padding: 10px 20px 30px;
+    }
+    .BlogDeatailSidebar .Trending .posts .ImageDiv {
+        width: 25%;
+    }
+    .BlogDeatailSidebar .Trending .posts .ContentDiv {
+        width: 70%;
+    }
+    .BlogDeatailSidebar .Trending .posts img {
+        width: 100%;
+    }
+    .BlogDeatail .ListBlogs .Content span {
+        display: block;
+        font-size: 14px !important;
+        margin-bottom: 15px;
+    }
+    /* Blog End */
+    .Pagenotfound{
+        font-size: 200px !important;
+        color: #EFEFEF;
+    }    
+    .ViewJob tr{
+        box-shadow: none;
+        border-radius: 0;
+        margin-bottom: 0;
+        padding: 0;
+        display: flex;
+    }
+    .ViewJob .joblistview {    margin: 50px 0px 0 0 !important;} 
+ 
+        section.PublicProfile .ProfileContainer form{
+            margin: auto 12%;
+        }
+
+        .PublicProfileEdit .profileEditIcon {
+            top: 5% !important;
+            left: 19% !important;
+        }
+
+        .OfficeProfileEdit .profileEditIcon {
+            top: 11% !important;
+            left: 19% !important;
+        }
+        .paddingleft_90{padding-left: 90px !important;}
+        .paddingright_90{padding-right: 90px !important;}
+        .paddingtop_90{padding-top: 90px !important;}
+        .paddingbottom_90{padding-bottom: 90px !important;}
+                
+        .marginleft_60{margin-left: 60px !important;}
+        .marginright_60{margin-right: 60px !important;}
+        .margintop_60{margin-top: 60px !important;}
+        .marginbottom_60{margin-bottom: 60px !important;}
+
+        .UploadFile , .UpgradeProVersion, .Profile , .Cart{
+            padding: 50px 0;
+        }
+
+
+        /* .ContainerPackages{ 
+            background-image: url(../images/upgradeproversion.svg);
+            background-size: contain;
+            background-repeat: no-repeat; 
+        }  */
+        .horizontalScrollable > .Scrollablrow {
+            overflow-x: auto;
+            white-space: nowrap;
+            flex-wrap: inherit !important;
+        }
+        
+        .horizontalScrollable > .Scrollablrow > .Scrollablecol {
+            display: inline-block;
+            float: none;
+            flex: 0 0 360px !important;
+        }
+
+        .FormControlSocialIcons {
+            width: 89%;
+        }
+
+        .DisplayFlex_md{display: flex !important;}
+        
+        .flexEnd_md{align-items: flex-end !important;}
+        .mobileBottomMenu{
+            display: block !important;
+        }
+        .LoadMore {
+            width: auto !important;
+            height: auto !important;
+            padding: 15px 70px !important;
+        } 
+        
+        .DownloadTabsSeaction{ margin: 10px 90px;  }
+        .DownloadTabs{ margin:0 38px; }
+
+        .thumbnailVideo{
+            width: 150px !important;
+            height: 150px !important;
+        }
+    }
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199px) { 
+    .ContainerPackages{ 
+        background-image: url(../images/upgradeproversion.svg);
+        background-size: contain;
+        background-repeat: no-repeat; 
+    } 
+    .BtnStyle_11{ 
+        width: 200px !important; 
+    }
+
+    .RecentImg img{
+        width: 100px !important;
+        height: auto !important; 
+    }
+    .RecentImg{ 
+        margin-right: 2px !important;
+    }
+    section.HiringDronersBanner{ 
+        background: url(../images/hirebanner.svg);
+        background-size: contain;
+        background-repeat: no-repeat;
+        position: relative; 
+        background-position: right;
+    }
+    section.HiringDronersBanner .Text{ 
+        padding: 22% 0;
+        line-height: 57px;
+    }
+    section.Followers .Avatar img ,section.Purchase .Avatar img ,section.Liked .Avatar img ,section.Cart .Avatar img ,   section.Following .Avatar img , section.CartList .Avatar img{
+        width: 150px !important;
+    }
+
+    form.form select.FormControl.dropdown{
+        width: 94% !important;
+    }
+    
+    section.HiringDroners .FormControl, .Link_Form {
+        width: 92% !important;
+    }   
+    .FormControlSocialIcons {  width: 82%;  }  
+
+    .coverEditIcon { 
+        top: 70% !important;
+        left: 25% !important; 
+    }
+
+    .NotFoundTitle{
+        font-size: 160px;
+        color: #cecece;
+    }
+
+    /* Blog */
+    .BlogDeatailSidebar .Trending .posts .ImageDiv {
+        width: 25%;
+    }
+    .BlogDeatailSidebar .Trending .posts .ContentDiv {
+        width: 100%;
+    }
+    
+    /* Blog End */
+    .Pagenotfound{
+        font-size: 240px;
+        color: #EFEFEF;
+    }
+    .UploadFile .BtnStyle_4 {
+        margin-bottom: 20px;
+    }
+    .Desktop_popup{
+        display:block !important;
+    }
+    .Mobile_popup{
+        display: none !important;
+    }
+    
+    section.PublicProfile .ProfileContainer form{
+        margin: auto 12%;
+    }
+
+    .PublicProfileEdit .profileEditIcon{
+        top: 5% !important;
+        left: 17% !important;
+    } 
+
+    .OfficeProfileEdit .profileEditIcon{
+        top: 10% !important;
+        left: 17% !important;
+    } 
+
+
+    .marginleft_60{margin-left: 60px !important;}
+    .marginright_60{margin-right: 60px !important;}
+    .margintop_60{margin-top: 60px !important;}
+    .marginbottom_60{margin-bottom: 60px !important;}
+
+    .paddingleft_90{padding-left: 90px !important;}
+    .paddingright_90{padding-right: 90px !important;}
+    .paddingtop_90{padding-top: 90px !important;}
+    .paddingbottom_90{padding-bottom: 90px !important;}
+
+    .UploadFile , .UpgradeProVersion, .Profile , .Cart{
+        padding: 80px 0;
+    } 
+
+    .Myjobslistdesktop ,.Purchasedlistdesktop , .Cartlistdesktop{
+        display: block;
+    }
+
+    .Myjobslistmobile , .Purchasedlistmobile , .Cartlistmobile{
+        display: none;
+    }
+
+    
+    .pl_lg_30{padding-left: 30px !important;}
+    .pr_lg_30{padding-right: 30px !important;}
+    .pt_lg_30{padding-top: 30px !important;}
+    .pb_lg_30{padding-bottom: 30px !important;}
+
+    .DisplayFlex_lg{display: flex !important; } 
+    .flexEnd_lg{align-items: flex-end; }
+    section.Register .Checkbox span { 
+        bottom: 18px !important;
+    } 
+    
+    section.HiringDroners form.form , section.HiringDroners .form{
+        margin: auto 12% !important;
+    }
+    .JobsList{
+        padding-top: 10px; 
+        margin: 0 30px;
+    }
+    .DownloadTabsSeaction{ margin: 10px 90px;  }
+    .DownloadTabs{ margin:0 38px; }
+    }
+ 
+ 
+/* // Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) { 
+    
+    
+    .marginleft_60{margin-left: 60px !important;}
+    .marginright_60{margin-right: 60px !important;}
+    .margintop_60{margin-top: 60px !important;}
+    .marginbottom_60{margin-bottom: 60px !important;}
+
+    .marginleft_90{margin-left: 90px !important;}
+    .marginright_90{margin-right: 90px !important;}
+    .margintop_90{margin-top: 90px !important;}
+    .marginbottom_90{margin-bottom: 90px !important;}
+
+    .paddingleft_90{padding-left: 90px !important;}
+    .paddingright_90{padding-right: 90px !important;}
+    .paddingtop_90{padding-top: 90px !important;}
+    .paddingbottom_90{padding-bottom: 90px !important;}
+
+    .pl_xl_30{padding-left: 30px !important;}
+    .pr_xl_30{padding-right: 30px !important;}
+    .pt_xl_30{padding-top: 30px !important;}
+    .pb_xl_30{padding-bottom: 30px !important;}
+    .DisplayFlex_xl{display: flex !important;}
+    .flexEnd_xl{align-items: flex-end;}
+
+    .UploadFile , .UpgradeProVersion, .Profile , .Cart{
+        padding: 80px 0;
+    }
+
+        .DownloadTabsSeaction{ margin: 10px 90px;  }
+        .DownloadTabs{ margin:0 38px; }
+
+    .Container{
+        max-width: 1200px !important;
+    }
+    .ContainerPackages{ 
+        background-image: url(../images/upgradeproversion.svg);
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 1200px;  
+    }  
+    section.HiringDronersBanner{ 
+        background: url(../images/hirebanner.svg);
+        background-size: contain;
+        background-repeat: no-repeat;
+        position: relative; 
+        background-position: right;
+    }
+    section.HiringDronersBanner .Text{ 
+        padding: 35% 0;
+        line-height: 57px;
+    }
+    section.Followers .Avatar img ,section.Purchase .Avatar img ,section.Liked .Avatar img ,section.Cart .Avatar img ,   section.Following .Avatar img , section.CartList .Avatar img { 
+        width: 150px !important;
+    } 
+
+    video.thumbnail{
+        width: 150px !important;
+    }
+ 
+    form.form select.All_FormControl.dropdown{
+        width: 68.5% !important;
+    }
+    .Pagenotfound{
+        font-size: 280px;
+        color: #EFEFEF;
+    }
+
+    .JobsList{
+        padding-top: 10px; 
+        margin: 0 30px;
+    }
+    section.HiringDroners form.form , section.HiringDroners .form{
+        margin: auto 12% !important;
+    }
+
+    .Jobdetail{
+        width: 150px !important;
+    }
+    .JobColon{
+        width: 40px !important;
+    }
+    .tabsmodel_li{
+        position: absolute !important;
+        right: 0 !important;
+    }
+
+    .Desktop_popup{
+        display:block !important;
+    }
+    .Mobile_popup{
+        display: none !important;
+    }
+
+    
+  section.PublicProfile.PublicProfileEdit .FormControl {
+    width: 88% !important;
+}
+    
+
+section.PublicProfile .ProfileContainer form{
+    margin: auto 12%;
+}
+
+.PublicProfileEdit .profileEditIcon {
+    top: 5% !important;
+    left: 16% !important;
+}
+
+.OfficeProfileEdit .profileEditIcon {
+    top: 10% !important;
+    left: 16% !important;
+}
+
+
+section.Profile.EndUserProfile form {
+    display: inline-flex !important;
+}
+ 
+.Myjobslistdesktop ,.Purchasedlistdesktop , .Cartlistdesktop{
+    display: block;
+}
+
+.Myjobslistmobile , .Purchasedlistmobile , .Cartlistmobile{
+    display: none;
+} 
+    }

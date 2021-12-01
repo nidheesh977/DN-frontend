@@ -1,0 +1,18 @@
+card_brand: null
+card_last_four: null
+company_name: null
+country: null
+created_at: "2021-11-25 05:26:20"
+email: "nidheesh.nexevo@gmail.com"
+email_verified_at: null
+id: 17
+location: null
+name: "Nidheesh"
+phone: "+917305055356"
+profession: null
+role_id: 1
+stripe_id: null
+subscribed: null
+trial_ends_at: null
+updated_at: "2021-11-25 05:26:20"
+username: "Nidheesh"

@@ -1,0 +1,133 @@
+ 
+form input[type="file"]{
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  height: 37%;
+  outline: none;
+  opacity: 0;
+  width: 74%;
+}
+form p{
+  width: 100%;
+  height: 100%;
+  color: #000000;  
+}
+
+[class^="percent"] {
+  width: 1%;
+  height: 24px;
+  background: transparent linear-gradient(31deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
+  border-radius: 50px;
+}
+
+.progress { position:relative; width:400px; border: 1px solid #ddd; padding: 1px; border-radius: 3px; }
+.bar { background-color: #B4F5B4; width:0%; height:20px; border-radius: 3px; }
+.percent { position:absolute; display:inline-block; top:3px; left:48%; }
+
+ 
+.uploadFile{
+  text-align: center; 
+}
+.PrivateSwitchBase-root-1 {
+  padding: 0px 4px !important;
+} 
+.signup-box{
+  border: 1px solid #ddd;
+  width: 700px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 5px;
+}
+.title{
+  font-weight: 600;
+  margin-top:0;
+}
+.err {
+  font-size: large;
+  color: red;
+}
+.asterisk{
+  font-size: small;
+  color: red;
+}
+.MuiFormControlLabel-root{
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+}
+
+.form-group {
+  margin: 15px;
+}
+
+.uploadFile img {  
+  margin-top: 20%;
+}
+
+@media (max-width: 575px) { 
+  form input[type="file"] { 
+    height: 100%;  
+    width: 94% !important;
+}
+
+.uploadFile { 
+  margin-top: 0% !important;
+  margin-bottom: 15%;
+}
+
+.uploadFile img {
+  width: 100px;    
+  margin-top: 10%;
+}
+.UploadFile button {
+  width: 45% !important;
+}
+}
+
+@media (min-width: 576px) and (max-width: 767px) { 
+  form input[type="file"] { 
+    height: 100%;
+    width: 95%;
+}
+.uploadFile img {
+  margin-top: 10%;
+}
+.uploadFile { 
+  margin-top: 0% !important;
+  margin-bottom: 10%;
+}
+ }
+
+
+@media (min-width: 768px) and (max-width: 991px) { 
+  form input[type="file"] { 
+    height: 100%;
+    width: 96%;
+}
+.uploadFile {  
+  margin-bottom: 10%;
+}
+}
+
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  form input[type="file"] { 
+    height: 32%;  
+    width: 96%;
+}
+.uploadFile { 
+  margin-top: 0%;
+}
+ }
+
+@media (min-width: 1200px) {
+  form input[type="file"] {
+    height: 100%;
+    width: 96%;
+}
+ }
+
+
+
+
+

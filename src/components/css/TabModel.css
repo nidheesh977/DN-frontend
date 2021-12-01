@@ -1,0 +1,349 @@
+ 
+  .tabs-nav ul ,  .tabs-navs ul  {
+    margin: 0;
+    padding: 0; 
+  }
+
+  
+  
+  .tabs-nav li , .tabs-navs li {
+    display: inline-block;
+    /* background: rgba(0, 0, 0, 0.78);
+    color: #fefefe;
+    border-width: 1px 1px 0 1px;
+    border-style: solid;
+    border-color: #34495E;
+    margin-right: 5px; */
+  }
+  
+  .tabs-nav a ,.tabs-navs a {
+    display: block;
+    padding: 15px;
+    font-weight: 300!important;
+    color: rgb(0, 0, 0);
+  }
+
+  ul.TabModelProfile button, ul.TabModelProfile button , span.TabModelProfile button, span.EditProfile button{
+    display: block;
+    padding: 15px;
+    font-weight: 300!important;
+    color: rgb(0, 0, 0);
+    background: #00ffff00;
+    border: none;
+    font-size: 16px;
+    font-family: 'Muli-Light';
+    cursor: pointer;
+  }
+
+  ul.TabModelProfile button:focus, ul.TabModelProfile button:focus , span.TabModelProfile button:focus, span.EditProfile button:focus{
+    outline: none;
+}
+
+  section.tabs-content.Hireprofiletab .tabs-nav button  {
+    padding: 20px !important;
+}
+
+  
+  /* Active tab */
+  
+  .tabs-nav li.active ,  .tabs-navs li.active {
+    /* background: #FFF; */
+    color: #000; 
+  }
+
+  .tabs-navs li.active a {
+    background: #4FFEA3 0% 0% no-repeat padding-box;
+    border: 1px solid #00000033;
+    border-radius: 5px;
+    width: 100%;
+    padding: 5px 15px;
+    text-align: center;
+}
+.tabs-navs li.active a:hover {
+  color: #000 !important;
+}
+
+.tabs-nav li.active a:hover, .tabs-navs li.active a:hover {
+  color: #000 !important;
+}
+  
+  .tabs-nav li.active a , .tabs-navs li.active a {
+    color: inherit;
+    font-family: 'Muli-Bold' !important;
+  }
+  /* Tab content */
+  
+   .tabs-contents { 
+    padding: 0px;
+    background: #FFF;
+    margin-top: -1px;
+    overflow: hidden;
+  }
+
+  .tabs-contents img.icon {
+    padding-right: 10px;
+}
+
+  section.tabs-content {
+    padding-top: 5px;
+}
+ 
+  /* Hide all but first content div */
+  
+  .tabs-content div.TabsContent:not(:first-child),   .tabs-contents div.TabsContents:not(:first-child)  {
+    display: none;
+  }
+
+  .tabs-navs li {
+    margin: auto 50px;
+}
+
+header.tabs-navs{
+  margin: 20px 70px 50px 70px;
+}
+  /* Hide all but first content div */
+    
+
+  /*  */
+
+
+  table { 
+    width: 100%;  
+    border-spacing: 0;
+    }
+   
+   
+  
+  td, th { 
+    padding: 0px;  
+    font-size: 18px; 
+    border-bottom: 1px solid #E2E2E2;
+    }
+ 
+
+    .Desktop_popup{
+      display:none !important;
+      }
+      .Mobile_popup{
+          display: block !important;
+      }
+
+      .UsersListBody  p{
+        margin: 6px 0px !important; 
+      }
+
+      .All_UsersListBody__34kT1 p {
+    margin: 6px 0;
+}
+
+section.tabs-content section.Myjobs {
+  padding: 40px 0px 0px 0px;
+}
+
+    /*  */
+
+
+    /* // Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575px) {  
+    .tabs-nav ul ,.tabs-navs ul { 
+        overflow-x: scroll;
+        white-space: nowrap;
+        flex-wrap: inherit;
+      }
+
+      table { 
+        width: 100%; 
+    }
+  
+    /* Force table to not be like tables anymore */
+    table, thead, tbody, th, td, tr { 
+      display: block; 
+    }
+    
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr { 
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+    
+    tr {     
+      box-shadow: -1px -1px 10px #0000000a, -1px -1px 10px rgb(94 104 121 / 12%);
+      border-radius: 5px; 
+      margin-bottom: 25px;    
+      padding: 10px;
+    }
+    
+    td { 
+      /* Behave  like a "row" */
+      border: none; 
+      position: relative; 
+    }
+  
+    td:before { 
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%; 
+      padding-right: 10px; 
+      white-space: nowrap;
+      /* Label the data */
+      content: attr(data-column);
+  
+      color: #000;
+      font-weight: bold;
+    }
+
+    .tabs-content , .tabs-contents {
+      padding: 0px; 
+      margin-top: 10px; 
+  }
+  .tabs-navs li {
+    margin: auto 0px;
+}
+
+ }
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767px) {   
+    .tabs-nav ul ,.tabs-navs ul { 
+        overflow-x: scroll;
+        white-space: nowrap;
+        flex-wrap: inherit;
+      }
+
+      table { 
+        width: 100%; 
+    }
+  
+    /* Force table to not be like tables anymore */
+    table, thead, tbody, th, td, tr { 
+      display: block; 
+    }
+    
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr { 
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+    
+    tr {     
+      box-shadow: -1px -1px 10px #0000000a, -1px -1px 10px rgb(94 104 121 / 12%);
+      border-radius: 5px; 
+      margin-bottom: 25px;
+      padding: 25px;
+    }
+    
+    td { 
+      /* Behave  like a "row" */
+      border: none; 
+      position: relative; 
+    }
+  
+    td:before { 
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%; 
+      padding-right: 10px; 
+      white-space: nowrap;
+      /* Label the data */
+      content: attr(data-column);
+  
+      color: #000;
+      font-weight: bold;
+    }
+    .tabs-navs li {
+      margin: auto 0px;
+  }
+ }
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) {   
+    .tabs-nav ul ,.tabs-navs ul { 
+        overflow-x: scroll;
+        white-space: nowrap;
+        flex-wrap: inherit;
+      }
+
+      table { 
+        width: 100%; 
+    }
+  
+    /* Force table to not be like tables anymore */
+    table, thead, tbody, th, td, tr { 
+      display: block; 
+    }
+    
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr { 
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+    
+    tr {     
+      box-shadow: -1px -1px 10px #0000000a, -1px -1px 10px rgb(94 104 121 / 12%);
+      border-radius: 5px; 
+      margin-bottom: 25px;
+      padding: 25px;
+    }
+    
+    td { 
+      /* Behave  like a "row" */
+      border: none; 
+      position: relative; 
+    }
+
+    /* .{
+      margin-right: 15px;
+    }
+   */
+    td:before { 
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%; 
+      padding-right: 10px; 
+      white-space: nowrap;
+      /* Label the data */
+      content: attr(data-column);
+  
+      color: #000;
+      font-weight: bold;
+    }
+ }
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199px) {  
+  .Desktop_popup{
+    display:block !important;
+    }
+    .Mobile_popup{
+        display: none !important;
+    }
+ }
+
+/* // Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) { 
+    .tabs-nav ul span:nth-child(2) {
+      float: right;
+    }
+    .tabs-content img.GalleryImg , .tabs-content .content-overlay , video.GalleryImg{
+      width: 280px;
+  }
+
+  .Desktop_popup{
+    display:block !important;
+    }
+    .Mobile_popup{
+        display: none !important;
+    }
+    }
