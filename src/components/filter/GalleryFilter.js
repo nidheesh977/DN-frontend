@@ -72,6 +72,7 @@ class GalleryFilter extends React.Component {
     this.state = {
       userlogin: "",
       listing: [],
+      listing_length: 0,
       posttitle: [],
       visible: 10,
       valuees: 0,
@@ -79,7 +80,7 @@ class GalleryFilter extends React.Component {
       usersid: "",
       all_id: "1",
       value: "",
-      loading: false,
+      loading: true,
       userId: props.user,
       images: "1",
       categoriesImage: "1",
@@ -308,6 +309,7 @@ class GalleryFilter extends React.Component {
         (data) => {
           this.setState({
             listing: data,
+            listing_length: data.length,
             loading: false,
           });
         },
@@ -341,6 +343,7 @@ class GalleryFilter extends React.Component {
     const { loading, data } = this.state;
 
     const { classes } = this.props;
+    var listing_length = this.state.listing_length
 
     return (
       <>
@@ -510,7 +513,7 @@ class GalleryFilter extends React.Component {
                 ) : (
                   <>
                     <div>
-                      {!listing.length ? (
+                      {listing_length == 0 ? (
                         <div style={{ margin: "0px auto", display: "block" }}>
                           <Box className={All.Text_center} pt={5}>
                             <img
