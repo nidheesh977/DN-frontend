@@ -247,14 +247,14 @@ export default class ViewJob extends React.Component {
                         <Box pt={1}>
                           <Link
                             to={{
-                              pathname: `/ProfileSingle/${imageview.user_id}`,
+                              pathname: `/ProfileSingle/${this.props.match.params.user_id}`,
                             }}
                           >
                             <h5> {imageview.author || <Skeleton />}</h5>
                           </Link>
                           <Link
                             to={{
-                              pathname: `/ProfileSingle/${imageview.user_id}`,
+                              pathname: `/ProfileSingle/${this.props.match.params.user_id}`,
                             }}
                           >
                             <label
