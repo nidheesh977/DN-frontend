@@ -160,6 +160,7 @@ class GalleryFilter extends React.Component {
   handleChanges(event) {
     event.preventDefault();
     let type = $("#type").val();
+    console.log(type)
     const config = {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -175,8 +176,9 @@ class GalleryFilter extends React.Component {
       .then(
         (data) => {
           this.setState({ listing: data });
+          console.log(data)
         },
-        (err) => {}
+        (err) => {console.log(err)}
       );
   }
 

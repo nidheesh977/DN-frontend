@@ -82,7 +82,6 @@ const Home = () => {
     .then(
       (res) => {
         Setuser(res.data);
-        console.log("Response data = "+res.data)
     })
     .catch((err)=>{
       console.log(err);
