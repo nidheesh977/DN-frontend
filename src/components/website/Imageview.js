@@ -496,7 +496,7 @@ export default class ViewJob extends React.Component {
                         <Box textAlign={"Left"}>
                           <img
                             class="alignleft"
-                            src={imageview.profile}
+                            src={user_profile}
                             alt="Image Sample 1"
                             style={{
                               display: "inline",
