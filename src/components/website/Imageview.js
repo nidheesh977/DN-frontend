@@ -27,6 +27,7 @@ export default class ViewJob extends React.Component {
       user_id: "",
       imageview: "",
       userid: "",
+      user_profile: "",
       relatedposts: [],
       loading: false,
       id: "",
@@ -119,6 +120,15 @@ export default class ViewJob extends React.Component {
       });
 
     this.setState({ loading: true });
+
+    axios.post('http://localhost/auth-app/public/api/auth/profilesingle', {
+      user_id: user_id,
+    }, config)
+    .then(res=>{
+      this.setState({
+        user_profile: res.data.profile
+      })
+    })
   }
 
   addComment(comment) {
@@ -131,6 +141,7 @@ export default class ViewJob extends React.Component {
   render() {
     const { imageview, value } = this.state;
     const { relatedposts, values } = this.state;
+    var user_profile = this.state.user_profile
     return (
       <>
         <Helmet>
@@ -230,7 +241,7 @@ export default class ViewJob extends React.Component {
                           >
                             <img
                               class="alignleft"
-                              src={imageview.profile}
+                              src={user_profile}
                               alt="Image Sample 1"
                               style={{
                                 display: "inline",

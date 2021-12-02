@@ -47,8 +47,10 @@ class EndProfile extends React.Component {
             .then(res => {
                 this.setState({profile: res.data})
                 this.setState({croppedImg:res.data.profile})
+                console.log(res)
             },
               err => { 
+                console.log(err)
               }
             )
    
