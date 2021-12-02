@@ -18,6 +18,7 @@ const useStyless = makeStyles((theme) => ({
   root: {
     transform: "translateZ(0px)",
     flexGrow: 1,
+
   },
   speedDials: {
     "&.MuiFab-primary": {
@@ -82,11 +83,10 @@ const Home = () => {
       (res) => {
         Setuser(res.data);
         console.log("Response data = "+res.data)
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
   }, []);
 
   function routeChange(name) {
