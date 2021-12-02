@@ -167,7 +167,7 @@ export default class ViewJob extends React.Component {
                           {imageview.sale == "forsale" && (
                             <Link
                               to={{
-                                pathname: `/Cart/${imageview.slug}/download/${imageview.user_id}`,
+                                pathname: `/Cart/${imageview.slug}/download/${this.props.match.params.user_id}`,
                               }}
                             >
                               <Button className={All.BtnStyle_5}>
@@ -225,7 +225,7 @@ export default class ViewJob extends React.Component {
                         <Box textAlign={"Left"}>
                           <Link
                             to={{
-                              pathname: `/ProfileSingle/${imageview.user_id}`,
+                              pathname: `/ProfileSingle/${this.props.match.params.user_id}`,
                             }}
                           >
                             <img
@@ -308,7 +308,7 @@ export default class ViewJob extends React.Component {
                       <Box pt={2} pb={5}>
                         <Link
                           to={{
-                            pathname: `/ProfileSingle/${imageview.user_id}`,
+                            pathname: `/ProfileSingle/${this.props.match.params.user_id}`,
                           }}
                         >
                           <Button className={All.BtnStyle_11}>
@@ -424,7 +424,7 @@ export default class ViewJob extends React.Component {
                           {imageview.sale == "forsale" && (
                             <Link
                               to={{
-                                pathname: `/Cart/${imageview.slug}/download/${imageview.user_id}`,
+                                pathname: `/Cart/${imageview.slug}/download/${this.props.match.params.user_id}`,
                               }}
                             >
                               <Button className={All.BtnStyle_5}>
@@ -554,7 +554,7 @@ export default class ViewJob extends React.Component {
                       <Box pt={2} pb={5}>
                         <Link
                           to={{
-                            pathname: `/ProfileSingle/${imageview.user_id}`,
+                            pathname: `/ProfileSingle/${this.props.match.params.user_id}`,
                           }}
                         >
                           <Button className={All.BtnStyle_11}>
