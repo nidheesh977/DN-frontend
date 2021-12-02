@@ -18,6 +18,7 @@ import GraphicsImages from './GraphicsImages.js'
 import styled from 'styled-components';
 import axios from 'axios'
 import { userService } from '../_services/user.service';
+import "../css/TabModel.css"
 
 
 document.addEventListener('click', ({ target: { dataset: { id = '' }}}) => {

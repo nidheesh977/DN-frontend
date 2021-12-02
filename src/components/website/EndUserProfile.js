@@ -103,6 +103,7 @@ export default function EndUserProfile(props) {
       .then(
         (res) => {
           setProfile(res.data);
+          console.log(res.data)
           setBusy(true);
         },
         (err) => {
