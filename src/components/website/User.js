@@ -35,7 +35,6 @@ function User() {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(false); 
   const [test, setTest] = useState();
-  const [passwordLength, setPasswordLength] = useState();
 
   const history = useHistory();
   const onSubmit = (event) => {
@@ -57,7 +56,9 @@ function User() {
       history.push("/Profile");
     })
       .catch(error => {
-        console.log(error) 
+        swal('Something went wrong. Try again', {
+          icon: "error",
+        });
         // swal(error.response.data.message.email[0], {
         //   icon: "error",
         // });
@@ -102,9 +103,6 @@ function User() {
     setOpen(false);
   };
 
-  const passwordChangeHandler = (e) => {
-    setPasswordLength(e.target.value.length)
-  }
 
   return (
     <>
@@ -122,7 +120,7 @@ function User() {
       {errors.confirmPassword && !errors.name && !errors.username && !errors.email && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">password does not match</Alert></Snackbar>}
       {errors.confirmPassword && errors.confirmPassword.type === "required" && !errors.name && !errors.username && !errors.email && !errors.password && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Confirm password is a requied feild!</Alert></Snackbar>}
 
-      {errors.password && passwordLength < 8 && !errors.name && !errors.username && !errors.email && !errors.confirmPassword && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Password must have at least 8 characters</Alert></Snackbar>}
+      {errors.password && errors.password.message && !errors.name && !errors.username && !errors.email && !errors.confirmPassword && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Password must have at least 8 characters</Alert></Snackbar>}
 
       {errors.password && errors.password.type === "required" && !errors.name && !errors.username && !errors.email && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Password is a requied feild!</Alert></Snackbar>}
 
@@ -173,7 +171,7 @@ function User() {
                 <div className={All.FormGroup}>
                   <label className={All.Bold} for="password">Password <span className = {All.required_field}>*</span></label>
                   <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
-                  <input name="password" type="password" name="password" className={All.FormControl} id="password" ref={register({ required: "You must specify a password", minLength: { value: 8, message: "Password must have at least 8 characters" } })} onChange = {passwordChangeHandler} />
+                  <input name="password" type="password" name="password" className={All.FormControl} id="password" ref={register({ required: "You must specify a password", minLength: { value: 8, message: "Password must have at least 8 characters" } })} />
                   <VisibilityIcon  className={All.VisibilityIcon} onClick={PasswordShow}/> 
              </div>
                
