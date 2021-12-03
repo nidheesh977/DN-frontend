@@ -34,9 +34,11 @@ function User() {
   
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(false); 
-  const [test, setTest] = useState(); 
+  const [test, setTest] = useState();
+  const [passwordLength, setPasswordLength] = useState();
+
   const history = useHistory();
-  const onSubmit = (event) => { 
+  const onSubmit = (event) => {
     setLoading(true); 
     axios.post('http://localhost/auth-app/public/api/auth/register', {
       name: event.name,
@@ -55,10 +57,10 @@ function User() {
       history.push("/Profile");
     })
       .catch(error => {
-        console.log(error.response.data.message.email[0]) 
-        swal(error.response.data.message.email[0], {
-          icon: "error",
-        });
+        console.log(error) 
+        // swal(error.response.data.message.email[0], {
+        //   icon: "error",
+        // });
         // setError(true); 
         setLoading(false);  
         // setTest(error.response.data.message.email[0]);  
@@ -100,6 +102,10 @@ function User() {
     setOpen(false);
   };
 
+  const passwordChangeHandler = (e) => {
+    setPasswordLength(e.target.value.length)
+  }
+
   return (
     <>
       <Helmet>
@@ -112,20 +118,23 @@ function User() {
         error && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">{test}!</Alert></Snackbar>
       } 
        */}
-      {errors.name && errors.name.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-      {errors.name && errors.name.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
 
-      {errors.username && errors.username.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-      {errors.username && errors.username.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a equied feild!</Alert></Snackbar>}
+      {errors.confirmPassword && !errors.name && !errors.username && !errors.email && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">password does not match</Alert></Snackbar>}
+      {errors.confirmPassword && errors.confirmPassword.type === "required" && !errors.name && !errors.username && !errors.email && !errors.password && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Confirm password is a requied feild!</Alert></Snackbar>}
 
-      {errors.email && errors.email.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-      {errors.email && errors.email.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-      {errors.email && errors.email.message && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
- 
-      {errors.password && errors.password.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
+      {errors.password && passwordLength < 8 && !errors.name && !errors.username && !errors.email && !errors.confirmPassword && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Password must have at least 8 characters</Alert></Snackbar>}
 
-      {errors.confirmPassword && errors.confirmPassword.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-      {errors.confirmPassword && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">password does not match</Alert></Snackbar>}
+      {errors.password && errors.password.type === "required" && !errors.name && !errors.username && !errors.email && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Password is a requied feild!</Alert></Snackbar>}
+
+      {errors.email && errors.email.type === "required" && !errors.name && !errors.username && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Email ID is a requied feild!</Alert></Snackbar>}
+      {errors.email && errors.email.type === "minLength" && !errors.name && !errors.username &&<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Enter valid email id</Alert></Snackbar>}
+      {errors.email && errors.email.message && !errors.name && !errors.username && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Enter valid email id</Alert></Snackbar>}
+
+      {errors.username && errors.username.type === "required" && !errors.name && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Username is a requied feild!</Alert></Snackbar>}
+      {errors.username && errors.username.type === "minLength" && !errors.name && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Username is a requied feild!</Alert></Snackbar>}
+
+      {errors.name && errors.name.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Name is a requied feild!</Alert></Snackbar>}
+      {errors.name && errors.name.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Name is a requied feild!</Alert></Snackbar>}
  
       {errors.checkedA && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
 
@@ -142,16 +151,16 @@ function User() {
               </Box>
               <form className={All.form} onSubmit={handleSubmit(onSubmit)}>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="name">Name</label>
+                  <label className={All.Bold} for="name">Name <span className = {All.required_field}>*</span></label>
                   <input type="text" name="name" className={All.FormControl} id="name" ref={register({ required: true, minLength: 2 })} />
 
                 </div>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="username">User Name</label>
+                  <label className={All.Bold} for="username">User Name <span className = {All.required_field}>*</span></label>
                   <input type="text" name="username" className={All.FormControl} id="username" ref={register({ required: true, minLength: 2 })} />
                 </div>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="email">Email ID</label>
+                  <label className={All.Bold} for="email">Email ID <span className = {All.required_field}>*</span></label>
                   <input type="email" className={All.FormControl} id="email" name="email" ref={register({ required: true, pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "invalid email address" } })} />
                 </div>
                 <div className={All.FormGroup}>
@@ -162,18 +171,18 @@ function User() {
                  
                 <Box pb={2} className={`${All.Width_76} ${All.shipping_txt} `} textAlign="right" pl={0}><span textAlign="right" className={All.FSize_12}>Only for shipping process</span></Box>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="password">Password</label>
+                  <label className={All.Bold} for="password">Password <span className = {All.required_field}>*</span></label>
                   <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
-                  <input name="password" type="password" name="password" className={All.FormControl} id="password" ref={register({ required: "You must specify a password", minLength: { value: 8, message: "Password must have at least 8 characters" } })} />
+                  <input name="password" type="password" name="password" className={All.FormControl} id="password" ref={register({ required: "You must specify a password", minLength: { value: 8, message: "Password must have at least 8 characters" } })} onChange = {passwordChangeHandler} />
                   <VisibilityIcon  className={All.VisibilityIcon} onClick={PasswordShow}/> 
              </div>
                
                 </div>
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="confirmPassword">Confirm Password</label>
+                  <label className={All.Bold} for="confirmPassword">Confirm Password <span className = {All.required_field}>*</span></label>
                   <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
-                  <input type="password" name="confirmPassword" className={All.FormControl} id="confirmPassword" ref={register({ validate: value => value === password.current || "The passwords do not match" })} />
+                  <input type="password" name="confirmPassword" className={All.FormControl} id="confirmPassword" ref={register({ validate: value => value === password.current || "The passwords do not match", required: "You must specify a password" })} />
                   <VisibilityIcon  className={All.VisibilityIcon} onClick={confirmPasswordShow}/> 
              </div> 
                 </div>

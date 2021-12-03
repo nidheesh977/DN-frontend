@@ -1,4 +1,8 @@
-   @font-face {
+.required_field{
+    color: red;
+}
+
+  @font-face {
     font-family: Muli-Bold;
     src: url('../../font/Muli-Bold.ttf');
   }
