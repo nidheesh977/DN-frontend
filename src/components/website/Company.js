@@ -162,18 +162,18 @@ function Company() {
               </Box>
               <form className={All.form} onSubmit={handleSubmit(onSubmit)}>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="name">Company Name</label>
+                  <label className={All.Bold} for="name">Company Name <span className = {All.required_field}>*</span></label>
                   <input type="text" name="companyname" className={All.FormControl} id="companyname" ref={register({ required: true, minLength: 2 })} />
 
                 </div>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="username">Profession</label>
+                  <label className={All.Bold} for="username">Profession <span className = {All.required_field}>*</span></label>
                   <input type="text" name="profession" className={All.FormControl} id="profession" ref={register({ required: true, minLength: 2 })} />
                 </div>
 
                 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="username">Country</label>
+                  <label className={All.Bold} for="username">Country <span className = {All.required_field}>*</span></label>
                   <input type="text" name="country" className={All.FormControl} id="country" ref={register({ required: true, minLength: 2 })} />
                   {/* <CountryDropdown name="country" id="country" className={` ${All.Country}`}  ref={register({ required: true })} 
                     value={country} onChange={selectCountry} /> */}
@@ -181,7 +181,7 @@ function Company() {
 
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="username">Location</label>
+                  <label className={All.Bold} for="username">Location <span className = {All.required_field}>*</span></label>
                   <input type="text" name="location" className={All.FormControl} id="location" ref={register({ required: true, minLength: 2 })} />
                   {/* <RegionDropdown name="location" id="location" className={` ${All.Country}`}   ref={register({ required: true })}
                   country={country} 
@@ -189,7 +189,7 @@ function Company() {
                 </div>
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="email">Email ID</label>
+                  <label className={All.Bold} for="email">Email ID <span className = {All.required_field}>*</span></label>
                   <input type="email" className={All.FormControl} id="email" name="email" ref={register({ required: true, pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "invalid email address" } })} />
                 </div>
                 <div className={All.FormGroup}>
@@ -198,7 +198,7 @@ function Company() {
                 </div>
                 <Box pb={2} className={`${All.Width_76} ${All.shipping_txt} `} textAlign="right" pl={0}><span textAlign="right" className={All.FSize_12}>Only for shipping process</span></Box>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="password">Password</label>
+                  <label className={All.Bold} for="password">Password <span className = {All.required_field}>*</span></label>
                   <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
                   <input name="password" type="password" name="password" className={All.FormControl} id="password" ref={register({ required: "You must specify a password", minLength: { value: 8, message: "Password must have at least 8 characters" } })} />
                   <VisibilityIcon  className={All.VisibilityIcon} onClick={PasswordShow}/> 
@@ -207,7 +207,7 @@ function Company() {
              </div>
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="confirmPassword">Confirm Password</label>
+                  <label className={All.Bold} for="confirmPassword">Confirm Password <span className = {All.required_field}>*</span></label>
                   <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
                   <input type="password" name="confirmPassword" className={All.FormControl} id="confirmPassword" ref={register({ validate: value => value === password.current || "The passwords do not match" })} />
                   <VisibilityIcon  className={All.VisibilityIcon} onClick={confirmPasswordShow}/> 
