@@ -62,15 +62,14 @@ function User() {
       .catch(error => {
 
         try{
-          console.log(error.response.data.message.email[0]) 
-          swal(error.response.data.message.email[0], {
+          console.log(error.response.data.message.phone[0]) 
+          swal(error.response.data.message.phone[0], {
             icon: "error",
           });
         }
 
-        catch(err){
-          console.log(error.response.data.message.phone[0]) 
-          swal(error.response.data.message.phone[0], {
+        catch(err){ 
+          swal("Something went wrong. Try again.", {
             icon: "error",
           });
         }
