@@ -35,13 +35,13 @@ class ProfileCoverImg extends React.Component {
     this.state = {
       cropperOpen: false,
       img: null,
-      zoom: 2,  
-      croppedImg: 
-        "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
-        profile: [],
-        user: [],  
-        open: true, 
-        // SuccessMessages: [],
+      zoom: 2,
+      defaultCoverPic: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
+      croppedImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
+      profile: [],
+      user: [],  
+      open: true, 
+      // SuccessMessages: [],
         
     };
   }
@@ -127,7 +127,10 @@ class ProfileCoverImg extends React.Component {
       <MuiThemeProvider >
         <div>
          <Box position="relative">
-         <Avatar src={this.state.croppedImg || <Skeleton circle={true} height={50} width={50}/>} className={All.BackgroundcoverImg} size={100} />
+         {this.state.croppedImg 
+           ? <Avatar src={this.state.croppedImg} className={All.BackgroundcoverImg} size={100} />
+           : <Avatar src={this.state.defaultCoverPic} className={All.BackgroundcoverImg} size={100} />
+         }
             <figure  className={All.coverEditIcon} > 
             {CoverEdit ? <img src={CoverEdit} /> : <img src={this.state.croppedImgerEdit} /> }   
             <div class="bottom-left"><p className={ `${All.FSize_15} ${All.TextWhite}`}>Change Your Cover Pic</p></div>

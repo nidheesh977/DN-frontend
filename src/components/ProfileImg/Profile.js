@@ -29,13 +29,13 @@ class Profile extends React.Component {
     this.state = {
       cropperOpen: false,
       img: null,
+      defaultProfileImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
       zoom: 2,  
-      croppedImg:
-        "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
-        profile: [],
-        user: [],
-        open: true, 
-        SuccessMessages: [],
+      croppedImg:"https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
+      profile: [],
+      user: [],
+      open: true, 
+      SuccessMessages: [],
     };
     
   }
@@ -124,7 +124,7 @@ class Profile extends React.Component {
       <MuiThemeProvider>
         <div className={All.M_ProfileCenter}>
          <div>
-         {this.state.croppedImg ? <Avatar src={this.state.croppedImg} size={100} /> :  <Skeleton width={100} height={100}/> }   
+         {this.state.croppedImg ? <Avatar src={this.state.croppedImg} size={100} /> :  <Avatar src={this.state.defaultProfileImg} size={100} />}
          <img src={ProfileEditIcon}  className={All.profileEditIcon} />
          </div>
           <RaisedButton className={All.ProfileImg}
@@ -136,7 +136,7 @@ class Profile extends React.Component {
             <input
               ref="in"
               type="file"
-              accept="image/*" 
+              accept="image/*"
               onChange={this.handleFileChange}
               className={All.Width_100}
             />
