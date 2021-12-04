@@ -73,10 +73,53 @@ export default function SocialMediaProfiles() {
       // setSuccessMessages(res.data.message);  
     })
       .catch(error => {
-        setLoading(false);  
-        swal(error.data.message.username[0], {
-          icon: "error",
-        });
+        setLoading(false); 
+
+        try{
+          swal(error.response.data.message.facebook[0], {
+            icon: "error",
+          });
+        }
+        catch{
+          try{
+            swal(error.response.data.message.twitter[0], {
+              icon: "error",
+            });
+          }
+          catch{
+            try{
+              swal(error.response.data.message.instagram[0], {
+                icon: "error",
+              });
+            }
+            catch{
+              try{
+                swal(error.response.data.message.linkedin[0], {
+                  icon: "error",
+                });
+              }
+              catch{
+                try{
+                  swal(error.response.data.message.pinterest[0], {
+                    icon: "error",
+                  });
+                }
+                catch{
+                  try{
+                    swal(error.response.data.message.youtube[0], {
+                      icon: "error",
+                    });
+                  }
+                  catch{
+                    swal("Something went wrong. Please try again", {
+                      icon: "error",
+                    });
+                  }
+                }
+              }
+            }
+          }
+        }
         // setError(true);
         // alert(error.response.data.message.username[0]);
         // setErrorMessages(error.response.data.message.username[0]) ;
