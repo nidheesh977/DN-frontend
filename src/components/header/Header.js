@@ -8,7 +8,7 @@ class Header extends React.Component {
       super(props);
       
       this.state = {
-        isDesktop: false  
+        isDesktop: false
       };
   
       this.updatePredicate = this.updatePredicate.bind(this);

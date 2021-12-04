@@ -91,7 +91,11 @@ function Navbar(props) {
 
       userService.Profile().then(res => { 
         setLoading(false);
-        setProfileImage(res.data.profile);
+        if (res.data.profile != "http://localhost/auth-app/public/uploads/profile"){
+          setProfileImage(res.data.profile);
+        }else{
+          setProfileImage(ProfileIcon)
+        }
       })    
   }, []);
 
