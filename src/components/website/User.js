@@ -28,6 +28,7 @@ function User() {
   const password = useRef({});
   password.current = watch("password", "");
   const [value, setValue] = useState()
+  const [emailTaken, setEmailTaken] = useState()
   const [state, setState] = React.useState({
     checkedA: false,
   });
@@ -38,35 +39,53 @@ function User() {
 
   const history = useHistory();
   const onSubmit = (event) => {
-    setLoading(true); 
-    axios.post('http://localhost/auth-app/public/api/auth/register', {
-      name: event.name,
-      username: event.username,
-      email: event.email,
-      phone: value,
-      role: 1,
-      password: event.password
-    }).then(res => { 
-      swal('Register Successfull', {
-        icon: "success",
-      });
-      setLoading(false);  
-      localStorage.setItem('access_token', res.data.access_token);
-      localStorage.setItem('token_type', res.data.token_type);
-      history.push("/Profile");
-    })
-      .catch(error => {
-        swal('Something went wrong. Try again', {
-          icon: "error",
+    axios.post("http://localhost/auth-app/public/api/emailcheck", {email: event.email})
+    .then(res => {
+      console.log(res)
+      setLoading(true); 
+      axios.post('http://localhost/auth-app/public/api/auth/register', {
+        name: event.name,
+        username: event.username,
+        email: event.email,
+        phone: value,
+        role: 1,
+        password: event.password
+      }).then(res => { 
+        swal('Register Successfull', {
+          icon: "success",
         });
-        // swal(error.response.data.message.email[0], {
-        //   icon: "error",
-        // });
+        setLoading(false);  
+        localStorage.setItem('access_token', res.data.access_token);
+        localStorage.setItem('token_type', res.data.token_type);
+        history.push("/Profile");
+      })
+      .catch(error => {
+
+        try{
+          console.log(error.response.data.message.email[0]) 
+          swal(error.response.data.message.email[0], {
+            icon: "error",
+          });
+        }
+
+        catch(err){
+          console.log(error.response.data.message.phone[0]) 
+          swal(error.response.data.message.phone[0], {
+            icon: "error",
+          });
+        }
         // setError(true); 
         setLoading(false);  
         // setTest(error.response.data.message.email[0]);  
         console.log(error);
       }); 
+    })
+    .catch(err => {
+      swal(err.response.data.message, {
+        icon: "error",
+      });
+    })
+    
     }  
 
         const PasswordShow = () => {
@@ -162,7 +181,7 @@ function User() {
                   <input type="email" className={All.FormControl} id="email" name="email" ref={register({ required: true, pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "invalid email address" } })} />
                 </div>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="phone">Phone Number <span className={All.FSize_12}>(with country code)</span></label>
+                  <label className={All.Bold} for="phone">Phone Number <span className={All.FSize_12}>(with country code)</span>  <span className = {All.required_field}>*</span></label>
                   <PhoneInput className={All.Phonenumber} name="phone" id="phone" value={value} onChange={setValue} />
                 </div>
 
