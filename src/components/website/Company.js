@@ -79,7 +79,7 @@ function Company() {
     })
       .catch(error => {
         setLoading(false); 
-        setTest(error.response.data.message.email[0])  
+        setTest("Something went wrong. Try again")  
         setError(true); 
       }); 
         } 
