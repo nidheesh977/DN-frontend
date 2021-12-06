@@ -56,7 +56,8 @@ class Hiring extends React.Component {
       job_location: job_location,
       job_category: job_category,
     }, config2).then(res => {
-      this.setState({ hiredorners: res.data })
+      this.setState({ hiredorners: res.data.reverse() })
+      console.log(res)
 
     }).catch(error => {
       console.log(error);
@@ -82,7 +83,7 @@ class Hiring extends React.Component {
       const ress = await axios.get(urls, config)
       const resss = await axios.get(urlss, config)
 
-      const users = res.data
+      const users = res.data.reverse()
       const datas = ress.data
       const data1 = resss.data
       this.setState({ users })
@@ -262,15 +263,31 @@ class Hiring extends React.Component {
                                     <Box className={All.JobsList}>
                                       <Box textAlign={'Left'} pt={3}>
                                         {this.state.loading ? <Skeleton circle={true} height={75} width={75} style={{ borderRadius: '100%' }} className={All.SkeletonImg} />
-                                          : <img className="alignleft" src={el.profile}
-                                            alt="Image Sample 1" style={{
-                                              display: "inline",
-                                              float: "left",
-                                              width: "75px",
-                                              height: "75px",
-                                              borderRadius: "100px",
-                                              marginRight: '15px'
-                                            }} />}    </Box>
+                                          : <>
+                                              {el.profile 
+                                                ?<img className="alignleft" src={el.profile}
+                                                  alt="Image Sample 1" style={{
+                                                    display: "inline",
+                                                    float: "left",
+                                                    width: "75px",
+                                                    height: "75px",
+                                                    borderRadius: "100px",
+                                                    marginRight: '15px'
+                                                  }} 
+                                                />
+                                                :<img className="alignleft" src={"https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"}
+                                                alt="Image Sample 1" style={{
+                                                  display: "inline",
+                                                  float: "left",
+                                                  width: "75px",
+                                                  height: "75px",
+                                                  borderRadius: "100px",
+                                                  marginRight: '15px'
+                                                }} 
+                                              />
+                                              }
+                                            </>
+                                            }</Box>
 
                                       <Box pt={1}>
 
