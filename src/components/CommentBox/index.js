@@ -51,14 +51,9 @@ class CommentBox extends React.Component {
   }
 
   render() {
-    const comments = this._getComments();
+    var comments = this.state.comments
     let commentNodes;
     let buttonText = "Show Comments";
-
-    if (this.state.showComments) {
-      buttonText = "Hide Comments";
-      commentNodes = <div className="comment-list">{comments}</div>;
-    }
 
     return (
       <div className="comment-box">
@@ -71,7 +66,45 @@ class CommentBox extends React.Component {
           post={this.props.passedVal}
           addComment={this._addComment.bind(this)}
         />
-        {commentNodes}
+        <div className="comment-list">
+          {comments.map((comment, index) => {
+            return(
+              <>
+                <Box textAlign={"Left"} className="comment">
+                  <img
+                    class="alignleft"
+                    src={comment.profile}
+                    alt="Image Sample 1"
+                    style={{
+                      display: "inline",
+                      float: "left",
+                      width: "45px",
+                      marginRight: "15px",
+                      marginTop: "25px",
+                      height: "45px",
+                      borderRadius: "100px",
+                    }}
+                  />
+                </Box>
+
+                <Box pt={1}>
+                  <label className={All.Bold}>{comment.name}</label>
+                </Box>
+                <Box className={`${All.DisplayFlex}  ${All.paddingtop} `}>
+                  <label style={{ wordBreak: "break-all", width: "80%" }}>
+                    - {comment.body}
+                  </label>
+                  <figcaption>
+                    <span className="LikeIcon LikeIcon_slider MuliLight">
+                      {" "}
+                      <CommentLike id={comment.id} />
+                    </span>
+                  </figcaption>
+                </Box>
+              </>
+            )
+          })}
+        </div>
       </div>
     );
   } // end render
