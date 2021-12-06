@@ -110,215 +110,215 @@ class Hiring extends React.Component {
     return (
       <>
         <section className={All.HiringDronersFliter}>
-              <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
-                <Row class="FilterDropdown" >
-                  <Col lg={4} >
-                    <label className={All.Bold}>Job Title</label>
-                    <select className="dropdown dropdown__text" id="job_title" onChange={this.handleChanges} >
-                      <option value="" selected disabled>Job Title</option>
-                      {title.map((option) => (
-                        <option value={option.jobtitle}>{option.jobtitle}</option>
-                      ))}
-                    </select> 
-                  </Col>
-                  <Col lg={4} >
-                    <label className={All.Bold}>Job Category</label>
+          <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
+            <Row class="FilterDropdown" >
+              <Col lg={4} >
+                <label className={All.Bold}>Job Title</label>
+                <select className="dropdown dropdown__text" id="job_title" onChange={this.handleChanges} >
+                  <option value="" selected>All Titles</option>
+                  {title.map((option) => (
+                    <option value={option.jobtitle}>{option.jobtitle}</option>
+                  ))}
+                </select>
+              </Col>
+              <Col lg={4} >
+                <label className={All.Bold}>Job Category</label>
 
-                    <select className="dropdown dropdown__text" id="job_category" onChange={this.handleChanges} >
-                      <option value="" selected disabled>Job Category</option>
-                      <option value="full_time">Full-Time</option>
-                      <option value="part_time">Part-Time</option>
-                      <option value="freelanchers">Freelanchers</option>
-                    </select> 
-                  </Col>
-                  <Col lg={4} >
+                <select className="dropdown dropdown__text" id="job_category" onChange={this.handleChanges} >
+                  <option value="" selected>All Categories</option>
+                  <option value="full_time">Full-Time</option>
+                  <option value="part_time">Part-Time</option>
+                  <option value="freelanchers">Freelanchers</option>
+                </select>
+              </Col>
+              <Col lg={4} >
 
-                    <label className={All.Bold}>Job Location</label>
+                <label className={All.Bold}>Job Location</label>
 
-                    <select className="dropdown dropdown__text" id="job_location" onChange={this.handleChanges} >
-                      <option value="" selected disabled>Job Location</option>
-                      {cities.map((option) => (
-                        <option value={option.location}>{option.location}</option>
-                      ))}
-                    </select>
-                  </Col>
-                </Row>
-              </Container>
-            </section>
-    {loading === true
-      ?
-      <section className={All.HireDornerJobList}>
-        <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_30} ${All.paddingtop_10}`}>
-          <Row>
-            <Col lg={12}>
-              <Box className={All.JobsList}>  
-                  <div className={All.Joblist_loading}> 
-                    <div>
-                      <Skeleton circle={true} height={100} width={100} className={`${All.Border_radius_50}`} />
-                    </div> 
-                    <div>
-                    {loading === true ?  <Skeleton/> :  <h2></h2> }
-                    {loading === true ?  <Skeleton/> :  <h2></h2> }
-                     <div>
-                     <Skeleton /> 
-                            <Box pb={6} pt={3}>
-                                <Button ml={2}  className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
-                                    <img style={{ paddingRight: 10 }} /> <Skeleton /></Button>
-                                    <Button ml={2}  className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
-                                    <img style={{ paddingRight: 10 }}/> <Skeleton /></Button>  
-                                    <Button ml={2}  className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
-                                    <img style={{ paddingRight: 10 }}/> <Skeleton /></Button>    
-                                     
-                                </Box>
-                     </div> 
-                  </div>
-                </div>
-              </Box>
-              <Box className={All.JobsList}>  
-                  <div className={All.Joblist_loading}> 
-                    <div>
-                      <Skeleton circle={true} height={100} width={100} className={`${All.Border_radius_50}`} />
-                    </div> 
-                    <div>
-                    {loading === true ?  <Skeleton/> :  <h2></h2> }
-                    {loading === true ?  <Skeleton/> :  <h2></h2> }
-                     <div>
-                     <Skeleton /> 
-                            <Box pb={6} pt={3}>
-                                <Button ml={2}  className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
-                                    <img style={{ paddingRight: 10 }} /> <Skeleton /></Button>
-                                    <Button ml={2}  className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
-                                    <img style={{ paddingRight: 10 }}/> <Skeleton /></Button>  
-                                    <Button ml={2}  className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
-                                    <img style={{ paddingRight: 10 }}/> <Skeleton /></Button>    
-                                     
-                                </Box>
-                     </div> 
-                  </div>
-                </div>
-              </Box>
-              <Box className={All.JobsList}>  
-                  <div className={All.Joblist_loading}> 
-                    <div>
-                      <Skeleton circle={true} height={100} width={100} className={`${All.Border_radius_50}`} />
-                    </div> 
-                    <div>
-                    {loading === true ?  <Skeleton/> :  <h2></h2> }
-                    {loading === true ?  <Skeleton/> :  <h2></h2> }
-                     <div>
-                     <Skeleton /> 
-                            <Box pb={6} pt={3}>
-                                <Button ml={2}  className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
-                                    <img style={{ paddingRight: 10 }} /> <Skeleton /></Button>
-                                    <Button ml={2}  className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
-                                    <img style={{ paddingRight: 10 }}/> <Skeleton /></Button>  
-                                    <Button ml={2}  className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
-                                    <img style={{ paddingRight: 10 }}/> <Skeleton /></Button>    
-                                     
-                                </Box>
-                     </div> 
-                  </div>
-                </div>
-              </Box>
-            </Col>
-          </Row>
-        </Container>
-      </section>
-      : <>
-        {!hiredorners.length
+                <select className="dropdown dropdown__text" id="job_location" onChange={this.handleChanges} >
+                  <option value="" selected disabled>All Locations</option>
+                  {cities.map((option) => (
+                    <option value={option.location}>{option.location}</option>
+                  ))}
+                </select>
+              </Col>
+            </Row>
+          </Container>
+        </section>
+        {loading === true
           ?
-          <>
-          <div style={{ margin: '0px auto', display: 'block' }}>
-            <Box className={All.Text_center} pt={5}>
-              <img src={nofoundresult} className={`${All.W_xs_100} ${All.W_sm_100}`} />
-              <Box className={`${All.Text_center}`} px={5} pb={2}>
-                <h2>No Results Found</h2>
-              </Box>
-              <Box className={`${All.Text_center}`} pb={5}>
-                <label>It seems we can’t find any results based on your search. </label>
-              </Box>
-            </Box>
-          </div>
-          </>
-          :
-          <>
-          
+          <section className={All.HireDornerJobList}>
+            <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_30} ${All.paddingtop_10}`}>
+              <Row>
+                <Col lg={12}>
+                  <Box className={All.JobsList}>
+                    <div className={All.Joblist_loading}>
+                      <div>
+                        <Skeleton circle={true} height={100} width={100} className={`${All.Border_radius_50}`} />
+                      </div>
+                      <div>
+                        {loading === true ? <Skeleton /> : <h2></h2>}
+                        {loading === true ? <Skeleton /> : <h2></h2>}
+                        <div>
+                          <Skeleton />
+                          <Box pb={6} pt={3}>
+                            <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
+                              <img style={{ paddingRight: 10 }} /> <Skeleton /></Button>
+                            <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
+                              <img style={{ paddingRight: 10 }} /> <Skeleton /></Button>
+                            <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
+                              <img style={{ paddingRight: 10 }} /> <Skeleton /></Button>
 
-            <section className={All.HireDornerJobList}>
-              <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_30}`}>
-                <Row>
-                  <Col lg={12}>
+                          </Box>
+                        </div>
+                      </div>
+                    </div>
+                  </Box>
+                  <Box className={All.JobsList}>
+                    <div className={All.Joblist_loading}>
+                      <div>
+                        <Skeleton circle={true} height={100} width={100} className={`${All.Border_radius_50}`} />
+                      </div>
+                      <div>
+                        {loading === true ? <Skeleton /> : <h2></h2>}
+                        {loading === true ? <Skeleton /> : <h2></h2>}
+                        <div>
+                          <Skeleton />
+                          <Box pb={6} pt={3}>
+                            <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
+                              <img style={{ paddingRight: 10 }} /> <Skeleton /></Button>
+                            <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
+                              <img style={{ paddingRight: 10 }} /> <Skeleton /></Button>
+                            <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
+                              <img style={{ paddingRight: 10 }} /> <Skeleton /></Button>
 
-                    <SearchResults
-                      value={value}
-                      data={hiredorners}
-                      renderResults={results => (
-                        <>
-                          <div className="tiles" aria-live="polite">
+                          </Box>
+                        </div>
+                      </div>
+                    </div>
+                  </Box>
+                  <Box className={All.JobsList}>
+                    <div className={All.Joblist_loading}>
+                      <div>
+                        <Skeleton circle={true} height={100} width={100} className={`${All.Border_radius_50}`} />
+                      </div>
+                      <div>
+                        {loading === true ? <Skeleton /> : <h2></h2>}
+                        {loading === true ? <Skeleton /> : <h2></h2>}
+                        <div>
+                          <Skeleton />
+                          <Box pb={6} pt={3}>
+                            <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
+                              <img style={{ paddingRight: 10 }} /> <Skeleton /></Button>
+                            <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
+                              <img style={{ paddingRight: 10 }} /> <Skeleton /></Button>
+                            <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
+                              <img style={{ paddingRight: 10 }} /> <Skeleton /></Button>
 
-                            {results.slice(0, this.state.visible).map(el => (
-                              <>
-                                <Divider />
-                                <Box className={All.JobsList}>
-                                  <Box textAlign={'Left'} pt={3}>
-                                    {this.state.loading ? <Skeleton circle={true} height={75} width={75} style={{ borderRadius: '100%' }} className={All.SkeletonImg} />
-                                      : <img className="alignleft" src={el.profile}
-                                        alt="Image Sample 1" style={{
-                                          display: "inline",
-                                          float: "left",
-                                          width: "75px",
-                                          height: "75px",
-                                          borderRadius: "100px",
-                                          marginRight: '15px'
-                                        }} />}    </Box>
+                          </Box>
+                        </div>
+                      </div>
+                    </div>
+                  </Box>
+                </Col>
+              </Row>
+            </Container>
+          </section>
+          : <>
+            {!hiredorners.length
+              ?
+              <>
+                <div style={{ margin: '0px auto', display: 'block' }}>
+                  <Box className={All.Text_center} pt={5}>
+                    <img src={nofoundresult} className={`${All.W_xs_100} ${All.W_sm_100}`} />
+                    <Box className={`${All.Text_center}`} px={5} pb={2}>
+                      <h2>No Results Found</h2>
+                    </Box>
+                    <Box className={`${All.Text_center}`} pb={5}>
+                      <label>It seems we can’t find any results based on your search. </label>
+                    </Box>
+                  </Box>
+                </div>
+              </>
+              :
+              <>
 
-                                  <Box pt={1}>
 
-                                    {this.state.loading ? <Skeleton /> : <h2>{el.jobtitle}</h2>}
-                                    {this.state.loading ? <Skeleton /> : <label className={All.Bold}>{el.companyname}</label>}
-                                  </Box>
+                <section className={All.HireDornerJobList}>
+                  <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_30}`}>
+                    <Row>
+                      <Col lg={12}>
 
-                                  <Box className={All.JobDescription} >
-                                    {this.state.loading ? <Skeleton /> : <label className={`${All.lineheight_24} ${All.pt_xs_30} ${All.pt_sm} ${All.pt_md}`}>{el.jobdescription}</label>}
+                        <SearchResults
+                          value={value}
+                          data={hiredorners}
+                          renderResults={results => (
+                            <>
+                              <div className="tiles" aria-live="polite">
 
-                                    <Box pb={6} pt={3}>
-                                      <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
-                                        <img style={{ paddingRight: 10 }} src={Location} />
-                                        {el.joblocation || <Skeleton />}</Button>
-                                      <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
-                                        <img style={{ paddingRight: 10 }} src={work} />
-                                        {el.typeofrole || <Skeleton />}</Button>
-                                      {el.id ? <Link to={{ pathname: `ViewJob/${el.id}`, data: el, state: { foo: 'bar' } }} onClick={this.clickMe.bind(this, el)}>
-                                        <Button ml={2} variant="contained" color="default" type="submit" id={el.id} className={`${All.BtnStyle_5} ${All.Bold}  ${All.W_xs_100}`}>
-                                          View Job</Button>
-                                      </Link> : <Skeleton />
-                                      }
+                                {results.slice(0, this.state.visible).map(el => (
+                                  <>
+                                    <Divider />
+                                    <Box className={All.JobsList}>
+                                      <Box textAlign={'Left'} pt={3}>
+                                        {this.state.loading ? <Skeleton circle={true} height={75} width={75} style={{ borderRadius: '100%' }} className={All.SkeletonImg} />
+                                          : <img className="alignleft" src={el.profile}
+                                            alt="Image Sample 1" style={{
+                                              display: "inline",
+                                              float: "left",
+                                              width: "75px",
+                                              height: "75px",
+                                              borderRadius: "100px",
+                                              marginRight: '15px'
+                                            }} />}    </Box>
+
+                                      <Box pt={1}>
+
+                                        {this.state.loading ? <Skeleton /> : <h2>{el.jobtitle}</h2>}
+                                        {this.state.loading ? <Skeleton /> : <label className={All.Bold}>{el.companyname}</label>}
+                                      </Box>
+
+                                      <Box className={All.JobDescription} >
+                                        {this.state.loading ? <Skeleton /> : <label className={`${All.lineheight_24} ${All.pt_xs_30} ${All.pt_sm} ${All.pt_md}`}>{el.jobdescription}</label>}
+
+                                        <Box pb={6} pt={3}>
+                                          <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
+                                            <img style={{ paddingRight: 10 }} src={Location} />
+                                            {el.joblocation || <Skeleton />}</Button>
+                                          <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
+                                            <img style={{ paddingRight: 10 }} src={work} />
+                                            {el.typeofrole || <Skeleton />}</Button>
+                                          {el.id ? <Link to={{ pathname: `ViewJob/${el.id}`, data: el, state: { foo: 'bar' } }} onClick={this.clickMe.bind(this, el)}>
+                                            <Button ml={2} variant="contained" color="default" type="submit" id={el.id} className={`${All.BtnStyle_5} ${All.Bold}  ${All.W_xs_100}`}>
+                                              View Job</Button>
+                                          </Link> : <Skeleton />
+                                          }
+                                        </Box>
+                                      </Box>
                                     </Box>
-                                  </Box>
+                                  </>
+                                ))}
+
+                              </div>
+                              {this.state.visible < this.state.hiredorners.length &&
+                                <Box py={6} textAlign={'center'}>
+                                  <Button variant="contained" color="default" type="submit" onClick={this.loadMore} className={`${All.BtnStyle_5} ${All.LoadMore} ${All.W_sm_70} ${All.Bold}`}>
+                                    <img style={{ paddingRight: 10 }} src={DroneImg} />
+                                    Load More</Button>
                                 </Box>
-                              </>
-                            ))}
+                              }
+                            </>
+                          )} />
 
-                          </div>
-                          {this.state.visible < this.state.hiredorners.length &&
-                            <Box py={6} textAlign={'center'}>
-                              <Button variant="contained" color="default" type="submit" onClick={this.loadMore} className={`${All.BtnStyle_5} ${All.LoadMore} ${All.W_sm_70} ${All.Bold}`}>
-                                <img style={{ paddingRight: 10 }} src={DroneImg} />
-                                   Load More</Button>
-                            </Box> 
-                          } 
-                        </>
-                      )} />
-
-                  </Col>
-                </Row>
-              </Container>
-            </section>
+                      </Col>
+                    </Row>
+                  </Container>
+                </section>
+              </>
+            }
           </>
         }
       </>
-    }
-    </>
     )
   }
 }
