@@ -43,19 +43,18 @@ export default function GoPremium() {
 
           axios.get('http://localhost/auth-app/public/api/auth/plans', config)
           .then(res => { 
-            // setId0(res.data[0].id);
-            // setId1(res.data[1].id);
-            // setId2(res.data[2].id);
-            // setAmount0(res.data[0].amount);
-            // setAmount1(res.data[1].amount);
-            // setAmount2(res.data[2].amount);
-            // setDay0(res.data[0].days);
-            // setDay1(res.data[1].days);
-            // setDay2(res.data[2].days);
-            // setPlan0(res.data[0].plan);
-            // setPlan1(res.data[1].plan);
-            // setPlan2(res.data[2].plan);  
-            console.log()
+            setId0(res.data[0].id);
+            setId1(res.data[1].id);
+            setId2(res.data[2].id);
+            setAmount0(res.data[0].amount);
+            setAmount1(res.data[1].amount);
+            setAmount2(res.data[2].amount);
+            setDay0(res.data[0].days);
+            setDay1(res.data[1].days);
+            setDay2(res.data[2].days);
+            setPlan0(res.data[0].plan);
+            setPlan1(res.data[1].plan);
+            setPlan2(res.data[2].plan);
           },
             err => {
               console.log(err);
@@ -166,7 +165,7 @@ export default function GoPremium() {
                             <div className={All.NormalUser}>
                                 <Box className={All.paddingtop_90} pt={6} textAlign={'center'}>
                                     <label className={All.ForUser}>For Normal User</label>
-                                    <h1>${Amount1}<span className={All.Month}>{Day0}/days</span></h1> 
+                                    <h1>${Amount1}<span className={All.Month}>/{Day0}days</span></h1> 
                                 </Box>
                                 <Box pb={2} textAlign={'center'}> 
                                     <p>{Plan0}</p>
@@ -182,7 +181,7 @@ export default function GoPremium() {
                             <div className={All.ProUserMonth}>
                                 <Box className={All.paddingtop_90} pt={6} textAlign={'center'}>
                                     <label className={All.ForUser}>For Premium User</label>
-                                    <h1>${Amount2}<span className={All.Month}>{Day1}/days</span></h1> 
+                                    <h1>${Amount2}<span className={All.Month}>/{Day1}days</span></h1> 
                                 </Box> 
                                 <Box pb={2} textAlign={'center'}> 
                                     <p>{Plan1}</p>
@@ -198,7 +197,7 @@ export default function GoPremium() {
                             <div className={All.ProUserYear}>
                                 <Box className={All.paddingtop_90} pt={6} textAlign={'center'}>
                                     <label className={All.ForUser}>For Premium User</label>
-                                    <h1>${Amount3}<span className={All.Month}>{Day2}/days</span></h1> 
+                                    <h1>${Amount3}<span className={All.Month}>/{Day2}days</span></h1> 
                                 </Box> 
                                 <Box pb={2} textAlign={'center'}> 
                                     <p>{Plan2}</p>
