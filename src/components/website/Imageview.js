@@ -9,7 +9,6 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "react-responsive-modal/styles.css";
 import Hirebtn from "../images/hirebtn.svg";
 import { Helmet } from "react-helmet";
-import Header from "../header/Header";
 import swal from "sweetalert";
 import Skeleton from "react-loading-skeleton";
 import axios from "axios";
@@ -152,8 +151,6 @@ export default class ViewJob extends React.Component {
           <meta charSet="utf-8" />
           <meta name="description" content="Nested component" />
         </Helmet>
-
-        <Header />
         <section>
           <Container className={All.Container}>
             <Row>

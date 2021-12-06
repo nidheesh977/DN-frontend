@@ -11,7 +11,6 @@ import Divider from '@material-ui/core/Divider';
 import SearchResults from 'react-filter-search';
 import { Link } from 'react-router-dom';
 import $ from "jquery";
-import Header from '../header/Header'
 import nofoundresult from '../images/noresultfound.svg'
 import Skeleton from 'react-loading-skeleton';
 import viewJobMobileImg from '../images/viewjob_mobile.svg'
@@ -333,7 +332,6 @@ function HiringTitle() {
         <meta name="description" content="Nested component" />
       </Helmet>
 
-      <Header />
       <section className={All.HiringDronersBanner}>
         <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
           <Row>

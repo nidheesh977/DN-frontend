@@ -13,7 +13,6 @@ import ThreeDImageBlack from '../images/proversion/black/ThreeDImage.svg'
 import VideoBlack from '../images/proversion/black/Video.svg'
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import Header from '../header/Header'
 
 
 export default function UpgradeProVersion() {
@@ -25,7 +24,6 @@ export default function UpgradeProVersion() {
                 <meta name="description" content="Nested component" />
             </Helmet>
 
-<Header />
             <section className={All.UpgradeProVersion}>
                 <Box p={4} textAlign={'center'}>
                         <h2>Upgrade Pro Version</h2>

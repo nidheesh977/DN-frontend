@@ -4,7 +4,6 @@ import All from '../website/All.module.css'
 import { Container, Row, Col } from 'react-grid-system';
 import Box from '@material-ui/core/Box'; 
 import Button from '@material-ui/core/Button';
-import Header from '../header/Header'
 import { useState, useEffect } from 'react';
 import swal from 'sweetalert';
 import axios from 'axios'
@@ -152,7 +151,6 @@ export default function GoPremium() {
                 <meta name="description" content="Nested component" />
             </Helmet>
 
-<Header />
             <section className={All.UpgradeProVersion}>
                 <Box p={5} textAlign={'center'}>
                         <h2>Upgrade Premium Version</h2>

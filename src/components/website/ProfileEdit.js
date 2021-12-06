@@ -6,7 +6,6 @@ import All from '../website/All.module.css'
 import Box from '@material-ui/core/Box';
 
 import EditProfileTab from '../tabs/EditProfileTab'
-import Header from '../header/Header'
 import Facebook from '../images/socialicons/facebook.svg'
 import Instagram from '../images/socialicons/instagram.svg'
 import linkedin from '../images/socialicons/linkedin.svg'
@@ -76,7 +75,6 @@ export default function ProfileEdit() {
         <meta name="description" content="Nested component" />
       </Helmet>
 
-      <Header />
       <section className={All.Profile}>
         <Container className={All.Container}>
           <Row>

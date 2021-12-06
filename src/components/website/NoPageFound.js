@@ -5,7 +5,6 @@ import {Helmet} from "react-helmet";
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { Container, Row, Col } from 'react-grid-system';  
-import Header from '../header/Header'
 
 const NoPageFound = () => (
   <>
@@ -15,7 +14,6 @@ const NoPageFound = () => (
                 <meta name="description" content="Nested component" />
             </Helmet>
 
-            <Header />
 <section className={All.PageNotFound} style={{ textAlign: 'center' , padding: '50px', margin: '50px' }}>
   <Container className={All.Container}>
     <Row>

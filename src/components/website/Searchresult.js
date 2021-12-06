@@ -1,6 +1,5 @@
 import React from 'react'
 import axios from 'axios'
-import Header from '../header/Header'
 import { Helmet } from "react-helmet";
 import { Container, Row, Col } from 'react-grid-system';
 import All from '../website/All.module.css'
@@ -119,7 +118,6 @@ export default class Searchresult extends React.Component {
                     <meta charSet="utf-8" />
                     <meta name="description" content="Nested component" />
                 </Helmet>
-                <Header />
 
                 <section>
                     <Container className={All.Container}>

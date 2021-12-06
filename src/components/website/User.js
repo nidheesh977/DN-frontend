@@ -17,7 +17,6 @@ import { useForm } from "react-hook-form";
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import { useHistory } from 'react-router-dom';
-import Header from '../header/Header'
 import Loader from '../Loader/loader' 
 import swal from 'sweetalert';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -154,7 +153,6 @@ function User() {
  
       {errors.checkedA && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
 
-      <Header/>
       <section className={All.Register}>
       <Container className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}>
           <Row>

@@ -25,7 +25,6 @@ import PhonePe from '../images/phonepe.svg'
 import Paytm from '../images/paytm.svg'
 import clock from '../images/clock.svg'
 import Radio from '@material-ui/core/Radio';
-import Header from '../header/Header'
 import axios from 'axios';
 import { useParams } from "react-router-dom";
 import swal from 'sweetalert';
@@ -237,7 +236,6 @@ export default function Cart(props) {
 
   return (
     <>
-      <Header />
       <section className={All.Cart}>
         <Container className={All.Container}>
           <Row>

@@ -17,7 +17,6 @@ import Youtube from '../images/socialicons/youtube.svg'
 import ProfileImg from '../ProfileImg/Profile'
 import CoverImg from '../ProfileCoverImg/ProfileCoverImg'
 import { useState, useEffect } from 'react';
-import Header from '../header/Header'
 import { userService } from '../_services/user.service';
 
 // $(function() {
@@ -90,7 +89,6 @@ export default function OfficeProfileEdit() {
                 <meta name="description" content="Nested component" />
             </Helmet>
 
-<Header />
             <section className={All.Profile}>
             <Container className={All.Container}>
                     <Row>

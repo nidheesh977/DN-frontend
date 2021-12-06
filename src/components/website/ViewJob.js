@@ -5,7 +5,6 @@ import All from "../website/All.module.css";
 import Box from "@material-ui/core/Box";
 import axios from "axios";
 import Button from "@material-ui/core/Button";
-import Header from "../header/Header";
 import Skeleton from "react-loading-skeleton";
 import swal from "sweetalert";
 import viewJobMobileImg from "../images/viewjob_mobile.svg";
@@ -102,7 +101,6 @@ export default class ViewJob extends React.Component {
           <meta name="description" content="Nested component" />
         </Helmet>
 
-        <Header />
         <section className={All.HiringDronersBanner}>
           <Container
             className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}

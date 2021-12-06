@@ -10,7 +10,6 @@ import Radio from '@material-ui/core/Radio';
 import swal from 'sweetalert';
 import Alert from '@material-ui/lab/Alert'; 
 import Snackbar from '@material-ui/core/Snackbar';
-import Header from '../header/Header'
 import { Link } from 'react-router-dom';
 
 
@@ -188,7 +187,6 @@ export default function JobPostEdit(props) {
                 <meta name="description" content="Nested component" />
             </Helmet>
  
- <Header />
 
             <section className={All.HiringDronersBanner}> 
                 <Container className={All.Container}>

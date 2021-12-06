@@ -19,28 +19,34 @@ class CommentBox extends React.Component {
       post_id: props.post_id,
       passedVal: "",
       comments: [],
-      location: props.passedVal,
+      comments_length : 0,
+      comment_body: "",
+      isLoading: false,
+
     };
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.passedVal) {
-      this.setState({ location: nextProps.passedVal });
-    }
-
+  componentDidMount(){
+    
     const config = {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-
-    const urls = `http://localhost/auth-app/public/api/auth/commentlisting/${nextProps.passedVal}`;
+    const urls = `http://localhost/auth-app/public/api/auth/commentlisting/${this.props.passedVal}`;
     axios
       .get(urls, config)
       .then((res) => res.data)
       .then((data) => {
-        this.setState({ comments: data });
-      });
+        console.log(data)
+        this.setState({ 
+          comments: data,
+          comments_length: data.length
+        });
+      })
+      .catch(err => {
+        console.log(err)
+      })
 
     axios.get("http://localhost/auth-app/public/api/auth/user", config).then(
       (res) => {
@@ -50,22 +56,124 @@ class CommentBox extends React.Component {
     );
   }
 
+  postComment = (event) => {
+    event.preventDefault()
+    this.setState({
+      comment_body: ""
+    })
+    document.getElementById("comment_input").innerHTML = ""
+    console.log(this.state.comment_body)
+    this.setState({
+      isLoading: true
+    })
+    const config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    axios
+      .post(
+        "http://localhost/auth-app/public/api/auth/commentstore",
+        {
+          body: this.state.comment_body,
+          user_id: this.state.user_id,
+          post_id: this.props.passedVal,
+        },
+        config
+      )
+      .then((res) => {
+        swal(res.data.message, {
+          icon: "success",
+        });
+        this.setState({
+          isLoading: false
+        })
+        console.log(res)
+        axios
+        .get( `http://localhost/auth-app/public/api/auth/commentlisting/${this.props.passedVal}`, config)
+        .then((res) => res.data)
+        .then((data) => {
+          this.setState({ 
+            comments: data,
+            comments_length: data.length
+          });
+          this.setState({
+            isLoading: false
+          })
+        });
+      })
+      .catch(err => {
+        swal("Comment not send", {
+          icon: "error",
+        });
+        console.log(err.response)
+        this.setState({
+          isLoading: false
+        })
+      })
+  };
+
+  commentChangeHandler = (e) => {
+    this.setState({
+      comment_body: e.target.value
+    })
+  }
+
   render() {
     var comments = this.state.comments
-    let commentNodes;
+    var comments_length = this.state.comments_length
+    var isLoading = this.state.isLoading
+    var postComment = this.postComment
+    var commentChangeHandler = this.commentChangeHandler
     let buttonText = "Show Comments";
 
     return (
       <div className="comment-box">
         <label className={`${All.Bold} ${All.paddingtop} ${All.paddingbottom}`}>
           {" "}
-          {this._getCommentsTitle(comments.length)}{" "}
+          {comments_length 
+            ? <>{comments_length} Comments</>
+            : <>No comments yet</>
+          }
+          {" "}
         </label>
-        <CommentForm
-          names={this.state.user_id}
-          post={this.props.passedVal}
-          addComment={this._addComment.bind(this)}
-        />
+        <>
+          <form className="comment-form" onSubmit={postComment}>
+            <div className="comment-form-fields">
+              <textarea
+                id = "comment_input"
+                placeholder="Comment"
+                name="body"
+                rows="4"
+                className={All.FormControl}
+                onChange = {commentChangeHandler}
+              ></textarea>
+            </div>
+            <div className="comment-form-actions">
+              {isLoading ? 
+                <>
+                  <Button
+                    variant="contained"
+                    color="default"
+                    type="submit"
+                    className={All.LoaderBtn}
+                  >
+                    <Loader /> Loading
+                  </Button>
+                </>
+               : 
+                <>
+                  <Button
+                    type="submit"
+                    className={All.BtnStyle_5}
+                  >
+                    Post Comment
+                  </Button>
+                </>
+              }
+            </div>
+          </form>
+        </>
         <div className="comment-list">
           {comments.map((comment, index) => {
             return(
@@ -109,164 +217,10 @@ class CommentBox extends React.Component {
     );
   } // end render
 
-  _addComment(author, body, names, id, post_id) {
-    const comment = {
-      id: this.state.comments.length + 1,
-      author,
-      body,
-    };
-    this.setState({ comments: this.state.comments.concat([comment]) }); // *new array references help React stay fast, so concat works better than push here.
-  }
-
-  _handleClick() {
-    this.setState({
-      showComments: !this.state.showComments,
-    });
-  }
-
-  _getComments() {
-    return this.state.comments.map((comment) => {
-      return (
-        <Comment
-          name={comment.name}
-          body={comment.body}
-          id={comment.id}
-          key={comment.id}
-          profile={comment.profile}
-        />
-      );
-    });
-  }
-
-  _getCommentsTitle(commentCount) {
-    if (commentCount === 0) {
-      return "No comments yet";
-    } else if (commentCount === 1) {
-      return "1 comment";
-    } else {
-      return `${commentCount} comments`;
-    }
-  }
-} // end CommentBox component
-
-function CommentForm(props) {
-  const { register, handleSubmit, errors, watch, control } = useForm();
-  const [open, setOpen] = React.useState(false);
-  const [isLoading, setLoading] = useState(false);
-  const history = useHistory();
-  const handleClick = () => {
-    setOpen(true);
-  };
-
-  const onSubmit = (event) => {
-    setLoading(true);
-    const config = {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("access_token"),
-      },
-    };
-    axios
-      .post(
-        "http://localhost/auth-app/public/api/auth/commentstore",
-        {
-          body: event.body,
-          user_id: props.names,
-          post_id: props.post,
-        },
-        config
-      )
-      .then((res) => {
-        swal(res.data.message, {
-          icon: "success",
-        });
-        window.location.reload();
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-      });
-  };
-
-  return (
-    <>
-      <form className="comment-form" onSubmit={handleSubmit(onSubmit)}>
-        <div className="comment-form-fields">
-          <textarea
-            placeholder="Comment"
-            name="body"
-            rows="4"
-            className={All.FormControl}
-            ref={register({ required: true })}
-          ></textarea>
-        </div>
-        <div className="comment-form-actions">
-          {isLoading ? (
-            <>
-              <Button
-                variant="contained"
-                color="default"
-                type="submit"
-                onClick={handleClick}
-                className={All.LoaderBtn}
-              >
-                <Loader /> Loading
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                type="submit"
-                onClick={handleClick}
-                className={All.BtnStyle_5}
-              >
-                Post Comment
-              </Button>
-            </>
-          )}
-        </div>
-      </form>
-    </>
-  );
+  
 }
 
-class Comment extends React.Component {
-  render() {
-    return (
-      <>
-        <Box textAlign={"Left"} className="comment">
-          <img
-            class="alignleft"
-            src={this.props.profile}
-            alt="Image Sample 1"
-            style={{
-              display: "inline",
-              float: "left",
-              width: "45px",
-              marginRight: "15px",
-              marginTop: "25px",
-              height: "45px",
-              borderRadius: "100px",
-            }}
-          />
-        </Box>
 
-        <Box pt={1}>
-          <label className={All.Bold}>{this.props.name}</label>
-        </Box>
-        <Box className={`${All.DisplayFlex}  ${All.paddingtop} `}>
-          <label style={{ wordBreak: "break-all", width: "80%" }}>
-            - {this.props.body}
-          </label>
-          <figcaption>
-            <span className="LikeIcon LikeIcon_slider MuliLight">
-              {" "}
-              <CommentLike id={this.props.id} />
-            </span>
-          </figcaption>
-        </Box>
-      </>
-    );
-  }
-}
+
 
 export default CommentBox;

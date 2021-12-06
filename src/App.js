@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Switch } from "react-router-dom";
+import Header from "./components/header/Header";
 import Home from "./components/website/Home";
 import Company from "./components/website/Company";
 import User from "./components/website/User";
@@ -72,6 +73,7 @@ class App extends React.Component {
     const { currentUser, isAdmin } = this.state;
     return (
       <BrowserRouter>
+        <Header />
         <UserContext.Provider>
           <Switch>
             <PublicRoute

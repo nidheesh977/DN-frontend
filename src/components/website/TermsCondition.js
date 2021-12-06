@@ -5,7 +5,6 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { AllInbox } from '@material-ui/icons';
 import All from '../website/All.module.css'
-import Header from '../header/Header'
 
 export default function TermsCondition() {
     return (
@@ -15,7 +14,6 @@ export default function TermsCondition() {
                 <meta charSet="utf-8" />
                 <meta name="description" content="Nested component" />
             </Helmet>
-<Header />  
             <section className={All.TermsCondition}> 
             <Box textAlign={'Center'}>  
                <h2>Terms & Conditions</h2>

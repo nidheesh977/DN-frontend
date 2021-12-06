@@ -12,7 +12,6 @@ import Divider from '@material-ui/core/Divider';
 import SearchResults from 'react-filter-search';
 import DroneImg from '../images/UploadFile.svg'
 import DropdownFilter from '../filter/DropdownFilter'
-import Header from '../header/Header'
 
 
 
@@ -70,7 +69,6 @@ export default class Industry extends React.Component {
             <meta name="description" content="Nested component" />
         </Helmet>
 
-<Header />
         <section>
       <Container className={All.Container}>
           <Row>

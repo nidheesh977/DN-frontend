@@ -6,7 +6,6 @@ import All from '../website/All.module.css'
 import '../website/upload.css'
 import FileUpload from '../uploadfile/FileUpload'
 import Form from '../forms/Form' 
-import Header from '../header/Header' 
 import { Link  } from 'react-router-dom'; 
 import Upload from '../images/upload.svg'
 import swal from 'sweetalert';
@@ -399,7 +398,6 @@ const API_URL = 'http://localhost/auth-app/public/api/auth';
                 <meta charSet="utf-8" />
                 <meta name="description" content="Nested component" />
             </Helmet> 
-            <Header />
 
    {/* { this.state.showerror && <Alert severity="error">This is an error message!</Alert>} */}
    { this.state.showerror && <Snackbar open={this.state.showerror} autoHideDuration={6000} onClose={this.handleClose}><Alert  variant="filled" onClose={this.handleClose} severity="error">Required feild! Upload image</Alert></Snackbar> }

@@ -12,7 +12,6 @@ import DronePerson from '../images/drone-person.svg'
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import DroneImg from '../images/drone-img.svg'
-import Header from '../header/Header'
 import Loader from '../Loader/loader'
 import swal from 'sweetalert'; 
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -114,7 +113,6 @@ const PasswordShow = () => {
       {errors.email && errors.email.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
       {errors.email && errors.email.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
 
-      <Header />
       <section className={All.Signup}>
         <Container className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}>
           <Row>

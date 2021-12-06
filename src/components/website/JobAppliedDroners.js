@@ -7,7 +7,6 @@ import { Container, Row, Col } from 'react-grid-system';
 import Divider from '@material-ui/core/Divider';
 import axios from 'axios' 
 import { Link } from 'react-router-dom';
-import Header from '../header/Header'
 import {Helmet} from "react-helmet";
 import nofoundresult from '../images/noresultfound.svg'
 import DroneImg from '../images/drone-img.svg' 
@@ -68,8 +67,6 @@ export default class JobAppliedDroners extends React.Component {
         <meta charSet="utf-8" />
         <meta name="description" content="Nested component" />
     </Helmet>
-
-        <Header /> 
  
         <section>
               <Container className={All.Container}>

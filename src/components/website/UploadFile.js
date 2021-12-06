@@ -4,7 +4,6 @@ import { Container, Row, Col } from "react-grid-system";
 import "../uploadfile/FileUpload.css";
 import "../website/upload.css";
 import All from "../website/All.module.css";
-import Header from "../header/Header";
 import { Link } from "react-router-dom";
 import Upload from "../images/upload.svg";
 import swal from "sweetalert";
@@ -374,8 +373,6 @@ class UploadFile extends React.Component {
           <meta charSet="utf-8" />
           <meta name="description" content="Nested component" />
         </Helmet>
-
-        <Header />
 
         {this.state.showerror && (
           <Snackbar

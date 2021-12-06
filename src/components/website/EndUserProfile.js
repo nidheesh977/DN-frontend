@@ -23,7 +23,6 @@ import ProfileImg from "../ProfileImg/EndProfile";
 import CoverImg from "../ProfileCoverImg/EndProfileCoverImg";
 import Close from "../images/close.svg";
 import FollowBtn from "../tabs/FollowBtn";
-import Header from "../header/Header";
 import "reactjs-popup/dist/index.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -257,7 +256,6 @@ export default function EndUserProfile(props) {
         <meta name="description" content="Nested component" />
       </Helmet>
 
-      <Header />
       <section className={` ${All.Profile} ${All.EndUserProfile}`}>
         <Container className={All.Container}>
           <Row>

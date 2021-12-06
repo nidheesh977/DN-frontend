@@ -24,13 +24,13 @@ class CommentLike extends React.Component {
     } 
  
 
-    axios.get(`http://localhost/auth-app/public/api/auth/user`, config)
-    .then(res => this.setState({ user: res.data }, () => { 
-            axios.get(`http://localhost/auth-app/public/api/auth/commentcheck/${id}/${res.data.id}`,config).then(res => res.data)
-                   .then((data) => { 
-                    this.setState({ liked: data.status }) 
-                    })    
-    })) 
+    // axios.get(`http://localhost/auth-app/public/api/auth/user`, config)
+    // .then(res => this.setState({ user: res.data }, () => { 
+    //         axios.get(`http://localhost/auth-app/public/api/auth/commentcheck/${id}/${res.data.id}`,config).then(res => res.data)
+    //                .then((data) => { 
+    //                 this.setState({ liked: data.status }) 
+    //                 })
+    // }))
 
     axios.get(`http://localhost/auth-app/public/api/auth/commentlikes/${id}`, config)
     .then(res => {    

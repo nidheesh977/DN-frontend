@@ -27,7 +27,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import ProfileImg from '../ProfileImg/Profile'
 import CoverImg from '../ProfileCoverImg/ProfileCoverImg'
 import { useState, useEffect } from 'react';
-import Header from '../header/Header'
 import { userService } from '../_services/user.service';
 
 const styles = (theme) => ({
@@ -135,7 +134,6 @@ export default function OfficeProfile() {
                 <meta name="description" content="Nested component" />
             </Helmet>
 
-            <Header />
             <section className={` ${All.Profile} ${All.Hireprofile}`}>
                 <Container className={All.Container}>
                     <Row>

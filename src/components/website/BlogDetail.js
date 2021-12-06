@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import Placeholder from '../images/placeholder.png'
 import { Link } from 'react-router-dom'; 
 import axios from 'axios'
-import Header from '../header/Header'
 const API_URL = 'https://demo-nexevo.in/vijay';
   
 export default class HiringDorners extends React.Component { 
@@ -63,7 +62,6 @@ export default class HiringDorners extends React.Component {
                 <meta name="description" content="Nested component" />
             </Helmet>
 
-            <Header />
             <section className={All.BlogDeatail}>
                 <Box p={4} textAlign={'center'}>
                     <h2 className = {All.BlogDeatailTitle}>What is Lorem Ipsum?</h2> 

@@ -8,7 +8,6 @@ import utv from '../images/utv.png'
 import SearchResults from 'react-filter-search'; 
 import DropdownFilter from '../filter/DropdownFilter'
 import { Link } from 'react-router-dom';
-import Header from '../header/Header'
 import DroneImg from '../images/drone-img.svg'
 const API_URL = 'http://localhost/auth-app/public/api/auth';
 
@@ -63,7 +62,6 @@ class Member extends  React.Component {
 
     return (
 <>
-<Header />
       <section>
       <Container className={All.Container}>
           <Row>

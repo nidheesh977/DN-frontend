@@ -10,7 +10,6 @@ import Radio from '@material-ui/core/Radio';
 import swal from 'sweetalert';
 import Alert from '@material-ui/lab/Alert'; 
 import Snackbar from '@material-ui/core/Snackbar'; 
-import Header from '../header/Header'
 import { Link } from 'react-router-dom'; 
 import viewJobMobileImg from '../images/viewjob_mobile.svg'
  
@@ -180,8 +179,6 @@ export default function GetJobs(props) {
                 <meta charSet="utf-8" />
                 <meta name="description" content="Nested component" />
             </Helmet>
-
-            <Header />
 
             <section className={All.HiringDronersBanner}> 
             <Container className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}>

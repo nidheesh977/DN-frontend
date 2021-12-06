@@ -9,7 +9,6 @@ import Calendar from "../images/calendar.svg";
 import Pin from "../images/pin.svg";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import Header from "../header/Header";
 
 const API_URL = "https://demo-nexevo.in/vijay";
 
@@ -64,8 +63,6 @@ export default class HiringDorners extends React.Component {
           <meta charSet="utf-8" />
           <meta name="description" content="Nested component" />
         </Helmet>
-
-        <Header />
         <section className={All.BlogDeatail}>
           <Box p={4} textAlign={"center"}>
             <h2 className={All.BlogDeatailTitle}>Blog Catagories</h2>

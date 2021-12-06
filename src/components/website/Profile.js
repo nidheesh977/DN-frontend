@@ -25,7 +25,6 @@ import ProfileImg from "../ProfileImg/Profile";
 import CoverImg from "../ProfileCoverImg/ProfileCoverImg";
 import Profileuser from "../images/profile_user.png";
 import Close from "../images/close.svg";
-import Header from "../header/Header";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useState, useEffect } from "react";
@@ -135,7 +134,6 @@ export default function Profile() {
         <meta name="description" content="Nested component" />
       </Helmet>
 
-      <Header />
       <section className={All.Profile}>
         <Container className={`${All.Container}`}>
           <Row>

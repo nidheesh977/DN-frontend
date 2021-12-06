@@ -99,7 +99,6 @@ const Home = () => {
         <meta charSet="utf-8" />
         <meta name="description" content="Nested component" />
       </Helmet>
-      <Header />
       <Filter id={user.id} />
       {user.role_id == "1" && (
         <div className={All.mobileBottomMenu}>
