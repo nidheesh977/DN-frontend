@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Switch } from "react-router-dom";
+import { BrowserRouter, Switch } from "react-router-dom";
 import Home from "./components/website/Home";
 import Company from "./components/website/Company";
 import User from "./components/website/User";
@@ -71,7 +71,7 @@ class App extends React.Component {
   render() {
     const { currentUser, isAdmin } = this.state;
     return (
-      <HashRouter>
+      <BrowserRouter>
         <UserContext.Provider>
           <Switch>
             <PublicRoute
@@ -186,7 +186,7 @@ class App extends React.Component {
             <PrivateRoute exact path="*" component={NoPageFound} />
           </Switch>
         </UserContext.Provider>
-      </HashRouter>
+      </BrowserRouter>
     );
   }
 }

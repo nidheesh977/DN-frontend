@@ -126,7 +126,7 @@ function Navbar(props) {
         {loading === true && <PageLoader />}
         <section className="navbar_sticky">
         <nav className='navbar navbar-desktop'>
-          <Link to='' className='nav-item'>
+          <Link to='/' className='nav-item'>
             <img className="nav-links" src={Logo} />
           </Link>
           <div className='menu-icon' onClick={handleClick}>

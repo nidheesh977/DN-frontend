@@ -104,12 +104,15 @@ export default class ViewJob extends React.Component {
     );
 
     const url = `${API_URL}/singlelisting/${id}`;
-    axios
-      .get(url, config)
-      .then((res) => res.data)
-      .then((data) => {
-        this.setState({ imageview: data });
-      });
+    
+    axios.get(url, config)
+    .then(res => {
+      this.setState({ imageview: res.data });
+      console.log(res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
 
     const urls = `http://localhost/auth-app/public/api/auth/relatedposts/${user_id}`;
     axios

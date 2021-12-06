@@ -109,7 +109,7 @@ export default function Cart(props) {
 let { slug } = useParams(); 
 let { userId } = useParams(); 
 
-useEffect(() => { 
+useEffect(() => {
 const config = {
   headers: {
     Authorization: 'Bearer ' + localStorage.getItem('access_token')
@@ -155,13 +155,13 @@ if (!result) {
 }
 
 const { price , id, order_id, user_id,  currency } = result.data;
-  
+
 let val=result.data.order_id;
 let userid = result.data.user_id
 const options = {
     key: "rzp_test_tzURXA4gSDw99d", // Enter the Key ID generated from the Dashboard
-    amount: price,  
-    currency: currency,
+    amount: (Number(Cart.price) + 39) * 100, 
+    currency: "USD",
     name: user.name,
     description: "Test Transaction",
     // image: { logo }, 
@@ -207,10 +207,10 @@ paymentObject.open();
  
 
   const [selectedValues, setSelectedValue] = React.useState('a');
-  const [Cart, setCart] = useState([]);   
+  const [Cart, setCart] = useState([]);
   const handleChanges = (event) => {
     setSelectedValue(event.target.value);
-  }; 
+  };
 
 
     const {register ,handleSubmit, errors, watch ,control  } = useForm();

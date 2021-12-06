@@ -51,16 +51,16 @@ class Profile extends React.Component {
     userService.Profile().then(res => {
 
       this.setState({ profile: res.data })
-      if (res.data.profile != "http://localhost/auth-app/public/uploads/profile"){
+      if (res.data.profile != "http://localhost/auth-app/public/uploads/profile") {
         console.log(res.data)
         this.setState({ croppedImg: res.data.profile })
       }
-      else{
+      else {
         this.setState({ croppedImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png" })
       }
     },
       err => {
-        
+
       }
     )
   }
@@ -100,7 +100,8 @@ class Profile extends React.Component {
         user_id: this.state.user.id,
         // role: 1,
         // password: event.password
-      }, config).then(res => {
+      }, config)
+      .then(res => {
         this.setState(state);
         this.setState({ SuccessMessages: res.data.message })
 
