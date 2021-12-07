@@ -147,6 +147,11 @@ class App extends React.Component {
               path={"/ProfileSingle/:id"}
               component={EndUserProfile}
             />
+            <PrivateRoute
+              exact
+              path="/HiringDorners"
+              component={HiringDorners}
+            />
             <AdminRoute
               exact
               path="/PostJobEdit/:id"
