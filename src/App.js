@@ -167,7 +167,6 @@ class App extends React.Component {
             />
             <PrivateRoute exact path="/Blog" component={Blog} />
             <PrivateRoute exact path="/searchresult" component={searchresult} />
-            <PrivateRoute exact path="/ViewJob" component={ViewJob} />
             <PrivateRoute exact path="/search/Industry" component={Industry} />
             <PrivateRoute
               exact
