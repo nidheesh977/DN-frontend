@@ -162,89 +162,61 @@ export default function EndUserProfile(props) {
 
   // const HireMe = (event) => {
   const onSubmit = (event) => {
-    swal({
-      title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this imaginary file!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        const config = {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-        };
-        axios
-          .post(
-            "http://localhost/auth-app/public/api/auth/hireme",
-            {
-              user_id: props.match.params.id,
-              name: event.name,
-              message: event.message,
-            },
-            config
-          )
-          .then((response) => {
-            swal(response.data.message, {
-              icon: "success",
-            });
-            setOpen(false);
-          })
-          .catch((error) => {
-            swal(error.response.data.message, {
-              icon: "error",
-            });
-            setOpen(false);
-          });
-      } else {
-        swal("Cancel!");
+    const config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    axios
+      .post(
+        "http://localhost/auth-app/public/api/auth/hireme",
+        {
+          user_id: props.match.params.id,
+          name: event.name,
+          message: event.message,
+        },
+        config
+      )
+      .then((response) => {
+        swal(response.data.message, {
+          icon: "success",
+        });
         setOpen(false);
-      }
-    });
+      })
+      .catch((error) => {
+        swal(error.response.data.message, {
+          icon: "error",
+        });
+        setOpen(false);
+      });
   };
 
   const onSubmitReport = (event) => {
-    swal({
-      title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this imaginary file!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        const config = {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-        };
+    const config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
 
-        axios
-          .post(
-            "http://localhost/auth-app/public/api/auth/reportuser",
-            {
-              user_id: props.match.params.id,
-              sender_id: "9",
-              message: event.message,
-            },
-            config
-          )
-          .then((response) => {
-            swal(response.data.message, {
-              icon: "success",
-            });
-            setOpenReport(false);
-          })
-          .catch((error) => {
-            swal(error.response.data.message, {
-              icon: "error",
-            });
-            setOpenReport(false);
-          });
-      } else {
-        swal("Cancel!");
-        setOpenReport(false);
-      }
+    axios.post("http://localhost/auth-app/public/api/auth/reportuser",
+      {
+        user_id: props.match.params.id,
+        sender_id: "9",
+        message: event.message,
+      },
+      config
+    )
+    .then((response) => {
+      swal(response.data.message, {
+        icon: "success",
+      });
+      setOpenReport(false);
+    })
+    .catch((error) => {
+      swal(error.response.data.message, {
+        icon: "error",
+      });
+      setOpenReport(false);
     });
   };
 
