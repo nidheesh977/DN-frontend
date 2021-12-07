@@ -41,20 +41,24 @@ export default function GoPremium() {
           }
         ) 
 
-          axios.get('http://localhost/auth-app/public/api/auth/plans', config)
+        axios.get('http://localhost/auth-app/public/api/auth/plans', config)
           .then(res => { 
-            setId0(res.data[0].id);
-            setId1(res.data[1].id);
-            setId2(res.data[2].id);
-            setAmount0(res.data[0].amount);
-            setAmount1(res.data[1].amount);
-            setAmount2(res.data[2].amount);
-            setDay0(res.data[0].days);
-            setDay1(res.data[1].days);
-            setDay2(res.data[2].days);
-            setPlan0(res.data[0].plan);
-            setPlan1(res.data[1].plan);
-            setPlan2(res.data[2].plan);
+              try{
+                setId0(res.data[0].id);
+                setId1(res.data[1].id);
+                setId2(res.data[2].id);
+                setAmount0(res.data[0].amount);
+                setAmount1(res.data[1].amount);
+                setAmount2(res.data[2].amount);
+                setDay0(res.data[0].days);
+                setDay1(res.data[1].days);
+                setDay2(res.data[2].days);
+                setPlan0(res.data[0].plan);
+                setPlan1(res.data[1].plan);
+                setPlan2(res.data[2].plan);
+              }catch{
+                  console.log(res)
+              }
           },
             err => {
               console.log(err);

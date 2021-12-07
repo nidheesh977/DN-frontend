@@ -15,12 +15,12 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 import { FormControl, Radio, RadioGroup } from "@material-ui/core";
+import { Video } from "video-react";
 
 class UploadFile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedFile: null,
       caption: "",
       uploadingfile: "",
       uploaderror: false,
@@ -28,7 +28,7 @@ class UploadFile extends React.Component {
       errortypemsg: false,
       description: "",
       for_sales: "",
-      category_id: "",
+      category_id: "1",
       comments: "",
       showerror: false,
       price: "",
@@ -38,6 +38,9 @@ class UploadFile extends React.Component {
       file: "",
       dragOver: false,
       errorNoficication: null,
+      uploadPreview: "",
+      file_selected: false,
+      selected_file: ""
     };
     this.handleAddImage = this.handleAddImage.bind(this);
     this.handleDragOver = this.handleDragOver.bind(this);
@@ -84,7 +87,14 @@ class UploadFile extends React.Component {
   };
 
   handleChangess = (e) => {
-    this.setState({ category_id: e.target.value });
+    
+    this.setState({
+      category_id: e.target.value,
+      file: null,
+      uploadPreview: "",
+      file_selected: false,
+      selected_file: ""
+    });
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -96,18 +106,12 @@ class UploadFile extends React.Component {
   CancelUpload = (e) => {
     swal({
       title: "Are you sure?",
-      text: "Once reset, you will not be able to recover this imaginary file!",
       icon: "warning",
       buttons: true,
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        swal("Poof! Your imaginary file has been deleted!", {
-          icon: "success",
-        });
         window.location.reload();
-      } else {
-        swal("Your imaginary file is safe!");
       }
     });
   };
@@ -140,37 +144,25 @@ class UploadFile extends React.Component {
         for (let name in this.state) {
           data.append(name, this.state[name]);
         }
-        swal({
-          title: "Are you sure?",
-          text: "Once Post, you will not be able to recover this imaginary file!",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true,
-        }).then((willDelete) => {
-          if (willDelete) {
-            const config = {
-              headers: {
-                Authorization: "Bearer " + localStorage.getItem("access_token"),
-              },
-            };
-            axios
-              .post(
-                "http://localhost/auth-app/public/api/auth/post",
-                data,
-                config,
-                {}
-              )
-              .then((res) => {
-                swal(res.data.message, {
-                  icon: "success",
-                });
-                window.location.reload();
-                // data.reset();
-              });
-          } else {
-            swal("Your imaginary file is safe!");
-          }
-        });
+        const config = {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        };
+        axios
+          .post(
+            "http://localhost/auth-app/public/api/auth/post",
+            data,
+            config,
+            {}
+          )
+          .then((res) => {
+            swal(res.data.message, {
+              icon: "success",
+            });
+            window.location.reload();
+            // data.reset();
+          });
       }
     } else {
       const data = new FormData();
@@ -181,37 +173,27 @@ class UploadFile extends React.Component {
       for (let name in this.state) {
         data.append(name, this.state[name]);
       }
-      swal({
-        title: "Are you sure?",
-        text: "Once Post, you will not be able to recover this imaginary file!",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      }).then((willDelete) => {
-        if (willDelete) {
-          const config = {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          };
-          axios
-            .post(
-              "http://localhost/auth-app/public/api/auth/post",
-              data,
-              config,
-              {}
-            )
-            .then((res) => {
-              swal(res.data.message, {
-                icon: "success",
-              });
-              window.location.reload();
-              // data.reset();
-            });
-        } else {
-          swal("Your imaginary file is safe!");
-        }
-      });
+      
+      const config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      };
+      axios
+        .post(
+          "http://localhost/auth-app/public/api/auth/post",
+          data,
+          config,
+          {}
+        )
+        .then((res) => {
+          swal(res.data.message, {
+            icon: "success",
+          });
+          window.location.reload();
+          // data.reset();
+        });
+        
     }
   };
   download = () => {
@@ -277,9 +259,24 @@ class UploadFile extends React.Component {
   handleAddImage(e) {
     e.preventDefault();
 
+    this.setState({
+      file_selected: true,
+      selected_file: e.target.files[0]
+    })
+
     var uploaded = $("#uploaded").val();
 
     let file = this.refs.image.files[0];
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (reader.readyState === 2){
+        this.setState({
+          uploadPreview: reader.result
+        })
+      }
+    }
+    reader.readAsDataURL(file)
     // Validate file is of type Image
     const fileType = file["type"];
     const validImageTypes = [
@@ -313,6 +310,9 @@ class UploadFile extends React.Component {
     e.preventDefault();
     this.setState({
       file: null,
+      uploadPreview: "",
+      file_selected: false,
+      selected_file: ""
     });
   }
 
@@ -427,36 +427,85 @@ class UploadFile extends React.Component {
             <Row className={All.margin_0}>
               <Col lg={8} className={`${All.Dragdrop} upload`}>
                 <div className="image-uploader-wrapper">
-                  <div className={dragOverClass}>
-                    <div className="icon-text-box">
-                      <div className="upload-icon">
-                        <img src={Upload} />
+                  {this.state.category_id === "3"
+                    ?<div className={dragOverClass}>
+                    {!this.state.file_selected
+                      ?<>
+                        <div className="icon-text-box">
+                          <div className="upload-icon">
+                            <img src={Upload} />
+                          </div>
+                          <div className="upload-text">{uploadText}</div>
+                        </div>
+                        <div>
+                          <input
+                            type="file"
+                            ref="image"
+                            id="upload-image-input uploaded"
+                            className="upload-image-input"
+                            accept="video/*"
+                            name="file"
+                            onDrop={this.handleDrop}
+                            onDragEnter={this.handleDragEnter}
+                            onDragOver={this.handleDragOver}
+                            onDragLeave={this.handleDragLeave}
+                            onChange={this.handleAddImage}
+                            
+                          />
+                            
+                        </div>
+                      </>
+                      : <div id = "video-preview-container" style = {{textAlign: "center"}}>
+                        <video src={URL.createObjectURL(this.state.selected_file)} controls style = {{width: "100%", height: "100%", objectFit: "contain"}}></video>
+                        <Button
+                        variant="contained"
+                        type="button"
+                        color="default"
+                        className={All.BtnStyle_5}
+                        onClick={this.handleCancelUpload}
+                      >
+                        Cancel
+                      </Button>
                       </div>
-                      <div className="upload-text">{uploadText}</div>
-                    </div>
-                    <div>
-                      <input
-                        type="file"
-                        ref="image"
-                        id="upload-image-input uploaded"
-                        className="upload-image-input"
-                        accept="video/*,image/*"
-                        name="file"
-                        onDrop={this.handleDrop}
-                        onDragEnter={this.handleDragEnter}
-                        onDragOver={this.handleDragOver}
-                        onDragLeave={this.handleDragLeave}
-                        onChange={this.handleAddImage}
-                      />
-                    </div>
+                    }
                   </div>
+                    :<div className={dragOverClass} style = {{backgroundImage: "url("+this.state.uploadPreview+")", backgroundRepeat: "no-repeat",  backgroundSize: "cover", backgroundPosition: "center"}}>
+
+                      <div className="icon-text-box">
+                        <div className="upload-icon">
+                          {!this.state.file_selected
+                            ?<img src={Upload} />
+                            :""
+                          }
+                        </div>
+                        <div className="upload-text">{uploadText}</div>
+                      </div>
+                      <div>
+                        <input
+                            type="file"
+                            ref="image"
+                            id="upload-image-input uploaded"
+                            className="upload-image-input"
+                            accept="image/*"
+                            name="file"
+                            onDrop={this.handleDrop}
+                            onDragEnter={this.handleDragEnter}
+                            onDragOver={this.handleDragOver}
+                            onDragLeave={this.handleDragLeave}
+                            onChange={this.handleAddImage}
+                            
+                          />
+                      </div>
+                    </div>
+                    
+                  }
                 </div>
               </Col>
               <Col
                 lg={4}
                 className={` ${All.pl_lg_30} ${All.pl_xs_0} ${All.pr_xs_0} ${All.pl_md_0} ${All.pr_md_0} ${All.pl_sm_0} ${All.pr_sm_0}`}
               >
-                <form className={All.form}>
+                <form className={All.form} >
                   <div className={All.FormGroup}>
                     <label for="usr">caption</label>
                     <input
@@ -476,25 +525,38 @@ class UploadFile extends React.Component {
                         id="category_id"
                         name="category_id"
                       >
-                        <FormControlLabel
-                          value="1"
-                          control={<Radio />}
-                          label="Images"
-                        />
+                        {this.state.category_id === "1"
+                          ?<FormControlLabel
+                            value="1"
+                            control={<Radio />}
+                            label="Images"
+                            ref = "radio-img"
+                            checked
+                          />
+                          :<FormControlLabel
+                            value="1"
+                            control={<Radio />}
+                            label="Images"
+                            ref = "radio-img"
+                          />
+                        }
                         <FormControlLabel
                           value="2"
                           control={<Radio />}
                           label="360°Image"
+                          ref = "radio-360img"
                         />
                         <FormControlLabel
                           value="3"
                           control={<Radio />}
                           label="Video"
+                          ref = "radio-vid"
                         />
                         <FormControlLabel
                           value="4"
                           control={<Radio />}
                           label="3D Model"
+                          ref = "radio-3dimg"
                         />
                       </RadioGroup>
                     </FormControl>
@@ -509,6 +571,7 @@ class UploadFile extends React.Component {
                       cols="50"
                       id="description"
                       name="description"
+                      required
                     />
                   </div>
 
@@ -522,6 +585,7 @@ class UploadFile extends React.Component {
                           onChange={this.handleChangeComments}
                           id="comments"
                           name="comments"
+                          required
                         />
                       }
                       label="Close Comments"
