@@ -106,7 +106,7 @@ export default function EndUserProfile(props) {
           setBusy(true);
         },
         (err) => {
-          window.location.replace("/ProfileSingle");
+          console.log(err.response)
         }
       );
 

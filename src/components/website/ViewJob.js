@@ -92,7 +92,9 @@ export default class ViewJob extends React.Component {
             });
           });
       } else {
-        swal("Cancelled");
+        swal("Cancelled", {
+          icon: 'success'
+        });
       }
     });
   }
