@@ -41,7 +41,7 @@ class Like extends React.Component {
   }
 
   updateLikes = num => {
-    let id = this.props.id 
+    let id = this.props.id
 
     const config = {
       headers: {

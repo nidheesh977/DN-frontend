@@ -35,12 +35,12 @@ export default function JobPostEdit(props) {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     }
-  const url = `${API_URL}/Edit/${id}`;
-  axios.get(url,config).then(res => res.data)
-  .then((data) => {
-    setDr(data)
-    setRadiobtn(data.typeofrole) 
-   })  
+    const url = `${API_URL}/Edit/${id}`;
+    axios.get(url,config).then(res => res.data)
+    .then((data) => {
+      setDr(data)
+      setSelectedValue(data.typeofrole) 
+    })
     
   }, []);
 
@@ -67,13 +67,12 @@ export default function JobPostEdit(props) {
 
       setOpen(false);
     };
-   
 
     // 
     const onSubmit = (event) => {  
       swal({
         title: "Are you sure?",
-        text: "Once Post, you will not be able to recover this imaginary file!",
+        text: "Do you want to edit this job post?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -96,23 +95,32 @@ export default function JobPostEdit(props) {
               status:status,
   
           },config1).then(res => {
-            swal(res.data.message, {
+            swal("Edited successfully", {
               icon: "success",
             }); 
-          }).catch(error => {  
+          }).catch(error => { 
+            if (error.response.status === 401){
+              swal("You can't edit others job post", {
+                icon: "error",
+              });
+            }else{
+              swal("Something went wrong! Try again.", {
+                icon: "error",
+              });
+            }
         });
         } else {
-          swal("Your imaginary file is safe!");
+          swal("Job post not edited");
         }
       });  
       setStatus(false);
     }
 
     function handleAlternate(event) { 
-    if(setOpen=== false){
+    if(setOpen === false){
       swal({
         title: "Are you sure?",
-        text: "Once Post, you will not be able to recover this imaginary file!",
+        text: "Do you want to edit this job post?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -227,12 +235,12 @@ export default function JobPostEdit(props) {
 
                                 <div className={All.FormGroup}>
                                     <label className={All.Bold} for="usr">Job Location</label>
-                                    <input type="text" name="job_location" defaultValue={hiredorners.jobdescription} className={All.FormControl} id="usr" ref={register({ required: true,  })}  />
-                                 </div> 
+                                    <input type="text" name="job_location" defaultValue={hiredorners.joblocation} className={All.FormControl} id="usr" ref={register({ required: true,  })}  />
+                                 </div>
 
                                     <div className={All.FormGroup}>
                                     <label  className={All.Bold} htmlFor="type_of_droner" > Type of Droner</label>
-                                    <select  className={`${All.FormControl} ${All.dropdown} `} name="type_of_droner" value={hiredorners.typeofdroner} ref={register({ required: "select one option" })} > 
+                                    <select  className={`${All.FormControl} ${All.dropdown} `} name="type_of_droner" value={hiredorners.typeofdroner} ref={register({ required: "select one option" })} >
                                         <option value="">Select droners category</option> 
                                         <option value="user" >Small</option>
                                         <option value="user">Medium</option>
@@ -242,8 +250,8 @@ export default function JobPostEdit(props) {
 
                                 <div className={All.FormGroup}>
                                     <label className={`${All.Bold} ${All.RadioGroup}`} for="usr">Type of Role</label>   
-                                <Radio checked={selectedValues==='full_time'}  onChange={handleChanges} value="full_time"  color="default"  name="typeofrole"  /><span className={`${All.FormControlLabel} ${All.paddingright_30} ${All.pr_md} ${All.pr_sm} ${All.pr_xs}`}>Full Time</span>     
-                                <Radio checked={selectedValues==='part_time'}  onChange={handleChanges}   value="part_time"  color="default"  name="typeofrole"     /><span className={`${All.FormControlLabel} ${All.paddingright_30} ${All.pr_md} ${All.pr_sm} ${All.pr_xs}`}>Part Time</span>
+                                <Radio checked={selectedValues ==='full_time'}  onChange={handleChanges} value="full_time"  color="default"  name="typeofrole" /><span className={`${All.FormControlLabel} ${All.paddingright_30} ${All.pr_md} ${All.pr_sm} ${All.pr_xs}`}>Full Time</span>     
+                                <Radio checked={selectedValues==='part_time'}  onChange={handleChanges}   value="part_time"  color="default"  name="typeofrole"/><span className={`${All.FormControlLabel} ${All.paddingright_30} ${All.pr_md} ${All.pr_sm} ${All.pr_xs}`}>Part Time</span>
                                 <Radio checked={selectedValues==='freelanchers'} onChange={handleChanges}   value="freelanchers"  color="default"  name="typeofrole" /><span className={`${All.FormControlLabel} ${All.paddingright_30} ${All.pr_md} ${All.pr_sm} ${All.pr_xs}`}>Freelanchers</span>
                                      
 
@@ -257,7 +265,7 @@ export default function JobPostEdit(props) {
                                         {/* <img style={{paddingRight:10}} src={DroneImg} /> */}
                                         Draft</Button>
                                         <Link  to='OfficeProfile'>
-                                        <Button ml={2}  variant="contained" color="default" className={All.BtnStyle_4}> 
+                                        <Button ml={2}  variant="contained" color="default" className={All.BtnStyle_4} onClick = {window.location.reload}> 
                                         Cancel</Button>
                                         </Link>
                                

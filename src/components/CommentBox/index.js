@@ -61,7 +61,6 @@ class CommentBox extends React.Component {
     this.setState({
       comment_body: ""
     })
-    document.getElementById("comment_input").innerHTML = ""
     console.log(this.state.comment_body)
     this.setState({
       isLoading: true
@@ -101,6 +100,7 @@ class CommentBox extends React.Component {
             isLoading: false
           })
         });
+        this.mainInput.value = "";
       })
       .catch(err => {
         swal("Comment not send", {
@@ -110,7 +110,10 @@ class CommentBox extends React.Component {
         this.setState({
           isLoading: false
         })
+        this.mainInput.value = "";
       })
+
+      
   };
 
   commentChangeHandler = (e) => {
@@ -141,6 +144,7 @@ class CommentBox extends React.Component {
           <form className="comment-form" onSubmit={postComment}>
             <div className="comment-form-fields">
               <textarea
+                ref={(ref) => this.mainInput= ref}
                 id = "comment_input"
                 placeholder="Comment"
                 name="body"

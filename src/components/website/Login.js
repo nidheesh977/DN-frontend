@@ -17,6 +17,7 @@ import swal from 'sweetalert';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import { authenticationService } from '../../middleware/auth';
+import { trackWindowScroll } from 'react-lazy-load-image-component';
 
 
 const PasswordShow = () => {
@@ -34,6 +35,7 @@ const PasswordShow = () => {
   }
  
         if (authenticationService.currentUserValue) { 
+          window.reload()
           props.history.push('/');
       }  
  

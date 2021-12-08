@@ -339,7 +339,7 @@ export default class ViewJob extends React.Component {
                           <a
                             className={`${All.marginright_9} ${All.RecentImg}`}
                             href={
-                              "././#/Imageview/" +
+                              "/Imageview/" +
                               option.id +
                               "/" +
                               option.user_id
