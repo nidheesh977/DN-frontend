@@ -204,7 +204,7 @@ class Posts extends React.Component {
                                     marginRight: '15px' ,
                                     height: '100px',
                                     borderRadius: '100px'
-                                }} />  :  <Skeleton circle={true} height={100} width={100} className={All.SkeletonImg}/> }  
+                                }} />  :  <Skeleton circle={true} height={100} width={100} className={All.SkeletonImg}/> }
                                 </Box>  
                                 <Box pt={1}  className={`${All.DisplayFlex_xl} ${All.flexEnd_xl} ${All.DisplayFlex_lg} ${All.flexEnd_lg} ${All.DisplayFlex_md} ${All.flexEnd_md}`}> 
                                     <h2 className={All.paddingright}>{user.jobtitle  || <Skeleton count={1}/>}</h2> 
@@ -272,11 +272,6 @@ class Posts extends React.Component {
  function MyPostsTitle() {
   return (
     <>
-         <Helmet>
-                <title>HiringDorners</title>
-                <meta charSet="utf-8" />
-                <meta name="description" content="Nested component" />
-            </Helmet>
 
     </>
   )
