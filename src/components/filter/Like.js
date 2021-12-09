@@ -24,7 +24,7 @@ class Like extends React.Component {
 
 	render() {
 		return (
-			<div> 
+			<div>
 				<center>
 				<p> {this.state.count}  <button onClick= {this.go} > like! </button> </p>
 				</center>

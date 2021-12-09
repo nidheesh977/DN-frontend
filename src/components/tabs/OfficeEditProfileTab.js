@@ -7,7 +7,7 @@ import $ from 'jquery'
 import Box from '@material-ui/core/Box'; 
 import OfficePublicProfile from '../tabs/OfficePublicProfile'
 import AdvancedInformation from '../tabs/AdvancedInformation'
-import SocialMediaProfiles from '../tabs/SocialMediaProfiles'
+// import SocialMediaProfiles from '../tabs/SocialMediaProfiles'
 import EmailNotification from '../tabs/EmailNotifications'
 
 
@@ -33,7 +33,7 @@ export default class EditProfileTab extends React.Component {
                   <span className="EditProfile"> 
                       <li><button data-id="tab1">Public Profile</button></li>
                       <li><button data-id="tab2">Advanced Information</button></li>
-                      <li><button data-id="tab3"> Social Media Profiles</button></li> 
+                      {/* <li><button data-id="tab3"> Social Media Profiles</button></li>  */}
                   </span> 
                 </ul>
               </header>
@@ -53,7 +53,7 @@ export default class EditProfileTab extends React.Component {
               <Col> 
                   <div id="tab1" class="tab"> <OfficePublicProfile /></div> 
                   <div id="tab2" class="tab hidden"> <AdvancedInformation /></div> 
-                  <div id="tab3" class="tab hidden"> <SocialMediaProfiles /></div>  
+                  {/* <div id="tab3" class="tab hidden"> <SocialMediaProfiles /></div>   */}
               </Col>
           </Row> 
         </Container> 

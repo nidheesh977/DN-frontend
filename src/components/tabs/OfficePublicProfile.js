@@ -30,7 +30,7 @@ export default function OfficePublicProfile() {
           .then(res => {
             setLoading(false); 
             setUser(res.data)
-            // console.log(res);
+            console.log(res);
           },
             err => {
               setLoading(false); 
@@ -69,19 +69,21 @@ export default function OfficePublicProfile() {
             setLoading(false);    
             swal(res.data.message, {
               icon: "success",
-            }); 
+            });
+
+            console.log(res)
           })
             .catch(error => {
-              setLoading(false); 
+              setLoading(false);
               console.log(error);
             });
     }
 
-    const {register ,handleSubmit, errors, watch ,control  } = useForm(); 
-   
+    const {register ,handleSubmit, errors, watch ,control  } = useForm();
+
       const [value, setValue] = useState()
       const [state, setState] = React.useState({
-          checkedA: false, 
+          checkedA: false,
         });
         const handleChange = (event) => {
           setState({ ...state, [event.target.name]: event.target.checked });
@@ -115,18 +117,18 @@ export default function OfficePublicProfile() {
                              </div>
 
                             <div className={All.FormGroup}>
-                                <label className={All.Bold} for="usr">Profession:</label>
-                                <input type="text" name="profession" className={All.FormControl} id="usr" defaultValue={user.profession} ref={register ({ required : true, minLength : 2}) }/> 
+                                <label className={All.Bold} for="profession">Profession:</label>
+                                <input type="text" name="profession" className={All.FormControl} id="profession" defaultValue={user.profession} ref={register ({ required : true, minLength : 2}) }/> 
                             </div> 
 
                             <div className={All.FormGroup}>
-                                <label className={All.Bold} for="usr">Location:</label>
-                                <input placeholder="Bangalore" type="text" name="location" className={All.FormControl} defaultValue={user.location} id="usr" ref={register ({ required : true, minLength : 2}) }/> 
+                                <label className={All.Bold} for="location">Location:</label>
+                                <input placeholder="Bangalore" type="text" name="location" className={All.FormControl} defaultValue={user.location} id="location" ref={register ({ required : true, minLength : 2}) }/> 
                          </div> 
 
                             <div className={All.FormGroup}>
-                                <label className={All.Bold} for="usr">Country:</label>
-                                <input placeholder="India" type="text" name="country" className={All.FormControl} id="usr" defaultValue={user.country} ref={register ({ required : true, minLength : 2}) }/> 
+                                <label className={All.Bold} for="country">Country:</label>
+                                <input placeholder="India" type="text" name="country" className={All.FormControl} id="country" defaultValue={user.country} ref={register ({ required : true, minLength : 2}) }/> 
                               </div>  
 
                         <div className={All.FormGroup}> 

@@ -570,20 +570,24 @@ class GalleryFilter extends React.Component {
                                                   />
                                                 </Link>
                                                 <figcaption>
-                                                  {users.id ==
+                                                  {user.user_id ==
                                                   this.state.usersid ? (
-                                                    <span className="FSize_14 Profile_icon">
-                                                      {user.author}{" "}
-                                                    </span>
+                                                    <Link
+                                                      className={All.White}
+                                                      to="/Profile/">
+                                                      <span className="FSize_14 Profile_icon">
+                                                        {user.author} {" "}
+                                                      </span>
+                                                    </Link>
                                                   ) : (
                                                     <Link
                                                       className={All.White}
                                                       to={{
-                                                        pathname: `ProfileSingle/${user.user_id}`,
+                                                        pathname: `/ProfileSingle/${user.user_id}`,
                                                       }}
                                                     >
                                                       <span className="FSize_14 Profile_icon">
-                                                        {user.author}{" "}
+                                                        {user.author} {" "}
                                                       </span>
                                                     </Link>
                                                   )}
@@ -622,7 +626,7 @@ class GalleryFilter extends React.Component {
                                               <figure>
                                                 <Link
                                                   to={{
-                                                    pathname: `Imageview/${user.id}/${user.user_id}`,
+                                                    pathname: `/Imageview/${user.id}/${user.user_id}`,
                                                     data: user,
                                                     state: { foo: "bar" },
                                                   }}
@@ -638,11 +642,18 @@ class GalleryFilter extends React.Component {
                                                   />
                                                 </Link>
                                                 <figcaption>
-                                                  {users.id ==
+                                                  {user.user_id ==
                                                   this.state.usersid ? (
-                                                    <span className="FSize_14 Profile_icon">
-                                                      {user.author}{" "}
-                                                    </span>
+                                                    <Link
+                                                      className={All.White}
+                                                      to={{
+                                                        pathname: `/Profile/`,
+                                                      }}
+                                                    >
+                                                      <span className="FSize_14 Profile_icon">
+                                                        {user.author}{" "}
+                                                      </span>
+                                                    </Link>
                                                   ) : (
                                                     <Link
                                                       className={All.White}
@@ -709,11 +720,18 @@ class GalleryFilter extends React.Component {
                                                   </video>
                                                 </Link>
                                                 <figcaption>
-                                                  {users.id ==
+                                                  {user.user_id ==
                                                   this.state.usersid ? (
-                                                    <span className="FSize_14 Profile_icon">
-                                                      {user.author}{" "}
-                                                    </span>
+                                                    <Link
+                                                      className={All.White}
+                                                      to={{
+                                                        pathname: `/Profile/`,
+                                                      }}
+                                                    >
+                                                      <span className="FSize_14 Profile_icon">
+                                                        {user.author}{" "}
+                                                      </span>
+                                                    </Link>
                                                   ) : (
                                                     <Link
                                                       className={All.White}
@@ -777,11 +795,18 @@ class GalleryFilter extends React.Component {
                                                   />
                                                 </Link>
                                                 <figcaption>
-                                                  {users.id ==
+                                                  {user.user_id ==
                                                   this.state.usersid ? (
-                                                    <span className="FSize_14 Profile_icon">
-                                                      {user.author}{" "}
-                                                    </span>
+                                                    <Link
+                                                      className={All.White}
+                                                      to={{
+                                                        pathname: `/Profile/`,
+                                                      }}
+                                                    >
+                                                      <span className="FSize_14 Profile_icon">
+                                                        {user.author}{" "}
+                                                      </span>
+                                                    </Link>
                                                   ) : (
                                                     <Link
                                                       className={All.White}
