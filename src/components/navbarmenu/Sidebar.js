@@ -92,8 +92,7 @@ export default function PersistentDrawerLeft(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [userlogin, Setuserlogin] = useState(false) 
-  useEffect(() => Setuserlogin(isLogin()), [props])
+  const [userlogin, Setuserlogin] = useState(false)
 
 
   const handleDrawerOpen = () => {
@@ -122,8 +121,9 @@ export default function PersistentDrawerLeft(props) {
     axios.get('http://localhost/auth-app/public/api/auth/user', config)
       .then(res => {
         Setuser(res.data);  
-      },
-        err => { 
+      })
+      .catch(err => { 
+        console.log(err.response)
         }
       )  
           axios.get('http://localhost/auth-app/public/api/auth/profile', config)

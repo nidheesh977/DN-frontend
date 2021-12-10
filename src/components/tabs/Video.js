@@ -146,7 +146,7 @@ export default class Video extends React.Component {
                               >
                                 <Link
                                   to={{
-                                    pathname: `PostEdit/${user.id}/${user.user_id}`,
+                                    pathname: `/PostEdit/${user.id}/${user.user_id}`,
                                     data: user,
                                     state: { foo: "bar" },
                                   }}
@@ -164,7 +164,7 @@ export default class Video extends React.Component {
 
                             <Link
                               to={{
-                                pathname: `Imageview/${user.id}/${user.user_id}`,
+                                pathname: `/Imageview/${user.id}/${user.user_id}`,
                                 data: user,
                                 state: { foo: "bar" },
                               }}
@@ -184,7 +184,7 @@ export default class Video extends React.Component {
                                 <Link
                                   className={All.White}
                                   to={{
-                                    pathname: `ProfileSingle/${user.user_id}`,
+                                    pathname: `/ProfileSingle/${user.user_id}`,
                                   }}
                                 >
                                   <span className="FSize_14 Profile_icon">

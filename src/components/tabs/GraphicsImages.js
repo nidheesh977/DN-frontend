@@ -103,7 +103,7 @@ export default class GraphicsImages extends React.Component {
                                                         <figure>
                                                         {users.id == this.state.userId ? 
                                                         <figcaption class="edit" style={{top: '0 !important'}}>   
-                                                            <Link to={{ pathname: `PostEdit/${user.id}/${user.user_id}`,  data: user , state: { foo: 'bar'} }} onClick={this.clickMe.bind(this, user)}> 
+                                                            <Link to={{ pathname: `/PostEdit/${user.id}/${user.user_id}`,  data: user , state: { foo: 'bar'} }} onClick={this.clickMe.bind(this, user)}> 
                                                             <span className="LikeIcon MuliLight"> <EditIcon></EditIcon> </span>
                                                             </Link> </figcaption> : <> </> }  
                                                                 <Link  to={{ pathname: `/Imageview/${user.id}/${user.user_id}`,  data: user , state: { foo: 'bar'} }} onClick={this.clickMe.bind(this, user)}>  
@@ -113,7 +113,7 @@ export default class GraphicsImages extends React.Component {
                                                             </Link> 
                                                             <figcaption>
                                                             {users.id == this.state.userId ?  <span className="FSize_14 Profile_icon">{user.author} </span> 
-                                                            :  <Link className={All.White} to={{ pathname:`ProfileSingle/${user.user_id}`}}><span className="FSize_14 Profile_icon">{user.author} </span></Link> }      
+                                                            :  <Link className={All.White} to={{ pathname:`/ProfileSingle/${user.user_id}`}}><span className="FSize_14 Profile_icon">{user.author} </span></Link> }      
                                                                 <span className="LikeIcon  MuliLight"><Like id={user.id}/> </span>
                                                             </figcaption>
                                                         </figure>

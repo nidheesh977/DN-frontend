@@ -162,7 +162,7 @@ export default class HiringDorners extends React.Component {
                                     </figure>
                                     <div className={All.UsersListBody}>
                                         <div>
-                                        <Link  to={{ pathname: `ProfileSingle/${user.user_id}`  }} >  
+                                        <Link  to={{ pathname: `/ProfileSingle/${user.user_id}`  }} >  
                                             <h4 className={` ${All.paddingbottom} ${All.p_xs_0} ${All.p_sm_0} ${All.p_md_0}`}>{user.user}</h4>
                                             </Link>
                                             <label className={All.wordbreak_breakAll}>{user.user_name}</label> 

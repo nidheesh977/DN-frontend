@@ -25,6 +25,11 @@ document.addEventListener('click', ({ target: { dataset: { id = '' }}}) => {
   if (id.length > 0) {
     document.querySelectorAll('.tab').forEach(t => t.classList.add('hidden'));
     document.querySelector(`#${id}`).classList.remove('hidden'); 
+
+    document.querySelectorAll('.select_tab').forEach(t => t.classList.remove(All.BtnStyle_12));
+    document.querySelector(`#select_${id}`).classList.add(All.BtnStyle_12); 
+
+
   }
 }); 
 
@@ -34,7 +39,7 @@ document.addEventListener('click', ({ target: { dataset: { pluginid = '' }}}) =>
     document.querySelector(`#${pluginid}`).classList.remove('deactive'); 
     
   }
-});  
+}); 
 
 export default class TabModel extends React.Component {
   constructor(props) {
@@ -46,11 +51,12 @@ export default class TabModel extends React.Component {
     };  
   }
 
-  componentDidMount() {  
+  componentDidMount() { 
+    document.getElementById("select_tab1").classList.add(All.BtnStyle_12) 
     userService.User().then(res => res.data)
     .then((data) => {
       this.setState({ user: data }) 
-     }) 
+     })
   }  
     render(){
  
@@ -63,19 +69,19 @@ export default class TabModel extends React.Component {
                 <ul className="TabModelProfile">
                   {/* <span className={All.scrollableShadow}></span> */}
                   <span>
-                      <li><button data-id="tab1" data-pluginid="tab1" class="tabs">All</button></li>
-                      <li><button data-id="tab2" data-pluginid="tab2" class="tabs deactive">Images</button></li>
-                      <li><button data-id="tab3" data-pluginid="tab3" class="tabs deactive"> 360° Images</button></li>
-                      <li><button data-id="tab4" data-pluginid="tab4" class="tabs deactive">Videos</button></li>    
-                      <li><button data-id="tab5" data-pluginid="tab5" class="tabs deactive">3D Models</button></li> 
+                      <li className='select_tab' id = "select_tab1"><button data-id="tab1" data-pluginid="tab1" class="tabs">All</button></li>
+                      <li className='select_tab' id = "select_tab2"><button data-id="tab2" data-pluginid="tab2" class="tabs deactive">Images</button></li>
+                      <li className='select_tab' id = "select_tab3"><button data-id="tab3" data-pluginid="tab3" class="tabs deactive"> 360° Images</button></li>
+                      <li className='select_tab' id = "select_tab4"><button data-id="tab4" data-pluginid="tab4" class="tabs deactive">Videos</button></li>    
+                      <li className='select_tab' id = "select_tab5"><button data-id="tab5" data-pluginid="tab5" class="tabs deactive">3D Models</button></li> 
                       {user.id == this.props.id ? <>
-                        <li><button data-id="tab6" data-pluginid="tab6" class="tabs deactive">My Store</button></li>
-                        <li><button data-id="tab7" data-pluginid="tab7" class="tabs deactive"> My Jobs</button></li></> : <> </> } 
+                        <li className='select_tab' id = "select_tab6"><button data-id="tab6" data-pluginid="tab6" class="tabs deactive">My Store</button></li>
+                        <li className='select_tab' id = "select_tab7"><button data-id="tab7" data-pluginid="tab7" class="tabs deactive"> My Jobs</button></li></> : <> </> } 
                      </span>
 
                   <span className={All.tabsmodel_li}>
-                      <li><button data-id="tab8" data-pluginid="tab8" class="tabs deactive">Followers</button></li>
-                      <li><button data-id="tab9" data-pluginid="tab9" class="tabs deactive">Following</button></li>  
+                      <li className='select_tab' id = "select_tab8"><button data-id="tab8" data-pluginid="tab8" class="tabs deactive">Followers</button></li>
+                      <li className='select_tab' id = "select_tab9"><button data-id="tab9" data-pluginid="tab9" class="tabs deactive">Following</button></li>  
                   </span> 
                 </ul>
               </header> 
@@ -97,7 +103,6 @@ export default class TabModel extends React.Component {
               <div id="tab9" class="tab hidden"> <Following user={this.props.id} /></div>    
         </section>
       </div>
- 
       )
     }
   }

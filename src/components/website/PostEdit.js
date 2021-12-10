@@ -45,25 +45,24 @@ const API_URL = 'http://localhost/auth-app/public/api/auth';
           dragOver: false,
           errorNoficication: null 
         };
-        
-      this.handleAddImage = this.handleAddImage.bind(this); 
-      this.handleDragOver = this.handleDragOver.bind(this);
-      this.handleDragEnter = this.handleDragEnter.bind(this);
-      this.handleDragLeave = this.handleDragLeave.bind(this);
-      this.handleDrop = this.handleDrop.bind(this);
-      this.handleCancelUpload = this.handleCancelUpload.bind(this);
+
+        this.handleAddImage = this.handleAddImage.bind(this);
+        this.handleDragOver = this.handleDragOver.bind(this);
+        this.handleDragEnter = this.handleDragEnter.bind(this);
+        this.handleDragLeave = this.handleDragLeave.bind(this);
+        this.handleDrop = this.handleDrop.bind(this);
+        this.handleCancelUpload = this.handleCancelUpload.bind(this);
         this.onChangecaption = this.onChangecaption.bind(this);
         this.onChangedescription = this.onChangedescription.bind(this);
         this.onChangecategory_id = this.onChangecategory_id.bind(this);
         this.onChangecomments = this.onChangecomments.bind(this);
         this.onChangeprice = this.onChangeprice.bind(this);
         this.onChangesale = this.onChangesale.bind(this);
-      } 
-
+      }
+      
       componentDidMount() {
-        const id = this.props.match.params.id; 
-        const user_id = this.props.match.params.user_id 
-  
+        const id = this.props.match.params.id;
+        const user_id = this.props.match.params.user_id
         this.setState({
           fieldVal: id
         }) 
