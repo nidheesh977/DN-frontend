@@ -605,6 +605,19 @@ button.disabled span {
     outline: none;
 }
 
+.BtnStyle_12{
+    color: #041D1F !important;    
+    background: transparent linear-gradient(121deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
+    border-radius: 50px !important; 
+    font-size: 16px !important;
+    font-weight: bold !important;
+    border: 1px solid #38f7bd !important;
+    box-shadow: none !important;  
+    text-align: center;
+    text-transform: none !important;
+    outline: none;
+}
+
 .LoadMore{    
     width: auto !important;
     height: auto !important;

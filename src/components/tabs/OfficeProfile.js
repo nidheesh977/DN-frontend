@@ -10,20 +10,29 @@ import AppliedDroners from '../tabs/AppliedDroners'
 import HiredDroners from '../tabs/HiredDroners'  
 import { Link } from 'react-router-dom'; 
 import { userService } from '../_services/user.service'; 
+import BottomNavigation from "@material-ui/core/BottomNavigation";
+import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
  
 document.addEventListener('click', ({ target: { dataset: { id = '' }}}) => { 
   if (id.length > 0) { 
     document.querySelectorAll('.tab').forEach(t => t.classList.add('hidden'));  
     document.querySelector(`#${id}`).classList.remove('hidden'); 
+
+    document.getElementById("select_tab1").classList.remove(All.BtnStyle_12)
+    document.getElementById("select_tab2").classList.remove(All.BtnStyle_12)
+    document.getElementById("select_tab3").classList.remove(All.BtnStyle_12)
+    document.getElementById("select_tab4").classList.remove(All.BtnStyle_12)
+    
+    document.getElementById("select_"+id).classList.add(All.BtnStyle_12)
+
   } 
 }); 
 
   export default function EditProfileTab() {  
-     
-    const[Subscriptioncheck, setSubscriptioncheck] = useState([]);  
-     
+
+    const[Subscriptioncheck, setSubscriptioncheck] = useState([]); 
     useEffect(() => { 
- 
+      document.getElementById("select_tab1").classList.add(All.BtnStyle_12)
       const config = { 
         headers: { 
           Authorization: 'Bearer ' + localStorage.getItem('access_token') 
@@ -50,13 +59,13 @@ document.addEventListener('click', ({ target: { dataset: { id = '' }}}) => {
                     <ul>
                     {/* <span className={All.scrollableShadow}></span> */}
                       <span className="TabModelProfile"> 
-                          <li><button data-id="tab1">My Posts</button></li>
-                          <li><button data-id="tab2">Applied Droners</button></li>
-                          <li><button data-id="tab3">Hired Droners</button></li>
-                          <li><button data-id="tab4">Draft Posts</button></li>    
+                          <li id = "select_tab1"><button data-id="tab1">My Posts</button></li>
+                          <li id = "select_tab2"><button data-id="tab2">Applied Droners</button></li>
+                          <li id = "select_tab3"><button data-id="tab3">Hired Droners</button></li>
+                          <li id = "select_tab4"><button data-id="tab4">Draft Posts</button></li>
                       </span> 
                       <span>  
- 
+
                           {Subscriptioncheck.message == 'subscribed' ?
                             <Link to='GetJobs'  className={`${All.padding_0} ${All.DisplayInline}`}>
                             <Button variant="contained" color="default" type="submit" className={`${All.BtnStyle_11}`}>
@@ -70,8 +79,8 @@ document.addEventListener('click', ({ target: { dataset: { id = '' }}}) => {
                             </Button>
                             </Link>
                           }
- 
- 
+
+
                       </span> 
                     </ul>
                   </header>
