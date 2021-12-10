@@ -50,7 +50,7 @@ export default class AppliedDorners extends React.Component {
   deleteRow(id, e){  
     swal({
         title: "Are you sure?",
-        text: "Once deleted, you will not be able to recover this imaginary file!",
+        text: "Once deleted, you will not be able to recover this application!",
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -72,7 +72,7 @@ export default class AppliedDorners extends React.Component {
             }).catch(error => {  
             });  
         } else {
-          swal("Your imaginary file is safe!");
+          swal("Application is safe!");
         }
       });  
     } 

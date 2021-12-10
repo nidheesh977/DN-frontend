@@ -15,13 +15,13 @@ import DropdownFilter from '../filter/DropdownFilter'
 
 
 
-const API_URL = 'https://demo-nexevo.in/vijay';
+const API_URL = 'http://localhost/auth-app/public/api/auth';
  
 export default class Industry extends React.Component {
   
     constructor(props) {
       super(props);
-  
+
       this.state = {
         items: [],
         value: '',
@@ -41,9 +41,19 @@ export default class Industry extends React.Component {
 
     componentDidMount() {
         const url = `${API_URL}/hiredorners`;
-        axios.get(url).then(res => res.data)
+        const config = {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('access_token')
+          }
+        } 
+        axios.get(url, config).then(res => res.data)
         .then((data) => {
           this.setState({ hiredorners: data }) 
+          console.log(data)
+         })
+
+         .catch(err => {
+           console.log(err.response)
          })
       }
 
@@ -64,7 +74,7 @@ export default class Industry extends React.Component {
 
         <>
         <Helmet>
-            <title>HiringDorners</title>
+            <title>Search Industry</title>
             <meta charSet="utf-8" />
             <meta name="description" content="Nested component" />
         </Helmet>

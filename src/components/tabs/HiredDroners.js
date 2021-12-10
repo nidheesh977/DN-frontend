@@ -55,7 +55,7 @@ export default class HiringDorners extends React.Component {
   deleteRow(id, e){  
     swal({
         title: "Are you sure?",
-        text: "Once deleted, you will not be able to recover this imaginary file!",
+        text: "Once deleted, you will not be able to recover this hired droner!",
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -80,7 +80,7 @@ export default class HiringDorners extends React.Component {
                   });
             });  
         } else {
-          swal("Your imaginary file is safe!");
+          swal("Your hired droner is safe!");
         }
       });  
     } 

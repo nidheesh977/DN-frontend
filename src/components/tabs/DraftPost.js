@@ -61,7 +61,7 @@ export default class HiringDorners extends React.Component {
   deleteRow(id, e) {
     swal({
       title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this imaginary file!",
+      text: "Once deleted, you will not be able to recover this draft post!",
       icon: "warning",
       buttons: true,
       dangerMode: true,
@@ -86,7 +86,7 @@ export default class HiringDorners extends React.Component {
           })
           .catch((error) => {});
       } else {
-        swal("Your imaginary file is safe!");
+        swal("Your draft post is safe!");
       }
     });
   }

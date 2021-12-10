@@ -22,15 +22,21 @@ class CommentLike extends React.Component {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     } 
- 
 
-    // axios.get(`http://localhost/auth-app/public/api/auth/user`, config)
-    // .then(res => this.setState({ user: res.data }, () => { 
-    //         axios.get(`http://localhost/auth-app/public/api/auth/commentcheck/${id}/${res.data.id}`,config).then(res => res.data)
-    //                .then((data) => { 
-    //                 this.setState({ liked: data.status }) 
-    //                 })
-    // }))
+    axios.get(`http://localhost/auth-app/public/api/auth/user`, config)
+    .then(res => {
+            axios.get(`http://localhost/auth-app/public/api/auth/commentcheck/${id}/${res.data.id}`,config).then(res => res.data)
+                   .then((data) => {
+                    this.setState({ liked: data.status })
+                    console.log(data.status)
+                    })
+                    .catch(err => {
+                      console.log(err.response)
+                    })
+    })
+    .catch(err => {
+      console.log(err.response)
+    })
 
     axios.get(`http://localhost/auth-app/public/api/auth/commentlikes/${id}`, config)
     .then(res => {    
@@ -47,13 +53,13 @@ class CommentLike extends React.Component {
       }
     } 
     axios.get(`http://localhost/auth-app/public/api/auth/comment/like/${id}`, config)
-    .then(res => {  
-    })  
+    .then(res => {    
 
-    this.setState({
-      liked: !this.state.liked,
-      likes: this.state.likes + num
-    });
+      this.setState({
+        liked: !this.state.liked,
+        likes: this.state.likes + num
+      });
+    })
   };
 
   updateDislikes = num => {
@@ -87,8 +93,8 @@ class CommentLike extends React.Component {
       <div style={{display: 'flex',alignItems: 'center'}}> 
       <div style={{display: 'flex',marginLeft: '8px',alignItems:'center'}}> 
       <span class={likeClasses} onClick={this.onClickLike}>
-                {this.state.liked == 1 ?  <Favorite /> : <FavoriteBorder/> } 
-            </span> 
+                {this.state.liked == 1 ?  <Favorite /> : <FavoriteBorder/> }
+            </span>
             <span>{likes}</span>
         </div>
         </div>
