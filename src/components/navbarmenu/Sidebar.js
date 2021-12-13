@@ -1,4 +1,4 @@
-import React , { useState, useEffect } from 'react';
+import React , { useState, Component, useEffect , useCallback } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -15,16 +15,19 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import Logo from '../images/Logo.png'
 import { Link } from 'react-router-dom';
+import InputBase from '@material-ui/core/InputBase'; 
 import SearchIcon from '@material-ui/icons/Search'; 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'; 
 import PersonIcon from '@material-ui/icons/Person';
 import axios from 'axios'
 import WorkIcon from '@material-ui/icons/Work';
+import Hiring from '../images/hiring.svg'
 import All from '../website/All.module.css'
-import { logout, isLogin } from '../../middleware/auth';  
+import { logout, isLogin ,login ,getRefreshToken } from '../../middleware/auth';  
 import WorkOutlineIcon from '@material-ui/icons/WorkOutline'; 
 import BusinessIcon from '@material-ui/icons/Business';
 
@@ -92,7 +95,8 @@ export default function PersistentDrawerLeft(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [userlogin, Setuserlogin] = useState(false)
+  const [userlogin, Setuserlogin] = useState(false) 
+  useEffect(() => Setuserlogin(isLogin()), [props])
 
 
   const handleDrawerOpen = () => {
@@ -103,14 +107,14 @@ export default function PersistentDrawerLeft(props) {
     setOpen(false);
   };
 
-
+  
   const handleLogout = () => {
     logout();
     Setuserlogin(false)
     setOpen(false);
 }
 
-
+  
   useEffect(() => { 
     const config = {
       headers: {
@@ -121,9 +125,8 @@ export default function PersistentDrawerLeft(props) {
     axios.get('http://localhost/auth-app/public/api/auth/user', config)
       .then(res => {
         Setuser(res.data);  
-      })
-      .catch(err => { 
-        console.log(err.response)
+      },
+        err => { 
         }
       )  
           axios.get('http://localhost/auth-app/public/api/auth/profile', config)
