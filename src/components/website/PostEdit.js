@@ -71,12 +71,12 @@ class UploadFile extends React.Component {
           category_id: data.tag,
           description: data.description,
           comments: data.comments,
-          for_sale: data.sale,
+          for_sales: data.sale,
           price: data.price,
           file_selected: true,
           uploadPreview: data.src
         });
-        
+        console.log(data)
         // this.setState({ imageview: data }) 
       })
   }
@@ -105,15 +105,20 @@ class UploadFile extends React.Component {
     }
   };
 
-  handleFileChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-    // this.setState({submitDisabled: ![e.target.name]});
-    const { value, name } = e.target;
-    this.setState({ [name]: value });
+  handleCaptionChange = (e) => {
+    this.setState({ caption: e.target.value});
+  };
+
+  handleDescriptionChange = (e) => {
+    this.setState({ description: e.target.value});
+  };
+
+  handlePriceChange = (e) => {
+    this.setState({ price: e.target.value});
   };
 
   handleChangefor_sale = (e) => {
-    this.setState({ for_sale: e.target.value });
+    this.setState({ for_sale: e.target.value, price: "" });
     this.setState({ [e.target.name]: e.target.value });
     // this.setState({submitDisabled: ![e.target.name]});
   };
@@ -130,7 +135,7 @@ class UploadFile extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleChangeComments = (event) => {
+  handleCommentsChange = (event) => {
     this.setState({ [event.target.name]: event.target.checked });
     // this.setState({submitDisabled: ![event.target.name]});
   };
@@ -149,23 +154,23 @@ class UploadFile extends React.Component {
   };
 
   saveAll = () => {
-    var uploaded = $("#uploaded").val();
-    var caption = $("#caption").val();
-    // var category_id = $('#category_id').val();
-    var description = $("#description").val();
-    // var comments = $('#comments').val();
-    // var for_sales = $('#for_sales').val();
+    var file = this.state.file
+    var caption = this.state.caption
+    var description = this.state.description
+    var category_id = this.state.category_id
+    var for_sales = this.state.for_sales
+    var price = this.state.price
 
     if (
-      this.state.file === "" ||
+      file === "" ||
       caption == "" ||
       description == "" ||
-      this.state.category_id === "" ||
-      this.state.for_sales === ""
+      category_id === "" ||
+      for_sales === ""
     ) {
       this.setState({ showerror: true });
-    } else if (this.state.for_sales === "forsale") {
-      if (this.state.price === "") {
+    } else if (for_sales === "forsale") {
+      if (price === "") {
         this.setState({ showerror: true });
       } else {
         const data = new FormData();
@@ -183,7 +188,7 @@ class UploadFile extends React.Component {
         };
         axios
           .post(
-            "http://localhost/auth-app/public/api/auth/post",
+            `http://localhost/auth-app/public/api/auth/editpost/${this.props.match.params.id}`,
             data,
             config,
             {}
@@ -213,7 +218,7 @@ class UploadFile extends React.Component {
       };
       axios
         .post(
-          "http://localhost/auth-app/public/api/auth/post",
+          `http://localhost/auth-app/public/api/auth/editpost/${this.props.match.params.id}`,
           data,
           config,
           {}
@@ -349,7 +354,9 @@ class UploadFile extends React.Component {
   }
 
   render() {
-    // Match drag over css to hover css
+    
+    var handleCaptionChange = this.handleCaptionChange
+    
     let dragOverClass = this.state.dragOver
       ? `display-box drag-over`
       : `display-box`;
@@ -401,7 +408,7 @@ class UploadFile extends React.Component {
     return (
       <>
         <Helmet>
-          <title>UploadFile</title>
+          <title>Post Edit</title>
           <meta charSet="utf-8" />
           <meta name="description" content="Nested component" />
         </Helmet>
@@ -545,7 +552,7 @@ class UploadFile extends React.Component {
                       id="caption"
                       className={All.FormControl}
                       name="caption"
-                      onChange={this.handleFileChange}
+                      onChange={handleCaptionChange}
                       defaultValue={this.state.caption}
                     />
                   </div>
@@ -595,7 +602,7 @@ class UploadFile extends React.Component {
                     <label for="usr">Say about the shot</label>
                     <textarea
                       className={All.FormControl}
-                      onChange={this.handleFileChange}
+                      onChange={this.handleDescriptionChange}
                       rows="4"
                       cols="50"
                       id="description"
@@ -612,7 +619,7 @@ class UploadFile extends React.Component {
                       control={
                         <Checkbox
                           checked={this.state.comments}
-                          onChange={this.handleChangeComments}
+                          onChange={this.handleCommentsChange}
                           id="comments"
                           name="comments"
                           required
@@ -634,13 +641,13 @@ class UploadFile extends React.Component {
                           value="forsale"
                           control={<Radio onClick={this.forsale} />}
                           label="For Sale"
-                          checked={this.state.for_sale === "forsale"}
+                          checked={this.state.for_sales === "forsale"}
                         />
                         <FormControlLabel
                           value="download"
                           control={<Radio onClick={this.download} />}
                           label="Download"
-                          checked={this.state.for_sale === "download"}
+                          checked={this.state.for_sales === "download"}
                         />
                       </RadioGroup>
                     </FormControl>
@@ -649,7 +656,7 @@ class UploadFile extends React.Component {
                   <div className={All.FormGroup}>
                     <label for="usr">Price</label>
                     <input
-                      onChange={this.handleFileChange}
+                      onChange={this.handlePriceChange}
                       disabled={this.state.readOnly}
                       id="price"
                       type="number"
@@ -685,6 +692,10 @@ class UploadFile extends React.Component {
             </Row>
           </Container>
         </section>
+        {this.state.file}
+        {this.state.caption}
+        {this.state.category_id}
+        {this.state.description}
       </>
     );
   }
