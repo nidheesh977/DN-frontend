@@ -13,7 +13,7 @@ import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import DroneImg from '../images/drone-img.svg'
 import Loader from '../Loader/loader'
-import swal from 'sweetalert'; 
+import swal from 'sweetalert';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import { authenticationService } from '../../middleware/auth';
@@ -29,16 +29,16 @@ const PasswordShow = () => {
   }
 };
 
- const Login = props => {
-  function refreshPage() { 
+const Login = (props) => {
+  function refreshPage() {
     window.location.reload(false);
   }
- 
-        if (authenticationService.currentUserValue) {
-          props.history.push('/');
-          console.log("Redirected to homepage")
-      }  
- 
+
+  if (authenticationService.currentUserValue) {
+    props.history.push('/');
+    console.log("Redirected to homepage")
+  }
+
   const [open, setOpen] = React.useState(false);
   const [isLoading, setLoading] = useState(false);
 
@@ -50,28 +50,47 @@ const PasswordShow = () => {
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
-    } 
+    }
     setOpen(false);
   };
 
   const [user, setUser] = useState({ email: "" });
-  const history = useHistory(); 
+  const history = useHistory();
 
   // const [error, setError] = useState(false); 
 
   // const [LoginError, setTestLoginError] = useState(); 
 
-  const onSubmit = (event) => { 
-    setLoading(true); 
+  const onSubmit = (event) => {
+    setLoading(true);
     var element = document.getElementById("myDIV");
-    element.className = element.className.replace(/\bmystyle\b/g, "");   
+    element.className = element.className.replace(/\bmystyle\b/g, "");
     axios.post('http://localhost/auth-app/public/api/auth/login', {
       email: event.email,
       password: event.password
-    }).then(res => {  
-      setLoading(false); 
+    }).then(res => {
+      setLoading(false);
       // login(props, event); 
-      authenticationService.login(props, event)
+      localStorage.setItem('access_token', res.data.access_token);
+      localStorage.setItem('refresh_token', res.data.refresh_token);
+      localStorage.setItem('token_type', res.data.token_type);
+      const config = {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('access_token')
+        }
+      }
+      axios.get('http://localhost/auth-app/public/api/auth/user', config)
+        .then(user => {
+          localStorage.setItem('currentUser', JSON.stringify(user.data.role_id));
+          window.location.reload()
+          props.history.push("/")
+        })
+        .catch(err => {
+            console.log(err);
+            localStorage.clear();
+            // startRefreshToken();
+          }
+        )
       swal('Login Successful', {
         icon: "success",
       });
@@ -80,13 +99,13 @@ const PasswordShow = () => {
         swal(error.response.data.message, {
           icon: "error",
         });
-        setLoading(false);  
+        setLoading(false);
         // setError(true);
         // setErrorMessage(error.response.data.message);  
         // setTestLoginError(error.response.data.message)  
-      }); 
-  }; 
-  
+      });
+  };
+
   const { register, handleSubmit, errors } = useForm();
 
   const [value, setValue] = useState()
@@ -96,7 +115,7 @@ const PasswordShow = () => {
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
-  }; 
+  };
 
   return (
     <>
@@ -105,11 +124,11 @@ const PasswordShow = () => {
         <meta charSet="utf-8" />
         <meta name="description" content="Nested component" />
       </Helmet>
- 
+
       {/* {
         error && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">{LoginError}!</Alert></Snackbar>
       } */}
- 
+
       <Snackbar id="myDIV" className={All.DisplayNone} open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="success">Success!</Alert></Snackbar>
       {errors.password && errors.password.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a password feild!</Alert></Snackbar>}
       {errors.email && errors.email.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
@@ -132,38 +151,38 @@ const PasswordShow = () => {
                 </div>
                 <div className={All.FormGroup}>
                   <label className={All.Bold} for="usr">Password:</label>
-                <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
-                <input type="password" name="password" className={All.password} id="password" ref={register({ required: true })} />
-                      <VisibilityIcon  className={All.VisibilityIcon} onClick={PasswordShow}/> 
-                </div>
-                <div className={All.FormGroup}>
-                  <Link to="/ForgotPassword" className={All.Black}>
-                    <Box className={`${All.Width_74} ${All.Width_100}`} textAlign="right" ><span textAlign="right" className={`${All.FSize_12} ${All.MuliLight}`}>Forgot Password</span></Box>
-                  </Link>
-                </div>
+                  <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
+                    <input type="password" name="password" className={All.password} id="password" ref={register({ required: true })} />
+                    <VisibilityIcon className={All.VisibilityIcon} onClick={PasswordShow} />
+                  </div>
+                  <div className={All.FormGroup}>
+                    <Link to="/ForgotPassword" className={All.Black}>
+                      <Box className={`${All.Width_74} ${All.Width_100}`} textAlign="right" ><span textAlign="right" className={`${All.FSize_12} ${All.MuliLight}`}>Forgot Password</span></Box>
+                    </Link>
+                  </div>
 
                 </div>
-                <div className={All.FormGroup}> 
-                 {isLoading ? ( <>
-                  <Button variant="contained" color="default" type="submit" onClick={handleClick} className={All.LoaderBtn}>
-                  <Loader /> Loading</Button>
-                 </> ) : ( <>
-                  <Button variant="contained" color="default" type="submit" onClick={handleClick} className={All.BtnStyle_5}>
-                  <img style={{ paddingRight: 10 }} src={DroneImg} /> submit</Button>
-                 </> )}
+                <div className={All.FormGroup}>
+                  {isLoading ? (<>
+                    <Button variant="contained" color="default" type="submit" onClick={handleClick} className={All.LoaderBtn}>
+                      <Loader /> Loading</Button>
+                  </>) : (<>
+                    <Button variant="contained" color="default" type="submit" onClick={handleClick} className={All.BtnStyle_5}>
+                      <img style={{ paddingRight: 10 }} src={DroneImg} /> submit</Button>
+                  </>)}
 
 
                 </div>
 
                 <div className={All.FormGroup}>
                   <p>Don't have Drone Zone Account? <Link to="/User" className={All.D_Block_xs}> <span className={All.LightBlue}>Register Here</span></Link></p>
-                </div> 
+                </div>
 
               </form>
             </Col>
           </Row>
         </Container>
-      </section> 
+      </section>
     </>
   )
 }
