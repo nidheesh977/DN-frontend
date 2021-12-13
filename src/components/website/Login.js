@@ -34,9 +34,9 @@ const PasswordShow = () => {
     window.location.reload(false);
   }
  
-        if (authenticationService.currentUserValue) { 
-          window.reload()
+        if (authenticationService.currentUserValue) {
           props.history.push('/');
+          console.log("Redirected to homepage")
       }  
  
   const [open, setOpen] = React.useState(false);

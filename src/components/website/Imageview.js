@@ -15,6 +15,7 @@ import axios from "axios";
 import CommentBox from "../CommentBox";
 import { Player } from "video-react";
 import { userService } from "../_services/user.service";
+import Video from "video-react/lib/components/Video";
 
 const API_URL = "http://localhost/auth-app/public/api/auth";
 
@@ -82,6 +83,8 @@ export default class ViewJob extends React.Component {
   componentDidMount() {
     const id = this.props.match.params.id;
     const user_id = this.props.match.params.user_id;
+
+    
 
     this.setState({
       fieldVal: id,
@@ -215,11 +218,7 @@ export default class ViewJob extends React.Component {
                       />
                     )}
                     {imageview.tag == "3" && (
-                      <Player
-                        playsInline
-                        poster={imageview.src}
-                        src={imageview.src}
-                      />
+                        <video src = {imageview.src} controls className="GalleryImg"></video>
                     )}
                     {imageview.tag == "4" && (
                       <img
