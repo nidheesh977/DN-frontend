@@ -228,44 +228,7 @@ export default function Profile() {
                 </Box>
               )}
               <Box>
-                <span className={All.SocialIcon}>
-                  <a href={social.facebook} target="_blank">
-                    <img
-                      src={Facebook}
-                      className={`${All.pr_xs} ${All.pr_sm}`}
-                    />{" "}
-                  </a>
-                  <a href={social.instagram} target="_blank">
-                    <img
-                      src={Instagram}
-                      className={`${All.pr_xs} ${All.pr_sm}`}
-                    />{" "}
-                  </a>
-                  <a href={social.linkedin} target="_blank">
-                    <img
-                      src={linkedin}
-                      className={`${All.pr_xs} ${All.pr_sm}`}
-                    />{" "}
-                  </a>
-                  <a href={social.pinterest} target="_blank">
-                    <img
-                      src={Pinterest}
-                      className={`${All.pr_xs} ${All.pr_sm}`}
-                    />{" "}
-                  </a>
-                  <a href={social.twitter} target="_blank">
-                    <img
-                      src={Twitter}
-                      className={`${All.pr_xs} ${All.pr_sm}`}
-                    />{" "}
-                  </a>
-                  <a href={social.youtube} target="_blank">
-                    <img
-                      src={Youtube}
-                      className={`${All.pr_xs} ${All.pr_sm}`}
-                    />{" "}
-                  </a>
-                </span>
+                {/* social media */}
               </Box>
             </Col>
             <Col

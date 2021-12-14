@@ -103,6 +103,9 @@ export default function EndUserProfile(props) {
         (res) => {
           setProfile(res.data);
           console.log(res.data)
+          if(res.data.id == props.match.params.id){
+            props.history.push("/Profile")
+          }
           setBusy(true);
         },
         (err) => {
@@ -310,44 +313,7 @@ export default function EndUserProfile(props) {
                 )}
               </Box>
               <Box>
-                <span className={All.SocialIcon}>
-                  <a href={social.facebook} target="_blank">
-                    <img
-                      src={Facebook}
-                      className={`${All.pr_xs} ${All.pr_sm} ${All.pr_md}`}
-                    />
-                  </a>
-                  <a href={social.instagram} target="_blank">
-                    <img
-                      src={Instagram}
-                      className={`${All.pr_xs} ${All.pr_sm} ${All.pr_md}`}
-                    />{" "}
-                  </a>
-                  <a href={social.linkedin} target="_blank">
-                    <img
-                      src={linkedin}
-                      className={`${All.pr_xs} ${All.pr_sm} ${All.pr_md}`}
-                    />{" "}
-                  </a>
-                  <a href={social.pinterest} target="_blank">
-                    <img
-                      src={Pinterest}
-                      className={`${All.pr_xs} ${All.pr_sm} ${All.pr_md}`}
-                    />{" "}
-                  </a>
-                  <a href={social.twitter} target="_blank">
-                    <img
-                      src={Twitter}
-                      className={`${All.pr_xs} ${All.pr_sm} ${All.pr_md}`}
-                    />{" "}
-                  </a>
-                  <a href={social.youtube} target="_blank">
-                    <img
-                      src={Youtube}
-                      className={`${All.pr_xs} ${All.pr_sm} ${All.pr_md}`}
-                    />{" "}
-                  </a>
-                </span>
+                {/* social media */}
               </Box>
             </Col>
             <Col
