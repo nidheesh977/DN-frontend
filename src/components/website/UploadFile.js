@@ -27,9 +27,9 @@ class UploadFile extends React.Component {
       fileextensionserror: false,
       errortypemsg: false,
       description: "",
-      for_sales: "",
+      for_sales: "download",
       category_id: "1",
-      comments: "",
+      comments: true,
       showerror: false,
       price: "",
       loaded: 0,
@@ -73,21 +73,25 @@ class UploadFile extends React.Component {
     }
   };
 
-  handleFileChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-    // this.setState({submitDisabled: ![e.target.name]});
-    const { value, name } = e.target;
-    this.setState({ [name]: value });
+
+  handleCaptionChange = (e) => {
+    this.setState({ caption: e.target.value });
+  };
+
+  handleDescriptionChange = (e) => {
+    this.setState({ description: e.target.value });
+  };
+
+  handlePriceChange = (e) => {
+    this.setState({ price: e.target.value });
   };
 
   handleChangefor_sale = (e) => {
     this.setState({ for_sale: e.target.value });
-    this.setState({ [e.target.name]: e.target.value });
-    // this.setState({submitDisabled: ![e.target.name]});
   };
 
   handleChangess = (e) => {
-    
+
     this.setState({
       category_id: e.target.value,
       file: null,
@@ -99,7 +103,7 @@ class UploadFile extends React.Component {
   };
 
   handleChangeComments = (event) => {
-    this.setState({ [event.target.name]: event.target.checked });
+    this.setState({ comments: event.target.checked });
     // this.setState({submitDisabled: ![event.target.name]});
   };
 
@@ -173,7 +177,7 @@ class UploadFile extends React.Component {
       for (let name in this.state) {
         data.append(name, this.state[name]);
       }
-      
+
       const config = {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -193,7 +197,7 @@ class UploadFile extends React.Component {
           window.location.reload();
           // data.reset();
         });
-        
+
     }
   };
   download = () => {
@@ -270,7 +274,7 @@ class UploadFile extends React.Component {
 
     const reader = new FileReader()
     reader.onload = () => {
-      if (reader.readyState === 2){
+      if (reader.readyState === 2) {
         this.setState({
           uploadPreview: reader.result
         })
@@ -428,76 +432,76 @@ class UploadFile extends React.Component {
               <Col lg={8} className={`${All.Dragdrop} upload`}>
                 <div className="image-uploader-wrapper">
                   {this.state.category_id === "3"
-                    ?<div className={dragOverClass}>
-                    {!this.state.file_selected
-                      ?<>
-                        <div className="icon-text-box">
-                          <div className="upload-icon">
-                            <img src={Upload} />
+                    ? <div className={dragOverClass}>
+                      {!this.state.file_selected
+                        ? <>
+                          <div className="icon-text-box">
+                            <div className="upload-icon">
+                              <img src={Upload} />
+                            </div>
+                            <div className="upload-text">{uploadText}</div>
                           </div>
-                          <div className="upload-text">{uploadText}</div>
+                          <div>
+                            <input
+                              type="file"
+                              ref="image"
+                              id="upload-image-input uploaded"
+                              className="upload-image-input"
+                              accept="video/*"
+                              name="file"
+                              onDrop={this.handleDrop}
+                              onDragEnter={this.handleDragEnter}
+                              onDragOver={this.handleDragOver}
+                              onDragLeave={this.handleDragLeave}
+                              onChange={this.handleAddImage}
+
+                            />
+
+                          </div>
+                        </>
+                        : <div id="video-preview-container" style={{ textAlign: "center" }}>
+                          <video src={URL.createObjectURL(this.state.selected_file)} controls style={{ width: "100%", height: "100%", objectFit: "contain" }}></video>
+                          <Button
+                            variant="contained"
+                            type="button"
+                            color="default"
+                            className={All.BtnStyle_5}
+                            onClick={this.handleCancelUpload}
+                          >
+                            Cancel
+                          </Button>
                         </div>
-                        <div>
-                          <input
-                            type="file"
-                            ref="image"
-                            id="upload-image-input uploaded"
-                            className="upload-image-input"
-                            accept="video/*"
-                            name="file"
-                            onDrop={this.handleDrop}
-                            onDragEnter={this.handleDragEnter}
-                            onDragOver={this.handleDragOver}
-                            onDragLeave={this.handleDragLeave}
-                            onChange={this.handleAddImage}
-                            
-                          />
-                            
-                        </div>
-                      </>
-                      : <div id = "video-preview-container" style = {{textAlign: "center"}}>
-                        <video src={URL.createObjectURL(this.state.selected_file)} controls style = {{width: "100%", height: "100%", objectFit: "contain"}}></video>
-                        <Button
-                        variant="contained"
-                        type="button"
-                        color="default"
-                        className={All.BtnStyle_5}
-                        onClick={this.handleCancelUpload}
-                      >
-                        Cancel
-                      </Button>
-                      </div>
-                    }
-                  </div>
-                    :<div className={dragOverClass} style = {{backgroundImage: "url("+this.state.uploadPreview+")", backgroundRepeat: "no-repeat",  backgroundSize: "cover", backgroundPosition: "center"}}>
+                      }
+                    </div>
+                    : <div className={dragOverClass} style={{ backgroundImage: "url(" + this.state.uploadPreview + ")", backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center" }}>
 
                       <div className="icon-text-box">
                         <div className="upload-icon">
                           {!this.state.file_selected
-                            ?<img src={Upload} />
-                            :""
+                            ? <img src={Upload} />
+                            : ""
                           }
                         </div>
                         <div className="upload-text">{uploadText}</div>
                       </div>
                       <div>
                         <input
-                            type="file"
-                            ref="image"
-                            id="upload-image-input uploaded"
-                            className="upload-image-input"
-                            accept="image/*"
-                            name="file"
-                            onDrop={this.handleDrop}
-                            onDragEnter={this.handleDragEnter}
-                            onDragOver={this.handleDragOver}
-                            onDragLeave={this.handleDragLeave}
-                            onChange={this.handleAddImage}
-                            
-                          />
+                          type="file"
+                          ref="image"
+                          id="upload-image-input uploaded"
+                          className="upload-image-input"
+                          accept="image/*"
+                          name="file"
+                          onDrop={this.handleDrop}
+                          onDragEnter={this.handleDragEnter}
+                          onDragOver={this.handleDragOver}
+                          onDragLeave={this.handleDragLeave}
+                          onChange={this.handleAddImage}
+
+                        />
                       </div>
                     </div>
-                    
+
                   }
                 </div>
               </Col>
@@ -513,7 +517,7 @@ class UploadFile extends React.Component {
                       id="caption"
                       className={All.FormControl}
                       name="caption"
-                      onChange={this.handleFileChange}
+                      onChange={this.handleCaptionChange}
                     />
                   </div>
 
@@ -526,37 +530,37 @@ class UploadFile extends React.Component {
                         name="category_id"
                       >
                         {this.state.category_id === "1"
-                          ?<FormControlLabel
+                          ? <FormControlLabel
                             value="1"
                             control={<Radio />}
                             label="Images"
-                            ref = "radio-img"
+                            ref="radio-img"
                             checked
                           />
-                          :<FormControlLabel
+                          : <FormControlLabel
                             value="1"
                             control={<Radio />}
                             label="Images"
-                            ref = "radio-img"
+                            ref="radio-img"
                           />
                         }
                         <FormControlLabel
                           value="2"
                           control={<Radio />}
                           label="360°Image"
-                          ref = "radio-360img"
+                          ref="radio-360img"
                         />
                         <FormControlLabel
                           value="3"
                           control={<Radio />}
                           label="Video"
-                          ref = "radio-vid"
+                          ref="radio-vid"
                         />
                         <FormControlLabel
                           value="4"
                           control={<Radio />}
                           label="3D Model"
-                          ref = "radio-3dimg"
+                          ref="radio-3dimg"
                         />
                       </RadioGroup>
                     </FormControl>
@@ -566,7 +570,7 @@ class UploadFile extends React.Component {
                     <label for="usr">Say about the shot</label>
                     <textarea
                       className={All.FormControl}
-                      onChange={this.handleFileChange}
+                      onChange={this.handleDescriptionChange}
                       rows="4"
                       cols="50"
                       id="description"
@@ -588,7 +592,7 @@ class UploadFile extends React.Component {
                           required
                         />
                       }
-                      label="Close Comments"
+                      label="Accept Comments"
                     />
                   </div>
 
@@ -604,11 +608,13 @@ class UploadFile extends React.Component {
                           value="forsale"
                           control={<Radio onClick={this.forsale} />}
                           label="For Sale"
+                          checked = {this.state.for_sales == "forsale"}
                         />
                         <FormControlLabel
                           value="download"
                           control={<Radio onClick={this.download} />}
                           label="Download"
+                          checked = {this.state.for_sales == "download"}
                         />
                       </RadioGroup>
                     </FormControl>
@@ -617,7 +623,7 @@ class UploadFile extends React.Component {
                   <div className={All.FormGroup}>
                     <label for="usr">Price</label>
                     <input
-                      onChange={this.handleFileChange}
+                      onChange={this.handlePriceChange}
                       disabled={this.state.readOnly}
                       id="price"
                       type="number"

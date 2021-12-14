@@ -29,7 +29,7 @@ class UploadFile extends React.Component {
       description: "",
       for_sales: "",
       category_id: "1",
-      comments: "",
+      comments: false,
       showerror: false,
       price: "",
       loaded: 0,
@@ -136,8 +136,8 @@ class UploadFile extends React.Component {
   };
 
   handleCommentsChange = (event) => {
-    this.setState({ [event.target.name]: event.target.checked });
-    // this.setState({submitDisabled: ![event.target.name]});
+    console.log(!this.state.comments)
+    this.setState({ comments: !this.state.comments });
   };
 
   CancelUpload = (e) => {
@@ -625,7 +625,7 @@ class UploadFile extends React.Component {
                           required
                         />
                       }
-                      label="Close Comments"
+                      label="Accept Comments"
                     />
                   </div>
 
@@ -641,13 +641,13 @@ class UploadFile extends React.Component {
                           value="forsale"
                           control={<Radio onClick={this.forsale} />}
                           label="For Sale"
-                          checked={this.state.for_sales === "forsale"}
+                          checked={this.state.for_sales == "forsale"}
                         />
                         <FormControlLabel
                           value="download"
                           control={<Radio onClick={this.download} />}
                           label="Download"
-                          checked={this.state.for_sales === "download"}
+                          checked={this.state.for_sales == 'download'}
                         />
                       </RadioGroup>
                     </FormControl>
