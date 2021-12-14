@@ -38,7 +38,6 @@ class CommentBox extends React.Component {
       .get(urls, config)
       .then((res) => res.data)
       .then((data) => {
-        console.log(data)
         this.setState({ 
           comments: data,
           comments_length: data.length

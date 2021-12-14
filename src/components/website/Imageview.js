@@ -50,12 +50,12 @@ export default class ViewJob extends React.Component {
   download(event) {
     swal({
       title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this imaginary file!",
+      text: "Do you want to download this image",
       icon: "warning",
       buttons: true,
       dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
+    }).then((download) => {
+      if (download) {
         const config = {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -75,7 +75,7 @@ export default class ViewJob extends React.Component {
             });
           });
       } else {
-        swal("Your imaginary file is safe!");
+        swal("Download cancelled");
       }
     });
   }
@@ -464,6 +464,7 @@ export default class ViewJob extends React.Component {
                         alt="image"
                       />
                     )}
+
                     {imageview.tag == "2" && (
                       <img
                         className="GalleryImg"
@@ -471,13 +472,11 @@ export default class ViewJob extends React.Component {
                         alt="image"
                       />
                     )}
+
                     {imageview.tag == "3" && (
-                      <Player
-                        playsInline
-                        poster={imageview.src}
-                        src={imageview.src}
-                      />
+                      <video src = {imageview.src} controls className="GalleryImg"></video>
                     )}
+
                     {imageview.tag == "4" && (
                       <img
                         className="GalleryImg"

@@ -87,6 +87,7 @@ export default class Searchresult extends React.Component {
 
         axios.get(url, config).then(res => res.data)
             .then((data) => {
+                console.log(data)
                 this.setState({ search: data })
             })
     }
@@ -126,7 +127,7 @@ export default class Searchresult extends React.Component {
                         <Row>
                             <Col>
                                 <Box className={All.FormGroup} py={4}>
-                                    <form className={All.DisplayFlex} onSubmit = {(event) => {
+                                    <form className={All.DisplayFlex} onSubmit={(event) => {
                                         event.preventDefault()
                                     }}>
                                         <div className={All.SearchBar}>
@@ -349,7 +350,16 @@ export default class Searchresult extends React.Component {
                                                                             height: "75px",
                                                                             borderRadius: "100px",
                                                                             marginRight: '15px'
-                                                                        }} /> : <Skeleton style={{ borderRadius: "100px !important" }} circle={true} height={75} width={75} borderRadius={50} className={`${All.FloatLeft} ${All.marginright}`} />}
+                                                                        }} /> : <img className="alignleft" src="https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"
+                                                                        alt="Image Sample 1" style={{
+                                                                            display: "inline",
+                                                                            float: "left",
+                                                                            width: "75px",
+                                                                            height: "75px",
+                                                                            borderRadius: "100px",
+                                                                            marginRight: '15px'
+                                                                        }} /> 
+                                                                        }
                                                                 </Box>
 
                                                                 <Box pt={1}>
