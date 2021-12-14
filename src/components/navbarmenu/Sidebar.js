@@ -1,4 +1,4 @@
-import React , { useState, Component, useEffect , useCallback } from 'react';
+import React, { useState, Component, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -19,16 +19,16 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import Logo from '../images/Logo.png'
 import { Link } from 'react-router-dom';
-import InputBase from '@material-ui/core/InputBase'; 
-import SearchIcon from '@material-ui/icons/Search'; 
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'; 
+import InputBase from '@material-ui/core/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonIcon from '@material-ui/icons/Person';
 import axios from 'axios'
 import WorkIcon from '@material-ui/icons/Work';
 import Hiring from '../images/hiring.svg'
 import All from '../website/All.module.css'
-import { logout, isLogin ,login ,getRefreshToken } from '../../middleware/auth';  
-import WorkOutlineIcon from '@material-ui/icons/WorkOutline'; 
+import { logout, isLogin, login, getRefreshToken } from '../../middleware/auth';
+import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
 import BusinessIcon from '@material-ui/icons/Business';
 
 const drawerWidth = 240;
@@ -90,12 +90,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PersistentDrawerLeft(props) {
-  const [user, Setuser] = useState([]);     
-  const [profile, Setprofile] = useState([]);    
+  const [user, Setuser] = useState([]);
+  const [profile, Setprofile] = useState([]);
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [userlogin, Setuserlogin] = useState(false) 
+  const [userlogin, Setuserlogin] = useState(false)
   useEffect(() => Setuserlogin(isLogin()), [props])
 
 
@@ -107,44 +107,38 @@ export default function PersistentDrawerLeft(props) {
     setOpen(false);
   };
 
-  
+
   const handleLogout = () => {
     logout();
     Setuserlogin(false)
     setOpen(false);
-}
+  }
 
-  
-  useEffect(() => { 
+
+  useEffect(() => {
     const config = {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     }
-    
+
     axios.get('http://localhost/auth-app/public/api/auth/user', config)
       .then(res => {
-        Setuser(res.data);  
+        Setuser(res.data);
+        console.log(res)
       },
-        err => { 
+        err => {
         }
-      )  
-          axios.get('http://localhost/auth-app/public/api/auth/profile', config)
-      .then(res => {
-        Setuser(res.data);  
-      },
-        err => { 
-        }
-      )  
+      )
   }, []);
 
-  return ( 
+  return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar 
-        position="fixed" 
+      <AppBar
+        position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,  
+          [classes.appBarShift]: open,
         })}
       >
         <Toolbar>
@@ -159,12 +153,12 @@ export default function PersistentDrawerLeft(props) {
           </IconButton>
           <Typography variant="h6" noWrap>
             <Link to='/' className='nav-item'>
-                <img src={Logo} />  
-                {/* <p>Logo</p> */}
-            </Link> 
+              <img src={Logo} />
+              {/* <p>Logo</p> */}
+            </Link>
           </Typography>
           <div className="NavSearchBar">
-          {/* <InputBase
+            {/* <InputBase
         className={classes.input}
         placeholder="Search Google Maps"
         inputProps={{ 'aria-label': 'search google maps' }}
@@ -172,9 +166,9 @@ export default function PersistentDrawerLeft(props) {
           <IconButton type="submit" className={classes.iconButton} aria-label="search">
         <SearchIcon />
       </IconButton>  */}
-   
-      
-      </div>
+
+
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -186,142 +180,134 @@ export default function PersistentDrawerLeft(props) {
           paper: classes.drawerPaper,
         }}
       >
-    
-        <div className={classes.drawerHeader}> 
-        <Link to='/UpgradeProVersion' className='nav-item'>
+
+        <div className={classes.drawerHeader}>
+          <Link to='/UpgradeProVersion' className='nav-item'>
             Upgrade Pro Version
-          </Link>  
+          </Link>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <CloseIcon /> : <ChevronRightIcon />}
           </IconButton>
         </div>
-        <Divider />  
+        <Divider />
 
-        <Link  to="/Searchresult"  onClick={handleDrawerClose}>
-              <List>
-                  {[ 'Search'].map((text, index) => (
-                    <ListItem button key={text}>
-                      <ListItemIcon>{index % 2 === 0 ? <SearchIcon /> : <MailIcon /> }</ListItemIcon>
-                      <ListItemText primary={text} />
-                    </ListItem>
-                  ))}
-                </List> 
-              </Link> 
-
-              {user.role_id == '2' && 
-              <Link  to="/OfficeProfile"  onClick={handleDrawerClose}>
-              <List>
-                  {[ 'Profile'].map((text, index) => (
-                    <ListItem button key={text}>
-                      <ListItemIcon>{index % 2 === 0 ? <PersonIcon /> : <MailIcon /> }</ListItemIcon>
-                      <ListItemText primary={text} />
-                    </ListItem>
-                  ))}
-                </List> 
-              </Link> 
-        }
-        {user.role_id == '1' && 
-              <Link  to="/Profile"  onClick={handleDrawerClose}>
-              <List>
-                  {[ 'Profile'].map((text, index) => (
-                    <ListItem button key={text}>
-                      <ListItemIcon>{index % 2 === 0 ? <PersonIcon /> : <MailIcon /> }</ListItemIcon>
-                      <ListItemText primary={text} />
-                    </ListItem>
-                  ))}
-                </List> 
-              </Link> 
-        }
-
-        <Link to="/GetJobs"  onClick={handleDrawerClose}>
-        <List>
-                  {['Get Jobs'].map((text, index) => (
-                    <ListItem button key={text}>
-                      <ListItemIcon>{index % 2 === 0 ? <WorkIcon /> : <MailIcon />}</ListItemIcon>
-                      <ListItemText primary={text} />
-                    </ListItem>
-                  ))}
-                </List> 
-        </Link> 
-
-        <Link to="/HiringDorners"  onClick={handleDrawerClose}>
+        <Link to="/Searchresult" onClick={handleDrawerClose}>
           <List>
-                  {[ 'Hire Now'].map((text, index) => (
-                    <ListItem button key={text}>
-                      <ListItemIcon>{index % 2 === 0 ? <WorkOutlineIcon /> : <MailIcon />}
-                      </ListItemIcon> 
-                      <ListItemText primary={text} />
-                    </ListItem>
-                  ))}
-                </List> 
+            <ListItem button key={'Search'}>
+              <ListItemIcon><SearchIcon /></ListItemIcon>
+              <ListItemText primary={'Search'} />
+            </ListItem>
+          </List>
+        </Link>
+
+        {user.role_id == '2' &&
+          <Link to="/OfficeProfile" onClick={handleDrawerClose}>
+            <List>
+                <ListItem button key={user.company_name}>
+                  <ListItemIcon><PersonIcon /></ListItemIcon>
+                  <ListItemText primary={user.company_name} />
+                </ListItem>
+            </List>
+          </Link>
+        }
+        {user.role_id == '1' &&
+          <Link to="/Profile" onClick={handleDrawerClose}>
+            <List>
+                <ListItem button key={user.name}>
+                  <ListItemIcon><PersonIcon /></ListItemIcon>
+                  <ListItemText primary={user.name} />
+                </ListItem>
+            </List>
+          </Link>
+        }
+
+        <Link to="/GetJobs" onClick={handleDrawerClose}>
+          <List>
+              <ListItem button key={"Get job"}>
+                <ListItemIcon><WorkIcon /></ListItemIcon>
+                <ListItemText primary={"Get job"} />
+              </ListItem>
+          </List>
+        </Link>
+
+        <Link to="/HiringDorners" onClick={handleDrawerClose}>
+          <List>
+            {['Hire Now'].map((text, index) => (
+              <ListItem button key={text}>
+                <ListItemIcon>{index % 2 === 0 ? <WorkOutlineIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
         </Link>
 
         {userlogin === false &&
-        <Link to="/Login"  onClick={handleDrawerClose}>
-          <List>
-                  {[ 'Login'].map((text, index) => (
-                    <ListItem button key={text}>
-                      <ListItemIcon>{index % 2 === 0 ? <ExitToAppIcon /> : <MailIcon />} 
-                      </ListItemIcon> 
-                      <ListItemText primary={text} />
-                    </ListItem>
-                  ))}
-                </List> 
-                </Link>
-              
+          <Link to="/Login" onClick={handleDrawerClose}>
+            <List>
+              {['Login'].map((text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon>{index % 2 === 0 ? <ExitToAppIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              ))}
+            </List>
+          </Link>
+
         }
 
         {userlogin === false &&
-                <Link to="/User"  onClick={handleDrawerClose}>
-                  <List>
-                          {[ 'User Register'].map((text, index) => (
-                            <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <PersonIcon /> : <MailIcon />}  
-                              </ListItemIcon> 
-                              <ListItemText primary={text} />
-                            </ListItem>
-                          ))}
-                        </List> 
-                </Link>
+          <Link to="/User" onClick={handleDrawerClose}>
+            <List>
+              {['User Register'].map((text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon>{index % 2 === 0 ? <PersonIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              ))}
+            </List>
+          </Link>
         }
 
         {userlogin === false &&
-                        <Link to="/Company"  onClick={handleDrawerClose}>
-                          <List>
-                                  {[ 'Company Register'].map((text, index) => (
-                                    <ListItem button key={text}>
-                                        <ListItemIcon>{index % 2 === 0 ? <BusinessIcon /> : <MailIcon />}   
-                                      </ListItemIcon> 
-                                      <ListItemText primary={text} />
-                                    </ListItem>
-                                  ))}
-                                </List> 
-                        </Link>
-                }
-      
+          <Link to="/Company" onClick={handleDrawerClose}>
+            <List>
+              {['Company Register'].map((text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon>{index % 2 === 0 ? <BusinessIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              ))}
+            </List>
+          </Link>
+        }
+
         {userlogin === true &&
-        <Link onClick={() => handleLogout()} to="/">
-          <List className="Signout"> 
-                  {['Sign Out'].map((text, index) => (
-                    <ListItem button key={text}>
-                      <ListItemIcon>{index % 2 === 0 ? <ExitToAppIcon /> : <ExitToAppIcon />}</ListItemIcon>
-                      <ListItemText primary={text} />
-                    </ListItem>
-                  ))}
-                </List> 
-        </Link> 
-        }  
+          <Link onClick={() => handleLogout()} to="/">
+            <List className="Signout">
+              {['Sign Out'].map((text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon>{index % 2 === 0 ? <ExitToAppIcon /> : <ExitToAppIcon />}</ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              ))}
+            </List>
+          </Link>
+        }
 
-        </Drawer>
+      </Drawer>
 
-     
-      
-      <main id={All.SidebarHeader} 
+
+
+      <main id={All.SidebarHeader}
         className={clsx(classes.content, {
           [classes.contentShift]: open,
         })}
       >
-        <div className={classes.drawerHeader} /> 
+        <div className={classes.drawerHeader} />
       </main>
     </div>
   );
