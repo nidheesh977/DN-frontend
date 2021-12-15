@@ -6,7 +6,6 @@ import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
 import PublicProfile from "../tabs/PublicProfile";
 import AccountSetting from "../tabs/AccountSetting";
-import SocialMediaProfiles from "../tabs/SocialMediaProfiles";
 import EmailNotification from "../tabs/EmailNotifications";
 
 document.addEventListener(
@@ -21,6 +20,8 @@ document.addEventListener(
         .querySelectorAll(".tab")
         .forEach((t) => t.classList.add("hidden"));
       document.querySelector(`#${id}`).classList.remove("hidden");
+      document.querySelectorAll('.select_tab').forEach(t => t.classList.remove(All.BtnStyle_12));
+      document.querySelector(`#select_${id}`).classList.add(All.BtnStyle_12);
     }
   }
 );
@@ -37,17 +38,14 @@ export default class EditProfileTab extends React.Component {
                   <ul>
                     {/* <span className={All.scrollableShadow}></span> */}
                     <span className="EditProfile">
-                      <li>
+                      <li id = "select_tab1" className={"select_tab "+All.BtnStyle_12}>
                         <button data-id="tab1">Public Profile</button>
                       </li>
-                      <li>
+                      <li id = "select_tab2" className="select_tab">
                         <button data-id="tab2">Account Settings</button>
                       </li>
-                      <li>
-                        <button data-id="tab3">Social Media Profiles</button>
-                      </li>
-                      <li>
-                        <button data-id="tab4">Email Notifications</button>
+                      <li id = "select_tab3" className="select_tab">
+                        <button data-id="tab3">Email Notifications</button>
                       </li>
                     </span>
                   </ul>
@@ -73,9 +71,6 @@ export default class EditProfileTab extends React.Component {
                   <AccountSetting />
                 </div>
                 <div id="tab3" class="tab hidden">
-                  <SocialMediaProfiles />
-                </div>
-                <div id="tab4" class="tab hidden">
                   <EmailNotification />
                 </div>
               </Col>

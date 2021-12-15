@@ -21,23 +21,24 @@ import { userService } from '../_services/user.service';
 import "../css/TabModel.css"
 
 
-document.addEventListener('click', ({ target: { dataset: { id = '' }}}) => {
-  if (id.length > 0) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.add('hidden'));
-    document.querySelector(`#${id}`).classList.remove('hidden'); 
+// document.addEventListener('click', ({ target: { dataset: { id = '' }}}) => {
+//   if (id.length > 0) {
+//     document.querySelectorAll('.tab').forEach(t => t.classList.add('hidden'));
+//     document.querySelector(`#${id}`).classList.remove('hidden'); 
 
-    document.querySelectorAll('.select_tab').forEach(t => t.classList.remove(All.BtnStyle_12));
-    document.querySelector(`#select_${id}`).classList.add(All.BtnStyle_12); 
+//     document.querySelectorAll('.select_tab').forEach(t => t.classList.remove(All.BtnStyle_12));
+//     document.querySelector(`#select_${id}`).classList.add(All.BtnStyle_12); 
 
 
-  }
-}); 
+//   }
+// }); 
 
 document.addEventListener('click', ({ target: { dataset: { pluginid = '' }}}) => {
   if (pluginid.length > 0) {
     document.querySelectorAll('.tabs').forEach(t => t.classList.add('deactive'));
-    document.querySelector(`#${pluginid}`).classList.remove('deactive'); 
-    
+    document.querySelector(`#${pluginid}`).classList.remove('deactive');
+    document.querySelectorAll('.select_tab').forEach(t => t.classList.remove(All.BtnStyle_12));
+    document.querySelector(`#select_${pluginid}`).classList.add(All.BtnStyle_12);  
   }
 }); 
 
