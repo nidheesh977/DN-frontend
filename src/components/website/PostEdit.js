@@ -17,7 +17,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import { FormControl, Radio, RadioGroup } from "@material-ui/core";
 import { Video } from "video-react";
 
-class UploadFile extends React.Component {
+class PostEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -692,13 +692,9 @@ class UploadFile extends React.Component {
             </Row>
           </Container>
         </section>
-        {this.state.file}
-        {this.state.caption}
-        {this.state.category_id}
-        {this.state.description}
       </>
     );
   }
 }
 
-export default UploadFile;
+export default PostEdit;
