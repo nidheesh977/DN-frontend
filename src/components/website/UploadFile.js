@@ -50,6 +50,7 @@ class UploadFile extends React.Component {
     this.handleCancelUpload = this.handleCancelUpload.bind(this);
   }
 
+
   handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -73,21 +74,22 @@ class UploadFile extends React.Component {
     }
   };
 
-
   handleCaptionChange = (e) => {
-    this.setState({ caption: e.target.value });
+    this.setState({ caption: e.target.value});
   };
 
   handleDescriptionChange = (e) => {
-    this.setState({ description: e.target.value });
+    this.setState({ description: e.target.value});
   };
 
   handlePriceChange = (e) => {
-    this.setState({ price: e.target.value });
+    this.setState({ price: e.target.value});
   };
 
   handleChangefor_sale = (e) => {
-    this.setState({ for_sale: e.target.value });
+    this.setState({ for_sale: e.target.value, price: "" });
+    this.setState({ [e.target.name]: e.target.value });
+    // this.setState({submitDisabled: ![e.target.name]});
   };
 
   handleChangess = (e) => {
@@ -102,9 +104,9 @@ class UploadFile extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleChangeComments = (event) => {
-    this.setState({ comments: event.target.checked });
-    // this.setState({submitDisabled: ![event.target.name]});
+  handleCommentsChange = (event) => {
+    console.log(!this.state.comments)
+    this.setState({ comments: !this.state.comments });
   };
 
   CancelUpload = (e) => {
@@ -121,23 +123,23 @@ class UploadFile extends React.Component {
   };
 
   saveAll = () => {
-    var uploaded = $("#uploaded").val();
-    var caption = $("#caption").val();
-    // var category_id = $('#category_id').val();
-    var description = $("#description").val();
-    // var comments = $('#comments').val();
-    // var for_sales = $('#for_sales').val();
+    var file = this.state.file
+    var caption = this.state.caption
+    var description = this.state.description
+    var category_id = this.state.category_id
+    var for_sales = this.state.for_sales
+    var price = this.state.price
 
     if (
-      this.state.file === "" ||
+      file === "" ||
       caption == "" ||
       description == "" ||
-      this.state.category_id === "" ||
-      this.state.for_sales === ""
+      category_id === "" ||
+      for_sales === ""
     ) {
       this.setState({ showerror: true });
-    } else if (this.state.for_sales === "forsale") {
-      if (this.state.price === "") {
+    } else if (for_sales === "forsale") {
+      if (price === "") {
         this.setState({ showerror: true });
       } else {
         const data = new FormData();
@@ -173,7 +175,7 @@ class UploadFile extends React.Component {
       for (var x = 0; x < this.state.file.length; x++) {
         data.append("file", this.state.file[x]);
       }
-
+      
       for (let name in this.state) {
         data.append(name, this.state[name]);
       }
@@ -321,7 +323,9 @@ class UploadFile extends React.Component {
   }
 
   render() {
-    // Match drag over css to hover css
+    
+    var handleCaptionChange = this.handleCaptionChange
+    
     let dragOverClass = this.state.dragOver
       ? `display-box drag-over`
       : `display-box`;
@@ -373,7 +377,7 @@ class UploadFile extends React.Component {
     return (
       <>
         <Helmet>
-          <title>UploadFile</title>
+          <title>Upload file</title>
           <meta charSet="utf-8" />
           <meta name="description" content="Nested component" />
         </Helmet>
@@ -460,7 +464,7 @@ class UploadFile extends React.Component {
                           </div>
                         </>
                         : <div id="video-preview-container" style={{ textAlign: "center" }}>
-                          <video src={URL.createObjectURL(this.state.selected_file)} controls style={{ width: "100%", height: "100%", objectFit: "contain" }}></video>
+                          <video src={this.state.uploadPreview} controls style={{ width: "100%", height: "100%", objectFit: "contain" }}></video>
                           <Button
                             variant="contained"
                             type="button"
@@ -517,7 +521,7 @@ class UploadFile extends React.Component {
                       id="caption"
                       className={All.FormControl}
                       name="caption"
-                      onChange={this.handleCaptionChange}
+                      onChange={handleCaptionChange}
                     />
                   </div>
 
@@ -529,38 +533,34 @@ class UploadFile extends React.Component {
                         id="category_id"
                         name="category_id"
                       >
-                        {this.state.category_id === "1"
-                          ? <FormControlLabel
+
+                        <FormControlLabel
                             value="1"
                             control={<Radio />}
                             label="Images"
                             ref="radio-img"
-                            checked
+                            checked={this.state.category_id === "1"}
                           />
-                          : <FormControlLabel
-                            value="1"
-                            control={<Radio />}
-                            label="Images"
-                            ref="radio-img"
-                          />
-                        }
                         <FormControlLabel
                           value="2"
                           control={<Radio />}
                           label="360°Image"
                           ref="radio-360img"
+                          checked={this.state.category_id === "2"}
                         />
                         <FormControlLabel
                           value="3"
                           control={<Radio />}
                           label="Video"
                           ref="radio-vid"
+                          checked={this.state.category_id === "3"}
                         />
                         <FormControlLabel
                           value="4"
                           control={<Radio />}
                           label="3D Model"
                           ref="radio-3dimg"
+                          checked={this.state.category_id === "4"}
                         />
                       </RadioGroup>
                     </FormControl>
@@ -586,7 +586,7 @@ class UploadFile extends React.Component {
                       control={
                         <Checkbox
                           checked={this.state.comments}
-                          onChange={this.handleChangeComments}
+                          onChange={this.handleCommentsChange}
                           id="comments"
                           name="comments"
                           required
@@ -608,13 +608,13 @@ class UploadFile extends React.Component {
                           value="forsale"
                           control={<Radio onClick={this.forsale} />}
                           label="For Sale"
-                          checked = {this.state.for_sales == "forsale"}
+                          checked={this.state.for_sales == "forsale"}
                         />
                         <FormControlLabel
                           value="download"
                           control={<Radio onClick={this.download} />}
                           label="Download"
-                          checked = {this.state.for_sales == "download"}
+                          checked={this.state.for_sales == 'download'}
                         />
                       </RadioGroup>
                     </FormControl>
