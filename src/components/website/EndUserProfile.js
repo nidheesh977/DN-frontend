@@ -91,6 +91,12 @@ export default function EndUserProfile(props) {
       },
     };
 
+    userService.User().then((res) => {
+      if(res.data.id == props.match.params.id){
+        props.history.push("/Profile")
+      }
+    })
+
     axios
       .post(
         "http://localhost/auth-app/public/api/auth/profilesingle",
@@ -103,9 +109,7 @@ export default function EndUserProfile(props) {
         (res) => {
           setProfile(res.data);
           console.log(res.data)
-          if(res.data.id == props.match.params.id){
-            props.history.push("/Profile")
-          }
+          
           setBusy(true);
         },
         (err) => {
