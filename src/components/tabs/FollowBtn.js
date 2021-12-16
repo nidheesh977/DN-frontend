@@ -7,6 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { authenticationService } from '../../middleware/auth';
 import { userService } from '../_services/user.service';
+import Loader from '../Loader/loader';
 
 
 class FollowBtn extends React.Component {
@@ -19,6 +20,7 @@ class FollowBtn extends React.Component {
       user_role_id: '',
       open: false,
       currentUser: authenticationService.currentUserValue,
+      isLoading: false
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -64,7 +66,8 @@ class FollowBtn extends React.Component {
   };
 
   handleClick() {
-    // this.setState({isLoading:true}); 
+    this.setState({isLoading:true}); 
+
     const config = {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
@@ -80,12 +83,11 @@ class FollowBtn extends React.Component {
         if (res.data.message == "unfollow") {
           this.setState({ isToggleOn: true });
         }
-        //  this.setState({isLoading:false}); 
-      },
-        err => {
-          // this.setState({isLoading:false});  
-        }
-      )
+         this.setState({isLoading:false}); 
+      })
+      .catch(err => {
+          this.setState({isLoading:false});  
+        })
   }
 
   render() {
@@ -93,9 +95,18 @@ class FollowBtn extends React.Component {
     return (
       <form>
         <Box textAlign={'right'} className={All.marginright}>
-          {currentUser === 1 ?
-            <Button onClick={this.handleClick} id="follow" ml={2} variant="contained" color="default" className={All.BtnStyle_3}>
-              {this.state.isToggleOn ? 'Follow' : 'UnFollow'}</Button>
+          {currentUser === 1 
+            ?
+            <span>
+              {this.state.isLoading
+                ?<Button variant="contained" color="default" className={All.LoaderBtn}>
+                  <Loader /> Loading
+                </Button>
+                :<Button onClick={this.handleClick} id="follow" ml={2} variant="contained" color="default" className={All.BtnStyle_3}>
+                  {this.state.isToggleOn ? 'Follow' : 'UnFollow'}
+                </Button>
+              }
+            </span>
             :
             <ClickAwayListener onClickAway={this.handleTooltipClose}>
               <div>

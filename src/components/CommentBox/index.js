@@ -80,7 +80,7 @@ class CommentBox extends React.Component {
         config
       )
       .then((res) => {
-        swal(res.data.message, {
+        swal("Comment sent successfully", {
           icon: "success",
         });
         this.setState({
@@ -91,7 +91,7 @@ class CommentBox extends React.Component {
         .get( `http://localhost/auth-app/public/api/auth/commentlisting/${this.props.passedVal}`, config)
         .then((res) => res.data)
         .then((data) => {
-          this.setState({ 
+          this.setState({
             comments: data,
             comments_length: data.length
           });
@@ -105,7 +105,7 @@ class CommentBox extends React.Component {
         swal("Comment not send", {
           icon: "error",
         });
-        console.log(err.response)
+        console.log(err)
         this.setState({
           isLoading: false
         })

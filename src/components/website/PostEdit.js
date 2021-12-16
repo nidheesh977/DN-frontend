@@ -77,7 +77,7 @@ class PostEdit extends React.Component {
           uploadPreview: data.src
         });
         console.log(data)
-        // this.setState({ imageview: data }) 
+        // this.setState({ imageview: data })
       })
   }
 
@@ -174,9 +174,6 @@ class PostEdit extends React.Component {
         this.setState({ showerror: true });
       } else {
         const data = new FormData();
-        for (var x = 0; x < this.state.file.length; x++) {
-          data.append("file", this.state.file[x]);
-        }
 
         for (let name in this.state) {
           data.append(name, this.state[name]);
@@ -203,13 +200,13 @@ class PostEdit extends React.Component {
       }
     } else {
       const data = new FormData();
-      for (var x = 0; x < this.state.file.length; x++) {
-        data.append("file", this.state.file[x]);
-      }
       
+
       for (let name in this.state) {
         data.append(name, this.state[name]);
       }
+
+      data.append("sale", this.state.for_sales);
 
       const config = {
         headers: {
@@ -354,7 +351,7 @@ class PostEdit extends React.Component {
   }
 
   render() {
-    
+    console.log(this.state.for_sales)
     var handleCaptionChange = this.handleCaptionChange
     
     let dragOverClass = this.state.dragOver

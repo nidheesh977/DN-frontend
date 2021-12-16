@@ -31,6 +31,7 @@ import swal from "sweetalert";
 import { useForm } from "react-hook-form";
 import { userService } from "../_services/user.service";
 
+
 const styles = (theme) => ({
   root: {
     margin: 0,
@@ -118,14 +119,18 @@ export default function EndUserProfile(props) {
       );
 
     const url = `http://localhost/auth-app/public/api/auth/hiredstatus/${id}`;
-    axios.get(url, config).then(
-      (res) => {
-        setHirestatus(res.data.success);
-      },
-      (err) => {
-        console.log(err);
+    axios.get(url, config)
+    .then((res) => {
+      if(res.data.success){
+        setHirestatus(true)
       }
-    );
+      else{
+        setHirestatus(false)
+      }
+    })
+    .catch(err => {
+      setHirestatus(false)
+    })
 
     const urls = `http://localhost/auth-app/public/api/auth/reportcheck/${id}`;
     axios.get(urls, config).then(

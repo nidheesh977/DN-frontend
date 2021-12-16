@@ -31,6 +31,7 @@ class UploadFile extends React.Component {
       category_id: "1",
       comments: true,
       showerror: false,
+      error_msg: "",
       price: "",
       loaded: 0,
       submitDisabled: true,
@@ -131,21 +132,50 @@ class UploadFile extends React.Component {
     var price = this.state.price
 
     if (
-      file === "" ||
-      caption == "" ||
-      description == "" ||
-      category_id === "" ||
-      for_sales === ""
+      file === ""
     ) {
-      this.setState({ showerror: true });
-    } else if (for_sales === "forsale") {
+      this.setState({ 
+        showerror: true,
+        error_msg: "File field is required"
+      });
+    }
+
+    else if(caption == ""){
+      this.setState({ 
+        showerror: true ,
+        error_msg: "Caption field is required"
+      });
+    }
+
+    else if(description == ""){
+      this.setState({ 
+        showerror: true ,
+        error_msg: "Description field is required"
+      });
+    }
+
+    else if(category_id == ""){
+      this.setState({ 
+        showerror: true ,
+        error_msg: "Select category"
+      });
+    }
+
+    else if(for_sales == ""){
+      this.setState({ 
+        showerror: true ,
+        error_msg: "Select download type"
+      });
+    }
+    
+    else if (for_sales === "forsale") {
       if (price === "") {
         this.setState({ showerror: true });
       } else {
         const data = new FormData();
-        for (var x = 0; x < this.state.file.length; x++) {
-          data.append("file", this.state.file[x]);
-        }
+        // for (var x = 0; x < this.state.file.length; x++) {
+        //   data.append("file", this.state.file[x]);
+        // }
 
         for (let name in this.state) {
           data.append(name, this.state[name]);
@@ -172,9 +202,9 @@ class UploadFile extends React.Component {
       }
     } else {
       const data = new FormData();
-      for (var x = 0; x < this.state.file.length; x++) {
-        data.append("file", this.state.file[x]);
-      }
+      // for (var x = 0; x < this.state.file.length; x++) {
+      //   data.append("file", this.state.file[x]);
+      // }
       
       for (let name in this.state) {
         data.append(name, this.state[name]);
@@ -389,7 +419,7 @@ class UploadFile extends React.Component {
             onClose={this.handleClose}
           >
             <Alert variant="filled" onClose={this.handleClose} severity="error">
-              This is required feild!
+              {this.state.error_msg}
             </Alert>
           </Snackbar>
         )}
