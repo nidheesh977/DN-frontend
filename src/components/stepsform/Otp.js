@@ -34,9 +34,9 @@ export default function Otp(props) {
                     history.push("/Login");
                 })
             .catch(error => {
-              swal(error.response.data.message, {
-                icon: "error",
-              });  
+              swal(error.response.data.message.password[0], {
+                icon: "error"
+              })
               setLoading(false); 
             });                                                                                                                  
     }

@@ -27,62 +27,67 @@ function User() {
   const password = useRef({});
   password.current = watch("password", "");
   const [value, setValue] = useState()
-  const [emailTaken, setEmailTaken] = useState()
   const [state, setState] = React.useState({
     checkedA: false,
   });
   
   const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState(false); 
-  const [test, setTest] = useState();
+  const [error, setError] = useState(false);
+  const [error_msg, setErrorMsg] = useState("");
 
   const history = useHistory();
   const onSubmit = (event) => {
-    axios.post("http://localhost/auth-app/public/api/emailcheck", {email: event.email})
-    .then(res => {
-      console.log(res)
-      setLoading(true); 
-      axios.post('http://localhost/auth-app/public/api/auth/register', {
-        name: event.name,
-        username: event.username,
-        email: event.email,
-        phone: value,
-        role: 1,
-        password: event.password
-      }).then(res => { 
-        swal('Register Successfull', {
-          icon: "success",
-        });
-        setLoading(false);  
-        localStorage.setItem('access_token', res.data.access_token);
-        localStorage.setItem('token_type', res.data.token_type);
-        history.push("/Profile");
+    if (state.checkedA){
+      axios.post("http://localhost/auth-app/public/api/emailcheck", {email: event.email})
+      .then(res => {
+        console.log(res)
+        setLoading(true);
+        axios.post('http://localhost/auth-app/public/api/auth/register', {
+          name: event.name,
+          username: event.username,
+          email: event.email,
+          phone: value,
+          role: 1,
+          password: event.password
+        }).then(res => {
+          swal('Register Successfull', {
+            icon: "success",
+          });
+          setLoading(false);
+          localStorage.setItem('access_token', res.data.access_token);
+          localStorage.setItem('token_type', res.data.token_type);
+          history.push("/Profile");
+        })
+        .catch(error => {
+
+          try{
+            setError(true)
+            setErrorMsg(error.response.data.message.phone[0])
+          }
+
+          catch(err){
+            swal("Something went wrong. Try again.", {
+              icon: "error",
+            });
+          }
+          // setError(true);
+          setLoading(false);  
+          // setTest(error.response.data.message.email[0]);
+          console.log(error);
+        }); 
       })
-      .catch(error => {
+      .catch(err => {
+        setError(true)
+        setErrorMsg(err.response.data.message)
+      })
+    }
 
-        try{
-          console.log(error.response.data.message.phone[0]) 
-          swal(error.response.data.message.phone[0], {
-            icon: "error",
-          });
-        }
+    else{
+      setError(true)
+      setErrorMsg("Accept the policy to create account")
+    }
 
-        catch(err){ 
-          swal("Something went wrong. Try again.", {
-            icon: "error",
-          });
-        }
-        // setError(true); 
-        setLoading(false);  
-        // setTest(error.response.data.message.email[0]);  
-        console.log(error);
-      }); 
-    })
-    .catch(err => {
-      swal(err.response.data.message, {
-        icon: "error",
-      });
-    })
+    setLoading(false);  
     
     }  
 
@@ -118,6 +123,8 @@ function User() {
       return;
     } 
     setOpen(false);
+    setError(false)
+    setErrorMsg("")
   };
 
 
@@ -129,29 +136,26 @@ function User() {
         <meta name="description" content="Nested component" />
       </Helmet>
  
-      {/* {
-        error && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">{test}!</Alert></Snackbar>
-      } 
-       */}
+      {
+        error && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">{error_msg}</Alert></Snackbar>
+      }
 
       {errors.confirmPassword && !errors.name && !errors.username && !errors.email && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">password does not match</Alert></Snackbar>}
-      {errors.confirmPassword && errors.confirmPassword.type === "required" && !errors.name && !errors.username && !errors.email && !errors.password && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Confirm password is a requied feild!</Alert></Snackbar>}
+      {errors.confirmPassword && errors.confirmPassword.type === "required" && !errors.name && !errors.username && !errors.email && !errors.password && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Confirm password is required!</Alert></Snackbar>}
 
       {errors.password && errors.password.message && !errors.name && !errors.username && !errors.email && !errors.confirmPassword && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Password must have at least 8 characters</Alert></Snackbar>}
 
-      {errors.password && errors.password.type === "required" && !errors.name && !errors.username && !errors.email && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Password is a requied feild!</Alert></Snackbar>}
+      {errors.password && errors.password.type === "required" && !errors.name && !errors.username && !errors.email && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Password is required!</Alert></Snackbar>}
 
-      {errors.email && errors.email.type === "required" && !errors.name && !errors.username && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Email ID is a requied feild!</Alert></Snackbar>}
+      {errors.email && errors.email.type === "required" && !errors.name && !errors.username && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Email ID is required!</Alert></Snackbar>}
       {errors.email && errors.email.type === "minLength" && !errors.name && !errors.username &&<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Enter valid email id</Alert></Snackbar>}
       {errors.email && errors.email.message && !errors.name && !errors.username && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Enter valid email id</Alert></Snackbar>}
 
-      {errors.username && errors.username.type === "required" && !errors.name && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Username is a requied feild!</Alert></Snackbar>}
-      {errors.username && errors.username.type === "minLength" && !errors.name && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Username is a requied feild!</Alert></Snackbar>}
+      {errors.username && errors.username.type === "required" && !errors.name && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Username is required!</Alert></Snackbar>}
+      {errors.username && errors.username.type === "minLength" && !errors.name && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Username must have at least 2 characters</Alert></Snackbar>}
 
-      {errors.name && errors.name.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Name is a requied feild!</Alert></Snackbar>}
-      {errors.name && errors.name.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Name is a requied feild!</Alert></Snackbar>}
- 
-      {errors.checkedA && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
+      {errors.name && errors.name.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Name is a required!</Alert></Snackbar>}
+      {errors.name && errors.name.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Name must have at least 2 characters</Alert></Snackbar>}
 
       <section className={All.Register}>
       <Container className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}>

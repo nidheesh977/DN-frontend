@@ -96,7 +96,6 @@ export default function PersistentDrawerLeft(props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [userlogin, Setuserlogin] = useState(false)
-  useEffect(() => Setuserlogin(isLogin()), [props])
 
 
   const handleDrawerOpen = () => {
@@ -116,6 +115,7 @@ export default function PersistentDrawerLeft(props) {
 
 
   useEffect(() => {
+    Setuserlogin(isLogin())
     const config = {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
@@ -125,7 +125,6 @@ export default function PersistentDrawerLeft(props) {
     axios.get('http://localhost/auth-app/public/api/auth/user', config)
       .then(res => {
         Setuser(res.data);
-        console.log(res)
       },
         err => {
         }

@@ -161,7 +161,6 @@ class GalleryFilter extends React.Component {
   handleChanges(event) {
     event.preventDefault();
     let type = $("#type").val();
-    console.log(type)
     const config = {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -176,10 +175,9 @@ class GalleryFilter extends React.Component {
       .then((response) => response.data)
       .then(
         (data) => {
-          this.setState({ listing: data });
-          console.log(data)
+          this.setState({ listing: data, listing_length: data.length });
         },
-        (err) => {console.log(err)}
+        (err) => { console.log(err) }
       );
   }
 
@@ -204,9 +202,9 @@ class GalleryFilter extends React.Component {
         config2
       )
       .then((res) => {
-        this.setState({ listing: res.data });
+        this.setState({ listing: res.data, listing_length: res.data.length });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   // onClickAll(event){
@@ -244,9 +242,9 @@ class GalleryFilter extends React.Component {
           .then((response) => response.data)
           .then(
             (data) => {
-              this.setState({ listing: data });
+              this.setState({ listing: data, listing_length: data.length });
             },
-            (err) => {}
+            (err) => { }
           );
         break;
       default:
@@ -258,9 +256,9 @@ class GalleryFilter extends React.Component {
           .then((response) => response.data)
           .then(
             (data) => {
-              this.setState({ listing: data });
+              this.setState({ listing: data, listing_length: data.length });
             },
-            (err) => {}
+            (err) => { }
           );
     }
   };
@@ -313,7 +311,7 @@ class GalleryFilter extends React.Component {
             loading: false,
           });
         },
-        (err) => {}
+        (err) => { }
       );
     axios
       .get(urls, config)
@@ -327,7 +325,7 @@ class GalleryFilter extends React.Component {
       (res) => {
         this.setState({ users: res.data, usersid: res.data.id });
       },
-      (err) => {}
+      (err) => { }
     );
   }
 
@@ -390,14 +388,15 @@ class GalleryFilter extends React.Component {
                 <Row>
                   <Col lg={2} xs={6} className="DropdownFilter views">
                     <select
-                      class="dropdown dropdown__text"
+                      className="dropdown dropdown__text"
                       onChange={this.handleChanges}
                       id="type"
+                      defaultValue={"1"}
                     >
                       <option value="" disabled>
                         All
                       </option>
-                      <option selected value="1">
+                      <option value="1">
                         All
                       </option>
                       {this.state.userlogin && (
@@ -407,12 +406,13 @@ class GalleryFilter extends React.Component {
                   </Col>
 
                   <Col lg={8} xs={12} className="categories">
-                    <div class="Filters">
-                      <form class="GalleryForm">
+                    <div className="Filters">
+                      <form className="GalleryForm">
                         <ul>
-                          {links.map((link) => {
+                          {links.map((link, index) => {
                             return (
                               <li
+                                key={index}
                                 onClick={() => this.handleClick(link.id)}
                                 className={
                                   link.className +
@@ -429,7 +429,7 @@ class GalleryFilter extends React.Component {
                                   className={
                                     link.id === activeLink && "active!"
                                   }
-                                  for={link.name}
+                                  htmlFor={link.name}
                                 >
                                   {" "}
                                   {link.name}
@@ -456,17 +456,18 @@ class GalleryFilter extends React.Component {
                   </Col>
                 </Row>
                 <div id="FilterDropdowns" style={{ display: "none" }}>
-                  <Row class="FilterDropdown">
+                  <Row className="FilterDropdown">
                     <Col lg={4}>
                       <select
-                        class="dropdown dropdown__text"
+                        className="dropdown dropdown__text"
                         id="timeframe"
                         onChange={this.handleChangesTimeframe}
+                        defaultValue={""}
                       >
                         {/* {this.state.times.map(function(data, key){  return (
                       <option  value={data}>{data}</option> )
                     })} */}
-                        <option value="" selected disabled>
+                        <option value="" disabled>
                           Time Frame
                         </option>
                         <option value="today">today</option>
@@ -538,7 +539,7 @@ class GalleryFilter extends React.Component {
                               Check the talent of other droners
                             </h5>
                           </Box>
-                          <div class="Filters">
+                          <div className="Filters">
                             <SearchResults
                               value={value}
                               data={listing}
@@ -547,8 +548,8 @@ class GalleryFilter extends React.Component {
                                   <>
                                     {results
                                       .slice(0, this.state.visible)
-                                      .map((user) => (
-                                        <li>
+                                      .map((user, index) => (
+                                        <li key={index}>
                                           {user.tag === "1" ? (
                                             <div>
                                               <figure>
@@ -563,15 +564,15 @@ class GalleryFilter extends React.Component {
                                                     user
                                                   )}
                                                 >
-                                                  <div class="content-overlay"></div>
+                                                  <div className="content-overlay"></div>
                                                   <img
-                                                    class="GalleryImg"
+                                                    className="GalleryImg"
                                                     src={user.src}
                                                   />
                                                 </Link>
                                                 <figcaption>
                                                   {user.user_id ==
-                                                  this.state.usersid ? (
+                                                    this.state.usersid ? (
                                                     <Link
                                                       className={All.White}
                                                       to="/Profile/">
@@ -635,15 +636,15 @@ class GalleryFilter extends React.Component {
                                                     user
                                                   )}
                                                 >
-                                                  <div class="content-overlay"></div>
+                                                  <div className="content-overlay"></div>
                                                   <img
-                                                    class="GalleryImg"
+                                                    className="GalleryImg"
                                                     src={user.src}
                                                   />
                                                 </Link>
                                                 <figcaption>
                                                   {user.user_id ==
-                                                  this.state.usersid ? (
+                                                    this.state.usersid ? (
                                                     <Link
                                                       className={All.White}
                                                       to={{
@@ -710,9 +711,9 @@ class GalleryFilter extends React.Component {
                                                     user
                                                   )}
                                                 >
-                                                  <div class="content-overlay-video"></div>
+                                                  <div className="content-overlay-video"></div>
 
-                                                  <video class="thumbnail GalleryImg">
+                                                  <video className="thumbnail GalleryImg">
                                                     <source
                                                       src={user.src}
                                                       type="video/mp4"
@@ -721,7 +722,7 @@ class GalleryFilter extends React.Component {
                                                 </Link>
                                                 <figcaption>
                                                   {user.user_id ==
-                                                  this.state.usersid ? (
+                                                    this.state.usersid ? (
                                                     <Link
                                                       className={All.White}
                                                       to={{
@@ -788,15 +789,15 @@ class GalleryFilter extends React.Component {
                                                     user
                                                   )}
                                                 >
-                                                  <div class="content-overlay"></div>
+                                                  <div className="content-overlay"></div>
                                                   <img
-                                                    class="GalleryImg"
+                                                    className="GalleryImg"
                                                     src={user.src}
                                                   />
                                                 </Link>
                                                 <figcaption>
                                                   {user.user_id ==
-                                                  this.state.usersid ? (
+                                                    this.state.usersid ? (
                                                     <Link
                                                       className={All.White}
                                                       to={{

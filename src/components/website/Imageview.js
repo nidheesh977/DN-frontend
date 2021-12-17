@@ -15,7 +15,6 @@ import axios from "axios";
 import CommentBox from "../CommentBox";
 import { Player } from "video-react";
 import { userService } from "../_services/user.service";
-import Video from "video-react/lib/components/Video";
 
 const API_URL = "http://localhost/auth-app/public/api/auth";
 
@@ -25,6 +24,7 @@ export default class ViewJob extends React.Component {
     this.state = {
       items: [],
       user_id: "",
+      role_id: "",
       imageview: "",
       userid: "",
       user_profile: "",
@@ -48,6 +48,7 @@ export default class ViewJob extends React.Component {
   }
 
   download(event) {
+    var image = this.state.imageview.src
     swal({
       title: "Are you sure?",
       text: "Do you want to download this image",
@@ -63,7 +64,7 @@ export default class ViewJob extends React.Component {
         };
         const url = `http://localhost/auth-app/public/api/auth/freedownload/${event.id}?user_id=${event.user_id}`;
         axios
-          .get(url, config)
+          .post(url, config)
           .then((response) => {
             swal(response.data.message, {
               icon: "success",
@@ -99,6 +100,7 @@ export default class ViewJob extends React.Component {
       (res) => {
         this.setState({ user_id: res.data.id });
         this.setState({ userid: res.data.id });
+        this.setState({ role_id: res.data.role_id });
       },
       (err) => {
         console.log(err);
@@ -309,25 +311,30 @@ export default class ViewJob extends React.Component {
                     </Col>
 
                     <Col lg={3}>
-                      <Box>
-                        <label className={`${All.Bold} ${All.paddingbottom_5}`}>
-                          Like What You See?
-                        </label>
-                        <label>This Droners is available for work</label>
-                      </Box>
-                      <Box pt={2} pb={5}>
-                        <Link
-                          to={{
-                            pathname: `/ProfileSingle/${this.props.match.params.user_id}`,
-                          }}
-                        >
-                          <Button className={All.BtnStyle_11}>
-                            {" "}
-                            <img style={{ paddingRight: 10 }} src={Hirebtn} />
-                            Hire This Droner
-                          </Button>
-                        </Link>
-                      </Box>
+                      {this.state.role_id == 2
+                        ?<React.Fragment>
+                          <Box>
+                            <label className={`${All.Bold} ${All.paddingbottom_5}`}>
+                              Like What You See?
+                            </label>
+                            <label>This Droners is available for work</label>
+                          </Box>
+                          <Box pt={2} pb={5}>
+                            <Link
+                              to={{
+                                pathname: `/ProfileSingle/${this.props.match.params.user_id}`,
+                              }}
+                            >
+                              <Button className={All.BtnStyle_11}>
+                                {" "}
+                                <img style={{ paddingRight: 10 }} src={Hirebtn} />
+                                Hire This Droner
+                              </Button>
+                            </Link>
+                          </Box>
+                        </React.Fragment>
+                        :""
+                      }
                       <Box pb={2}>
                         <label className={All.Bold}>
                           More Shots from {imageview.author || <Skeleton />}
@@ -443,7 +450,7 @@ export default class ViewJob extends React.Component {
                             </Link>
                           )}
                           {imageview.sale == "download" && (
-                            <Link to="/Cart">
+                            <Link>
                               <Button
                                 onClick={() => this.download(imageview)}
                                 className={All.BtnStyle_5}

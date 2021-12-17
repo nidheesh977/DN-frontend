@@ -105,7 +105,7 @@ export default class Alls extends React.Component {
                     </div>
                     :
                     <div>
-                        <div class="Filters">
+                        <div className = "Filters">
                             <ul>
                                 {this.state.listing.slice(0, this.state.visible).map(user => (
                                     <li>
@@ -113,7 +113,7 @@ export default class Alls extends React.Component {
                                             <div>
                                                 <figure>
                                                     {users.id == this.state.userId ?
-                                                        <figcaption class="edit" style={{ top: '0 !important' }}>
+                                                        <figcaption className = "edit" style={{ top: '0 !important' }}>
                                                             <Link to={{ pathname: `/PostEdit/${user.id}/${user.user_id}`, data: user, state: { foo: 'bar' } }} onClick={this.clickMe.bind(this, user)}>
                                                                 <span className="LikeIcon MuliLight">
                                                                     <EditIcon></EditIcon>
@@ -122,8 +122,8 @@ export default class Alls extends React.Component {
                                                         </figcaption>
                                                         : <> </>}
                                                     <Link to={{ pathname: `/Imageview/${user.id}/${user.user_id}`, data: user, state: { foo: 'bar' } }} onClick={this.clickMe.bind(this, user)}>
-                                                        <div class="content-overlay"></div>
-                                                        {user.src ? <img class="GalleryImg" src={user.src} />
+                                                        <div className = "content-overlay"></div>
+                                                        {user.src ? <img className = "GalleryImg" src={user.src} />
                                                             : <Skeleton circle={true} height={280} width={280} className={All.SkeletonImg} />}
                                                     </Link>
                                                     <figcaption>
@@ -138,7 +138,7 @@ export default class Alls extends React.Component {
                                             <div>
                                                 <figure>
                                                     {users.id == this.state.userId ?
-                                                        <figcaption class="edit" style={{ top: '0 !important' }}>
+                                                        <figcaption className = "edit" style={{ top: '0 !important' }}>
                                                             <Link to={{ pathname: `/PostEdit/${user.id}/${user.user_id}`, data: user, state: { foo: 'bar' } }} onClick={this.clickMe.bind(this, user)}>
                                                                 <span className="LikeIcon MuliLight">
                                                                     <EditIcon></EditIcon>
@@ -147,8 +147,8 @@ export default class Alls extends React.Component {
                                                         </figcaption>
                                                         : <> </>}
                                                     <Link to={{ pathname: `/Imageview/${user.id}/${user.user_id}`, data: user, state: { foo: 'bar' } }} onClick={this.clickMe.bind(this, user)}>
-                                                        <div class="content-overlay"></div>
-                                                        {user.src ? <img class="GalleryImg" src={user.src} />
+                                                        <div className = "content-overlay"></div>
+                                                        {user.src ? <img className = "GalleryImg" src={user.src} />
                                                             : <Skeleton circle={true} height={280} width={280} className={All.SkeletonImg} />}
                                                     </Link>
                                                     <figcaption>
@@ -163,7 +163,7 @@ export default class Alls extends React.Component {
                                             <div>
                                                 <figure>
                                                     {users.id == this.state.userId ?
-                                                        <figcaption class="edit" style={{ top: '0 !important' }}>
+                                                        <figcaption className = "edit" style={{ top: '0 !important' }}>
                                                             <Link to={{ pathname: `/PostEdit/${user.id}/${user.user_id}`, data: user, state: { foo: 'bar' } }} onClick={this.clickMe.bind(this, user)}>
                                                                 <span className="LikeIcon MuliLight">
                                                                     <EditIcon></EditIcon>
@@ -172,8 +172,8 @@ export default class Alls extends React.Component {
                                                         </figcaption>
                                                         : <> </>}
                                                     <Link to={{ pathname: `/Imageview/${user.id}/${user.user_id}`, data: user, state: { foo: 'bar' } }} onClick={this.clickMe.bind(this, user)}>
-                                                        <div class="content-overlay-video" ></div>
-                                                        <video class="thumbnail GalleryImg">
+                                                        <div className = "content-overlay-video" ></div>
+                                                        <video className = "thumbnail GalleryImg">
                                                             <source src={user.src} type="video/mp4" />
                                                         </video>
                                                     </Link>
@@ -189,7 +189,7 @@ export default class Alls extends React.Component {
                                             <div>
                                                 <figure>
                                                     {users.id == this.state.userId ?
-                                                        <figcaption class="edit" style={{ top: '0 !important' }}>
+                                                        <figcaption className = "edit" style={{ top: '0 !important' }}>
                                                             <Link to={{ pathname: `/PostEdit/${user.id}/${user.user_id}`, data: user, state: { foo: 'bar' } }} onClick={this.clickMe.bind(this, user)}>
                                                                 <span className="LikeIcon MuliLight">
                                                                     <EditIcon></EditIcon>
@@ -198,8 +198,8 @@ export default class Alls extends React.Component {
                                                         </figcaption>
                                                         : <> </>}
                                                     <Link to={{ pathname: `/Imageview/${user.id}/${user.user_id}`, data: user, state: { foo: 'bar' } }} onClick={this.clickMe.bind(this, user)}>
-                                                        <div class="content-overlay"></div>
-                                                        {user.src ? <img class="GalleryImg" src={user.src} />
+                                                        <div className = "content-overlay"></div>
+                                                        {user.src ? <img className = "GalleryImg" src={user.src} />
                                                             : <Skeleton circle={true} height={280} width={280} className={All.SkeletonImg} />}
                                                     </Link>
                                                     <figcaption>

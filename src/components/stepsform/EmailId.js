@@ -30,9 +30,7 @@ export default function EmailId(props) {
             props.next();            
           })
             .catch(error => {
-              swal(error.response.data.message, {
-                icon: "error",
-              }); 
+              console.log(error.response)
               setLoading(false); 
             });                                                                                    
     }

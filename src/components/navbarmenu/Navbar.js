@@ -149,7 +149,7 @@ function Navbar(props) {
                         <li className='nav-item SearchBoxIcon'>
                         {/* <Search /> */}
             {/* <i class="fa fa-search" aria-hidden="true"></i> */}
-            <Link to='/Searchresult'><img class="fa fa-search" src={SearchIcon} /></Link>
+            <Link to='/Searchresult'><img className="fa fa-search" src={SearchIcon} /></Link>
             {/* <div class="search-box">
               <form action={`${process.env.PUBLIC_URL}/Search`}>
                 <input type="text" className="MenuSearchBox" placeholder=""/> 
@@ -191,7 +191,7 @@ function Navbar(props) {
               </li>
               {userlogin === true &&
                 <li className='nav-item'>   
-                 {ProfileImage ?  <img class="nav-links" style={{width:'40px', height:'40px' , borderRadius:'100%'}} src={ProfileImage} onClick={handleMenu} /> :   <img class="nav-links" style={{width:'30px', height:'30px' , borderRadius:'100%'}} src={ProfileIcon} onClick={handleMenu} />}
+                 {ProfileImage ?  <img className ="nav-links" style={{width:'40px', height:'40px' , borderRadius:'100%'}} src={ProfileImage} onClick={handleMenu} /> :   <img className ="nav-links" style={{width:'30px', height:'30px' , borderRadius:'100%'}} src={ProfileIcon} onClick={handleMenu} />}
                   <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}

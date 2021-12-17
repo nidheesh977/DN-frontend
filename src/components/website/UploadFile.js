@@ -17,7 +17,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import { FormControl, Radio, RadioGroup } from "@material-ui/core";
 import { Video } from "video-react";
 
-class UploadFile extends React.Component {
+class PostEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,7 +41,6 @@ class UploadFile extends React.Component {
       errorNoficication: null,
       uploadPreview: "",
       file_selected: false,
-      selected_file: ""
     };
     this.handleAddImage = this.handleAddImage.bind(this);
     this.handleDragOver = this.handleDragOver.bind(this);
@@ -51,6 +50,7 @@ class UploadFile extends React.Component {
     this.handleCancelUpload = this.handleCancelUpload.bind(this);
   }
 
+  
 
   handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -89,25 +89,22 @@ class UploadFile extends React.Component {
 
   handleChangefor_sale = (e) => {
     this.setState({ for_sale: e.target.value, price: "" });
-    this.setState({ [e.target.name]: e.target.value });
-    // this.setState({submitDisabled: ![e.target.name]});
   };
 
   handleChangess = (e) => {
 
     this.setState({
       category_id: e.target.value,
-      file: null,
+      file: "",
       uploadPreview: "",
       file_selected: false,
-      selected_file: ""
     });
     this.setState({ [e.target.name]: e.target.value });
   };
 
   handleCommentsChange = (event) => {
-    console.log(!this.state.comments)
-    this.setState({ comments: !this.state.comments });
+    var comments = this.state.comments
+    this.setState({ comments: !comments });
   };
 
   CancelUpload = (e) => {
@@ -130,56 +127,46 @@ class UploadFile extends React.Component {
     var category_id = this.state.category_id
     var for_sales = this.state.for_sales
     var price = this.state.price
+    var comments = this.state.comments
 
     if (
       file === ""
     ) {
-      this.setState({ 
-        showerror: true,
-        error_msg: "File field is required"
-      });
+      this.setState({showerror: true, error_msg: "File is required field"})
     }
-
-    else if(caption == ""){
-      this.setState({ 
-        showerror: true ,
-        error_msg: "Caption field is required"
-      });
+    else if (caption == ""){
+      this.setState({showerror: true, error_msg: "Caption is required field"})
     }
-
-    else if(description == ""){
-      this.setState({ 
-        showerror: true ,
-        error_msg: "Description field is required"
-      });
+    else if (description == ""){
+      this.setState({showerror: true, error_msg: "Description is required field"})
     }
-
-    else if(category_id == ""){
-      this.setState({ 
-        showerror: true ,
-        error_msg: "Select category"
-      });
+    else if (for_sales == ""){
+      this.setState({showerror: true, error_msg: "Select mode of download"})
     }
-
-    else if(for_sales == ""){
-      this.setState({ 
-        showerror: true ,
-        error_msg: "Select download type"
-      });
-    }
-    
     else if (for_sales === "forsale") {
       if (price === "") {
-        this.setState({ showerror: true });
+        this.setState({ showerror: true, error_msg: "Price is required field" });
       } else {
-        const data = new FormData();
-        // for (var x = 0; x < this.state.file.length; x++) {
-        //   data.append("file", this.state.file[x]);
+        // const data = {
+        //   file: this.state.uploadPreview,
+        //   caption: caption,
+        //   description: description,
+        //   category_id: category_id,
+        //   for_sale: for_sales,
+        //   price: price,
+        //   comments: comments
         // }
 
-        for (let name in this.state) {
-          data.append(name, this.state[name]);
-        }
+        const data = new FormData();
+
+        data.append("file", file)
+        data.append("caption", caption)
+        data.append("description", description)
+        data.append("category_id", category_id)
+        data.append("for_sale", for_sales)
+        data.append("price", price)
+        data.append("comments", Boolean(comments))
+
         const config = {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -201,14 +188,16 @@ class UploadFile extends React.Component {
           });
       }
     } else {
+
       const data = new FormData();
-      // for (var x = 0; x < this.state.file.length; x++) {
-      //   data.append("file", this.state.file[x]);
-      // }
-      
-      for (let name in this.state) {
-        data.append(name, this.state[name]);
-      }
+
+        data.append("file", file)
+        data.append("caption", caption)
+        data.append("description", description)
+        data.append("category_id", category_id)
+        data.append("for_sale", for_sales)
+        data.append("price", price)
+        data.append("comments", Boolean(comments))
 
       const config = {
         headers: {
@@ -233,12 +222,12 @@ class UploadFile extends React.Component {
     }
   };
   download = () => {
-    this.setState({ readOnly: true });
+    this.setState({ readOnly: true, for_sales: "download" });
     document.getElementById("price").value = "";
   };
 
   forsale = () => {
-    this.setState({ readOnly: false });
+    this.setState({ readOnly: false, for_sales: "forsale" });
   };
 
   handleDragEnter(e) {
@@ -293,67 +282,82 @@ class UploadFile extends React.Component {
   }
 
   handleAddImage(e) {
-    e.preventDefault();
-
-    this.setState({
-      file_selected: true,
-      selected_file: e.target.files[0]
-    })
-
-    var uploaded = $("#uploaded").val();
-
-    let file = this.refs.image.files[0];
-
-    const reader = new FileReader()
-    reader.onload = () => {
-      if (reader.readyState === 2) {
+    try{
+      if((e.target.files[0].size / 1024 / 1024) <= 10){
         this.setState({
-          uploadPreview: reader.result
+          file_selected: true,
+          file: e.target.files[0]
+        })
+
+        var uploaded = $("#uploaded").val();
+
+        let file = this.refs.image.files[0];
+
+        const reader = new FileReader()
+        reader.onload = () => {
+          if (reader.readyState === 2) {
+            this.setState({
+              uploadPreview: reader.result
+            })
+          }
+        }
+        reader.readAsDataURL(file)
+        // Validate file is of type Image
+        const fileType = file["type"];
+        const validImageTypes = [
+          "image/gif",
+          "image/jpeg",
+          "image/png",
+          "image/jpg",
+          "video/mp4",
+        ];
+        if (!validImageTypes.includes(fileType)) {
+          this.setState({
+            file: null,
+            errortypemsg: true,
+            errorNotification: "Not an image or video (mp4) file",
+            dragOverClass: "",
+          });
+          return setTimeout(() => {
+            this.setState({
+              errorNotification: null,
+            });
+          }, 3000);
+        }
+
+        this.setState({
+          file,
+        });
+      }
+      else{
+        e.target.value = ""
+        swal({
+          text: "Upgrade to pro version to upload file greater than 10MB",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then(res => {
+          if(res){
+            this.props.history.push("/UpgradeProVersion")
+          }
         })
       }
     }
-    reader.readAsDataURL(file)
-    // Validate file is of type Image
-    const fileType = file["type"];
-    const validImageTypes = [
-      "image/gif",
-      "image/jpeg",
-      "image/png",
-      "image/jpg",
-      "video/mp4",
-    ];
-    if (!validImageTypes.includes(fileType)) {
-      console.log("Not an image and video (mp4) file");
-      this.setState({
-        file: null,
-        errortypemsg: true,
-        errorNotification: "Not an image File",
-        dragOverClass: "",
-      });
-      return setTimeout(() => {
-        this.setState({
-          errorNotification: null,
-        });
-      }, 3000);
+    catch{
     }
-
-    this.setState({
-      file,
-    });
   }
 
   handleCancelUpload(e) {
-    e.preventDefault();
+    e.target.value = ""
     this.setState({
-      file: null,
+      file: "",
       uploadPreview: "",
       file_selected: false,
-      selected_file: ""
     });
   }
 
   render() {
-    
     var handleCaptionChange = this.handleCaptionChange
     
     let dragOverClass = this.state.dragOver
@@ -407,11 +411,10 @@ class UploadFile extends React.Component {
     return (
       <>
         <Helmet>
-          <title>Upload file</title>
+          <title>Post Edit</title>
           <meta charSet="utf-8" />
           <meta name="description" content="Nested component" />
         </Helmet>
-
         {this.state.showerror && (
           <Snackbar
             open={this.state.showerror}
@@ -566,31 +569,31 @@ class UploadFile extends React.Component {
 
                         <FormControlLabel
                             value="1"
-                            control={<Radio />}
+                            control={<Radio style={{ backgroundColor: 'transparent' }}/>}
                             label="Images"
                             ref="radio-img"
-                            checked={this.state.category_id === "1"}
+                            checked = {this.state.category_id == "1"}
                           />
                         <FormControlLabel
                           value="2"
-                          control={<Radio />}
+                          control={<Radio style={{ backgroundColor: 'transparent' }}/>}
                           label="360°Image"
                           ref="radio-360img"
-                          checked={this.state.category_id === "2"}
+                          checked = {this.state.category_id == "2"}
                         />
                         <FormControlLabel
                           value="3"
-                          control={<Radio />}
+                          control={<Radio style={{ backgroundColor: 'transparent' }}/>}
                           label="Video"
                           ref="radio-vid"
-                          checked={this.state.category_id === "3"}
+                          checked = {this.state.category_id == "3"}
                         />
                         <FormControlLabel
                           value="4"
-                          control={<Radio />}
+                          control={<Radio style={{ backgroundColor: 'transparent' }}/>}
                           label="3D Model"
                           ref="radio-3dimg"
-                          checked={this.state.category_id === "4"}
+                          checked = {this.state.category_id == "4"}
                         />
                       </RadioGroup>
                     </FormControl>
@@ -606,6 +609,7 @@ class UploadFile extends React.Component {
                       id="description"
                       name="description"
                       required
+                      defaultValue={this.state.description}
                     />
                   </div>
 
@@ -615,11 +619,11 @@ class UploadFile extends React.Component {
                       className={All.Checkbox}
                       control={
                         <Checkbox
-                          checked={this.state.comments}
                           onChange={this.handleCommentsChange}
                           id="comments"
                           name="comments"
                           required
+                          checked = {this.state.comments}
                         />
                       }
                       label="Accept Comments"
@@ -636,15 +640,15 @@ class UploadFile extends React.Component {
                       >
                         <FormControlLabel
                           value="forsale"
-                          control={<Radio onClick={this.forsale} />}
+                          control={<Radio onClick={this.forsale} style={{ backgroundColor: 'transparent' }}/>}
                           label="For Sale"
-                          checked={this.state.for_sales == "forsale"}
+                          checked = {this.state.for_sales == "forsale"}
                         />
                         <FormControlLabel
                           value="download"
-                          control={<Radio onClick={this.download} />}
+                          control={<Radio onClick={this.download} style={{ backgroundColor: 'transparent' }}/>}
                           label="Download"
-                          checked={this.state.for_sales == 'download'}
+                          checked = {this.state.for_sales == "download"}
                         />
                       </RadioGroup>
                     </FormControl>
@@ -693,4 +697,4 @@ class UploadFile extends React.Component {
   }
 }
 
-export default UploadFile;
+export default PostEdit;

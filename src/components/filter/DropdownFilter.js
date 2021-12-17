@@ -60,6 +60,4 @@ export default class DropdownFilter extends React.Component {
       <div className="dropdown__items"> { list } </div>
     )
   }
-
-} 
-
+}

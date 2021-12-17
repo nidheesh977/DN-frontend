@@ -1,17 +1,17 @@
 import React, { useRef } from 'react'
 import { Helmet } from "react-helmet";
 import { Container, Row, Col } from 'react-grid-system';
-import All from '../website/All.module.css'
-import PhoneInput from 'react-phone-number-input'
+import All from '../website/All.module.css';
+import PhoneInput from 'react-phone-number-input';
 import { useState } from 'react';
 import 'react-phone-number-input/style.css'
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
-import DronePerson from '../images/drone-person.svg'
-import axios from 'axios'
-//import DummyImage from '../images/dummy-image.png'
-import DroneImg from '../images/drone-img.svg'
+import DronePerson from '../images/drone-person.svg';
+import axios from 'axios';
+//import DummyImage from '../images/dummy-image.png';
+import DroneImg from '../images/drone-img.svg';
 import Box from '@material-ui/core/Box';
 import { useForm } from "react-hook-form";
 import Alert from '@material-ui/lab/Alert';
@@ -51,54 +51,58 @@ function Company() {
   });
 
   const [error, setError] = useState(false);
-  const [test, setTest] = useState();
+  const [error_msg, setErrorMsg] = useState("");
 
   const [isLoading, setLoading] = useState(false);
 
   const history = useHistory();
   const onSubmit = (event) => {
     setLoading(true);
-    axios.post("http://localhost/auth-app/public/api/emailcheck", {email: event.email})
-    .then(res => {
-      axios.post('http://localhost/auth-app/public/api/auth/registerhirer', {
-        company_name: event.companyname,
-        profession: event.profession,
-        location: event.location,
-        country: event.country,
-        username: event.username,
-        email: event.email,
-        phone: value,
-        password: event.password
-      })
+    if(state.checkedA){
+      axios.post("http://localhost/auth-app/public/api/emailcheck", {email: event.email})
       .then(res => {
-        setLoading(false);
-        localStorage.setItem('access_token', res.data.access_token);
-        localStorage.setItem('token_type', res.data.token_type);
-        history.push("/OfficeProfile");
-        swal('Register Successful', {
-          icon: "success",
+        axios.post('http://localhost/auth-app/public/api/auth/registerhirer', {
+          company_name: event.companyname,
+          profession: event.profession,
+          location: event.location,
+          country: event.country,
+          username: event.username,
+          email: event.email,
+          phone: value,
+          password: event.password
+        })
+        .then(res => {
+          setLoading(false);
+          localStorage.setItem('access_token', res.data.access_token);
+          localStorage.setItem('token_type', res.data.token_type);
+          history.push("/OfficeProfile");
+          swal('Register Successful', {
+            icon: "success",
+          });
+        })
+        .catch(error => {
+          console.log(error.response)
+          try{
+            setError(true)
+            setErrorMsg("Phone number is required")
+          }
+          catch{
+            swal('Something went wrong. Try again', {
+              icon: "error",
+            });
+          }
         });
       })
-      .catch(error => {
-        console.log(error.response)
-        try{
-          swal(error.response.data.message.phone[0], {
-            icon: "error",
-          });
-        }
-        catch{
-          swal('Something went wrong. Try again', {
-            icon: "error",
-          });
-        }
-      });
-    })
-    .catch(err => {
-      swal(err.response.data.message, {
-        icon: "error",
-      });
-    })
-
+      .catch(err => {
+        setError(true)
+        setErrorMsg("Email id is taken")
+      })
+      setLoading(false);
+    }
+    else{
+      setError(true)
+      setErrorMsg("Accept policy to create account")
+    }
     setLoading(false);
   }
 
@@ -122,11 +126,9 @@ function Company() {
   };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
     setOpen(false);
+    setError(false)
+    setErrorMsg("")
   };
 
   return (
@@ -138,34 +140,26 @@ function Company() {
       </Helmet>
 
       {
-        error && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">{test}!</Alert></Snackbar>
+        error && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">{error_msg}!</Alert></Snackbar>
       }
 
-      {errors.password && errors.password.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
+      {errors.companyname && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Company name is required</Alert></Snackbar>}
 
-      {errors.confirmPassword && errors.confirmPassword.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-      {errors.confirmPassword && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">password does not match</Alert></Snackbar>}
+      {errors.profession && !errors.companyname && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Profession is required</Alert></Snackbar>}
 
-      {errors.companyname && errors.companyname.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-      {errors.companyname && errors.companyname.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
+      {errors.country && !errors.profession && !errors.companyname && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Country is required</Alert></Snackbar>}
 
-      {errors.pofession && errors.pofession.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-      {errors.pofession && errors.pofession.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a equied feild!</Alert></Snackbar>}
+      {errors.location && !errors.country && !errors.profession && !errors.companyname && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Location is required</Alert></Snackbar>}
 
-      {errors.location && errors.location.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-      {errors.location && errors.location.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a equied feild!</Alert></Snackbar>}
+      {errors.email && errors.email.type == 'required' && !errors.location && !errors.country && !errors.profession && !errors.companyname && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Email is required</Alert></Snackbar>}
 
-      {errors.country && errors.country.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-      {errors.country && errors.country.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a equied feild!</Alert></Snackbar>}
+      {errors.email && errors.email.message && !errors.location && !errors.country && !errors.profession && !errors.companyname && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Enter valid email id</Alert></Snackbar>}
 
-      {errors.email && errors.email.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-      {errors.email && errors.email.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-      {errors.email && errors.email.message && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
+      {errors.password && errors.password.type == "required" && !errors.email && !errors.location && !errors.country && !errors.profession && !errors.companyname && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Password is required</Alert></Snackbar>}
 
-      {errors.phone && errors.phone.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
+      {errors.password && errors.password.type == "minLength" && !errors.email && !errors.location && !errors.country && !errors.profession && !errors.companyname && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Password must have at least 8 characters</Alert></Snackbar>}
 
-      {errors.checkedA && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-
+      {errors.confirmPassword &&  !errors.password && !errors.email && !errors.location && !errors.country && !errors.profession && !errors.companyname && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Password doesn't match</Alert></Snackbar>}
 
       <section className={All.Register}>
         <Container className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}>
@@ -179,18 +173,18 @@ function Company() {
               </Box>
               <form className={All.form} onSubmit={handleSubmit(onSubmit)}>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="name">Company Name <span className={All.required_field}>*</span></label>
+                  <label className={All.Bold} htmlFor="companyname">Company Name <span className={All.required_field}>*</span></label>
                   <input type="text" name="companyname" className={All.FormControl} id="companyname" ref={register({ required: true, minLength: 2 })} />
 
                 </div>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="username">Profession <span className={All.required_field}>*</span></label>
+                  <label className={All.Bold} htmlFor="profession">Profession <span className={All.required_field}>*</span></label>
                   <input type="text" name="profession" className={All.FormControl} id="profession" ref={register({ required: true, minLength: 2 })} />
                 </div>
 
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="username">Country <span className={All.required_field}>*</span></label>
+                  <label className={All.Bold} htmlFor="country">Country <span className={All.required_field}>*</span></label>
                   <input type="text" name="country" className={All.FormControl} id="country" ref={register({ required: true, minLength: 2 })} />
                   {/* <CountryDropdown name="country" id="country" className={` ${All.Country}`}  ref={register({ required: true })} 
                     value={country} onChange={selectCountry} /> */}
@@ -198,7 +192,7 @@ function Company() {
 
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="username">Location <span className={All.required_field}>*</span></label>
+                  <label className={All.Bold} htmlFor="location">Location <span className={All.required_field}>*</span></label>
                   <input type="text" name="location" className={All.FormControl} id="location" ref={register({ required: true, minLength: 2 })} />
                   {/* <RegionDropdown name="location" id="location" className={` ${All.Country}`}   ref={register({ required: true })}
                   country={country} 
@@ -206,16 +200,16 @@ function Company() {
                 </div>
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="email">Email ID <span className={All.required_field}>*</span></label>
+                <label className={All.Bold} htmlFor="email">Email ID <span className = {All.required_field}>*</span></label>
                   <input type="email" className={All.FormControl} id="email" name="email" ref={register({ required: true, pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "invalid email address" } })} />
                 </div>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="phone">Phone Number <span className={All.FSize_12}>(with country code)</span></label>
+                  <label className={All.Bold} htmlFor="phone">Phone Number <span className={All.FSize_12}>(with country code) <span className={All.required_field}>*</span></span></label>
                   <PhoneInput className={All.Phonenumber} name="phone" id="phone" value={value} onChange={setValue} />
                 </div>
-                <Box pb={2} className={`${All.Width_76} ${All.shipping_txt} `} textAlign="right" pl={0}><span textAlign="right" className={All.FSize_12}>Only for shipping process</span></Box>
+                <Box pb={2} className={`${All.Width_76} ${All.shipping_txt} `} textalign="right" pl={0}><span textalign="right" className={All.FSize_12}>Only for shipping process</span></Box>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="password">Password <span className={All.required_field}>*</span></label>
+                  <label className={All.Bold} htmlFor="password">Password <span className={All.required_field}>*</span></label>
                   <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
                     <input name="password" type="password" name="password" className={All.FormControl} id="password" ref={register({ required: "You must specify a password", minLength: { value: 8, message: "Password must have at least 8 characters" } })} />
                     <VisibilityIcon className={All.VisibilityIcon} onClick={PasswordShow} />
@@ -224,7 +218,7 @@ function Company() {
                 </div>
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="confirmPassword">Confirm Password <span className={All.required_field}>*</span></label>
+                  <label className={All.Bold} htmlFor="confirmPassword">Confirm Password <span className={All.required_field}>*</span></label>
                   <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
                     <input type="password" name="confirmPassword" className={All.FormControl} id="confirmPassword" ref={register({ validate: value => value === password.current || "The passwords do not match" })} />
                     <VisibilityIcon className={All.VisibilityIcon} onClick={confirmPasswordShow} />
@@ -238,7 +232,7 @@ function Company() {
                 <div className={All.FormGroup}>
                   <Box pb={3} pt={6}>
                     {isLoading ? (<>
-                      <Button variant="contained" color="default" type="submit" onClick={handleClick} className={All.LoaderBtn}>
+                      <Button variant="contained" color="default" className={All.LoaderBtn}>
                         <Loader /> Loading</Button>
                     </>) : (<>
                       <Button variant="contained" color="default" type="submit" onClick={handleClick} className={All.BtnStyle_5}>

@@ -304,9 +304,9 @@ export default function Cart(props) {
 
                       <Box pt={2} pb={5}>
                         <div className={All.FormGroup}>
-                          <Radio checked={selectedValues === 'a'} onChange={handleChanges} value="a" color="default" name="radio-button-demo" inputProps={{ 'aria-label': 'A' }} /><img src={GPay} />
-                          <Radio checked={selectedValues === 'b'} onChange={handleChanges} value="b" color="default" name="radio-button-demo" inputProps={{ 'aria-label': 'B' }} /><img src={PhonePe} />
-                          <Radio checked={selectedValues === 'c'} onChange={handleChanges} value="c" color="default" name="radio-button-demo" inputProps={{ 'aria-label': 'B' }} /><img src={Paytm} />
+                          <Radio checked={selectedValues === 'a'} onChange={handleChanges} value="a" color="default" name="radio-button-demo" inputProps={{ 'aria-label': 'A' }} id = "gpay_chekbox"/><img src={GPay} />
+                          <Radio checked={selectedValues === 'b'} onChange={handleChanges} value="b" color="default" name="radio-button-demo" inputProps={{ 'aria-label': 'B' }} id = "phonepe_chekbox" /><img src={PhonePe} />
+                          <Radio checked={selectedValues === 'c'} onChange={handleChanges} value="c" color="default" name="radio-button-demo" inputProps={{ 'aria-label': 'B' }} id = "paytm_chekbox" /><img src={Paytm} />
                         </div>
                       </Box>
 

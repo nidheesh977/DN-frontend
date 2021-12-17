@@ -83,7 +83,7 @@ export default function EndUserProfile(props) {
   const [isBusy, setBusy] = useState(false);
   const [hirestatus, setHirestatus] = useState(false);
   const [Reportstatus, setReportstatus] = useState(false);
-  const [user, Setuser] = useState([]);
+  const [role_id, setRole_id] = useState([]);
   const id = props.match.params.id;
   useEffect(() => {
     const config = {
@@ -95,6 +95,9 @@ export default function EndUserProfile(props) {
     userService.User().then((res) => {
       if(res.data.id == props.match.params.id){
         props.history.push("/Profile")
+      }
+      else{
+        setRole_id(res.data.role_id)
       }
     })
 
@@ -109,7 +112,6 @@ export default function EndUserProfile(props) {
       .then(
         (res) => {
           setProfile(res.data);
-          console.log(res.data)
           
           setBusy(true);
         },
@@ -190,16 +192,26 @@ export default function EndUserProfile(props) {
         config
       )
       .then((response) => {
-        swal(response.data.message, {
+        swal("Hired successfully", {
           icon: "success",
         });
         setOpen(false);
+        setHirestatus(true)
       })
       .catch((error) => {
-        swal(error.response.data.message, {
-          icon: "error",
-        });
-        setOpen(false);
+        try{
+          swal(error.response.data.message, {
+            icon: "error",
+          });
+          setOpen(false);
+        }
+        catch{
+          console.log(error.response)
+          swal("Something went wrong. We will fix it soon", {
+            icon: "error",
+          });
+          setOpen(false);
+        }
       });
   };
 
@@ -277,28 +289,33 @@ export default function EndUserProfile(props) {
 
               <Box py={4}>
                 <FollowBtn ml={2} id={profile.id} className={All.BtnStyle_4} />
-                {hirestatus === true ? (
-                  <Button
-                    ml={2}
-                    variant="contained"
-                    color="default"
-                    className={`${All.BtnStyle_3} ${All.marginright}`}
-                  >
-                    <img style={{ paddingRight: 10 }} src={Hirebtn} />
-                    Already Hired
-                  </Button>
-                ) : (
-                  <Button
-                    ml={2}
-                    onClick={handleClickOpen}
-                    variant="contained"
-                    color="default"
-                    className={`${All.BtnStyle_3} ${All.marginright}`}
-                  >
-                    <img style={{ paddingRight: 10 }} src={Hirebtn} />
-                    Hire me
-                  </Button>
-                )}
+                {role_id == "2"
+                ?<React.Fragment>
+                  {hirestatus === true ? (
+                    <Button
+                      ml={2}
+                      variant="contained"
+                      color="default"
+                      className={`${All.BtnStyle_3} ${All.marginright}`}
+                    >
+                      <img style={{ paddingRight: 10 }} src={Hirebtn} />
+                      Already Hired
+                    </Button>
+                  ) : (
+                    <Button
+                      ml={2}
+                      onClick={handleClickOpen}
+                      variant="contained"
+                      color="default"
+                      className={`${All.BtnStyle_3} ${All.marginright}`}
+                    >
+                      <img style={{ paddingRight: 10 }} src={Hirebtn} />
+                      Hire me
+                    </Button>
+                  )}
+                </React.Fragment>
+                :""
+                }
 
                 {Reportstatus === true ? (
                   <Button
