@@ -289,7 +289,22 @@ class GalleryFilter extends React.Component {
     this.setState({ valuees });
   };
 
+  handleScroll = () => {
+    try {
+      const wrappedElement = document.getElementById('main_div');
+      if (wrappedElement.getBoundingClientRect().bottom <= window.innerHeight+1) {
+        if (this.state.visible < this.state.listing.length) {
+          this.loadMore()
+        }
+      }
+    }
+    catch {
+      console.log("Error")
+    }
+  }
+
   componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll);
     const token = localStorage.getItem("access_token");
     this.setState({ userlogin: token });
 
@@ -329,6 +344,10 @@ class GalleryFilter extends React.Component {
     );
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
   render() {
     const { links, activeLink } = this.state;
     const { times } = this.state;
@@ -345,7 +364,7 @@ class GalleryFilter extends React.Component {
 
     return (
       <>
-        <section className={All.Filter}>
+        <section className={All.Filter} id="main_div">
           <div className={All.mobileBottomMenu}>
             <BottomNavigation
               value={valuees}
@@ -860,20 +879,6 @@ class GalleryFilter extends React.Component {
                             />
                           </div>
                         </>
-                      )}
-                      {this.state.visible < this.state.listing.length && (
-                        <Box py={6} textAlign={"center"}>
-                          <Button
-                            variant="contained"
-                            color="default"
-                            type="submit"
-                            onClick={this.loadMore}
-                            className={`${All.BtnStyle_5} ${All.LoadMore} ${All.W_sm_70} ${All.Bold}`}
-                          >
-                            <img style={{ paddingRight: 10 }} src={DroneImg} />
-                            Load More
-                          </Button>
-                        </Box>
                       )}
                     </div>
                   </>
