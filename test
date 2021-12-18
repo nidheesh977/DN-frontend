@@ -3,10 +3,10 @@ comments: "true"
 description: "sdfgdfg"
 id: 110
 price: null
-profile: "http://localhost/auth-app/public/uploads/profile/profile1638593631.png"
+profile: "https://nexevo-demo.in/nidheesh/dn/auth-app/public/uploads/profile/profile1638593631.png"
 sale: "download"
 slug: "sdfgdfg-110"
-src: "http://localhost/auth-app/public/files/file1639633367.jpg"
+src: "https://nexevo-demo.in/nidheesh/dn/auth-app/public/files/file1639633367.jpg"
 tag: "1"
 title: "sdfgdfg"
 user_id: 17

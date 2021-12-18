@@ -57,7 +57,7 @@ export default function SocialMediaProfiles() {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     }
-    axios.post('http://localhost/auth-app/public/api/auth/updatesocialmedia', {
+    axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/updatesocialmedia', {
       facebook: event.facebook, 
       twitter: event.twitter,
       instagram: event.instagram,

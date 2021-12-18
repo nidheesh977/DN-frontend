@@ -18,7 +18,7 @@ import DroneImg from '../images/drone-img.svg'
 import nofoundresult from '../images/noresultfound.svg' 
 import Skeleton from 'react-loading-skeleton';
   
-const API_URL = 'http://localhost/auth-app/public/api/auth';
+const API_URL = 'https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth';
 
 var videos = document.querySelectorAll(".thumbnail");
 for (var i = 0; i < videos.length; i++) {

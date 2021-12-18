@@ -19,7 +19,7 @@ import Skeleton from 'react-loading-skeleton';
 import nofoundresult from '../images/noresultfound.svg'
 import DroneImg from '../images/UploadFile.svg'
 
-const API_URL = 'http://localhost/auth-app/public/api/auth';
+const API_URL = 'https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth';
 
 class Posts extends React.Component {
 

@@ -22,7 +22,7 @@ import Like from '../Like';
 
 
 const race = ['shots', 'members', 'company'];
-const API_URL = 'http://localhost/auth-app/public/api/auth';
+const API_URL = 'https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth';
 
 export default class Searchresult extends React.Component {
 

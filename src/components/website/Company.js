@@ -59,9 +59,9 @@ function Company() {
   const onSubmit = (event) => {
     setLoading(true);
     if(state.checkedA){
-      axios.post("http://localhost/auth-app/public/api/emailcheck", {email: event.email})
+      axios.post("https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/emailcheck", {email: event.email})
       .then(res => {
-        axios.post('http://localhost/auth-app/public/api/auth/registerhirer', {
+        axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/registerhirer', {
           company_name: event.companyname,
           profession: event.profession,
           location: event.location,

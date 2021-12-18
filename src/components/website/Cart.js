@@ -30,7 +30,7 @@ import { useParams } from "react-router-dom";
 import swal from 'sweetalert';
 
 
-const API_URL = 'http://localhost/auth-app/public/api/auth';
+const API_URL = 'https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth';
 
 
 const emails = ['Stephen Raj', 'Vijay'];
@@ -115,7 +115,7 @@ export default function Cart(props) {
       }
     }
 
-    axios.get('http://localhost/auth-app/public/api/auth/user', config)
+    axios.get('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user', config)
       .then(res => {
         Setuser(res.data);
       },
@@ -125,7 +125,7 @@ export default function Cart(props) {
       )
 
 
-    axios.get(`http://localhost/auth-app/public/api/auth/${slug}/download?user_id=${userId}`, config)
+    axios.get(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/${slug}/download?user_id=${userId}`, config)
       .then(res => {
         setCart(res.data);
       },
@@ -146,7 +146,7 @@ export default function Cart(props) {
       return;
     }
 
-    const result = await axios.get(`http://localhost/auth-app/public/api/auth/${slug}/download?user_id=${userId}`);
+    const result = await axios.get(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/${slug}/download?user_id=${userId}`);
 
     if (!result) {
       alert("Server error. Are you online?");
@@ -178,7 +178,7 @@ export default function Cart(props) {
             Authorization: 'Bearer ' + localStorage.getItem('access_token')
           }
         }
-        const result = await axios.post("http://localhost/auth-app/public/api/auth/downloadpayment", data)
+        const result = await axios.post("https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/downloadpayment", data)
           .then(res => res.data)
           .then((data) => {
             swal("Download Sucessfull", {

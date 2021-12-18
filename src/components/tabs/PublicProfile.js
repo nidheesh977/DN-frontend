@@ -60,7 +60,7 @@ export default function PublicProfile() {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     }
-    axios.post('http://localhost/auth-app/public/api/auth/updateprofile', {
+    axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/updateprofile', {
       name: event.name,
       profession: event.profession,
       bio: event.bio,

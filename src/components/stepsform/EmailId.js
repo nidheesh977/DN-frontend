@@ -20,7 +20,7 @@ export default function EmailId(props) {
     const [open, setOpen] = React.useState(false);
     const onSubmit = (event) => {
         setLoading(true);   
-        axios.post('http://localhost/auth-app/public/api/auth/forgotpassword', {
+        axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/forgotpassword', {
             email: event.email, 
           }).then(res => {   
             swal('Check Your Email', {

@@ -174,7 +174,7 @@ class PostEdit extends React.Component {
         };
         axios
           .post(
-            "http://localhost/auth-app/public/api/auth/post",
+            "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/post",
             data,
             config,
             {}
@@ -206,7 +206,7 @@ class PostEdit extends React.Component {
       };
       axios
         .post(
-          "http://localhost/auth-app/public/api/auth/post",
+          "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/post",
           data,
           config,
           {}

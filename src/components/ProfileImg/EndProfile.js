@@ -41,7 +41,7 @@ class EndProfile extends React.Component {
   
     
       
-          axios.post('http://localhost/auth-app/public/api/auth/profilesingle', {
+          axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/profilesingle', {
       user_id: this.props.id,
   }, config)
             .then(res => {

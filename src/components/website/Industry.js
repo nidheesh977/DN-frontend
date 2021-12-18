@@ -15,7 +15,7 @@ import DropdownFilter from '../filter/DropdownFilter'
 
 
 
-const API_URL = 'http://localhost/auth-app/public/api/auth';
+const API_URL = 'https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth';
  
 export default class Industry extends React.Component {
   

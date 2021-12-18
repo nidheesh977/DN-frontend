@@ -26,7 +26,7 @@ export default function OfficePublicProfile() {
             Authorization: 'Bearer ' + localStorage.getItem('access_token')
           }
         }
-        axios.get('http://localhost/auth-app/public/api/auth/user', config)
+        axios.get('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user', config)
           .then(res => {
             setLoading(false); 
             setUser(res.data)
@@ -57,7 +57,7 @@ export default function OfficePublicProfile() {
               Authorization: 'Bearer ' + localStorage.getItem('access_token')
             }
           }
-          axios.post('http://localhost/auth-app/public/api/auth/updateprofile', {
+          axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/updateprofile', {
             company_name: event.company_name,
             profession: event.profession,
             country: event.country,

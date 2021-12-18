@@ -27,7 +27,7 @@ export default function UpgradeProVersion() {
             }
         }
 
-        axios.get('http://localhost/auth-app/public/api/auth/user', config)
+        axios.get('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user', config)
         .then(res => {
             setRoleId(res.data.role_id)
         })

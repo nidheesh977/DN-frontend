@@ -57,7 +57,7 @@ class ProfileCoverImg extends React.Component {
     userService.Profile()
     .then(res => {
       this.setState({ profile: res.data })
-      if (res.data.cover != "http://localhost/auth-app/public/uploads/cover") {
+      if (res.data.cover != "https://nexevo-demo.in/nidheesh/dn/auth-app/public/uploads/cover") {
         this.setState({ croppedImg: res.data.cover })
       }
       else {
@@ -103,7 +103,7 @@ class ProfileCoverImg extends React.Component {
           Authorization: 'Bearer ' + localStorage.getItem('access_token')
         }
       }
-      axios.post('http://localhost/auth-app/public/api/auth/updatecover', {
+      axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/updatecover', {
         cover: croppedImg,
       },
         config

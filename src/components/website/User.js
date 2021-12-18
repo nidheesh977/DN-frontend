@@ -38,11 +38,11 @@ function User() {
   const history = useHistory();
   const onSubmit = (event) => {
     if (state.checkedA){
-      axios.post("http://localhost/auth-app/public/api/emailcheck", {email: event.email})
+      axios.post("https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/emailcheck", {email: event.email})
       .then(res => {
         console.log(res)
         setLoading(true);
-        axios.post('http://localhost/auth-app/public/api/auth/register', {
+        axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/register', {
           name: event.name,
           username: event.username,
           email: event.email,

@@ -23,7 +23,7 @@ import { userService } from '../_services/user.service';
 
 
 
-const API_URL = 'http://localhost/auth-app/public/api/auth';
+const API_URL = 'https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth';
 
 export default class RotateImages extends React.Component {
     constructor(props) {
@@ -55,7 +55,7 @@ export default class RotateImages extends React.Component {
                 Authorization: 'Bearer ' + localStorage.getItem('access_token')
             }
         }
-        axios.get(`http://localhost/auth-app/public/api/auth/categorylisting/${this.state.userId}/${this.state.categories}`, config).then(response => response.data)
+        axios.get(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/categorylisting/${this.state.userId}/${this.state.categories}`, config).then(response => response.data)
             .then(data => {
                 this.setState({ 
                     listing: data,

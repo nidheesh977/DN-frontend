@@ -15,40 +15,40 @@ export const userService = {
 
 function User() {
     const requestOptions = { method: 'GET', headers: authHeader() };
-    return axios(`http://localhost/auth-app/public/api/auth/user`, requestOptions).then();
+    return axios(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user`, requestOptions).then();
 }
 
 function Profile() {
     const requestOptions = { method: 'GET', headers: authHeader() };
-    return axios(`http://localhost/auth-app/public/api/auth/profile`, requestOptions).then();
+    return axios(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/profile`, requestOptions).then();
 }
 
 function Applieddroners() {
     const requestOptions = { method: 'GET', headers: authHeader() };
-    return axios(`http://localhost/auth-app/public/api/auth/applieddroners`, requestOptions).then();
+    return axios(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/applieddroners`, requestOptions).then();
 }
 
 function Email() {
     const requestOptions = { method: 'GET', headers: authHeader() };
-    return axios(`http://localhost/auth-app/public/api/auth/email`, requestOptions).then();
+    return axios(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/email`, requestOptions).then();
 } 
 
 function Social() {
     const requestOptions = { method: 'GET', headers: authHeader() };
-    return axios(`http://localhost/auth-app/public/api/auth/social`, requestOptions).then();
+    return axios(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/social`, requestOptions).then();
 }
  
 
 function Subscriptioncheck() {
     const requestOptions = { method: 'GET', headers: authHeader() };
-    return axios(`http://localhost/auth-app/public/api/auth/subscriptioncheck`, requestOptions).then();
+    return axios(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/subscriptioncheck`, requestOptions).then();
 }
  
 
 
 function Accountsettings() {
     const requestOptions = { method: 'Post', headers: authHeader() };
-    return axios(`http://localhost/auth-app/public/api/auth/accountsettings`, requestOptions).then();
+    return axios(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/accountsettings`, requestOptions).then();
 }
 
 

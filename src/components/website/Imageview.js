@@ -16,7 +16,7 @@ import CommentBox from "../CommentBox";
 import { Player } from "video-react";
 import { userService } from "../_services/user.service";
 
-const API_URL = "http://localhost/auth-app/public/api/auth";
+const API_URL = "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth";
 
 export default class ViewJob extends React.Component {
   constructor(props) {
@@ -62,7 +62,7 @@ export default class ViewJob extends React.Component {
             Authorization: "Bearer " + localStorage.getItem("access_token"),
           },
         };
-        const url = `http://localhost/auth-app/public/api/auth/freedownload/${event.id}?user_id=${event.user_id}`;
+        const url = `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/freedownload/${event.id}?user_id=${event.user_id}`;
         axios
           .post(url, config)
           .then((response) => {
@@ -118,7 +118,7 @@ export default class ViewJob extends React.Component {
       console.log(err)
     })
 
-    const urls = `http://localhost/auth-app/public/api/auth/relatedposts/${user_id}`;
+    const urls = `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/relatedposts/${user_id}`;
     axios
       .get(urls, config)
       .then((res) => res.data)
@@ -128,7 +128,7 @@ export default class ViewJob extends React.Component {
 
     this.setState({ loading: true });
 
-    axios.post('http://localhost/auth-app/public/api/auth/profilesingle', {
+    axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/profilesingle', {
       user_id: user_id,
     }, config)
     .then(res=>{

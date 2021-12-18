@@ -65,7 +65,7 @@ const Login = (props) => {
     setLoading(true);
     var element = document.getElementById("myDIV");
     element.className = element.className.replace(/\bmystyle\b/g, "");
-    axios.post('http://localhost/auth-app/public/api/auth/login', {
+    axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/login', {
       email: event.email,
       password: event.password
     }).then(res => {
@@ -79,7 +79,7 @@ const Login = (props) => {
           Authorization: 'Bearer ' + localStorage.getItem('access_token')
         }
       }
-      axios.get('http://localhost/auth-app/public/api/auth/user', config)
+      axios.get('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user', config)
         .then(user => {
           localStorage.setItem('currentUser', JSON.stringify(user.data.role_id));
           window.location.reload()

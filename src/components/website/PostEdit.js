@@ -62,7 +62,7 @@ class PostEdit extends React.Component {
       }
     }
 
-    const url = `http://localhost/auth-app/public/api/auth/singlelisting/${id}`;
+    const url = `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/singlelisting/${id}`;
     axios.get(url, config).then(res => res.data)
       .then((data) => {
         this.setState({
@@ -203,7 +203,7 @@ class PostEdit extends React.Component {
         };
         axios
           .post(
-            `http://localhost/auth-app/public/api/auth/editpost/${this.props.match.params.id}`,
+            `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/editpost/${this.props.match.params.id}`,
             data,
             config,
             {}
@@ -235,7 +235,7 @@ class PostEdit extends React.Component {
       };
       axios
         .post(
-          `http://localhost/auth-app/public/api/auth/editpost/${this.props.match.params.id}`,
+          `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/editpost/${this.props.match.params.id}`,
           data,
           config,
           {}

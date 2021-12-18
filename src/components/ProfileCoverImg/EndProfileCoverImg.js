@@ -41,7 +41,7 @@ class EndProfileCoverImg extends React.Component {
         }
       }
    
-          axios.post('http://localhost/auth-app/public/api/auth/profilesingle', {
+          axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/profilesingle', {
                 user_id: this.props.id,
             }, config)
             .then(res => {
@@ -82,7 +82,7 @@ class EndProfileCoverImg extends React.Component {
           Authorization: 'Bearer ' + localStorage.getItem('access_token')
         }
       }
-      axios.post('http://localhost/auth-app/public/api/auth/updatecover', {
+      axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/updatecover', {
         cover: croppedImg,
     
         

@@ -91,7 +91,7 @@ function Navbar(props) {
 
       userService.Profile().then(res => { 
         setLoading(false);
-        if (res.data.profile != "http://localhost/auth-app/public/uploads/profile"){
+        if (res.data.profile != "https://nexevo-demo.in/nidheesh/dn/auth-app/public/uploads/profile"){
           setProfileImage(res.data.profile);
         }else{
           setProfileImage(ProfileIcon)

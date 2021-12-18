@@ -32,7 +32,7 @@ export default function GoPremium() {
           }
         } 
 
-        axios.get('http://localhost/auth-app/public/api/auth/user', config)
+        axios.get('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user', config)
         .then(res => {
           Setuser(res.data);  
         },
@@ -41,7 +41,7 @@ export default function GoPremium() {
           }
         ) 
 
-        axios.get('http://localhost/auth-app/public/api/auth/plans', config)
+        axios.get('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/plans', config)
           .then(res => { 
               try{
                 setId0(res.data[0].id);
@@ -91,7 +91,7 @@ export default function GoPremium() {
                 return;
             }
     
-            const result = await axios.post(`http://localhost/auth-app/public/api/auth/beforepayment/${data}`,{
+            const result = await axios.post(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/beforepayment/${data}`,{
                 user_id :  user.id,
             });
     
@@ -120,7 +120,7 @@ export default function GoPremium() {
                         // razorpayOrderId: response.razorpay_order_id,
                         // razorpaySignature: response.razorpay_signature, 
                     };   
-                    const result = await axios.post("http://localhost/auth-app/public/api/auth/payment", data); 
+                    const result = await axios.post("https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/payment", data); 
                     swal("Payment Sucessfull", {
                         icon: "success",
                       });

@@ -16,7 +16,7 @@ import Skeleton from 'react-loading-skeleton';
 import viewJobMobileImg from '../images/viewjob_mobile.svg'
 import DroneImg from '../images/drone-img.svg'
 
-const API_URL = 'http://localhost/auth-app/public/api/auth';
+const API_URL = 'https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth';
 
 class Hiring extends React.Component {
 
@@ -51,7 +51,7 @@ class Hiring extends React.Component {
       }
     }
 
-    axios.post('http://localhost/auth-app/public/api/auth/hiredornersfillter', {
+    axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/hiredornersfillter', {
       job_title: job_title,
       job_location: job_location,
       job_category: job_category,

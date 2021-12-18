@@ -11,7 +11,7 @@ import viewJobMobileImg from "../images/viewjob_mobile.svg";
 import { userService } from "../_services/user.service";
 import nofoundresult from '../images/noresultfound.svg'
 
-const API_URL = "http://localhost/auth-app/public/api/auth";
+const API_URL = "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth";
 
 export default class ViewJob extends React.Component {
   constructor(props) {

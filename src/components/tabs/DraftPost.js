@@ -13,7 +13,7 @@ import swal from "sweetalert";
 import Skeleton from "react-loading-skeleton";
 import nofoundresult from "../images/noresultfound.svg";
 
-const API_URL = "http://localhost/auth-app/public/api/auth";
+const API_URL = "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth";
 
 export default class HiringDorners extends React.Component {
   constructor(props) {

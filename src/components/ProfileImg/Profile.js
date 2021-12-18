@@ -51,7 +51,7 @@ class Profile extends React.Component {
     userService.Profile().then(res => {
 
       this.setState({ profile: res.data })
-      if (res.data.profile != "http://localhost/auth-app/public/uploads/profile") {
+      if (res.data.profile != "https://nexevo-demo.in/nidheesh/dn/auth-app/public/uploads/profile") {
         console.log(res.data)
         this.setState({ croppedImg: res.data.profile })
       }
@@ -95,7 +95,7 @@ class Profile extends React.Component {
           Authorization: 'Bearer ' + localStorage.getItem('access_token')
         }
       }
-      axios.post('http://localhost/auth-app/public/api/auth/updateprofileimage', {
+      axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/updateprofileimage', {
         profile: croppedImg,
         user_id: this.state.user.id,
         // role: 1,

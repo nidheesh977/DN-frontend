@@ -33,7 +33,7 @@ class CommentBox extends React.Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    const urls = `http://localhost/auth-app/public/api/auth/commentlisting/${this.props.passedVal}`;
+    const urls = `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/commentlisting/${this.props.passedVal}`;
     axios
       .get(urls, config)
       .then((res) => res.data)
@@ -47,7 +47,7 @@ class CommentBox extends React.Component {
         console.log(err)
       })
 
-    axios.get("http://localhost/auth-app/public/api/auth/user", config).then(
+    axios.get("https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user", config).then(
       (res) => {
         this.setState({ user_id: res.data.id });
       },
@@ -71,7 +71,7 @@ class CommentBox extends React.Component {
     };
     axios
       .post(
-        "http://localhost/auth-app/public/api/auth/commentstore",
+        "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/commentstore",
         {
           body: this.state.comment_body,
           user_id: this.state.user_id,
@@ -88,7 +88,7 @@ class CommentBox extends React.Component {
         })
         console.log(res)
         axios
-        .get( `http://localhost/auth-app/public/api/auth/commentlisting/${this.props.passedVal}`, config)
+        .get( `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/commentlisting/${this.props.passedVal}`, config)
         .then((res) => res.data)
         .then((data) => {
           this.setState({
