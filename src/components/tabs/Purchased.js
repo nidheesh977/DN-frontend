@@ -13,7 +13,6 @@ import axios from 'axios'
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DroneImg from '../images/drone-img.svg'
-import FileSaver from "file-saver";
 import nofoundresult from '../images/noresultfound.svg'
 import Skeleton from 'react-loading-skeleton';
 
