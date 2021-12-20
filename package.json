@@ -1,5 +1,6 @@
 {
   "name": "navbar-dropdown-v1",
+  "homepage": "https://nexevo-demo.in/nidheesh/dn/DN-frontend/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -112,6 +113,7 @@
     "sweetalert": "^2.1.2",
     "video-react": "^0.14.1"
   },
+  
   "scripts": {
     "start": "react-scripts start",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
@@ -144,6 +146,5 @@
     "webpack": "^4.42.0",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.10.3"
-  },
-  "homepage": "."
+  }
 }
