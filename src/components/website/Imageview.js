@@ -388,7 +388,6 @@ export default class ViewJob extends React.Component {
                                   borderRadius: "10px",
                                   marginBottom: "10px",
                                 }}
-                                className="GalleryImg"
                               >
                                 <source src={option.src} type="video/mp4" />
                               </video>
@@ -633,7 +632,6 @@ export default class ViewJob extends React.Component {
                                   borderRadius: "10px",
                                   marginBottom: "10px",
                                 }}
-                                className="GalleryImg"
                               >
                                 <source src={option.src} type="video/mp4" />
                               </video>
