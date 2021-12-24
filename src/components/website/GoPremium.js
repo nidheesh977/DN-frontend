@@ -142,10 +142,6 @@ export default function GoPremium() {
             paymentObject.open();
         
     }
-    
-
- 
-
 
     return (
         <>
@@ -177,7 +173,7 @@ export default function GoPremium() {
                                     <p className={All.TextBlueColor}>Upgrade Premium Version</p>
                                 </Box>
                                 <Box className={All.paddingbottom_90} pb={6} textAlign={'center'}> 
-                                    <Button variant="contained" color="default" value={Id0}  onClick={((e) => id(e, Id0))}  className={All.BtnStyle_5}>You Are Here</Button>    
+                                    <Button variant="contained" color="default" value={Id0}  onClick={((e) => id(e, Id0))}  className={All.BtnStyle_5}>Go Premium</Button>
                                 </Box> 
                             </div>
                         </Col>
@@ -193,17 +189,17 @@ export default function GoPremium() {
                                     <p className={All.TextWhite}>Upgrade Premium Version</p>
                                 </Box>
                                 <Box pb={6} className={All.paddingbottom_90} textAlign={'center'}> 
-                                    <Button variant="contained" color="default" value={Id1}  onClick={((e) => id(e, Id1))}  className={All.BtnStyle_6}>Go Premium</Button>     
-                                </Box> 
+                                    <Button variant="contained" color="default" value={Id1}  onClick={((e) => id(e, Id1))}  className={All.BtnStyle_6}>Go Premium</Button>
+                                </Box>
                             </div>
                         </Col>
                         <Col lg={4} className={All.Scrollablecol}>
                             <div className={All.ProUserYear}>
                                 <Box className={All.paddingtop_90} pt={6} textAlign={'center'}>
                                     <label className={All.ForUser}>For Premium User</label>
-                                    <h1>${Amount3/100}<span className={All.Month}>/{Day2}days</span></h1> 
-                                </Box> 
-                                <Box pb={2} textAlign={'center'}> 
+                                    <h1>${Amount3/100}<span className={All.Month}>/{Day2}days</span></h1>
+                                </Box>
+                                <Box pb={2} textAlign={'center'}>
                                     <p>{Plan2}</p>
                                     <p>If you want post more than one post,</p>
                                     <p className={All.TextBlueColor}>Upgrade Premium Version</p>

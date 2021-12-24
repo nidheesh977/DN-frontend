@@ -137,7 +137,7 @@ class Hiring extends React.Component {
                 <label className={All.Bold}>Job Location</label>
 
                 <select className="dropdown dropdown__text" id="job_location" onChange={this.handleChanges} >
-                  <option value="" selected disabled>All Locations</option>
+                  <option value="" selected>All Locations</option>
                   {cities.map((option) => (
                     <option value={option.location}>{option.location}</option>
                   ))}
@@ -264,7 +264,7 @@ class Hiring extends React.Component {
                                       <Box textAlign={'Left'} pt={3}>
                                         {this.state.loading ? <Skeleton circle={true} height={75} width={75} style={{ borderRadius: '100%' }} className={All.SkeletonImg} />
                                           : <>
-                                              {el.profile 
+                                              {el.profile
                                                 ?<img className="alignleft" src={el.profile}
                                                   alt="Image Sample 1" style={{
                                                     display: "inline",
@@ -273,7 +273,7 @@ class Hiring extends React.Component {
                                                     height: "75px",
                                                     borderRadius: "100px",
                                                     marginRight: '15px'
-                                                  }} 
+                                                  }}
                                                 />
                                                 :<img className="alignleft" src={"https://www.symbiosis-pharma.com/wp-content/uploads/2015/10/placeholder-person-490x490.jpg"}
                                                 alt="Image Sample 1" style={{
