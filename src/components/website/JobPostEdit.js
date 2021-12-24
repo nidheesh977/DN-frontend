@@ -27,7 +27,7 @@ export default function JobPostEdit(props) {
     const [selectedValues, setSelectedValue] = useState(); 
     
   const id =props.match.params.id;
-  const API_URL = 'https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth';
+  const API_URL = 'https://demo-nexevo.in/haj/auth-app/public/api/auth';
   useEffect(() => {
 
     const config = {
@@ -43,14 +43,6 @@ export default function JobPostEdit(props) {
     })
     
   }, []);
-
-
-
-    // const onSubmit = (event) => {  
-     
-    // }
-      
- 
  
       const handleChanges = (event) => {
         setSelectedValue(event.target.value); 
@@ -240,11 +232,11 @@ export default function JobPostEdit(props) {
 
                                     <div className={All.FormGroup}>
                                     <label  className={All.Bold} htmlFor="type_of_droner" > Type of Droner</label>
-                                    <select  className={`${All.FormControl} ${All.dropdown} `} name="type_of_droner" value={hiredorners.typeofdroner} ref={register({ required: "select one option" })} >
+                                    <select  className={`${All.FormControl} ${All.dropdown} `} name="type_of_droner" defaultValue={hiredorners.typeofdroner} ref={register({ required: "select one option" })} >
                                         <option value="">Select droners category</option> 
                                         <option value="user" >Small</option>
-                                        <option value="user">Medium</option>
-                                        <option value="user">Large</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="large">Large</option>
                                     </select> 
                                 </div>
 

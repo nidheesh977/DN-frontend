@@ -12,7 +12,7 @@ import nofoundresult from '../images/noresultfound.svg'
 import DroneImg from '../images/drone-img.svg'
 import Skeleton from 'react-loading-skeleton';
 
-const API_URL = 'https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth';
+const API_URL = 'https://demo-nexevo.in/haj/auth-app/public/api/auth';
 
 export default class JobAppliedDroners extends React.Component {
     constructor(props) {

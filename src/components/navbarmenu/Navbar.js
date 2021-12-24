@@ -69,6 +69,14 @@ function Navbar(props) {
     setAnchorEls(event.currentTarget);
   };
 
+  const handleMenusOpen = (event) => {
+    setAnchorEls(true);
+  };
+
+  const handleMenusClose = (event) => {
+    setAnchorEls(false);
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -91,7 +99,7 @@ function Navbar(props) {
 
       userService.Profile().then(res => { 
         setLoading(false);
-        if (res.data.profile != "https://nexevo-demo.in/nidheesh/dn/auth-app/public/uploads/profile"){
+        if (res.data.profile != "https://demo-nexevo.in/haj/auth-app/public/uploads/profile"){
           setProfileImage(res.data.profile);
         }else{
           setProfileImage(ProfileIcon)
@@ -142,7 +150,7 @@ function Navbar(props) {
              }
               
               <Link to='/HiringDorners'  className='nav-links' id="fouth" onClick={closeMobileMenu}>
-                <li className='nav-item'>  Hire Me </li>
+                <li className='nav-item'>  Jobs </li>
               </Link> 
             </span>
             <span className="menu">
@@ -152,7 +160,7 @@ function Navbar(props) {
             <Link to='/Searchresult'><img className="fa fa-search" src={SearchIcon} /></Link>
             {/* <div class="search-box">
               <form action={`${process.env.PUBLIC_URL}/Search`}>
-                <input type="text" className="MenuSearchBox" placeholder=""/> 
+                <input type="text" className="MenuSearchBox" placeholder=""/>
                 <input type="submit" value="Search" />
                 </form>
               </div> */}
@@ -161,8 +169,8 @@ function Navbar(props) {
             </li>
             {userlogin === false &&
                 <>
-                  <li className='nav-item'>  
-                  <Link  className='nav-links'  onClick={handleMenus}>
+                  <li className='nav-item'>
+                  <Link  className='nav-links'  onClick={handleMenus} onMouseEnter={handleMenusOpen} onMouseLeave={handleMenusClose}>
                       Sign up
                   </Link>
                 <Menu

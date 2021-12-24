@@ -16,7 +16,7 @@ import DroneImg from '../images/drone-img.svg'
 import nofoundresult from '../images/noresultfound.svg'
 import Skeleton from 'react-loading-skeleton';
 
-const API_URL = 'https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth';
+const API_URL = 'https://demo-nexevo.in/haj/auth-app/public/api/auth';
 
 var videos = document.querySelectorAll(".thumbnail");
 for (var i = 0; i < videos.length; i++) {
@@ -94,7 +94,7 @@ export default class Purchased extends React.Component {
             },
         }
 
-        axios.get(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/download/${event}`, config)
+        axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/download/${event}`, config)
             .then((response) => {
                 var img = new Image;
                 img.onload = function () {

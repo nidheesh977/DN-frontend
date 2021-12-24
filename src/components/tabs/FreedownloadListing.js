@@ -8,7 +8,7 @@ import DroneImg from '../images/drone-img.svg'
 import nofoundresult from '../images/noresultfound.svg' 
 import Skeleton from 'react-loading-skeleton';
 
-const API_URL = 'https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth';
+const API_URL = 'https://demo-nexevo.in/haj/auth-app/public/api/auth';
 
 var videos = document.querySelectorAll(".thumbnail");
 for (var i = 0; i < videos.length; i++) {
@@ -86,7 +86,7 @@ export default class FreedownloadListing extends React.Component {
             }, 
         }     
 
-        axios.get(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/download/${event}`,config)
+        axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/download/${event}`,config)
         .then((response) => {   
         var img = new Image;
         img.onload = function() {
@@ -108,17 +108,17 @@ export default class FreedownloadListing extends React.Component {
     componentDidMount() {
         const config = {
                     headers: {
-                      Authorization: 'Bearer ' + localStorage.getItem('access_token')
+                        Authorization: 'Bearer ' + localStorage.getItem('access_token')
                     }
                   }   
         axios.get(`${API_URL}/user`, config)
         .then(res => this.setState({ user: res.data }, () => { 
                 axios.get(`${API_URL}/freedownloadlisting`,config).then(res => res.data)
                        .then((data) => { 
-                        this.setState({ 
-                            mystore: data,
-                            loading: false,
-                         })
+                            this.setState({ 
+                                mystore: data,
+                                loading: false,
+                            })
                         })  
                 .catch(err => console.log(err))  
         }))

@@ -62,7 +62,7 @@ class PostEdit extends React.Component {
       }
     }
 
-    const url = `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/singlelisting/${id}`;
+    const url = `https://demo-nexevo.in/haj/auth-app/public/api/auth/singlelisting/${id}`;
     axios.get(url, config).then(res => res.data)
       .then((data) => {
         this.setState({
@@ -174,7 +174,7 @@ class PostEdit extends React.Component {
     }
     else if (for_sales === "forsale") {
       if (price === "") {
-        this.setState({ showerror: true });
+        this.setState({ showerror: true, error_msg: "Price is required field" });
       } else {
         // const data = {
         //   file: this.state.uploadPreview,
@@ -203,7 +203,7 @@ class PostEdit extends React.Component {
         };
         axios
           .post(
-            `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/editpost/${this.props.match.params.id}`,
+            `https://demo-nexevo.in/haj/auth-app/public/api/auth/editpost/${this.props.match.params.id}`,
             data,
             config,
             {}
@@ -235,7 +235,7 @@ class PostEdit extends React.Component {
       };
       axios
         .post(
-          `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/editpost/${this.props.match.params.id}`,
+          `https://demo-nexevo.in/haj/auth-app/public/api/auth/editpost/${this.props.match.params.id}`,
           data,
           config,
           {}
@@ -409,7 +409,7 @@ class PostEdit extends React.Component {
       <div>
         <p className={All.FSize_16}>
           <span style={{ color: "#67edfa" }} className={All.FSize_16}>
-            browser
+            Browser
           </span>
           to choose a File <br />
           (1600×1200 or larger recommended, up to 10MB each)
@@ -578,7 +578,7 @@ class PostEdit extends React.Component {
               >
                 <form className={All.form} >
                   <div className={All.FormGroup}>
-                    <label for="usr">caption</label>
+                    <label for="caption">caption</label>
                     <input
                       type="text"
                       id="caption"
@@ -631,7 +631,7 @@ class PostEdit extends React.Component {
                   </div>
 
                   <div className={All.FormGroup}>
-                    <label for="usr">Say about the shot</label>
+                    <label for="description">Say about the shot</label>
                     <textarea
                       className={All.FormControl}
                       onChange={this.handleDescriptionChange}
@@ -645,7 +645,7 @@ class PostEdit extends React.Component {
                   </div>
 
                   <div className={All.FormGroup}>
-                    <label for="usr">Comments</label>
+                    <label for="comments">Comments</label>
                     <FormControlLabel
                       className={All.Checkbox}
                       control={
@@ -686,7 +686,7 @@ class PostEdit extends React.Component {
                   </div>
 
                   <div className={All.FormGroup}>
-                    <label for="usr">Price</label>
+                    <label for="price">Price</label>
                     <input
                       onChange={this.handlePriceChange}
                       disabled={this.state.readOnly}

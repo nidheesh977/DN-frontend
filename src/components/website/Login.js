@@ -65,45 +65,55 @@ const Login = (props) => {
     setLoading(true);
     var element = document.getElementById("myDIV");
     element.className = element.className.replace(/\bmystyle\b/g, "");
-    axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/login', {
+    axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/login', {
       email: event.email,
       password: event.password
     }).then(res => {
       setLoading(false);
-      // login(props, event); 
-      localStorage.setItem('access_token', res.data.access_token);
-      localStorage.setItem('refresh_token', res.data.refresh_token);
-      localStorage.setItem('token_type', res.data.token_type);
-      const config = {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      try{
+        if (res.data.token_type == "Bearer"){
+          // login(props, event);
+          localStorage.setItem('access_token', res.data.access_token);
+          localStorage.setItem('refresh_token', res.data.refresh_token);
+          localStorage.setItem('token_type', res.data.token_type);
+          const config = {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('access_token')
+            }
+          }
+          axios.get('https://demo-nexevo.in/haj/auth-app/public/api/auth/user', config)
+          .then(user => {
+            try{
+              localStorage.setItem('currentUser', JSON.stringify(user.data.role_id));
+              swal('Login Successful', {
+                icon: "success",
+              });
+              window.location.reload()
+              props.history.push("/")
+            }
+            catch{
+              swal('An error occured on the server. We will fix it soon.', {
+                icon: "error",
+              });
+              localStorage.clear();
+            }
+          })
+        }
+        
+        else{
+          swal(res.data.message, {
+            icon: "error",
+          });
+          setLoading(false);
         }
       }
-      axios.get('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user', config)
-        .then(user => {
-          localStorage.setItem('currentUser', JSON.stringify(user.data.role_id));
-          window.location.reload()
-          props.history.push("/")
-        })
-        .catch(err => {
-            console.log(err);
-            localStorage.clear();
-            // startRefreshToken();
-          }
-        )
-      swal('Login Successful', {
-        icon: "success",
-      });
-    })
-      .catch(error => {
-        swal(error.response.data.message, {
+      catch{
+        swal("An error occured on the server. We will fix it soon.", {
           icon: "error",
         });
         setLoading(false);
-        // setError(true);
-        // setErrorMessage(error.response.data.message);  
-        // setTestLoginError(error.response.data.message)  
-      });
+      }
+    })
   };
 
   const { register, handleSubmit, errors } = useForm();
@@ -146,11 +156,11 @@ const Login = (props) => {
               </Box>
               <form className={All.form} onSubmit={handleSubmit(onSubmit)}>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="usr">Email ID:</label>
-                  <input type="email" name="email" className={All.FormControl} id="usr" ref={register({ required: true })} />
+                  <label className={All.Bold} for="email">Email ID:</label>
+                  <input type="email" name="email" className={All.FormControl} id="email" ref={register({ required: true })} />
                 </div>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="usr">Password:</label>
+                  <label className={All.Bold} for="password">Password:</label>
                   <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
                     <input type="password" name="password" className={All.password} id="password" ref={register({ required: true })} />
                     <VisibilityIcon className={All.VisibilityIcon} onClick={PasswordShow} />
@@ -186,6 +196,5 @@ const Login = (props) => {
     </>
   )
 }
-
 
 export default Login

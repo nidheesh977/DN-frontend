@@ -21,7 +21,7 @@ import nofoundresult from "../images/noresultfound.svg";
 import { userService } from "../_services/user.service";
 import DroneImg from "../images/drone-img.svg";
 
-const API_URL = "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth";
+const API_URL = "https://demo-nexevo.in/haj/auth-app/public/api/auth";
 
 var videos = document.querySelectorAll(".thumbnail");
 for (var i = 0; i < videos.length; i++) {
@@ -62,7 +62,7 @@ export default class Video extends React.Component {
     };
     axios
       .get(
-        `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/categorylisting/${this.state.userId}/${this.state.categories}`,
+        `https://demo-nexevo.in/haj/auth-app/public/api/auth/categorylisting/${this.state.userId}/${this.state.categories}`,
         config
       )
       .then((response) => response.data)

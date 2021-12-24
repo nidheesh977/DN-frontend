@@ -32,7 +32,7 @@ export default function GoPremium() {
           }
         } 
 
-        axios.get('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user', config)
+        axios.get('https://demo-nexevo.in/haj/auth-app/public/api/auth/user', config)
         .then(res => {
           Setuser(res.data);  
         },
@@ -41,7 +41,7 @@ export default function GoPremium() {
           }
         ) 
 
-        axios.get('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/plans', config)
+        axios.get('https://demo-nexevo.in/haj/auth-app/public/api/auth/plans', config)
           .then(res => { 
               try{
                 setId0(res.data[0].id);
@@ -91,7 +91,7 @@ export default function GoPremium() {
                 return;
             }
     
-            const result = await axios.post(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/beforepayment/${data}`,{
+            const result = await axios.post(`https://demo-nexevo.in/haj/auth-app/public/api/auth/beforepayment/${data}`,{
                 user_id :  user.id,
             });
     
@@ -119,8 +119,8 @@ export default function GoPremium() {
                         razorpay_payment_id: response.razorpay_payment_id,
                         // razorpayOrderId: response.razorpay_order_id,
                         // razorpaySignature: response.razorpay_signature, 
-                    };   
-                    const result = await axios.post("https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/payment", data); 
+                    };
+                    const result = await axios.post("https://demo-nexevo.in/haj/auth-app/public/api/auth/payment", data); 
                     swal("Payment Sucessfull", {
                         icon: "success",
                       });
@@ -169,7 +169,7 @@ export default function GoPremium() {
                             <div className={All.NormalUser}>
                                 <Box className={All.paddingtop_90} pt={6} textAlign={'center'}>
                                     <label className={All.ForUser}>For Normal User</label>
-                                    <h1>${Amount1}<span className={All.Month}>/{Day0}days</span></h1> 
+                                    <h1>${Amount1/100}<span className={All.Month}>/{Day0}days</span></h1> 
                                 </Box>
                                 <Box pb={2} textAlign={'center'}> 
                                     <p>{Plan0}</p>
@@ -185,7 +185,7 @@ export default function GoPremium() {
                             <div className={All.ProUserMonth}>
                                 <Box className={All.paddingtop_90} pt={6} textAlign={'center'}>
                                     <label className={All.ForUser}>For Premium User</label>
-                                    <h1>${Amount2}<span className={All.Month}>/{Day1}days</span></h1> 
+                                    <h1>${Amount2/100}<span className={All.Month}>/{Day1}days</span></h1> 
                                 </Box> 
                                 <Box pb={2} textAlign={'center'}> 
                                     <p>{Plan1}</p>
@@ -201,7 +201,7 @@ export default function GoPremium() {
                             <div className={All.ProUserYear}>
                                 <Box className={All.paddingtop_90} pt={6} textAlign={'center'}>
                                     <label className={All.ForUser}>For Premium User</label>
-                                    <h1>${Amount3}<span className={All.Month}>/{Day2}days</span></h1> 
+                                    <h1>${Amount3/100}<span className={All.Month}>/{Day2}days</span></h1> 
                                 </Box> 
                                 <Box pb={2} textAlign={'center'}> 
                                     <p>{Plan2}</p>

@@ -16,7 +16,7 @@ import CommentBox from "../CommentBox";
 import { Player } from "video-react";
 import { userService } from "../_services/user.service";
 
-const API_URL = "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth";
+const API_URL = "https://demo-nexevo.in/haj/auth-app/public/api/auth";
 
 export default class ViewJob extends React.Component {
   constructor(props) {
@@ -62,7 +62,7 @@ export default class ViewJob extends React.Component {
             Authorization: "Bearer " + localStorage.getItem("access_token"),
           },
         };
-        const url = `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/freedownload/${event.id}?user_id=${event.user_id}`;
+        const url = `https://demo-nexevo.in/haj/auth-app/public/api/auth/freedownload/${event.id}?user_id=${this.state.user_id}`;
         axios
           .post(url, config)
           .then((response) => {
@@ -70,11 +70,6 @@ export default class ViewJob extends React.Component {
               icon: "success",
             });
           })
-          .catch((error) => {
-            swal(error.response.data.message, {
-              icon: "error",
-            });
-          });
       } else {
         swal("Download cancelled");
       }
@@ -108,17 +103,20 @@ export default class ViewJob extends React.Component {
     );
 
     const url = `${API_URL}/singlelisting/${id}`;
-    
+
     axios.get(url, config)
     .then(res => {
-      this.setState({ imageview: res.data });
-      console.log(res.data)
+      try{
+        this.setState({ imageview: res.data });
+        console.log(res.data)
+      }
+      catch{}
     })
     .catch(err => {
       console.log(err)
     })
 
-    const urls = `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/relatedposts/${user_id}`;
+    const urls = `https://demo-nexevo.in/haj/auth-app/public/api/auth/relatedposts/${user_id}`;
     axios
       .get(urls, config)
       .then((res) => res.data)
@@ -128,7 +126,7 @@ export default class ViewJob extends React.Component {
 
     this.setState({ loading: true });
 
-    axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/profilesingle', {
+    axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/profilesingle', {
       user_id: user_id,
     }, config)
     .then(res=>{
@@ -145,10 +143,16 @@ export default class ViewJob extends React.Component {
     });
   }
 
+  other_post = (id, user_id) => {
+    this.props.history.push("/Imageview/" + id + "/" + user_id)
+    window.location.reload()
+  }
+
   render() {
     const { imageview, value } = this.state;
     const { relatedposts, values } = this.state;
     var user_profile = this.state.user_profile
+    var other_post = this.other_post
     return (
       <>
         <Helmet>
@@ -342,14 +346,9 @@ export default class ViewJob extends React.Component {
                       </Box>
                       <Box>
                         {relatedposts.map((option) => (
-                          <a
+                          <Link
                             className={`${All.marginright_9} ${All.RecentImg}`}
-                            href={
-                              "/Imageview/" +
-                              option.id +
-                              "/" +
-                              option.user_id
-                            }
+                            onClick = {() => {other_post(option.id, option.user_id)}}
                           >
                             {option.tag == "1" && (
                               <img
@@ -409,7 +408,7 @@ export default class ViewJob extends React.Component {
                                 }}
                               />
                             )}
-                          </a>
+                          </Link>
                         ))}
                       </Box>
                     </Col>
@@ -587,14 +586,14 @@ export default class ViewJob extends React.Component {
                       </Box>
                       <Box>
                         {relatedposts.map((option) => (
-                          <a
+                          <Link
                             className={`${All.marginright_9} ${All.RecentImg}`}
-                            href={
-                              "././#/Imageview/" +
-                              option.id +
-                              "/" +
-                              option.user_id
-                            }
+                            // to={"/Imageview/" +
+                            //   option.id +
+                            //   "/" +
+                            //   option.user_id
+                            // }
+                            onClick = {() => {other_post(option.id, option.user_id)}}
                           >
                             {option.tag == "1" && (
                               <img
@@ -654,7 +653,7 @@ export default class ViewJob extends React.Component {
                                 }}
                               />
                             )}
-                          </a>
+                          </Link>
                         ))}
                       </Box>
                     </Col>

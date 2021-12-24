@@ -38,47 +38,55 @@ function User() {
   const history = useHistory();
   const onSubmit = (event) => {
     if (state.checkedA){
-      axios.post("https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/emailcheck", {email: event.email})
+      axios.post("https://demo-nexevo.in/haj/auth-app/public/api/emailcheck", {email: event.email})
       .then(res => {
-        console.log(res)
-        setLoading(true);
-        axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/register', {
-          name: event.name,
-          username: event.username,
-          email: event.email,
-          phone: value,
-          role: 1,
-          password: event.password
-        }).then(res => {
-          swal('Register Successfull', {
-            icon: "success",
-          });
-          setLoading(false);
-          localStorage.setItem('access_token', res.data.access_token);
-          localStorage.setItem('token_type', res.data.token_type);
-          history.push("/Profile");
-        })
-        .catch(error => {
+        if (res.data.message == "Email Available!"){
+          setLoading(true);
+          axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/register', {
+            name: event.name,
+            username: event.username,
+            email: event.email,
+            phone: value,
+            role: 1,
+            password: event.password
+          }).then(res => {
+            try{
+              if (res.data.token_type == "Bearer"){
+                swal('Register Successfull', {
+                  icon: "success",
+                });
+                setLoading(false);
+                localStorage.setItem('access_token', res.data.access_token);
+                localStorage.setItem('token_type', res.data.token_type);
+                history.push("/Profile");
+              }
+              else{
+                try{
+                  setError(true)
+                  setErrorMsg(res.data.message.phone[0])
+                }
 
-          try{
-            setError(true)
-            setErrorMsg(error.response.data.message.phone[0])
-          }
-
-          catch(err){
-            swal("Something went wrong. Try again.", {
-              icon: "error",
-            });
-          }
-          // setError(true);
-          setLoading(false);  
-          // setTest(error.response.data.message.email[0]);
-          console.log(error);
-        }); 
-      })
-      .catch(err => {
-        setError(true)
-        setErrorMsg(err.response.data.message)
+                catch(err){
+                  setLoading(false);  
+                  swal("Some error occured on the server. We will fix it soon.", {
+                    icon: "error",
+                  });
+                }
+              }
+            }
+            catch{
+              setLoading(false);  
+                swal("Some error occured on the server. We will fix it soon.", {
+                  icon: "error",
+                });
+            }
+            
+          })
+        }
+        else{
+          setError(true)
+          setErrorMsg(res.data.message)
+        }
       })
     }
 

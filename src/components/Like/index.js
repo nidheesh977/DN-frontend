@@ -25,16 +25,16 @@ class Like extends React.Component {
       }
     }  
  
-          axios.get(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user`, config)
+          axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/user`, config)
         .then(res => this.setState({ user: res.data }, () => { 
-                axios.get(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/likecheck/${id}/${res.data.id}`,config).then(res => res.data)
+                axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/likecheck/${id}/${res.data.id}`,config).then(res => res.data)
                        .then((data) => { 
                         this.setState({ liked: data.status }) 
                         })    
         })) 
 
  
-    axios.get(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/postlikes/${id}`, config)
+    axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/postlikes/${id}`, config)
     .then(res => {    
       this.setState({likes:res.data.count }) 
     })
@@ -48,7 +48,7 @@ class Like extends React.Component {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     } 
-    axios.get(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/post/like/${id}`, config)
+    axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/post/like/${id}`, config)
     .then(res => {  
     })  
 

@@ -60,7 +60,7 @@ export default function PublicProfile() {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     }
-    axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/updateprofile', {
+    axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/updateprofile', {
       name: event.name,
       profession: event.profession,
       bio: event.bio,
@@ -126,26 +126,26 @@ export default function PublicProfile() {
                 </div>
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="usr">Profession:</label>
-                  <input type="text" name="profession" className={All.FormControl} id="usr" defaultValue={user.profession} ref={register({ required: true })} />
+                  <label className={All.Bold} for="profession">Profession:</label>
+                  <input type="text" name="profession" className={All.FormControl} id="profession" defaultValue={user.profession} ref={register({ required: true })} />
 
                 </div>
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="usr">Bio:</label>
-                  <textarea name="bio" placeholder="Maximum 50 words..." className={`${All.FormControl} ${All.officePublic}`} rows="4" cols="50" id="usr" form="usrform" defaultValue={profile.bio} ref={register({ required: true, maxLength: 500 })}></textarea>
+                  <label className={All.Bold} for="bio">Bio:</label>
+                  <textarea name="bio" placeholder="Maximum 50 words..." className={`${All.FormControl} ${All.officePublic}`} rows="4" cols="50" id="bio" form="usrform" defaultValue={profile.bio} ref={register({ required: true, maxLength: 500 })}></textarea>
                   <p>Brief description for your profile. URLs are hyperlinked.</p>
                 </div>
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="usr">Location:</label>
-                  <input placeholder="Bangalore" type="text" name="location" className={All.FormControl} defaultValue={user.location} id="usr" ref={register({ required: true })} />
+                  <label className={All.Bold} for="location">Location:</label>
+                  <input placeholder="Bangalore" type="text" name="location" className={All.FormControl} defaultValue={user.location} id="location" ref={register({ required: true })} />
 
                 </div>
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="usr">Country:</label>
-                  <input placeholder="India" type="text" name="country" className={All.FormControl} id="usr" defaultValue={user.country} ref={register({ required: true })} />
+                  <label className={All.Bold} for="country">Country:</label>
+                  <input placeholder="India" type="text" name="country" className={All.FormControl} id="country" defaultValue={user.country} ref={register({ required: true })} />
 
                 </div>
 
@@ -155,14 +155,14 @@ export default function PublicProfile() {
                 </Box>
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="usr">Portfolio URL:</label>
-                  <input type="text" name="portfolio_url" className={All.FormControl} id="usr" defaultValue={profile.portfolio_url} ref={register({ required: true, pattern: { value: /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/i, message: "Invalid Url" } })} />
+                  <label className={All.Bold} for="portfolio_url">Portfolio URL:</label>
+                  <input type="text" name="portfolio_url" className={All.FormControl} id="portfolio_url" defaultValue={profile.portfolio_url} ref={register({ required: true, pattern: { value: /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/i, message: "Invalid Url" } })} />
 
                 </div>
 
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="usr">Portfolio Password:</label>
-                  <input type="password" name="portfolio_password" className={All.FormControl} id="usr" defaultValue={profile.password_url} ref={register({ required: true })} />
+                  <label className={All.Bold} for="portfolio_password">Portfolio Password:</label>
+                  <input type="password" name="portfolio_password" className={All.FormControl} id="portfolio_password" defaultValue={profile.password_url} ref={register({ required: true })} />
 
                 </div>
 

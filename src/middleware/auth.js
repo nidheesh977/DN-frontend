@@ -15,7 +15,7 @@ export const authenticationService = {
 // LOGIN  s
 function login(props, d) {   
   
-  axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/login', {
+  axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/login', {
     email: d.email,
     password: d.password
   }).then(res => {      
@@ -27,7 +27,7 @@ function login(props, d) {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       } 
     } 
-      axios.get('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user', config)
+      axios.get('https://demo-nexevo.in/haj/auth-app/public/api/auth/user', config)
         .then(user => {    
           // {user.data.role_id === 1 &&   
           // // window.location.replace('/vijay/abctestdfetest#/Profile');   

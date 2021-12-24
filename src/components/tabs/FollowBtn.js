@@ -40,7 +40,7 @@ class FollowBtn extends React.Component {
         console.log(err);
       })
 
-    axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/followcheck', {
+    axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/followcheck', {
       user_id: this.state.userId,
     }, config)
       .then(res => {
@@ -73,7 +73,7 @@ class FollowBtn extends React.Component {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     }
-    axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/follow', {
+    axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/follow', {
       user_id: this.state.userId,
     }, config)
       .then(res => {
@@ -95,8 +95,8 @@ class FollowBtn extends React.Component {
     return (
       <form>
         <Box textAlign={'right'} className={All.marginright}>
-          {currentUser === 1 
-            ?
+          {/* {currentUser === 1 
+            ? */}
             <span>
               {this.state.isLoading
                 ?<Button variant="contained" color="default" className={All.LoaderBtn}>
@@ -107,7 +107,7 @@ class FollowBtn extends React.Component {
                 </Button>
               }
             </span>
-            :
+            {/* :
             <ClickAwayListener onClickAway={this.handleTooltipClose}>
               <div>
                 <Tooltip
@@ -125,7 +125,7 @@ class FollowBtn extends React.Component {
                 </Tooltip>
               </div>
             </ClickAwayListener>
-          }
+          } */}
         </Box>
       </form>
     );

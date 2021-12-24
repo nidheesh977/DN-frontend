@@ -22,23 +22,45 @@ export default function Otp(props) {
     password.current = watch("password", "");
     const onSubmit = (event) => {
         setLoading(true); 
-        axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/password/reset', {
+        axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/password/reset', {
             email: props.state.email,
             code:   event.code, 
-            password: event.password 
-                }).then(res => {   
-                    swal('Reset Password Successful', {
-                    icon: "success",
-                    }); 
-                    setLoading(false); 
-                    history.push("/Login");
+            password: event.password,
+            password_confirmation: event.password_confirmation
                 })
-            .catch(error => {
-              swal(error.response.data.message.password[0], {
-                icon: "error"
-              })
-              setLoading(false); 
-            });                                                                                                                  
+            .then(res => {
+                try{
+                    if (res.data.message){
+                        try{
+                            swal(res.data.message.password[0], {
+                                icon: "error"
+                            })
+                            setLoading(false);
+                        }
+
+                        catch{
+                            swal(res.data.message, {
+                                icon: "error"
+                            })
+                            setLoading(false);
+                        }
+                    }
+                    else{
+                        swal('Reset Password Successful', {
+                            icon: "success",
+                            });
+                            setLoading(false); 
+                            history.push("/Login");
+                    }
+                }
+                catch{
+                    swal('Reset Password Successful', {
+                        icon: "success",
+                        });
+                        setLoading(false); 
+                        history.push("/Login");
+                }
+            })                                                                                                               
     }
 
     const [isLoading, setLoading] = useState(false);
@@ -71,10 +93,10 @@ export default function Otp(props) {
         {errors.password_confirmation && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">password does not match</Alert></Snackbar>}
         {errors.password && errors.password.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
         {errors.password && errors.password.type === "maxLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">Password must be of Maxmum 12 characters</Alert></Snackbar>}
-        {errors.password && errors.password.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">Password must be of Minimum 6 characters</Alert></Snackbar>}
-        {errors.code && errors.code.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>} 
-        {errors.code && errors.code.type === "maxLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">Password must be of Maxmum 6 characters</Alert></Snackbar>} 
-        {errors.code && errors.code.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">Password must be of Minimum 6 characters</Alert></Snackbar>} 
+        {errors.password && errors.password.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">Password must be of Minimum 8 characters</Alert></Snackbar>}
+        {errors.code && errors.code.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">OTP requied feild!</Alert></Snackbar>} 
+        {errors.code && errors.code.type === "maxLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">OTP must be 6 characters</Alert></Snackbar>} 
+        {errors.code && errors.code.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">OTP must be 6 characters</Alert></Snackbar>}
             
 
             <Helmet>
@@ -96,19 +118,19 @@ export default function Otp(props) {
                             <form className={All.form} onSubmit={handleSubmit(onSubmit)} >
 
                                 <div className={All.FormGroup}>
-                                    <label className={All.Bold} for="usr">OTP:</label>
-                                    <input type="text" name="code" className={All.FormControl} id="usr"  ref={register({ required: true,  maxLength: 6 ,  minLength: 6  })} />
- 
+                                    <label className={All.Bold} for="otp">OTP:</label>
+                                    <input type="text" name="code" className={All.FormControl} id="otp"  ref={register({ required: true,  maxLength: 6 ,  minLength: 6  })} />
+
                                 </div>
 
                                 <div className={All.FormGroup}>
-                                    <label className={All.Bold} for="usr">Password:</label>
-                                    <input type="password" name="password" className={All.FormControl} id="usr"  ref={register({ required: true  , maxLength: 12 ,  minLength: 6})} />
+                                    <label className={All.Bold} for="password">Password:</label>
+                                    <input type="password" name="password" className={All.FormControl} id="password"  ref={register({ required: true  , maxLength: 12 ,  minLength: 8})} />
  
                                 </div> 
                                 <div className={All.FormGroup}>
-                                    <label className={All.Bold} for="usr">Confirm Password :</label>
-                                    <input type="password" name="password_confirmation" className={All.FormControl} id="usr" ref={register({ validate: value => value === password.current || "The passwords do not match" })} />
+                                    <label className={All.Bold} for="confirm_pswd">Confirm Password :</label>
+                                    <input type="password" name="password_confirmation" className={All.FormControl} id="confirm_pswd" ref={register({ validate: value => value === password.current || "The passwords do not match" })} />
  
                                 </div> 
 

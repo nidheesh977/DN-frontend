@@ -103,7 +103,7 @@ export default function EndUserProfile(props) {
 
     axios
       .post(
-        "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/profilesingle",
+        "https://demo-nexevo.in/haj/auth-app/public/api/auth/profilesingle",
         {
           user_id: props.match.params.id,
         },
@@ -120,7 +120,7 @@ export default function EndUserProfile(props) {
         }
       );
 
-    const url = `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/hiredstatus/${id}`;
+    const url = `https://demo-nexevo.in/haj/auth-app/public/api/auth/hiredstatus/${id}`;
     axios.get(url, config)
     .then((res) => {
       if(res.data.success){
@@ -134,7 +134,7 @@ export default function EndUserProfile(props) {
       setHirestatus(false)
     })
 
-    const urls = `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/reportcheck/${id}`;
+    const urls = `https://demo-nexevo.in/haj/auth-app/public/api/auth/reportcheck/${id}`;
     axios.get(urls, config).then(
       (res) => {
         setReportstatus(res.data.success);
@@ -183,7 +183,7 @@ export default function EndUserProfile(props) {
     };
     axios
       .post(
-        "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/hireme",
+        "https://demo-nexevo.in/haj/auth-app/public/api/auth/hireme",
         {
           user_id: props.match.params.id,
           name: event.name,
@@ -222,7 +222,7 @@ export default function EndUserProfile(props) {
       },
     };
 
-    axios.post("https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/reportuser",
+    axios.post("https://demo-nexevo.in/haj/auth-app/public/api/auth/reportuser",
       {
         user_id: props.match.params.id,
         sender_id: "9",

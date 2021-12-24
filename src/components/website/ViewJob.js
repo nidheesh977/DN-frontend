@@ -11,7 +11,7 @@ import viewJobMobileImg from "../images/viewjob_mobile.svg";
 import { userService } from "../_services/user.service";
 import nofoundresult from '../images/noresultfound.svg'
 
-const API_URL = "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth";
+const API_URL = "https://demo-nexevo.in/haj/auth-app/public/api/auth";
 
 export default class ViewJob extends React.Component {
   constructor(props) {
@@ -82,15 +82,17 @@ export default class ViewJob extends React.Component {
         axios
           .get(url, config)
           .then((response) => {
-            swal('Job applied successfully', {
-              icon: "success",
-            });
+            if (response.data.success == true){
+              swal('Job applied successfully', {
+                icon: "success",
+              });
+            }
+            else{
+              swal(response.data.message, {
+                icon: "error",
+              });
+            }
           })
-          .catch((error) => {
-            swal(error.response.data.message, {
-              icon: "error",
-            });
-          });
       } else {
         swal("Cancelled", {
           icon: 'success'

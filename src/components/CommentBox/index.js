@@ -33,21 +33,22 @@ class CommentBox extends React.Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    const urls = `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/commentlisting/${this.props.passedVal}`;
+    const urls = `https://demo-nexevo.in/haj/auth-app/public/api/auth/commentlisting/${this.props.passedVal}`;
     axios
       .get(urls, config)
-      .then((res) => res.data)
-      .then((data) => {
-        this.setState({ 
-          comments: data,
-          comments_length: data.length
-        });
-      })
-      .catch(err => {
-        console.log(err)
+      .then(res => {
+        try{
+          this.setState({ 
+            comments: res.data,
+            comments_length: res.data.length
+          });
+        }
+        catch{
+          
+        }
       })
 
-    axios.get("https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user", config).then(
+    axios.get("https://demo-nexevo.in/haj/auth-app/public/api/auth/user", config).then(
       (res) => {
         this.setState({ user_id: res.data.id });
       },
@@ -71,7 +72,7 @@ class CommentBox extends React.Component {
     };
     axios
       .post(
-        "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/commentstore",
+        "https://demo-nexevo.in/haj/auth-app/public/api/auth/commentstore",
         {
           body: this.state.comment_body,
           user_id: this.state.user_id,
@@ -88,12 +89,11 @@ class CommentBox extends React.Component {
         })
         console.log(res)
         axios
-        .get( `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/commentlisting/${this.props.passedVal}`, config)
-        .then((res) => res.data)
-        .then((data) => {
+        .get( `https://demo-nexevo.in/haj/auth-app/public/api/auth/commentlisting/${this.props.passedVal}`, config)
+        .then((res) => {
           this.setState({
-            comments: data,
-            comments_length: data.length
+            comments: res.data,
+            comments_length: res.data.length
           });
           this.setState({
             isLoading: false
@@ -150,6 +150,7 @@ class CommentBox extends React.Component {
                 rows="4"
                 className={All.FormControl}
                 onChange = {commentChangeHandler}
+                required
               ></textarea>
             </div>
             <div className="comment-form-actions">
@@ -182,20 +183,36 @@ class CommentBox extends React.Component {
             return(
               <>
                 <Box textAlign={"Left"} className="comment">
-                  <img
-                    class="alignleft"
-                    src={comment.profile}
-                    alt="Image Sample 1"
-                    style={{
-                      display: "inline",
-                      float: "left",
-                      width: "45px",
-                      marginRight: "15px",
-                      marginTop: "25px",
-                      height: "45px",
-                      borderRadius: "100px",
-                    }}
-                  />
+                  {comment.profile != "https://demo-nexevo.in/haj/auth-app/public/uploads/profile" && comment.profile
+                    ?<img
+                      class="alignleft"
+                      src={comment.profile}
+                      alt="Image Sample 1"
+                      style={{
+                        display: "inline",
+                        float: "left",
+                        width: "45px",
+                        marginRight: "15px",
+                        marginTop: "25px",
+                        height: "45px",
+                        borderRadius: "100px",
+                      }}
+                    />
+                    :<img
+                      class="alignleft"
+                      src="https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"
+                      alt="Image Sample 1"
+                      style={{
+                        display: "inline",
+                        float: "left",
+                        width: "45px",
+                        marginRight: "15px",
+                        marginTop: "25px",
+                        height: "45px",
+                        borderRadius: "100px",
+                      }}
+                    />
+                  }
                 </Box>
 
                 <Box pt={1}>

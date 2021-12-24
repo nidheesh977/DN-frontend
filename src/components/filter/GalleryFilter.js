@@ -25,7 +25,7 @@ import PanoramaIcon from "@material-ui/icons/Panorama";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import { withStyles } from "@material-ui/core/styles";
 
-const API_URL = "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth";
+const API_URL = "https://demo-nexevo.in/haj/auth-app/public/api/auth";
 
 function handleClick() {
   var v = document.getElementById("FilterDropdowns");
@@ -169,7 +169,7 @@ class GalleryFilter extends React.Component {
 
     axios
       .post(
-        `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/homepagelistingfillter?type=${type}`,
+        `https://demo-nexevo.in/haj/auth-app/public/api/homepagelistingfillter?type=${type}`,
         config
       )
       .then((response) => response.data)
@@ -184,6 +184,9 @@ class GalleryFilter extends React.Component {
   handleChangesTimeframe = (event) => {
     let type = $("#type").val();
     let timeframe = $("#timeframe").val();
+
+
+    
     let keywords = $("#keywords").val();
     const config2 = {
       headers: {
@@ -193,7 +196,7 @@ class GalleryFilter extends React.Component {
 
     axios
       .post(
-        "https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/homepagelistingfillter",
+        "https://demo-nexevo.in/haj/auth-app/public/api/homepagelistingfillter",
         {
           timeframe: timeframe,
           keywords: keywords,
@@ -217,7 +220,7 @@ class GalleryFilter extends React.Component {
   //     }
   // }
 
-  // axios.get(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/homepagelistingfillter?type=${this.state.all_id}`, config).then(response => response.data)
+  // axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/homepagelistingfillter?type=${this.state.all_id}`, config).then(response => response.data)
   //     .then(data => {
   //         this.setState({ listing: data })
   //     },
@@ -238,7 +241,7 @@ class GalleryFilter extends React.Component {
     switch (id) {
       case 5:
         axios
-          .get(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/listingall`, config)
+          .get(`https://demo-nexevo.in/haj/auth-app/public/api/listingall`, config)
           .then((response) => response.data)
           .then(
             (data) => {
@@ -250,7 +253,7 @@ class GalleryFilter extends React.Component {
       default:
         axios
           .get(
-            `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/categorylisting/${id}`,
+            `https://demo-nexevo.in/haj/auth-app/public/api/categorylisting/${id}`,
             config
           )
           .then((response) => response.data)
@@ -276,7 +279,7 @@ class GalleryFilter extends React.Component {
   //     }
   // }
 
-  //   axios.get(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/homepagelistingfillter?timeframe=${e.target.value}&type=${e.target.id}`, config).then(response => response.data)
+  //   axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/homepagelistingfillter?timeframe=${e.target.value}&type=${e.target.id}`, config).then(response => response.data)
   //       .then(data => {
   //           this.setState({ listing: data })
   //       },
@@ -308,7 +311,7 @@ class GalleryFilter extends React.Component {
     const token = localStorage.getItem("access_token");
     this.setState({ userlogin: token });
 
-    const urls = `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/posttitle`;
+    const urls = `https://demo-nexevo.in/haj/auth-app/public/api/posttitle`;
     const config = {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -316,7 +319,7 @@ class GalleryFilter extends React.Component {
     };
     this.setState({ loading: true });
     axios
-      .get(`https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/homepagelisting`, config)
+      .get(`https://demo-nexevo.in/haj/auth-app/public/api/homepagelisting`, config)
       .then((response) => response.data)
       .then(
         (data) => {
@@ -336,7 +339,7 @@ class GalleryFilter extends React.Component {
         this.setState({ loading: false });
       });
 
-    axios.get("https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user", config).then(
+    axios.get("https://demo-nexevo.in/haj/auth-app/public/api/auth/user", config).then(
       (res) => {
         this.setState({ users: res.data, usersid: res.data.id });
       },

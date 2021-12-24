@@ -122,7 +122,7 @@ export default function PersistentDrawerLeft(props) {
       }
     }
 
-    axios.get('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user', config)
+    axios.get('https://demo-nexevo.in/haj/auth-app/public/api/auth/user', config)
       .then(res => {
         Setuser(res.data);
       },
@@ -231,7 +231,7 @@ export default function PersistentDrawerLeft(props) {
 
         <Link to="/HiringDorners" onClick={handleDrawerClose}>
           <List>
-            {['Hire Now'].map((text, index) => (
+            {['Jobs'].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>{index % 2 === 0 ? <WorkOutlineIcon /> : <MailIcon />}
                 </ListItemIcon>
@@ -298,8 +298,6 @@ export default function PersistentDrawerLeft(props) {
         }
 
       </Drawer>
-
-
 
       <main id={All.SidebarHeader}
         className={clsx(classes.content, {

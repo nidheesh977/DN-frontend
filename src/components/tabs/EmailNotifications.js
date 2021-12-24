@@ -64,7 +64,7 @@ export default function EmailNotifications() {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     }
-    axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/emailsettings', {
+    axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/emailsettings', {
       news: event.checkedA, 
       privacy: event.checkedB,
       anyone_hire_me: event.checkedC,
@@ -168,8 +168,8 @@ export default function EmailNotifications() {
 
                   <Box py={3}>
                     <FormControlLabel className={`${All.Checkbox} ${All.Bold}`} control={<Checkbox checked={state.checkedE} onChange={handleChange} name="checkedE" inputRef={register()} />} /><span className={All.Bold}>Someone accepts my invitation</span>
-                   {errors.checkedE &&   <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled"  severity="error">{errors.checkedE.message}</Alert></Snackbar>}
-                   </Box>
+                    {errors.checkedE &&   <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert  variant="filled"  severity="error">{errors.checkedE.message}</Alert></Snackbar>}
+                  </Box>
 
                   <Divider />
 

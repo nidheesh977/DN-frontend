@@ -62,7 +62,7 @@ export default class AppliedDorners extends React.Component {
                 Authorization: 'Bearer ' + localStorage.getItem('access_token')
             }
         }
-        const url = `https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/deleteapplieddorners/${id}`;
+        const url = `https://demo-nexevo.in/haj/auth-app/public/api/auth/deleteapplieddorners/${id}`;
         axios.get(url, config).then(response => {  
               const applieddroners = this.state.applieddroners.filter(item => item.id !== id);
               this.setState({ applieddroners });   

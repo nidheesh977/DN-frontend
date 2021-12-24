@@ -9,7 +9,7 @@ import SearchResults from 'react-filter-search';
 import DropdownFilter from '../filter/DropdownFilter'
 import { Link } from 'react-router-dom';
 import DroneImg from '../images/drone-img.svg'
-const API_URL = 'https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth';
+const API_URL = 'https://demo-nexevo.in/haj/auth-app/public/api/auth';
 
 class Member extends React.Component {
   constructor(props) {

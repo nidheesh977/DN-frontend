@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Switch } from "react-router-dom";
+import { HashRouter, Switch } from "react-router-dom";
 import Header from "./components/header/Header";
 import Home from "./components/website/Home";
 import Company from "./components/website/Company";
@@ -45,7 +45,6 @@ import { authenticationService } from "../src/middleware/auth";
 class App extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       currentUser: null,
       isAdmin: false,
@@ -61,18 +60,18 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    authenticationService.currentUser.subscribe((x) =>
+    authenticationService.currentUser.subscribe((x) =>{
       this.setState({
         currentUser: x,
         isAdmin: x && x.role === Role.Admin,
       })
-    );
+    });
   }
 
   render() {
     const { currentUser, isAdmin } = this.state;
     return (
-      <BrowserRouter>
+      <HashRouter>
         <Header />
         <UserContext.Provider>
           <Switch>
@@ -187,9 +186,8 @@ class App extends React.Component {
             <PrivateRoute exact path="*" component={NoPageFound} />
           </Switch>
         </UserContext.Provider>
-      </BrowserRouter>
+      </HashRouter>
     );
   }
 }
-
 export default App;

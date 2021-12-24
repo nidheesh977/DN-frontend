@@ -26,7 +26,7 @@ export default function OfficePublicProfile() {
             Authorization: 'Bearer ' + localStorage.getItem('access_token')
           }
         }
-        axios.get('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/user', config)
+        axios.get('https://demo-nexevo.in/haj/auth-app/public/api/auth/user', config)
           .then(res => {
             setLoading(false); 
             setUser(res.data)
@@ -57,7 +57,7 @@ export default function OfficePublicProfile() {
               Authorization: 'Bearer ' + localStorage.getItem('access_token')
             }
           }
-          axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/updateprofile', {
+          axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/updateprofile', {
             company_name: event.company_name,
             profession: event.profession,
             country: event.country,
@@ -112,8 +112,8 @@ export default function OfficePublicProfile() {
                                 <Profile />
                             </div> 
                             <div className={All.FormGroup}>
-                                <label className={All.Bold} for="usr">Name:</label>
-                                <input type="text" name="company_name" className={All.FormControl} id="usr" defaultValue={user.company_name} ref={register ({ required : true, minLength : 2}) }/> 
+                                <label className={All.Bold} for="company_name">Name:</label>
+                                <input type="text" name="company_name" className={All.FormControl} id="company_name" defaultValue={user.company_name} ref={register ({ required : true, minLength : 2}) }/> 
                              </div>
 
                             <div className={All.FormGroup}>

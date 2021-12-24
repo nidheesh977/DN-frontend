@@ -27,7 +27,7 @@ function Register() {
    
   const onSubmit = (event) => {
  
-    axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/register', {
+    axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/register', {
     name: event.name,
     username: event.username,  
     email: event.email,

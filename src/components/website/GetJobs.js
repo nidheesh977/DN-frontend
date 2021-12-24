@@ -28,7 +28,7 @@ export default function GetJobs(props) {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     }
-    axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/postajob', {
+    axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/postajob', {
       job_title: event.job_title,
       job_description: event.comment,
       job_location: event.job_location,
@@ -65,7 +65,7 @@ export default function GetJobs(props) {
                 Authorization: 'Bearer ' + localStorage.getItem('access_token')
               }
             }
-            axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/postajob', {
+            axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/postajob', {
               job_title: event.job_title,
               job_description: event.comment,
               job_location: event.job_location,
@@ -218,8 +218,8 @@ export default function GetJobs(props) {
                   <select className={`${All.FormControl} ${All.dropdown} `} name="type_of_droner" ref={register({ required: "select one option" })}>
                     <option value="">Select droners category</option>
                     <option value="user">Small</option>
-                    <option value="user">Medium</option>
-                    <option value="user">Large </option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
                   </select>
                 </div>
 

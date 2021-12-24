@@ -19,22 +19,27 @@ export default function EmailId(props) {
     const { register, handleSubmit, errors } = useForm();
     const [open, setOpen] = React.useState(false);
     const onSubmit = (event) => {
-        setLoading(true);   
-        axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/forgotpassword', {
-            email: event.email, 
-          }).then(res => {   
-            swal('Check Your Email', {
-              icon: "success",
-            });
-            setLoading(false); 
-            props.next();            
+        setLoading(true);
+        axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/forgotpassword', {
+            email: event.email,
+          }).then(res => {
+              if (res.data.message == "We have e-mailed your password reset code!"){
+
+                swal('Check Your Email', {
+                    icon: "success",
+                });
+                setLoading(false); 
+                props.next();            
+              }
+              else{
+                swal("Invalid email id", {
+                    icon: "error",
+                });
+                setLoading(false);
+              }
           })
-            .catch(error => {
-              console.log(error.response)
-              setLoading(false); 
-            });                                                                                    
     }
-    
+
     const [isLoading, setLoading] = useState(false);
     const [value, setValue] = useState()
     const [state, setState] = React.useState({
@@ -44,7 +49,7 @@ export default function EmailId(props) {
     const handleClick = () => {
         setOpen(true);
       };
-    
+
       const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
           return;

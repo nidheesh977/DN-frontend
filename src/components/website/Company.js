@@ -59,43 +59,56 @@ function Company() {
   const onSubmit = (event) => {
     setLoading(true);
     if(state.checkedA){
-      axios.post("https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/emailcheck", {email: event.email})
+      axios.post("https://demo-nexevo.in/haj/auth-app/public/api/emailcheck", {email: event.email})
       .then(res => {
-        axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/registerhirer', {
-          company_name: event.companyname,
-          profession: event.profession,
-          location: event.location,
-          country: event.country,
-          username: event.username,
-          email: event.email,
-          phone: value,
-          password: event.password
-        })
-        .then(res => {
-          setLoading(false);
-          localStorage.setItem('access_token', res.data.access_token);
-          localStorage.setItem('token_type', res.data.token_type);
-          history.push("/OfficeProfile");
-          swal('Register Successful', {
-            icon: "success",
-          });
-        })
-        .catch(error => {
-          console.log(error.response)
-          try{
-            setError(true)
-            setErrorMsg("Phone number is required")
+        if (res.data.message == "Email Available!"){
+          axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/registerhirer', {
+            company_name: event.companyname,
+            profession: event.profession,
+            location: event.location,
+            country: event.country,
+            username: event.username,
+            email: event.email,
+            phone: value,
+            password: event.password
+          })
+          .then(res => {
+            try{
+              if (res.data.token_type == "Bearer"){
+              setLoading(false);
+              localStorage.setItem('access_token', res.data.access_token);
+              localStorage.setItem('token_type', res.data.token_type);
+              history.push("/OfficeProfile");
+              swal('Register Successful', {
+                icon: "success",
+              });
+            }
+            else{
+              try{
+                setError(true)
+                setErrorMsg(res.data.message.phone[0])
+              }
+
+              catch(err){
+                setLoading(false);  
+                swal("Some error occured on the server. We will fix it soon.", {
+                  icon: "error",
+                });
+              }
+            }
           }
           catch{
-            swal('Something went wrong. Try again', {
-              icon: "error",
-            });
+            setLoading(false);  
+                swal("Some error occured on the server. We will fix it soon.", {
+                  icon: "error",
+                });
           }
-        });
-      })
-      .catch(err => {
-        setError(true)
-        setErrorMsg("Email id is taken")
+          })
+        }
+        else{
+          setError(true)
+          setErrorMsg(res.data.message)
+        }
       })
       setLoading(false);
     }

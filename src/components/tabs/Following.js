@@ -34,7 +34,7 @@ export default class HiringDorners extends React.Component {
                 Authorization: 'Bearer ' + localStorage.getItem('access_token')
             }
         }
-        axios.post('https://nexevo-demo.in/nidheesh/dn/auth-app/public/api/auth/following', {
+        axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/following', {
             user_id: this.props.user,
         }, config)
             .then(res => {
