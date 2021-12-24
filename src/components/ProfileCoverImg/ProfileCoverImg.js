@@ -36,8 +36,8 @@ class ProfileCoverImg extends React.Component {
       cropperOpen: false,
       img: null,
       zoom: 2,
-      defaultCoverPic: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
-      croppedImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
+      defaultCoverPic: "https://www.symbiosis-pharma.com/wp-content/uploads/2015/10/placeholder-person-490x490.jpg",
+      croppedImg: "https://www.symbiosis-pharma.com/wp-content/uploads/2015/10/placeholder-person-490x490.jpg",
       profile: [],
       user: [],
       open: true,
@@ -62,7 +62,7 @@ class ProfileCoverImg extends React.Component {
       }
       else {
         this.setState({
-          croppedImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"
+          croppedImg: "https://www.symbiosis-pharma.com/wp-content/uploads/2015/10/placeholder-person-490x490.jpg"
         })
       }
       // console.log(this.state.profile.profile);

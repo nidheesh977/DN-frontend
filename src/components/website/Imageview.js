@@ -501,7 +501,7 @@ export default class ViewJob extends React.Component {
                             class="alignleft"
                             src={user_profile}
                             alt="Image Sample 1"
-                            style={{
+                            style = {{
                               display: "inline",
                               float: "left",
                               width: "75px",

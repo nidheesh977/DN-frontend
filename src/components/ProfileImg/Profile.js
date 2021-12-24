@@ -29,9 +29,9 @@ class Profile extends React.Component {
     this.state = {
       cropperOpen: false,
       img: null,
-      defaultProfileImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
+      defaultProfileImg: "https://www.symbiosis-pharma.com/wp-content/uploads/2015/10/placeholder-person-490x490.jpg",
       zoom: 2,
-      croppedImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
+      croppedImg: "https://www.symbiosis-pharma.com/wp-content/uploads/2015/10/placeholder-person-490x490.jpg",
       profile: [],
       user: [],
       open: true,
@@ -56,7 +56,7 @@ class Profile extends React.Component {
         this.setState({ croppedImg: res.data.profile })
       }
       else {
-        this.setState({ croppedImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png" })
+        this.setState({ croppedImg: "https://www.symbiosis-pharma.com/wp-content/uploads/2015/10/placeholder-person-490x490.jpg" })
       }
     },
       err => {
