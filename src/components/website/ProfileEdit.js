@@ -6,12 +6,6 @@ import All from '../website/All.module.css'
 import Box from '@material-ui/core/Box';
 
 import EditProfileTab from '../tabs/EditProfileTab'
-import Facebook from '../images/socialicons/facebook.svg'
-import Instagram from '../images/socialicons/instagram.svg'
-import linkedin from '../images/socialicons/linkedin.svg'
-import Pinterest from '../images/socialicons/pinterest.svg'
-import Twitter from '../images/socialicons/twitter.svg'
-import Youtube from '../images/socialicons/youtube.svg'
 import ProfileImg from '../ProfileImg/Profile'
 import ProfileCoverImg from '../ProfileCoverImg/ProfileCoverImg';
 import { useState, useEffect } from 'react';

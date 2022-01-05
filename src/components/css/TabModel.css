@@ -3,8 +3,6 @@
     margin: 0;
     padding: 0; 
   }
-
-  
   
   .tabs-nav li , .tabs-navs li {
     display: inline-block;
@@ -21,11 +19,12 @@
     padding: 15px;
     font-weight: 300!important;
     color: rgb(0, 0, 0);
+
   }
 
   ul.TabModelProfile button, ul.TabModelProfile button , span.TabModelProfile button, span.EditProfile button{
     display: block;
-    padding: 15px;
+    padding: 10px 15px;
     font-weight: 300!important;
     color: rgb(0, 0, 0);
     background: #00ffff00;
@@ -87,9 +86,9 @@
   section.tabs-content {
     padding-top: 5px;
 }
- 
+
   /* Hide all but first content div */
-  
+
   .tabs-content div.TabsContent:not(:first-child),   .tabs-contents div.TabsContents:not(:first-child)  {
     display: none;
   }
@@ -105,7 +104,6 @@ header.tabs-navs{
     
 
   /*  */
-
 
   table { 
     width: 100%;  
@@ -346,4 +344,4 @@ section.tabs-content section.Myjobs {
     .Mobile_popup{
         display: none !important;
     }
-    }
+  }

@@ -31,7 +31,7 @@
   .upload .image-uploader-wrapper .display-box .icon-text-box .upload-icon { 
     transform: translateY(0px);
     transition: transform 0.2s ease-in-out;
-  } 
+  }
   .upload .image-uploader-wrapper .display-box .icon-text-box .upload-button,
   .image-uploader-wrapper .display-box .icon-text-box .cancel-upload-button {
     margin: 0 10px;

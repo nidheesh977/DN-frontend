@@ -40,7 +40,7 @@ class Header extends React.Component {
       return (
         <div>
           {isDesktop ? (
-            <Navbar auth ={this.props.auth}  />
+            <Navbar auth ={this.props.auth}/>
           ) : (
             <Sidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
           )}

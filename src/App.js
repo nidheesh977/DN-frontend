@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Switch } from "react-router-dom";
+import { HashRouter, Switch, Route } from "react-router-dom";
 import Header from "./components/header/Header";
 import Home from "./components/website/Home";
 import Company from "./components/website/Company";
@@ -41,6 +41,9 @@ import JobAppliedDroners from "../src/components/website/JobAppliedDroners";
 // import Alert from "../src/components/alert/Alert.component";
 import Role from "../src/components/_helpers/role";
 import { authenticationService } from "../src/middleware/auth";
+import ServiceCenters from "./components/website/serviceCenters";
+import Footer from "./components/footer/footer";
+
 
 class App extends React.Component {
   constructor(props) {
@@ -183,9 +186,11 @@ class App extends React.Component {
               roles={[Role.Admin]}
               component={PostEdit}
             />
+            <PublicRoute component = {ServiceCenters} path = "/service_centers" exact />
             <PrivateRoute exact path="*" component={NoPageFound} />
           </Switch>
         </UserContext.Provider>
+        <Footer />
       </HashRouter>
     );
   }

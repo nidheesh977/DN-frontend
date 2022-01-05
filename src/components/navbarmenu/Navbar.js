@@ -4,17 +4,17 @@ import '../Navbar.css';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { makeStyles } from '@material-ui/core/styles';
-import All from '../website/All.module.css'
+import All from '../website/All.module.css';
 import Button from '@material-ui/core/Button'; 
-import Logo from '../images/Logo.png'
-import ProfileIcon from '../images/person.svg'
-import UploadFile from '../images/UploadFile.svg'
-import SearchIcon from '../images/search.png'
+import Logo from '../images/Logo.png';
+import ProfileIcon from '../images/person.svg';
+import UploadFile from '../images/UploadFile.svg';
+import SearchIcon from '../images/search.png';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Joyride from "react-joyride";
-import getSteps from '../website/getSteps'
-import axios from 'axios'
+import getSteps from '../website/getSteps';
+import axios from 'axios';
 import { render } from '@testing-library/react'; 
 import $ from 'jquery'
 import { logout, isLogin ,login ,getRefreshToken } from '../../middleware/auth'; 
@@ -91,26 +91,66 @@ function Navbar(props) {
 }
  
   useEffect(() => {   
-  
-    userService.User().then(res => {
-        Setuser(res.data); 
-        setLoading(false); 
-      })  
 
-      userService.Profile().then(res => { 
+    userService.User().then(res => {
+      setLoading(false);
+        try{
+          if (res.data.id >= 0){
+            Setuser(res.data);
+          }
+          else{
+            try{
+              axios.post("https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",{ header: {"Refreshtoken": localStorage.getItem("refresh_token")}})
+              .then(res => {
+                if (res.data.token_type === "Bearer"){
+                  localStorage.setItem("access_token", res.data.access_token)
+                  localStorage.setItem("refresh_token", res.data.refresh_token)
+                  window.location.reload()
+                }
+                else{
+                  localStorage.clear()
+                }
+              })
+            }
+            catch{
+              localStorage.clear()
+            }
+          }
+        }
+        catch{
+          try{
+            axios.post("https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",{ header: {"Refreshtoken": localStorage.getItem("refresh_token")}})
+            .then(res => {
+              if (res.data.token_type === "Bearer"){
+                localStorage.setItem("access_token", res.data.access_token)
+                localStorage.setItem("refresh_token", res.data.refresh_token)
+                window.location.reload()
+              }
+              else{
+                localStorage.clear()
+              }
+            })
+          }
+          catch{
+            localStorage.clear()
+          }
+        }
+      })
+
+      userService.Profile().then(res => {
         setLoading(false);
         if (res.data.profile != "https://demo-nexevo.in/haj/auth-app/public/uploads/profile"){
           setProfileImage(res.data.profile);
         }else{
           setProfileImage(ProfileIcon)
         }
-      })    
+      })
   }, []);
 
-   
-    
+
+
   render()
-  {  
+  {
 
 
     return (
@@ -148,7 +188,7 @@ function Navbar(props) {
               <li className='nav-item'>     Post Jobs  </li> 
             </Link>
              }
-              
+
               <Link to='/HiringDorners'  className='nav-links' id="fouth" onClick={closeMobileMenu}>
                 <li className='nav-item'>  Jobs </li>
               </Link> 
@@ -220,7 +260,7 @@ function Navbar(props) {
                   </MenuItem>
               </Menu>
                 </li>
-               } 
+               }
                 {currentUser[0] == '1' &&   
                     <li className='nav-item'> 
                         <Link to='/UploadFile' className="nav-links">  
@@ -233,10 +273,8 @@ function Navbar(props) {
         </nav>
         </section>
       </>
-    );   
-  }  
+    );
+  }
 }
 
 export default Navbar;
-
-

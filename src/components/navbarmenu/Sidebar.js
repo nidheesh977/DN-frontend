@@ -124,12 +124,19 @@ export default function PersistentDrawerLeft(props) {
 
     axios.get('https://demo-nexevo.in/haj/auth-app/public/api/auth/user', config)
       .then(res => {
-        Setuser(res.data);
-      },
-        err => {
+        try{
+          if(res.data.id>=0){
+            Setuser(res.data);
+          }
+          else{
+            localStorage.clear()
+          }
         }
-      )
-  }, []);
+        catch{
+          localStorage.clear()
+        }
+      })
+    }, []);
 
   return (
     <div className={classes.root}>
