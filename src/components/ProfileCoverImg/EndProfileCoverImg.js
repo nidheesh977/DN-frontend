@@ -7,7 +7,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Slider from "material-ui/Slider";
 import All from '../website/All.module.css'
 import CoverImg from '../images/cover-img.svg' 
-import CoverEdit from '../images/cover-edit.svg' 
+import CoverEdit from '../images/cover-edit.svg'
 import Box from '@material-ui/core/Box'; 
 import axios from 'axios'
 
@@ -22,12 +22,11 @@ class EndProfileCoverImg extends React.Component {
     this.state = {
       cropperOpen: false,
       img: null,
-      zoom: 2, 
-      croppedImg: 
-        "https://www.symbiosis-pharma.com/wp-content/uploads/2015/10/placeholder-person-490x490.jpg",
+      zoom: 2,
+      croppedImg:
+        "https://www.mediamatic.net/image/2016/12/14/blog_commenting_profile_logo.jpg%28mediaclass-landscape-large.1df3d6f438769113d26ed8577bc84d61afea2a7e%29.jpg",
         profile: [],
         user: [],
-        
     };
   }
   componentDidMount()
@@ -95,7 +94,7 @@ class EndProfileCoverImg extends React.Component {
         .catch(error => { 
         });
     }
-    
+
   }
   handleCancel() {
     let state = this.state;
@@ -104,7 +103,7 @@ class EndProfileCoverImg extends React.Component {
   }
   setEditorRef(editor) {
     this.editor = editor;
-  } 
+  }
 
   render() {
     return (
@@ -113,7 +112,7 @@ class EndProfileCoverImg extends React.Component {
          <Box position="relative">
          <Avatar src={this.state.croppedImg} className={All.BackgroundcoverImg} size={100} />
           <figure  className={All.coverEditIcon} >
-            <img src={CoverEdit} />  
+            <img src={CoverEdit} />
             <div class="bottom-left"><p className={ `${All.FSize_15} ${All.TextWhite}`}>Change Your Cover Pic</p></div>
           </figure> 
          <Avatar src={CoverImg} className={All.overlayBackgroundCoverImg} />

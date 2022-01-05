@@ -78,7 +78,7 @@ export default class TabModel extends React.Component {
                       {user.id == this.props.id ? <>
                         <li className='select_tab' id = "select_tab6"><button data-id="tab6" data-pluginid="tab6" class="tabs deactive">My Store</button></li>
                         <li className='select_tab' id = "select_tab7"><button data-id="tab7" data-pluginid="tab7" class="tabs deactive"> My Jobs</button></li></> : <> </> } 
-                     </span>
+                      </span>
 
                   <span className={All.tabsmodel_li}>
                       <li className='select_tab' id = "select_tab8"><button data-id="tab8" data-pluginid="tab8" class="tabs deactive">Followers</button></li>

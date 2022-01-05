@@ -54,6 +54,7 @@ function Navbar(props) {
     localStorage.clear(); 
     logout();
     Setuserlogin(false) 
+    
   } 
 
 

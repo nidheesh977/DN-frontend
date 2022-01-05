@@ -41,7 +41,7 @@ import JobAppliedDroners from "../src/components/website/JobAppliedDroners";
 // import Alert from "../src/components/alert/Alert.component";
 import Role from "../src/components/_helpers/role";
 import { authenticationService } from "../src/middleware/auth";
-import ServiceCenters from "./components/website/serviceCenters";
+import ServiceCenters from "./components/website/serviceCenterList";
 import Footer from "./components/footer/footer";
 
 

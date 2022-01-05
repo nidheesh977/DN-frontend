@@ -275,7 +275,7 @@ class Hiring extends React.Component {
                                                     marginRight: '15px'
                                                   }}
                                                 />
-                                                :<img className="alignleft" src={"https://www.symbiosis-pharma.com/wp-content/uploads/2015/10/placeholder-person-490x490.jpg"}
+                                                :<img className="alignleft" src={"https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"}
                                                 alt="Image Sample 1" style={{
                                                   display: "inline",
                                                   float: "left",

@@ -2,17 +2,10 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import { Container, Row, Col } from "react-grid-system";
 import All from "../website/All.module.css";
-
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import DroneImg from "../images/UploadFile.svg";
 import TabModel from "../tabs/TabModel";
-import Facebook from "../images/socialicons/facebook.svg";
-import Instagram from "../images/socialicons/instagram.svg";
-import linkedin from "../images/socialicons/linkedin.svg";
-import Pinterest from "../images/socialicons/pinterest.svg";
-import Twitter from "../images/socialicons/twitter.svg";
-import Youtube from "../images/socialicons/youtube.svg";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
@@ -126,7 +119,7 @@ export default function Profile() {
     setOpen(true);
   };
 
-  return isBusy === true ? (
+  return (
     <>
       <Helmet>
         <title>Profile</title>
@@ -321,7 +314,5 @@ export default function Profile() {
         </Box>
       </Dialog>
     </>
-  ) : (
-    ""
-  );
+  )
 }

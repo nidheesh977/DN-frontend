@@ -36,8 +36,8 @@ class ProfileCoverImg extends React.Component {
       cropperOpen: false,
       img: null,
       zoom: 2,
-      defaultCoverPic: "https://www.symbiosis-pharma.com/wp-content/uploads/2015/10/placeholder-person-490x490.jpg",
-      croppedImg: "https://www.symbiosis-pharma.com/wp-content/uploads/2015/10/placeholder-person-490x490.jpg",
+      defaultCoverPic: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
+      croppedImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
       profile: [],
       user: [],
       open: true,
@@ -62,7 +62,7 @@ class ProfileCoverImg extends React.Component {
       }
       else {
         this.setState({
-          croppedImg: "https://www.symbiosis-pharma.com/wp-content/uploads/2015/10/placeholder-person-490x490.jpg"
+          croppedImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"
         })
       }
       // console.log(this.state.profile.profile);
@@ -140,7 +140,7 @@ class ProfileCoverImg extends React.Component {
                 : <Avatar src={this.state.defaultCoverPic} className={All.BackgroundcoverImg} size={100} />
               }
               <figure className={All.coverEditIcon} >
-                {CoverEdit ? <img src={CoverEdit} /> : <img src={this.state.croppedImgerEdit} />}
+              <img src={CoverEdit} />
                 <div class="bottom-left"><p className={`${All.FSize_15} ${All.TextWhite}`}>Change Your Cover Pic</p></div>
               </figure>
               <Avatar src={CoverImg} className={All.overlayBackgroundCoverImg} />
