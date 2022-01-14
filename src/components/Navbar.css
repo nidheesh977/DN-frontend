@@ -1,5 +1,6 @@
 .navbar {
   background: linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%);
+  /* background: black; */
   height: 25px;
   display: flex;
   justify-content: left;
@@ -140,9 +141,7 @@ ul.MuiList-root.MuiList-padding.Signout {
 .react-joyride__tooltip button[aria-label="Close"] {
   padding: 8px !important;
   visibility: hidden;
-}  
-
-
+}
 
 .react-joyride__tooltip button[aria-label="Close"]:after {
   content: "Next";
@@ -227,7 +226,7 @@ ul.MuiList-root.MuiList-padding.Signout {
 }
 
 .nav-links {
-  color: white;
+  color: white !important;
   text-decoration: none;
   padding: 0rem 20px;
 }
@@ -686,17 +685,6 @@ button.swal-button.swal-button--confirm{
 
  }
 
-
-
-
-
-
-
-
-
-
-
-
  .header {
   background-color: #0097e6;
   width: 100%;
@@ -860,4 +848,29 @@ button.swal-button.swal-button--confirm{
     -webkit-transform: scaleY(0);
     transform: scaleY(0);
   }
+}
+
+.my_account_btn{
+  background: transparent linear-gradient(180deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
+  border: 1px solid #00E7FC;
+  color: #000 !important;
+  font-style: muli-light;
+  border-radius: 20px;
+  padding: 4px 7px;
+}
+
+.my_account_btn:hover {
+  color: #000 !important;
+}
+
+.nav_upload_img{
+  background-color: #4FFEA3 !important;
+  border-radius: 20px !important;
+  border: 1px solid #4FFEA3 !important;
+}
+
+.nav-links2 {
+  color: #4FFEA3 !important;
+  text-decoration: none;
+  padding: 0rem 20px;
 }

@@ -30,6 +30,10 @@ import All from '../website/All.module.css'
 import { logout, isLogin, login, getRefreshToken } from '../../middleware/auth';
 import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
 import BusinessIcon from '@material-ui/icons/Business';
+import UploadFileIcon from '@material-ui/icons/CloudUpload';
+import JobIcon from '@material-ui/icons/Work';
+
+
 
 const drawerWidth = 240;
 
@@ -188,25 +192,49 @@ export default function PersistentDrawerLeft(props) {
       >
 
         <div className={classes.drawerHeader}>
-          <Link to='/UpgradeProVersion' className='nav-item'>
-            Upgrade Pro Version
-          </Link>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <CloseIcon /> : <ChevronRightIcon />}
           </IconButton>
         </div>
         <Divider />
 
-        <Link to="/Searchresult" onClick={handleDrawerClose}>
+        <Link to="">
           <List>
-            <ListItem button key={'Search'}>
+            <ListItem button>
               <ListItemIcon><SearchIcon /></ListItemIcon>
               <ListItemText primary={'Search'} />
             </ListItem>
           </List>
         </Link>
 
-        {user.role_id == '2' &&
+        <Link to="">
+          <List>
+            <ListItem button>
+              <ListItemIcon><JobIcon /></ListItemIcon>
+              <ListItemText primary={'Apply jobs'} />
+            </ListItem>
+          </List>
+        </Link>
+
+        <Link to="">
+          <List>
+            <ListItem button>
+              <ListItemIcon><JobIcon /></ListItemIcon>
+              <ListItemText primary={'Hire Pilots'} />
+            </ListItem>
+          </List>
+        </Link>
+
+        <Link to="">
+          <List>
+            <ListItem button>
+              <ListItemIcon><SearchIcon /></ListItemIcon>
+              <ListItemText primary={'Find Service Centers'} />
+            </ListItem>
+          </List>
+        </Link>
+
+        {/* {user.role_id == '2' &&
           <Link to="/OfficeProfile" onClick={handleDrawerClose}>
             <List>
                 <ListItem button key={user.company_name}>
@@ -246,63 +274,62 @@ export default function PersistentDrawerLeft(props) {
               </ListItem>
             ))}
           </List>
-        </Link>
+        </Link> */}
 
         {userlogin === false &&
-          <Link to="/Login" onClick={handleDrawerClose}>
-            <List>
-              {['Login'].map((text, index) => (
-                <ListItem button key={text}>
-                  <ListItemIcon>{index % 2 === 0 ? <ExitToAppIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItem>
-              ))}
-            </List>
-          </Link>
-
-        }
-
-        {userlogin === false &&
-          <Link to="/User" onClick={handleDrawerClose}>
-            <List>
-              {['User Register'].map((text, index) => (
-                <ListItem button key={text}>
-                  <ListItemIcon>{index % 2 === 0 ? <PersonIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItem>
-              ))}
-            </List>
-          </Link>
-        }
-
-        {userlogin === false &&
-          <Link to="/Company" onClick={handleDrawerClose}>
-            <List>
-              {['Company Register'].map((text, index) => (
-                <ListItem button key={text}>
-                  <ListItemIcon>{index % 2 === 0 ? <BusinessIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItem>
-              ))}
-            </List>
-          </Link>
+          <>
+            <Link to="/login" onClick={handleDrawerClose}>
+              <List>
+                  <ListItem button>
+                    <ListItemIcon><ExitToAppIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={"Login"} />
+                  </ListItem>
+              </List>
+            </Link>
+            <Link to="/sign_up" onClick={handleDrawerClose}>
+              <List>
+                  <ListItem button>
+                    <ListItemIcon><PersonIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={'Sign up'} />
+                  </ListItem>
+              </List>
+            </Link>
+          </>
         }
 
         {userlogin === true &&
-          <Link onClick={() => handleLogout()} to="/">
-            <List className="Signout">
-              {['Sign Out'].map((text, index) => (
-                <ListItem button key={text}>
-                  <ListItemIcon>{index % 2 === 0 ? <ExitToAppIcon /> : <ExitToAppIcon />}</ListItemIcon>
-                  <ListItemText primary={text} />
+          <>
+            <Link to="" onClick={handleDrawerClose}>
+              <List>
+                  <ListItem button>
+                    <ListItemIcon><PersonIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={"My account"} />
+                  </ListItem>
+              </List>
+            </Link>
+            
+            <Link to="">
+              <List className="Signout">
+                <ListItem button key={'Sign Out'}>
+                  <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                  <ListItemText primary={'Sign Out'} />
                 </ListItem>
-              ))}
-            </List>
-          </Link>
+              </List>
+            </Link>
+          </>
         }
+        <Link to="" onClick={handleDrawerClose}>
+          <List>
+              <ListItem button>
+                <ListItemIcon><UploadFileIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Upload file"} />
+              </ListItem>
+          </List>
+        </Link>
 
       </Drawer>
 

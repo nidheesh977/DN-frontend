@@ -3,14 +3,13 @@ import { HashRouter, Switch, Route } from "react-router-dom";
 import Header from "./components/header/Header";
 import Home from "./components/website/Home";
 import Company from "./components/website/Company";
-import User from "./components/website/User";
+import SignUp from "./components/website/SignUp";
 import Login from "./components/website/Login";
 import Profile from "./components/website/Profile";
 import ProfileEdit from "./components/website/ProfileEdit";
 import TermsCondition from "./components/website/TermsCondition";
 import UpgradeProVersion from "./components/website/UpgradeProVersion ";
 import GoPremium from "./components/website/GoPremium";
-import UploadFile from "./components/website/UploadFile";
 import ViewJob from "./components/website/ViewJob";
 import Imageview from "./components/website/Imageview";
 import HiringDroners from "./components/website/GetJobs";
@@ -43,6 +42,8 @@ import Role from "../src/components/_helpers/role";
 import { authenticationService } from "../src/middleware/auth";
 import ServiceCenters from "./components/website/serviceCenterList";
 import Footer from "./components/footer/footer";
+import UserCategory from "./components/website/UserCategory";
+import UploadFiles from "./components/website/UploadFiles";
 
 
 class App extends React.Component {
@@ -86,8 +87,14 @@ class App extends React.Component {
             />
             <PublicRoute
               restricted={true}
-              path="/User"
-              component={User}
+              path="/sign_up"
+              component={SignUp}
+              exact
+            />
+            <PublicRoute
+              restricted={true}
+              path="/select_category"
+              component={UserCategory}
               exact
             />
             <PublicRoute
@@ -132,11 +139,11 @@ class App extends React.Component {
               component={UpgradeProVersion}
             />
             <PrivateRoute exact path="/GoPremium" component={GoPremium} />
-            <UserRoute
-              exact
+            <PublicRoute
+              restricted={true}
               path="/UploadFile"
-              roles={[Role.Admin]}
-              component={UploadFile}
+              component={UploadFiles}
+              exact
             />
             <PrivateRoute exact path={"/ViewJob/:id"} component={ViewJob} />
             <PrivateRoute
@@ -190,7 +197,7 @@ class App extends React.Component {
             <PrivateRoute exact path="*" component={NoPageFound} />
           </Switch>
         </UserContext.Provider>
-        <Footer />
+        <Footer/>
       </HashRouter>
     );
   }

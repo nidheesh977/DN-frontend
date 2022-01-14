@@ -24,7 +24,7 @@ class EndProfileCoverImg extends React.Component {
       img: null,
       zoom: 2,
       croppedImg:
-        "https://www.mediamatic.net/image/2016/12/14/blog_commenting_profile_logo.jpg%28mediaclass-landscape-large.1df3d6f438769113d26ed8577bc84d61afea2a7e%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
         profile: [],
         user: [],
     };

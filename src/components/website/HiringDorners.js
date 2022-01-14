@@ -344,7 +344,7 @@ function HiringTitle() {
     <>
 
       <Helmet>
-        <title>HiringDorners</title>
+        <title>Droners jobs</title>
         <meta charSet="utf-8" />
         <meta name="description" content="Nested component" />
       </Helmet>

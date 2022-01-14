@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Helmet } from "react-helmet";
-import { Container, Row, Col } from 'react-grid-system';
+import { Container, Row, Col, Hidden } from 'react-grid-system';
 import All from '../website/All.module.css'
 import 'react-phone-number-input/style.css'
 import Button from '@material-ui/core/Button';
@@ -8,7 +8,7 @@ import Box from '@material-ui/core/Box';
 import { useForm } from "react-hook-form";
 import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios'
-import DronePerson from '../images/drone-person.svg'
+import DronePerson from '../images/drone_person_new.png'
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import DroneImg from '../images/drone-img.svg'
@@ -140,7 +140,7 @@ const Login = (props) => {
       } */}
 
       <Snackbar id="myDIV" className={All.DisplayNone} open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="success">Success!</Alert></Snackbar>
-      {errors.password && errors.password.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a password feild!</Alert></Snackbar>}
+      {errors.password && errors.password.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a required feild!</Alert></Snackbar>}
       {errors.email && errors.email.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
       {errors.email && errors.email.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
 
@@ -148,7 +148,9 @@ const Login = (props) => {
         <Container className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}>
           <Row>
             <Col lg={6} className={All.DronePerson}>
-              <img src={DronePerson} />
+              <Hidden xs sm md>
+                <img src={DronePerson} />
+              </Hidden>
             </Col>
             <Col lg={6} className={All.Login}>
               <Box pb={3}>
@@ -167,7 +169,7 @@ const Login = (props) => {
                   </div>
                   <div className={All.FormGroup}>
                     <Link to="/ForgotPassword" className={All.Black}>
-                      <Box className={`${All.Width_74} ${All.Width_100}`} textAlign="right" ><span textAlign="right" className={`${All.FSize_12} ${All.MuliLight}`}>Forgot Password</span></Box>
+                      <Box className={`${All.Width_74}`} style = {{textAlign: "right", width: "100% !important"}}><span className={`${All.FSize_12} ${All.MuliLight}`}>Forgot Password</span></Box>
                     </Link>
                   </div>
 
@@ -178,7 +180,7 @@ const Login = (props) => {
                       <Loader /> Loading</Button>
                   </>) : (<>
                     <Button variant="contained" color="default" type="submit" onClick={handleClick} className={All.BtnStyle_5}>
-                      <img style={{ paddingRight: 10 }} src={DroneImg} /> submit</Button>
+                      <img style={{ paddingRight: 10 }} src={DroneImg} /> Submit</Button>
                   </>)}
 
 
@@ -189,6 +191,11 @@ const Login = (props) => {
                 </div>
 
               </form>
+            </Col>
+            <Col lg={6}>
+              <Hidden lg xl xxl>
+                <img src={DronePerson} width={"80%"}/>
+              </Hidden>
             </Col>
           </Row>
         </Container>

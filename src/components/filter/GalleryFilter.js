@@ -24,6 +24,9 @@ import ImageIcon from "@material-ui/icons/Image";
 import PanoramaIcon from "@material-ui/icons/Panorama";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import { withStyles } from "@material-ui/core/styles";
+import "../css/GaleryFilter.css"
+import DropDownPng from '../images/s_c_dropdown2.png'
+import { Dropdown } from "materialize-css";
 
 const API_URL = "https://demo-nexevo.in/haj/auth-app/public/api/auth";
 
@@ -186,7 +189,7 @@ class GalleryFilter extends React.Component {
     let timeframe = $("#timeframe").val();
 
 
-    
+
     let keywords = $("#keywords").val();
     const config2 = {
       headers: {
@@ -295,7 +298,7 @@ class GalleryFilter extends React.Component {
   handleScroll = () => {
     try {
       const wrappedElement = document.getElementById('main_div');
-      if (wrappedElement.getBoundingClientRect().bottom <= window.innerHeight+1) {
+      if (wrappedElement.getBoundingClientRect().bottom <= window.innerHeight + 1) {
         if (this.state.visible < this.state.listing.length) {
           this.loadMore()
         }
@@ -347,6 +350,18 @@ class GalleryFilter extends React.Component {
     );
   }
 
+  dropdown_open = (id) => {
+    document.getElementById("g_f_filter" + id).classList.add("g_f_filter_selected")
+  }
+
+  dropdown_close = (id) => {
+    document.getElementById("g_f_filter" + id).classList.remove("g_f_filter_selected")
+  }
+
+  dropdown_select = (id) => {
+    document.getElementById("g_f_filter" + id).classList.remove("g_f_filter_selected")
+  }
+
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
   }
@@ -364,6 +379,9 @@ class GalleryFilter extends React.Component {
 
     const { classes } = this.props;
     var listing_length = this.state.listing_length
+    var dropdown_open = this.dropdown_open
+    var dropdown_close = this.dropdown_close
+    var dropdown_select = this.dropdown_select
 
     return (
       <>
@@ -415,9 +433,6 @@ class GalleryFilter extends React.Component {
                       id="type"
                       defaultValue={"1"}
                     >
-                      <option value="" disabled>
-                        All
-                      </option>
                       <option value="1">
                         All
                       </option>
@@ -478,41 +493,44 @@ class GalleryFilter extends React.Component {
                   </Col>
                 </Row>
                 <div id="FilterDropdowns" style={{ display: "none" }}>
-                  <Row className="FilterDropdown">
-                    <Col lg={4}>
-                      <select
-                        className="dropdown dropdown__text"
-                        id="timeframe"
-                        onChange={this.handleChangesTimeframe}
-                        defaultValue={""}
-                      >
-                        {/* {this.state.times.map(function(data, key){  return (
-                      <option  value={data}>{data}</option> )
-                    })} */}
-                        <option value="" disabled>
-                          Time Frame
-                        </option>
-                        <option value="today">today</option>
-                        <option value="week">week</option>
-                        <option value="month">month</option>
-                        <option value="ever">ever</option>
+                  {/* <Row  gutterWidth={20}>
+                    <Col lg = {3}><div className="g_f_filter" onClick = {() => dropdown(1)}>Select Country <span className='g_f_dropdown_icon'><img src={DropDownPng} alt="" height={"14px"} id="g_f_dropdown_icon1" /></span></div></Col>
+                    <Col lg = {3}><div className="g_f_filter" onClick = {() => dropdown(2)}>Select City <span className='g_f_dropdown_icon'><img src={DropDownPng} alt="" height={"14px"} id="g_f_dropdown_icon2" /></span></div></Col>
+                    <Col lg = {3}><div className="g_f_filter" onClick = {() => dropdown(3)}>Select Industry <span className='g_f_dropdown_icon'><img src={DropDownPng} alt="" height={"14px"} id="g_f_dropdown_icon3" /></span></div></Col>
+                    <Col ><button className="g_f_btn1" style = {{margin: "10px 0", borderRadius: "20px !important"}}>Search</button></Col>
+                  </Row> */}
+                  <Row gutterWidth={20}>
+                    <Col xxl = {3} xl = {3} lg = {3} md = {6} sm = {6} xs = {12}>
+                      <select className="g_f_filter" id="g_f_filter1" onFocus={() => dropdown_open(1)} onBlur={() => dropdown_close(1)} onChange={() => dropdown_select(1)}>
+                        <option disabled selected>Select Country</option>
+                        <option>India</option>
+                        <option>China</option>
+                        <option>Russia</option>
+                      </select>
+                      {/* <select className="g_f_filter">
+                        <option>Hot Dog, Fries and a Soda</option>
+                        <option>Burger, Shake and a Smile</option>
+                        <option>Sugar, Spice and all things nice</option>
+                      </select> */}
+
+                    </Col>
+                    <Col xxl = {3} xl = {3} lg = {3} md = {6} sm = {6} xs = {12}>
+                      <select className="g_f_filter" id="g_f_filter2" onFocus={() => dropdown_open(2)} onBlur={() => dropdown_close(2)} onChange={() => dropdown_select(2)}>
+                        <option disabled selected>Select City</option>
+                        <option>Bangalore</option>
+                        <option>Chennai</option>
+                        <option>Mumbai</option>
                       </select>
                     </Col>
-                    <Col lg={4}></Col>
-                    <Col lg={4}>
-                      <select
-                        className="dropdown dropdown__text"
-                        id="keywords"
-                        onChange={this.handleChangesTimeframe}
-                      >
-                        <option value="" selected disabled>
-                          Caption
-                        </option>
-                        {posttitle.map((title) => (
-                          <option value={title.caption}>{title.caption}</option>
-                        ))}
+                    <Col xxl = {3} xl = {3} lg = {3} md = {6} sm = {6} xs = {12}>
+                      <select className="g_f_filter" id="g_f_filter3" onFocus={() => dropdown_open(3)} onBlur={() => dropdown_close(3)} onChange={() => dropdown_select(3)}>
+                        <option disabled selected>Select Industry</option>
+                        <option>Nexevo</option>
+                        <option>Nexevo technologies</option>
+                        <option>Nexevo tech</option>
                       </select>
                     </Col>
+                    <Col xxl = {3} xl = {3} lg = {3} md = {6} sm = {6} xs = {12}><button className="g_f_btn1" style={{ margin: "10px 0", borderRadius: "20px !important" }}>Search</button></Col>
                   </Row>
                 </div>
 

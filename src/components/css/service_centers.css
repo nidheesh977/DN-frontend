@@ -92,6 +92,7 @@
 }
 
 .service_center_rating_md_xl{
+  cursor: default;
   float: right;
   margin-bottom: 10px;
 }
@@ -109,10 +110,8 @@
 }
 
 .rating_request_xs_sm{
+  cursor: default;
   width: fit-content;
-}
-
-.rating_request_xs_sm{
   margin-left: 75px
 }
 
@@ -162,6 +161,10 @@
   overflow: auto;
 }
 
+.s_c_dropdown-content::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
+
 .s_c_dropdown-content li {
   color: black;
   padding: 12px 16px;
@@ -175,3 +178,10 @@
 .s_c_dropdown_content_selected {
   display: block;
 }
+
+/* #s_c_list_title{
+  position: sticky;
+  top: 75px;
+  z-index: 3;
+  background-color: rgb(243, 243, 243);
+} */
