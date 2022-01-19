@@ -99,6 +99,7 @@
     "react-search-box": "^2.0.2",
     "react-select-country-list": "^2.2.3",
     "react-select-plus": "^1.0.0-rc.3.patch12",
+    "react-share": "^4.4.0",
     "react-simple-image-slider": "^2.0.1",
     "react-simple-infinite-scroll": "0.0.1",
     "react-step-builder": "^2.0.5",

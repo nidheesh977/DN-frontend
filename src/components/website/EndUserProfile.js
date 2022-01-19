@@ -457,8 +457,6 @@ export default function EndUserProfile(props) {
           <DialogContent className={All.PopupBody}>
             <Box>
               <textarea
-                col-6
-                type="email"
                 name="message"
                 className={`${All.FormControl} ${All.Popupmodel}`}
                 ref={register({ required: true })}

@@ -275,6 +275,7 @@ import { Helmet } from "react-helmet";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import axios from 'axios';
 
+
 class ServiceCenters extends Component {
   constructor(props) {
     super(props);
@@ -288,7 +289,8 @@ class ServiceCenters extends Component {
       state_list: [],
       city_list: [],
       service_center_list: [{ name: "Nexevo Technologies1", bio: "Nexevo Technologies is a professional drone service center1", workingHours: "9.30AM to 7.00PM", address: "#2 MH-155, 1st Floor, 2nd H Main, Opp. Cuppa Cafe, East of NGEF, Kasthui Nagar, Bangalore - 560043", rating: 1 }, { name: "Nexevo Technologies2", bio: "Nexevo Technologies is a professional drone service center2", workingHours: "9.30AM to 8.00PM", address: "#2 MH-155, 1st Floor, 2nd H Main, Opp. Cuppa Cafe, East of NGEF, Kasthui Nagar, Bangalore - 560044", rating: 2 }, { name: "Nexevo Technologies3", bio: "Nexevo Technologies is a professional drone service center3", workingHours: "9.30AM to 9.00PM", address: "#2 MH-155, 1st Floor, 2nd H Main, Opp. Cuppa Cafe, East of NGEF, Kasthui Nagar, Bangalore - 560045", rating: 3 }, { name: "Nexevo Technologies4", bio: "Nexevo Technologies is a professional drone service center4", workingHours: "9.30AM to 10.00PM", address: "#2 MH-155, 1st Floor, 2nd H Main, Opp. Cuppa Cafe, East of NGEF, Kasthui Nagar, Bangalore - 560046", rating: 4 }, { name: "Nexevo Technologies5", bio: "Nexevo Technologies is a professional drone service center5", workingHours: "9.30AM to 11.00PM", address: "#2 MH-155, 1st Floor, 2nd H Main, Opp. Cuppa Cafe, East of NGEF, Kasthui Nagar, Bangalore - 560047", rating: 5 },],
-      loading: true
+      loading: true,
+      open: true,
     };
   }
 
@@ -373,6 +375,7 @@ class ServiceCenters extends Component {
   }
 
   render() {
+    console.log(window.location.href)
     const dropDown = this.dropDown
     const selectCountry = this.selectCountry
     const selectState = this.selectState

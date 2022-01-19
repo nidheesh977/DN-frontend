@@ -136,6 +136,7 @@
   border-radius: 15px;
   margin: 5px;
   display: inline-block;
+  cursor: pointer;
 }
 
 #u_f_btn{
@@ -201,4 +202,12 @@
 
 .u_f_selected_file{
   border: 2px solid #73F8AF;
+}
+
+#u_f_preview_row{
+  width: 100%;
+}
+
+.u_f_file_usage_selected{
+  background-color: rgb(184, 184, 184);
 }

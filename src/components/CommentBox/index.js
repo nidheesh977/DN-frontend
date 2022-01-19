@@ -171,7 +171,7 @@ class CommentBox extends React.Component {
                     type="submit"
                     className={All.BtnStyle_5}
                   >
-                    Post Comment
+                    Post your comment
                   </Button>
                 </>
               }
