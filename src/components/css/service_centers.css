@@ -42,11 +42,13 @@
   box-shadow: none !important;
   text-transform: none !important;
   outline: none;
-  padding: 10px 25px;
+  padding: 5px 25px;
   font-family: muli-light;
   font-size: 15px;
   cursor: pointer;
-  float: right;
+  margin-left: 75px;
+  float: left;
+  margin-right: 20px;
 }
 
 #service_centers button:hover{
@@ -98,7 +100,7 @@
 }
 
 .star_checked{
-  color: cyan;
+  color: #FFCC00;
   font-size: 20px !important;
   padding: 2px;
 }
@@ -185,3 +187,25 @@
   z-index: 3;
   background-color: rgb(243, 243, 243);
 } */
+
+.s_c_review_link{
+  font-size: 12px !important;
+}
+
+.rating_request_md_xl{
+  float: right;
+  text-align: center;
+  padding: 5px;
+  text-decoration: underline;
+}
+
+.s_c_other_details_phone{
+  color: #10B2C0 !important;
+}
+
+.s_c_share{
+  border-radius: 0% !important;
+  margin-left: auto;
+  height: 25px;
+  width: 25px;
+}
