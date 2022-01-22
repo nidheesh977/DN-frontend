@@ -281,12 +281,6 @@ export default class ViewJob extends React.Component {
               className={All.PopupHeader}
             >
               <Box display="flex" pt={6}>
-                <Box pr={2}>
-                  <img
-                    style={{ width: "75px", height: "75px", borderRadius: "50%" }}
-                    src={user_profile}
-                  />
-                </Box>
                 <Box mt={2}>
                   <h3 className={All.Bold} style={{textAlign: "center"}}>Share</h3>
                 </Box>

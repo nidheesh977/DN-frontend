@@ -51,6 +51,27 @@
   margin-right: 20px;
 }
 
+.s_c_button3{
+  color: #041D1F !important;
+  background: transparent linear-gradient(121deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
+  border-radius: 25px !important;
+  font-weight: 900 !important;
+  border: 1px solid #00fcef;
+  box-shadow: none !important;
+  text-transform: none !important;
+  outline: none;
+  padding: 5px 25px;
+  font-family: muli-light;
+  font-size: 15px;
+  cursor: pointer;
+  float: left;
+  margin-right: 20px;
+}
+
+.s_c_button3:hover{
+  background: white;
+}
+
 #service_centers button:hover{
   background: white;
 }
@@ -58,12 +79,11 @@
 .s_c_list_title{
   font-size: 20px;
   font-weight: 900;
-  
 }
 
 .s_c_location{
   text-align: right;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 900 ;
   padding-top: 10px;
   width: fit-content;
@@ -91,6 +111,7 @@
   line-height: 30px;
   font-weight: 1000;
   padding-top: 10px;
+  cursor: pointer;
 }
 
 .service_center_rating_md_xl{
@@ -129,15 +150,16 @@
 
 .s_c_other_details_title{
   font-weight: 900;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 25px;
   margin-left: 75px;
+  margin-top: 10px;
 }
 
 .s_c_other_details_content{
-  font-size: 14px;
+  font-size: 15px;
   margin-left: 75px;
-  line-height: 20px;
+  line-height: 25px;
 }
 
 .s_c_profile_container{
@@ -208,4 +230,36 @@
   margin-left: auto;
   height: 25px;
   width: 25px;
+}
+
+.s_c_enquiry_input{
+  width: calc(100% - 40px);
+  height: 30px;
+  border-radius: 15px;
+  border: 1px solid rgb(202, 202, 202);
+  margin-bottom: 5px;
+  padding: 0 20px;
+}
+
+.s_c_enquiry_textarea{
+  width: calc(100% - 40px);
+  height: 150px;
+  border-radius: 15px;
+  border: 1px solid rgb(202, 202, 202);
+  padding: 10px 20px;
+}
+
+.s_c_enquiry_title{
+  font-weight: 900;
+  line-height: 30px;
+}
+
+#s_c_enquiry_heading{
+  margin: 10px 0;
+}
+
+.s_f_form_img_container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

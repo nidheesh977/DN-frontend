@@ -14,7 +14,7 @@ class UploadFiles extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      instructions: false,
+      instructions: true,
       draft_count: 10,
       selected_tab: 1,
       files_selected: false,
@@ -23,6 +23,7 @@ class UploadFiles extends Component {
       selected_files_details: [],
       selected_category: "all",
       files_count: 0,
+      total_file_objects_count: 0,
       file_objects_count: 0,
       file_edit: 0
     }
@@ -52,14 +53,20 @@ class UploadFiles extends Component {
     reader.onload = () => {
       if (reader.readyState === 2) {
         var files_details = this.state.selected_files_details
-        files_details[this.state.file_objects_count].file = reader.result
+        files_details[this.state.total_file_objects_count].file = reader.result
         this.setState({
           selected_files_details: files_details,
-          file_objects_count: this.state.file_objects_count + 1
+          file_objects_count: this.state.file_objects_count + 1,
+          total_file_objects_count: this.state.total_file_objects_count+1
         })
 
         if (this.state.file_objects_count != this.state.files_count) {
           this.createFileObject(files)
+        }
+        else{
+          this.setState({
+            file_objects_count: 0
+          })
         }
       }
     }
@@ -67,9 +74,11 @@ class UploadFiles extends Component {
   }
 
   chooseFiles = (e) => {
+    var row_files = this.state.row_files
+    row_files.push(e.target.files)
     this.setState({
-      row_files: e.target.files,
-      files_count: e.target.files.length
+      row_files: row_files,
+      files_count: e.target.files.length,
     })
     for (var i = 0; i < e.target.files.length; i++) {
       var details = this.state.selected_files_details
@@ -138,6 +147,7 @@ class UploadFiles extends Component {
     })
   }
 
+
   render() {
     console.log(this.state.file_objects_count)
     return (
@@ -167,6 +177,14 @@ class UploadFiles extends Component {
                   <Col lg={8} className={`${All.Dragdrop} upload`}>
                     {this.state.selected_tab == "1"
                       ? <div id="u_f_select_category_container">
+                        {this.state.files_selected
+                        ?<>
+                          <input type="file" name="" id="add_files" multiple style = {{visibility: "hidden"}} onChange = {this.chooseFiles}/>
+                          <label style = {{display: "inline-block"}} for = "add_files" id='u_f_add_more'>
+                            Add more
+                          </label>
+                        </>
+                        :""}
                         <select name="" id="u_f_select_category" onChange={this.categoryChanged}>
                           <option value="all" selected={this.state.selected_category == "all"}>All Files</option>
                           <option value="image" selected={this.state.selected_category == "image"}>Image</option>
@@ -258,8 +276,12 @@ class UploadFiles extends Component {
                                 <Col xxl={6} xl={6} lg={6} md={6} sm={6} xs={6}>
                                   <div className={this.state.file_edit == key ? "u_f_selected_file u_f_file_preview_container" : "u_f_file_preview_container"} onClick={() => { this.selectImage(key) }}>
                                     {file.type[0] == "v"
-                                      ? <video src={file.file} />
-                                      : <img src={file.file} className={this.state.file_edit == key ? "u_f_selected_file" : ""} />
+                                      ? <>
+                                          <video src={file.file} />
+                                        </>
+                                      : <>
+                                          <img src={file.file} className={this.state.file_edit == key ? "u_f_selected_file" : ""} />
+                                        </>
                                     }
                                   </div>
                                 </Col>
@@ -275,7 +297,7 @@ class UploadFiles extends Component {
                     className={` ${All.pl_lg_30} ${All.pl_xs_0} ${All.pr_xs_0} ${All.pl_md_0} ${All.pr_md_0} ${All.pl_sm_0} ${All.pr_sm_0}`}
                   >
                     <div id="u_f_details_input">
-                      {this.state.file_objects_count > 0
+                      {this.state.files_selected
                         ? <div className="u_f_form_row">
                           <div className='u_f_file'>
                             {this.state.selected_files_details[this.state.file_edit].type[0] == "v"

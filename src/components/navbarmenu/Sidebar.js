@@ -207,7 +207,7 @@ export default function PersistentDrawerLeft(props) {
           </List>
         </Link>
 
-        <Link to="">
+        <Link to="/apply_job">
           <List>
             <ListItem button>
               <ListItemIcon><JobIcon /></ListItemIcon>

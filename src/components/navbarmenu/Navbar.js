@@ -190,7 +190,7 @@ function Navbar(props) {
                   {/* <SearchFilter /> */}
                 </li>
                 <li className='nav-item'>
-                  <Link className='nav-links'>
+                  <Link to = '/apply_job' className='nav-links'>
                     Apply jobs
                   </Link>
 

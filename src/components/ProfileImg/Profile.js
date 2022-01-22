@@ -17,6 +17,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import user_image from "../images/user_image.png"
 
 class Profile extends React.Component {
   constructor(props) {
@@ -29,9 +30,9 @@ class Profile extends React.Component {
     this.state = {
       cropperOpen: false,
       img: null,
-      defaultProfileImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
+      defaultProfileImg: user_image,
       zoom: 2,
-      croppedImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
+      croppedImg: user_image,
       profile: [],
       user: [],
       open: true,

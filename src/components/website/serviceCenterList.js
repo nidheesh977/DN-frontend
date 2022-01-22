@@ -277,6 +277,81 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import whatsapp_icon from "../images/whatsapp_icon.png"
 import share2 from '../images/share2.png'
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  LineShareButton,
+  LinkedinShareButton,
+  PinterestShareButton,
+  RedditShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+  ViberShareButton,
+  VKShareButton,
+  WhatsappShareButton,
+} from "react-share";
+import {
+  EmailIcon,
+  FacebookIcon,
+  LineIcon,
+  LinkedinIcon,
+  PinterestIcon,
+  RedditIcon,
+  TelegramIcon,
+  TwitterIcon,
+  ViberIcon,
+  VKIcon,
+  WhatsappIcon,
+} from "react-share";
+import Dialog from "@material-ui/core/Dialog";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import MuiDialogActions from "@material-ui/core/DialogActions";
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import s_c_form_img from "../images/s_c_form_img.png"
+import close from '../images/close.svg'
+
+
+const styles = (theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: "absolute",
+    right: theme.spacing(4),
+    top: theme.spacing(2),
+    color: theme.palette.grey[500],
+  },
+});
+
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          className={classes.closeButton}
+          onClick={onClose}
+        >
+          {/* <CloseIcon className="test"/> */}
+          <img src={close} />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
+
 
 class ServiceCenters extends Component {
   constructor(props) {
@@ -292,9 +367,11 @@ class ServiceCenters extends Component {
       state_list: [],
       city_list: [],
       brand_list: ["DJI Mavic Air 2", "DJI Mavic 2 Pro", "DJI Mavic Mini", "DJI Mavic 2 Zoom", "DJI Phanton 4", "Parrot Anafi", "DJI Mavic Pro", "DJI Inspire 2", "DJI Inspire 1", "Parrot Bebop 2"],
-      service_center_list: [{ name: "Nexevo Technologies1", bio: "Nexevo Technologies is a professional drone service center1", workingHours: "9.30AM to 7.00PM", location: "Kasthui Nagar, Bangalore.", rating: 1, phone: "+91 9876543210, +91 9876543210", brands: "DJI, UVify, Hubsan, Parrot, Autel Robotics." }, { name: "Nexevo Technologies2", bio: "Nexevo Technologies is a professional drone service center2", workingHours: "9.30AM to 8.00PM", location: "Kasthui Nagar, Bangalore.", rating: 2, phone: "+91 9876543210, +91 9876543210", brands: "DJI, UVify, Hubsan, Parrot, Autel Robotics." }, { name: "Nexevo Technologies3", bio: "Nexevo Technologies is a professional drone service center3", workingHours: "9.30AM to 9.00PM", location: "Kasthui Nagar, Bangalore.", rating: 3, phone: "+91 9876543210, +91 9876543210", brands: "DJI, UVify, Hubsan, Parrot, Autel Robotics." }, { name: "Nexevo Technologies4", bio: "Nexevo Technologies is a professional drone service center4", workingHours: "9.30AM to 10.00PM", location: "Kasthui Nagar, Bangalore.", rating: 4, phone: "+91 9876543210, +91 9876543210", brands: "DJI, UVify, Hubsan, Parrot, Autel Robotics." }, { name: "Nexevo Technologies5", bio: "Nexevo Technologies is a professional drone service center5", workingHours: "9.30AM to 11.00PM", location: "Kasthui Nagar, Bangalore.", rating: 5, phone: "+91 9876543210, +91 9876543210", brands: "DJI, UVify, Hubsan, Parrot, Autel Robotics." },],
+      service_center_list: [{ id: "1", name: "Nexevo Technologies1", bio: "Nexevo Technologies is a professional drone service center1", workingHours: "9.30AM to 7.00PM", location: "Kasthui Nagar, Bangalore.", rating: 1, phone: "+91 9876543210, +91 9876543210", brands: "DJI, UVify, Hubsan, Parrot, Autel Robotics.", whatsapp_number: "917305055356" }, { id: "2", name: "Nexevo Technologies2", bio: "Nexevo Technologies is a professional drone service center2", workingHours: "9.30AM to 8.00PM", location: "Kasthui Nagar, Bangalore.", rating: 2, phone: "+91 9876543210, +91 9876543210", brands: "DJI, UVify, Hubsan, Parrot, Autel Robotics.", whatsapp_number: "917305055356" }, { id: "3", name: "Nexevo Technologies3", bio: "Nexevo Technologies is a professional drone service center3", workingHours: "9.30AM to 9.00PM", location: "Kasthui Nagar, Bangalore.", rating: 3, phone: "+91 9876543210, +91 9876543210", brands: "DJI, UVify, Hubsan, Parrot, Autel Robotics.", whatsapp_number: "917305055356" }, { id: "4", name: "Nexevo Technologies4", bio: "Nexevo Technologies is a professional drone service center4", workingHours: "9.30AM to 10.00PM", location: "Kasthui Nagar, Bangalore.", rating: 4, phone: "+91 9876543210, +91 9876543210", brands: "DJI, UVify, Hubsan, Parrot, Autel Robotics.", whatsapp_number: "917305055356" }, { id: "5", name: "Nexevo Technologies5", bio: "Nexevo Technologies is a professional drone service center5", workingHours: "9.30AM to 11.00PM", location: "Kasthui Nagar, Bangalore.", rating: 5, phone: "+91 9876543210, +91 9876543210", brands: "DJI, UVify, Hubsan, Parrot, Autel Robotics.", whatsapp_number: "917305055356" },],
       loading: false,
-      open: true,
+      share: false,
+      enquire: false,
+      shareLink: "",
     };
   }
 
@@ -385,6 +462,39 @@ class ServiceCenters extends Component {
       selected_brand: brand
     })
     this.closeDropDown()
+  }
+
+  handleShareClose = () => {
+    this.setState({
+      share: false
+    })
+  }
+
+  shareLinkChange = (link) => {
+    this.setState({
+      shareLink: "http://localhost:3000/service_center/" + link,
+      share: true
+    })
+  }
+
+  whatsappChat = (whatsapp_number) => {
+    window.open("https://wa.me/" + whatsapp_number + "?text=Hello", "_blank")
+  }
+
+  enquireNow = () => {
+    this.setState({
+      enquire: true
+    })
+  }
+
+  closeEnquiry = () => {
+    this.setState({
+      enquire: false
+    })
+  }
+
+  serviceCenterDetails = (id) => {
+    this.props.history.push("/service_center/"+id)
   }
 
   render() {
@@ -536,7 +646,7 @@ class ServiceCenters extends Component {
                           <div className="s_c_profile_container">
                             <img src={nexevo_img} alt="" width="50px" />
                           </div>
-                          <span className="service_center_name">
+                          <span className="service_center_name" onClick = {() => this.serviceCenterDetails(service_center.id)}>
                             {service_center.name}
                           </span>
                           <div className='rating_request_md_xl'>
@@ -552,7 +662,6 @@ class ServiceCenters extends Component {
                             </div>
                           </div>
                           <div className='s_c_other_details'>
-                            <div className='s_c_other_details_content'>{service_center.bio}</div>
                             <div className='s_c_other_details_title'>Working time:</div>
                             <div className='s_c_other_details_content'>{service_center.workingHours}</div>
                             <div className='s_c_other_details_title'>Phone Number:</div>
@@ -562,17 +671,118 @@ class ServiceCenters extends Component {
                             <div className='s_c_other_details_title'>Brands:</div>
                             <div className='s_c_other_details_content'>{service_center.brands}</div>
                           </div>
-                          <hr />
-                          <div style={{display: "flex"}}>
-                            <button className='s_c_button2'>Enquire Now</button>
-                            <img src={whatsapp_icon} alt="" height={"35px"} />
-                            <img src={share2} alt="" className='s_c_share' />
+                          <hr style={{ border: "1px solid #efefef" }} />
+                          <div style={{ display: "flex" }}>
+                            <button className='s_c_button2' onClick={this.enquireNow}>Enquire Now</button>
+                            <Link onClick={() => this.whatsappChat(service_center.whatsapp_number)}><img src={whatsapp_icon} alt="" height={"35px"} /></Link>
+
+                            <img src={share2} alt="" className='s_c_share' onClick={() => this.shareLinkChange(service_center.id)} style={{cursor: "pointer"}}/>
                           </div>
                         </div>
                       </Col>
                     )
                   })}
                 </Row>
+
+                  <Dialog
+                    open={this.state.enquire}
+                    onClose={this.closeEnquiry}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    maxWidth={"md"}
+                    fullWidth={true}
+                  >
+
+                    <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+                      <div style = {{position: "absolute", top: '20px', right: '20px'}}>
+                        <img src={close} alt="" onClick = {this.closeEnquiry} style={{cursor: "pointer"}}/>
+                      </div>
+                      <Row style={{marginTop: "30px"}}>
+                        <Hidden xs sm>
+                        <Col className='s_f_form_img_container'>
+                          <img src={s_c_form_img} alt="" width={"100%"} className='s_f_form_img'/>
+                        </Col>
+                        </Hidden>
+                        <Col>
+                          <h3 id = "s_c_enquiry_heading">Request Quote</h3>
+                          <label>
+                            <div className='s_c_enquiry_title'>Name</div>
+                            <input type="text" name="" id="" className="s_c_enquiry_input" />
+                          </label>
+                          <label>
+                            <div className='s_c_enquiry_title'>Phone Number</div>
+                            <input type="text" name="" id="" className="s_c_enquiry_input" />
+                          </label>
+                          <label>
+                            <div className='s_c_enquiry_title'>Email ID</div>
+                            <input type="text" name="" id="" className="s_c_enquiry_input" />
+                          </label>
+                          <label>
+                            <div className='s_c_enquiry_title'>Message</div>
+                            <textarea className="s_c_enquiry_textarea"></textarea>
+                          </label>
+                          <button className='s_c_button3'>Submit</button>
+                        </Col>
+                      </Row>
+                    </DialogContent>
+                  </Dialog>
+                <Dialog
+                  open={this.state.share}
+                  onClose={this.handleShareClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                  maxWidth={"md"}
+                  fullWidth={true}
+                >
+                  <DialogTitle
+                    id="customized-dialog-title"
+                    onClose={this.handleShareClose}
+                    className={All.PopupHeader}
+                  >
+                    <Box display="flex" pt={6}>
+                      <Box mt={2}>
+                        <h3 className={All.Bold} style={{ textAlign: "center" }}>Share</h3>
+                      </Box>
+                    </Box>
+                  </DialogTitle>
+                  <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+                    <Row>
+                      <WhatsappShareButton url={this.state.shareLink} style={{ margin: '10px' }}>
+                        <WhatsappIcon size={52} round={true} />
+                      </WhatsappShareButton>
+                      <FacebookShareButton url={this.state.shareLink} style={{ margin: '10px' }}>
+                        <FacebookIcon size={52} round={true} />
+                      </FacebookShareButton>
+                      <EmailShareButton url={this.state.shareLink} style={{ margin: '10px' }}>
+                        <EmailIcon size={52} round={true} />
+                      </EmailShareButton>
+                      <TwitterShareButton url={this.state.shareLink} style={{ margin: '10px' }}>
+                        <TwitterIcon size={52} round={true} />
+                      </TwitterShareButton>
+                      <TelegramShareButton url={this.state.shareLink} style={{ margin: '10px' }}>
+                        <TelegramIcon size={52} round={true} />
+                      </TelegramShareButton>
+                      <LinkedinShareButton url={this.state.shareLink} style={{ margin: '10px' }}>
+                        <LinkedinIcon size={52} round={true} />
+                      </LinkedinShareButton>
+                      <PinterestShareButton url={this.state.shareLink} style={{ margin: '10px' }}>
+                        <PinterestIcon size={52} round={true} />
+                      </PinterestShareButton>
+                      <VKShareButton url={this.state.shareLink} style={{ margin: '10px' }}>
+                        <VKIcon size={52} round={true} />
+                      </VKShareButton>
+                      <ViberShareButton url={this.state.shareLink} style={{ margin: '10px' }}>
+                        <ViberIcon size={52} round={true} />
+                      </ViberShareButton>
+                      <RedditShareButton url={this.state.shareLink} style={{ margin: '10px' }}>
+                        <RedditIcon size={52} round={true} />
+                      </RedditShareButton>
+                      <LineShareButton url={this.state.shareLink} style={{ margin: '10px' }}>
+                        <LineIcon size={52} round={true} />
+                      </LineShareButton>
+                    </Row>
+                  </DialogContent>
+                </Dialog>
               </>
               :
               <div style={{ margin: '0px auto', display: 'block' }}>
@@ -585,6 +795,7 @@ class ServiceCenters extends Component {
                     <label>It seems we can't find any results based on your search. </label>
                   </Box>
                 </Box>
+
               </div>
             }
           </Container>

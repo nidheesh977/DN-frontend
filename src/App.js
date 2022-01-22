@@ -44,6 +44,8 @@ import ServiceCenters from "./components/website/serviceCenterList";
 import Footer from "./components/footer/footer";
 import UserCategory from "./components/website/UserCategory";
 import UploadFiles from "./components/website/UploadFiles";
+import ServiceCenterDetails from "./components/website/service_center_details";
+import ApplyJob from "./components/website/ApplyJob";
 
 
 class App extends React.Component {
@@ -194,6 +196,8 @@ class App extends React.Component {
               component={PostEdit}
             />
             <PublicRoute component = {ServiceCenters} path = "/service_centers" exact />
+            <PublicRoute component = {ServiceCenterDetails} path = "/service_center/:id" exact />
+            <PublicRoute component = {ApplyJob} path = "/apply_job" exact />
             <PrivateRoute exact path="*" component={NoPageFound} />
           </Switch>
         </UserContext.Provider>

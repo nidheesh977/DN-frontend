@@ -21,7 +21,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { userService } from '../_services/user.service';
-
+import user_image from "../images/user_image.png"
 
 
 class ProfileCoverImg extends React.Component {
@@ -36,8 +36,8 @@ class ProfileCoverImg extends React.Component {
       cropperOpen: false,
       img: null,
       zoom: 2,
-      defaultCoverPic: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
-      croppedImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
+      defaultCoverPic: user_image,
+      croppedImg: user_image,
       profile: [],
       user: [],
       open: true,
