@@ -146,7 +146,7 @@ export default function ServiceCenterDashboard(props) {
   return (
     <>
       <Helmet>
-        <title>Profile</title>
+        <title>Service center details</title>
         <meta charSet="utf-8" />
         <meta name="description" content="Nested component" />
       </Helmet>

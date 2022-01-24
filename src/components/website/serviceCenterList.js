@@ -658,7 +658,7 @@ class ServiceCenters extends Component {
                               <span className={service_center.rating >= 5 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
                             </div>
                             <div>
-                              <Link className='s_c_review_link'>Read Reviews</Link>
+                              <Link className='s_c_review_link' to = {"/service_center/"+service_center.id}>Read Reviews</Link>
                             </div>
                           </div>
                           <div className='s_c_other_details'>

@@ -82,7 +82,7 @@ class UploadFiles extends Component {
     })
     for (var i = 0; i < e.target.files.length; i++) {
       var details = this.state.selected_files_details
-      details.push({"file":"", "name": e.target.files[i].name, "type": e.target.files[i].type, "size": e.target.files[i].size, "usage": 'free', "price": "", "category": "", 'experience': "", 'key_words': [], 'suggested': [], 'adult_content': false })
+      details.push({"file":"", "name": e.target.files[i].name, "type": e.target.files[i].type, "size": e.target.files[i].size, "usage": 'free', "price": "", "category": "", 'experience': "", 'key_words': [], 'suggested': [], 'adult_content': false, "select_type": e.target.files[i].type })
       this.setState({
         selected_files_details: details
       })
@@ -142,6 +142,22 @@ class UploadFiles extends Component {
   changeUsage = (usage) => {
     var files_details = this.state.selected_files_details
     files_details[this.state.file_edit].usage = usage
+    this.setState({
+      selected_files_details: files_details
+    })
+  }
+
+  selectImageType = (type) => {
+    var files_details = this.state.selected_files_details
+    files_details[this.state.file_edit].select_type = type
+    this.setState({
+      selected_files_details: files_details
+    })
+  }
+
+  changeAdultContent = () => {
+    var files_details = this.state.selected_files_details
+    files_details[this.state.file_edit].adult_content = !files_details[this.state.file_edit].adult_content
     this.setState({
       selected_files_details: files_details
     })
@@ -321,10 +337,20 @@ class UploadFiles extends Component {
                         : <input type="text" name="" id="u_f_post_name" className='u_f_input_field' disabled/>
                       }
                       <div className="u_f_input_title">File type</div>
-                      <div className='u_f_file_type' id="u_f_file_type1">Images</div>
-                      <div className='u_f_file_type' id="u_f_file_type2">Videos</div>
-                      <div className='u_f_file_type' id="u_f_file_type3">3D Images</div>
-                      <div className='u_f_file_type' id="u_f_file_type4">360 image</div>
+                      {this.state.files_selected
+                      ?<>
+                        <div className={this.state.selected_files_details[this.state.file_edit].select_type[0] == "i"?'u_f_file_type u_f_file_usage_selected' : "u_f_file_type"} id="u_f_file_type1" onClick = {() => this.selectImageType("image")} >Images</div>
+                        <div className={this.state.selected_files_details[this.state.file_edit].select_type[0] == "v"?'u_f_file_type u_f_file_usage_selected' : "u_f_file_type"} id="u_f_file_type2" onClick = {() => this.selectImageType("video")}>Videos</div>
+                        <div className={this.state.selected_files_details[this.state.file_edit].select_type == "3D_image"?'u_f_file_type u_f_file_usage_selected' : "u_f_file_type"} id="u_f_file_type3" onClick = {() => this.selectImageType("3D_image")}>3D Images</div>
+                        <div className={this.state.selected_files_details[this.state.file_edit].select_type == "360_image"?'u_f_file_type u_f_file_usage_selected' : "u_f_file_type"} id="u_f_file_type4" onClick = {() => this.selectImageType("360_image")}>360 image</div>
+                      </>
+                      :<>
+                        <div className='u_f_file_type' id="u_f_file_type1">Images</div>
+                        <div className='u_f_file_type' id="u_f_file_type2">Videos</div>
+                        <div className='u_f_file_type' id="u_f_file_type3">3D Images</div>
+                        <div className='u_f_file_type' id="u_f_file_type4">360 image</div>
+                      </>
+                      }
                       <div className="u_f_input_title">Usage</div>
                       {this.state.files_selected
                       ?<><div className={this.state.selected_files_details[this.state.file_edit].usage == "free"?'u_f_file_usage_selected u_f_file_usage': "u_f_file_usage"} id="u_f_file_usage1" onClick = {() => this.changeUsage("free")}>Free</div>
@@ -358,8 +384,10 @@ class UploadFiles extends Component {
                       <div className="u_f_input_keywords">Aviation</div>
                       <div className="u_f_input_keywords">Drone</div>
                       <div className="u_f_input_title">Content</div>
-                      <div className="u_f_input_title"><label><input type="checkbox" name="" id="" />Confirm 18+ viewable?</label></div>
-
+                      {this.state.files_selected
+                        ?<div className="u_f_input_title"><label><input type="checkbox" name="" id="" onChange = {this.changeAdultContent} checked = {this.state.selected_files_details[this.state.file_edit].adult_content}/>Confirm 18+ viewable?</label></div>
+                        :<div className="u_f_input_title"><label><input type="checkbox" name="" id=""/>Confirm 18+ viewable?</label></div>
+                      }
                       <div id="u_f_btn">
                         <button id="u_f_save_draft">Save Draft</button>
                         <button id="u_f_submit">Publish</button>

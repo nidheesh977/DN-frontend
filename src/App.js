@@ -8,7 +8,7 @@ import Login from "./components/website/Login";
 import Profile from "./components/website/Profile";
 import ProfileEdit from "./components/website/ProfileEdit";
 import TermsCondition from "./components/website/TermsCondition";
-import UpgradeProVersion from "./components/website/UpgradeProVersion ";
+import DownloadSubscription from "./components/website/DownloadSubscription";
 import GoPremium from "./components/website/GoPremium";
 import ViewJob from "./components/website/ViewJob";
 import Imageview from "./components/website/Imageview";
@@ -135,10 +135,16 @@ class App extends React.Component {
               path="/TermsCondition"
               component={TermsCondition}
             />
-            <PrivateRoute
+            {/* <PrivateRoute
               exact
               path="/UpgradeProVersion"
               component={UpgradeProVersion}
+            /> */}
+            <PublicRoute
+              restricted={true}
+              path="/DownloadSubscription"
+              component={DownloadSubscription}
+              exact
             />
             <PrivateRoute exact path="/GoPremium" component={GoPremium} />
             <PublicRoute
