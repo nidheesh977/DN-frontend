@@ -2796,7 +2796,7 @@ section.UploadFile .form label.MuiFormControlLabel-root {
         .DownloadTabs{ margin:0 38px; }
 
     .Container{
-        max-width: 1200px !important;
+        max-width: 1430px !important;
     }
     .ContainerPackages{ 
         background-image: url(../images/upgradeproversion.svg);

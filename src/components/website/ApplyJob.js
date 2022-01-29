@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
-import All from '../website/All.module.css'
+import All from './All.module.css'
 import '../css/ApplyJob.css'
 
 class ApplyJob extends Component{
