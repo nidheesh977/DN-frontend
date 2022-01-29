@@ -267,7 +267,7 @@ export default class ViewJob extends React.Component {
           <meta name="description" content="Nested component" />
         </Helmet>
         <section>
-        <Dialog
+          <Dialog
             className="test"
             onClose={this.handleShareClose}
             aria-labelledby="customized-dialog-title"
@@ -282,47 +282,47 @@ export default class ViewJob extends React.Component {
             >
               <Box display="flex" pt={6}>
                 <Box mt={2}>
-                  <h3 className={All.Bold} style={{textAlign: "center"}}>Share</h3>
+                  <h3 className={All.Bold} style={{ textAlign: "center" }}>Share</h3>
                 </Box>
               </Box>
             </DialogTitle>
-              <DialogContent className={All.PopupBody} style={{marginBottom: "50px"}}>
-                <Row>
-                  <WhatsappShareButton url = {window.location.href} style={{margin: '10px'}}>
-                    <WhatsappIcon size={52} round={true}/>
-                  </WhatsappShareButton>
-                  <FacebookShareButton url = {window.location.href} style={{margin: '10px'}}>
-                    <FacebookIcon size={52} round={true}/>
-                  </FacebookShareButton>
-                  <EmailShareButton url = {window.location.href} style={{margin: '10px'}}>
-                    <EmailIcon size={52} round={true}/>
-                  </EmailShareButton>
-                  <TwitterShareButton url = {window.location.href} style={{margin: '10px'}}>
-                    <TwitterIcon size={52} round={true}/>
-                  </TwitterShareButton>
-                  <TelegramShareButton url = {window.location.href} style={{margin: '10px'}}>
-                    <TelegramIcon size={52} round={true}/>
-                  </TelegramShareButton>
-                  <LinkedinShareButton url = {window.location.href} style={{margin: '10px'}}>
-                    <LinkedinIcon size={52} round={true}/>
-                  </LinkedinShareButton>
-                  <PinterestShareButton url = {window.location.href} style={{margin: '10px'}}>
-                    <PinterestIcon size={52} round={true}/>
-                  </PinterestShareButton>
-                  <VKShareButton url = {window.location.href} style={{margin: '10px'}}>
-                    <VKIcon size={52} round={true}/>
-                  </VKShareButton>
-                  <ViberShareButton url = {window.location.href} style={{margin: '10px'}}>
-                    <ViberIcon size={52} round={true}/>
-                  </ViberShareButton>
-                  <RedditShareButton url = {window.location.href} style={{margin: '10px'}}>
-                    <RedditIcon size={52} round={true}/>
-                  </RedditShareButton>
-                  <LineShareButton url = {window.location.href} style={{margin: '10px'}}>
-                    <LineIcon size={52} round={true}/>
-                  </LineShareButton>
-                </Row>
-              </DialogContent>
+            <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+              <Row>
+                <WhatsappShareButton url={window.location.href} style={{ margin: '10px' }}>
+                  <WhatsappIcon size={52} round={true} />
+                </WhatsappShareButton>
+                <FacebookShareButton url={window.location.href} style={{ margin: '10px' }}>
+                  <FacebookIcon size={52} round={true} />
+                </FacebookShareButton>
+                <EmailShareButton url={window.location.href} style={{ margin: '10px' }}>
+                  <EmailIcon size={52} round={true} />
+                </EmailShareButton>
+                <TwitterShareButton url={window.location.href} style={{ margin: '10px' }}>
+                  <TwitterIcon size={52} round={true} />
+                </TwitterShareButton>
+                <TelegramShareButton url={window.location.href} style={{ margin: '10px' }}>
+                  <TelegramIcon size={52} round={true} />
+                </TelegramShareButton>
+                <LinkedinShareButton url={window.location.href} style={{ margin: '10px' }}>
+                  <LinkedinIcon size={52} round={true} />
+                </LinkedinShareButton>
+                <PinterestShareButton url={window.location.href} style={{ margin: '10px' }}>
+                  <PinterestIcon size={52} round={true} />
+                </PinterestShareButton>
+                <VKShareButton url={window.location.href} style={{ margin: '10px' }}>
+                  <VKIcon size={52} round={true} />
+                </VKShareButton>
+                <ViberShareButton url={window.location.href} style={{ margin: '10px' }}>
+                  <ViberIcon size={52} round={true} />
+                </ViberShareButton>
+                <RedditShareButton url={window.location.href} style={{ margin: '10px' }}>
+                  <RedditIcon size={52} round={true} />
+                </RedditShareButton>
+                <LineShareButton url={window.location.href} style={{ margin: '10px' }}>
+                  <LineIcon size={52} round={true} />
+                </LineShareButton>
+              </Row>
+            </DialogContent>
           </Dialog>
           <Container className={All.Container}>
             <Row>
@@ -373,25 +373,8 @@ export default class ViewJob extends React.Component {
 
                   <div className="slider_image">
                     {imageview.tag == "1" && (
-                      <img
-                        className="GalleryImg"
-                        src={imageview.src}
-                        alt="image"
-                      />
-                    )}
-                    {imageview.tag == "2" && (
-                      <img
-                        className="GalleryImg"
-                        src={imageview.src}
-                        alt="image"
-                      />
-                    )}
-                    {imageview.tag == "3" && (
-                      <video src={imageview.src} controls className="GalleryImg"></video>
-                    )}
-                    {imageview.tag == "4" && (
                       <>
-                        <span style = {{
+                        <span style={{
                           position: 'absolute',
                           top: '10px',
                           float: "right",
@@ -399,8 +382,8 @@ export default class ViewJob extends React.Component {
                         }}>
                           <FavoriteBorder />
                           <img src={sharePNG} style={{
-                            paddingLeft:"30px",
-                          }} onClick={this.shareOpen}/>
+                            paddingLeft: "30px",
+                          }} onClick={this.shareOpen} />
                         </span>
                         <img
                           className="GalleryImg"
@@ -408,7 +391,63 @@ export default class ViewJob extends React.Component {
                           alt="image"
                         />
                       </>
-                      
+                    )}
+                    {imageview.tag == "2" && (
+                      <>
+                        <span style={{
+                          position: 'absolute',
+                          top: '10px',
+                          float: "right",
+                          zIndex: 1000
+                        }}>
+                          <FavoriteBorder />
+                          <img src={sharePNG} style={{
+                            paddingLeft: "30px",
+                          }} onClick={this.shareOpen} />
+                        </span>
+                        <img
+                          className="GalleryImg"
+                          src={imageview.src}
+                          alt="image"
+                        />
+                      </>
+                    )}
+                    {imageview.tag == "3" && (
+                      <>
+                          <span style={{
+                          position: 'absolute',
+                          top: '10px',
+                          float: "right",
+                          zIndex: 1000
+                        }}>
+                          <FavoriteBorder />
+                          <img src={sharePNG} style={{
+                            paddingLeft: "30px",
+                          }} onClick={this.shareOpen} />
+                        </span>
+                        <video src={imageview.src} controls className="GalleryImg"></video>
+                      </>
+                    )}
+                    {imageview.tag == "4" && (
+                      <>
+                        <span style={{
+                          position: 'absolute',
+                          top: '10px',
+                          float: "right",
+                          zIndex: 1000
+                        }}>
+                          <FavoriteBorder />
+                          <img src={sharePNG} style={{
+                            paddingLeft: "30px",
+                          }} onClick={this.shareOpen} />
+                        </span>
+                        <img
+                          className="GalleryImg"
+                          src={imageview.src}
+                          alt="image"
+                        />
+                      </>
+
                     )}
                   </div>
 
@@ -900,7 +939,7 @@ export default class ViewJob extends React.Component {
                       className={`${All.FormControl} ${All.Popupmodel}`}
                       id="message"
                       placeholder="Create the message"
-                      style = {{
+                      style={{
                         height: '150px',
                         width: '100%',
                       }}

@@ -220,7 +220,7 @@ class CommentBox extends React.Component {
                 </Box>
                 <Box className={`${All.DisplayFlex}  ${All.paddingtop} `}>
                   <label style={{ wordBreak: "break-all", width: "80%" }}>
-                    - {comment.body}
+                    {comment.body}
                   </label>
                   <figcaption>
                     <span className="LikeIcon LikeIcon_slider MuliLight">

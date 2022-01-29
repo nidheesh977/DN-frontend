@@ -128,7 +128,7 @@
 
 import React, { Component } from 'react'
 import { Container, Row, Col } from 'react-grid-system'
-import '../css/UpgradeProVersion.css'
+import '../css/DownloadSubscription.css'
 import All from './All.module.css'
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -139,7 +139,7 @@ import ProfileImg from "../ProfileImg/Profile";
 import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import payment_success from '../images/payment_success.png'
+import payment_success from '../images/payment_success.png';
 import { Helmet } from "react-helmet";
 
 const styles = (theme) => ({
@@ -261,7 +261,7 @@ class DownloadSubscription extends Component {
         return (
             <section>
                 <Helmet>
-                    <title>Download packages</title>
+                    <title>Download Subscription</title>
                     <meta charSet="utf-8" />
                     <meta name="description" content="Nested component" />
                 </Helmet>

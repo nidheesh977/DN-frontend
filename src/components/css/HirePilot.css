@@ -1,0 +1,199 @@
+.h_p_container{
+  background: #F8F8FB 0% 0% no-repeat padding-box;
+  padding-top: 60px;
+}
+
+#h_p_create_job_container{
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #E8E8E8;
+  border-radius: 10px;
+  padding: 17px 25px 21px 25px;
+  margin-bottom: 42px;
+} 
+
+.h_p_create_job_title{
+  font-family: muli-bold;
+  font-size: 18px;
+  line-height: 26px;
+  margin-bottom: 6px;
+}
+
+.h_p_create_job_desc{
+  font-family: muli-light;
+  font-size: 13px;
+  line-height: 19px;
+  margin-bottom: 11px;
+}
+
+.h_p_create_job_btn{
+  padding: 6px 17px;
+  font-family: muli-light;
+  font-size: 13px;
+  line-height: 19px;
+  background: transparent linear-gradient(290deg, #4FFEA3 0%, #00E7FC 100%) 0% 0% no-repeat padding-box;
+  border-radius: 23px;
+  border: 0;
+}
+
+.h_p_filter1_heading{
+  font-family: muli-bold;
+  font-size: 20px;
+  line-height: 30px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(112, 112, 112, 0.2);
+  margin-bottom: 10px;
+}
+
+.h_p_filter1_title{
+  font-family: muli-bold;
+  font-size: 17px;
+  line-height: 25px;
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+.h_p_filter1_filter{
+  display: flex;
+  padding-left: 10px;
+}
+
+.h_p_filter1_checkbox{
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.h_p_filter1_checkbox_label{
+  font-family: muli-light;
+  font-size: 15px;
+  line-height: 22px;
+  margin-bottom: 15px;
+}
+
+.h_p_filter1_rate_content{
+  font-family: muli-regular;
+  font-size: 15px;
+  line-height: 22px;
+  margin-bottom: 15px;
+}
+
+.h_p_title{
+  font-family: muli-bold;
+  font-size: 35px;
+  line-height: 51px;
+  margin-bottom: 10px;
+}
+
+.h_p_title_container{
+  background: #FFFFFF ;
+  border: 1px solid #E8E8E8;
+  border-radius: 10px;
+  padding: 7px 30px;
+  margin-bottom: 20px;
+}
+
+.h_p_listing_container{
+  padding: 20px 30px;
+  background: #FFFFFF;
+  border: 1px solid #E8E8E8;
+  border-radius: 10px;
+}
+
+.h_p_rating_selected{
+  color: #FFCC00;
+  font-size: 20px !important;
+}
+
+.h_p_rating_unselected{
+  color: rgb(201, 201, 201);
+  font-size: 20px !important;
+}
+
+.h_p_listing_container{
+  display: flex;
+}
+
+.h_p_listing_img_container{
+  height: 100px;
+  width: 100px;
+  float: left;
+}
+
+.h_p_listing_others_container{
+  margin-left: 100px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.h_p_listing_img{
+  height: 100px;
+  width: 100px;
+}
+
+.h_p_listing_pricing_rating{
+  width: 210px;
+  border-left: 1px solid #DCDCDC;
+}
+
+.h_p_listing_name{
+  font-size: 18px;
+  font-family: muli-bold;
+  line-height: 26px;
+  margin-bottom: 6px;
+}
+
+.h_p_listing_job{
+  font-size: 14px;
+  font-family: muli-light;
+  line-height: 20px;
+  margin-bottom: 6px;
+}
+
+.h_p_listing_location{
+  font-size: 14px;
+  font-family: muli-light;
+  line-height: 20px;
+  margin-bottom: 6px;
+}
+
+.h_p_listing_description{
+  font-size: 14px;
+  font-family: muli-light;
+  line-height: 20px;
+  margin-bottom: 6px;
+}
+
+.h_p_listing_keyword{
+  padding: 2px 15px;
+  background-color: #F1F1F1;
+  border-radius: 13px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+}
+
+.h_p_listing_keywords_container{
+  display: flex;
+}
+
+.h_p_listing_pricing_rating{
+  text-align: center;
+}
+
+.h_p_listing_price_container{
+  display: flex;
+  justify-content: center;
+}
+
+.h_p_listing_price_per{
+  margin-top: 10px;
+}
+
+.h_p_listing_price{
+    font-size: 25px;
+    font-family: muli-bold;
+    line-height: 36px;
+}
+
+.h_p_rating_container{
+  display: flex;
+  justify-content: center;
+}

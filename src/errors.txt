@@ -1,5 +1,0 @@
-Login invalid credentials status code 200
-Email already taken status code 200
-Registration error status code 200
-Job apply already applied error status code 200
-Report already reported error status code 200

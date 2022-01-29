@@ -179,7 +179,7 @@ function Navbar(props) {
                 <li className='nav-item SearchBoxIcon'>
                   {/* <Search /> */}
                   {/* <i class="fa fa-search" aria-hidden="true"></i> */}
-                  <Link to='/Searchresult'><img className="fa fa-search" src={SearchIcon} /></Link>
+                  <Link to='/Searchresult'><img className="fa fa-search" src={SearchIcon} style={{marginRight: "15px"}}/></Link>
                   {/* <div class="search-box">
               <form action={`${process.env.PUBLIC_URL}/Search`}>
                 <input type="text" className="MenuSearchBox" placeholder=""/>
@@ -196,7 +196,7 @@ function Navbar(props) {
 
                 </li>
                 <li className='nav-item'>
-                  <Link className='nav-links'>
+                  <Link to = "/hire_pilots" className='nav-links'>
                     Hire Pilots
                   </Link>
 

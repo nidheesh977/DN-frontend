@@ -140,7 +140,7 @@ class GalleryFilter extends React.Component {
           type: "3D Images",
         },
       ],
-      activeLink: null,
+      activeLink: 5,
     };
     this.loadMore = this.loadMore.bind(this);
     this.handleChanges = this.handleChanges.bind(this);
@@ -366,6 +366,14 @@ class GalleryFilter extends React.Component {
     window.removeEventListener('scroll', this.handleScroll);
   }
 
+  mouseOverFilter = (id) => {
+    document.getElementById("file_details_"+id).style.visibility = "visible"
+  }
+
+  mouseLeaveFilter = (id) => {
+    document.getElementById("file_details_"+id).style.visibility = "hidden"
+  }
+
   render() {
     const { links, activeLink } = this.state;
     const { times } = this.state;
@@ -589,7 +597,7 @@ class GalleryFilter extends React.Component {
                                     {results
                                       .slice(0, this.state.visible)
                                       .map((user, index) => (
-                                        <li key={index}>
+                                        <li key={index} onMouseOver={() => this.mouseOverFilter(index)} onMouseLeave={() => this.mouseLeveFilter(index)}>
                                           {user.tag === "1" ? (
                                             <div>
                                               <figure>
@@ -610,7 +618,7 @@ class GalleryFilter extends React.Component {
                                                     src={user.src}
                                                   />
                                                 </Link>
-                                                <figcaption>
+                                                <figcaption id = {"file_details_"+index} className="file_figcaption">
                                                   {user.user_id ==
                                                     this.state.usersid ? (
                                                     <Link
@@ -682,7 +690,7 @@ class GalleryFilter extends React.Component {
                                                     src={user.src}
                                                   />
                                                 </Link>
-                                                <figcaption>
+                                                <figcaption id = {"file_details_"+index} className="file_figcaption">
                                                   {user.user_id ==
                                                     this.state.usersid ? (
                                                     <Link
@@ -760,7 +768,7 @@ class GalleryFilter extends React.Component {
                                                     />
                                                   </video>
                                                 </Link>
-                                                <figcaption>
+                                                <figcaption id = {"file_details_"+index} className="file_figcaption">
                                                   {user.user_id ==
                                                     this.state.usersid ? (
                                                     <Link
@@ -835,7 +843,7 @@ class GalleryFilter extends React.Component {
                                                     src={user.src}
                                                   />
                                                 </Link>
-                                                <figcaption>
+                                                <figcaption id = {"file_details_"+index} className="file_figcaption">
                                                   {user.user_id ==
                                                     this.state.usersid ? (
                                                     <Link

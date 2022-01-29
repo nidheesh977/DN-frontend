@@ -46,7 +46,8 @@ import UserCategory from "./components/website/UserCategory";
 import UploadFiles from "./components/website/UploadFiles";
 import ServiceCenterDetails from "./components/website/service_center_details";
 import ApplyJob from "./components/website/ApplyJob";
-
+import HireSubscription from "./components/website/HireSubscription"
+import HirePilot from './components/website/HirePilot'
 
 class App extends React.Component {
   constructor(props) {
@@ -146,6 +147,12 @@ class App extends React.Component {
               component={DownloadSubscription}
               exact
             />
+            <PublicRoute
+              restricted={true}
+              path="/HireSubscription"
+              component={HireSubscription}
+              exact
+            />
             <PrivateRoute exact path="/GoPremium" component={GoPremium} />
             <PublicRoute
               restricted={true}
@@ -154,10 +161,15 @@ class App extends React.Component {
               exact
             />
             <PrivateRoute exact path={"/ViewJob/:id"} component={ViewJob} />
-            <PrivateRoute
+            {/* <PrivateRoute
               exact
               path="/HiringDroners"
               component={HiringDroners}
+            /> */}
+            <PublicRoute
+              exact
+              path="/hire_pilots"
+              component={HirePilot}
             />
             <PrivateRoute
               exact
@@ -204,7 +216,7 @@ class App extends React.Component {
             <PublicRoute component = {ServiceCenters} path = "/service_centers" exact />
             <PublicRoute component = {ServiceCenterDetails} path = "/service_center/:id" exact />
             <PublicRoute component = {ApplyJob} path = "/apply_job" exact />
-            <PrivateRoute exact path="*" component={NoPageFound} />
+            <PublicRoute exact path="*" component={NoPageFound} />
           </Switch>
         </UserContext.Provider>
         <Footer/>
