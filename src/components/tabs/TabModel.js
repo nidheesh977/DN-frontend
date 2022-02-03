@@ -94,7 +94,7 @@ export default class TabModel extends React.Component {
         
         <section className={`${All.pt_md_0} ${All.pt_xs_0} ${All.pt_sm_0} tabs-content`}>  
               <div id="tab1" class="tab"> <Alls user={this.props.id}/></div> 
-              <div id="tab2" class="tab hidden"> <Image user={this.props.id} categories={this.state.categories}/></div> 
+              <div id="tab2" class="tab hidden"> <Image user={this.props.id} categories={this.state.categories}/></div>
               <div id="tab3" class="tab hidden"> <RotateImages user={this.props.id}/></div> 
               <div id="tab4" class="tab hidden"> <Video user={this.props.id}/></div>  
               <div id="tab5" class="tab hidden"> <GraphicsImages user={this.props.id}/></div> 

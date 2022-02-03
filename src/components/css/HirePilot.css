@@ -135,6 +135,7 @@
   font-family: muli-bold;
   line-height: 26px;
   margin-bottom: 6px;
+  cursor: pointer;
 }
 
 .h_p_listing_job{
@@ -429,3 +430,5 @@
   padding: 10px 73px;
   cursor: pointer;
 }
+
+

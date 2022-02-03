@@ -15,6 +15,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import close from '../images/close.svg'
+import { Helmet } from "react-helmet";
 
 const AirbnbSlider = styled(Slider)(({ theme }) => ({
   color: '#00E7FC',
@@ -181,8 +182,18 @@ class HirePilot extends Component {
     })
   }
 
+  pilotDetailPage = (id) => {
+    this.props.history.push("/pilot_details/"+id)
+  }
+
   render() {
     return (
+      <>
+      <Helmet>
+        <title>Hire pilots</title>
+        <meta charSet="utf-8" />
+        <meta name="description" content="Nested component" />
+      </Helmet>
       <div className="h_p_container">
         <Container className={All.Container}>
           <Row gutterWidth={40}>
@@ -314,7 +325,7 @@ class HirePilot extends Component {
                       <img src={profileImg} alt="" className='h_p_listing_img' />
                     </div>
                     <div className="h_p_others_container">
-                      <div className="h_p_listing_name">John Doe</div>
+                      <div className="h_p_listing_name" onClick = {() => this.pilotDetailPage(1)}>John Doe</div>
                       <div className="h_p_listing_job">Professional Drone pilot</div>
                       <div className="h_p_listing_location"><img src={locationIcon} alt="" height={"13px"} style={{ marginRight: "4px" }} /> Bangalore, India</div>
                       <div className="h_p_listing_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod, possimus!</div>
@@ -383,6 +394,7 @@ class HirePilot extends Component {
           </Dialog>
         </Container>
       </div>
+      </>
     )
   }
 }
