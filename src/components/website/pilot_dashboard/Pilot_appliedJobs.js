@@ -36,7 +36,7 @@ function Pilot_appliedJobs() {
         desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
         location: "Bangalore",
         type: "Part Time",
-        like: false,
+        like: true,
       },
       {
         id: 3,
