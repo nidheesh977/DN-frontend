@@ -81,6 +81,7 @@ class UploadFiles extends Component {
           this.setState({
             file_objects_count: 0
           })
+          this.refs.addFileRef.value = ""
         }
       }
     }
@@ -289,7 +290,7 @@ class UploadFiles extends Component {
                       ? <div id="u_f_select_category_container">
                         {this.state.files_selected
                           ? <>
-                            <input type="file" name="" id="add_files" multiple style={{ visibility: "hidden" }} onChange={this.chooseFiles} />
+                            <input type="file" name="" id="add_files" multiple style={{ visibility: "hidden" }} onChange={this.chooseFiles} ref = "addFileRef" />
                             <label style={{ display: "inline-block" }} for="add_files" id='u_f_add_more'>
                             <i class="fas fa-plus u_f_add_more_icon"></i> Add more
                             </label>
@@ -395,7 +396,7 @@ class UploadFiles extends Component {
                                         <video src={file.file} />
                                       </>
                                       : <>
-                                        <img src={file.file} className={this.state.file_edit == key ? "u_f_selected_file" : ""} />
+                                        <img src={file.file} />
                                       </>
                                     }
                                   </div>

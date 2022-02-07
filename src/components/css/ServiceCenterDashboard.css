@@ -1,0 +1,130 @@
+.s_c_db_main_tabs{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  box-shadow: 0px 0px 5px #0000001A;
+  margin-bottom: 33px;
+}
+
+.s_c_db_main_tab{
+  font-family: muli-light;
+  font-size: 18px;
+  margin-right: 50px;
+  cursor: pointer;
+}
+
+.s_c_db_main_tab_selected{
+  font-family: muli-bold;
+  color: #00E7FC;
+}
+
+.s_c_db_activity_filter_title{
+  font-size: 18px;
+  font-family: muli-bold;
+  line-height: 26px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.s_c_db_activity_filter{
+  font-size: 16px;
+  font-family: muli-light;
+  line-height: 24px;
+  margin-bottom: 17px;
+  cursor: pointer;
+}
+
+.s_c_db_activity_filter_active{
+  font-family: muli-bold;
+  color: #00E7FC;
+}
+
+.s_c_db_activity_filter_dropdown{
+  float: right;
+  margin-top: 8px;
+}
+
+.s_c_db_activity_filter_dropdown_selected{
+  transform: rotate(180deg);
+}
+
+.s_c_db_activity_file_type_container{
+  margin-top: 45px;
+  padding-bottom: 10px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.s_c_db_activity_file_type{
+  margin-right: 50px;
+  font-family: muli-light;
+  font-size: 15px;
+  line-height: 22px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.s_c_db_activity_file_type_selected{
+  font-family: muli-bold;
+}
+
+.s_c_db_activity .p_d_files_container{
+  position: relative;
+}
+
+.s_c_db_activity_file_edit{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+}
+
+.s_c_db_activity_file_premium{
+  background: #000000;
+  padding: 4px 7px;
+  border-radius: 5px;
+  position: absolute;
+  left: 15px;
+  top: 10px
+}
+
+.s_c_db_activity_file_more {
+  background: hsla(0, 0%, 0%, 0.65);
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  border-radius: 5px;
+  visibility: hidden;
+}
+
+.s_c_db_activity_file_links{
+  text-align: right;
+  color: white;
+  cursor: pointer;
+  font-family: muli-regular;
+  font-size: 12px;
+  margin-bottom: 7px;
+  line-height: 18px;
+}
+
+.s_c_db_activity_file_links:hover{
+  color: #00E7FC;
+}
+
+.s_c_db_activity_file_loadmore{
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.s_c_db_activity_file_loadmore_btn{
+  font-family: muli-regular;
+  font-size: 16px;
+  line-height: 24px;
+  padding: 13px 50px;
+  background: transparent linear-gradient(31deg, #00E7FC 0%, #4FFEA3 100%);
+  border-radius: 25px;
+  border: 0;
+}

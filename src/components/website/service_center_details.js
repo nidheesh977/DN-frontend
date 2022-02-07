@@ -36,6 +36,8 @@ import {
   Section,
 } from 'react-scroll-section';
 
+import $ from "jquery"
+
 const styles = (theme) => ({
   root: {
     margin: 0,
@@ -131,7 +133,9 @@ export default function ServiceCenterDetails(props) {
     document.getElementById("s_c_d_brands_tab").classList.remove("s_c_d_tab_selected")
     document.getElementById("s_c_d_reviews_tab").classList.remove("s_c_d_tab_selected")
     document.getElementById(tab_id).classList.add("s_c_d_tab_selected")
-    document.getElementById(container_id).scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" })
+      $('html, body').animate({
+        scrollTop: $("#"+container_id).offset().top-100
+      }, 1000)
   }
 
   const changeReviewHandler = (e) => {
@@ -142,6 +146,12 @@ export default function ServiceCenterDetails(props) {
     setErrorMsg("")
     setError(false)
   }
+
+  $('div.top').click(function() {
+    $('html, body').animate({
+      scrollTop: $("div.middle").offset().top
+    }, 1000)
+  });
 
   return (
     <>

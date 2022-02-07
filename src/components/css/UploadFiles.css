@@ -202,10 +202,11 @@
 .u_f_file_preview_container{
   height: 300px;
   width: 100%;
-  background-color: black;
+  /* background-color: black; */
   margin-bottom: 10px;
   border-radius: 20px;
   overflow: hidden;
+  border: 2px solid #F5F5F7;
 }
 
 .u_f_file_preview_container img {

@@ -49,6 +49,8 @@ import ApplyJob from "./components/website/ApplyJob";
 import HireSubscription from "./components/website/HireSubscription"
 import HirePilot from './components/website/HirePilot'
 import PilotDetails from './components/website/PilotDetail'
+import ServiceCenterDashboard from "./components/website/ServiceCenterDashboard/ServiceCenterDashboard";
+import CreateJob from './components/website/CreateJob'
 
 class App extends React.Component {
   constructor(props) {
@@ -220,7 +222,9 @@ class App extends React.Component {
               component={PostEdit}
             />
             <PublicRoute component = {ServiceCenters} path = "/service_centers" exact />
+            <PublicRoute component = {CreateJob} path = "/create_job" exact />
             <PublicRoute component = {ServiceCenterDetails} path = "/service_center/:id" exact />
+            <PublicRoute component = {ServiceCenterDashboard} path = "/service_center_dashboard"/>
             <PublicRoute component = {ApplyJob} path = "/apply_job" exact />
             <PublicRoute exact path="*" component={NoPageFound} />
           </Switch>
