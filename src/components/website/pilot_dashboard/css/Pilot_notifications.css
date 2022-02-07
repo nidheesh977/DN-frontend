@@ -1,0 +1,73 @@
+.pd_notifications_mainBox{
+    display: flex;
+}
+.pd_notifications_edit{
+    margin-bottom: 40px;
+}
+
+.pd_notifications_main{
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-top: 15px;
+
+}
+
+.pd_notifications_main_title{
+    font-family: muli-bold;
+    font-size: 30px;
+    line-height: 44px;
+    margin-right: 20px;
+    margin-bottom: 40px;
+}
+
+.pd_notifications_alert_title{
+    font-family: muli-bold;
+    font-size: 18px;
+    line-height: 26px;
+    margin-bottom: 6px;
+    display: inline;
+    margin-right: 10px;
+}
+.pd_notifications_alert_side{
+    font-family: muli-light;
+    font-size: 13px;
+    line-height: 19px;
+    margin-bottom: 6px;
+    display: inline;
+
+}
+.pd_notifications_hr{
+    border: 0.5px solid lightgray;
+}
+
+.pd_notifications_title{
+    margin-left: 15px;
+    font-family: muli-bold;
+    font-size: 16px;
+    line-height: 24px;
+
+}
+
+.pd_notifications_label{
+    margin-top: 20px;
+    margin-bottom: 8px;
+}
+
+.pd_notifications_label2{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.pd_notifications_save{
+    margin: 40px 0px;
+}
+.pd_notifications_saveBtn{
+    padding: 13px 26px;
+    font-family: muli-regular;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 30px;
+    border: none;
+    background: transparent linear-gradient(290deg, #4FFEA3 0%, #00E7FC 100%) 0% 0%;
+    cursor: pointer;
+}
