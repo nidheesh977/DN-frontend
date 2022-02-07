@@ -385,7 +385,7 @@ class HirePilot extends Component {
                             {this.state.keywords_visible <= 3 ? <div className="h_p_listing_keyword h_p_listing_keyword_more" onClick={this.handleMoreKeyword}>+ {this.state.keywords.length - 3} more</div> : <div className="h_p_listing_keyword h_p_listing_keyword_more" onClick={this.handleMoreKeyword}>- Show less</div>}
                           </div>
                         </div>
-                        <hr style={{ border: "1px solid #dcdcdc" }} />
+                        <hr style={{ borderBottom: "1px solid #dcdcdc" }} />
                         <div className="h_p_listing_pricing_rating_sm">
 
                           <div className='h_p_star-price_box'>
