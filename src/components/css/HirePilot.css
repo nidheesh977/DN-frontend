@@ -33,6 +33,7 @@
   background: transparent linear-gradient(290deg, #4FFEA3 0%, #00E7FC 100%) 0% 0% no-repeat padding-box;
   border-radius: 23px;
   border: 0;
+  cursor: pointer;
 }
 
 .h_p_filter1_heading{
@@ -226,6 +227,7 @@
   border: 0;
   border-radius: 26px;
   margin-right: 2px;
+  cursor: pointer;
 }
 
 .h_p_save_pilot_btn{
@@ -234,6 +236,7 @@
   border-radius: 26px;
   background: transparent linear-gradient(323deg, #4FFEA3 0%, #00E7FC 100%);
   border: 0;
+  cursor: pointer;
 }
 
 .h_p_listing_send_msg_link{
@@ -241,6 +244,7 @@
   font-size: 14px;
   line-height: 20px;
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .h_p_listing_keyword_more{
@@ -261,13 +265,19 @@
 }
 
 .h_p_filter2_input{
-  font-size: 12px;
+  font-size: 14px;
   font-family: muli-light;
   line-height: 18px;
-  padding: 10px 20px;
+  padding: 10px 40px 10px 20px;
   width: 210px;
   border-radius: 20px;
   border: 1px solid #e8e8e8;
+  background:url('../images/search2.png'), #fff;
+  appearance:none;
+	-webkit-appearance:none;
+	background-repeat:no-repeat;
+  background-size: 15px;
+  background-position: 92%;
 }
 
 .h_p_filter2_dropdown_title{
@@ -282,12 +292,18 @@
   font-family: muli-light;
   font-size: 14px;
   line-height: 20px;
-  padding: 10px 18px;
+  padding: 10px 40px 10px 18px;
   min-width: 150px;
   margin-right: 15px;
   border: 1px solid #E8E8E8;
   border-radius: 20px;
   height: 40px;
+  background:url('../images/dropdown-bottom.svg'), #fff;
+  appearance:none;
+	-webkit-appearance:none;
+	background-repeat:no-repeat;
+  background-size: 12px;
+  background-position: 88%;
 }
 
 .h_p_filter1_dropdown{
@@ -305,4 +321,111 @@
 
 .h_p_hide_filter{
   display: none;
+}
+
+.h_p_search_suggestions{
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  max-width: 341px;
+  z-index: 1;
+  max-height: 500px;
+  overflow: auto;
+  box-shadow: 0px 3px 6px #00000029;
+  border: 1px solid #E8E8E8;
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 5px;
+}
+
+.h_p_search_suggestions_show{
+  display: block;
+}
+
+.h_p_suggestions_title{
+  font-family: muli-bold;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 10px;
+}
+
+.h_p_suggestion{
+  font-family: muli-light;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 5px 15px;
+  margin-right: 5px;
+  display: inline-block;
+  border-radius: 15px;
+  background: #F1F1F1;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.h_p_start_process_form{
+  padding: 0px 63px 35px 63px;
+  width: 100%;
+}
+
+.h_p_start_process_form_title{
+  font-family: muli-bold;
+  font-size: 30px;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 20px;
+  line-height: 44px;
+}
+
+.h_p_start_process_form_label{
+  font-size: 18px;
+  font-family: muli-bold;
+  line-height: 26px;
+  margin-bottom: 10px;
+}
+
+.h_p_start_process_form_description{
+  width: calc(100% - 20px);
+  height: 105px;
+  margin-bottom: 30px;
+  background: #F5F5F7;
+  border-radius: 10px;
+  border: 1px solid white;
+  padding: 10px;
+  font-size: 14px;
+  font-family: muli-light;
+}
+
+.h_p_start_process_form_file{
+  display: none;
+}
+
+.h_p_start_process_form_file_label{
+  display: inline-block;
+  background: #DBDBDB;
+  font-size: muli-light;
+  padding: 10px 44px;
+  border-radius: 10px;
+  margin-right: 20px;
+  margin-bottom: 50px;
+}
+
+.h_p_start_process_form_file_label_text{
+  display: inline-block;
+  font-family: muli-light;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.h_p_start_process_form_btn_container{
+  text-align: center;
+}
+
+.h_p_start_process_form_btn{
+  background: #4FFEA3;
+  border-radius: 23px;
+  font-family: muli-regular;
+  font-size: 16px;
+  border: 0;
+  padding: 10px 73px;
+  cursor: pointer;
 }

@@ -50,6 +50,7 @@ import HireSubscription from "./components/website/HireSubscription"
 import HirePilot from './components/website/HirePilot'
 import Pilot_dashboard from "./components/website/pilot_dashboard/Pilot_dashboard"
 import ScrollToTop from "./components/website/ScrollToTop";
+import PilotDetails from './components/website/PilotDetail'
 
 class App extends React.Component {
   constructor(props) {
@@ -173,6 +174,11 @@ class App extends React.Component {
               exact
               path="/hire_pilots"
               component={HirePilot}
+            />
+            <PublicRoute
+              exact
+              path="/pilot_details/:id"
+              component={PilotDetails}
             />
             <PrivateRoute
               exact

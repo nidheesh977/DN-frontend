@@ -1,0 +1,446 @@
+.p_d_name_container{
+  margin-top: 40px;
+}
+
+.p_d_name{
+  display: inline-block;
+  font-family: muli-bold;
+  font-size: 35px;
+  line-height: 51px;
+  margin-right: 20px;
+}
+
+.p_d_profession{
+  font-size: 50px;
+  font-family: muli-bold;
+  line-height: 74px;
+}
+
+.p_d_location{
+  font-family: muli-bold;
+  font-size: 20px;
+  line-height: 30px;
+  margin-bottom: 17px;
+}
+
+.p_d_description{
+  font-family: muli-light;
+  font-size: 16px;
+  line-height: 20px;
+  margin-bottom: 29px;
+}
+
+.p_d_btn_container{
+  margin-bottom: 30px;
+}
+
+.p_d_btn{
+  font-size: 16px;
+  font-family: muli-regular;
+  line-height: 24px;
+  border-radius: 5px;
+  border: 0;
+  height: 35px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+
+.p_d_more_btn{
+  background-color: #F5F5F7 ;
+  font-size: 20px;
+  font-family: muli-bold;
+  border: 1px solid rgba(0, 0, 0, 0.330);
+  width: 54px;
+}
+
+.p_d_tabs{
+  margin-top: 20px;
+}
+
+.p_d_tab{
+  font-size: 16px;
+  font-family: muli-light;
+  line-height: 24px;
+  margin-right: 50px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.p_d_tab_md{
+  font-size: 16px;
+  font-family: muli-light;
+  line-height: 24px;
+  margin-left: 20px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.p_d_tab_selected{
+  font-family: muli-bold;
+}
+
+.p_d_tab_filter_title{
+  font-size: 16px;
+  font-family: muli-regular;
+  line-height: 20px;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.p_d_tab_filter{
+  font-size: 16px;
+  font-family: muli-regular;
+  padding: 5px;
+  border-radius: 25px;
+}
+
+.p_d_files{
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.p_d_files_container{
+  margin-bottom: 33px;
+}
+
+.p_d_file_details_container{
+  display: flex;
+  visibility: hidden;
+  margin-top: 7px;
+}
+
+.p_d_file_other_details{
+  display: flex;
+  margin-left: auto;
+}
+
+.p_d_file_user_name{
+  font-size: 14px;
+  font-family: muli-light;
+}
+
+.p_d_file_views{
+  font-size: 14px;
+  font-family: muli-light;
+  margin-right: 15px
+}
+
+.p_d_file_downloads{
+  font-size: 14px;
+  font-family: muli-light;
+  margin-right: 15px
+}
+
+.p_d_file_likes{
+  font-size: 14px;
+  font-family: muli-light;
+  margin-right: 15px
+}
+
+.p_d_files_icon{
+  float: left;
+}
+
+.p_d_files_video_icon{
+  position: absolute;
+  top: calc(50% - 60px);
+  left: calc(50% - 27px);
+}
+
+.p_d_about_title{
+  font-family: muli-bold;
+  font-size: 20px;
+  line-height: 30px;
+  margin-bottom: 10px;
+}
+
+.p_d_about_name{
+  font-family: muli-light;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 30px;
+}
+
+.p_d_about_content{
+  font-family: muli-light;
+  font-size: 15px;
+  line-height: 28px;
+  margin-bottom: 30px;
+}
+
+.p_d_about_skills_keyword{
+  font-family: muli-regular;
+  font-size: 12px;
+  padding: 6px 10px;
+  background: #F5F5F7;
+  border-radius: 15px;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.p_d_pilot_details{
+  background-color: #F5F5F7;
+  border-radius: 5px;
+  padding: 25px 40px 1px 40px;
+  margin-bottom: 10px;
+}
+
+.p_d_hire_container{
+  background-color: #F5F5F7;
+  border-radius: 5px;
+  padding: 25px 40px 20px 40px;
+  margin-bottom: 60px;
+}
+
+.p_d_about_name_container{
+  margin-top: 55px;
+}
+
+.p_d_about_details_title{
+  font-size: 16px;
+  font-family: muli-bold;
+  line-height: 24px;
+  margin-bottom: 5px;
+
+}
+
+.p_d_about_details_content{
+  font-size: 16px;
+  font-family: muli-light;
+  line-height: 24px;
+  margin-bottom: 25px;
+}
+
+.p_d_hire_container{
+  text-align: center;
+}
+.p_d_soc_icon1{
+  position: absolute;
+  padding-top: 2px;
+  right: 105px;
+}
+.p_d_soc_icon2{
+  position: absolute;
+  right: 103px; 
+ 
+}
+.p_d_soc_icon3{
+  position: absolute;
+  right: 103px; 
+  padding-top: 4px;
+}
+.p_d_message_btn {
+  background-color: #00E7FC;
+  width: 150px;
+  text-align: center;
+  padding-left: 33px;
+  position: relative;
+}
+.p_d_follow_btn{
+  background-color: #F5F5F7;
+  width: 150px;
+  text-align: center;
+  padding-left: 33px;
+  position: relative;
+}
+
+.p_d_hire_btn{
+  background-color: #4FFEA3;
+  width: 150px;
+  text-align: center;
+  padding-left: 25px;
+  position: relative;
+}
+
+.p_d_hire_content{
+  font-family: muli-light;
+  font-size: 16px;
+  line-height: 25px;
+  margin-bottom: 25px;
+}
+
+.p_d_about_hire_btn{
+  padding: 6px 30px;
+  font-family: muli-regular;
+  font-size: 16px;
+  line-height: 24px;
+  background-color: #4FFEA3;
+  border: 0;
+  border-radius: 5px;
+  display: flex;
+  margin: auto;
+  cursor: pointer;
+  margin-bottom: 13px;
+}
+
+.p_d_followers_img_container{
+  display: inline-block;
+}
+
+.p_d_followers_name{
+  font-family: muli-bold;
+  font-size: 25px;
+  line-height: 36px;
+  margin-bottom: 5px;
+}
+
+.p_d_followers_username{
+  font-family: muli-light;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 15px;
+}
+
+.p_d_followers_img_container{
+  float: left;
+  vertical-align: middle;
+}
+
+.p_d_followers_other_details_xxl{
+  min-height: 150px;
+  margin-left: 194px;
+  display: flex;
+}
+
+.p_d_followers_follow_btn{
+  background: #4FFEA3;
+  padding: 13px 75px;
+  font-family: muli-regular;
+  font-size: 16px;
+  line-height: 24px;
+  border-radius: 25px;
+  border: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+  cursor: pointer;
+}
+
+.p_d_follower_details_container{
+  padding: 35px 0px;
+}
+
+.p_d_followers_other_details_md{
+  margin-left: 122px;
+}
+
+.p_d_followers_btn_container{
+  margin-left: auto;
+}
+
+.p_d_followers_name_username{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.p_d_message_container{
+  height: 460px;
+  width: 360px;
+  background: white;
+  border: 1px solid #D8D8D8;
+  border-radius: 10px;
+  padding: 20px;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 160px;
+}
+
+.p_d_message_container::-webkit-scrollbar {
+  display: none;
+}
+
+.p_d_message_user_image{
+  height: 40px;
+  width: 40px;
+}
+
+.p_d_message_sender_img{
+  height: 55px;
+  width: 55px;
+}
+
+.p_d_message_user_details{
+  display: flex;
+  padding-bottom: 20px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid rgba(112, 112, 112, 0.2);
+}
+
+.p_d_message_user_title{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.p_d_message_close_container{
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: auto;
+}
+
+.p_d_message_user_image_container{
+  margin-right: 15px;
+}
+
+.p_d_message_user_title{
+  font-family: muli-bold;
+  font-size: 17px;
+  line-height: 25px;
+
+}
+
+.p_d_message_search{
+  padding: 10px 50px 10px 25px;
+  width: calc(100% - 80px);
+  font-size: 14px;
+  font-family: muli-light;
+  border: 1px solid #E8E8E8;
+  border-radius: 20px;
+  background:url('../images/search2.png'), #fff;
+  appearance:none;
+	-webkit-appearance:none;
+	background-repeat:no-repeat;
+  background-size: 15px;
+  background-position: 93%;
+  margin-bottom: 25px;
+}
+
+.p_d_message_recieve_container, .p_d_message_content_container{
+  display: flex;
+}
+
+.p_d_message_recieve_container{
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(112, 112, 112, 0.2);
+  margin-bottom: 20px;
+}
+
+.p_d_message_sender_name{
+  font-family: muli-bold;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 5px;
+}
+
+.p_d_message_text{
+  font-size: 11px;
+  font-family: muli-light;
+  line-height: 17px;
+
+}
+
+.p_d_message_time{
+  font-size: 11px;
+  font-family: muli-light;
+  line-height: 16px;
+}
+
+.p_d_followers_follow_btn_xxl{
+  margin-top: 50px;
+}
+

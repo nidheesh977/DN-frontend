@@ -262,3 +262,24 @@
   justify-content: center;
   align-items: center;
 }
+
+.s_c_list_btn_container{
+  text-align: right;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.s_c_list_btn{
+  font-family: muli-bold;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 10px 22px;
+  background: #00E7FC;
+  border-radius: 20px;
+  border: 0;
+  cursor: pointer;
+}
+
+.s_c_list_btn:hover{
+  background: #00E7FC !important;
+}
