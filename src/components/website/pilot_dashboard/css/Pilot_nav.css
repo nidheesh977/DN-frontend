@@ -1,0 +1,22 @@
+.p_d_navbar{
+    display: flex;
+    /* align-items: center; */
+    padding: 12px;
+    box-shadow: 0px 0px 5px #0000001A;
+}
+#p_d_navitem2{
+    margin-left: 50px;
+}
+#p_d_navitem2, #p_d_navitem1{
+    font-family: muli-light;
+    font-size: 18px;
+    line-height: 26px;
+}
+#p_d_navitem1{
+    margin-left: 122px;
+}
+
+.pd_nav_active{
+    font-family: muli-bold !important;
+    color: #00E7FC;
+}

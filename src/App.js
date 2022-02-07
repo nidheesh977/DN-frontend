@@ -48,6 +48,8 @@ import ServiceCenterDetails from "./components/website/service_center_details";
 import ApplyJob from "./components/website/ApplyJob";
 import HireSubscription from "./components/website/HireSubscription"
 import HirePilot from './components/website/HirePilot'
+import Pilot_dashboard from "./components/website/pilot_dashboard/Pilot_dashboard"
+import ScrollToTop from "./components/website/ScrollToTop";
 
 class App extends React.Component {
   constructor(props) {
@@ -81,6 +83,7 @@ class App extends React.Component {
       <HashRouter>
         <Header />
         <UserContext.Provider>
+          <ScrollToTop />
           <Switch>
             <PublicRoute
               restricted={true}
@@ -216,6 +219,9 @@ class App extends React.Component {
             <PublicRoute component = {ServiceCenters} path = "/service_centers" exact />
             <PublicRoute component = {ServiceCenterDetails} path = "/service_center/:id" exact />
             <PublicRoute component = {ApplyJob} path = "/apply_job" exact />
+            {/* yaseen */}
+            <Route component={Pilot_dashboard} path="/pilot_dashboard" />
+            {/* yaseen */}
             <PublicRoute exact path="*" component={NoPageFound} />
           </Switch>
         </UserContext.Provider>

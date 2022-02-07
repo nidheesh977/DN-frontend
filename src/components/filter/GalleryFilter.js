@@ -550,7 +550,7 @@ class GalleryFilter extends React.Component {
                 </div>
                 {loading === true ? (
                   <div>
-                    <figure>
+                    <figure style={{display: "flex", justifyContent: "center"}}>
                       <Skeleton
                         height={250}
                         width={270}
