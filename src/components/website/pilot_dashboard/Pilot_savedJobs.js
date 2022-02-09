@@ -69,10 +69,11 @@ function Pilot_savedJobs() {
           return (
             <div className="pd_a_j_data">
               <div style={{ marginBottom: "10px" }}>
-                <div className="pd_a_j_dataTitle">{item.name}</div>
-                <div className="pd_a_j_dataDateHead">
+              <div className="pd_a_j_dataDateHead">
                   Posted on:<span className="pd_a_j_dataDate">{item.date}</span>
                 </div>
+                <div className="pd_a_j_dataTitle">{item.name}</div>
+              
               </div>
               <div className="pd_a_j_data_subTitle">{item.producer}</div>
               <div>

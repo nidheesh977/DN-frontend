@@ -43,12 +43,12 @@ function Pilot_following() {
                     return (
                         <div>
                             <Row>
-                                <Col xl={1.4} sm={1}>
+                                <Col xl={1.4} xs={2}>
                                     <div className='pd_followers_pilotImageBox' >
                                         <img src={Pilot} alt="pilot img" className='pd_followers_pilot_img' />
                                     </div>
                                 </Col>
-                                <Col>
+                                <Col xs={5.25}>
                                     <div className='pd_followers_pilotDetails'>
                                         <div className='pd_followers_pilotName'>{item.name}</div>
                                         <div className='pd_followers_pilotType'>{item.profile}</div>

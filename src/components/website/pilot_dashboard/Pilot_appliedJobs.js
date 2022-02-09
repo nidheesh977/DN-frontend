@@ -36,7 +36,7 @@ function Pilot_appliedJobs() {
         desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
         location: "Bangalore",
         type: "Part Time",
-        like: true,
+        like: false,
       },
       {
         id: 3,
@@ -61,7 +61,7 @@ function Pilot_appliedJobs() {
         desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
         location: "Bangalore",
         type: "Full Time",
-        like:true,
+        like:false,
 
       },
     ],
@@ -76,10 +76,11 @@ function Pilot_appliedJobs() {
           return (
             <div className="pd_a_j_data">
               <div style={{ marginBottom: "10px" }}>
-                <div className="pd_a_j_dataTitle">{item.name}</div>
-                <div className="pd_a_j_dataDateHead">
+              <div className="pd_a_j_dataDateHead">
                   Posted on:<span className="pd_a_j_dataDate">{item.date}</span>
                 </div>
+                <div className="pd_a_j_dataTitle">{item.name}</div>
+               
               </div>
               <div className="pd_a_j_data_subTitle">{item.producer}</div>
               <div>
@@ -108,7 +109,7 @@ function Pilot_appliedJobs() {
                 <Link to="#" id="a_j_job_btn">
                   View Job
                 </Link>{" "}
-                <img src={item.like ? heart : heartLike} className="a_j_like" />
+                <img src={item.like ? heart : heartLike}  className="a_j_like" />
               </div>
             </div>
           );

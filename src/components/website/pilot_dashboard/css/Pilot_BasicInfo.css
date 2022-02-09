@@ -4,7 +4,7 @@
     border-radius: 5px;
 }
 .pd_b_i_main{
-    margin: 25px 30px;
+    margin: 25px 0px;
 }
 
 .pd_b_i_images{
@@ -147,6 +147,7 @@
 }
 
 .pd_p_i_profile_text{
+    display: inline;
     font-family: muli-light;
     font-size: 14px;
     line-height: 20px;
@@ -160,6 +161,7 @@
     display: none;
 }
 .pd_b_i_attachment{
+    display: inline;
     font-family: muli-light;
     font-size: 14px;
     line-height: 20px;
@@ -167,6 +169,7 @@
     margin-right: 10px;
     background-color: #4FFEA3;
     border-radius: 5px;
+    width: 20%;
 border: none;
 cursor: pointer;
 }
@@ -175,4 +178,31 @@ cursor: pointer;
     margin-top: 22.5px;
     margin-bottom: 22.5px;
     
+}
+
+@media only screen and (max-width: 980px) {
+    .pd_b_i_edit{
+        position: absolute;
+        background-color: #00E7FC;
+        height: 20px;
+        width: 20px;
+        bottom: 10px;
+        left: 40%;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 5px;
+    
+    }
+
+    .pd_b_i_edit1{
+        position: absolute;
+        background-color: #00E7FC;
+        height: 25px;
+        width: 25px;
+        bottom: 10px;
+        right: 10px;
+        cursor: pointer;
+        padding: 7px;
+        border-radius: 5px;
+    }
 }
