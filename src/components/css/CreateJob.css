@@ -121,10 +121,75 @@
   margin-bottom: 35px;
 }
 
-.c_j_price_input{
-  width: 100%;
+.c_j_salery_input_label_title{
+  font-family: muli-regular;
+  font-size: 14px;
+  line-height: 20px;
 }
 
-.c_j_rate_input{
-  width: 100%;
+.c_j_salery_input_label, .c_j_salery_input_to{
+  display: inline-block;
+  margin-right: 25px;
+  margin-bottom: 10px;
+}
+
+.c_j_salery_input_to{
+  font-size: 14px;
+  font-family: muli-regular;
+  line-height: 20px;
+}
+
+.c_j_salery_rate_input, .c_j_salery_input{
+  font-size: 14px;
+  font-family: muli-regular;
+  padding: 9px 20px;
+  width: 200px;
+  line-height: 20px;
+  border: 0;
+  border-radius: 5px;
+  background: #F5F5F7;
+  margin-bottom: 10px;
+  border: 1px solid #F5F5F7;
+}
+
+.c_j_salery_rate_input:hover{
+  border: 1px solid #4FFEA3;
+}
+
+.c_j_salery_input_container{
+  margin-bottom: 35px;
+}
+
+.c_j_date_input{
+  font-size: 14px;
+  font-family: muli-regular;
+  padding: 9px 20px;
+  width: 85%;
+  max-width: 350px;
+  line-height: 20px;
+  border: 0;
+  border-radius: 5px;
+  background: #F5F5F7;
+  margin-bottom: 10px;
+  border: 1px solid #F5F5F7;
+  margin-right: 20px;
+}
+
+.c_j_input_text{
+  font-size: 14px;
+  font-family: muli-regular;
+  line-height: 20px;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.c_j_form_textarea{
+  width: calc(100% - 40px);
+  padding: 10px 20px;
+  font-size: 14px;
+  font-family: muli-regular;
+  height: 400px;
+  background: #F5F5F7;
+  border-radius: 5px;
+  border: 1px solid #F5F5F7;
 }

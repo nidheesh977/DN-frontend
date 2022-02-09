@@ -1,13 +1,36 @@
 import React, { Component } from 'react'
-import { Container, Row, Col, Visible } from 'react-grid-system'
+import { Container, Row, Col, Visible, Hidden } from 'react-grid-system'
 import All from './All.module.css';
 import '../css/CreateJob.css'
+import $ from 'jquery'
+import Dialog from "@material-ui/core/Dialog";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import Close from "../images/close.svg";
+import { withStyles } from "@material-ui/core/styles";
+import profileUser from "../images/profile-user.svg";
+import money from "../images/money.svg";
+import location from "../images/location.svg";
+import work from "../images/work.svg";
+import heart from "../images/heart (3).svg";
+import heartLike from "../images/heart-blue.svg";
+import { Link } from "react-router-dom";
+import loadMore from "../images/Group 71.svg";
+import c_j_edit from '../images/c_j_edit.png'
+import c_j_bin from '../images/c_j_bin.png'
+import locationIcon from '../images/location.svg'
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
 
 class CreateJob extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
+      show_popup: true,
       main_tab: 1,
       create_job_step: 1,
       company_name: "",
@@ -16,8 +39,69 @@ class CreateJob extends Component {
       address: "",
       city: "",
       state: "",
-      country: ""
+      country: "",
+      min_salery: "",
+      max_salery: "",
+      rate: 'per_month',
+      date: "",
+      location: "",
+      description: "",
+      draft_listing: [
+        {
+          id: 1,
+          name: "Yasar Arafath",
+          date: "06 Jan 2022",
+          producer: "UTV Motion Pictures",
+          profile: "Professional Pilot",
+          range: "$150.00 - $200.00",
+          desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
+          location: "Bangalore",
+          type: "Full Time",
+          like: true,
+        },
+        {
+          id: 2,
+          name: "React Cinematograper",
+          date: "06 July 2022",
+          producer: "UTV Motion Moviess",
+          profile: "Full Stack Developer",
+          range: "$150.00 - $600.00",
+          desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
+          location: "Bangalore",
+          type: "Part Time",
+          like: true,
+        },
+        {
+          id: 3,
+          name: "Drone Cinematograper",
+          date: "06 Jan 2022",
+          producer: "UTV Motion Pictures",
+          profile: "Professional Pilot",
+          range: "$150.00 - $200.00",
+          desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
+          location: "Bangalore",
+          type: "Full Time",
+          like: false,
+        },
+        {
+          id: 4,
+          name: "Drone Cinematograper",
+          date: "06 Jan 2022",
+          producer: "UTV Motion Pictures",
+          profile: "Professional Pilot",
+          range: "$150.00 - $200.00",
+          desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
+          location: "Bangalore",
+          type: "Full Time",
+          like: false,
+        },
+      ],
     }
+  }
+
+  componentDidMount() {
+    console.log("Helo")
+    $('html,body').scrollTop(0);
   }
 
   selectMainTab = (tab) => {
@@ -42,7 +126,15 @@ class CreateJob extends Component {
       city: "",
       state: "",
       country: "",
-      create_job_step: 1
+      create_job_step: 2,
+      job_type: "full_time",
+      employee_type: "licensed",
+      min_salery: "",
+      max_salery: "",
+      rate: 'per_month',
+      date: "",
+      location: "",
+      description: ""
     })
 
   }
@@ -80,6 +172,7 @@ class CreateJob extends Component {
       this.setState({
         create_job_step: 2
       })
+      $('html,body').scrollTop(0);
     }
   }
 
@@ -87,8 +180,94 @@ class CreateJob extends Component {
 
   }
 
-  SaveJob = () => {
+  PostJob = () => {
+    console.log(this.state)
+    if (this.state.min_salery == "") {
+      this.refs.min_salery.focus()
+      this.refs.min_salery.style.backgroundColor = "#ffe8e8"
+    }
 
+    else if (this.state.max_salery == "") {
+      this.refs.max_salery.focus()
+      this.refs.max_salery.style.backgroundColor = "#ffe8e8"
+    }
+
+    else if (this.state.location == "") {
+      this.refs.location.focus()
+      this.refs.location.style.backgroundColor = "#ffe8e8"
+    }
+
+    else if (this.state.description == "") {
+      this.refs.description.focus()
+      this.refs.description.style.backgroundColor = "#ffe8e8"
+    }
+
+    else {
+      alert("ready")
+      $('html,body').scrollTop(0);
+    }
+  }
+
+  minSaleryChange = (e) => {
+    this.setState({
+      min_salery: e.target.value
+    })
+    this.refs.min_salery.style.backgroundColor = "#F5F5F7"
+  }
+
+  maxSalaryChange = (e) => {
+    this.setState({
+      max_salery: e.target.value
+    })
+    this.refs.max_salery.style.backgroundColor = "#F5F5F7"
+  }
+
+  rateChange = (e) => {
+    this.setState({
+      rate: e.target.value
+    })
+  }
+
+  dateChange = (e) => {
+    this.setState({
+      date: e.target.value
+    })
+  }
+
+  locationChange = (e) => {
+    this.setState({
+      location: e.target.value
+    })
+    this.refs.location.style.backgroundColor = "#F5F5F7"
+  }
+
+  descriptionChange = (e) => {
+    this.setState({
+      description: e.target.value
+    })
+    this.refs.description.style.backgroundColor = "#F5F5F7"
+  }
+
+  closePopup = () => {
+    this.setState({
+      show_popup: false
+    })
+  }
+
+  openDraft = () => {
+    this.setState({
+      show_popup: false,
+      main_tab: 2,
+    })
+    $('html,body').scrollTop(0);
+  }
+
+  uploadNew = () => {
+    this.setState({
+      show_popup: false,
+      main_tab: 1
+    })
+    $('html,body').scrollTop(0);
   }
 
   render() {
@@ -120,7 +299,7 @@ class CreateJob extends Component {
                   <div className="c_j_description">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</div>
                 </div>
               </Row>
-              {this.state.create_job_step === 2 &&
+              {this.state.create_job_step === 1 &&
                 <Row>
                   <div className="c_j_form_container">
                     <div className="c_j_form_title">Basic Information</div>
@@ -156,86 +335,143 @@ class CreateJob extends Component {
                 </Row>
               }
 
-              {this.state.create_job_step === 1 &&
-              <Row>
-                <div className="c_j_form_container">
-                  <div className="c_j_form_title">Job Details</div>
-                  <div className="c_j_form_input_title">Job type?</div>
-                  <div className="c_j_radio_input_container">
-                    <label className="c_j_radio_input_label">
-                      <input type="radio" name="job_type" id="" className='c_j_input_radio'/>
-                      <div className="c_j_input_sub_label">Full time</div>
-                    </label>
-                    <label className="c_j_radio_input_label">
-                      <input type="radio" name="job_type" id="" className='c_j_input_radio'/>
-                      <div className="c_j_input_sub_label">Part time</div>
-                    </label>
-                  </div>
-                  <div className="c_j_form_input_title">Employee type</div>
-                  <div className="c_j_radio_input_container">
-                    <label className="c_j_radio_input_label">
-                      <input type="radio" name="employee_type" id="" className='c_j_input_radio'/>
-                      <div className="c_j_input_sub_label">Licensed Pilot</div>
-                    </label>
-                    <label className="c_j_radio_input_label">
-                      <input type="radio" name="employee_type" id="" className='c_j_input_radio'/>
-                      <div className="c_j_input_sub_label">Unlicensed Pilot</div>
-                    </label>
-                  </div>
-                  <div className="c_j_form_input_title">Salary range</div>
-                  <Row>
-                    <Col>
-                      <label className="c_j_input_label">
-                        <div className="c_j_input_sub_label">Minimum</div>
-                        <input type="number" name="" id="" className='c_j_price_input' style = {{width: "calc(100% - 60px)"}}/>
-                        <div className="c_j_input_text" style = {{width: "50px", textAlign: "center", float: "right"}}>to</div>
+              {this.state.create_job_step === 2 &&
+                <Row>
+                  <div className="c_j_form_container">
+                    <div className="c_j_form_title">Job Details</div>
+                    <div className="c_j_form_input_title">Job type?</div>
+                    <div className="c_j_radio_input_container">
+                      <label className="c_j_radio_input_label">
+                        <input type="radio" name="job_type" id="" className='c_j_input_radio' onClick={() => this.setState({ job_type: "full_time" })} defaultChecked />
+                        <div className="c_j_input_sub_label">Full time</div>
                       </label>
-                    </Col>
-                    <Col>
-                      <label className="c_j_input_label">
-                        <div className="c_j_input_sub_label">Maximum</div>
-                        <input type="number" name="" id="" className='c_j_price_input' />
+                      <label className="c_j_radio_input_label">
+                        <input type="radio" name="job_type" id="" className='c_j_input_radio' onClick={() => this.setState({ job_type: "part_time" })} />
+                        <div className="c_j_input_sub_label">Part time</div>
                       </label>
-                    </Col>
-                    <Col>
-                      <label className="c_j_input_label">
-                        <div className="c_j_input_sub_label">Rate</div>
-                        <select className='c_j_rate_input'>
+                    </div>
+                    <div className="c_j_form_input_title">Employee type</div>
+                    <div className="c_j_radio_input_container">
+                      <label className="c_j_radio_input_label">
+                        <input type="radio" name="employee_type" id="" className='c_j_input_radio' defaultChecked onClick={() => this.setState({ employee_type: "licensed" })} />
+                        <div className="c_j_input_sub_label">Licensed Pilot</div>
+                      </label>
+                      <label className="c_j_radio_input_label">
+                        <input type="radio" name="employee_type" id="" className='c_j_input_radio' onClick={() => this.setState({ employee_type: "unlicensed" })} />
+                        <div className="c_j_input_sub_label">Unlicensed Pilot</div>
+                      </label>
+                    </div>
+                    <div className="c_j_form_input_title">Salary range</div>
+
+                    <div className="c_j_salery_input_container">
+                      <label className="c_j_salery_input_label">
+                        <div className="c_j_salery_input_label_title">Minimum</div>
+                        <input type="number" className='c_j_salery_input' onChange={this.minSaleryChange} ref="min_salery" />
+                      </label>
+                      <Hidden xs>
+                        <div className="c_j_salery_input_to">to</div>
+                      </Hidden>
+                      <Visible xs>
+                        <div className="c_j_salery_input_to" style={{ width: "100%", paddingLeft: "90px" }}>to</div>
+                      </Visible>
+                      <label className="c_j_salery_input_label">
+                        <div className="c_j_salery_input_label_title" onChange={this.maxSalaryChange}>Maximum</div>
+                        <input type="number" className='c_j_salery_input' ref="max_salery" onChange={this.maxSalaryChange} />
+                      </label>
+                      <label className="c_j_salery_input_label">
+                        <div className="c_j_salery_input_label_title">Rate</div>
+                        <select className='c_j_salery_rate_input' onChange={this.rateChange}>
                           <option value="per_month">Per month</option>
                           <option value="per_hour">Per hour</option>
                         </select>
                       </label>
-                    </Col>
-                    <Col></Col>
-                  </Row>
-                  <label className="c_j_input_label">
-                    <div className="c_j_form_input_title">Job posting date</div>
-                    <input type="date" name="" id="" className='c_j_date_input' />
-                    <div className="c_j_input_text">If you want to post the job later, here you can mention the date.</div>
-                  </label>
-                  <label className="c_j_input_label">
-                    <div className="c_j_form_input_title">Work location</div>
-                    <input type="text" name="" id="" className='c_j_form_input' placeholder='E.g Bangalore'/>
-                  </label>
-                  <label className="c_j_input_label">
-                    <div className="c_j_form_input_title">Job description</div>
-                    <textarea id="" className='c_j_form_textarea'></textarea>
-                  </label>
-                </div>
-              </Row>
+                    </div>
+
+                    <div className="c_j_input_label">
+                      <div className="c_j_form_input_title">Job posting date</div>
+                      <input type="date" name="" id="" className='c_j_date_input' onChange={this.dateChange} />
+                      <div className="c_j_input_text">If you want to post the job later, here you can mention the date.</div>
+                    </div>
+                    <label className="c_j_input_label">
+                      <div className="c_j_form_input_title">Work location</div>
+                      <input type="text" name="" id="" className='c_j_form_input' placeholder='E.g Bangalore' onChange={this.locationChange} ref="location" />
+                    </label>
+                    <label className="c_j_input_label">
+                      <div className="c_j_form_input_title">Job description</div>
+                      <textarea id="" className='c_j_form_textarea' onChange={this.descriptionChange} ref="description"></textarea>
+                    </label>
+                  </div>
+                </Row>
               }
               <Row>
                 <div className="c_j_btn_container">
                   <button className="c_j_btn" id="c_j_btn_cancel" onClick={this.clearForm}>Cancel</button>
                   <button className="c_j_btn" id="c_j_btn_save_draft" onClick={this.saveDraft}>Save as draft</button>
                   {this.state.create_job_step === 1 && <button className="c_j_btn" id="c_j_btn_continue" onClick={this.continueProcess}>Continue</button>}
-                  {this.state.create_job_step === 2 && <button className="c_j_btn" id="c_j_btn_continue" onClick={this.SaveJob}>Save</button>}
+                  {this.state.create_job_step === 2 && <button className="c_j_btn" id="c_j_btn_continue" onClick={this.PostJob}>Post Now</button>}
                 </div>
               </Row>
             </>
           }
 
+          {this.state.main_tab === 2 &&
+            <>
+
+              <Row>
+                <div className="c_j_title_container">
+                  <div className="c_j_title">Draft Jobs</div>
+                  <div className="c_j_description">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</div>
+                </div>
+              </Row>
+
+              <Row>
+                <div className="c_j_drafts_container">
+                  <div className="pd_a_j_dataTitle">Drone Cinematographer</div>
+                  <div className="pd_a_j_data_subTitle">UTV Motion Pictures</div>
+                  <div className="a_j_container1">
+                    <div className="a_j_listing_img1">
+                      <img src={profileUser} />
+                    </div>
+                    <div className="a_j_listing_profileName">Professional Pilot</div>
+                    <div className="a_j_listing_img2">
+                      <img src={money} />
+                    </div>
+                    <div className="a_j_listing_money">Not Mentioned</div>
+                  </div>
+                  <div className="a_j_listing_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</div>
+                </div>
+                <button>Bangalore</button>
+                <button>Full-Time</button>
+                <button>Post Job</button>
+                <img src={c_j_edit} alt="" />
+                <img src={c_j_bin} alt="" />
+              </Row>
+            </>
+          }
         </Container>
+
+        <Dialog
+          open={this.state.show_popup}
+          onClose={this.closePopup}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+        >
+
+          <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+            <div style={{ position: "absolute", top: '20px', right: '20px' }}>
+              <img src={Close} alt="" onClick={this.closePopup} style={{ cursor: "pointer" }} />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="u_f_popup_title">You have draft job in your account. do you want to continue post?</div>
+              <div className="u_f_popup_btn_container">
+                <button className="u_f_popup_btn1" onClick={this.openDraft}>Open Draft</button>
+                <button className="u_f_popup_btn2" onClick={this.uploadNew}>Create New Job</button>
+              </div>
+            </Row>
+          </DialogContent>
+        </Dialog>
       </section>
     )
   }
