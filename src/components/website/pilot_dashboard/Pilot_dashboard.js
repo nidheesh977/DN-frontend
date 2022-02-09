@@ -4,13 +4,19 @@ import Pilot_nav from "./Pilot_nav";
 import { Container, Row, Col, Visible, Hidden } from 'react-grid-system'
 import Activities_Sidebar from './Activities_Sidebar'
 import Account_Sidebar from './Account_Sidebar';
+import All from '../../website/All.module.css'
+import ScrollToTop from "react-scroll-to-top";
+
+
 
 
 function Pilot_dashboard() {
     return (
         <>
+              <ScrollToTop smooth color="#4ffea3" style={{boxShadow: "3px 2px 7px #0000003A"}} top="500"/>
+
             <Pilot_nav />
-            <Container>
+            <Container  className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
                 <div style={{marginTop: "40px"}}>
 
                     <Switch>

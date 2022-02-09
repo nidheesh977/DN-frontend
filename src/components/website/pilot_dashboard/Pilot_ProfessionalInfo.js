@@ -40,8 +40,10 @@ function Pilot_ProfessionalInfo() {
     <Row>
       <Col xl={6}>
     <div className='pd_b_i_profile_head'>Certificates  <span className='pd_p_i_profile_text'>(Optional)</span> </div>
-   <label>
-    <button className='pd_b_i_attachment'>Attachments</button><span className='pd_p_i_profile_text'>Attach your DGCA certificate</span>
+   <label for="pd_p_i_hidden">
+     <div>
+    <div className='pd_b_i_attachment'>Attachments</div><span className='pd_p_i_profile_text'>Attach your DGCA certificate</span>
+    </div>
   <input type="file" id="pd_p_i_hidden"/>
   </label>
   </Col>
