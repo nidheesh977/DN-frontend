@@ -1,9 +1,7 @@
 import React from "react";
 import "./css/Pilot_images.css";
 import "./css/Pilot_downloads.css";
-import Pilot_approvedImages from "./Pilot_approvedImages";
-import Pilot_pendingImages from "./Pilot_pendingImages";
-import Pilot_rejectedImages from "./Pilot_rejectedImages";
+
 import { Switch, Route, NavLink } from "react-router-dom";
 import Pilot_downloadsImages from "./Pilot_downloadsImages";
 import Pilot_downloadsVideos from "./Pilot_downloadsVideos";
