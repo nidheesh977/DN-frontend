@@ -53,6 +53,7 @@ import ScrollToTop from "./components/website/ScrollToTop";
 import PilotDetails from './components/website/PilotDetail'
 import ServiceCenterDashboard from "./components/website/ServiceCenterDashboard/ServiceCenterDashboard";
 import CreateJob from './components/website/CreateJob'
+import Company_dashboard from "./components/website/company_dashboard/Company_dashboard";
 
 class App extends React.Component {
   constructor(props) {
@@ -231,6 +232,7 @@ class App extends React.Component {
             <PublicRoute component = {ApplyJob} path = "/apply_job" exact />
             {/* yaseen */}
             <Route component={Pilot_dashboard} path="/pilot_dashboard" />
+            <Route component={Company_dashboard} path="/company_dashboard" />
             {/* yaseen */}
             <PublicRoute exact path="*" component={NoPageFound} />
           </Switch>

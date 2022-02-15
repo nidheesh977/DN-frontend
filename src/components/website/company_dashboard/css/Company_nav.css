@@ -1,10 +1,10 @@
-.p_d_navbar{
+.c_d_navbar{
     /* display: flex; */
     /* align-items: center; */
     padding: 12px 0px;
     box-shadow: 0px 0px 5px #0000001A;
 }
-#p_d_navitem2{
+#c_d_navitem2{
     margin-left: 50px;
     font-family: muli-light;
     font-size: 18px !important;
@@ -12,7 +12,7 @@
 
 }
 
-#p_d_navitem1{
+#c_d_navitem1{
     font-family: muli-light;
     font-size: 18px !important;
     /* margin-left: 50px; */
@@ -20,7 +20,7 @@
 
 }
 
-.pd_nav_active{
+.cd_nav_active{
     font-family: muli-bold !important;
     font-size: 18px !important;
 
@@ -28,7 +28,7 @@
 }
 
 @media only screen and (max-width: 600px) {
-.p_d_navbar{
+.c_d_navbar{
     margin-top: 20px;
 }
 }

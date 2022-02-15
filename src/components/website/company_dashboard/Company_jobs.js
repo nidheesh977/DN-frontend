@@ -1,11 +1,12 @@
 import React from "react";
-import "./css/Pilot_images.css";
-import Pilot_approvedImages from "./Pilot_approvedImages";
-import Pilot_pendingImages from "./Pilot_pendingImages";
-import Pilot_rejectedImages from "./Pilot_rejectedImages";
-import { Switch, Route, NavLink } from "react-router-dom";
+// import "./css/Pilot_images.css";
 
-function Pilot_images() {
+import { Switch, Route, NavLink } from "react-router-dom";
+import Company_approvedJobs from "./Company_approvedJobs";
+import Company_closedJobs from "./Company_closedJobs";
+import Company_pendingJobs from "./Company_pendingJobs";
+
+function Company_jobs() {
   return (
     <div>
       <div className="pd_images_main">
@@ -13,7 +14,7 @@ function Pilot_images() {
           <NavLink
             exact
             activeClassName="pd_images_active"
-            to="/pilot_dashboard/activities/images/"
+            to="/company_dashboard/activities/jobs/"
             id="pd_images_navItem"
           >
             Approved
@@ -22,7 +23,7 @@ function Pilot_images() {
         <div>
           <NavLink
             activeClassName="pd_images_active"
-            to="/pilot_dashboard/activities/images/pending"
+            to="/company_dashboard/activities/jobs/pending"
             id="pd_images_navItem"
           >
             Pending
@@ -31,26 +32,28 @@ function Pilot_images() {
         <div>
           <NavLink
             activeClassName="pd_images_active"
-            to="/pilot_dashboard/activities/images/rejected"
+            to="/company_dashboard/activities/jobs/closed"
             id="pd_images_navItem"
           >
-            Rejected
+            Position Closed
           </NavLink>
         </div>
       </div>
       <div className="pd_images_content">
         <Switch>
+   
+
           <Route
-            path="/pilot_dashboard/activities/images/pending"
-            component={Pilot_pendingImages}
+            path="/company_dashboard/activities/jobs/pending"
+            component={Company_pendingJobs}
           />
           <Route
-            path="/pilot_dashboard/activities/images/rejected"
-            component={Pilot_rejectedImages}
+            path="/company_dashboard/activities/jobs/closed"
+            component={Company_closedJobs}
           />
           <Route
-            path="/pilot_dashboard/activities/images/"
-            component={Pilot_approvedImages}
+            path="/company_dashboard/activities/jobs/"
+            component={Company_approvedJobs}
           />
         </Switch>
       </div>
@@ -58,4 +61,4 @@ function Pilot_images() {
   );
 }
 
-export default Pilot_images;
+export default Company_jobs;
