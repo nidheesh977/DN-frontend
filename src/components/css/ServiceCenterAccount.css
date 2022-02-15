@@ -1,0 +1,42 @@
+.s_c_a_photos_container{
+  margin-bottom: 35px;
+}
+
+.s_c_a_photo{
+  height: 85px;
+  width: 115px;
+  display: inline-block;
+  margin-right: 25px;
+  margin-bottom: 25px;
+  
+}
+
+.s_c_a_photo_img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.s_c_a_photo_add{
+  position: relative;
+  height: 85px;
+  width: 115px;
+  display: inline-block;
+  background-color: #4FFEA3;
+}
+
+.s_c_a_photo_add_symbol, .s_c_a_plus_icon{
+  position: absolute;
+  height: 15px;
+  width: 15px;
+  top: 12px;
+  left: 25px;
+
+}
+
+.s_c_a_photo_add_text{
+  position: absolute;
+  left: 16px !important;
+  top: 45px;
+}

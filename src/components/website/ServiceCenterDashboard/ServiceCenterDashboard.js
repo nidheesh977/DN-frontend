@@ -3,6 +3,7 @@ import All from '../../website/All.module.css'
 import ServiceCenterActivities from './ServiceCenterActivities'
 import {Container, Row, Col, Visible, Hidden} from 'react-grid-system'
 import {NavLink, Switch, Route} from 'react-router-dom'
+import ServiceCenterAccount from './ServiceCenterAccount'
 
 class ServiceCenterDashboard extends Component{
 
@@ -21,6 +22,7 @@ class ServiceCenterDashboard extends Component{
   }
 
   render(){
+    // console.log(this.props.location)
     return(
       <>
         <div className="s_c_db_main_tabs">
@@ -35,14 +37,14 @@ class ServiceCenterDashboard extends Component{
           </Visible>
           <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
             <div style={{display: "flex"}}>
-              <div className={this.state.main_tab===1?"s_c_db_main_tab s_c_db_main_tab_selected":"s_c_db_main_tab"} onClick={() => this.selectMainTab(1, "/service_center_dashboard")}>Activities</div>
-              <div className={this.state.main_tab===2?"s_c_db_main_tab s_c_db_main_tab_selected":"s_c_db_main_tab"} onClick={() => this.selectMainTab(2, "/service_center_dashboard/account")}>My Account</div>
+              <div className={this.props.location.pathname === "/service_center_dashboard" ?"s_c_db_main_tab s_c_db_main_tab_selected":"s_c_db_main_tab"} onClick={() => this.selectMainTab(1, "/service_center_dashboard")}>Activities</div>
+              <div className={this.props.location.pathname === "/service_center_dashboard/account"?"s_c_db_main_tab s_c_db_main_tab_selected":"s_c_db_main_tab"} onClick={() => this.selectMainTab(2, "/service_center_dashboard/account")}>My Account</div>
             </div>
           </Container>
         </div>
         <Switch>
-          <Route path = "/service_center_dashboard" component = {ServiceCenterActivities} />
-          <Route path = "/service_center_dashboard/account" component = {ServiceCenterActivities} />
+          <Route exact path = "/service_center_dashboard" component = {ServiceCenterActivities} />
+          <Route exact path = "/service_center_dashboard/account" component = {ServiceCenterAccount} />
         </Switch>
       </>
     )

@@ -48,8 +48,6 @@
 
 }
 
-
-
 .pd_b_i_pilot{
     height:100px;
     width: 100px;
@@ -96,11 +94,11 @@
 
 .pd_b_i_profile_input{
     width: 100%;
-    height: 40px;
+    height: 38px;
+    border: 1px solid #F5F5F7;
     background-color: #F5F5F7;
     border-radius: 5px;
     margin-bottom: 30px;
-    border: none;
     font-family: muli-light;
     font-size: 14px;
     line-height: 20px;
@@ -111,7 +109,7 @@
     background-color: #F5F5F7;
     border-radius: 5px;
     margin-bottom: 10px;
-    border: none;
+    border:  1px solid #F5F5F7;
     font-family: muli-light;
     font-size: 14px;
     line-height: 20px;
@@ -205,4 +203,19 @@ cursor: pointer;
         padding: 7px;
         border-radius: 5px;
     }
+}
+
+.s_c_a_brand{
+    display: inline-block;
+    font-size: 14px;
+    font-family: muli-light;
+    padding: 8px 20px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background-color: #EEEEEE;
+    border-radius: 20px;
+}
+
+.s_c_a_brand_container{
+    margin-bottom: 30px;
 }

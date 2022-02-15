@@ -391,7 +391,7 @@ class HirePilot extends Component {
 
                           <div className='h_p_star-price_box'>
                             <div className='h_p_price-container-1'>
-                              <div className='h_p_price-rate'>$20   <span className='h_p_hour_time'>/hr</span>  </div>
+                              <div className='h_p_price-rate'>$20 <span className='h_p_hour_time'>/hr</span>  </div>
 
                             </div>
                             <div class="h_p_star_section">

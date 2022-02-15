@@ -9,8 +9,6 @@ import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
 import profileUser from "../images/profile-user.svg";
 import money from "../images/money.svg";
-import location from "../images/location.svg";
-import work from "../images/work.svg";
 import heart from "../images/heart (3).svg";
 import heartLike from "../images/heart-blue.svg";
 import { Link } from "react-router-dom";
@@ -18,6 +16,7 @@ import loadMore from "../images/Group 71.svg";
 import c_j_edit from '../images/c_j_edit.png'
 import c_j_bin from '../images/c_j_bin.png'
 import locationIcon from '../images/location.svg'
+import workIcon from '../images/work.svg'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -418,33 +417,59 @@ class CreateJob extends Component {
             <>
 
               <Row>
-                <div className="c_j_title_container">
+                <div className="c_j_title_container" style = {{marginBottom: '40px'}}>
                   <div className="c_j_title">Draft Jobs</div>
                   <div className="c_j_description">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</div>
                 </div>
               </Row>
 
               <Row>
-                <div className="c_j_drafts_container">
-                  <div className="pd_a_j_dataTitle">Drone Cinematographer</div>
-                  <div className="pd_a_j_data_subTitle">UTV Motion Pictures</div>
-                  <div className="a_j_container1">
-                    <div className="a_j_listing_img1">
-                      <img src={profileUser} />
+                <div className="c_j_draft_item_container">
+                  <div className="c_j_drafts_container">
+                    <div className="pd_a_j_dataTitle">Drone Cinematographer</div>
+                    <div className="pd_a_j_data_subTitle">UTV Motion Pictures</div>
+                    <div className="a_j_container1">
+                      <div className="a_j_listing_img1">
+                        <img src={profileUser} />
+                      </div>
+                      <div className="a_j_listing_profileName">Professional Pilot</div>
+                      <div className="a_j_listing_img2">
+                        <img src={money} />
+                      </div>
+                      <div className="a_j_listing_money">Not Mentioned</div>
                     </div>
-                    <div className="a_j_listing_profileName">Professional Pilot</div>
-                    <div className="a_j_listing_img2">
-                      <img src={money} />
-                    </div>
-                    <div className="a_j_listing_money">Not Mentioned</div>
+                    <div className="a_j_listing_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</div>
                   </div>
-                  <div className="a_j_listing_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</div>
+                  <button className='c_j_listing_btn c_j_location_btn'><img src={locationIcon} alt="" className='c_j_listing_icon1'/> Bangalore</button>
+                  <button className='c_j_listing_btn c_j_job_type_btn'><img src={workIcon} alt="" className='c_j_listing_icon1'/> Full-Time</button>
+                  <button className='c_j_listing_btn c_j_post_job_btn'>Post Job</button>
+                  <img src={c_j_edit} alt="" className='c_j_listing_icon2'/>
+                  <img src={c_j_bin} alt="" className='c_j_listing_icon2'/>
                 </div>
-                <button>Bangalore</button>
-                <button>Full-Time</button>
-                <button>Post Job</button>
-                <img src={c_j_edit} alt="" />
-                <img src={c_j_bin} alt="" />
+              </Row>
+              <Row>
+                <div className="c_j_draft_item_container">
+                  <div className="c_j_drafts_container">
+                    <div className="pd_a_j_dataTitle">Drone Cinematographer</div>
+                    <div className="pd_a_j_data_subTitle">UTV Motion Pictures</div>
+                    <div className="a_j_container1">
+                      <div className="a_j_listing_img1">
+                        <img src={profileUser} />
+                      </div>
+                      <div className="a_j_listing_profileName">Professional Pilot</div>
+                      <div className="a_j_listing_img2">
+                        <img src={money} />
+                      </div>
+                      <div className="a_j_listing_money">Not Mentioned</div>
+                    </div>
+                    <div className="a_j_listing_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...</div>
+                  </div>
+                  <button className='c_j_listing_btn c_j_location_btn'><img src={locationIcon} alt="" className='c_j_listing_icon1'/> Bangalore</button>
+                  <button className='c_j_listing_btn c_j_job_type_btn'><img src={workIcon} alt="" className='c_j_listing_icon1'/> Full-Time</button>
+                  <button className='c_j_listing_btn c_j_post_job_btn'>Post Job</button>
+                  <img src={c_j_edit} alt="" className='c_j_listing_icon2'/>
+                  <img src={c_j_bin} alt="" className='c_j_listing_icon2'/>
+                </div>
               </Row>
             </>
           }
@@ -465,6 +490,49 @@ class CreateJob extends Component {
             </div>
             <Row style={{ marginTop: "30px" }}>
               <div className="u_f_popup_title">You have draft job in your account. do you want to continue post?</div>
+              <div className="u_f_popup_btn_container">
+                <button className="u_f_popup_btn1" onClick={this.openDraft}>Open Draft</button>
+                <button className="u_f_popup_btn2" onClick={this.uploadNew}>Create New Job</button>
+              </div>
+            </Row>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          open={this.state.job_created_popup}
+          onClose={this.closePopup}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+        >
+
+          <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+            <div style={{ position: "absolute", top: '20px', right: '20px' }}>
+              <img src={Close} alt="" onClick={this.closePopup} style={{ cursor: "pointer" }} />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="u_f_popup_title">Success</div>
+              
+            </Row>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          open={this.state.job_created_popup}
+          onClose={this.closePopup}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+        >
+
+          <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+            <div style={{ position: "absolute", top: '20px', right: '20px' }}>
+              <img src={Close} alt="" onClick={this.closePopup} style={{ cursor: "pointer" }} />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="u_f_popup_title">Success</div>
               <div className="u_f_popup_btn_container">
                 <button className="u_f_popup_btn1" onClick={this.openDraft}>Open Draft</button>
                 <button className="u_f_popup_btn2" onClick={this.uploadNew}>Create New Job</button>
