@@ -349,6 +349,7 @@
   z-index: 1;
   right: 0;
   top: 160px;
+  z-index: 2;
 }
 
 .p_d_message_container::-webkit-scrollbar {

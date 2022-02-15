@@ -11,17 +11,28 @@ import videoIcon from '../../images/video-icon.svg'
 import premiumIcon from '../../images/golden-star.svg'
 import moreIcon from '../../images/Path.svg'
 import { Link } from 'react-router-dom'
+import Pilot from "../pilot_dashboard/images/pilot.jpg";
+import loadMore from "../../images/Group 71.svg";
 
 class ServiceCenterActivities extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      activity_inspired_filter: true,
       activity_store_filter: true,
+      activity_inspired_filter: false,
       selected_filter: 1,
       file_type: 1,
       show_edit: null,
-      follows: [1,2,3,4,5,6,7,8]
+      follows: [
+        { name: "Yasar Arafath", profile: "Professional Pilot" },
+        { name: "Yaseen Ahmed", profile: "Passionate Pilot" },
+        { name: "Yasar Arafath", profile: "Professional Pilot" },
+        { name: "Yaseen Ahmed", profile: "Passionate Pilot" },
+        { name: "Yasar Arafath", profile: "Passionate Pilot" },
+        { name: "Yaseen Ahmed", profile: "Professional Pilot" },
+        { name: "Yasar Arafath", profile: "Professional Pilot" },
+        { name: "Yaseen Ahmed", profile: "Passionate Pilot" },
+      ]
     }
   }
 
@@ -59,13 +70,13 @@ class ServiceCenterActivities extends Component {
 
         <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
           <Row gutterWidth={70}>
-            <Col xl={3} lg={4} md={6} sm={8}>
+            <Col xl={3} lg={4} md={12}>
               <div className="s_c_db_activity_filter_container">
-                <div className="s_c_db_activity_filter_title" onClick={() => this.setState({ activity_store_filter: !this.state.activity_store_filter })}>My Store <img src={dropdown} alt="" height={"16px"} width={"14px"} className={this.state.activity_store_filter ? 's_c_db_activity_filter_dropdown s_c_db_activity_filter_dropdown_selected' : "s_c_db_activity_filter_dropdown"} /></div>
+                <div className="s_c_db_activity_filter_title" onClick={() => this.setState({ activity_store_filter: !this.state.activity_store_filter, activity_inspired_filter: false })}>My Store <img src={dropdown} alt="" height={"16px"} width={"14px"} className={this.state.activity_store_filter ? 's_c_db_activity_filter_dropdown s_c_db_activity_filter_dropdown_selected' : "s_c_db_activity_filter_dropdown"} /></div>
                 {this.state.activity_store_filter &&
                   <div className={this.state.selected_filter === 1 ? "s_c_db_activity_filter s_c_db_activity_filter_active" : "s_c_db_activity_filter"} onClick={() => this.setState({ selected_filter: 1 })}>Downloaded files</div>
                 }
-                <div className="s_c_db_activity_filter_title" onClick={() => this.setState({ activity_inspired_filter: !this.state.activity_inspired_filter })}>Inspired <img src={dropdown} alt="" height={"16px"} width={"14px"} className={this.state.activity_inspired_filter ? 's_c_db_activity_filter_dropdown s_c_db_activity_filter_dropdown_selected' : "s_c_db_activity_filter_dropdown"} /></div>
+                <div className="s_c_db_activity_filter_title" onClick={() => this.setState({ activity_inspired_filter: !this.state.activity_inspired_filter, activity_store_filter: false })}>Inspired <img src={dropdown} alt="" height={"16px"} width={"14px"} className={this.state.activity_inspired_filter ? 's_c_db_activity_filter_dropdown s_c_db_activity_filter_dropdown_selected' : "s_c_db_activity_filter_dropdown"} /></div>
                 {this.state.activity_inspired_filter
                   &&
                   <>
@@ -98,8 +109,8 @@ class ServiceCenterActivities extends Component {
                               <div className="s_c_db_activity_file_more" id={"s_c_db_activity_file_more_" + id}>
                                 {this.state.show_edit === id
                                   ? <div style={{ padding: "10px 10px 5px 10px" }} onMouseLeave={() => this.hideEditHandler(id)}>
-                                    <div className='s_c_db_activity_file_links' onClick = {() => this.setState({show_edit: null})}>Redownload</div>
-                                    <div className='s_c_db_activity_file_links' onClick = {() => this.setState({show_edit: null})}>Delete</div>
+                                    <div className='s_c_db_activity_file_links' onClick={() => this.setState({ show_edit: null })}>Redownload</div>
+                                    <div className='s_c_db_activity_file_links' onClick={() => this.setState({ show_edit: null })}>Delete</div>
                                   </div>
                                   : <img src={moreIcon} alt="" onClick={() => this.showEditHandler(id)} style={{ padding: "6px 12px 4px 12px" }} />
                                 }
@@ -125,9 +136,123 @@ class ServiceCenterActivities extends Component {
                   </div>
                 </>
               }
-              {/* {this.state.selected_filter === 2 &&
+              {this.state.selected_filter === 2 &&
+                <div className="pd_followers_mainBox" style={{ marginTop: "20px" }}>
+                  <div className='pd_followers_headBox'>
+                    <Row>
+                      <Col>
+                        <div className='pd_followers_title'>Followers</div>
 
-              } */}
+                      </Col>
+                      <Col>
+                        <select className='pd_followers_select'>
+                          <option disabled selected>All Profiles</option>
+                          <option>Professional Pilot</option>
+                          <option>Passionate Pilot</option>
+                        </select>
+                      </Col>
+                    </Row>
+                  </div>
+                  <hr className='pd_followers_hr' />
+                  {
+                    this.state.follows.map((item, i) => {
+                      return (
+                        <div>
+                          <Row>
+                            <Col xl={1.4} xs={2}>
+                              <div className='pd_followers_pilotImageBox' >
+                                <img src={Pilot} alt="pilot img" className='pd_followers_pilot_img' />
+                              </div>
+                            </Col>
+                            <Col xs={5.25}>
+                              <div className='pd_followers_pilotDetails'>
+                                <div className='pd_followers_pilotName'>{item.name}</div>
+                                <div className='pd_followers_pilotType'>{item.profile}</div>
+                              </div>
+                            </Col>
+                            <Col>
+                              <div className='pd_followers_profile'>
+                                <div className='pd_followers_profileBox'>
+                                  <button className="pd_followers_profileBtn">View Profile</button>
+                                  <div className='pd_followers_profileUnfollow'>Remove</div>
+                                </div>
+                              </div>
+
+                            </Col>
+                          </Row>
+                          <hr className='pd_followers_hr' />
+                        </div>
+                      )
+                    })
+                  }
+                  <div className="a_j_load_div" style={{ margin: "40px 0px" }}>
+                    <button className="a_j_loadMore_btn">
+                      <img src={loadMore} className="a_j_location_logo" />
+                      <span className="a_j_location_text">Load More</span>
+                    </button>{" "}
+                  </div>
+
+
+
+                </div>
+              }
+              {this.state.selected_filter === 3 &&
+                <div className="pd_followers_mainBox" style={{ marginTop: "20px" }}>
+                  <div className='pd_followers_headBox'>
+                    <Row>
+                      <Col>
+                        <div className='pd_followers_title'>Following</div>
+
+                      </Col>
+                      <Col>
+                        <select className='pd_followers_select'>
+                          <option disabled selected>All Profiles</option>
+                          <option>Professional Pilot</option>
+                          <option>Passionate Pilot</option>
+                        </select>
+                      </Col>
+                    </Row>
+                  </div>
+                  <hr className='pd_followers_hr' />
+                  {
+                    this.state.follows.map((item, i) => {
+                      return (
+                        <div>
+                          <Row>
+                            <Col xl={1.4} xs={2}>
+                              <div className='pd_followers_pilotImageBox' >
+                                <img src={Pilot} alt="pilot img" className='pd_followers_pilot_img' />
+                              </div>
+                            </Col>
+                            <Col xs={5.25}>
+                              <div className='pd_followers_pilotDetails'>
+                                <div className='pd_followers_pilotName'>{item.name}</div>
+                                <div className='pd_followers_pilotType'>{item.profile}</div>
+                              </div>
+                            </Col>
+                            <Col>
+                              <div className='pd_followers_profile'>
+                                <div className='pd_followers_profileBox'>
+                                  <button className="pd_followers_profileBtn">View Profile</button>
+                                  <div className='pd_followers_profileUnfollow'>Unfollow</div>
+                                </div>
+                              </div>
+
+                            </Col>
+                          </Row>
+                          <hr className='pd_followers_hr' />
+                        </div>
+                      )
+                    })
+                  }
+                  <div className="a_j_load_div" style={{ margin: "40px 0px" }}>
+                    <button className="a_j_loadMore_btn">
+                      <img src={loadMore} className="a_j_location_logo" />
+                      <span className="a_j_location_text">Load More</span>
+                    </button>{" "}
+                  </div>
+                </div>
+              }
             </Col>
           </Row>
         </Container>

@@ -5,7 +5,6 @@ import {NavLink, Link} from "react-router-dom";
 import All from '../../website/All.module.css'
 
 
-
 function Pilot_nav() {
     let [active, setActive] = useState({
         link1: true,

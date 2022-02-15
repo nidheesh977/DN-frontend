@@ -105,6 +105,7 @@
   border: 1px solid #E8E8E8;
   border-radius: 10px;
   padding: 20px;
+  margin-bottom: 10px;
 }
 
 .h_p_listing_img_container{
@@ -139,6 +140,7 @@
   font-family: muli-bold;
   line-height: 26px;
   margin-bottom: 6px;
+  cursor: pointer;
 }
 
 .h_p_listing_job{

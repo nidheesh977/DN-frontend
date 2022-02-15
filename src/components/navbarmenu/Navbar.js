@@ -1,5 +1,5 @@
 import React, { useState, Component, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import '../Navbar.css';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -80,7 +80,6 @@ function Navbar(props) {
   }
 
   useEffect(() => {
-
     userService.User().then(res => {
       setLoading(false);
       try {
@@ -190,9 +189,9 @@ function Navbar(props) {
                   {/* <SearchFilter /> */}
                 </li>
                 <li className='nav-item'>
-                  <Link to = '/apply_job' className='nav-links'>
+                  <NavLink to = '/apply_job' className='nav-links' activeStyle={{color: "blue!important"}}>
                     Apply jobs
-                  </Link>
+                  </NavLink>
 
                 </li>
                 <li className='nav-item'>
