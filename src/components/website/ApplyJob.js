@@ -1,22 +1,298 @@
-import React, {Component} from 'react'
+import React, { Component } from "react";
 import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
-import All from './All.module.css'
-import '../css/ApplyJob.css'
+import All from "./All.module.css";
+import "../css/HirePilot.css";
+import "../css/ApplyJob.css";
+import profileUser from "../images/profile-user.svg";
+import money from "../images/money.svg";
+import location from "../images/location.svg";
+import work from "../images/work.svg";
+import { Link } from "react-router-dom";
+import dropdown from '../images/s_c_dropdown2.png';
+import Box from '@mui/material/Box';
 
-class ApplyJob extends Component{
-  render(){
-    return(
-      <div>
-        <Container className={All.Container}>
-          <Row>
-            <Col>
-              <h1>Apply Jobs</h1>
-            </Col>
-          </Row>
-        </Container>
+import loadMore from "../images/Group 71.svg";
+import Slider from '@mui/material/Slider';
+import { styled } from '@mui/material/styles';
+import { Helmet } from "react-helmet";
+import heart from "../images/heart (3).svg";
+import heartLike from "../images/heart-blue.svg";
+
+const AirbnbSlider = styled(Slider)(({ theme }) => ({
+  color: '#00E7FC',
+  height: 3,
+  padding: '13px 0',
+  '& .MuiSlider-thumb': {
+    height: 20,
+    width: 20,
+    backgroundColor: '#fff',
+    border: '1px solid #707070',
+    '&:hover': {
+      boxShadow: '0 0 0 8px rgba(58, 133, 137, 0.16)',
+    },
+    '& .airbnb-bar': {
+      height: 9,
+      width: 1,
+      backgroundColor: 'currentColor',
+      marginLeft: 1,
+      marginRight: 1,
+    },
+  },
+  '& .MuiSlider-track': {
+    height: 0,
+  },
+  '& .MuiSlider-rail': {
+    color: theme.palette.mode === 'dark' ? '#bfbfbf' : '#cecece',
+    opacity: theme.palette.mode === 'dark' ? undefined : 1,
+    height: 2,
+  },
+}));
+
+
+class ApplyJob extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      view_pilot_type_filter: true,
+      view_work_filter: true,
+      view_hourly_rate_filter: true,
+      price_range: [20, 40],
+      price_range_min: 0,
+      price_range_max: 200,
+      listing: [
+        {
+          id: 1,
+          name: "Drone Cinematograper",
+          date: "06 Jan 2022",
+          producer: "UTV Motion Pictures",
+          profile: "Professional Pilot",
+          range: "$150.00 - $200.00",
+          desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
+          location: "Bangalore",
+          type: "Full Time",
+          like:true,
+        },
+        {
+          id: 2,
+          name: "React Cinematograper",
+          date: "06 July 2022",
+          producer: "UTV Motion Moviess",
+          profile: "Full Stack Developer",
+          range: "$150.00 - $600.00",
+          desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
+          location: "Bangalore",
+          type: "Part Time",
+          like: false,
+        },
+        {
+          id: 3,
+          name: "Drone Cinematograper",
+          date: "06 Jan 2022",
+          producer: "UTV Motion Pictures",
+          profile: "Professional Pilot",
+          range: "$150.00 - $200.00",
+          desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
+          location: "Bangalore",
+          type: "Full Time",
+          like:true,
+  
+        },
+        {
+          id: 4,
+          name: "Drone Cinematograper",
+          date: "06 Jan 2022",
+          producer: "UTV Motion Pictures",
+          profile: "Professional Pilot",
+          range: "$150.00 - $200.00",
+          desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
+          location: "Bangalore",
+          type: "Full Time",
+          like:false,
+  
+        },
+      ],
+    }
+  }
+  dropdown = (id) => {
+    id = "view_" + id
+    this.setState({
+      [id]: !this.state[id]
+    })
+  }
+  handlePriceRange = (e, value) => {
+    this.setState({
+      price_range: value
+    })
+  }
+
+  render() {
+    return (
+      <>
+        <Helmet>
+          <title>Apply Jobs</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
+        <div className="h_p_container" style={{ overflowX: "hidden" }}>
+          <Container className={All.Container}>
+            <Row gutterWidth={40}>
+              <Visible xxl xl>
+                <Col xxl={3.5} xl={3.3} lg={4.15} md={5.4}>
+                  <div id="h_p_create_job_container">
+                    <div className="h_p_create_job_title">Show your talent</div>
+                    <div className="h_p_create_job_desc">
+                      Upload your Ariel shots and get paid
+                    </div>
+                    <button
+                      className="h_p_create_job_btn"
+                      onClick={() => this.props.history.push("/create_job")}
+                    >
+                      Upload Now
+                    </button>
+                  </div>
+
+                  <div className="h_p_filter1_title1">Keywords</div>
+                  <input type="text" className="a_j_keywords" placeholder="Search Keywords"/>
+                  <div className="h_p_filter1_title1">Country</div>
+                  <select className="a_j_select_dropdown">
+                  <option>select Country</option>
+                  <option>India</option>
+                  <option>India</option>
+                  <option>India</option>
+                  <option>India</option>
+                  </select><div className="h_p_filter1_title1">City</div>
+                  <select className="a_j_select_dropdown" id="a_j_select_dropdown1">
+                  <option>Select City</option>
+                  <option>Bangalore</option>
+                  <option>Bangalore</option>
+                  <option>Bangalore</option>
+                  <option>Bangalore</option>
+ 
+                  </select>
+
+
+
+
+                  <div className="h_p_filter1_title" onClick={() => this.dropdown("pilot_type_filter")}>Pilot type <img src={dropdown} alt="dropdown img" className={this.state.view_pilot_type_filter ? "h_p_filter1_dropdown1 h_p_dropdown_selected1" : "h_p_filter1_dropdown1"} /></div>
+                    <div className={this.state.view_pilot_type_filter ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_pilot_type_filter">
+                      <label className="h_p_filter1_filter1">
+                        <input type="checkbox" className="h_p_filter1_checkbox" />
+                        <div className="h_p_filter1_checkbox_label">Licensed Pilots</div>
+                      </label>
+                      <label className="h_p_filter1_filter1">
+                        <input type="checkbox" className="h_p_filter1_checkbox" />
+
+                        <div className="h_p_filter1_checkbox_label">Unlicensed Pilots</div>
+                      </label>
+                    </div>
+                    <div className="h_p_filter1_title" onClick={() => this.dropdown("work_filter")}>Work <img src={dropdown} alt="dropdown img" className={this.state.view_work_filter ? "h_p_dropdown_selected1 h_p_filter1_dropdown1" : "h_p_filter1_dropdown1"} /></div>
+                    <div className={this.state.view_work_filter ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_work_filter">
+                      <label className="h_p_filter1_filter1">
+                        <input type="checkbox" className="h_p_filter1_checkbox" />
+                        <div className="h_p_filter1_checkbox_label">Full Time</div>
+                      </label>
+                      <label className="h_p_filter1_filter1">
+                        <input type="checkbox" className="h_p_filter1_checkbox" />
+                        <div className="h_p_filter1_checkbox_label">Part Time</div>
+                      </label>
+                    </div>
+                    <div className="h_p_filter1_title" onClick={() => this.dropdown("hourly_rate_filter")}>Monthly Salary</div>
+                    <div className={this.state.view_hourly_rate_filter ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_hourly_rate_filter">
+                      <div className="h_p_filter1_rate_content"> ${this.state.price_range[0]} - ${this.state.price_range[1]}</div>
+                      <Box style={{ marginRight: "7px", marginLeft: "10px" }}>
+                        <AirbnbSlider
+                          getAriaLabel={(index) => (index === 0 ? 'Minimum price' : 'Maximum price')}
+                          value={this.state.price_range}
+                          onChange={this.handlePriceRange}
+                          min={this.state.price_range_min}
+                          max={this.state.price_range_max}
+                        />
+                      </Box>
+                    </div>
+                </Col>
+              </Visible>
+              <Col>
+                <div className="h_p_title_container">
+                  <div className="h_p_title">Apply jobs and get hired</div>
+                  <div className="h_p_title_desc">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Nam, sunt.
+                  </div>
+                </div>
+                <div style={{ margin: "40px 0px 50px 0px" }}>
+
+                  {
+                    this.state.listing.map((item,i)=>{
+                      return(
+                        <div className="pd_a_j_data" style={{ margin: "20px 0px 0px 0px" }}>
+                    <div style={{ marginBottom: "10px" }}>
+                      <div className="pd_a_j_dataDateHead">
+                        Posted on:
+                        <span className="pd_a_j_dataDate">{item.date}</span>
+                      </div>
+                      <div className="pd_a_j_dataTitle">{item.name}</div>
+                    </div>
+                    <div className="pd_a_j_data_subTitle">
+                      {item.producer}
+                    </div>
+                    <div>
+                      <div className="a_j_container1">
+                        <div className="a_j_listing_img1">
+                          <img src={profileUser} />
+                        </div>
+                        <div className="a_j_listing_profileName">
+                          {item.profile}
+                        </div>
+                        <div className="a_j_listing_img2">
+                          <img src={money} />
+                        </div>
+                        <div className="a_j_listing_money">
+                          {item.range}
+                        </div>
+                      </div>
+                      <div className="a_j_listing_text">
+                        {" "}
+                        {item.desc}
+                      </div>
+                      <hr className="a_j_listing_hr" />
+                    </div>
+                    <div className="a_j_listing_btns">
+                      <button className="a_j_location_btn">
+                        <img src={location} className="a_j_location_logo" />
+                        <span className="a_j_location_text">{item.location}</span>
+                      </button>{" "}
+                      <button className="a_j_location_btn">
+                        <img src={work} className="a_j_location_logo" />
+                        <span className="a_j_location_text">{item.type}</span>
+                      </button>
+                      <Link to="#" id="a_j_job_btn">
+                        View Job
+                      </Link>{" "}
+                      <img
+                        src={item.like ? heartLike : heart}
+                        className="a_j_like"
+                      />
+                    </div>
+                  </div>
+              
+                      )
+                    })
+                  }
+                  
+                </div>
+                <div className="a_j_load_div" style={{marginBottom: "40px"}}>
+        <button className="a_j_loadMore_btn">
+          <img src={loadMore} className="a_j_location_logo" />
+          <span className="a_j_location_text">Load More</span>
+        </button>{" "}
       </div>
-    )
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      </>
+    );
   }
 }
 
-export default ApplyJob
+export default ApplyJob;
