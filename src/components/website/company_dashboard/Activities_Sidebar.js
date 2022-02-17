@@ -18,7 +18,7 @@ class Activities_Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view_jobs_filter: false,
+      view_jobs_filter: true,
       view_store_filter: false,
     };
   }
@@ -29,6 +29,18 @@ class Activities_Sidebar extends React.Component {
       [id]: !this.state[id],
     });
   };
+  jobsBtn= () =>{
+    this.setState({
+      view_jobs_filter: true,
+      view_store_filter: false,
+    })
+  }
+  storeBtn= () =>{
+    this.setState({
+      view_jobs_filter: false,
+      view_store_filter: true,
+    })
+  }
 
   render() {
     return (
@@ -37,10 +49,13 @@ class Activities_Sidebar extends React.Component {
         <Col xl={3} lg={4} md={12} sm={12}>
           <div>
             <div className="media_box">
+              <div className="sidebar_filter1_title"
+              onClick={()=>this.jobsBtn()}>
               <div
-                className="sidebar_filter1_title"
+                
                 onClick={() => this.dropdown("jobs_filter")}
               >
+                </div>
                 Jobs{" "}
                 <img
                   src={dropdown}
@@ -101,10 +116,13 @@ class Activities_Sidebar extends React.Component {
               </div>
             </div>
             <div className="media_box">
+              <div className="sidebar_filter1_title" onClick={()=>this.storeBtn()}>
               <div
-                className="sidebar_filter1_title"
+                
                 onClick={() => this.dropdown("store_filter")}
               >
+              </div>
+              
                 My Store{" "}
                 <img
                   src={dropdown}

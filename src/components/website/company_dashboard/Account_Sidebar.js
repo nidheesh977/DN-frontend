@@ -15,7 +15,7 @@ class Account_Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view_account_filter: false,
+      view_account_filter: true,
     };
   }
 

@@ -12,7 +12,7 @@ class Account_Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view_account_filter: false,
+      view_account_filter: true,
     };
   }
 
@@ -23,19 +23,14 @@ class Account_Sidebar extends React.Component {
     });
   };
 
-  Closeall = () => {
-    this.setState({
-        view_account_filter: false,
 
-    });
-  };
 
   render() {
     return (
       <div>
         <Row gutterWidth={70}>
           <Col xl={3} lg={4} md={12} sm={12}>
-          <div onMouseLeave={this.Closeall}>
+          <div>
 
             <div className="media_box">
                 <div
