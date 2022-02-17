@@ -18,20 +18,20 @@
 
 .upload_inst_title1{
   font-size: 30px;
-  font-weight: 900;
+  font-family: muli-bold;
   line-height: 30px;
   margin-bottom: 10px;
 }
 
 .upload_inst_title2{
   font-size: 25px;
-  font-weight: 900;
+  font-family: muli-bold;
   line-height: 50px;
 }
 
 .upload_inst_title3{
   font-size: 20px;
-  font-weight: 900;
+  font-family: muli-bold;
   line-height: 30px;
 }
 
@@ -46,7 +46,7 @@
   background: linear-gradient(121deg, #00E7FC 0%, #00ff7b 100%) 0% 0%;
   border-radius: 50px !important; 
   font-size: 16px !important;
-  font-weight: bold !important;
+  font-family: muli-bold;
   border: 1px solid #38f7bd !important;
   box-shadow: none !important;  
   text-align: center;

@@ -14,7 +14,7 @@
 
 .s_c_dropdown_title{
   font-size: 15px;
-  font-weight: 900;
+  font-family: muli-bold;
   margin-bottom: 10px;
 }
 
@@ -22,14 +22,13 @@
   color: #041D1F !important;
   background: transparent linear-gradient(121deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
   border-radius: 5px !important;
-  font-weight: bold !important;
+  font-family: muli-bold;
   border: 1px solid #00fcef;
   box-shadow: none !important;
   text-transform: none !important;
   outline: none;
   padding: 11px 0 11px 0;
   width: 100%;
-  font-family: muli-light;
   cursor: pointer;
 }
 
@@ -37,13 +36,12 @@
   color: #041D1F !important;
   background: transparent linear-gradient(121deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
   border-radius: 25px !important;
-  font-weight: 900 !important;
   border: 1px solid #00fcef;
   box-shadow: none !important;
   text-transform: none !important;
   outline: none;
   padding: 5px 25px;
-  font-family: muli-light;
+  font-family: muli-bold;
   font-size: 15px;
   cursor: pointer;
   margin-left: 75px;
@@ -55,13 +53,12 @@
   color: #041D1F !important;
   background: transparent linear-gradient(121deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
   border-radius: 25px !important;
-  font-weight: 900 !important;
   border: 1px solid #00fcef;
   box-shadow: none !important;
   text-transform: none !important;
   outline: none;
   padding: 5px 25px;
-  font-family: muli-light;
+  font-family: muli-bold;
   font-size: 15px;
   cursor: pointer;
   float: left;
@@ -78,13 +75,13 @@
 
 .s_c_list_title{
   font-size: 20px;
-  font-weight: 900;
+  font-family: muli-bold;
 }
 
 .s_c_location{
   text-align: right;
   font-size: 15px;
-  font-weight: 900 ;
+  font-family: muli-bold;
   padding-top: 10px;
   width: fit-content;
   float: right;
@@ -109,7 +106,7 @@
 .service_center_name{
   font-size: 20px !important;
   line-height: 30px;
-  font-weight: 1000;
+  font-family: muli-bold;
   padding-top: 10px;
   cursor: pointer;
 }
@@ -148,7 +145,7 @@
 }
 
 .s_c_other_details_title{
-  font-weight: 900;
+  font-family: muli-bold;
   font-size: 16px;
   line-height: 25px;
   margin-left: 75px;
@@ -249,7 +246,7 @@
 }
 
 .s_c_enquiry_title{
-  font-weight: 900;
+  font-family: muli-bold;
   line-height: 30px;
 }
 

@@ -9,12 +9,12 @@ import swal from 'sweetalert';
 import axios from 'axios'
 
 export default function GoPremium() {  
-    const[Id0, setId0] = useState([]);
-    const[Id1, setId1] = useState([]);
-    const[Id2, setId2] = useState([]); 
-    const[Amount1, setAmount0] = useState([]);
-    const[Amount2, setAmount1] = useState([]);
-    const[Amount3, setAmount2] = useState([]);
+    const[Id0, setId0] = useState([0]);
+    const[Id1, setId1] = useState([1]);
+    const[Id2, setId2] = useState([2]); 
+    const[Amount1, setAmount0] = useState([10]);
+    const[Amount2, setAmount1] = useState([50]);
+    const[Amount3, setAmount2] = useState([500]);
     const[Day0, setDay0] = useState([]);
     const[Day1, setDay1] = useState([]);
     const[Day2, setDay2] = useState([]);

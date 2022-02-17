@@ -21,7 +21,7 @@ import Favorite from '@material-ui/icons/Favorite';
 import Like from '../Like';
 
 
-const race = ['shots', 'members', 'company'];
+const race = ['shots', 'company'];
 const API_URL = 'https://demo-nexevo.in/haj/auth-app/public/api/auth';
 
 export default class Searchresult extends React.Component {
@@ -270,71 +270,6 @@ export default class Searchresult extends React.Component {
                                                         </Box>
 
                                                     }
-                                                </>
-                                            ) : haveText === 'members' ? (
-                                                <>
-                                                    {results.length > 0 ? results.slice(0, this.state.visible).map(el => (
-                                                        <>
-                                                            <Box className={All.JobsList}>
-                                                                <Box textAlign={'Left'} pt={3}>
-                                                                    {el.profile ? <img className="alignleft" src={el.profile}
-                                                                        alt="Image Sample 1" style={{
-                                                                            display: "inline",
-                                                                            float: "left",
-                                                                            width: "75px",
-                                                                            height: "75px",
-                                                                            borderRadius: "100px",
-                                                                            marginRight: '15px'
-                                                                        }} /> : <Skeleton style={{ borderRadius: "100px !important" }} circle={true} height={75} width={75} className={All.SkeletonImg} />}
-                                                                </Box>
-
-                                                                <Box pt={1}>
-
-                                                                    {el.companyname ? <h2>{el.companyname}</h2> : <Skeleton width={250} />}
-                                                                    {el.jobtitle ? <label className={All.Bold}>{el.jobtitle}</label> : <Skeleton width={250} />}
-                                                                </Box>
-
-                                                                <Box className={All.JobDescription} >
-                                                                    <label className={`${All.lineheight_24} ${All.pt_xs_30} ${All.pt_sm} ${All.pt_md}`}>{el.jobdescription || <Skeleton width={250} />}</label>
-
-                                                                    <Box pb={6} pt={3}>
-                                                                        <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
-                                                                            <img style={{ paddingRight: 10 }} src={Location} />
-                                                                            {el.joblocation || <Skeleton width={250} />}</Button>
-                                                                        <Button ml={2} className={`${All.BtnStyle_4} ${All.disabled} ${All.W_xs_45}`} disabled>
-                                                                            <img style={{ paddingRight: 10 }} src={work} />
-                                                                            {el.typeofrole || <Skeleton width={250} />}</Button>
-                                                                        {el.id ? <Link to={{ pathname: `ViewJob/${el.id}`, data: el, state: { foo: 'bar' } }}  >
-                                                                            <Button ml={2} variant="contained" color="default" type="submit" id={el.id} className={`${All.BtnStyle_5} ${All.Bold}  ${All.W_xs_100}`}>
-                                                                                View Job</Button>
-                                                                        </Link> : <Skeleton width={250} />
-                                                                        }
-                                                                    </Box>
-                                                                </Box>
-                                                            </Box>
-                                                            <Divider />
-                                                        </>
-                                                    )) :
-                                                        <Box className={All.Text_center} pt={5}>
-                                                            <img src={nofoundresult} className={`${All.W_xs_100} ${All.W_sm_100}`} />
-                                                            <Box className={`${All.Text_center}`} px={5} pb={2}>
-                                                                <h2>No Results Found</h2>
-                                                            </Box>
-                                                            <Box className={`${All.Text_center}`} pb={5}>
-                                                                <label>It seems we can't find any results based on your search. </label>
-                                                            </Box>
-                                                        </Box>
-                                                    }
-
-                                                    {this.state.visible < this.state.search.length &&
-                                                        <Box py={6} textAlign={'center'}>
-                                                            <Button variant="contained" color="default" type="submit" onClick={this.loadMore} className={`${All.BtnStyle_5} ${All.LoadMore} ${All.W_sm_70} ${All.Bold}`}>
-                                                                <img style={{ paddingRight: 10 }} src={DroneImg} />
-                                                                Load More</Button>
-                                                        </Box>
-
-                                                    }
-
                                                 </>
                                             ) : haveText === 'company' ? (
                                                 <>

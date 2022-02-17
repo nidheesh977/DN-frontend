@@ -139,10 +139,10 @@ const Login = (props) => {
         error && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">{LoginError}!</Alert></Snackbar>
       } */}
 
-      <Snackbar id="myDIV" className={All.DisplayNone} open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="success">Success!</Alert></Snackbar>
+      {/* <Snackbar id="myDIV" className={All.DisplayNone} open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="success">Success!</Alert></Snackbar>
       {errors.password && errors.password.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a required feild!</Alert></Snackbar>}
       {errors.email && errors.email.type === "required" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
-      {errors.email && errors.email.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>}
+      {errors.email && errors.email.type === "minLength" && <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">This is a requied feild!</Alert></Snackbar>} */}
 
       <section className={All.Signup}>
         <Container className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}>
@@ -187,7 +187,7 @@ const Login = (props) => {
                 </div>
 
                 <div className={All.FormGroup}>
-                  <p>Don't have Drone Zone Account? <Link to="/User" className={All.D_Block_xs}> <span className={All.LightBlue}>Register Here</span></Link></p>
+                  <p>Don't have Drone Zone Account? <Link to="/sign_up" className={All.D_Block_xs}> <span className={All.LightBlue}>Register Here</span></Link></p>
                 </div>
 
               </form>

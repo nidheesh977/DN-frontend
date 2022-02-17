@@ -371,18 +371,18 @@ export default class ViewJob extends React.Component {
                     </Col>
                   </Row>
 
-                  <div className="slider_image">
+                  <div className="slider_image" style = {{position: "relative"}}>
                     {imageview.tag == "1" && (
                       <>
                         <span style={{
                           position: 'absolute',
                           top: '10px',
-                          float: "right",
+                          right: "30px",
                           zIndex: 1000
                         }}>
                           <FavoriteBorder />
                           <img src={sharePNG} style={{
-                            paddingLeft: "30px",
+                            marginLeft: "30px",
                           }} onClick={this.shareOpen} />
                         </span>
                         <img
@@ -397,12 +397,12 @@ export default class ViewJob extends React.Component {
                         <span style={{
                           position: 'absolute',
                           top: '10px',
-                          float: "right",
+                          right: "30px",
                           zIndex: 1000
                         }}>
                           <FavoriteBorder />
                           <img src={sharePNG} style={{
-                            paddingLeft: "30px",
+                            marginLeft: "30px",
                           }} onClick={this.shareOpen} />
                         </span>
                         <img
@@ -417,12 +417,12 @@ export default class ViewJob extends React.Component {
                           <span style={{
                           position: 'absolute',
                           top: '10px',
-                          float: "right",
+                          right: "30px",
                           zIndex: 1000
                         }}>
                           <FavoriteBorder />
                           <img src={sharePNG} style={{
-                            paddingLeft: "30px",
+                            marginLeft: "30px",
                           }} onClick={this.shareOpen} />
                         </span>
                         <video src={imageview.src} controls className="GalleryImg"></video>
@@ -433,12 +433,12 @@ export default class ViewJob extends React.Component {
                         <span style={{
                           position: 'absolute',
                           top: '10px',
-                          float: "right",
+                          right: "30px",
                           zIndex: 1000
                         }}>
                           <FavoriteBorder />
                           <img src={sharePNG} style={{
-                            paddingLeft: "30px",
+                            marginLeft: "30px",
                           }} onClick={this.shareOpen} />
                         </span>
                         <img

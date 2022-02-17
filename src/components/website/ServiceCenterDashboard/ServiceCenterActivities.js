@@ -132,7 +132,7 @@ class ServiceCenterActivities extends Component {
                     })}
                   </Row>
                   <div className="s_c_db_activity_file_loadmore">
-                    <button className="s_c_db_activity_file_loadmore_btn">Load More</button>
+                    <button className="s_c_db_activity_file_loadmore_btn"><img src={loadMore} className="a_j_location_logo" style={{marginTop: "0px", marginRight: "10px"}}/> Load More</button>
                   </div>
                 </>
               }

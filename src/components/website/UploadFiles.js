@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import UploadFileInstruction from './UploadFileInstruction'
-import "../css/UploadFiles.css"
+import React, { Component } from 'react';
+import UploadFileInstruction from './UploadFileInstruction';
+import "../css/UploadFiles.css";
 import { Helmet } from "react-helmet";
 import { Container, Row, Col } from "react-grid-system";
 import "../uploadfile/FileUpload.css";
@@ -8,11 +8,12 @@ import "../website/upload.css";
 import All from "../website/All.module.css";
 import { Link } from "react-router-dom";
 import Upload from "../images/upload.svg";
-import addMore from '../images/u_f_plus.png'
+import addMore from '../images/u_f_plus.png';
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
+import moreIcon from '../images/Path.svg';
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -38,7 +39,8 @@ class UploadFiles extends Component {
       file_edit: 0,
       upload_choice: false,
       new_keyword: "",
-      suggested_keywords: ["Areal View", "UAV", "Aviation", "Drone"]
+      suggested_keywords: ["Areal View", "UAV", "Aviation", "Drone"],
+      showEditOptions: ""
     }
   }
 
@@ -116,7 +118,7 @@ class UploadFiles extends Component {
     })
   }
 
-  selectImage = (id) => {
+  selectImage = (e, id) => {
     this.setState({
       file_edit: id
     })
@@ -203,11 +205,15 @@ class UploadFiles extends Component {
   fileNameShow = (id) => {
     document.getElementById("file_name_"+id).style.visibility = "visible"
     document.getElementById("file_adult_"+id).style.visibility = "visible"
+    if (this.state.showEditOptions !== id){
+      document.getElementById("u_f_edit_icon_"+id).style.visibility = "visible"
+    }
   }
 
   fileNameHide = (id) => {
     document.getElementById("file_name_"+id).style.visibility = "hidden"
     document.getElementById("file_adult_"+id).style.visibility = "hidden"
+    document.getElementById("u_f_edit_icon_"+id).style.visibility = "hidden"
   }
 
   newKeywordChange = (e) => {
@@ -236,12 +242,15 @@ class UploadFiles extends Component {
     }
   }
 
-  selectKeyword = (keyword) => {
+  selectKeyword = (keyword, id) => {
     if (this.state.files_selected && !this.state.selected_files_details[this.state.file_edit].keywords.includes(keyword)) {
       var files_details = this.state.selected_files_details
+      var suggested_keywords = this.state.suggested_keywords
+      // suggested_keywords.splice(id, 1)
       files_details[this.state.file_edit].keywords.push(keyword)
       this.setState({
-        selected_files_details: files_details
+        selected_files_details: files_details,
+        // suggested_keywords: suggested_keywords
       })
     }
   }
@@ -258,6 +267,75 @@ class UploadFiles extends Component {
       selected_files_details: selected_files_details
     })
     
+  }
+
+  showEditOptions = (id) => {
+    this.setState({
+      showEditOptions: id
+    })
+    document.getElementById("u_f_edit_icon_"+id).style.visibility = "hidden"
+  }
+
+  hideEditOptions = (id) => {
+    this.setState({
+      showEditOptions: ""
+    })
+    document.getElementById("u_f_edit_icon_"+id).style.visibility = "visible"
+  }
+
+  removeFile = (id) => {
+    if (this.state.total_file_objects_count == 1){
+      this.setState({
+        files_selected: false,
+        row_files: [],
+        selected_files_preview: [],
+        selected_files_details: [],
+        selected_category: "all",
+        files_count: 0,
+        total_file_objects_count: 0,
+        file_objects_count: 0,
+        file_edit: 0,
+        upload_choice: false,
+        showEditOptions: ""
+      })
+      document.getElementById("u_f_post_name").value = ""
+    }
+    else{
+      var row_files = this.state.row_files
+      var selected_files_preview = this.state.selected_files_preview
+      var selected_files_details = this.state.selected_files_details
+      row_files.splice(id, 1)
+      selected_files_preview.splice(id, 1)
+      selected_files_details.splice(id, 1)
+      this.setState({
+        row_files: row_files,
+        selected_files_preview: selected_files_preview,
+        selected_files_details: selected_files_details,
+        total_file_objects_count: this.state.total_file_objects_count-1,
+        file_edit: 0
+      })
+    }
+  }
+
+  changeFile = (e, id) => {
+    var row_files = this.state.row_files
+    var details = this.state.selected_files_details
+    details[id].type = e.target.files[0].type
+    details[id].size = e.target.files[0].size
+    row_files[id] = (e.target.files)
+    this.setState({
+      row_files: row_files
+    })
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        details[id].file = reader.result
+        this.setState({
+          selected_files_details: details
+        })
+      }
+    }
+    reader.readAsDataURL(e.target.files[0])
   }
 
   render() {
@@ -282,7 +360,6 @@ class UploadFiles extends Component {
               <Container
                 className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}
               >
-
                 <Row className={All.margin_0}>
 
                   <Col lg={8} className={`${All.Dragdrop} upload`}>
@@ -382,15 +459,15 @@ class UploadFiles extends Component {
                         </div>
                         : <>
                           <Row id='u_f_preview_row'>
-                            {this.state.selected_files_details.map((file, key) => {
+                            {this.state.selected_files_details.map((file, index) => {
                               return (
                                 <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
-                                  <div className={this.state.file_edit == key ? "u_f_selected_file u_f_file_preview_container" : "u_f_file_preview_container"} onClick={() => { this.selectImage(key) }} onMouseOver={() => this.fileNameShow(key)} onMouseLeave={() => this.fileNameHide(key)}>
+                                  <div className={this.state.file_edit == index ? "u_f_selected_file u_f_file_preview_container" : "u_f_file_preview_container"} onMouseDown={(e) => { this.selectImage(e, index) }} onMouseOver={() => this.fileNameShow(index)} onMouseLeave={() => this.fileNameHide(index)}>
                                     <div className="u_f_file_name_adult_container">
-                                      <div className="u_f_file_name_on_file" id = {"file_name_"+key}>{file.name}</div>
-                                      {file.adult_content ? <div className="u_f_file_adult" id = {"file_adult_"+key}>Adult</div> :<div id = {"file_adult_"+key}></div>}
+                                      <div className="u_f_file_name_on_file" id = {"file_name_"+index}>{file.name}</div>
+                                      {file.adult_content ? <div className="u_f_file_adult" id = {"file_adult_"+index}>Adult</div> :<div id = {"file_adult_"+index}></div>}
                                     </div>
-                                    
+
                                     {file.type[0] == "v"
                                       ? <>
                                         <video src={file.file} />
@@ -398,6 +475,18 @@ class UploadFiles extends Component {
                                       : <>
                                         <img src={file.file} />
                                       </>
+                                    }
+                                    <div className="u_f_edit_icon" id={`u_f_edit_icon_${index}`} onClick = {() => this.showEditOptions(index)}>
+                                      <img src={moreIcon} alt="" />
+                                    </div>
+                                    {this.state.showEditOptions === index &&
+                                      <div className="u_f_edit_content" onMouseLeave={()=> this.hideEditOptions(index)}>
+                                        <label>
+                                          <input type="file" name="" id="" accept="video/*,image/*" style = {{display: "none"}} onChange = {(e) => this.changeFile(e, index)}/>
+                                          <div className="u_f_edit_content_title">Change</div>
+                                        </label>
+                                        <div className="u_f_edit_content_title" onClick = {() => this.removeFile(index)}>Remove</div>
+                                      </div>
                                     }
                                   </div>
                                 </Col>
@@ -458,11 +547,11 @@ class UploadFiles extends Component {
                         : <div className='u_f_input_keywords_container'><div className="u_f_file_usage" id="u_f_file_usage1">Free</div>
                           <div className='u_f_file_usage' id="u_f_file_usage2">Paid</div></div>
                       }
-                      <div className="u_f_input_title">Price(Dollars)</div>
+                      {/* <div className="u_f_input_title">Price(Dollars)</div>
                       {this.state.files_selected
                         ? <><input type="number" name="" id="u_f_price" className='u_f_input_field' value={this.state.selected_files_details[this.state.file_edit].price} onChange={this.priceChange} disabled={this.state.selected_files_details[this.state.file_edit].usage == 'free'} /></>
                         : <input type="number" name="" id="u_f_price" className='u_f_input_field' disabled/>
-                      }
+                      } */}
                       <div className="u_f_input_title">Category</div>
                       {this.state.files_selected
                         ? <input type="text" name="" id="u_f_category" className='u_f_input_field' value={this.state.selected_files_details[this.state.file_edit].category} onChange={this.categoryChange} />
@@ -488,7 +577,7 @@ class UploadFiles extends Component {
                       <div className='u_f_input_keywords_container'>
                         {this.state.suggested_keywords.map((keyword, index) => {
                           return(
-                            <div className="u_f_input_keywords" onClick = {() => this.selectKeyword(keyword)}>{keyword} <i class="fas fa-plus"></i></div>
+                            <div className="u_f_input_keywords" onClick = {() => this.selectKeyword(keyword, index)}>{keyword} <i class="fas fa-plus"></i></div>
                           )
                         })}
                       </div>

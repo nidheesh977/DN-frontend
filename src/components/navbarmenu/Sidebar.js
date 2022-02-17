@@ -198,38 +198,38 @@ export default function PersistentDrawerLeft(props) {
         </div>
         <Divider />
 
-        <Link to="">
+        <Link to="/Searchresult" onClick={handleDrawerClose}>
           <List>
             <ListItem button>
               <ListItemIcon><SearchIcon /></ListItemIcon>
-              <ListItemText primary={'Search'} />
+              <div style = {{fontFamily: "muli-bold", display: "inline-block", fontSize: "13px"}}>Search</div>
             </ListItem>
           </List>
         </Link>
 
-        <Link to="/apply_job">
+        <Link to="/apply_job" onClick={handleDrawerClose}>
           <List>
             <ListItem button>
               <ListItemIcon><JobIcon /></ListItemIcon>
-              <ListItemText primary={'Apply jobs'} />
+              <div style = {{fontFamily: "muli-bold", display: "inline-block", fontSize: "13px"}}>Apply jobs</div>
             </ListItem>
           </List>
         </Link>
 
-        <Link to="">
+        <Link to="/hire_pilots" onClick={handleDrawerClose}>
           <List>
             <ListItem button>
               <ListItemIcon><JobIcon /></ListItemIcon>
-              <ListItemText primary={'Hire Pilots'} />
+              <div style = {{fontFamily: "muli-bold", display: "inline-block", fontSize: "13px"}}>Hire Pilots</div>
             </ListItem>
           </List>
         </Link>
 
-        <Link to="">
+        <Link to="/service_centers" onClick={handleDrawerClose}>
           <List>
             <ListItem button>
               <ListItemIcon><SearchIcon /></ListItemIcon>
-              <ListItemText primary={'Find Service Centers'} />
+              <div style = {{fontFamily: "muli-bold", display: "inline-block", fontSize: "13px"}}>Find Service Centers</div>
             </ListItem>
           </List>
         </Link>
@@ -283,7 +283,7 @@ export default function PersistentDrawerLeft(props) {
                   <ListItem button>
                     <ListItemIcon><ExitToAppIcon />
                     </ListItemIcon>
-                    <ListItemText primary={"Login"} />
+                    <div style = {{fontFamily: "muli-bold", display: "inline-block", fontSize: "13px"}}>Login</div>
                   </ListItem>
               </List>
             </Link>
@@ -292,7 +292,7 @@ export default function PersistentDrawerLeft(props) {
                   <ListItem button>
                     <ListItemIcon><PersonIcon />
                     </ListItemIcon>
-                    <ListItemText primary={'Sign up'} />
+                    <div style = {{fontFamily: "muli-bold", display: "inline-block", fontSize: "13px"}}>Sign up</div>
                   </ListItem>
               </List>
             </Link>
@@ -306,7 +306,7 @@ export default function PersistentDrawerLeft(props) {
                   <ListItem button>
                     <ListItemIcon><PersonIcon />
                     </ListItemIcon>
-                    <ListItemText primary={"My account"} />
+                    <div style = {{fontFamily: "muli-bold", display: "inline-block", fontSize: "13px"}}>My account</div>
                   </ListItem>
               </List>
             </Link>
@@ -315,18 +315,19 @@ export default function PersistentDrawerLeft(props) {
               <List className="Signout">
                 <ListItem button key={'Sign Out'}>
                   <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-                  <ListItemText primary={'Sign Out'} />
+                  <ListItemText primary={''} />
+                  <div style = {{fontFamily: "muli-bold", display: "inline-block", fontSize: "13px"}}>Sign Out</div>
                 </ListItem>
               </List>
             </Link>
           </>
         }
-        <Link to="" onClick={handleDrawerClose}>
+        <Link to="/UploadFile" onClick={handleDrawerClose}>
           <List>
               <ListItem button>
                 <ListItemIcon><UploadFileIcon />
                 </ListItemIcon>
-                <ListItemText primary={"Upload file"} />
+                <div style = {{fontFamily: "muli-bold", display: "inline-block", fontSize: "13px"}}>Upload file</div>
               </ListItem>
           </List>
         </Link>

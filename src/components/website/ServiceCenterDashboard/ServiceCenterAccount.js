@@ -12,6 +12,7 @@ import service_center_2 from "../../images/service_center_2.jpg"
 import service_center_3 from "../../images/service_center_3.jpg"
 import service_center_4 from "../../images/service_center_4.jpg"
 import plusicon from '../../images/s_d_a_plus_icon.png'
+import deleteIcon from '../company_dashboard/images/c_j_bin.png'
 
 class ServiceCenterAccount extends Component {
 
@@ -41,6 +42,22 @@ class ServiceCenterAccount extends Component {
       }
     }
     reader.readAsDataURL(e.target.files[0])
+  }
+
+  showRemoveIcon = (id) => {
+    document.getElementById(id).style.visibility = "visible"
+  }
+
+  hideRemoveIcon = (id) => {
+    document.getElementById(id).style.visibility = "hidden"
+  }
+
+  removePhoto = (id) => {
+    var photos = this.state.photos
+    photos.splice(id, 1)
+    this.setState({
+      photos: photos
+    })
   }
 
   render() {
@@ -140,9 +157,6 @@ class ServiceCenterAccount extends Component {
                     <textarea type="text" className='pd_b_i_profile_inputDesc' placeholder='Maximum 50 words...' ></textarea>
                     <div className='pd_b_i_profile_text'>Brief description for your profile. URLs are hyperlinked</div>
                   </div>
-                  <div>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.5222123604804!2d77.65847001484964!3d13.00238241772004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae111fb298eb41%3A0xb7745cc56c25525e!2sNexevo%20Technologies!5e0!3m2!1sen!2sin!4v1644836629540!5m2!1sen!2sin" width="600" height="450" style={{border:"0"}} allowfullscreen="" loading="lazy"></iframe>
-                  </div>
                   <div className='pd_b_i_notifications_save'>
                     <button className='pd_b_i_notifications_saveBtn'>Save Changes</button>
 
@@ -219,14 +233,15 @@ class ServiceCenterAccount extends Component {
                     <div className="s_c_a_photos_container">
                       {this.state.photos.map((photo, index) => {
                         return (
-                          <div className="s_c_a_photo" key={index}>
+                          <div className="s_c_a_photo" key={index} onClick = {() => this.removePhoto(index)} onMouseOver = {() => this.showRemoveIcon(`s_c_a_remove_img_${index}`)} onMouseLeave = {() => this.hideRemoveIcon(`s_c_a_remove_img_${index}`)}>
                             <img src={photo} alt="" className="s_c_a_photo_img" />
+                            <img src={deleteIcon} alt="" className="s_c_a_remove_img" id={`s_c_a_remove_img_${index}`}/>
                           </div>
                         )
                       })}
 
                       <label className="s_c_a_photo_add">
-                        <input type="file" name="" id="" style={{ display: "none" }} onChange={this.addPhoto} ref = "add_photo"/>
+                        <input type="file" name="" id="" style={{ display: "none" }} onChange={this.addPhoto} ref = "add_photo"  accept="image/*"/>
                         <div className="s_c_a_photo_add_symbol">
                           <img src={plusicon} alt="" className="s_c_a_plus_icon" />
                         </div>

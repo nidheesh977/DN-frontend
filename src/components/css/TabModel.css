@@ -189,7 +189,6 @@ section.tabs-content section.Myjobs {
       white-space: nowrap;
       /* Label the data */
       content: attr(data-column);
-  
       color: #000;
       font-weight: bold;
     }

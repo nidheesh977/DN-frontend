@@ -12,7 +12,8 @@
     display: inline;
     font-family: muli-bold;
     font-size: 25px;
-    line-height: 30px;
+    line-height: 36px;
+    margin-bottom: 5px;
 }
 .pd_a_j_dataDateHead{
     display: inline;
@@ -31,10 +32,10 @@
 }
 
 .pd_a_j_data_subTitle{
-    font-family: muli-light;
-    font-size: 14px;
-    line-height: 22px;
-    margin-bottom: 20px;
+    font-family: muli-regular;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 22px;
 }
 .pd_a_j_data_name{
     font-family: muli-light;
@@ -168,7 +169,7 @@
 }
 #a_j_job_btn, #a_j_job_btn1 {
   color: black;
-padding: 10px 60px;
+padding: 8px 60px 7px 60px;
 background: transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0%
   0% no-repeat padding-box;
   font-family: muli-bold;

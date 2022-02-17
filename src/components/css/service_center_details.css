@@ -18,7 +18,7 @@
 }
 
 .s_c_d_other_details_title{
-  font-weight: 900;
+  font-family: muli-bold;
   font-size: 16px;
   line-height: 25px;
 }
@@ -46,13 +46,12 @@
   color: #041D1F !important;
   background: transparent linear-gradient(121deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
   border-radius: 25px !important;
-  font-weight: 900 !important;
+  font-family: muli-bold;
   border: 1px solid #00fcef;
   box-shadow: none !important;
   text-transform: none !important;
   outline: none;
   padding: 5px 25px;
-  font-family: muli-light;
   font-size: 15px;
   cursor: pointer;
   float: left;
@@ -84,7 +83,7 @@
 }
 
 .s_c_d_tab_selected{
-  font-weight: 900;
+  font-family: muli-bold;
 }
 
 .s_c_d_tab_brands{
@@ -99,14 +98,14 @@
 
 .s_c_d_tab_title{
   font-size: 25px;
-  font-weight: 900;
+  font-family: muli-bold;
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
 .s_c_d_tab_review_title{
   font-size: 25px;
-  font-weight: 900;
+  font-family: muli-bold;
 }
 
 .s_c_d_tab_about_content{
@@ -129,11 +128,11 @@
   font-size: 13px;
   margin-bottom: 10px;
   cursor: pointer;
-  font-weight: 900;
+  font-family: muli-bold;
 }
 
 .s_c_d_contact_details_title{
-  font-weight: 900;
+  font-family: muli-bold;
   font-size: 16px !important;
   line-height: 30px;
 }
@@ -153,7 +152,7 @@
 
 .s_c_d_photos_title{
   font-size: 20px;
-  font-weight: 900;
+  font-family: muli-bold;
   line-height: 70px;
 }
 
@@ -181,7 +180,7 @@
 .s_c_d_review_name{
   display: inline-block;
   font-size: 16px;
-  font-weight: 900;
+  font-family: muli-bold;
   margin-left: 20px;
   margin-right: 20px;
 }
@@ -247,7 +246,7 @@
 
 .s_c_d_rating_form_title{
   font-size: 30px;
-  font-weight: 900;
+  font-family: muli-bold;
   text-align: center;
 }
 

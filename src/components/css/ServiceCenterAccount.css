@@ -8,7 +8,7 @@
   display: inline-block;
   margin-right: 25px;
   margin-bottom: 25px;
-  
+  position: relative;
 }
 
 .s_c_a_photo_img{
@@ -24,6 +24,11 @@
   width: 115px;
   display: inline-block;
   background-color: #4FFEA3;
+  cursor: pointer;
+}
+
+.s_c_a_photo_add:hover{
+  background-color: #7cfcb9;
 }
 
 .s_c_a_photo_add_symbol, .s_c_a_plus_icon{
@@ -39,4 +44,15 @@
   position: absolute;
   left: 16px !important;
   top: 45px;
+}
+
+.s_c_a_remove_img{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 15px;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+  visibility: hidden;
 }

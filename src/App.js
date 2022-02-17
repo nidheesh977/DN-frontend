@@ -31,7 +31,7 @@ import "./components/website/All.module.css";
 import { UserContext } from "../src/hooks/UserContext";
 import JobPostEdit from "../src/components/website/JobPostEdit";
 import PublicRoute from "../src/hooks/PublicRoute";
-import PrivateRoute from "../src/hooks/PrivateRoute";
+import PrivateRoute from "../src/hooks/PrivateRoute"; 
 import AdminRoute from "../src/hooks/AdminRoute";
 import UserRoute from "../src/hooks/UserRoute";
 import searchresult from "../src/components/website/Searchresult";
@@ -54,6 +54,7 @@ import PilotDetails from './components/website/PilotDetail'
 import ServiceCenterDashboard from "./components/website/ServiceCenterDashboard/ServiceCenterDashboard";
 import CreateJob from './components/website/CreateJob'
 import Company_dashboard from "./components/website/company_dashboard/Company_dashboard";
+import UpgradeProVersion from './components/website/UpgradeProVersion'
 
 class App extends React.Component {
   constructor(props) {
@@ -143,11 +144,12 @@ class App extends React.Component {
               path="/TermsCondition"
               component={TermsCondition}
             />
-            {/* <PrivateRoute
+            <PublicRoute
+              restricted={true}
               exact
               path="/UpgradeProVersion"
               component={UpgradeProVersion}
-            /> */}
+            />
             <PublicRoute
               restricted={true}
               path="/DownloadSubscription"
@@ -160,7 +162,13 @@ class App extends React.Component {
               component={HireSubscription}
               exact
             />
-            <PrivateRoute exact path="/GoPremium" component={GoPremium} />
+            <PublicRoute
+              restricted={true}
+              path="/GoPremium"
+              component={GoPremium}
+              exact
+            />
+            {/* <PrivateRoute exact path="/GoPremium" component={GoPremium} /> */}
             <PublicRoute
               restricted={true}
               path="/UploadFile"
@@ -207,7 +215,8 @@ class App extends React.Component {
               component={OfficeProfileEdit}
             />
             <PrivateRoute exact path="/Blog" component={Blog} />
-            <PrivateRoute exact path="/searchresult" component={searchresult} />
+            {/* <PrivateRoute exact path="/searchresult" component={searchresult} /> */}
+            <PublicRoute component = {searchresult} path = "/searchresult" exact />
             <PrivateRoute exact path="/search/Industry" component={Industry} />
             <PrivateRoute
               exact

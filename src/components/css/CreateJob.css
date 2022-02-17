@@ -191,13 +191,13 @@
 }
 .c_j_listing_icon2{
   height: 20px;
-  width: 20px;
   margin-right: 20px;
   position: relative;
   vertical-align: middle;
 }
 .a_j_listing_text{
   margin-bottom: 30px;
+  font-size: 14px !important;
 }
 .c_j_draft_item_container{
   border-bottom: 1px solid rgba(112, 112, 112, 0.2);

@@ -283,7 +283,7 @@
 }
 
 .h_p_save_pilot_btn{
-  color: white;
+  color: white !important;
   padding: 10px 10px;
   border-radius: 26px;
   background: transparent linear-gradient(323deg, #4FFEA3 0%, #00E7FC 100%);
@@ -363,6 +363,7 @@
 .h_p_filter1_dropdown{
   width: 11px;
   float: right;
+  margin-top: 7px;
 }
 
 .h_p_dropdown_selected{

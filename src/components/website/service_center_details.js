@@ -118,8 +118,8 @@ export default function ServiceCenterDetails(props) {
       setRating(true)
     }
     else{
-      setError(true)
-      setErrorMsg("Review is required")
+      document.getElementById("s_c_d_review").focus()
+      document.getElementById("s_c_d_review").style.backgroundColor = "rgb(255, 219, 219)"
     }
   }
 
@@ -140,6 +140,7 @@ export default function ServiceCenterDetails(props) {
 
   const changeReviewHandler = (e) => {
     setNewReview(e.target.value)
+    document.getElementById("s_c_d_review").style.backgroundColor = "white"
   }
 
   const handleErrorClose = () => {
@@ -163,9 +164,6 @@ export default function ServiceCenterDetails(props) {
 
       <section className={` ${All.Profile} ${All.EndUserProfile} s_c_d_container`}>
         <Container className={All.Container}>
-          {
-            error && <Snackbar open={error} autoHideDuration={3000} onClose={handleErrorClose}><Alert variant="filled" onClose={handleErrorClose} severity="error">{errorMsg}</Alert></Snackbar>
-          }
           <Row>
             <Col
               md={6}
@@ -256,7 +254,7 @@ export default function ServiceCenterDetails(props) {
 
                 {writeReview
                   ? <div className="s_c_d_write_review_container">
-                    <textarea className="s_c_d_write_review" onChange={changeReviewHandler} ></textarea>
+                    <textarea className="s_c_d_write_review" id = "s_c_d_review" onChange={changeReviewHandler} ></textarea>
                     <button className="s_c_d_button2 s_c_d_review_submit" onClick={submitReview}>Submit</button>
                   </div>
                   : ""

@@ -94,11 +94,7 @@ class HirePilot extends Component {
       keywords: ["Areal View", "Agriculture", "NGO", "Agriculture", "Areal View", "Agriculture", "Areal View", "Agriculture", "NGO", "Agriculture", "Areal View", "NGO", "Areal View", "Agriculture", "NGO", "Agriculture", "Areal View", "Agriculture"],
       rating: 4,
       keywords_visible: 3,
-      view_pilot_type_filter: true,
-      view_work_filter: true,
-      view_hourly_rate_filter: true,
-      view_type_of_drone_filter: false,
-      view_ratings_filter: false,
+      filter_tab: 1,
       price_range: [20, 40],
       price_range_min: 0,
       price_range_max: 100,
@@ -122,11 +118,17 @@ class HirePilot extends Component {
     }
   }
 
-  dropdown = (id) => {
-    id = "view_" + id
-    this.setState({
-      [id]: !this.state[id]
-    })
+  dropdown = (tab) => {
+    if (this.state.filter_tab !== tab){
+      this.setState({
+        filter_tab: tab
+      })
+    }
+    else{
+      this.setState({
+        filter_tab: ""
+      })
+    }
   }
 
   handlePriceRange = (e, value) => {
@@ -199,7 +201,7 @@ class HirePilot extends Component {
             <Row gutterWidth={40}>
               <Visible xxl xl>
 
-                <Col xxl={3.5} xl={3.3} lg={4.15} md={5.4} >
+                <Col xxl={3.5} xl={3.3}>
                   <div id="h_p_create_job_container">
                     <div className='h_p_create_job_title'>Create Job Alert</div>
                     <div className='h_p_create_job_desc'>Create a job alert now, Click below button</div>
@@ -207,8 +209,8 @@ class HirePilot extends Component {
                   </div>
                   <div id="h_p_filters1_container">
                     <div className="h_p_filter1_heading">Filters</div>
-                    <div className="h_p_filter1_title" onClick={() => this.dropdown("pilot_type_filter")}>Pilot type <img src={dropdown} alt="dropdown img" className={this.state.view_pilot_type_filter ? "h_p_filter1_dropdown h_p_dropdown_selected" : "h_p_filter1_dropdown"} /></div>
-                    <div className={this.state.view_pilot_type_filter ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_pilot_type_filter">
+                    <div className="h_p_filter1_title" onClick={() => this.dropdown(1)}>Pilot type <img src={dropdown} alt="dropdown img" className={this.state.filter_tab === 1 ? "h_p_filter1_dropdown h_p_dropdown_selected" : "h_p_filter1_dropdown"} /></div>
+                    <div className={this.state.filter_tab === 1  ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_pilot_type_filter">
                       <label className="h_p_filter1_filter">
                         <input type="checkbox" className="h_p_filter1_checkbox" />
                         <div className="h_p_filter1_checkbox_label">Licensed Pilots</div>
@@ -219,8 +221,8 @@ class HirePilot extends Component {
                         <div className="h_p_filter1_checkbox_label">Unlicensed Pilots</div>
                       </label>
                     </div>
-                    <div className="h_p_filter1_title" onClick={() => this.dropdown("work_filter")}>Work <img src={dropdown} alt="dropdown img" className={this.state.view_work_filter ? "h_p_dropdown_selected h_p_filter1_dropdown" : "h_p_filter1_dropdown"} /></div>
-                    <div className={this.state.view_work_filter ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_work_filter">
+                    <div className="h_p_filter1_title" onClick={() => this.dropdown(2)}>Work <img src={dropdown} alt="dropdown img" className={this.state.filter_tab === 2 ? "h_p_dropdown_selected h_p_filter1_dropdown" : "h_p_filter1_dropdown"} /></div>
+                    <div className={this.state.filter_tab === 2 ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_work_filter">
                       <label className="h_p_filter1_filter">
                         <input type="checkbox" className="h_p_filter1_checkbox" />
                         <div className="h_p_filter1_checkbox_label">Full Time</div>
@@ -230,8 +232,8 @@ class HirePilot extends Component {
                         <div className="h_p_filter1_checkbox_label">Part Time</div>
                       </label>
                     </div>
-                    <div className="h_p_filter1_title" onClick={() => this.dropdown("hourly_rate_filter")}>Hourly Rate<img src={dropdown} alt="dropdown img" className={this.state.view_hourly_rate_filter ? "h_p_dropdown_selected h_p_filter1_dropdown" : "h_p_filter1_dropdown"} /></div>
-                    <div className={this.state.view_hourly_rate_filter ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_hourly_rate_filter">
+                    <div className="h_p_filter1_title" onClick={() => this.dropdown(3)}>Hourly Rate<img src={dropdown} alt="dropdown img" className={this.state.filter_tab === 3 ? "h_p_dropdown_selected h_p_filter1_dropdown" : "h_p_filter1_dropdown"} /></div>
+                    <div className={this.state.filter_tab === 3 ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_hourly_rate_filter">
                       <div className="h_p_filter1_rate_content">Price Range ${this.state.price_range[0]} - ${this.state.price_range[1]}</div>
                       <Box style={{ marginRight: "7px", marginLeft: "10px" }}>
                         <AirbnbSlider
@@ -243,8 +245,8 @@ class HirePilot extends Component {
                         />
                       </Box>
                     </div>
-                    <div className="h_p_filter1_title" onClick={() => this.dropdown("type_of_drone_filter")}>Type of Drone <img src={dropdown} alt="dropdown img" className={this.state.view_type_of_drone_filter ? "h_p_dropdown_selected h_p_filter1_dropdown" : "h_p_filter1_dropdown"} /></div>
-                    <div className={this.state.view_type_of_drone_filter ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_type_of_drone_filter">
+                    <div className="h_p_filter1_title" onClick={() => this.dropdown(4)}>Type of Drone <img src={dropdown} alt="dropdown img" className={this.state.filter_tab === 4 ? "h_p_dropdown_selected h_p_filter1_dropdown" : "h_p_filter1_dropdown"} /></div>
+                    <div className={this.state.filter_tab === 4 ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_type_of_drone_filter">
                       {this.state.type_of_drones.map((drone, index) => {
                         return (
                           <label className="h_p_filter1_filter" key={index}>
@@ -254,8 +256,8 @@ class HirePilot extends Component {
                         )
                       })}
                     </div>
-                    <div className="h_p_filter1_title" onClick={() => this.dropdown("ratings_filter")}>Ratings <img src={dropdown} alt="dropdown img" className={this.state.view_ratings_filter ? "h_p_dropdown_selected h_p_filter1_dropdown" : "h_p_filter1_dropdown"} /></div>
-                    <div id="h_p_rating_filter" className={this.state.view_ratings_filter ? "h_p_filter1_content_container" : "h_p_hide_filter"}>
+                    <div className="h_p_filter1_title" onClick={() => this.dropdown(5)}>Ratings <img src={dropdown} alt="dropdown img" className={this.state.filter_tab === 5 ? "h_p_dropdown_selected h_p_filter1_dropdown" : "h_p_filter1_dropdown"} /></div>
+                    <div id="h_p_rating_filter" className={this.state.filter_tab === 5 ? "h_p_filter1_content_container" : "h_p_hide_filter"}>
                       <label className="h_p_filter1_filter">
                         <input type="checkbox" className="h_p_filter1_checkbox" />
                         <div className="h_p_filter1_checkbox_label">5 Star</div>
@@ -285,6 +287,81 @@ class HirePilot extends Component {
                   <div className="h_p_title">Hire Drone Pilots</div>
                   <div className="h_p_title_desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam, sunt.</div>
                 </div>
+                <Hidden xxl xl>
+                  <div id="h_p_filters1_container">
+                    <div className="h_p_filter1_heading">Filters</div>
+                    <div className="h_p_filter1_title" onClick={() => this.dropdown(1)}>Pilot type <img src={dropdown} alt="dropdown img" className={this.state.filter_tab === 1 ? "h_p_filter1_dropdown h_p_dropdown_selected" : "h_p_filter1_dropdown"} /></div>
+                    <div className={this.state.filter_tab === 1  ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_pilot_type_filter">
+                      <label className="h_p_filter1_filter">
+                        <input type="checkbox" className="h_p_filter1_checkbox" />
+                        <div className="h_p_filter1_checkbox_label">Licensed Pilots</div>
+                      </label>
+                      <label className="h_p_filter1_filter">
+                        <input type="checkbox" className="h_p_filter1_checkbox" />
+
+                        <div className="h_p_filter1_checkbox_label">Unlicensed Pilots</div>
+                      </label>
+                    </div>
+                    <div className="h_p_filter1_title" onClick={() => this.dropdown(2)}>Work <img src={dropdown} alt="dropdown img" className={this.state.filter_tab === 2 ? "h_p_dropdown_selected h_p_filter1_dropdown" : "h_p_filter1_dropdown"} /></div>
+                    <div className={this.state.filter_tab === 2 ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_work_filter">
+                      <label className="h_p_filter1_filter">
+                        <input type="checkbox" className="h_p_filter1_checkbox" />
+                        <div className="h_p_filter1_checkbox_label">Full Time</div>
+                      </label>
+                      <label className="h_p_filter1_filter">
+                        <input type="checkbox" className="h_p_filter1_checkbox" />
+                        <div className="h_p_filter1_checkbox_label">Part Time</div>
+                      </label>
+                    </div>
+                    <div className="h_p_filter1_title" onClick={() => this.dropdown(3)}>Hourly Rate<img src={dropdown} alt="dropdown img" className={this.state.filter_tab === 3 ? "h_p_dropdown_selected h_p_filter1_dropdown" : "h_p_filter1_dropdown"} /></div>
+                    <div className={this.state.filter_tab === 3 ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_hourly_rate_filter">
+                      <div className="h_p_filter1_rate_content">Price Range ${this.state.price_range[0]} - ${this.state.price_range[1]}</div>
+                      <Box style={{ marginRight: "7px", marginLeft: "10px" }}>
+                        <AirbnbSlider
+                          getAriaLabel={(index) => (index === 0 ? 'Minimum price' : 'Maximum price')}
+                          value={this.state.price_range}
+                          onChange={this.handlePriceRange}
+                          min={this.state.price_range_min}
+                          max={this.state.price_range_max}
+                        />
+                      </Box>
+                    </div>
+                    <div className="h_p_filter1_title" onClick={() => this.dropdown(4)}>Type of Drone <img src={dropdown} alt="dropdown img" className={this.state.filter_tab === 4 ? "h_p_dropdown_selected h_p_filter1_dropdown" : "h_p_filter1_dropdown"} /></div>
+                    <div className={this.state.filter_tab === 4 ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_type_of_drone_filter">
+                      {this.state.type_of_drones.map((drone, index) => {
+                        return (
+                          <label className="h_p_filter1_filter" key={index}>
+                            <input type="checkbox" className="h_p_filter1_checkbox" />
+                            <div className="h_p_filter1_checkbox_label">{drone}</div>
+                          </label>
+                        )
+                      })}
+                    </div>
+                    <div className="h_p_filter1_title" onClick={() => this.dropdown(5)}>Ratings <img src={dropdown} alt="dropdown img" className={this.state.filter_tab === 5 ? "h_p_dropdown_selected h_p_filter1_dropdown" : "h_p_filter1_dropdown"} /></div>
+                    <div id="h_p_rating_filter" className={this.state.filter_tab === 5 ? "h_p_filter1_content_container" : "h_p_hide_filter"}>
+                      <label className="h_p_filter1_filter">
+                        <input type="checkbox" className="h_p_filter1_checkbox" />
+                        <div className="h_p_filter1_checkbox_label">5 Star</div>
+                      </label>
+                      <label className="h_p_filter1_filter">
+                        <input type="checkbox" className="h_p_filter1_checkbox" />
+                        <div className="h_p_filter1_checkbox_label">4 Star</div>
+                      </label>
+                      <label className="h_p_filter1_filter">
+                        <input type="checkbox" className="h_p_filter1_checkbox" />
+                        <div className="h_p_filter1_checkbox_label">3 Star</div>
+                      </label>
+                      <label className="h_p_filter1_filter">
+                        <input type="checkbox" className="h_p_filter1_checkbox" />
+                        <div className="h_p_filter1_checkbox_label">2 Star</div>
+                      </label>
+                      <label className="h_p_filter1_filter">
+                        <input type="checkbox" className="h_p_filter1_checkbox" />
+                        <div className="h_p_filter1_checkbox_label">1 Star</div>
+                      </label>
+                    </div>
+                  </div>
+                </Hidden>
 
                 <div className="h_p_filter2_container">
                   <div className="h_p_filter2_input_container">
