@@ -59,6 +59,11 @@
   padding-left: 10px;
 }
 
+.h_p_filter1_filter1{
+  display: flex;
+  padding-left: 0px !important;
+  
+}
 .h_p_filter1_checkbox{
   margin-right: 10px;
   vertical-align: middle;

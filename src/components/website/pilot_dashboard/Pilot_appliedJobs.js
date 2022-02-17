@@ -70,7 +70,6 @@ function Pilot_appliedJobs() {
   let [data, setData] = useState(profiles);
   return (
     <div className="pd_a_j_main">
-      <Container>
         {/* mapping */}
         {data.listing.map((item) => {
           return (
@@ -114,7 +113,6 @@ function Pilot_appliedJobs() {
             </div>
           );
         })}{" "}
-      </Container>
       <div className="a_j_load_div">
         <button className="a_j_loadMore_btn">
           <img src={loadMore} className="a_j_location_logo" />

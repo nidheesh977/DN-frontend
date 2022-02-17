@@ -49,7 +49,6 @@ function Company_downloadsVideos() {
   let [data, setData] = useState(details);
   return (
     <div>
-      <Container>
         <Row gutterWidth={7}>
           {data.images.map((item) => {
             return (
@@ -82,7 +81,6 @@ function Company_downloadsVideos() {
             );
           })}
         </Row>
-      </Container>
       <div className="a_j_load_div" style={{margin: "40px 0px"}}>
         <button className="a_j_loadMore_btn">
           <img src={loadMore} className="a_j_location_logo" />

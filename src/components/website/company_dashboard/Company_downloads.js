@@ -41,29 +41,29 @@ function Company_downloads() {
         </div>
       </div>
       <hr className="sidebar_hr" />
-
-      <div className="pd_downloads_content">
-        <Switch>
-         
-          {/* 
+      <div style={{ marginTop: "30px" }}>
+        <div className="pd_downloads_content">
+          <Switch>
+            {/* 
           
            <Route
             path="/pilot_dashboard/activities/downloads/"
             component={Pilot_downloadsImages}
           /> */}
-          <Route
-            path="/company_dashboard/activities/downloads/3d"
-            component={Company_downloads3d}
-          />
-          <Route
-            path="/company_dashboard/activities/downloads/videos"
-            component={Company_downloadsVideos}
-          />
-           <Route
-            path="/company_dashboard/activities/downloads/"
-            component={Company_downloadsImages}
-          /> 
-        </Switch>
+            <Route
+              path="/company_dashboard/activities/downloads/3d"
+              component={Company_downloads3d}
+            />
+            <Route
+              path="/company_dashboard/activities/downloads/videos"
+              component={Company_downloadsVideos}
+            />
+            <Route
+              path="/company_dashboard/activities/downloads/"
+              component={Company_downloadsImages}
+            />
+          </Switch>
+        </div>
       </div>
     </div>
   );

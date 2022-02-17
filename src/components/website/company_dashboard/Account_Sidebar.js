@@ -15,7 +15,7 @@ class Account_Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view_account_filter: false,
+      view_account_filter: true,
     };
   }
 
@@ -30,7 +30,7 @@ class Account_Sidebar extends React.Component {
   render() {
     return (
       <div>
-        <Row>
+        <Row gutterWidth={70}>
           <Col xl={3} lg={4} md={12} sm={12}>
           <div>
 
