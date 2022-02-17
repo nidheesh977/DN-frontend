@@ -15,6 +15,7 @@ import Pilot_videos from "./Pilot_videos";
 import Pilot_3d from "./Pilot_3d";
 import Pilot_360 from "./Pilot_360";
 import Pilot_downloads from "./Pilot_downloads";
+import All from '../../website/All.module.css'
 
 
 class Activities_Sidebar extends React.Component {
@@ -42,7 +43,8 @@ Closeall = ( ) => {
 }
   render() {
     return (
-        <Row>
+
+        <Row gutterWidth={70}>
 
           <Col xl={3} lg={4} md={12} sm={12}>
             <div onMouseLeave={this.Closeall}>

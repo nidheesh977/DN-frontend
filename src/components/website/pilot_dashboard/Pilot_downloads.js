@@ -40,6 +40,7 @@ function Pilot_downloads() {
         </div>
       </div>
       <hr className="sidebar_hr" />
+      <div style={{marginTop : "30px"}}>
 
       <div className="pd_downloads_content">
         <Switch>
@@ -57,6 +58,7 @@ function Pilot_downloads() {
             component={Pilot_downloadsImages}
           />
         </Switch>
+      </div>
       </div>
     </div>
   );

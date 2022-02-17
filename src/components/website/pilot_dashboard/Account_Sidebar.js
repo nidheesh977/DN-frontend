@@ -33,7 +33,7 @@ class Account_Sidebar extends React.Component {
   render() {
     return (
       <div>
-        <Row>
+        <Row gutterWidth={70}>
           <Col xl={3} lg={4} md={12} sm={12}>
           <div onMouseLeave={this.Closeall}>
 

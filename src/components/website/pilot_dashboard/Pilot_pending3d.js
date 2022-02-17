@@ -42,12 +42,11 @@ function Pilot_pending3d() {
   let [data, setData] = useState(details);
   return (
     <div>
-      <Container>
-      <Row gutterWidth={7}>
+      <Row gutterWidth={12}>
           {data.images.map((item) => {
             return (
               <Col  xl={4} lg={6} md={4} sm={6} xs={12}>
-                <div style={{ height: "300px" }}>
+                <div style={{ height: "310px" }}>
                   <div
                     className="pd_images_imageContainer"
                     onMouseOver={() => mouseGotIN(item.id)}
@@ -103,7 +102,6 @@ function Pilot_pending3d() {
             );
           })}
         </Row>
-      </Container>
       <div className="a_j_load_div" style={{ margin: "40px 0px" }}>
         <button className="a_j_loadMore_btn">
           <img src={loadMore} className="a_j_location_logo" />
