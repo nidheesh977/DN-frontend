@@ -54,7 +54,7 @@ import PilotDetails from './components/website/PilotDetail'
 import ServiceCenterDashboard from "./components/website/ServiceCenterDashboard/ServiceCenterDashboard";
 import CreateJob from './components/website/CreateJob'
 import Company_dashboard from "./components/website/company_dashboard/Company_dashboard";
-import UpgradeProVersion from './components/website/UpgradeProVersion'
+import UpgradeProVersion from './components/website/UpgradeProVersion';
 
 class App extends React.Component {
   constructor(props) {
