@@ -54,7 +54,7 @@ class ApplyJob extends Component {
     super(props)
     this.state = {
       view_pilot_type_filter: true,
-      view_work_filter: true,
+      view_work_filter: false,
       view_hourly_rate_filter: true,
       price_range: [20, 40],
       price_range_min: 0,
@@ -114,6 +114,10 @@ class ApplyJob extends Component {
     }
   }
   dropdown = (id) => {
+    this.setState({
+      view_pilot_type_filter: false,
+      view_work_filter: false,
+    })
     id = "view_" + id
     this.setState({
       [id]: !this.state[id]
@@ -196,7 +200,7 @@ class ApplyJob extends Component {
                         <div className="h_p_filter1_checkbox_label">Part Time</div>
                       </label>
                     </div>
-                    <div className="h_p_filter1_title" onClick={() => this.dropdown("hourly_rate_filter")}>Monthly Salary</div>
+                    <div className="h_p_filter1_title">Monthly Salary</div>
                     <div className={this.state.view_hourly_rate_filter ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_hourly_rate_filter">
                       <div className="h_p_filter1_rate_content"> ${this.state.price_range[0]} - ${this.state.price_range[1]}</div>
                       <Box style={{ marginRight: "7px", marginLeft: "10px" }}>
