@@ -33,18 +33,89 @@ function mouseGotOut(id) {
 function Pilot_downloads3D() {
   let details = {
     images: [
-      { id: 1, views: "5K", downloads: "2K", likes: "1K", premium: false, pilot: "Yasar Arafath" },
-      { id: 2, views: "8K", downloads: "7K", likes: "4K",premium: true, pilot: "Yaseen Ahmed" },
-      { id: 3, views: "3K", downloads: "2K", likes: "1K", premium: false, pilot: "Yasar Arafath" },
-      { id: 4, views: "9K", downloads: "3K", likes: "2K",premium: true, pilot: "Yasar Arafath" },
-      { id: 5, views: "0K", downloads: "9K", likes: "3K",premium: false, pilot: "Yasar Arafath" },
-      { id: 6, views: "5K", downloads: "8K", likes: "9K", premium: true, pilot: "Yasar Arafath" },
-      { id: 7, views: "6K", downloads: "3K", likes: "6K",premium: false, pilot: "Yasar Arafath" },
-      { id: 8, views: "7K", downloads: "6K", likes: "0K", premium: true, pilot: "Yasar Arafath" },
-      { id: 9, views: "9K", downloads: "7K", likes: "8K", premium: true, pilot: "Yasar Arafath" },
+      {
+        id: 1,
+        views: "5K",
+        downloads: "2K",
+        likes: "1K",
+        premium: false,
+        pilot: "Yasar Arafath",
+        src: "https://wallpaperaccess.com/thumb/104870.jpg",
+      },
+      {
+        id: 2,
+        views: "8K",
+        downloads: "7K",
+        likes: "4K",
+        premium: true,
+        pilot: "Yaseen Ahmed",
+        src: "https://wallpaperaccess.com/thumb/228944.jpg",
+      },
+      {
+        id: 3,
+        views: "3K",
+        downloads: "2K",
+        likes: "1K",
+        premium: false,
+        pilot: "Yasar Arafath",
+        src: "https://wallpaperaccess.com/thumb/33971.jpg",
+      },
+      {
+        id: 4,
+        views: "9K",
+        downloads: "3K",
+        likes: "2K",
+        premium: true,
+        pilot: "Yasar Arafath",
+        src: "https://wallpaperaccess.com/thumb/4896.jpg",
+      },
+      {
+        id: 5,
+        views: "0K",
+        downloads: "9K",
+        likes: "3K",
+        premium: false,
+        pilot: "Yasar Arafath",
+        src: "https://wallpaperaccess.com/full/309831.jpg",
+      },
+      {
+        id: 6,
+        views: "5K",
+        downloads: "8K",
+        likes: "9K",
+        premium: true,
+        pilot: "Yasar Arafath",
+        src: "https://wallpaperaccess.com/thumb/449975.jpg",
+      },
+      {
+        id: 7,
+        views: "6K",
+        downloads: "3K",
+        likes: "6K",
+        premium: false,
+        pilot: "Yasar Arafath",
+        src: "https://wallpaperaccess.com/thumb/132010.png",
+      },
+      {
+        id: 8,
+        views: "7K",
+        downloads: "6K",
+        likes: "0K",
+        premium: true,
+        pilot: "Yasar Arafath",
+        src: "https://wallpaperaccess.com/full/211836.jpg",
+      },
+      {
+        id: 9,
+        views: "9K",
+        downloads: "7K",
+        likes: "8K",
+        premium: true,
+        pilot: "Yasar Arafath",
+        src: "https://wallpaperaccess.com/thumb/196893.jpg",
+      },
     ],
   };
-
   let [data, setData] = useState(details);
   return (
     <div>
@@ -58,7 +129,7 @@ function Pilot_downloads3D() {
                     onMouseOver={() => mouseGotIN(item.id)}
                     onMouseOut={() => mouseGotOut(item.id)}
                   >
-                    <img src={Picture} className="pd_images_image" />
+                    <img src={item.src} className="pd_images_image" />
                     <div className={item.premium ? "pd_premiumBadge" : "pd_images_imageHidden"}>
                       <img src={premiumIcon} className="pd_premiumBadge_star" />
                     </div>

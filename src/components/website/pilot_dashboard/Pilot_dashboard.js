@@ -13,7 +13,7 @@ import ScrollToTop from "react-scroll-to-top";
 function Pilot_dashboard() {
     return (
         <>
-              <ScrollToTop smooth color="#4ffea3" style={{boxShadow: "3px 2px 7px #0000003A"}} top="500"/>
+              {/* <ScrollToTop smooth color="#4ffea3" style={{boxShadow: "3px 2px 7px #0000003A"}} top="500"/> */}
 
             <Pilot_nav />
             <Container  className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>

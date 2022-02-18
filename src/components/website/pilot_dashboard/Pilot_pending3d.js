@@ -27,15 +27,15 @@ function showMore(id) {
 function Pilot_pending3d() {
   let details = {
     images: [
-      { id: 1, views: "5K", downloads: "2K", likes: "1K", premium: false, tag1: "Tall Building", tag2: "Adult" },
-      { id: 2, views: "8K", downloads: "7K", likes: "4K", premium: true, tag1: "Building", tag2: "Adult" },
-      { id: 3, views: "3K", downloads: "2K", likes: "1K", premium: false, tag1: "Tall Building", tag2: "Height" },
-      { id: 4, views: "9K", downloads: "3K", likes: "2K", premium: true, tag1: "Tall Building", tag2: "Adult" },
-      { id: 5, views: "0K", downloads: "9K", likes: "3K", premium: false, tag1: "Abusive", tag2: "Adult" },
-      { id: 6, views: "5K", downloads: "8K", likes: "9K", premium: true, tag1: "Tall Building", tag2: "Adult" },
-      { id: 7, views: "6K", downloads: "3K", likes: "6K", premium: false, tag1: "Tall Building", tag2: "Adult" },
-      { id: 8, views: "7K", downloads: "6K", likes: "0K", premium: true, tag1: "Tall Building", tag2: "Adult" },
-      { id: 9, views: "9K", downloads: "7K", likes: "8K", premium: true, tag1: "Tall Building", tag2: "Adult" },
+      { id: 1, views: "5K", downloads: "2K", likes: "1K", premium: false, tag1: "Tall Building", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/543077.jpg" },
+      { id: 2, views: "8K", downloads: "7K", likes: "4K", premium: true, tag1: "Building", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/628286.jpg" },
+      { id: 3, views: "3K", downloads: "2K", likes: "1K", premium: false, tag1: "Tall Building", tag2: "taller Height" , src: "https://wallpaperaccess.com/thumb/543077.jpg"},
+      { id: 4, views: "9K", downloads: "3K", likes: "2K", premium: true, tag1: "Tall Building", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/628286.jpg"  },
+      { id: 5, views: "0K", downloads: "9K", likes: "3K", premium: false, tag1: "Abusive", tag2: "Adult" , src: "https://wallpaperaccess.com/thumb/543077.jpg"},
+      { id: 6, views: "5K", downloads: "8K", likes: "9K", premium: true, tag1: "Tall Building", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/359168.jpg"},
+      { id: 7, views: "6K", downloads: "3K", likes: "6K", premium: false, tag1: "Tall Building", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/359168.jpg" },
+      { id: 8, views: "7K", downloads: "6K", likes: "0K", premium: true, tag1: "Tall Building", tag2: "Adult",  src: "https://wallpaperaccess.com/thumb/628286.jpg"  },
+      { id: 9, views: "9K", downloads: "7K", likes: "8K", premium: true, tag1: "Tall Building", tag2: "Adult" , src: "https://wallpaperaccess.com/thumb/543077.jpg"},
     ],
   };
 
@@ -52,7 +52,7 @@ function Pilot_pending3d() {
                     onMouseOver={() => mouseGotIN(item.id)}
                     onMouseOut={() => mouseGotOut(item.id)}
                   >
-                    <img src={Picture} className="pd_images_image" />
+                    <img src={item.src} className="pd_images_image" />
                     <div
                       className={
                         item.premium

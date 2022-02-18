@@ -1,224 +1,221 @@
-.pd_b_i_cover{
-    height: 150px;
-    width: 100%;
-    border-radius: 5px;
+.pd_b_i_cover {
+  height: 150px;
+  width: 100%;
+  border-radius: 5px;
 }
-.pd_b_i_main{
-    margin: 25px 0px;
-}
-
-.pd_b_i_images{
-    position: relative;
-    margin-bottom: 70px;
-
+.pd_b_i_main {
+  margin: 25px 0px;
 }
 
-.pd_b_i_profile{
+.pd_b_i_images {
+  position: relative;
+  margin-bottom: 70px;
+}
+
+.pd_b_i_profile {
+  position: absolute;
+  top: 100px;
+  left: 25px;
+}
+
+.pd_b_i_edit1 {
+  position: absolute;
+  background-color: #00e7fc;
+  height: 15px;
+  width: 15px;
+  bottom: 10px;
+  right: 10px;
+  cursor: pointer;
+  padding: 7px;
+  border-radius: 5px;
+}
+.pd_b_i_profile_container {
+  position: relative;
+}
+
+.pd_b_i_edit {
+  position: absolute;
+  background-color: #00e7fc;
+  height: 15px;
+  width: 15px;
+  bottom: 10px;
+  left: 40%;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.pd_b_i_pilot {
+  height: 100px;
+  width: 100px;
+  border-radius: 50px;
+  border: 2px solid #ffffff;
+}
+
+.pd_b_i_profile_titleBox {
+  margin-bottom: 35px;
+}
+
+.pd_b_i_profile_title {
+  display: inline;
+  font-family: muli-bold;
+  font-size: 30px;
+  line-height: 44px;
+}
+.pd_b_i_profile_edit {
+  display: inline;
+  float: right;
+  font-family: muli-regular;
+  font-size: 16px;
+  line-height: 24px;
+  padding: 3px 25px;
+  background-color: #00e7fc;
+  border-radius: 20px;
+  border: none;
+  /* align: right; */
+}
+.pd_b_i_profile_head {
+  /* display: inline; */
+  font-family: muli-bold;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 15px !important;
+}
+.pd_b_i_profile_head1 {
+  display: inline;
+  font-family: muli-bold;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 15px !important;
+}
+
+.pd_b_i_profile_input {
+  width: calc(100% - 20px);
+  height: 38px;
+  border: 1px solid #f5f5f7;
+  background-color: #f5f5f7;
+  border: 1px solid #f5f5f7 !important;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  font-family: muli-light;
+  font-size: 14px;
+  line-height: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.pd_b_i_profile_inputDesc {
+  width: 100%;
+  height: 120px;
+  background-color: #f5f5f7;
+  border: 1px solid #f5f5f7 !important;
+
+  border-radius: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #f5f5f7;
+  font-family: muli-light;
+  font-size: 14px;
+  line-height: 20px;
+}
+.pd_b_i_profile_text {
+  font-family: muli-light;
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 50px;
+}
+
+.pd_b_i_notifications_save {
+  margin: 0px 0px 50px 0px;
+}
+.pd_b_i_notifications_saveBtn {
+  padding: 13px 26px;
+  font-family: muli-regular;
+  font-size: 16px;
+  line-height: 24px;
+  border-radius: 30px;
+  border: none;
+  background: transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0%
+    0%;
+  cursor: pointer;
+}
+
+.pd_b_i_profile_verify {
+  font-family: muli-light;
+  font-size: 14px;
+  line-height: 20px;
+  display: inline;
+  float: right;
+  color: #00e7fc;
+}
+
+.pd_p_i_profile_text {
+  display: inline;
+  font-family: muli-light;
+  font-size: 14px;
+  line-height: 20px;
+  /* margin-bottom: 15px; */
+  margin: 0px 50px 0px 5px;
+  padding-bottom: 5px;
+}
+
+#pd_p_i_hidden {
+  display: none;
+}
+.pd_b_i_attachment {
+  display: inline;
+  font-family: muli-light;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 10px 26px;
+  margin-right: 10px;
+  background-color: #4ffea3;
+  border-radius: 5px;
+  width: 20%;
+  border: none;
+  cursor: pointer;
+}
+
+.or_container {
+  margin-top: 22.5px;
+  margin-bottom: 22.5px;
+}
+
+@media only screen and (max-width: 980px) {
+  .pd_b_i_edit {
     position: absolute;
-    top: 100px;
-    left: 25px;
-}
-
-.pd_b_i_edit1{
-    position: absolute;
-    background-color: #00E7FC;
-    height: 15px;
-    width: 15px;
-    bottom: 10px;
-    right: 10px;
-    cursor: pointer;
-    padding: 7px;
-    border-radius: 5px;
-}
-.pd_b_i_profile_container{
-    position: relative;
-   
-}
-
-.pd_b_i_edit{
-    position: absolute;
-    background-color: #00E7FC;
-    height: 15px;
-    width: 15px;
+    background-color: #00e7fc;
+    height: 20px;
+    width: 20px;
     bottom: 10px;
     left: 40%;
     cursor: pointer;
     padding: 5px;
     border-radius: 5px;
+  }
 
-}
-
-.pd_b_i_pilot{
-    height:100px;
-    width: 100px;
-    border-radius: 50px;
-    border: 2px solid #ffffff;
-}
-
-.pd_b_i_profile_titleBox{
-    margin-bottom: 35px;
-}
-
-.pd_b_i_profile_title{
-    display: inline;
-    font-family: muli-bold;
-    font-size: 30px;
-    line-height: 44px;
-}
-.pd_b_i_profile_edit{
-    display: inline;
-    float: right;
-    font-family: muli-regular;
-    font-size: 16px;
-    line-height: 24px;
-    padding: 3px 25px;
-    background-color: #00E7FC;
-    border-radius: 20px;
-    border: none;
-    /* align: right; */
-}
-.pd_b_i_profile_head{
-    /* display: inline; */
-    font-family: muli-bold;
-    font-size: 16px;
-    line-height: 24px;
-    margin-bottom: 15px !important;
-}
-.pd_b_i_profile_head1{
-    display: inline;
-    font-family: muli-bold;
-    font-size: 16px;
-    line-height: 24px;
-    margin-bottom: 15px !important;
-}
-
-.pd_b_i_profile_input{
-    width: 100%;
-    height: 38px;
-    border: 1px solid #F5F5F7;
-    background-color: #F5F5F7;
-    border: 1px solid #F5F5F7 !important;
-    border-radius: 5px;
-    margin-bottom: 30px;
-    font-family: muli-light;
-    font-size: 14px;
-    line-height: 20px;
-}
-.pd_b_i_profile_inputDesc{
-    width: 100%;
-    height: 120px;
-    background-color: #F5F5F7;
-    border: 1px solid #F5F5F7 !important;
-
-    border-radius: 5px;
-    margin-bottom: 10px;
-    border:  1px solid #F5F5F7;
-    font-family: muli-light;
-    font-size: 14px;
-    line-height: 20px;
-}
-.pd_b_i_profile_text{
-    font-family: muli-light;
-    font-size: 14px;
-    line-height: 20px;
-    margin-bottom: 50px;
-}
-
-.pd_b_i_notifications_save{
-    margin: 0px 0px 50px 0px;
-}
-.pd_b_i_notifications_saveBtn{
-    padding: 13px 26px;
-    font-family: muli-regular;
-    font-size: 16px;
-    line-height: 24px;
-    border-radius: 30px;
-    border: none;
-    background: transparent linear-gradient(290deg, #4FFEA3 0%, #00E7FC 100%) 0% 0%;
+  .pd_b_i_edit1 {
+    position: absolute;
+    background-color: #00e7fc;
+    height: 25px;
+    width: 25px;
+    bottom: 10px;
+    right: 10px;
     cursor: pointer;
-}
-
-.pd_b_i_profile_verify{
-    font-family: muli-light;
-    font-size: 14px;
-    line-height: 20px;
-    display: inline;
-    float: right;
-    color: #00E7FC;
-}
-
-.pd_p_i_profile_text{
-    display: inline;
-    font-family: muli-light;
-    font-size: 14px;
-    line-height: 20px;
-    /* margin-bottom: 15px; */
-    margin: 0px 50px 0px 5px;
-    padding-bottom: 5px;
-
-}
-
-#pd_p_i_hidden{
-    display: none;
-}
-.pd_b_i_attachment{
-    display: inline;
-    font-family: muli-light;
-    font-size: 14px;
-    line-height: 20px;
-    padding: 10px 26px;
-    margin-right: 10px;
-    background-color: #4FFEA3;
+    padding: 7px;
     border-radius: 5px;
-    width: 20%;
-border: none;
-cursor: pointer;
+  }
 }
 
-.or_container{
-    margin-top: 22.5px;
-    margin-bottom: 22.5px;
-    
+.s_c_a_brand {
+  display: inline-block;
+  font-size: 14px;
+  font-family: muli-light;
+  padding: 8px 20px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  background-color: #eeeeee;
+  border-radius: 20px;
 }
 
-@media only screen and (max-width: 980px) {
-    .pd_b_i_edit{
-        position: absolute;
-        background-color: #00E7FC;
-        height: 20px;
-        width: 20px;
-        bottom: 10px;
-        left: 40%;
-        cursor: pointer;
-        padding: 5px;
-        border-radius: 5px;
-    
-    }
-
-    .pd_b_i_edit1{
-        position: absolute;
-        background-color: #00E7FC;
-        height: 25px;
-        width: 25px;
-        bottom: 10px;
-        right: 10px;
-        cursor: pointer;
-        padding: 7px;
-        border-radius: 5px;
-    }
-}
-
-.s_c_a_brand{
-    display: inline-block;
-    font-size: 14px;
-    font-family: muli-light;
-    padding: 8px 20px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    background-color: #EEEEEE;
-    border-radius: 20px;
-}
-
-.s_c_a_brand_container{
-    margin-bottom: 30px;
+.s_c_a_brand_container {
+  margin-bottom: 30px;
 }

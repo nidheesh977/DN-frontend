@@ -12,7 +12,7 @@ import Account_Sidebar from './Account_Sidebar'
 function Company_dashboard() {
     return (
         <>
-              <ScrollToTop smooth color="#4ffea3" style={{boxShadow: "3px 2px 7px #0000003A"}} top="500"/>
+              {/* <ScrollToTop smooth color="#4ffea3" style={{boxShadow: "3px 2px 7px #0000003A"}} top="500"/> */}
             <Company_nav />
             {/* <Pilot_nav /> */}
             <Container  className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>

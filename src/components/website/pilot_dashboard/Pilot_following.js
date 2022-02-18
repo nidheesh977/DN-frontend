@@ -3,19 +3,19 @@ import "./css/Pilot_followers.css"
 import { Container, Row, Col, Visible, Hidden } from 'react-grid-system';
 import Pilot from "./images/pilot.jpg";
 import loadMore from "../../images/Group 71.svg";
-
+import {Link} from "react-router-dom"
 
 
 function Pilot_following() {
     let initialValue = {
-        profiles: [{ name: "Yasar Arafath", profile: "Professional Pilot" },
-        { name: "Yaseen Ahmed", profile: "Passionate Pilot" },
-        { name: "Yasar Arafath", profile: "Professional Pilot" },
-        { name: "Yaseen Ahmed", profile: "Passionate Pilot" },
-        { name: "Yasar Arafath", profile: "Passionate Pilot" },
-        { name: "Yaseen Ahmed", profile: "Professional Pilot" },
-        { name: "Yasar Arafath", profile: "Professional Pilot" },
-        { name: "Yaseen Ahmed", profile: "Passionate Pilot" },
+        profiles: [{ name: "Abhishek", profile: "Passionate Pilot" , src: "https://i.pinimg.com/474x/0e/9c/eb/0e9ceb5002e527dd90b14be502ae91b7.jpg"},
+        { name: "Shahrukh Khan", profile: "Professional Pilot", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd1UoWwl6Ts_ZFvqHq8A8QxjRGPSQfWOiC4zUAWVUmYmHukvKGsIYakl7i9qcGEfAuTPM&usqp=CAU" },
+        { name: "Yasar Arafath", profile: "Passionate Pilot", src: "https://i.pinimg.com/474x/82/ab/35/82ab3533ee71daf256f23c1ccf20ad6f--avatar-maker.jpg" },
+        { name: "Yaseen Ahmed", profile: "Professional Pilot", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3skJyybaYrESeetWiGU5ybPilo9jez3w5u4JeS2EUUsqG7ZSTEP90tRAsvUNQ8pNEaeE&usqp=CAU" },
+        { name: "Yasar Arafath", profile: "Passionate Pilot" , src: "https://cdn2.vectorstock.com/i/1000x1000/38/21/male-face-avatar-logo-template-pictograph-vector-11333821.jpg"},
+        { name: "Yaseen Ahmed", profile: "Professional Pilot", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNo2N_JJycCNmkFVJPVNdTZcx5QSVpQvir2QpzMzxN80U3QOO1FbWwpsz-Axd8VW7ADTY&usqp=CAU" },
+        { name: "Yasar Arafath", profile: "Professional Pilot", src: "https://png.pngtree.com/png-vector/20191101/ourlarge/pngtree-male-avatar-simple-cartoon-design-png-image_1934458.jpg" },
+        { name: "Yaseen Ahmed", profile: "Passionate Pilot", src: "https://i.pinimg.com/474x/82/ab/35/82ab3533ee71daf256f23c1ccf20ad6f--avatar-maker.jpg" },
 
         ]
     }
@@ -45,7 +45,7 @@ function Pilot_following() {
                             <Row>
                                 <Col xl={1.4} xs={2}>
                                     <div className='pd_followers_pilotImageBox' >
-                                        <img src={Pilot} alt="pilot img" className='pd_followers_pilot_img' />
+                                        <img src={item.src} alt="pilot img" className='pd_followers_pilot_img' />
                                     </div>
                                 </Col>
                                 <Col xs={5.25}>
@@ -57,7 +57,9 @@ function Pilot_following() {
                                 <Col>
                                     <div className='pd_followers_profile'>
                                         <div className='pd_followers_profileBox'>
+                                            <Link to="/pilot_details/1">
                                             <button className="pd_followers_profileBtn">View Profile</button>
+                                            </Link>
                                             <div className='pd_followers_profileUnfollow'>Unfollow</div>
                                         </div>
                                     </div>
