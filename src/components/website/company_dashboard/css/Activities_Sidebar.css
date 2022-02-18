@@ -3,7 +3,8 @@
 }
 
 .sidebar_hr{
-    border: 0.5px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    border-top: none;
     margin-top: 5px;
     margin-bottom: 16px;
 }

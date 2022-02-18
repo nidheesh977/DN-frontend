@@ -1,0 +1,58 @@
+.c_r_applications_box{
+    padding: 30px 30px 1px 30px;
+    background-color: #FBFBFB;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+}.c_r_applications_box1{
+    padding: 15px 20px 15px 20px;
+    background-color: #FBFBFB;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.c_r_startProcessBtn{
+    background-color: #00E7FC;
+    padding: 10px 45px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: muli-regular;
+    line-height: 20px;
+    display: inline-block;
+}
+.c_r_Remove{
+    text-decoration: underline;
+    /* float: right; */
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 15px;
+    font-family: muli-light;
+    line-height: 22px;
+    cursor: pointer;
+
+}
+.c_r_applications_text{
+    margin-top: 10px;
+    font-size: 15px;
+    font-family: muli-light;
+    line-height: 22px;
+}
+
+.c_r_applicationsHead{
+    font-size: 18px;
+    font-family: muli-bold;
+    line-height: 22px;
+    margin-bottom: 5px;
+}
+.pd_a_j_data_subTitle1{
+font-family: muli-regular;
+font-size: 16px;
+line-height: 24px;
+margin-bottom: 20px;}
+
+.a_j_listing_text1{
+font-family: muli-light;
+font-size: 14px;
+line-height: 22px;
+margin-top: 1rem;
+}

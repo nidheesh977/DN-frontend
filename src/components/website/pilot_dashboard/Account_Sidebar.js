@@ -35,10 +35,10 @@ class Account_Sidebar extends React.Component {
             <div className="media_box">
                 <div
                   className="sidebar_filter1_title"
-                  onClick={() => this.dropdown("account_filter")}
+                  // onClick={() => this.dropdown("account_filter")}
                 >
                   My Account{" "}
-                  <img
+                  {/* <img
                     src={dropdown}
                     id="dropimg"
                     alt="dropdown img"
@@ -47,7 +47,7 @@ class Account_Sidebar extends React.Component {
                         ? "h_p_filter1_dropdown h_p_dropdown_selected"
                         : "h_p_filter1_dropdown"
                     }
-                  />
+                  /> */}
                 </div>
                 <hr className="sidebar_hr" />
                 <div

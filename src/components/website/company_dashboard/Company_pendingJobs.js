@@ -107,7 +107,7 @@ function Company_pendingJobs() {
               <img src={work} className="a_j_location_logo" />
               <span className="a_j_location_text">{items.type}</span>
             </button>
-            <Link to="#" id="a_j_job_btn">
+            <Link to="/applyJobLanding" id="a_j_job_btn">
               View Job
             </Link>{" "}
             <img src={edit} className="company_jobs_edit" />

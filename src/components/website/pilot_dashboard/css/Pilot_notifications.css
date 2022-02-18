@@ -3,6 +3,7 @@
 }
 .pd_notifications_edit{
     margin-bottom: 40px;
+    cursor: pointer;
 }
 
 .pd_notifications_main{

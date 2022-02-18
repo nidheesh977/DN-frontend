@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Row, Col } from 'react-grid-system'
 import Edit from "./images/edit-1.svg"
 import Cover from './images/cover.jpg'
@@ -6,6 +6,8 @@ import "./css/Pilot_BasicInfo.css"
 import Pilot from './images/pilot.jpg'
 
 function Pilot_ProfessionalInfo() {
+  let details = {name: "Yaseen Ahmed", droneId: "NE082", droneType: "Passionate Pilot", monthly: 500, industry: "Information Science", trainingCenter: "Nexevo Technologies"}
+  let [data, setData] = useState(details)
   return <div className='pd_b_i_main'>
     <div className='pd_b_i_images'>
       <img src={Cover} alt="" className='pd_b_i_cover' />
@@ -26,7 +28,7 @@ function Pilot_ProfessionalInfo() {
     </div>
     <div>
       <div className='pd_b_i_profile_head'>Name</div>
-      <input type="text" className='pd_b_i_profile_input' />
+      <input type="text" className='pd_b_i_profile_input' value={data.name} />
     </div>
     <div style={{marginBottom: "30px"}}>
       <div className='pd_b_i_profile_head'>Pilot type</div>
@@ -53,13 +55,13 @@ function Pilot_ProfessionalInfo() {
     <Col xl={5}>
     <div>
       <div className='pd_b_i_profile_head'>Drone ID <span className='pd_p_i_profile_text'>(Optional)</span></div>
-      <input type="text" className='pd_b_i_profile_input' placeholder='Enter your drone ID'/>
+      <input type="text" value={data.droneId} className='pd_b_i_profile_input' placeholder='Enter your drone ID'/>
     </div>
     </Col>
     </Row>
     <div>
       <div className='pd_b_i_profile_head'>Drone Type</div>
-      <input type="text" className='pd_b_i_profile_input' />
+      <input type="text" value={data.droneType} className='pd_b_i_profile_input' />
     </div>
     <div style={{marginBottom: "30px"}}>
       <div className='pd_b_i_profile_head'>Work Type</div>
@@ -73,7 +75,7 @@ function Pilot_ProfessionalInfo() {
       <input type="text" className='pd_b_i_profile_input' />
     </div><div>
       <div className='pd_b_i_profile_head'>Monthly Payment ($)<span className='pd_p_i_profile_text'>(Licensed Pilots)</span></div>
-      <input type="text" className='pd_b_i_profile_input' />
+      <input type="text" value={data.monthly} className='pd_b_i_profile_input' />
     </div>
     <div>
       <div className='pd_b_i_profile_head'>Industry<span className='pd_p_i_profile_text'>(for both pilots)</span></div>
@@ -81,7 +83,7 @@ function Pilot_ProfessionalInfo() {
     </div>
     <div>
       <div className='pd_b_i_profile_head'>Training Center Name<span className='pd_p_i_profile_text'>(Licensed Pilots)</span></div>
-      <input type="text" className='pd_b_i_profile_input' />
+      <input type="text" value={data.trainingCenter} className='pd_b_i_profile_input' />
     </div>
     <div>
       <div className='pd_b_i_profile_head'>Completed Year<span className='pd_p_i_profile_text'>(Licensed Pilots)</span></div>

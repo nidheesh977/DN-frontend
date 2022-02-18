@@ -3,19 +3,20 @@ import "./css/Pilot_followers.css"
 import { Container, Row, Col, Visible, Hidden } from 'react-grid-system';
 import Pilot from "./images/pilot.jpg";
 import loadMore from "../../images/Group 71.svg";
+import { Link } from 'react-router-dom';
 
 
 
 function Pilot_followers() {
     let initialValue = {
-        profiles: [{ name: "Yasar Arafath", profile: "Professional Pilot" },
-        { name: "Yaseen Ahmed", profile: "Passionate Pilot" },
-        { name: "Yasar Arafath", profile: "Professional Pilot" },
-        { name: "Yaseen Ahmed", profile: "Passionate Pilot" },
-        { name: "Yasar Arafath", profile: "Passionate Pilot" },
-        { name: "Yaseen Ahmed", profile: "Professional Pilot" },
-        { name: "Yasar Arafath", profile: "Professional Pilot" },
-        { name: "Yaseen Ahmed", profile: "Passionate Pilot" },
+        profiles: [{ name: "Yasar Arafath", profile: "Professional Pilot", src: "https://st2.depositphotos.com/1006318/5909/v/950/depositphotos_59094623-stock-illustration-female-avatar-woman.jpg" },
+        { name: "Haj Mohammed", profile: "Licensed Pilot", src :"https://t3.ftcdn.net/jpg/03/08/77/90/360_F_308779037_iftiqKoqVTDzTnG4t8SSnwnb4s6qRG20.jpg" },
+        { name: "Habeeb Mohammed", profile: "Professional Pilot", src: "https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/60-512.png" },
+        { name: "Yasar Arafath", profile: "Passionate Pilot", src: "https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/58-512.png" },
+        { name: "Nidheesh Shetty", profile: "Passionate Pilot", src: "https://t3.ftcdn.net/jpg/03/08/77/90/360_F_308779037_iftiqKoqVTDzTnG4t8SSnwnb4s6qRG20.jpg" },
+        { name: "Yaseen Ahmed", profile: "Professional Pilot", src: "https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/60-512.png" },
+        { name: "Yasar Arafath", profile: "Professional Pilot", src: "https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/58-512.png" },
+        { name: "Yaseen Ahmed", profile: "Passionate Pilot", src: "https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/58-512.png" },
 
         ]
     }
@@ -45,7 +46,7 @@ function Pilot_followers() {
                             <Row>
                                 <Col xl={1.4} xs={2}>
                                     <div className='pd_followers_pilotImageBox' >
-                                        <img src={Pilot} alt="pilot img" className='pd_followers_pilot_img' />
+                                        <img src={item.src} alt="pilot img" className='pd_followers_pilot_img' />
                                     </div>
                                 </Col>
                                 <Col xs={5.25}>
@@ -57,7 +58,9 @@ function Pilot_followers() {
                                 <Col>
                                     <div className='pd_followers_profile'>
                                         <div className='pd_followers_profileBox'>
+                                        <Link to="/pilot_details/1">
                                             <button className="pd_followers_profileBtn">View Profile</button>
+                                            </Link>
                                             <div className='pd_followers_profileUnfollow'>Remove</div>
                                         </div>
                                     </div>

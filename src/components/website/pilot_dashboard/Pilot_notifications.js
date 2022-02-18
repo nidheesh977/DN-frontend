@@ -16,7 +16,7 @@ function Pilot_notifications() {
         <hr className='pd_notifications_hr'/>
         <div>
             <label className='pd_notifications_label'>
-            <input type="checkbox" /> <span className='pd_notifications_title'>Drone Zone News</span>
+            <input type="checkbox" checked/> <span className='pd_notifications_title'>Drone Zone News</span>
             </label>
             <div className='pd_notifications_desc'>Get Drone Zone news, announcements and competition updates</div>
         </div>
@@ -35,7 +35,7 @@ function Pilot_notifications() {
         <hr className='pd_notifications_hr'/>
         <div>
             <label className='pd_notifications_label2'>
-            <input type="checkbox" /> <span className='pd_notifications_title'>Anyone hires me</span>
+            <input type="checkbox" checked/> <span className='pd_notifications_title'>Anyone hires me</span>
             </label>
         </div>
         <hr className='pd_notifications_hr'/><div>
@@ -50,12 +50,12 @@ function Pilot_notifications() {
         </div>
         <hr className='pd_notifications_hr'/><div>
             <label className='pd_notifications_label2'>
-            <input type="checkbox" /> <span className='pd_notifications_title'>Anyone follows me</span>
+            <input type="checkbox" checked/> <span className='pd_notifications_title'>Anyone follows me</span>
             </label>
         </div>
         <hr className='pd_notifications_hr'/><div>
             <label className='pd_notifications_label2'>
-            <input type="checkbox" /> <span className='pd_notifications_title'>Someone comments on one of my shots</span>
+            <input type="checkbox" checked/> <span className='pd_notifications_title'>Someone comments on one of my shots</span>
             </label>
         </div>
         <hr className='pd_notifications_hr'/>

@@ -11,6 +11,7 @@ import Company_downloads from "./Company_downloads";
 import Company_savedPilots from "./Company_savedPilots";
 import Company_hired from "./Company_hired";
 import All from '../../website/All.module.css'
+import Company_applications from "./Company_applications";
 
 
 
@@ -167,6 +168,10 @@ class Activities_Sidebar extends React.Component {
             <Route
               path="/company_dashboard/activities/received"
               component={Company_received}
+            />
+            <Route
+              path="/company_dashboard/activities/receivedApplications"
+              component={Company_applications}
             />
             <Route
               path="/company_dashboard/activities/jobs"

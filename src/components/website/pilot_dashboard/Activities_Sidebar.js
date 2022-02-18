@@ -172,7 +172,7 @@ class Activities_Sidebar extends React.Component {
                 <div id="pd_filter1_checkbox_label">
                   {" "}
                   <NavLink
-                    exact
+                    
                     activeClassName="h_p_sidebar_active"
                     to="/pilot_dashboard/activities/downloads"
                   >

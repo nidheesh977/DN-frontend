@@ -98,7 +98,7 @@ function Pilot_savedJobs() {
                   <img src={work} className="a_j_location_logo" />
                   <span className="a_j_location_text">{item.type}</span>
                 </button>
-                <Link to="#" id="a_j_job_btn">
+                <Link to="/applyJobLanding" id="a_j_job_btn">
                   View Job
                 </Link>{" "}
                 <img src={heart} className="a_j_like" />

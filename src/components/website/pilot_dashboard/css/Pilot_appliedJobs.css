@@ -311,6 +311,7 @@ justify-content: center}
  .a_j_listing_btns{
    display: contents;
  }
+
  
 } 
 @media only screen and (max-width: 567px){
@@ -351,8 +352,7 @@ justify-content: center}
 }
 
 .company_jobs_edit{
-  width: 25px;
-  height: 25px;
+  height: 20px;
   margin-right: 15px;
   margin-top: 10px;
   cursor: pointer;
