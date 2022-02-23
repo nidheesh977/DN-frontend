@@ -11,12 +11,10 @@ import loadMore from "../../images/Group 71.svg";
 import { Item } from "semantic-ui-react";
 
 function mouseGotIN(id) {
-  document.getElementById("pd_likes/" + id).style.display = "block";
   document.getElementById("pd_more/" + id).style.display = "block";
   document.getElementById("pd_images_more/" + id).style.display = "none";
 }
 function mouseGotOut(id) {
-  document.getElementById("pd_likes/" + id).style.display = "none";
   document.getElementById("pd_more/" + id).style.display = "none";
 }
 
@@ -62,17 +60,6 @@ function Pilot_rejected3d() {
                     >
                       <img src={premiumIcon} className="pd_premiumBadge_star" />
                     </div>
-                  </div>
-                  <div
-                    className="pd_likes_container"
-                    id={"pd_likes/" + item.id}
-                  >
-                    <img src={viewIcon} className="pd_likes_img" />{" "}
-                    <span>{item.views}</span>
-                    <img src={downloadIcon} className="pd_likes_img" />{" "}
-                    <span>{item.downloads}</span>
-                    <img src={productLike} className="pd_likes_img" />{" "}
-                    <span>{item.likes}</span>
                   </div>
                   <div
                     className="pd_moreBtn"

@@ -4,21 +4,137 @@ import "./css/Pilot_BasicInfo.css";
 import Pilot from "./images/pilot.jpg";
 import { Row, Col } from "react-grid-system";
 import Edit from "./images/edit-1.svg";
+import PhoneInput from 'react-phone-number-input'
+import All from '../../website/All.module.css'
 
 function Pilot_BasicInfo() {
   let details = {
-    name: "Yaseen Ahmed",
-    email: "yaseen.nexevo@gmail.com",
-    phNo: 6362206989,
-    dob: "04 Dec 1999",
-    gender: "Male",
-    address: "Jayanagar Bangalore",
-    city: "Bangalore",
-    Country: "India",
-    postal: 560069,
-    Bio: "LOREM IPSUM GENERATOR  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    full_name: "",
+    email: "",
+    phone: "+91",
+    dob: "",
+    gender: "",
+    address: "",
+    city: "",
+    country: "",
+    postal: "",
+    bio: "",
   };
   let [data, setData] = useState(details);
+  let [edit, setEdit] = useState(false)
+
+  const changeHandler = (e) => {
+    
+    if (e.target.id === "bio"){
+      document.getElementById(`${e.target.id}_error`).style.visibility = "hidden"
+      document.getElementById(`${e.target.id}_error`).style.display = "none"
+    }
+    else{
+      document.getElementById(`${e.target.id}_error`).style.visibility = "hidden"
+    }
+    setData({
+      ...data,
+      [e.target.id]: e.target.value
+    })
+    console.log(data)
+  }
+
+  const phoneChangeHandler = (e) => {
+    document.getElementById(`phone_error`).style.visibility = "hidden"
+    try{
+      if(e.length>=1){
+        setData({
+          ...data,
+          phone: e
+        })
+      }
+      else{
+        setData({
+          ...data,
+          phone: ""
+        })
+      }
+    }
+    catch{
+      setData({
+        ...data,
+        phone: ""
+      })
+    }
+    console.log(data)
+  }
+
+  const saveChanges = () => {
+    var fields = ["full_name", "email", "phone", "dob", "gender", "address", "city", "country", "postal", "bio"]
+    var error = false
+    const validateEmail = (email) => {
+      return String(email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    };
+    for (var i = 0; i < fields.length; i++){
+      if (fields[i] === "bio"){
+        if (data.bio === ""){
+          document.getElementById(`${fields[i]}_error`).style.visibility = "visible"
+          document.getElementById(`${fields[i]}_error`).style.display = "contents"
+          document.getElementById(`${fields[i]}`).focus()
+          error = true
+          break
+        }
+      }
+      else if (fields[i] === "email"){
+        if (data.email === ""){
+          document.getElementById(`email_error`).innerHTML = "Email ID is Required"
+          document.getElementById(`email_error`).style.visibility = "visible"
+          document.getElementById(`email`).focus()
+          error = true
+          break
+        }
+        else if (!validateEmail(data.email)){
+          document.getElementById(`email_error`).innerHTML = "Email ID is not valid"
+          document.getElementById(`email_error`).style.visibility = "visible"
+          document.getElementById(`email`).focus()
+          error = true
+          break
+        }
+      }
+      else if (fields[i] === "phone"){
+        if (data.phone === ""){
+          document.getElementById(`phone_error`).innerHTML = "Phone number is Required"
+          document.getElementById(`phone_error`).style.visibility = "visible"
+          document.getElementById(`phone`).focus()
+          error = true
+          break
+        }
+        else if (data.phone.length <= 7){
+          document.getElementById(`phone_error`).innerHTML = "Phone number is not valid"
+          document.getElementById(`phone_error`).style.visibility = "visible"
+          document.getElementById(`phone`).focus()
+          error = true
+          break
+        }
+      }
+      else if (data[fields[i]] === ""){
+        document.getElementById(`${fields[i]}_error`).style.visibility = "visible"
+        document.getElementById(`${fields[i]}`).focus()
+        error = true
+        break
+      }
+    }
+    if(!error){
+      alert("Ready to submit")
+    }
+  }
+
+  const editHandler = () => {
+    setEdit(true)
+    setTimeout(() => {
+      document.getElementById(`full_name`).focus()
+    }, 10)
+  }
+
   return (
     <div className="pd_b_i_main">
       <div className="pd_b_i_images">
@@ -37,11 +153,12 @@ function Pilot_BasicInfo() {
       </div>
       <div className="pd_b_i_profile_titleBox">
         <div className="pd_b_i_profile_title">Basic Information</div>
-        <div className="pd_b_i_profile_edit">Edit</div>
+        <div className="pd_b_i_profile_edit" onClick = {editHandler}>Edit</div>
       </div>
       <div>
         <div className="pd_b_i_profile_head">Full Name</div>
-        <input type="text" className="pd_b_i_profile_input" value={data.name} />
+        <input type="text" className="pd_b_i_profile_input" value={data.full_name} id = "full_name" onChange = {changeHandler} disabled = {!edit} />
+        <div className="input_error_msg" id = "full_name_error">Full name is required</div>
       </div>
       <Row>
         <Col>
@@ -56,7 +173,11 @@ function Pilot_BasicInfo() {
               type="text"
               className="pd_b_i_profile_input"
               value={data.email}
+              id = "email"
+              onChange = {changeHandler}
+              disabled = {!edit}
             />
+            <div className="input_error_msg" id = "email_error">Email ID is required</div>
           </div>
         </Col>
         <Col>
@@ -67,12 +188,8 @@ function Pilot_BasicInfo() {
                 <div className="pd_b_i_profile_verify">Verify</div>
               </div>
             </div>
-
-            <input
-              type="text"
-              className="pd_b_i_profile_input"
-              value={data.phNo}
-            />
+            <PhoneInput defaultCountry="IN" className={All.Phonenumber + " s_c_d_phone_input"} name="phone" id="phone" value={data.phone} onChange = {phoneChangeHandler} disabled = {!edit}/>
+            <div className="input_error_msg" id = "phone_error">Phone number is required</div>
           </div>
         </Col>
       </Row>
@@ -81,10 +198,14 @@ function Pilot_BasicInfo() {
           <div>
             <div className="pd_b_i_profile_head">DOB</div>
             <input
-              type="text"
+              type="date"
               className="pd_b_i_profile_input"
               value={data.dob}
+              id = "dob"
+              onChange = {changeHandler}
+              disabled = {!edit}
             />
+            <div className="input_error_msg" id = "dob_error">DOB is required</div>
           </div>
         </Col>
         <Col>
@@ -92,9 +213,15 @@ function Pilot_BasicInfo() {
             <div className="pd_b_i_profile_head">Gender</div>
             <input
               type="text"
+              name = "gender"
               className="pd_b_i_profile_input"
               value={data.gender}
+              onChange = {changeHandler}
+              id = "gender"
+              onChange = {changeHandler}
+              disabled = {!edit}
             />
+            <div className="input_error_msg" id = "gender_error">Gender is required</div>
           </div>
         </Col>
       </Row>
@@ -104,7 +231,11 @@ function Pilot_BasicInfo() {
           type="text"
           className="pd_b_i_profile_input"
           value={data.address}
+          id = "address"
+          onChange = {changeHandler}
+          disabled = {!edit}
         />
+        <div className="input_error_msg" id = "address_error">Address is required</div>
       </div>
       <Row>
         <Col xl={6}>
@@ -114,7 +245,11 @@ function Pilot_BasicInfo() {
               type="text"
               className="pd_b_i_profile_input"
               value={data.city}
+              id = "city"
+              onChange = {changeHandler}
+              disabled = {!edit}
             />
+            <div className="input_error_msg" id = "city_error">City is required</div>
           </div>
         </Col>
         <Col xl={6}>
@@ -123,8 +258,12 @@ function Pilot_BasicInfo() {
             <input
               type="text"
               className="pd_b_i_profile_input"
-              value={data.Country}
+              value={data.country}
+              id = "country"
+              onChange = {changeHandler}
+              disabled = {!edit}
             />
+            <div className="input_error_msg" id = "country_error">Country is required</div>
           </div>
         </Col>
         <Col xl={6}>
@@ -134,7 +273,11 @@ function Pilot_BasicInfo() {
               type="text"
               className="pd_b_i_profile_input"
               value={data.postal}
+              id = "postal"
+              onChange = {changeHandler}
+              disabled = {!edit}
             />
+            <div className="input_error_msg" id = "postal_error">Postal address is required</div>
           </div>
         </Col>
       </Row>
@@ -144,14 +287,18 @@ function Pilot_BasicInfo() {
           type="text"
           className="pd_b_i_profile_inputDesc"
           placeholder="Maximum 50 words..."
-          value={data.Bio}
+          value={data.bio}
+          id = "bio"
+          onChange = {changeHandler}
+          disabled = {!edit}
         ></textarea>
+        <div className="input_bio_error_msg" id = "bio_error">Bio is required</div>
         <div className="pd_b_i_profile_text">
           Brief description for your profile. URLs are hyperlinked
         </div>
       </div>
       <div className="pd_b_i_notifications_save">
-        <button className="pd_b_i_notifications_saveBtn">Save Changes</button>
+        <button className="pd_b_i_notifications_saveBtn" onClick={saveChanges}>Save Changes</button>
       </div>
     </div>
   );

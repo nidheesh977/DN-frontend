@@ -15,10 +15,9 @@ import DroneImg from '../images/drone-img.svg'
 import Loader from '../Loader/loader'
 import swal from 'sweetalert';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-
 import { authenticationService } from '../../middleware/auth';
 import { trackWindowScroll } from 'react-lazy-load-image-component';
-
+import "../css/Login.css"
 
 const PasswordShow = () => {
   var x = document.getElementById("password");
@@ -44,6 +43,7 @@ const Login = (props) => {
 
 
   const handleClick = () => {
+    
     setOpen(true);
   };
 
@@ -160,6 +160,7 @@ const Login = (props) => {
                 <div className={All.FormGroup}>
                   <label className={All.Bold} for="email">Email ID:</label>
                   <input type="email" name="email" className={All.FormControl} id="email" ref={register({ required: true })} />
+                  <div className="login_input_error_msg" id = "service_center_name_error">Service center name is required</div>
                 </div>
                 <div className={All.FormGroup}>
                   <label className={All.Bold} for="password">Password:</label>
@@ -172,6 +173,7 @@ const Login = (props) => {
                       <Box className={`${All.Width_74}`} style = {{textAlign: "right", width: "100% !important"}}><span className={`${All.FSize_12} ${All.MuliLight}`}>Forgot Password</span></Box>
                     </Link>
                   </div>
+                  <div className="login_input_error_msg" id = "service_center_name_error">Password is required</div>
 
                 </div>
                 <div className={All.FormGroup}>

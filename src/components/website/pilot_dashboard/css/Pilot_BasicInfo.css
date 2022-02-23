@@ -74,6 +74,11 @@
   border: none;
   /* align: right; */
 }
+
+.pd_b_i_profile_edit:hover{
+  background-color: #4FFEA3;
+}
+
 .pd_b_i_profile_head {
   /* display: inline; */
   font-family: muli-bold;
@@ -103,12 +108,12 @@
   padding-left: 10px;
   padding-right: 10px;
 }
+
 .pd_b_i_profile_inputDesc {
   width: 100%;
   height: 120px;
   background-color: #f5f5f7;
   border: 1px solid #f5f5f7 !important;
-
   border-radius: 5px;
   margin-bottom: 10px;
   border: 1px solid #f5f5f7;
@@ -116,6 +121,7 @@
   font-size: 14px;
   line-height: 20px;
 }
+
 .pd_b_i_profile_text {
   font-family: muli-light;
   font-size: 14px;
@@ -160,8 +166,9 @@
 #pd_p_i_hidden {
   display: none;
 }
+
 .pd_b_i_attachment {
-  display: inline;
+  display: inline-block;
   font-family: muli-light;
   font-size: 14px;
   line-height: 20px;
@@ -169,17 +176,21 @@
   margin-right: 10px;
   background-color: #4ffea3;
   border-radius: 5px;
-  width: 20%;
   border: none;
   cursor: pointer;
 }
+
+.pd_p_i_attachnment_label{
+  margin-bottom: 40px;
+}
+
 
 .or_container {
   margin-top: 22.5px;
   margin-bottom: 22.5px;
 }
 
-@media only screen and (max-width: 980px) {
+@media only screen and (max-width: 980px){
   .pd_b_i_edit {
     position: absolute;
     background-color: #00e7fc;
@@ -214,8 +225,21 @@
   margin-bottom: 10px;
   background-color: #eeeeee;
   border-radius: 20px;
+  cursor: pointer;
 }
 
 .s_c_a_brand_container {
   margin-bottom: 30px;
+}
+
+.pd_i_skill{
+  font-family: muli-light;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 3px 15px;
+  background: #F1F1F1;
+  border-radius: 13px;
+  display: inline-block;
+  margin: 10px 10px 0 0;
+  cursor: pointer;
 }

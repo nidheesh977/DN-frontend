@@ -1,0 +1,7 @@
+.login_input_error_msg{
+  font-family: muli-regular;
+  font-size: 14px;
+  line-height: 20px;
+  color: red;
+  display: none;
+}

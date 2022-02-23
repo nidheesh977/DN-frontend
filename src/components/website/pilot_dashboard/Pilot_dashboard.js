@@ -6,10 +6,6 @@ import Activities_Sidebar from './Activities_Sidebar'
 import Account_Sidebar from './Account_Sidebar';
 import All from '../../website/All.module.css'
 import ScrollToTop from "react-scroll-to-top";
-
-
-
-
 function Pilot_dashboard() {
     return (
         <>
@@ -21,6 +17,7 @@ function Pilot_dashboard() {
 
                     <Switch>
                         <Route path="/pilot_dashboard/activities" component={Activities_Sidebar} />
+                        <Route path="/pilot_dashboard/" exact component={Activities_Sidebar} />
                         <Route path="/pilot_dashboard/account" component={Account_Sidebar} />
                     </Switch>
 

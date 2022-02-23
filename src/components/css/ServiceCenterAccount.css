@@ -56,3 +56,41 @@
   cursor: pointer;
   visibility: hidden;
 }
+
+.input_error_msg{
+  font-family: muli-regular;
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 15px;
+  color: red;
+  visibility: hidden;
+}
+
+.input_bio_error_msg{
+  font-family: muli-regular;
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 15px;
+  color: red;
+  display: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.s_c_d_phone_input{
+  width: calc(100% - 20px);
+  height: 2px;
+}
+
+.s_c_d_phone_input:hover, .s_c_d_phone_input:focus, .s_c_d_phone_input:focus-visible{
+  border: 1px solid #4FFEA3;
+}

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { Helmet } from "react-helmet";
-import { Container, Row, Col } from 'react-grid-system';
+import { Container, Row, Col, Visible } from 'react-grid-system';
 import All from '../website/All.module.css'
 import PhoneInput from 'react-phone-number-input'
 import { useState } from 'react';
@@ -27,7 +27,7 @@ function SignUp(props) {
   const { register, handleSubmit, errors, watch, control} = useForm();
   const password = useRef({});
   password.current = watch("password", "");
-  const [value, setValue] = useState()
+  const [value, setValue] = useState("+91")
   const [viewPassword, setViewPassword] = useState()
   const [state, setState] = React.useState({
     checkedA: false,
@@ -169,17 +169,13 @@ function SignUp(props) {
       <section className={All.Register}>
       <Container className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}>
           <Row>
-            <Col lg={6} className={All.DronePerson} style = {{marginTop: "50px"}}>
-              <img src={DronePerson} />
-            </Col>
+            <Visible xxl xl lg>
+              <Col lg={6} className={All.DronePerson} style = {{marginTop: "50px"}}>
+                <img src={DronePerson} />
+              </Col>
+            </Visible>
             <Col lg={6}>
               <Box pb={3} className={`${All.pt_sm} ${All.pt_xs} ${All.pt_md}`}>
-
-
-
-
-
-                
                 <h2>Sign Up</h2>
               </Box>
               <form className={All.form} onSubmit={handleSubmit(onSubmit)}>
@@ -194,7 +190,8 @@ function SignUp(props) {
                 </div>
                 <div className={All.FormGroup}>
                   <label className={All.Bold} for="phone">Phone Number <span className={All.FSize_12}>(with country code)</span></label>
-                  <PhoneInput className={All.Phonenumber} name="phone" id="phone" value={value} onChange={setValue}/>
+                  {/* <PhoneInput defaultCountry="IN" className={All.Phonenumber} name="phone" id="phone" value={value} onChange={setValue}/> */}
+                  <PhoneInput defaultCountry="IN" className={All.Phonenumber} name="phone" id="phone" value={value}  onChange={setValue}/>
                 </div>
 
                  

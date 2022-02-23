@@ -13,12 +13,10 @@ import videoIcon from '../../images/video-icon.svg'
 
 
 function mouseGotIN(id) {
-  document.getElementById("pd_likes/" + id).style.display = "block";
   document.getElementById("pd_more/" + id).style.display = "block";
   document.getElementById("pd_images_more/" + id).style.display = "none";
 }
 function mouseGotOut(id) {
-  document.getElementById("pd_likes/" + id).style.display = "none";
   document.getElementById("pd_more/" + id).style.display = "none";
 }
 
@@ -66,17 +64,6 @@ function Pilot_pendingVideos() {
                   </div>
                   <div className="pd_video_icon"><img src={videoIcon}/></div>
 
-                  <div
-                    className="pd_likes_container"
-                    id={"pd_likes/" + item.id}
-                  >
-                    <img src={viewIcon} className="pd_likes_img" />{" "}
-                    <span>{item.views}</span>
-                    <img src={downloadIcon} className="pd_likes_img" />{" "}
-                    <span>{item.downloads}</span>
-                    <img src={productLike} className="pd_likes_img" />{" "}
-                    <span>{item.likes}</span>
-                  </div>
                   <div
                     className="pd_moreBtn"
                     id={"pd_more/" + item.id}

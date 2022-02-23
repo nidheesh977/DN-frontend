@@ -140,17 +140,18 @@ class App extends React.Component {
               roles={[Role.Admin]}
               component={GetJobs}
             />
-            <PrivateRoute
+            <PublicRoute
+              restricted={true}
               exact
               path="/TermsCondition"
               component={TermsCondition}
             />
-            <PublicRoute
+            {/* <PublicRoute
               restricted={true}
               exact
               path="/UpgradeProVersion"
               component={UpgradeProVersion}
-            />
+            /> */}
             <PublicRoute
               restricted={true}
               path="/DownloadSubscription"

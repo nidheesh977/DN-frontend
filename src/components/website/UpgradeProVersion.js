@@ -24,8 +24,6 @@ export default function UpgradeProVersion() {
                 <meta charSet="utf-8" />
                 <meta name="description" content="Nested component" />
             </Helmet>
-
-<Header />
             <section className={All.UpgradeProVersion}>
                 <Box p={4} textAlign={'center'}>
                         <h2>Upgrade Pro Version</h2>

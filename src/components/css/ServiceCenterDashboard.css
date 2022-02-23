@@ -127,4 +127,5 @@
   background: transparent linear-gradient(31deg, #00E7FC 0%, #4FFEA3 100%);
   border-radius: 25px;
   border: 0;
+  display: contents;
 }

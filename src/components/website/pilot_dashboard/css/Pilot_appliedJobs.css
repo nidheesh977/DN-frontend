@@ -311,8 +311,6 @@ justify-content: center}
  .a_j_listing_btns{
    display: contents;
  }
-
- 
 } 
 @media only screen and (max-width: 567px){
   .a_j_location_btn, #a_j_job_btn ,#a_j_job_btn1{

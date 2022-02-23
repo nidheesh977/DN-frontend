@@ -149,7 +149,16 @@ class ApplyJob extends Component {
                     </div>
                     <button
                       className="h_p_create_job_btn"
-                      onClick={() => this.props.history.push("/create_job")}
+
+
+
+
+
+
+
+
+
+                      onClick={() => this.props.history.push("/UploadFile")}
                     >
                       Upload Now
                     </button>
