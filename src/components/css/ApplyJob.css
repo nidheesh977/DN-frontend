@@ -4,12 +4,12 @@
 }
 
 .a_j_keywords {
+  width: calc(100% - 60px);
   font-size: 13px;
   color: #b2b2b2;
   font-family: muli-light;
   line-height: 20px;
   padding: 10px 40px 10px 20px;
-  width: 79%;
   border-radius: 5px;
   border: 1px solid #e8e8e8;
   background: url(/static/media/search2.036b2983.png), #fff;
@@ -17,14 +17,14 @@
   -webkit-appearance: none;
   background-repeat: no-repeat;
   background-size: 15px;
-  background-position: 92%;
+  background-position: calc(100% - 25px);
   margin-bottom: 20px;
 }
 
 .h_p_filter1_dropdown1 {
   width: 11px;
   float: right;
-  margin-right: 8%;
+  margin-right: 25px;
   margin-top: 8px;
 }
 
@@ -92,6 +92,7 @@
   font-size: 25px;
   line-height: 36px;
   margin-bottom: 5px;
+  word-break: break-word;
 }
 
 .j_l_producer {
@@ -139,9 +140,18 @@
   }
 }
 
+@media only screen and (max-width: 991px) {
+  .a_j_keywords {
+    width: calc(100%);
+  }
+}
+
 @media only screen and (max-width: 567px) {
   .j_l_applyJobBtn {
     padding: 10px 12px;
+  }
+  .a_j_keywords {
+    width: calc(100%);
   }
 }
 
@@ -171,5 +181,11 @@
 }
 .j_l_containerMain{
   background: #F8F8FB;
+}
 
+.a_j_more_filter{
+  font-family: muli-bold;
+  font-size: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
 }

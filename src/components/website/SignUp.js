@@ -29,13 +29,18 @@ function SignUp(props) {
   password.current = watch("password", "");
   const [value, setValue] = useState("+91")
   const [viewPassword, setViewPassword] = useState()
-  const [state, setState] = React.useState({
-    checkedA: false,
-  });
   
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [error_msg, setErrorMsg] = useState("");
+
+  const [formValues, setFormValues] = useState({
+    name: "",
+    email: "",
+    phone: "+91",
+    password: "",
+    confirmPassword: ""
+  })
 
   const history = useHistory();
   const onSubmit = (event) => {
@@ -94,10 +99,10 @@ function SignUp(props) {
       props.history.push({
         pathname: "/select_category",
         state: {
-          name: event.name,
-          email: event.email,
-          phone: value,
-          password: event.password
+          name: formValues.name,
+          email: formValues.email,
+          phone: formValues.phone,
+          password: formValues.password,
         }
       })
     }else{
@@ -126,7 +131,92 @@ function SignUp(props) {
     
   const [open, setOpen] = React.useState(false);
 
+  const changeHandler = (e) => {
+    setFormValues({
+      ...formValues,
+      [e.target.name]: e.target.value
+    })
+    document.getElementById(e.target.name+"_error").style.display = "none"
+  }
+
+  const phoneChangeHandler = (e) => {
+    document.getElementById(`phone_error`).style.display = "none"
+    try{
+      if(e.length>=1){
+        setFormValues({
+          ...formValues,
+          phone: e
+        })
+      }
+      else{
+        setFormValues({
+          ...formValues,
+          phone: ""
+        })
+      }
+    }
+    catch{
+      setFormValues({
+        ...formValues,
+        phone: ""
+      })
+    }
+  }
+
   const handleClick = () => {
+    const raiseError = (id, msg) => {
+      document.getElementById(`${id}_error`).innerText = msg
+      document.getElementById(`${id}_error`).style.display = "contents"
+    }
+
+    const validateEmail = (email) => {
+      return String(email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    };
+
+    if (formValues.name === "" || formValues.name.length < 2){
+      if (formValues.name === ""){
+        raiseError("name", "Name is required")
+      }
+      else{
+        raiseError("name", "Name must have atleast 2 characters")
+      }
+    }
+
+    else if (formValues.email === "" || !validateEmail(formValues.email)){
+      if (formValues.email === ""){
+        raiseError("email", "Email ID is required")
+      }
+      else{
+        raiseError("email", "Email ID is not valid")
+      }
+    }
+
+    else if (formValues.phone === "" || formValues.phone.length <= 7){
+      if (formValues.phone === ""){
+        raiseError("phone", "Phone number is required")
+      }
+      else{
+        raiseError("phone", "Phone number is not valid")
+      }
+    }
+
+    else if (formValues.password === "" || formValues.password.length < 8){
+      if (formValues.password === ""){
+        raiseError("password", "Password is required")
+      }
+      else{
+        raiseError("password", "Password must have atleast 8 characters")
+      }
+    }
+
+    else if (formValues.password!==formValues.confirmPassword){
+      raiseError("confirmPassword", "Password doesn't match")
+    }
+
     setOpen(true);
   };
 
@@ -139,7 +229,6 @@ function SignUp(props) {
     setErrorMsg("")
   };
 
-
   return (
     <>
       <Helmet>
@@ -147,24 +236,6 @@ function SignUp(props) {
         <meta charSet="utf-8" />
         <meta name="description" content="Nested component" />
       </Helmet>
- 
-      {
-        error && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}><Alert  variant="filled" onClose={handleClose} severity="error">{error_msg}</Alert></Snackbar>
-      }
-
-      {errors.confirmPassword && !errors.name && !errors.email && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">password does not match</Alert></Snackbar>}
-      {errors.confirmPassword && errors.confirmPassword.type === "required" && !errors.name && !errors.email && !errors.password && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Confirm password is required!</Alert></Snackbar>}
-
-      {errors.password && errors.password.message && !errors.name && !errors.email && !errors.confirmPassword && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Password must have at least 8 characters</Alert></Snackbar>}
-
-      {errors.password && errors.password.type === "required" && !errors.name && !errors.email && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Password is required!</Alert></Snackbar>}
-      {errors.phone && !errors.name && !errors.email && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Phone number is required!</Alert></Snackbar>}
-      {errors.phone && !errors.name && !errors.email && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Phone number is required!</Alert></Snackbar>}
-      {errors.email && errors.email.type === "required" && !errors.name && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Email ID is required!</Alert></Snackbar>}
-      {errors.email && errors.email.type === "minLength" && !errors.name && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Enter valid email id</Alert></Snackbar>}
-      {errors.email && errors.email.message && !errors.name && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Enter valid email id</Alert></Snackbar>}
-      {errors.name && errors.name.type === "required" && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Name is a required!</Alert></Snackbar>}
-      {errors.name && errors.name.type === "minLength" && <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}><Alert variant="filled" onClose={handleClose} severity="error">Name must have at least 2 characters</Alert></Snackbar>}
 
       <section className={All.Register}>
       <Container className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}>
@@ -180,37 +251,39 @@ function SignUp(props) {
               </Box>
               <form className={All.form} onSubmit={handleSubmit(onSubmit)}>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="name">Name</label>
-                  <input type="text" name="name" className={All.FormControl} id="name" ref={register({ required: true, minLength: 2 })}/>
-
+                  <label className={All.Bold + " form_label"} htmlFor="name">Name</label>
+                  <input type="text" name="name" className={All.FormControl} id="name" ref={register({ required: true, minLength: 2 })} onChange = {changeHandler}/>
+                  <div className="login_input_error_msg" id = "name_error">Name is required</div>
                 </div>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="email">Email ID </label>
-                  <input type="email" className={All.FormControl} id="email" name="email" ref={register({ required: true, pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "invalid email address" } })} />
+                  <label className={All.Bold + " form_label"} for="email">Email ID </label>
+                  <input type="text" className={All.FormControl} id="email" name="email" ref={register({ required: true, pattern: { value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i, message: "invalid email address" } })} onChange = {changeHandler} />
+                  <div className="login_input_error_msg" id = "email_error">Email ID is required</div>
                 </div>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="phone">Phone Number <span className={All.FSize_12}>(with country code)</span></label>
+                  <label className={All.Bold + " form_label"} for="phone">Phone Number <span className={All.FSize_12}>(with country code)</span></label>
                   {/* <PhoneInput defaultCountry="IN" className={All.Phonenumber} name="phone" id="phone" value={value} onChange={setValue}/> */}
-                  <PhoneInput defaultCountry="IN" className={All.Phonenumber} name="phone" id="phone" value={value}  onChange={setValue}/>
+                  <PhoneInput defaultCountry="IN" className={All.Phonenumber} name="phone" id="phone" value={formValues.phone}  onChange={phoneChangeHandler}/>
+                  <div className="login_input_error_msg" id = "phone_error">Phone number is required</div>
                 </div>
 
-                 
                 <Box pb={2} className={`${All.Width_76} ${All.shipping_txt} `} textAlign="right" pl={0}><span textAlign="right" className={All.FSize_12}></span></Box>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="password">Create Password </label>
+                  <label className={All.Bold + " form_label"} for="password">Create Password </label>
                   <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
-                  <input name="password" type="password" name="password" className={All.FormControl} id="password" ref={register({ required: "You must specify a password", minLength: { value: 8, message: "Password must have at least 8 characters" } })} />
+                  <input name="password" type="password" name="password" className={All.FormControl} id="password" ref={register({ required: "You must specify a password", minLength: { value: 8, message: "Password must have at least 8 characters" } })} onChange = {changeHandler} />
                   {viewPassword?<VisibilityIcon  className={All.VisibilityIcon} onClick={PasswordShow}/>:<img src = {invisible} className={All.VisibilityIcon} onClick={PasswordShow} style = {{padding: "2px 1px 0px 0px"}}/>}
              </div>
-               
-                </div>
+                  <div className="login_input_error_msg" id = "password_error">Password is required</div>
 
+                </div>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold} for="confirmPassword">Confirm Password </label>
+                  <label className={All.Bold + " form_label"} for="confirmPassword">Confirm Password </label>
                   <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
-                  <input type="password" name="confirmPassword" className={All.FormControl} id="confirmPassword" ref={register({ validate: value => value === password.current || "The passwords do not match", required: "You must specify a password" })} />
+                  <input type="password" name="confirmPassword" className={All.FormControl} id="confirmPassword" ref={register({ validate: value => value === password.current || "The passwords do not match", required: "You must specify a password" })} onChange = {changeHandler} />
                   {viewPassword?<VisibilityIcon  className={All.VisibilityIcon} onClick={PasswordShow}/>:<img src = {invisible} className={All.VisibilityIcon} onClick={PasswordShow} style = {{padding: "2px 1px 0px 0px"}}/>}
-             </div> 
+             </div>
+                  <div className="login_input_error_msg" id = "confirmPassword_error">Confirm password is required</div>
                 </div>
 
                 <div className={All.FormGroup}>

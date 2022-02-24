@@ -13,7 +13,7 @@ class UserCategory extends Component {
       email: "",
       phone: "",
       password: "",
-      user_category: "1"
+      user_category: "pilot"
     }
   }
 
@@ -54,8 +54,8 @@ class UserCategory extends Component {
         <h2 className='user_categories_title'>Choose what are you looking for?</h2>
         <Row>
           <Col xxl={4} xl={4} lg={6} md={6} sm={12} xs={12}>
-            <div className='user_categories' onClick={() => this.userCategoryDivClick("1")}>
-              {this.state.user_category == "1"
+            <div className='user_categories' onClick={() => this.userCategoryDivClick("pilot")}>
+              {this.state.user_category == "pilot"
                 ? <div className="u_c_r_icon_selected user_category_radio">
                   <div className="u_c_r_inner_selected"></div>
                 </div>
@@ -68,8 +68,8 @@ class UserCategory extends Component {
             </div>
           </Col>
           <Col xxl={4} xl={4} lg={6} md={6} sm={12} xs={12}>
-            <div className='user_categories' onClick={() => this.userCategoryDivClick("2")}>
-              {this.state.user_category == "2"
+            <div className='user_categories' onClick={() => this.userCategoryDivClick("service_center")}>
+              {this.state.user_category == "service_center"
                 ? <div className="u_c_r_icon_selected user_category_radio">
                   <div className="u_c_r_inner_selected"></div>
                 </div>
@@ -82,8 +82,8 @@ class UserCategory extends Component {
             </div>
           </Col>
           <Col xxl={4} xl={4} lg={6} md={6} sm={12} xs={12}>
-            <div className='user_categories' onClick={() => this.userCategoryDivClick("3")}>
-              {this.state.user_category == "3"
+            <div className='user_categories' onClick={() => this.userCategoryDivClick("visitor")}>
+              {this.state.user_category == "visitor"
                 ? <div className="u_c_r_icon_selected user_category_radio">
                   <div className="u_c_r_inner_selected"></div>
                 </div>
@@ -96,8 +96,8 @@ class UserCategory extends Component {
             </div>
           </Col>
           <Col xxl={4} xl={4} lg={6} md={6} sm={12} xs={12}>
-            <div className='user_categories' onClick={() => this.userCategoryDivClick("4")}>
-              {this.state.user_category == "4"
+            <div className='user_categories' onClick={() => this.userCategoryDivClick("company")}>
+              {this.state.user_category == "company"
                 ? <div className="u_c_r_icon_selected user_category_radio">
                   <div className="u_c_r_inner_selected"></div>
                 </div>
@@ -110,8 +110,8 @@ class UserCategory extends Component {
             </div>
           </Col>
           <Col xxl={4} xl={4} lg={6} md={6} sm={12} xs={12}>
-            <div className='user_categories' onClick={() => this.userCategoryDivClick("5")}>
-              {this.state.user_category == "5"
+            <div className='user_categories' onClick={() => this.userCategoryDivClick("candidate")}>
+              {this.state.user_category == "candidate"
                 ? <div className="u_c_r_icon_selected user_category_radio">
                   <div className="u_c_r_inner_selected"></div>
                 </div>

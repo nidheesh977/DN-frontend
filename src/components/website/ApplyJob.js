@@ -8,50 +8,49 @@ import money from "../images/money.svg";
 import location from "../images/location.svg";
 import work from "../images/work.svg";
 import { Link } from "react-router-dom";
-import dropdown from '../images/s_c_dropdown2.png';
-import Box from '@mui/material/Box';
+import dropdown from "../images/s_c_dropdown2.png";
+import Box from "@mui/material/Box";
 
 import loadMore from "../images/Group 71.svg";
-import Slider from '@mui/material/Slider';
-import { styled } from '@mui/material/styles';
+import Slider from "@mui/material/Slider";
+import { styled } from "@mui/material/styles";
 import { Helmet } from "react-helmet";
 import heart from "../images/heart (3).svg";
 import heartLike from "../images/heart-blue.svg";
 
 const AirbnbSlider = styled(Slider)(({ theme }) => ({
-  color: '#00E7FC',
+  color: "#00E7FC",
   height: 3,
-  padding: '13px 0',
-  '& .MuiSlider-thumb': {
+  padding: "13px 0",
+  "& .MuiSlider-thumb": {
     height: 20,
     width: 20,
-    backgroundColor: '#fff',
-    border: '1px solid #707070',
-    '&:hover': {
-      boxShadow: '0 0 0 8px rgba(58, 133, 137, 0.16)',
+    backgroundColor: "#fff",
+    border: "1px solid #707070",
+    "&:hover": {
+      boxShadow: "0 0 0 8px rgba(58, 133, 137, 0.16)",
     },
-    '& .airbnb-bar': {
+    "& .airbnb-bar": {
       height: 9,
       width: 1,
-      backgroundColor: 'currentColor',
+      backgroundColor: "currentColor",
       marginLeft: 1,
       marginRight: 1,
     },
   },
-  '& .MuiSlider-track': {
+  "& .MuiSlider-track": {
     height: 0,
   },
-  '& .MuiSlider-rail': {
-    color: theme.palette.mode === 'dark' ? '#bfbfbf' : '#cecece',
-    opacity: theme.palette.mode === 'dark' ? undefined : 1,
+  "& .MuiSlider-rail": {
+    color: theme.palette.mode === "dark" ? "#bfbfbf" : "#cecece",
+    opacity: theme.palette.mode === "dark" ? undefined : 1,
     height: 2,
   },
 }));
 
-
 class ApplyJob extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       view_pilot_type_filter: true,
       view_work_filter: false,
@@ -59,6 +58,7 @@ class ApplyJob extends Component {
       price_range: [20, 40],
       price_range_min: 0,
       price_range_max: 200,
+      show_more_filters: false,
       listing: [
         {
           id: 1,
@@ -70,7 +70,7 @@ class ApplyJob extends Component {
           desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
           location: "Bangalore",
           type: "Full Time",
-          like:true,
+          like: true,
         },
         {
           id: 2,
@@ -94,8 +94,7 @@ class ApplyJob extends Component {
           desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
           location: "Bangalore",
           type: "Full Time",
-          like:true,
-  
+          like: true,
         },
         {
           id: 4,
@@ -107,27 +106,32 @@ class ApplyJob extends Component {
           desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
           location: "Bangalore",
           type: "Full Time",
-          like:false,
-  
+          like: false,
         },
       ],
-    }
+    };
   }
   dropdown = (id) => {
     this.setState({
       view_pilot_type_filter: false,
       view_work_filter: false,
-    })
-    id = "view_" + id
+    });
+    id = "view_" + id;
     this.setState({
-      [id]: !this.state[id]
-    })
-  }
+      [id]: !this.state[id],
+    });
+  };
   handlePriceRange = (e, value) => {
     this.setState({
-      price_range: value
-    })
-  }
+      price_range: value,
+    });
+  };
+
+  showMoreFilters = () => {
+    this.setState({
+      show_more_filters: !this.state.show_more_filters,
+    });
+  };
 
   render() {
     return (
@@ -149,15 +153,6 @@ class ApplyJob extends Component {
                     </div>
                     <button
                       className="h_p_create_job_btn"
-
-
-
-
-
-
-
-
-
                       onClick={() => this.props.history.push("/UploadFile")}
                     >
                       Upload Now
@@ -165,65 +160,328 @@ class ApplyJob extends Component {
                   </div>
 
                   <div className="h_p_filter1_title1">Keywords</div>
-                  <input type="text" className="a_j_keywords" placeholder="Search Keywords"/>
+                  <input
+                    type="text"
+                    className="a_j_keywords"
+                    placeholder="Search Keywords"
+                  />
                   <div className="h_p_filter1_title1">Country</div>
                   <select className="a_j_select_dropdown">
-                  <option>select Country</option>
-                  <option>India</option>
-                  <option>India</option>
-                  <option>India</option>
-                  <option>India</option>
-                  </select><div className="h_p_filter1_title1">City</div>
-                  <select className="a_j_select_dropdown" id="a_j_select_dropdown1">
-                  <option>Select City</option>
-                  <option>Bangalore</option>
-                  <option>Bangalore</option>
-                  <option>Bangalore</option>
-                  <option>Bangalore</option>
- 
+                    <option>select Country</option>
+                    <option>India</option>
+                    <option>India</option>
+                    <option>India</option>
+                    <option>India</option>
+                  </select>
+                  <div className="h_p_filter1_title1">City</div>
+                  <select
+                    className="a_j_select_dropdown"
+                    id="a_j_select_dropdown1"
+                  >
+                    <option>Select City</option>
+                    <option>Bangalore</option>
+                    <option>Bangalore</option>
+                    <option>Bangalore</option>
+                    <option>Bangalore</option>
                   </select>
 
+                  <div
+                    className="h_p_filter1_title"
+                    onClick={() => this.dropdown("pilot_type_filter")}
+                  >
+                    Pilot type{" "}
+                    <img
+                      src={dropdown}
+                      alt="dropdown img"
+                      className={
+                        this.state.view_pilot_type_filter
+                          ? "h_p_filter1_dropdown1 h_p_dropdown_selected1"
+                          : "h_p_filter1_dropdown1"
+                      }
+                    />
+                  </div>
+                  <div
+                    className={
+                      this.state.view_pilot_type_filter
+                        ? "h_p_filter1_content_container "
+                        : "h_p_filter1_content_container h_p_hide_filter"
+                    }
+                    id="h_p_pilot_type_filter"
+                  >
+                    <label className="h_p_filter1_filter1">
+                      <input type="checkbox" className="h_p_filter1_checkbox" />
+                      <div className="h_p_filter1_checkbox_label">
+                        Licensed Pilots
+                      </div>
+                    </label>
+                    <label className="h_p_filter1_filter1">
+                      <input type="checkbox" className="h_p_filter1_checkbox" />
 
-
-
-                  <div className="h_p_filter1_title" onClick={() => this.dropdown("pilot_type_filter")}>Pilot type <img src={dropdown} alt="dropdown img" className={this.state.view_pilot_type_filter ? "h_p_filter1_dropdown1 h_p_dropdown_selected1" : "h_p_filter1_dropdown1"} /></div>
-                    <div className={this.state.view_pilot_type_filter ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_pilot_type_filter">
-                      <label className="h_p_filter1_filter1">
-                        <input type="checkbox" className="h_p_filter1_checkbox" />
-                        <div className="h_p_filter1_checkbox_label">Licensed Pilots</div>
-                      </label>
-                      <label className="h_p_filter1_filter1">
-                        <input type="checkbox" className="h_p_filter1_checkbox" />
-
-                        <div className="h_p_filter1_checkbox_label">Unlicensed Pilots</div>
-                      </label>
+                      <div className="h_p_filter1_checkbox_label">
+                        Unlicensed Pilots
+                      </div>
+                    </label>
+                  </div>
+                  <div
+                    className="h_p_filter1_title"
+                    onClick={() => this.dropdown("work_filter")}
+                  >
+                    Work{" "}
+                    <img
+                      src={dropdown}
+                      alt="dropdown img"
+                      className={
+                        this.state.view_work_filter
+                          ? "h_p_dropdown_selected1 h_p_filter1_dropdown1"
+                          : "h_p_filter1_dropdown1"
+                      }
+                    />
+                  </div>
+                  <div
+                    className={
+                      this.state.view_work_filter
+                        ? "h_p_filter1_content_container "
+                        : "h_p_filter1_content_container h_p_hide_filter"
+                    }
+                    id="h_p_work_filter"
+                  >
+                    <label className="h_p_filter1_filter1">
+                      <input type="checkbox" className="h_p_filter1_checkbox" />
+                      <div className="h_p_filter1_checkbox_label">
+                        Full Time
+                      </div>
+                    </label>
+                    <label className="h_p_filter1_filter1">
+                      <input type="checkbox" className="h_p_filter1_checkbox" />
+                      <div className="h_p_filter1_checkbox_label">
+                        Part Time
+                      </div>
+                    </label>
+                  </div>
+                  <div className="h_p_filter1_title">Monthly Salary</div>
+                  <div
+                    className={
+                      this.state.view_hourly_rate_filter
+                        ? "h_p_filter1_content_container "
+                        : "h_p_filter1_content_container h_p_hide_filter"
+                    }
+                    id="h_p_hourly_rate_filter"
+                  >
+                    <div className="h_p_filter1_rate_content">
+                      {" "}
+                      ${this.state.price_range[0]} - $
+                      {this.state.price_range[1]}
                     </div>
-                    <div className="h_p_filter1_title" onClick={() => this.dropdown("work_filter")}>Work <img src={dropdown} alt="dropdown img" className={this.state.view_work_filter ? "h_p_dropdown_selected1 h_p_filter1_dropdown1" : "h_p_filter1_dropdown1"} /></div>
-                    <div className={this.state.view_work_filter ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_work_filter">
-                      <label className="h_p_filter1_filter1">
-                        <input type="checkbox" className="h_p_filter1_checkbox" />
-                        <div className="h_p_filter1_checkbox_label">Full Time</div>
-                      </label>
-                      <label className="h_p_filter1_filter1">
-                        <input type="checkbox" className="h_p_filter1_checkbox" />
-                        <div className="h_p_filter1_checkbox_label">Part Time</div>
-                      </label>
-                    </div>
-                    <div className="h_p_filter1_title">Monthly Salary</div>
-                    <div className={this.state.view_hourly_rate_filter ? "h_p_filter1_content_container " : "h_p_filter1_content_container h_p_hide_filter"} id="h_p_hourly_rate_filter">
-                      <div className="h_p_filter1_rate_content"> ${this.state.price_range[0]} - ${this.state.price_range[1]}</div>
-                      <Box style={{ marginRight: "7px", marginLeft: "10px" }}>
-                        <AirbnbSlider
-                          getAriaLabel={(index) => (index === 0 ? 'Minimum price' : 'Maximum price')}
-                          value={this.state.price_range}
-                          onChange={this.handlePriceRange}
-                          min={this.state.price_range_min}
-                          max={this.state.price_range_max}
-                        />
-                      </Box>
-                    </div>
+                    <Box style={{ marginRight: "7px", marginLeft: "10px" }}>
+                      <AirbnbSlider
+                        getAriaLabel={(index) =>
+                          index === 0 ? "Minimum price" : "Maximum price"
+                        }
+                        value={this.state.price_range}
+                        onChange={this.handlePriceRange}
+                        min={this.state.price_range_min}
+                        max={this.state.price_range_max}
+                      />
+                    </Box>
+                  </div>
                 </Col>
               </Visible>
+              <Hidden xxl xl>
+                <Col lg={12} md={12}>
+                  <Row>
+                    <Col lg={4} md={4} sm={12}>
+                      <div className="h_p_filter1_title1">Keywords</div>
+                      <input
+                        type="text"
+                        className="a_j_keywords"
+                        placeholder="Search Keywords"
+                      />
+                    </Col>
+                    <Hidden xs sm>
+                      <Col lg={4} md={4} sm={6} xs={6}>
+                        <div className="h_p_filter1_title1">Country</div>
+                        <select className="a_j_select_dropdown">
+                          <option>select Country</option>
+                          <option>India</option>
+                          <option>India</option>
+                          <option>India</option>
+                          <option>India</option>
+                        </select>
+                      </Col>
+                      <Col lg={4} md={4} sm={6} xs={6}>
+                        <div className="h_p_filter1_title1">City</div>
+                        <select
+                          className="a_j_select_dropdown"
+                          id="a_j_select_dropdown1"
+                        >
+                          <option>Select City</option>
+                          <option>Bangalore</option>
+                          <option>Bangalore</option>
+                          <option>Bangalore</option>
+                          <option>Bangalore</option>
+                        </select>
+                      </Col>
+                    </Hidden>
+                  </Row>
+                  <div
+                    className="a_j_more_filter"
+                    onClick={this.showMoreFilters}
+                  >
+                    More filters
+                    <img
+                      src={dropdown}
+                      alt="dropdown img"
+                      className={
+                        this.state.show_more_filters
+                          ? "h_p_filter1_dropdown1 h_p_dropdown_selected1"
+                          : "h_p_filter1_dropdown1"
+                      }
+                    />
+                  </div>
+                  {this.state.show_more_filters && (
+                    <div id="show_more_filter">
+                      <Row>
+                        <Hidden md lg>
+                          <Col sm={6} xs={6}>
+                            <div className="h_p_filter1_title1">Country</div>
+                            <select className="a_j_select_dropdown">
+                              <option>select Country</option>
+                              <option>India</option>
+                              <option>India</option>
+                              <option>India</option>
+                              <option>India</option>
+                            </select>
+                          </Col>
+                          <Col sm={6} xs={6}>
+                            <div className="h_p_filter1_title1">City</div>
+                            <select
+                              className="a_j_select_dropdown"
+                              id="a_j_select_dropdown1"
+                            >
+                              <option>Select City</option>
+                              <option>Bangalore</option>
+                              <option>Bangalore</option>
+                              <option>Bangalore</option>
+                              <option>Bangalore</option>
+                            </select>
+                          </Col>
+                        </Hidden>
+                      </Row>
+                      <div
+                        className="h_p_filter1_title"
+                        onClick={() => this.dropdown("pilot_type_filter")}
+                      >
+                        Pilot types{" "}
+                        <img
+                          src={dropdown}
+                          alt="dropdown img"
+                          className={
+                            this.state.view_pilot_type_filter
+                              ? "h_p_filter1_dropdown1 h_p_dropdown_selected1"
+                              : "h_p_filter1_dropdown1"
+                          }
+                        />
+                      </div>
+                      <div
+                        className={
+                          this.state.view_pilot_type_filter
+                            ? "h_p_filter1_content_container "
+                            : "h_p_filter1_content_container h_p_hide_filter"
+                        }
+                        id="h_p_pilot_type_filter"
+                      >
+                        <label className="h_p_filter1_filter1">
+                          <input
+                            type="checkbox"
+                            className="h_p_filter1_checkbox"
+                          />
+                          <div className="h_p_filter1_checkbox_label">
+                            Licensed Pilots
+                          </div>
+                        </label>
+                        <label className="h_p_filter1_filter1">
+                          <input
+                            type="checkbox"
+                            className="h_p_filter1_checkbox"
+                          />
+
+                          <div className="h_p_filter1_checkbox_label">
+                            Unlicensed Pilots
+                          </div>
+                        </label>
+                      </div>
+                      <div
+                        className="h_p_filter1_title"
+                        onClick={() => this.dropdown("work_filter")}
+                      >
+                        Work{" "}
+                        <img
+                          src={dropdown}
+                          alt="dropdown img"
+                          className={
+                            this.state.view_work_filter
+                              ? "h_p_dropdown_selected1 h_p_filter1_dropdown1"
+                              : "h_p_filter1_dropdown1"
+                          }
+                        />
+                      </div>
+                      <div
+                        className={
+                          this.state.view_work_filter
+                            ? "h_p_filter1_content_container "
+                            : "h_p_filter1_content_container h_p_hide_filter"
+                        }
+                        id="h_p_work_filter"
+                      >
+                        <label className="h_p_filter1_filter1">
+                          <input
+                            type="checkbox"
+                            className="h_p_filter1_checkbox"
+                          />
+                          <div className="h_p_filter1_checkbox_label">
+                            Full Time
+                          </div>
+                        </label>
+                        <label className="h_p_filter1_filter1">
+                          <input
+                            type="checkbox"
+                            className="h_p_filter1_checkbox"
+                          />
+                          <div className="h_p_filter1_checkbox_label">
+                            Part Time
+                          </div>
+                        </label>
+                      </div>
+                      <div className="h_p_filter1_title">Monthly Salary</div>
+                      <div
+                        className={
+                          this.state.view_hourly_rate_filter
+                            ? "h_p_filter1_content_container "
+                            : "h_p_filter1_content_container h_p_hide_filter"
+                        }
+                        id="h_p_hourly_rate_filter"
+                      >
+                        <div className="h_p_filter1_rate_content">
+                          {" "}
+                          ${this.state.price_range[0]} - $
+                          {this.state.price_range[1]}
+                        </div>
+                        <Box style={{ marginRight: "7px", marginLeft: "10px" }}>
+                          <AirbnbSlider
+                            getAriaLabel={(index) =>
+                              index === 0 ? "Minimum price" : "Maximum price"
+                            }
+                            value={this.state.price_range}
+                            onChange={this.handlePriceRange}
+                            min={this.state.price_range_min}
+                            max={this.state.price_range_max}
+                          />
+                        </Box>
+                      </div>
+                    </div>
+                  )}
+                </Col>
+              </Hidden>
               <Col>
                 <div className="h_p_title_container">
                   <div className="h_p_title">Apply jobs and get hired</div>
@@ -233,72 +491,71 @@ class ApplyJob extends Component {
                   </div>
                 </div>
                 <div style={{ margin: "40px 0px 50px 0px" }}>
-
-                  {
-                    this.state.listing.map((item,i)=>{
-                      return(
-                        <div className="pd_a_j_data" style={{ margin: "20px 0px 0px 0px" }}>
-                    <div style={{ marginBottom: "10px" }}>
-                      <div className="pd_a_j_dataDateHead">
-                        Posted on:
-                        <span className="pd_a_j_dataDate">{item.date}</span>
+                  {this.state.listing.map((item, i) => {
+                    return (
+                      <div
+                        className="pd_a_j_data"
+                        style={{ margin: "20px 0px 0px 0px" }}
+                      >
+                        <div style={{ marginBottom: "10px" }}>
+                          <div className="pd_a_j_dataDateHead">
+                            Posted on:
+                            <span className="pd_a_j_dataDate">{item.date}</span>
+                          </div>
+                          <div className="pd_a_j_dataTitle">{item.name}</div>
+                        </div>
+                        <div className="pd_a_j_data_subTitle">
+                          {item.producer}
+                        </div>
+                        <div>
+                          <div className="a_j_container1">
+                            <div className="a_j_listing_img1">
+                              <img src={profileUser} />
+                            </div>
+                            <div className="a_j_listing_profileName">
+                              {item.profile}
+                            </div>
+                            <div className="a_j_listing_img2">
+                              <img src={money} />
+                            </div>
+                            <div className="a_j_listing_money">
+                              {item.range}
+                            </div>
+                          </div>
+                          <div className="a_j_listing_text"> {item.desc}</div>
+                          <hr className="a_j_listing_hr" />
+                        </div>
+                        <div className="a_j_listing_btns">
+                          <button className="a_j_location_btn">
+                            <img src={location} className="a_j_location_logo" />
+                            <span className="a_j_location_text">
+                              {item.location}
+                            </span>
+                          </button>{" "}
+                          <button className="a_j_location_btn">
+                            <img src={work} className="a_j_location_logo" />
+                            <span className="a_j_location_text">
+                              {item.type}
+                            </span>
+                          </button>
+                          <Link to="/applyJobLanding" id="a_j_job_btn">
+                            View Job
+                          </Link>{" "}
+                          <img
+                            src={item.like ? heartLike : heart}
+                            className="a_j_like"
+                          />
+                        </div>
                       </div>
-                      <div className="pd_a_j_dataTitle">{item.name}</div>
-                    </div>
-                    <div className="pd_a_j_data_subTitle">
-                      {item.producer}
-                    </div>
-                    <div>
-                      <div className="a_j_container1">
-                        <div className="a_j_listing_img1">
-                          <img src={profileUser} />
-                        </div>
-                        <div className="a_j_listing_profileName">
-                          {item.profile}
-                        </div>
-                        <div className="a_j_listing_img2">
-                          <img src={money} />
-                        </div>
-                        <div className="a_j_listing_money">
-                          {item.range}
-                        </div>
-                      </div>
-                      <div className="a_j_listing_text">
-                        {" "}
-                        {item.desc}
-                      </div>
-                      <hr className="a_j_listing_hr" />
-                    </div>
-                    <div className="a_j_listing_btns">
-                      <button className="a_j_location_btn">
-                        <img src={location} className="a_j_location_logo" />
-                        <span className="a_j_location_text">{item.location}</span>
-                      </button>{" "}
-                      <button className="a_j_location_btn">
-                        <img src={work} className="a_j_location_logo" />
-                        <span className="a_j_location_text">{item.type}</span>
-                      </button>
-                      <Link to="/applyJobLanding" id="a_j_job_btn">
-                        View Job
-                      </Link>{" "}
-                      <img
-                        src={item.like ? heartLike : heart}
-                        className="a_j_like"
-                      />
-                    </div>
-                  </div>
-              
-                      )
-                    })
-                  }
-                  
+                    );
+                  })}
                 </div>
-                <div className="a_j_load_div" style={{marginBottom: "40px"}}>
-        <button className="a_j_loadMore_btn">
-          <img src={loadMore} className="a_j_location_logo" />
-          <span className="a_j_location_text">Load More</span>
-        </button>{" "}
-      </div>
+                <div className="a_j_load_div" style={{ marginBottom: "40px" }}>
+                  <button className="a_j_loadMore_btn">
+                    <img src={loadMore} className="a_j_location_logo" />
+                    <span className="a_j_location_text">Load More</span>
+                  </button>{" "}
+                </div>
               </Col>
             </Row>
           </Container>

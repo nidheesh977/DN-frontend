@@ -57,16 +57,19 @@
 .h_p_filter1_filter{
   display: flex;
   padding-left: 10px;
+  cursor: pointer;
 }
 
 .h_p_filter1_filter1{
   display: flex;
   padding-left: 0px !important;
+  cursor: pointer;
   
 }
 .h_p_filter1_checkbox{
   margin-right: 10px;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 .h_p_filter1_checkbox_label{
@@ -74,6 +77,7 @@
   font-size: 15px;
   line-height: 22px;
   margin-bottom: 15px;
+  cursor: pointer;
 }
 
 .h_p_filter1_rate_content{
@@ -172,6 +176,7 @@
 
 .h_p_listing_keywords_container{
   width: 100%;
+  cursor: default;
 }
 
 .h_p_listing_keyword{
@@ -466,7 +471,7 @@
   padding: 10px 44px;
   border-radius: 10px;
   margin-right: 20px;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
 }
 
 .h_p_start_process_form_file_label_text{
@@ -474,6 +479,7 @@
   font-family: muli-light;
   font-size: 14px;
   line-height: 20px;
+  margin-bottom: 50px;
 }
 
 .h_p_start_process_form_btn_container{

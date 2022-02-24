@@ -31,7 +31,7 @@ class CreateJob extends Component {
     this.state = {
       show_popup: true,
       main_tab: 1,
-      create_job_step: 1,
+      create_job_step: 2,
       company_name: "",
       job_title: "",
       industry: "",
@@ -41,7 +41,7 @@ class CreateJob extends Component {
       country: "",
       min_salery: "",
       max_salery: "",
-      rate: 'per_month',
+      rate: 'month',
       date: "",
       location: "",
       description: "",
@@ -113,7 +113,7 @@ class CreateJob extends Component {
     this.setState({
       [input]: e.target.value
     })
-    this.refs[input].style.backgroundColor = "#F5F5F7"
+    document.getElementById(`${input}_error`).style.display = "none"
   }
 
   clearForm = () => {
@@ -125,49 +125,30 @@ class CreateJob extends Component {
       city: "",
       state: "",
       country: "",
-      create_job_step: 2,
+      create_job_step: 1,
       job_type: "full_time",
       employee_type: "licensed",
       min_salery: "",
       max_salery: "",
-      rate: 'per_month',
+      rate: 'month',
       date: "",
       location: "",
-      description: ""
+      description: "",
     })
-
   }
 
   continueProcess = () => {
-    if (this.state.company_name == "") {
-      this.refs.company_name.focus()
-      this.refs.company_name.style.backgroundColor = "#ffe8e8"
+    var fields = ["company_name", "job_title", "industry", "address", "city", "state", "country"]
+    var error = false
+    for (var i = 0; i < fields.length; i++){
+      if (this.state[fields[i]]== "") {
+        this.refs[fields[i]].focus()
+        document.getElementById(`${fields[i]}_error`).style.display = "contents"
+        error = true
+        break
+      }
     }
-    else if (this.state.job_title == "") {
-      this.refs.job_title.focus()
-      this.refs.job_title.style.backgroundColor = "#ffe8e8"
-    }
-    else if (this.state.industry == "") {
-      this.refs.industry.focus()
-      this.refs.industry.style.backgroundColor = "#ffe8e8"
-    }
-    else if (this.state.address == "") {
-      this.refs.address.focus()
-      this.refs.address.style.backgroundColor = "#ffe8e8"
-    }
-    else if (this.state.city == "") {
-      this.refs.city.focus()
-      this.refs.city.style.backgroundColor = "#ffe8e8"
-    }
-    else if (this.state.state == "") {
-      this.refs.state.focus()
-      this.refs.state.style.backgroundColor = "#ffe8e8"
-    }
-    else if (this.state.country == "") {
-      this.refs.country.focus()
-      this.refs.country.style.backgroundColor = "#ffe8e8"
-    }
-    else {
+    if(!error) {
       this.setState({
         create_job_step: 2
       })
@@ -183,22 +164,22 @@ class CreateJob extends Component {
     console.log(this.state)
     if (this.state.min_salery == "") {
       this.refs.min_salery.focus()
-      this.refs.min_salery.style.backgroundColor = "#ffe8e8"
+      document.getElementById(`min_salery_error`).style.display = "contents"
     }
 
     else if (this.state.max_salery == "") {
       this.refs.max_salery.focus()
-      this.refs.max_salery.style.backgroundColor = "#ffe8e8"
+      document.getElementById(`max_salery_error`).style.display = "contents"
     }
 
     else if (this.state.location == "") {
       this.refs.location.focus()
-      this.refs.location.style.backgroundColor = "#ffe8e8"
+      document.getElementById(`location_error`).style.display = "contents"
     }
 
     else if (this.state.description == "") {
       this.refs.description.focus()
-      this.refs.description.style.backgroundColor = "#ffe8e8"
+      document.getElementById(`description_error`).style.display = "contents"
     }
 
     else {
@@ -211,14 +192,14 @@ class CreateJob extends Component {
     this.setState({
       min_salery: e.target.value
     })
-    this.refs.min_salery.style.backgroundColor = "#F5F5F7"
+    document.getElementById(`min_salery_error`).style.display = "none"
   }
 
   maxSalaryChange = (e) => {
     this.setState({
       max_salery: e.target.value
     })
-    this.refs.max_salery.style.backgroundColor = "#F5F5F7"
+    document.getElementById(`max_salery_error`).style.display = "none"
   }
 
   rateChange = (e) => {
@@ -237,14 +218,14 @@ class CreateJob extends Component {
     this.setState({
       location: e.target.value
     })
-    this.refs.location.style.backgroundColor = "#F5F5F7"
+    document.getElementById(`location_error`).style.display = "none"
   }
 
   descriptionChange = (e) => {
     this.setState({
       description: e.target.value
     })
-    this.refs.description.style.backgroundColor = "#F5F5F7"
+    document.getElementById(`description_error`).style.display = "none"
   }
 
   closePopup = () => {
@@ -305,30 +286,37 @@ class CreateJob extends Component {
                     <label className="c_j_input_label">
                       <div className="c_j_form_input_title">Company Name</div>
                       <input type="text" name="company_name" id="c_j_company_name" className="c_j_form_input" ref="company_name" value={this.state.company_name} onChange={(e) => this.inputChangeHandler(e, "company_name")} />
+                      <div className="login_input_error_msg" id = "company_name_error">Company name is required</div>
                     </label>
                     <label className="c_j_input_label">
                       <div className="c_j_form_input_title">Job Title</div>
                       <input type="text" name="job_title" id="c_j_job_title" className="c_j_form_input" ref="job_title" value={this.state.job_title} onChange={(e) => this.inputChangeHandler(e, "job_title")} />
+                      <div className="login_input_error_msg" id = "job_title_error">Job title is required</div>
                     </label>
                     <label className="c_j_input_label">
                       <div className="c_j_form_input_title">Industry</div>
                       <input type="text" name="industry" id="c_j_industry" className="c_j_form_input" ref="industry" value={this.state.industry} onChange={(e) => this.inputChangeHandler(e, "industry")} />
+                      <div className="login_input_error_msg" id = "industry_error">Industry is required</div>
                     </label>
                     <label className="c_j_input_label">
                       <div className="c_j_form_input_title">Address</div>
                       <input type="text" name="address" id="c_j_address" className="c_j_form_input" ref="address" value={this.state.address} onChange={(e) => this.inputChangeHandler(e, "address")} />
+                      <div className="login_input_error_msg" id = "address_error">Address is required</div>
                     </label>
                     <label className="c_j_input_label">
                       <div className="c_j_form_input_title">City</div>
                       <input type="text" name="city" id="c_j_city" className="c_j_form_input" ref="city" value={this.state.city} onChange={(e) => this.inputChangeHandler(e, "city")} />
+                      <div className="login_input_error_msg" id = "city_error">City is required</div>
                     </label>
                     <label className="c_j_input_label">
                       <div className="c_j_form_input_title">State</div>
                       <input type="text" name="state" id="c_j_state" className="c_j_form_input" ref="state" value={this.state.state} onChange={(e) => this.inputChangeHandler(e, "state")} />
+                      <div className="login_input_error_msg" id = "state_error">State is required</div>
                     </label>
                     <label className="c_j_input_label">
                       <div className="c_j_form_input_title">Country</div>
                       <input type="text" name="country" id="c_j_country" className="c_j_form_input" ref="country" value={this.state.country} onChange={(e) => this.inputChangeHandler(e, "country")} />
+                      <div className="login_input_error_msg" id = "country_error">Country is required</div>
                     </label>
                   </div>
                 </Row>
@@ -365,23 +353,25 @@ class CreateJob extends Component {
                     <div className="c_j_salery_input_container">
                       <label className="c_j_salery_input_label">
                         <div className="c_j_salery_input_label_title">Minimum</div>
-                        <input type="number" className='c_j_salery_input' onChange={this.minSaleryChange} ref="min_salery" />
+                        <input type="number" className='c_j_salery_input' onChange={this.minSaleryChange} ref="min_salery" /><br />
+                        <div className="login_input_error_msg" id = "min_salery_error">Minimum salary is required</div>
                       </label>
-                      <Hidden xs>
+                      <Hidden xs sm>
                         <div className="c_j_salery_input_to">to</div>
                       </Hidden>
-                      <Visible xs>
+                      <Visible xs sm>
                         <div className="c_j_salery_input_to" style={{ width: "100%", paddingLeft: "90px" }}>to</div>
                       </Visible>
                       <label className="c_j_salery_input_label">
                         <div className="c_j_salery_input_label_title" onChange={this.maxSalaryChange}>Maximum</div>
-                        <input type="number" className='c_j_salery_input' ref="max_salery" onChange={this.maxSalaryChange} />
+                        <input type="number" className='c_j_salery_input' ref="max_salery" onChange={this.maxSalaryChange} /><br />
+                        <div className="login_input_error_msg" id = "max_salery_error">Maximum salary is required</div>
                       </label>
                       <label className="c_j_salery_input_label">
                         <div className="c_j_salery_input_label_title">Rate</div>
                         <select className='c_j_salery_rate_input' onChange={this.rateChange}>
-                          <option value="per_month">Per month</option>
-                          <option value="per_hour">Per hour</option>
+                          <option value="month" selected = {this.state.rate === "month"}>Per month</option>
+                          <option value="hour" selected = {this.state.rate === "hour"}>Per hour</option>
                         </select>
                       </label>
                     </div>
@@ -394,10 +384,12 @@ class CreateJob extends Component {
                     <label className="c_j_input_label">
                       <div className="c_j_form_input_title">Work location</div>
                       <input type="text" name="" id="" className='c_j_form_input' placeholder='E.g Bangalore' onChange={this.locationChange} ref="location" />
+                      <div className="login_input_error_msg" id = "location_error">Work location is required</div>
                     </label>
                     <label className="c_j_input_label">
                       <div className="c_j_form_input_title">Job description</div>
                       <textarea id="" className='c_j_form_textarea' onChange={this.descriptionChange} ref="description"></textarea>
+                      <div className="login_input_error_msg" id = "description_error">Job description is required</div>
                     </label>
                   </div>
                 </Row>
@@ -482,6 +474,7 @@ class CreateJob extends Component {
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
           fullWidth={true}
+          PaperProps={{style: { borderRadius: 20 }   }}
         >
 
           <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
@@ -525,6 +518,7 @@ class CreateJob extends Component {
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
           fullWidth={true}
+          PaperProps={{style: { borderRadius: 20 }   }}
         >
 
           <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>

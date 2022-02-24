@@ -180,7 +180,7 @@ export default function ServiceCenterDetails(props) {
               </Box>
 
               <Box py={1}>
-                <h2>{"Nexevo Technologies" || <Skeleton />} </h2>
+                <h2 style={{marginTop: "35px"}}>{"Nexevo Technologies" || <Skeleton />} </h2>
               </Box>
               <Box py={1}>
                 <h4>

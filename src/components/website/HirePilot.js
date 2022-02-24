@@ -57,7 +57,7 @@ const styles = (theme) => ({
     right: theme.spacing(4),
     top: theme.spacing(2),
     color: theme.palette.grey[500],
-  },
+  }
 });
 
 const DialogTitle = withStyles(styles)((props) => {
@@ -101,7 +101,8 @@ class HirePilot extends Component {
       show_suggestions: false,
       suggestions: ["Agriculture", "Manufacturing industry", "Media", "Real estate", "Film industry", "Agriculture", "Manufacturing industry", "Media", "Real estate", "Film industry"],
       searchValue: "",
-      startProcess: false
+      startProcess: false,
+      selected_file: {}
     }
   }
 
@@ -185,6 +186,16 @@ class HirePilot extends Component {
   }
 
   pilotDetailPage = (id) => {
+    this.props.history.push("/pilot_details/" + id)
+  }
+
+  handleProcessFileChange = (e) => {
+    this.setState({
+      selected_file: e.target.files[0]
+    })
+  }
+
+  sendMessage = (id) => {
     this.props.history.push("/pilot_details/" + id)
   }
 
@@ -434,7 +445,7 @@ class HirePilot extends Component {
                             <button className="h_p_start_process_btn" onClick={this.clickStartProcess}>Start Process</button>
                             <button className="h_p_save_pilot_btn"><i class="fa fa-heart"></i></button>
                           </div>
-                          <div className="h_p_listing_send_msg_link">Send Message</div>
+                          <div className="h_p_listing_send_msg_link" onClick = {() => this.sendMessage(1)}>Send Message</div>
                         </div>
                       </Col>
                     </Row>
@@ -483,7 +494,7 @@ class HirePilot extends Component {
                           <div className="h_p_listing_btn-container">
                             <button className="h_p_start_process_btn" onClick={this.clickStartProcess}>Start Process</button>
                             <button className="h_p_save_pilot_btn"><i class="fa fa-heart"></i></button>
-                            <div className="h_p_listing_send_msg_link " style={{ textAlign: "center" }}>Send Message</div>
+                            <div className="h_p_listing_send_msg_link " style={{ textAlign: "center" }} onClick = {() => this.sendMessage(1)}>Send Message</div>
                           </div>
                         </div>
                       </Col>
@@ -499,9 +510,10 @@ class HirePilot extends Component {
               aria-describedby="alert-dialog-description"
               maxWidth={"md"}
               fullWidth={true}
+              PaperProps={{style: { borderRadius: 20 }   }}
             >
 
-              <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+              <DialogContent className={All.PopupBody} style={{ marginBottom: "50px"}}>
                 <div style={{ position: "absolute", top: '20px', right: '20px' }}>
                   <img src={close} alt="" onClick={this.closeProcess} style={{ cursor: "pointer" }} />
                 </div>
@@ -512,9 +524,9 @@ class HirePilot extends Component {
                     <textarea className='h_p_start_process_form_description'></textarea>
                     <div className="h_p_start_process_form_label">Job Catalog (optional)</div>
                     <label>
-                      <input type="file" name="" id="" className="h_p_start_process_form_file" />
+                      <input type="file" name="" id="" className="h_p_start_process_form_file" onChange = {this.handleProcessFileChange}/>
                       <div className="h_p_start_process_form_file_label">Choose file to attach</div>
-                      <div className="h_p_start_process_form_file_label_text">The file type should be in PDF, Docs</div>
+                      <div className="h_p_start_process_form_file_label_text">{this.state.selected_file.name?this.state.selected_file.name:"The file type should be in PDF, Docs"}</div>
                     </label>
                     <div className="h_p_start_process_form_btn_container">
                       <button onClick={this.closeProcess} className='h_p_start_process_form_btn'>Submit</button>
