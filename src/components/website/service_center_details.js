@@ -95,6 +95,12 @@ export default function ServiceCenterDetails(props) {
   const [newRating, setNewRating] = useState(3)
 
   const [enquiry, setEnquiry] = useState(false)
+  const [enquiry_data, setEnquiryData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    message: ""
+  })
 
   const [rating, setRating] = useState(false)
 
@@ -153,6 +159,10 @@ export default function ServiceCenterDetails(props) {
       scrollTop: $("div.middle").offset().top
     }, 1000)
   });
+
+  const submitEnquiry = () => {
+    console.log("Submit");
+  }
 
   return (
     <>
@@ -254,7 +264,7 @@ export default function ServiceCenterDetails(props) {
 
                 {writeReview
                   ? <div className="s_c_d_write_review_container">
-                    <textarea className="s_c_d_write_review" id = "s_c_d_review" onChange={changeReviewHandler} ></textarea>
+                    <textarea className="s_c_d_write_review" id = "s_c_d_review" onChange={changeReviewHandler}></textarea>
                     <button className="s_c_d_button2 s_c_d_review_submit" onClick={submitReview}>Submit</button>
                   </div>
                   : ""
@@ -363,9 +373,10 @@ export default function ServiceCenterDetails(props) {
                   <div className='s_c_enquiry_title'>Message</div>
                   <textarea className="s_c_enquiry_textarea"></textarea>
                 </label>
-                <button className='s_c_button3'>Submit</button>
+                <button className='s_c_button3' onClick = {submitEnquiry}>Submit</button>
               </Col>
             </Row>
+
           </DialogContent>
         </Dialog>
         <Dialog

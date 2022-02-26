@@ -92,31 +92,26 @@ class App extends React.Component {
           <ScrollToTop />
           <Switch>
             <PublicRoute
-              restricted={true}
               path="/login"
               component={Login}
               exact
             />
             <PublicRoute
-              restricted={true}
               path="/sign_up"
               component={SignUp}
               exact
             />
             <PublicRoute
-              restricted={true}
               path="/select_category"
               component={UserCategory}
               exact
             />
             <PublicRoute
-              restricted={true}
               path="/Company"
               component={Company}
               exact
             />
             <PublicRoute
-              restricted={true}
               exact
               path="/ForgotPassword"
               component={ForgotPassword}
@@ -141,7 +136,6 @@ class App extends React.Component {
               component={GetJobs}
             />
             <PublicRoute
-              restricted={true}
               exact
               path="/TermsCondition"
               component={TermsCondition}
@@ -153,30 +147,27 @@ class App extends React.Component {
               component={UpgradeProVersion}
             /> */}
             <PublicRoute
-              restricted={true}
               path="/DownloadSubscription"
               component={DownloadSubscription}
               exact
             />
             <PublicRoute
-              restricted={true}
               path="/HireSubscription"
               component={HireSubscription}
               exact
             />
             <PublicRoute
-              restricted={true}
               path="/GoPremium"
               component={GoPremium}
               exact
             />
             {/* <PrivateRoute exact path="/GoPremium" component={GoPremium} /> */}
-            <PublicRoute
+            {/* <PublicRoute
               restricted={true}
               path="/UploadFile"
               component={UploadFiles}
               exact
-            />
+            /> */}
             <PrivateRoute exact path={"/ViewJob/:id"} component={ViewJob} />
             {/* <PrivateRoute
               exact
@@ -236,6 +227,7 @@ class App extends React.Component {
               roles={[Role.Admin]}
               component={PostEdit}
             />
+            <PublicRoute component = {UploadFiles} path = "/UploadFile" exact />
             <PublicRoute component = {ServiceCenters} path = "/service_centers" exact />
             <PublicRoute component = {CreateJob} path = "/create_job" exact />
             <PublicRoute component = {ServiceCenterDetails} path = "/service_center/:id" exact />

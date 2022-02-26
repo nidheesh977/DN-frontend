@@ -99,7 +99,7 @@ class UploadFiles extends Component {
     })
     for (var i = 0; i < e.target.files.length; i++) {
       var details = this.state.selected_files_details
-      details.push({ "file": "", "name": e.target.files[i].name, "type": e.target.files[i].type, "size": e.target.files[i].size, "usage": 'free', "price": "", "category": "", 'experience': "", 'keywords': [], 'adult_content': false, "select_type": e.target.files[i].type })
+      details.push({ "file": "", "name": e.target.files[i].name, "custom_name": e.target.files[i].name, "type": e.target.files[i].type, "size": e.target.files[i].size, "usage": 'free', "price": "", "category": "", 'experience': "", 'keywords': [], 'adult_content': false, "select_type": e.target.files[i].type })
       this.setState({
         selected_files_details: details
       })
@@ -126,7 +126,7 @@ class UploadFiles extends Component {
 
   fileNameChange = (e) => {
     var files_details = this.state.selected_files_details
-    files_details[this.state.file_edit].name = e.target.value
+    files_details[this.state.file_edit].custom_name = e.target.value
     this.setState({
       selected_files_details: files_details
     })
@@ -522,7 +522,7 @@ class UploadFiles extends Component {
                       }
                       <div className="u_f_input_title">Post name</div>
                       {this.state.files_selected
-                        ? <input type="text" name="" id="u_f_post_name" className='u_f_input_field' value={this.state.selected_files_details[this.state.file_edit].name} onChange={this.fileNameChange} />
+                        ? <input type="text" name="" id="u_f_post_name" className='u_f_input_field' value={this.state.selected_files_details[this.state.file_edit].custom_name} onChange={this.fileNameChange} />
                         : <input type="text" name="" id="u_f_post_name" className='u_f_input_field' disabled />
                       }
                       <div className="u_f_input_title">File type</div>

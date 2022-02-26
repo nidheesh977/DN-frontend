@@ -206,7 +206,21 @@ function Navbar(props) {
                   </Link>
 
                 </li>
-                {userlogin === false &&
+
+                {/* ============================== testing ================================ */}
+                <>
+                    <li className='nav-item'>
+                      <Link to='/login' className='nav-links2' onClick={closeMobileMenu}>Log In</Link>
+                    </li>
+                    <li className='nav-item'>
+                      <Link className='nav-links2' to="/sign_up">
+                        Sign up
+                      </Link>
+
+                    </li>
+                  </>
+                {/* ============================== testing ================================ */}
+                {/* {userlogin === false &&
                   <>
                     <li className='nav-item'>
                       <Link to='/login' className='nav-links2' onClick={closeMobileMenu}>Log In</Link>
@@ -218,8 +232,8 @@ function Navbar(props) {
 
                     </li>
                   </>
-                }
-                {userlogin === true &&
+                } */}
+                {/* {userlogin === true &&
                   // <li className='nav-item'>
                   //   {ProfileImage ? <Link><img className="nav-links" style={{ width: '40px', height: '40px', borderRadius: '100%' }} src={ProfileImage} onClick={handleMenu} />My account</Link> : <Link><img className="nav-links" style={{ width: '30px', height: '30px', borderRadius: '100%' }} src={ProfileIcon} onClick={handleMenu}/><span style = {{marginTop: "25px"}}>My account</span></Link>}
                   //   <Menu
@@ -245,7 +259,7 @@ function Navbar(props) {
                       </Link>
                     </li>
                   </>
-                }
+                } */}
                 <li className='nav-item'>
                   <Link to="/UploadFile" className="nav-links">
                     <Button variant="contained" color="default" id="first" className='nav_upload_img'><img style={{ paddingRight: 10 }} src={UploadFile} /> Upload file</Button>
