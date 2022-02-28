@@ -627,6 +627,10 @@ li.slide {
   width: 100% !important;
 }
 
+.slider_image{
+  position: relative !important;
+}
+
 li.slide {
   padding: 45px 65px;
 }

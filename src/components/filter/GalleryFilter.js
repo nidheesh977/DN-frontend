@@ -74,16 +74,16 @@ class GalleryFilter extends React.Component {
     super(props);
     this.state = {
       userlogin: "",
-      listing: [],
-      listing_length: 0,
-      posttitle: [],
+      listing: [{"id":125,"user_id":17,"author":"Nidheesh","title":"tryjutryutryu","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1645192329.png"},{"id":124,"user_id":17,"author":"Nidheesh","title":"dfgsdfg","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640332697.jpg"},{"id":123,"user_id":1,"author":"Haj Mohamed","title":"ggggdddh","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640266992.jpg"},{"id":122,"user_id":1,"author":"Haj Mohamed","title":"Strawberry","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172407.mp4"},{"id":121,"user_id":17,"author":"Nidheesh","title":"test","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172334.mp4"},{"id":120,"user_id":1,"author":"Haj Mohamed","title":"Test Video","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172299.mp4"},{"id":119,"user_id":1,"author":"Haj Mohamed","title":"Test Image","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640171670.png"},{"id":118,"user_id":17,"author":"Nidheesh","title":"sdfas","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640167498.jpg"},{"id":117,"user_id":17,"author":"Nidheesh","title":"testttt","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640077412.jpg"},{"id":116,"user_id":17,"author":"Nidheesh","title":"sdfvdf","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063729.jfif"},{"id":115,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063673.jpg"},{"id":113,"user_id":17,"author":"Nidheesh","title":"sdfgdfg","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639719698.mp4"},{"id":112,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639662056.jpeg"},{"id":88,"user_id":17,"author":"Nidheesh","title":"test","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1638876500.mp4"},{"id":87,"user_id":17,"author":"Nidheesh","title":"ddddt","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639641791.jpeg"},{"id":86,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640062701.jpeg"},{"id":84,"user_id":14,"author":"Ajith Karu","title":"Dummy","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1627899071.png"},{"id":83,"user_id":14,"author":"Ajith Karu","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1626174083.png"},{"id":61,"user_id":17,"author":"Nidheesh","title":"asdasd","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063030.jpg"},{"id":60,"user_id":1,"author":"Haj Mohamed","title":"asdasd","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1618899801.png"}],
+      listing_length: 20,
+      posttitle: [{"id":60,"caption":"asdasd"},{"id":87,"caption":"ddddt"},{"id":124,"caption":"dfgsdfg"},{"id":84,"caption":"Dummy"},{"id":123,"caption":"ggggdddh"},{"id":118,"caption":"sdfas"},{"id":113,"caption":"sdfgdfg"},{"id":116,"caption":"sdfvdf"},{"id":122,"caption":"Strawberry"},{"id":83,"caption":"test"},{"id":119,"caption":"Test Image"},{"id":120,"caption":"Test Video"},{"id":117,"caption":"testttt"},{"id":125,"caption":"tryjutryutryu"}],
       visible: 10,
       valuees: 0,
       users: "",
       usersid: "",
       all_id: "1",
       value: "",
-      loading: true,
+      loading: false,
       userId: props.user,
       images: "1",
       categoriesImage: "1",
@@ -103,11 +103,11 @@ class GalleryFilter extends React.Component {
           name: "Images",
           className: "GalleryFilter",
         },
-        {
-          id: 2,
-          name: "360 Images",
-          className: "GalleryFilter",
-        },
+        // {
+        //   id: 2,
+        //   name: "360 Images",
+        //   className: "GalleryFilter",
+        // },
         {
           id: 3,
           name: "Video",
@@ -320,7 +320,7 @@ class GalleryFilter extends React.Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    this.setState({ loading: true });
+    // this.setState({ loading: true });
     axios
       .get(`https://demo-nexevo.in/haj/auth-app/public/api/homepagelisting`, config)
       .then((response) => response.data)
@@ -411,11 +411,11 @@ class GalleryFilter extends React.Component {
                 onClick={() => this.handleClick(1)}
                 icon={<ImageIcon />}
               />
-              <BottomNavigationAction
+              {/* <BottomNavigationAction
                 label="360"
                 onClick={() => this.handleClick(2)}
                 icon={<ImageAspectRatioIcon />}
-              />
+              /> */}
               <BottomNavigationAction
                 label="Video"
                 onClick={() => this.handleClick(3)}
@@ -597,7 +597,7 @@ class GalleryFilter extends React.Component {
                                     {results
                                       .slice(0, this.state.visible)
                                       .map((user, index) => (
-                                        <li key={index} onMouseOver={() => this.mouseOverFilter(index)} onMouseLeave={() => this.mouseLeveFilter(index)}>
+                                        <li key={index} onMouseOver={() => this.mouseOverFilter(index)} onMouseLeave={() => this.mouseLeaveFilter(index)}>
                                           {user.tag === "1" ? (
                                             <div>
                                               <figure>

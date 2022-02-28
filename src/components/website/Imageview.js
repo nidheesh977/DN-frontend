@@ -23,9 +23,10 @@ import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Close from "../images/close.svg";
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
-import sharePNG from '../images/share.png';
+import Favorite from "@material-ui/icons/Favorite";
+import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
+import sharePNG from "../images/share.png";
+import userIcon from "../images/user_image.png"
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -107,10 +108,74 @@ export default class ViewJob extends React.Component {
       items: [],
       user_id: "",
       role_id: "",
-      imageview: "",
+      imageview: {
+        id: 87,
+        user_id: 17,
+        author: "Nidheesh",
+        sale: "download",
+        slug: "ddddt-87",
+        title: "ddddt",
+        price: null,
+        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem asperiores quibusdam, molestiae ipsam, doloremque ad consequatur quis delectus expedita quisquam corporis recusandae repellendus eius sequi accusantium, vitae ullam! Neque numquam nisi ab quis. Dolorem sequi atque saepe iste reprehenderit ea fugit excepturi necessitatibus tempore qui nulla, rerum distinctio! Esse, pariatur.",
+        comments: "true",
+        tag: "1",
+        src: "https://images.unsplash.com/photo-1454372182658-c712e4c5a1db?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8M3x8fGVufDB8fHx8&w=1000&q=80",
+        profile:
+          "https://demo-nexevo.in/haj/auth-app/public/uploads/profile/profile1643970630.png",
+      },
       userid: "",
       user_profile: "",
-      relatedposts: [],
+      relatedposts: [
+        {
+          id: 61,
+          user_id: 17,
+          author: "Nidheesh",
+          title: "asdasd",
+          tag: "1",
+          src: "https://demo-nexevo.in/haj/auth-app/public/files/file1640063030.jpg",
+        },
+        {
+          id: 86,
+          user_id: 17,
+          author: "Nidheesh",
+          title: "test",
+          tag: "1",
+          src: "https://demo-nexevo.in/haj/auth-app/public/files/file1640062701.jpeg",
+        },
+        {
+          id: 87,
+          user_id: 17,
+          author: "Nidheesh",
+          title: "ddddt",
+          tag: "1",
+          src: "https://demo-nexevo.in/haj/auth-app/public/files/file1639641791.jpeg",
+        },
+        {
+          id: 61,
+          user_id: 17,
+          author: "Nidheesh",
+          title: "asdasd",
+          tag: "1",
+          src: "https://demo-nexevo.in/haj/auth-app/public/files/file1640063030.jpg",
+        },
+        {
+          id: 61,
+          user_id: 17,
+          author: "Nidheesh",
+          title: "asdasd",
+          tag: "1",
+          src: "https://demo-nexevo.in/haj/auth-app/public/files/file1640063030.jpg",
+        },
+        {
+          id: 87,
+          user_id: 17,
+          author: "Nidheesh",
+          title: "ddddt",
+          tag: "1",
+          src: "https://demo-nexevo.in/haj/auth-app/public/files/file1639641791.jpeg",
+        },
+        ,
+      ],
       loading: false,
       id: "",
       post_id: "",
@@ -132,7 +197,7 @@ export default class ViewJob extends React.Component {
   }
 
   download(event) {
-    var image = this.state.imageview.src
+    var image = this.state.imageview.src;
     swal({
       title: "Are you sure?",
       text: "Do you want to download this image",
@@ -147,13 +212,11 @@ export default class ViewJob extends React.Component {
           },
         };
         const url = `https://demo-nexevo.in/haj/auth-app/public/api/auth/freedownload/${event.id}?user_id=${this.state.user_id}`;
-        axios
-          .post(url, config)
-          .then((response) => {
-            swal(response.data.message, {
-              icon: "success",
-            });
-          })
+        axios.post(url, config).then((response) => {
+          swal(response.data.message, {
+            icon: "success",
+          });
+        });
       } else {
         swal("Download cancelled");
       }
@@ -162,15 +225,13 @@ export default class ViewJob extends React.Component {
 
   handleClose = () => {
     this.setState({
-      open: false
-    })
+      open: false,
+    });
   };
 
   componentDidMount() {
     const id = this.props.match.params.id;
     const user_id = this.props.match.params.user_id;
-
-
 
     this.setState({
       fieldVal: id,
@@ -194,17 +255,17 @@ export default class ViewJob extends React.Component {
 
     const url = `${API_URL}/singlelisting/${id}`;
 
-    axios.get(url, config)
-      .then(res => {
+    axios
+      .get(url, config)
+      .then((res) => {
         try {
           this.setState({ imageview: res.data });
-          console.log(res.data)
-        }
-        catch { }
+          console.log(res.data);
+        } catch {}
       })
-      .catch(err => {
-        console.log(err)
-      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     const urls = `https://demo-nexevo.in/haj/auth-app/public/api/auth/relatedposts/${user_id}`;
     axios
@@ -216,14 +277,19 @@ export default class ViewJob extends React.Component {
 
     this.setState({ loading: true });
 
-    axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/profilesingle', {
-      user_id: user_id,
-    }, config)
-      .then(res => {
+    axios
+      .post(
+        "https://demo-nexevo.in/haj/auth-app/public/api/auth/profilesingle",
+        {
+          user_id: user_id,
+        },
+        config
+      )
+      .then((res) => {
         this.setState({
-          user_profile: res.data.profile
-        })
-      })
+          user_profile: res.data.profile,
+        });
+      });
   }
 
   addComment(comment) {
@@ -234,31 +300,29 @@ export default class ViewJob extends React.Component {
   }
 
   other_post = (id, user_id) => {
-    this.props.history.push("/Imageview/" + id + "/" + user_id)
-    window.location.reload()
-  }
+    this.props.history.push("/Imageview/" + id + "/" + user_id);
+    window.location.reload();
+  };
 
-  handleSubmit = (e) => {
-
-  }
+  handleSubmit = (e) => {};
 
   handleShareClose = () => {
     this.setState({
-      share: false
-    })
-  }
+      share: false,
+    });
+  };
 
   shareOpen = () => {
     this.setState({
-      share: true
-    })
-  }
+      share: true,
+    });
+  };
 
   render() {
     const { imageview, value } = this.state;
     const { relatedposts, values } = this.state;
-    var user_profile = this.state.user_profile
-    var other_post = this.other_post
+    var user_profile = this.state.user_profile;
+    var other_post = this.other_post;
     return (
       <>
         <Helmet>
@@ -282,43 +346,81 @@ export default class ViewJob extends React.Component {
             >
               <Box display="flex" pt={6}>
                 <Box mt={2}>
-                  <h3 className={All.Bold} style={{ textAlign: "center" }}>Share</h3>
+                  <h3 className={All.Bold} style={{ textAlign: "center" }}>
+                    Share
+                  </h3>
                 </Box>
               </Box>
             </DialogTitle>
-            <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
               <Row>
-                <WhatsappShareButton url={window.location.href} style={{ margin: '10px' }}>
+                <WhatsappShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
                   <WhatsappIcon size={52} round={true} />
                 </WhatsappShareButton>
-                <FacebookShareButton url={window.location.href} style={{ margin: '10px' }}>
+                <FacebookShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
                   <FacebookIcon size={52} round={true} />
                 </FacebookShareButton>
-                <EmailShareButton url={window.location.href} style={{ margin: '10px' }}>
+                <EmailShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
                   <EmailIcon size={52} round={true} />
                 </EmailShareButton>
-                <TwitterShareButton url={window.location.href} style={{ margin: '10px' }}>
+                <TwitterShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
                   <TwitterIcon size={52} round={true} />
                 </TwitterShareButton>
-                <TelegramShareButton url={window.location.href} style={{ margin: '10px' }}>
+                <TelegramShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
                   <TelegramIcon size={52} round={true} />
                 </TelegramShareButton>
-                <LinkedinShareButton url={window.location.href} style={{ margin: '10px' }}>
+                <LinkedinShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
                   <LinkedinIcon size={52} round={true} />
                 </LinkedinShareButton>
-                <PinterestShareButton url={window.location.href} style={{ margin: '10px' }}>
+                <PinterestShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
                   <PinterestIcon size={52} round={true} />
                 </PinterestShareButton>
-                <VKShareButton url={window.location.href} style={{ margin: '10px' }}>
+                <VKShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
                   <VKIcon size={52} round={true} />
                 </VKShareButton>
-                <ViberShareButton url={window.location.href} style={{ margin: '10px' }}>
+                <ViberShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
                   <ViberIcon size={52} round={true} />
                 </ViberShareButton>
-                <RedditShareButton url={window.location.href} style={{ margin: '10px' }}>
+                <RedditShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
                   <RedditIcon size={52} round={true} />
                 </RedditShareButton>
-                <LineShareButton url={window.location.href} style={{ margin: '10px' }}>
+                <LineShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
                   <LineIcon size={52} round={true} />
                 </LineShareButton>
               </Row>
@@ -362,6 +464,13 @@ export default class ViewJob extends React.Component {
                             <Button
                               onClick={() => this.download(imageview)}
                               className={All.BtnStyle_5}
+                              style={{
+                                background:
+                                  "transparent linear-gradient(21deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box",
+                                height: "35px",
+                                fontSize: "14px !important",
+                                fontFamily: "muli-regular"
+                              }}
                             >
                               Download
                             </Button>
@@ -371,39 +480,56 @@ export default class ViewJob extends React.Component {
                     </Col>
                   </Row>
 
-                  <div className="slider_image" style = {{position: "relative"}}>
+                  <div
+                    className="slider_image"
+                    style={{ position: "relative" }}
+                  >
                     {imageview.tag == "1" && (
                       <>
-                        <span style={{
-                          position: 'absolute',
-                          top: '10px',
-                          right: "30px",
-                          zIndex: 1000
-                        }}>
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: "30px",
+                            right: "30px",
+                            zIndex: 1000,
+                          }}
+                        >
                           <FavoriteBorder />
-                          <img src={sharePNG} style={{
-                            marginLeft: "30px",
-                          }} onClick={this.shareOpen} />
+                          <img
+                            src={sharePNG}
+                            style={{
+                              marginLeft: "30px",
+                              height: "24px",
+                            }}
+                            onClick={this.shareOpen}
+                          />
                         </span>
                         <img
                           className="GalleryImg"
                           src={imageview.src}
                           alt="image"
+                          style = {{height: "auto"}}
                         />
                       </>
                     )}
                     {imageview.tag == "2" && (
                       <>
-                        <span style={{
-                          position: 'absolute',
-                          top: '10px',
-                          right: "30px",
-                          zIndex: 1000
-                        }}>
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: "10px",
+                            right: "30px",
+                            zIndex: 1000,
+                          }}
+                        >
                           <FavoriteBorder />
-                          <img src={sharePNG} style={{
-                            marginLeft: "30px",
-                          }} onClick={this.shareOpen} />
+                          <img
+                            src={sharePNG}
+                            style={{
+                              marginLeft: "30px",
+                            }}
+                            onClick={this.shareOpen}
+                          />
                         </span>
                         <img
                           className="GalleryImg"
@@ -414,32 +540,48 @@ export default class ViewJob extends React.Component {
                     )}
                     {imageview.tag == "3" && (
                       <>
-                          <span style={{
-                          position: 'absolute',
-                          top: '10px',
-                          right: "30px",
-                          zIndex: 1000
-                        }}>
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: "10px",
+                            right: "30px",
+                            zIndex: 1000,
+                          }}
+                        >
                           <FavoriteBorder />
-                          <img src={sharePNG} style={{
-                            marginLeft: "30px",
-                          }} onClick={this.shareOpen} />
+                          <img
+                            src={sharePNG}
+                            style={{
+                              marginLeft: "30px",
+                            }}
+                            onClick={this.shareOpen}
+                          />
                         </span>
-                        <video src={imageview.src} controls className="GalleryImg"></video>
+                        <video
+                          src={imageview.src}
+                          controls
+                          className="GalleryImg"
+                        ></video>
                       </>
                     )}
                     {imageview.tag == "4" && (
                       <>
-                        <span style={{
-                          position: 'absolute',
-                          top: '10px',
-                          right: "30px",
-                          zIndex: 1000
-                        }}>
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: "10px",
+                            right: "30px",
+                            zIndex: 1000,
+                          }}
+                        >
                           <FavoriteBorder />
-                          <img src={sharePNG} style={{
-                            marginLeft: "30px",
-                          }} onClick={this.shareOpen} />
+                          <img
+                            src={sharePNG}
+                            style={{
+                              marginLeft: "30px",
+                            }}
+                            onClick={this.shareOpen}
+                          />
                         </span>
                         <img
                           className="GalleryImg"
@@ -447,7 +589,6 @@ export default class ViewJob extends React.Component {
                           alt="image"
                         />
                       </>
-
                     )}
                   </div>
 
@@ -457,12 +598,12 @@ export default class ViewJob extends React.Component {
                         <Box textAlign={"Left"}>
                           <Link
                             to={{
-                              pathname: `/ProfileSingle/${this.props.match.params.user_id}`,
+                              pathname: `/pilot_details/1`,
                             }}
                           >
                             <img
                               class="alignleft"
-                              src={user_profile}
+                              src={userIcon}
                               alt="Image Sample 1"
                               style={{
                                 display: "inline",
@@ -479,14 +620,14 @@ export default class ViewJob extends React.Component {
                         <Box pt={1}>
                           <Link
                             to={{
-                              pathname: `/ProfileSingle/${this.props.match.params.user_id}`,
+                              pathname: `/pilot_details/1`,
                             }}
                           >
                             <h5> {imageview.author || <Skeleton />}</h5>
                           </Link>
                           <Link
                             to={{
-                              pathname: `/ProfileSingle/${this.props.match.params.user_id}`,
+                              pathname: `/pilot_details/1`,
                             }}
                           >
                             <label
@@ -540,10 +681,10 @@ export default class ViewJob extends React.Component {
                       <Box pt={2} pb={5}>
                         <Link
                           to={{
-                            pathname: `/ProfileSingle/${this.props.match.params.user_id}`,
+                            pathname: `/pilot_details/1`,
                           }}
                         >
-                          <Button className={All.BtnStyle_11}>
+                          <Button className={All.BtnStyle_11} style = {{height: "40px"}}>
                             {" "}
                             <img style={{ paddingRight: 10 }} src={Hirebtn} />
                             Hire This Droner
@@ -559,7 +700,9 @@ export default class ViewJob extends React.Component {
                         {relatedposts.map((option) => (
                           <Link
                             className={`${All.marginright_9} ${All.RecentImg}`}
-                            onClick={() => { other_post(option.id, option.user_id) }}
+                            onClick={() => {
+                              other_post(option.id, option.user_id);
+                            }}
                           >
                             {option.tag == "1" && (
                               <img
@@ -630,7 +773,7 @@ export default class ViewJob extends React.Component {
                     style={{ paddingBottom: "25px", paddingTop: "25px" }}
                     className={`${All.Text_left}`}
                   >
-                    <Col sm={12} md={8}>
+                    <Col xs = {6} sm={8} md={8}>
                       {" "}
                       <div
                         className={`${All.lineheight_40} ${All.pt_xs_30} ${All.pb_xs_30} ${All.pt_sm} ${All.pb_sm} ${All.pt_md_30} ${All.pb_md_30} `}
@@ -642,7 +785,7 @@ export default class ViewJob extends React.Component {
                         </h4>{" "}
                       </div>
                     </Col>
-                    <Col sm={6} md={4}>
+                    <Col xs = {6} sm={4} md={4}>
                       {this.state.userid == this.props.match.params.user_id ? (
                         <> </>
                       ) : (
@@ -663,6 +806,12 @@ export default class ViewJob extends React.Component {
                               <Button
                                 onClick={() => this.download(imageview)}
                                 className={All.BtnStyle_5}
+                                style={{
+                                  background:
+                                    "transparent linear-gradient(21deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box",
+                                  height: "35px !important",
+                                  marginTop: "20px"
+                                }}
                               >
                                 Download
                               </Button>
@@ -672,13 +821,34 @@ export default class ViewJob extends React.Component {
                       )}
                     </Col>
                   </Row>
-                  <div className="slider_image">
+                  <div className="slider_image" style={{ position: "relative" }}>
                     {imageview.tag == "1" && (
-                      <img
-                        className="GalleryImg"
-                        src={imageview.src}
-                        alt="image"
-                      />
+                      <>
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: "30px",
+                            right: "30px",
+                            zIndex: 1000,
+                          }}
+                        >
+                          <FavoriteBorder />
+                          <img
+                            src={sharePNG}
+                            style={{
+                              marginLeft: "30px",
+                              height: "24px",
+                            }}
+                            onClick={this.shareOpen}
+                          />
+                        </span>
+                        <img
+                          className="GalleryImg"
+                          src={imageview.src}
+                          alt="image"
+                          style = {{height: "auto"}}
+                        />
+                      </>
                     )}
 
                     {imageview.tag == "2" && (
@@ -690,7 +860,11 @@ export default class ViewJob extends React.Component {
                     )}
 
                     {imageview.tag == "3" && (
-                      <video src={imageview.src} controls className="GalleryImg"></video>
+                      <video
+                        src={imageview.src}
+                        controls
+                        className="GalleryImg"
+                      ></video>
                     )}
 
                     {imageview.tag == "4" && (
@@ -704,13 +878,13 @@ export default class ViewJob extends React.Component {
                   <Row className={`${All.Text_left} slideProfileDetail `}>
                     <Col
                       lg={9}
-                      className={`${All.Order_sm_2} ${All.Order_xs_2} ${All.Order_md_2}`}
+                      // className={`${All.Order_sm_2} ${All.Order_xs_2} ${All.Order_md_2}`}
                     >
                       <Box className={`${All.Text_left}`}>
                         <Box textAlign={"Left"}>
                           <img
                             class="alignleft"
-                            src={user_profile}
+                            src={userIcon}
                             alt="Image Sample 1"
                             style={{
                               display: "inline",
@@ -726,7 +900,7 @@ export default class ViewJob extends React.Component {
                         <Box pt={1}>
                           <Link to="/profile">
                             <h5 className={All.Bold}>
-                              {imageview.user_name || <Skeleton />}
+                              {imageview.author || <Skeleton />}
                             </h5>
                           </Link>
                           <label
@@ -743,7 +917,7 @@ export default class ViewJob extends React.Component {
                             Hello Everyone,
                           </label>
                           <label className={All.paddingtop}>
-                            {imageview.user_name || <Skeleton />}
+                            {imageview.description || <Skeleton />}
                           </label>
                           <label className={All.paddingtop}>
                             Wanna create something great?
@@ -779,10 +953,10 @@ export default class ViewJob extends React.Component {
                       <Box pt={2} pb={5}>
                         <Link
                           to={{
-                            pathname: `/ProfileSingle/${this.props.match.params.user_id}`,
+                            pathname: `/pilot_details/1`,
                           }}
                         >
-                          <Button className={All.BtnStyle_11}>
+                          <Button className={All.BtnStyle_11} style = {{height: "40px"}}>
                             {" "}
                             <img style={{ paddingRight: 10 }} src={Hirebtn} />
                             Hire This Droner
@@ -795,15 +969,12 @@ export default class ViewJob extends React.Component {
                         </label>
                       </Box>
                       <Box>
-                        {relatedposts.map((option) => (
+                      {relatedposts.map((option) => (
                           <Link
                             className={`${All.marginright_9} ${All.RecentImg}`}
-                            // to={"/Imageview/" +
-                            //   option.id +
-                            //   "/" +
-                            //   option.user_id
-                            // }
-                            onClick={() => { other_post(option.id, option.user_id) }}
+                            onClick={() => {
+                              other_post(option.id, option.user_id);
+                            }}
                           >
                             {option.tag == "1" && (
                               <img
@@ -887,7 +1058,11 @@ export default class ViewJob extends React.Component {
               <Box display="flex" pt={6}>
                 <Box pr={2}>
                   <img
-                    style={{ width: "75px", height: "75px", borderRadius: "50%" }}
+                    style={{
+                      width: "75px",
+                      height: "75px",
+                      borderRadius: "50%",
+                    }}
                     src={user_profile}
                   />
                 </Box>
@@ -940,8 +1115,8 @@ export default class ViewJob extends React.Component {
                       id="message"
                       placeholder="Create the message"
                       style={{
-                        height: '150px',
-                        width: '100%',
+                        height: "150px",
+                        width: "100%",
                       }}
                     />
                   </Col>

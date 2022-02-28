@@ -504,11 +504,12 @@ button.disabled span {
     background: transparent linear-gradient(31deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
     border-radius: 50px !important;
     /* padding: 12px 20px; */
-    font-size:14px !important;
     border: 1px solid #38f7bd !important;
     box-shadow: none !important;
-    width: 160px;
-    height: 50px;
+    font-family: muli-regular;
+    font-size:16px !important;
+    width: 200px;
+    height: 45px;
     text-align: center;
     text-transform: none !important;
     outline: none;
@@ -1763,11 +1764,13 @@ section.UploadFile .form label.MuiFormControlLabel-root {
 
     .ml_xs_auto{margin-left: auto !important; }
     .mr_xs_auto{margin-right: auto !important; }
-    .LineHeight_normal_xs{line-height: normal !important;} 
+    .LineHeight_normal_xs{line-height: normal !important;}
     .height_auto_xs{height: auto !important;} 
     .BtnStyle_1 , .BtnStyle_2 , .BtnStyle_3 , .BtnStyle_4 , .BtnStyle_5 , .BtnStyle_6{                
-        width: 130px !important;
-        height: 40px !important; 
+        font-family: muli-regular;
+        font-size:16px !important;
+        width: 200px;
+        height: 45px;
     }  
     button span{font-family: Muli-Bold !important;}
 

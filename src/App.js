@@ -124,11 +124,11 @@ class App extends React.Component {
               path="/Cart/:slug/download/:userId"
               component={Cart}
             />
-            <PrivateRoute
+            {/* <PrivateRoute
               exact
               path={"/Imageview/:id/:user_id"}
               component={Imageview}
-            />
+            /> */}
             <AdminRoute
               exact
               path="/GetJobs"
@@ -174,6 +174,11 @@ class App extends React.Component {
               path="/HiringDroners"
               component={HiringDroners}
             /> */}
+            <PublicRoute
+              exact
+              path={"/Imageview/:id/:user_id"}
+              component={Imageview}
+            />
             <PublicRoute
               exact
               path="/hire_pilots"

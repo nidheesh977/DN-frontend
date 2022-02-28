@@ -161,6 +161,7 @@ class CommentBox extends React.Component {
                     color="default"
                     type="submit"
                     className={All.LoaderBtn}
+                    style = {{width: "200px!important"}}
                   >
                     <Loader /> Loading
                   </Button>
@@ -170,6 +171,10 @@ class CommentBox extends React.Component {
                   <Button
                     type="submit"
                     className={All.BtnStyle_5}
+                    style = {{
+                      width: "200px!important",
+                      fontFamily: "muli-regular"
+                    }}
                   >
                     Post your comment
                   </Button>
