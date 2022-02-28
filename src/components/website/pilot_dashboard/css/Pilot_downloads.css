@@ -8,19 +8,21 @@
 .pd_downloads_main{
     display: flex;
     padding: 10px 0px 11px 0px !important;
-
 }
+
 .pd_downloads_active{
     font-family: muli-bold !important;
     font-size: 15px !important;
-
 }
+
 .pd_personName{
     font-family: muli-light;
     font-size: 14px;
     line-height: 20px;
     margin-left: 5px;
     color: white;
-    
 }
 
+.p_d_file_user_name{
+    cursor: pointer;
+}

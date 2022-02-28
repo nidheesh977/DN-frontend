@@ -433,16 +433,17 @@
     font-family: muli-bold;
     line-height: 26px;
     margin-bottom: 10px;
+    cursor: pointer;
   }
   
   .h_p_start_process_form_description{
-    width: calc(100% - 20px);
+    width: calc(100% - 40px);
     height: 105px;
     margin-bottom: 30px;
     background: #F5F5F7;
     border-radius: 10px;
     border: 1px solid white;
-    padding: 10px;
+    padding: 10px 20px;
     font-size: 14px;
     font-family: muli-light;
   }
@@ -458,7 +459,7 @@
     padding: 10px 44px;
     border-radius: 10px;
     margin-right: 20px;
-    margin-bottom: 50px;
+    cursor: pointer;
   }
   
   .h_p_start_process_form_file_label_text{
@@ -466,6 +467,7 @@
     font-family: muli-light;
     font-size: 14px;
     line-height: 20px;
+    cursor: pointer;
   }
   
   .h_p_start_process_form_btn_container{

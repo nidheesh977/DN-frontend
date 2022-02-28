@@ -189,3 +189,11 @@
   margin-bottom: 20px;
   cursor: pointer;
 }
+
+button{
+  cursor: pointer;
+}
+
+textarea{
+  resize: none
+}

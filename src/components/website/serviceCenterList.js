@@ -641,13 +641,12 @@ class ServiceCenters extends Component {
                   </Col>
                 </Row>
                 <Row>
-
                   {this.state.service_center_list.map((service_center, index) => {
                     return (
                       <Col lg={6} md={12}>
                         <div className="service_center_list">
                           <div className="s_c_profile_container">
-                            <img src={nexevo_img} alt="" width="50px" />
+                            <img src={nexevo_img} alt="" width="40px" />
                           </div>
                           <span className="service_center_name" onClick = {() => this.serviceCenterDetails(service_center.id)}>
                             {service_center.name}

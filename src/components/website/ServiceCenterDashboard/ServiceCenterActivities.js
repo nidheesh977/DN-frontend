@@ -67,6 +67,10 @@ class ServiceCenterActivities extends Component {
     });
   };
 
+  redirectPilotDetails = (id) => {
+    this.props.history.push(`/pilot_details/${id}`)
+  }
+
   render() {
     const files = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     return (
@@ -134,7 +138,7 @@ class ServiceCenterActivities extends Component {
                 </div>
                 {this.state.activity_inspired_filter && (
                   <>
-                    <div
+                    {/* <div
                       className={
                         this.state.selected_filter === 2
                           ? "s_c_db_activity_filter s_c_db_activity_filter_active"
@@ -143,7 +147,7 @@ class ServiceCenterActivities extends Component {
                       onClick={() => this.setState({ selected_filter: 2 })}
                     >
                       Followers
-                    </div>
+                    </div> */}
                     <div
                       className={
                         this.state.selected_filter === 3
@@ -264,7 +268,7 @@ class ServiceCenterActivities extends Component {
                               className="p_d_file_details_container"
                               id={"p_d_file_details_" + id}
                             >
-                              <div className="p_d_file_user_name">
+                              <div className="p_d_file_user_name" onClick={() => this.redirectPilotDetails(index)}>
                                 <img
                                   src={userIcon}
                                   alt=""

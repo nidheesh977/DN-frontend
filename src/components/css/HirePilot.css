@@ -299,6 +299,7 @@
   background: transparent linear-gradient(323deg, #4FFEA3 0%, #00E7FC 100%);
   border: 0;
   cursor: pointer;
+  cursor: pointer;
 }
 
 .h_p_listing_send_msg_link{

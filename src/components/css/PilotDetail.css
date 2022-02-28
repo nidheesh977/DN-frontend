@@ -102,7 +102,7 @@
 }
 
 .p_d_files_container{
-  margin-bottom: 33px;
+  margin-bottom: 6px;
 }
 
 .p_d_file_details_container{
@@ -341,11 +341,11 @@
   background: white;
   border: 1px solid #D8D8D8;
   border-radius: 10px;
-  padding: 20px;
+  padding:20px;
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  position: absolute;
+  position: fixed;
   z-index: 1;
   right: 0;
   top: 160px;
@@ -368,9 +368,13 @@
 
 .p_d_message_user_details{
   display: flex;
+  padding-top: 10px;
   padding-bottom: 20px;
   margin-bottom: 25px;
   border-bottom: 1px solid rgba(112, 112, 112, 0.2);
+  position: sticky;
+  top: -20px;
+  background-color: white;
 }
 
 .p_d_message_user_title{
@@ -382,6 +386,10 @@
   margin-top: auto;
   margin-bottom: auto;
   margin-left: auto;
+}
+
+.p_d_message_close{
+  cursor: pointer;
 }
 
 .p_d_message_user_image_container{

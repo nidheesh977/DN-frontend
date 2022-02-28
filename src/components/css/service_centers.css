@@ -44,9 +44,9 @@
   font-family: muli-bold;
   font-size: 15px;
   cursor: pointer;
-  margin-left: 75px;
+  margin-left: 60px;
   float: left;
-  margin-right: 20px;
+  margin-right: 17px;
 }
 
 .s_c_button3{
@@ -93,18 +93,18 @@
 
 .service_center_list{
   background-color: white;
-  padding: 30px;
+  padding: 25px;
   margin-bottom: 30px !important;
 }
 
 .service_center_list img {
   border-radius: 100%;
   display: block;
-  margin-right: 25px;
+  margin-right: 20px;
 }
 
 .service_center_name{
-  font-size: 20px !important;
+  font-size: 17px !important;
   line-height: 30px;
   font-family: muli-bold;
   padding-top: 10px;
@@ -146,15 +146,16 @@
 
 .s_c_other_details_title{
   font-family: muli-bold;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 25px;
-  margin-left: 75px;
+  margin-left: 60px;
   margin-top: 10px;
 }
 
 .s_c_other_details_content{
-  font-size: 15px;
-  margin-left: 75px;
+  font-size: 14px;
+  font-family: muli-regular;
+  margin-left: 60px;
   line-height: 25px;
 }
 
@@ -208,17 +209,19 @@
 
 .s_c_review_link{
   font-size: 12px !important;
+  font-family: muli-regular;
 }
 
 .rating_request_md_xl{
   float: right;
   text-align: center;
-  padding: 5px;
+  padding: 0px 5px;
   text-decoration: underline;
 }
 
 .s_c_other_details_phone{
   color: #10B2C0 !important;
+  cursor: pointer;
 }
 
 .s_c_share{

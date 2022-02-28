@@ -16,6 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import close from '../images/close.svg'
 import { Helmet } from "react-helmet";
+import Close from "../images/close.svg";
 
 const AirbnbSlider = styled(Slider)(({ theme }) => ({
   color: '#00E7FC',
@@ -102,8 +103,21 @@ class HirePilot extends Component {
       suggestions: ["Agriculture", "Manufacturing industry", "Media", "Real estate", "Film industry", "Agriculture", "Manufacturing industry", "Media", "Real estate", "Film industry"],
       searchValue: "",
       startProcess: false,
-      selected_file: {}
+      selected_file: {},
+      jobSaved: false
     }
+  }
+
+  showJobSave = () => {
+    this.setState({
+      jobSaved: true
+    })
+  }
+
+  closeJobSave = () => {
+    this.setState({
+      jobSaved: false
+    })
   }
 
   handleMoreKeyword = () => {
@@ -443,7 +457,7 @@ class HirePilot extends Component {
                           </div>
                           <div className="h_p_listing_btn_container">
                             <button className="h_p_start_process_btn" onClick={this.clickStartProcess}>Start Process</button>
-                            <button className="h_p_save_pilot_btn"><i class="fa fa-heart"></i></button>
+                            <button className="h_p_save_pilot_btn" onClick = {this.showJobSave}><i class="fa fa-heart"></i></button>
                           </div>
                           <div className="h_p_listing_send_msg_link" onClick = {() => this.sendMessage(1)}>Send Message</div>
                         </div>
@@ -493,7 +507,7 @@ class HirePilot extends Component {
                           </div>
                           <div className="h_p_listing_btn-container">
                             <button className="h_p_start_process_btn" onClick={this.clickStartProcess}>Start Process</button>
-                            <button className="h_p_save_pilot_btn"><i class="fa fa-heart"></i></button>
+                            <button className="h_p_save_pilot_btn" onClick = {this.showJobSave}><i class="fa fa-heart"></i></button>
                             <div className="h_p_listing_send_msg_link " style={{ textAlign: "center" }} onClick = {() => this.sendMessage(1)}>Send Message</div>
                           </div>
                         </div>
@@ -535,6 +549,27 @@ class HirePilot extends Component {
                 </Row>
               </DialogContent>
             </Dialog>
+            <Dialog
+                open={this.state.jobSaved}
+                onClose={this.closeJobSave}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+              >
+
+                <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+                  <div style={{ position: "absolute", top: '20px', right: '20px' }} onClick={this.closeJobSave}>
+                    <img src={Close} alt="" onClick={this.closeChoicePopup} style={{ cursor: "pointer" }} />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title" style = {{width: "100%"}}>Job saved successfully</div>
+                    <div className="u_f_popup_btn_container">
+                      <button className="u_f_popup_btn2" onClick={this.closeJobSave}>Close</button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
           </Container>
         </div>
       </>
