@@ -94,6 +94,9 @@ function SignUp(props) {
     //   })
 
     // setLoading(false);  
+ 
+
+
     if (value){
 
       props.history.push({
@@ -218,6 +221,7 @@ function SignUp(props) {
     }
 
     setOpen(true);
+   
   };
 
   const handleClose = (event, reason) => {

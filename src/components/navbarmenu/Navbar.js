@@ -34,6 +34,7 @@ $(document).ready(function () {
 });
 
 function Navbar(props) {
+  
   const [user, Setuser] = useState([]);
   const [loading, setLoading] = useState(false)
   const [userlogin, Setuserlogin] = useState(false)
@@ -208,11 +209,12 @@ function Navbar(props) {
                 </li>
 
                 {/* ============================== testing ================================ */}
+                
                 <>
-                    <li className='nav-item'>
+                    <li className='nav-item' id="login" style={{display: localStorage.getItem("access_token")? "none" : "block", marginTop: "25px"}}>
                       <Link to='/login' className='nav-links2' onClick={closeMobileMenu}>Log In</Link>
                     </li>
-                    <li className='nav-item'>
+                    <li className='nav-item' id="signup" style={{display: localStorage.getItem("access_token")? "none" : "block",  marginTop: "25px"}}>
                       <Link className='nav-links2' to="/sign_up">
                         Sign up
                       </Link>
@@ -260,6 +262,15 @@ function Navbar(props) {
                     </li>
                   </>
                 } */}
+                
+                <li className='nav-item' style={{display: localStorage.getItem("access_token")? "block" : "none", marginTop:"15px"}} id="myAccount">
+                      <Link to="/pilot_dashboard/activities/images" className="nav-links my_account_btn" style={{ display: "flex", alignItems: 'center' }}>
+                        <img style={{ width: '30px', height: '30px', borderRadius: '100%' }} src={ProfileIcon} />
+                        
+                      
+                        <span style={{ paddingLeft: "10px", fontSize: "16px" }}>My account</span>
+                      </Link>
+                    </li>
                 <li className='nav-item'>
                   <Link to="/UploadFile" className="nav-links">
                     <Button variant="contained" color="default" id="first" className='nav_upload_img'><img style={{ paddingRight: 10 }} src={UploadFile} /> Upload file</Button>

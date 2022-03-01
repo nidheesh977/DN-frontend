@@ -235,7 +235,7 @@ class App extends React.Component {
             <PublicRoute component = {ApplyJob} path = "/apply_job" exact />
             {/* yaseen */}
             <Route component={Pilot_dashboard} path="/pilot_dashboard" />
-            <Route component={ApplyJobLanding} path="/applyJobLanding" />
+            <Route component={ApplyJobLanding} path="/applyJobLanding/:id" />
             <Route component={Company_dashboard} path="/company_dashboard" />
             {/* yaseen */}
             <PublicRoute exact path="*" component={NoPageFound} />

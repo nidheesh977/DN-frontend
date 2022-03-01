@@ -16,7 +16,8 @@ import loadMore from "../images/Group 71.svg";
 import c_j_edit from '../images/c_j_edit.png'
 import c_j_bin from '../images/c_j_bin.png'
 import locationIcon from '../images/location.svg'
-import workIcon from '../images/work.svg'
+import workIcon from '../images/work.svg';
+import Axios from 'axios'
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -31,9 +32,11 @@ class CreateJob extends Component {
     this.state = {
       show_popup: true,
       main_tab: 1,
-      create_job_step: 2,
+      create_job_step: 1,
       company_name: "",
       job_title: "",
+      job_type: "Full-Time",
+      employee_type: "Licensed Pilot",
       industry: "",
       address: "",
       city: "",
@@ -126,8 +129,8 @@ class CreateJob extends Component {
       state: "",
       country: "",
       create_job_step: 1,
-      job_type: "full_time",
-      employee_type: "licensed",
+      job_type: "Full-Time",
+      employee_type: "Licensed Pilot",
       min_salery: "",
       max_salery: "",
       rate: 'month',
@@ -183,9 +186,40 @@ class CreateJob extends Component {
     }
 
     else {
-      alert("ready")
+
+     
       $('html,body').scrollTop(0);
+      Axios.post("http://localhost:9000/api/jobs/createJob", {
+        companyName: this.state.company_name,
+        userId: "62178487f48b4cce740ff3ea",
+        jobTitle: this.state.job_title,
+        industry : this.state.industry,
+        address: this.state.address,
+        city: this.state.city,
+        state: this.state.state,
+        country: this.state.country,
+        jobType: this.state.job_type,
+        employeeType: this.state.employee_type,
+        minSalary: this.state.min_salery,
+        maxSalary: this.state.max_salery,
+        salaryType: this.state.rate,
+        postingDate: this.state.date,
+        workLocation: this.state.location,
+        jobDesc: this.state.description
+      })
+      this.clearForm();
     }
+    // Axios.post("http://localhost:9000/api/jobs/createJob", {
+    //     companyName: "Nexevo Tech",
+    //     userId: "62178487f48b4cce740ff3ea"
+    //   }).then(() => {
+    //    console.log("successfull")
+    //   })
+    //   .catch(() => {
+    //     alert("not successful");
+    //   });
+    
+
   }
 
   minSaleryChange = (e) => {
@@ -329,22 +363,22 @@ class CreateJob extends Component {
                     <div className="c_j_form_input_title">Job type?</div>
                     <div className="c_j_radio_input_container">
                       <label className="c_j_radio_input_label">
-                        <input type="radio" name="job_type" id="" className='c_j_input_radio' onClick={() => this.setState({ job_type: "full_time" })} defaultChecked />
+                        <input type="radio" name="job_type" id="" className='c_j_input_radio' onClick={() => this.setState({ job_type: "Full-Time" })} checked = {this.state.job_type === "Full-Time"}/>
                         <div className="c_j_input_sub_label">Full time</div>
                       </label>
                       <label className="c_j_radio_input_label">
-                        <input type="radio" name="job_type" id="" className='c_j_input_radio' onClick={() => this.setState({ job_type: "part_time" })} />
+                        <input type="radio" name="job_type" id="" className='c_j_input_radio' onClick={() => this.setState({ job_type: "Part-Time" })}  checked = {this.state.job_type === "Part-Time"}/>
                         <div className="c_j_input_sub_label">Part time</div>
                       </label>
                     </div>
                     <div className="c_j_form_input_title">Employee type</div>
                     <div className="c_j_radio_input_container">
                       <label className="c_j_radio_input_label">
-                        <input type="radio" name="employee_type" id="" className='c_j_input_radio' defaultChecked onClick={() => this.setState({ employee_type: "licensed" })} />
+                        <input type="radio" name="employee_type" id="" className='c_j_input_radio' defaultChecked onClick={() => this.setState({ employee_type: "Licensed Pilot" })} />
                         <div className="c_j_input_sub_label">Licensed Pilot</div>
                       </label>
                       <label className="c_j_radio_input_label">
-                        <input type="radio" name="employee_type" id="" className='c_j_input_radio' onClick={() => this.setState({ employee_type: "unlicensed" })} />
+                        <input type="radio" name="employee_type" id="" className='c_j_input_radio' onClick={() => this.setState({ employee_type: "Unlicensed Pilot" })} />
                         <div className="c_j_input_sub_label">Unlicensed Pilot</div>
                       </label>
                     </div>

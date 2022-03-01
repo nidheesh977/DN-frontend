@@ -1,4 +1,6 @@
-import React from "react";
+import React, {useState,useEffect} from "react";
+import {useParams} from "react-router-dom"
+import axios from 'axios'
 import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import All from "./All.module.css";
 import "../css/ApplyJob.css";
@@ -7,8 +9,38 @@ import heart from "../images/heart (3).svg";
 
 function ApplyJobLanding() {
   let history = useHistory();
+  let param = useParams();
+  // let {data, setData}= useState({})
+  let [list, setList] = useState([]);
+  let config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
+
+  console.log(param.id)
   const goToPreviousPath = () => {
       history.goBack()
+  }
+
+  useEffect(() => {
+    axios.get(`http://localhost:9000/api/jobs/jobLanding/${param.id}`).then((response) => {
+      // setData({response})
+      setList(response.data);
+
+      console.log(list.postingDate)
+console.log(response)});
+
+  }, []);
+
+  function applyNow(){
+    console.log(config)
+    axios.post(`http://localhost:9000/api/jobs/applyJob/${param.id}`, config)
+      .then(() => {
+alert("applied")      })
+      .catch(() => {
+        alert("not successful");
+      });
   }
   return (
     <div className="j_l_containerMain" style={{ overflowX: "hidden" }}>
@@ -21,12 +53,12 @@ function ApplyJobLanding() {
         <div className="j_l_container">
           <Row>
             <Col>
-              <div className="j_l_title">Drone Cinematographer</div>
-              <div className="j_l_producer">UTV Motion Pictures</div>
+              <div className="j_l_title">{list.jobTitle}</div>
+              <div className="j_l_producer">{list.industry}</div>
             </Col>
             <Col>
               <div className="j_l_right">
-                <div className="j_l_applyJobBtn">Apply Now</div>
+                <div className="j_l_applyJobBtn" onClick={applyNow}>Apply Now</div>
                 <img src={heart} />
               </div>
             </Col>
@@ -37,24 +69,11 @@ function ApplyJobLanding() {
             <Col>
               <div className="j_l_titleHead"> Job Description</div>
               <div className="j_l_desc">
-                There are many variations of passages of Lorem Ipsum available,
-                but the majority have suffered alteration in some form, by
-                injected humour, or randomised words which don't look even
-                slightly believable. If you are going to use a passage of Lorem
-                Ipsum, you need to be sure there isn't anything embarrassing
-                hidden in the middle of text. All the Lorem Ipsum generators on
-                the Internet tend to repeat predefined chunks as necessary,
-                making this the first true generator on the Internet. It uses a
-                dictionary of over 200 Latin words,
+                {list.jobDesc}
                 
               </div>
               <div className="j_l_desc">
-                There are many variations of passages of Lorem Ipsum available,
-                but the majority have suffered alteration in some form, by
-                injected humour, or randomised words which don't look even
-                slightly believable. If you are going to use a passage of Lorem
-                Ipsum, you need to be sure there isn't anything embarrassing
-                hidden in the middle of text.
+      {list.jobDesc}
               </div>
             </Col>
             <Visible xxl xl>
@@ -62,15 +81,15 @@ function ApplyJobLanding() {
             <Col xxl={3.5} xl={3.3} lg={4.15} md={5.4}>
               <div id="h_p_create_job_container">
                 <div className="h_p_filterTitle">Pilot Type</div>
-                <div className="h_p_filterText">Licensed Pilot</div>
+                <div className="h_p_filterText">{list.employeeType}</div>
                 <div className="h_p_filterTitle">Work Type</div>
-                <div className="h_p_filterText">Full Time</div>
+                <div className="h_p_filterText">{list.JobType}</div>
                 <div className="h_p_filterTitle">Salary</div>
-                <div className="h_p_filterText">$150.00 - $200.00 / Month</div>
+                <div className="h_p_filterText">${list.minSalary}.00 - ${list.maxSalary}.00 / Month</div>
                 <div className="h_p_filterTitle">Posted Date</div>
-                <div className="h_p_filterText">06 Jan 2022</div>
+                <div className="h_p_filterText">{list.postingDate}</div>
                 <div className="h_p_filterTitle">Work location</div>
-                <div className="h_p_filterText1">Bangalore, India</div>
+                <div className="h_p_filterText1">{list.workLocation}</div>
               </div>
             </Col>
           </Visible>

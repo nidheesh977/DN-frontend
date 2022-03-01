@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { Helmet } from "react-helmet";
+import { useHistory } from 'react-router-dom';
 import { Container, Row, Col, Hidden } from 'react-grid-system';
 import All from '../website/All.module.css'
 import 'react-phone-number-input/style.css'
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import { Link, useHistory } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import axios from 'axios'
 import DronePerson from '../images/drone_person_new.png'
 import Alert from '@material-ui/lab/Alert';
@@ -28,6 +29,7 @@ const PasswordShow = () => {
 };
 
 const Login = (props) => {
+  let history = useHistory();
 
   const [isLoading, setLoading] = useState(false);
   var [email, setEmail] = useState("")
@@ -57,8 +59,24 @@ const Login = (props) => {
       document.getElementById("password").focus()
     }
     else{
-      alert("Ready to submit")
-    }
+      alert("Logged In")
+      axios.post("http://localhost:9000/api/user/login", {
+      
+        email: email,
+        password: password,
+      }).then((res) => {
+  // alert("successful") 
+              localStorage.setItem('access_token', res.data.token);
+              localStorage.setItem('token_type', "Bearer");
+              history.push("/")
+              window.location.reload();
+              console.log(localStorage.getItem("access_token"))
+              console.log(res);
+
+              
+      })
+
+        }
   };
 
   const handleChange = (e) => {
