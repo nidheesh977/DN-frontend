@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./css/Pilot_appliedJobs.css";
 import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import profileUser from "../../images/profile-user.svg";
@@ -9,9 +9,12 @@ import heart from "../../images/heart (3).svg";
 import heartLike from "../../images/heart-blue.svg";
 import { Link } from "react-router-dom";
 import loadMore from "../../images/Group 71.svg";
+import axios from 'axios'
 
 
 function Pilot_appliedJobs() {
+
+
   let profiles = {
     listing: [
       {
@@ -65,50 +68,67 @@ function Pilot_appliedJobs() {
 
       },
     ],
+
   };
+  let config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
+  useEffect(() => {
+    console.log(config)
+    axios.post(`http://localhost:9000/api/pilot/getAppliedJobs`, config).then((response) => {
+      // setData({response})
+      setList(response.data);
+
+      // console.log(list.postingDate)
+console.log(response)});
+
+  }, []);
 
   let [data, setData] = useState(profiles);
+  let [list, setList] = useState([])
   return (
     <div className="pd_a_j_main">
         {/* mapping */}
-        {data.listing.map((item) => {
+        {list.slice(0).reverse().map((item) => {
           return (
             <div className="pd_a_j_data">
               <div style={{ marginBottom: "10px" }}>
               <div className="pd_a_j_dataDateHead">
-                  Posted on:<span className="pd_a_j_dataDate">{item.date}</span>
+                  Posted on:<span className="pd_a_j_dataDate">{item.postingDate.slice(0,10)}</span>
                 </div>
-                <div className="pd_a_j_dataTitle">{item.name}</div>
+                <div className="pd_a_j_dataTitle">{item.jobTitle}</div>
                
               </div>
-              <div className="pd_a_j_data_subTitle">{item.producer}</div>
+              <div className="pd_a_j_data_subTitle">{item.industry}</div>
               <div>
                 <div className="a_j_container1">
                   <div className="a_j_listing_img1">
                     <img src={profileUser} />
                   </div>
-                  <div className="a_j_listing_profileName">{item.profile}</div>
+                  <div className="a_j_listing_profileName">{item.employeeType}</div>
                   <div className="a_j_listing_img2">
                     <img src={money} />
                   </div>
-                  <div className="a_j_listing_money">{item.range}</div>
+                  <div className="a_j_listing_money">${item.minSalary}.00 - ${item.maxSalary}.00</div>
                 </div>
-                <div className="a_j_listing_text">{item.desc}</div>
+                <div className="a_j_listing_text">{item.jobDesc.slice(0,148)}</div>
                 <hr className="a_j_listing_hr" />
               </div>
               <div className="a_j_listing_btns">
                 <button className="a_j_location_btn">
                   <img src={location} className="a_j_location_logo" />
-                  <span className="a_j_location_text">{item.location}</span>
+                  <span className="a_j_location_text">{item.city}</span>
                 </button>{" "}
                 <button className="a_j_location_btn">
                   <img src={work} className="a_j_location_logo" />
-                  <span className="a_j_location_text">{item.type}</span>
+                  <span className="a_j_location_text">{item.jobType}</span>
                 </button>
-                <Link to="/applyJobLanding" id="a_j_job_btn">
+                <Link to={`/applyJobLanding/${item._id}`} id="a_j_job_btn">
                   View Job
                 </Link>{" "}
-                <img src={item.like ? heart : heartLike}  className="a_j_like" />
+                <img src={item.like ? heart : heart}  className="a_j_like" />
               </div>
             </div>
           );

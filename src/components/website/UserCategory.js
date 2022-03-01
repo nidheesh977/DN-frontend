@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-grid-system';
 import All from '../website/All.module.css'
 import "../css/UserCategory.css"
 import { Radio } from "@material-ui/core";
+import axios from "axios"
 
 
 class UserCategory extends Component {
@@ -37,13 +38,36 @@ class UserCategory extends Component {
       user_category: val
     });
   }
-
+  
+  
   submitCategory = () => {
     console.log(this.state.name)
     console.log(this.state.email)
     console.log(this.state.phone)
     console.log(this.state.password)
     console.log(this.state.user_category)
+
+    axios.post("http://localhost:9000/api/user/register", {
+      
+      name:  this.state.name,
+      email: this.state.email,
+      phoneNo: this.state.phone,
+      password: this.state.password,
+      role: this.state.user_category,
+    }, this.config).then((res) => {
+alert("successful") 
+console.log(res)
+            localStorage.setItem('access_token', res.data.token);
+            localStorage.setItem('token_type', "Bearer");
+            this.props.history.push("/")
+            window.location.reload();
+            console.log(localStorage.getItem("access_token"))
+            
+
+    })
+    .catch(() => {
+      alert("not successful");
+    });
   }
 
   render() {
