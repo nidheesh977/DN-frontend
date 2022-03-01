@@ -91,7 +91,7 @@ console.log(response)});
   return (
     <div className="pd_a_j_main">
         {/* mapping */}
-        {list.map((item) => {
+        {list.slice(0).reverse().map((item) => {
           return (
             <div className="pd_a_j_data">
               <div style={{ marginBottom: "10px" }}>

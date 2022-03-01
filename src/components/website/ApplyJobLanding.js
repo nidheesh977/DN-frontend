@@ -6,12 +6,25 @@ import All from "./All.module.css";
 import "../css/ApplyJob.css";
 import { Link, useHistory } from "react-router-dom";
 import heart from "../images/heart (3).svg";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import Close from "../images/close.svg";
+import { withStyles } from "@material-ui/core/styles";
+import Dialog from "@material-ui/core/Dialog";
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
+
 
 function ApplyJobLanding() {
   let history = useHistory();
   let param = useParams();
   // let {data, setData}= useState({})
   let [list, setList] = useState([]);
+  let [status, setStatus] = useState(0);
+  let [dialog, setDialog] = useState(false)
   let config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -27,21 +40,39 @@ function ApplyJobLanding() {
     axios.get(`http://localhost:9000/api/jobs/jobLanding/${param.id}`).then((response) => {
       // setData({response})
       setList(response.data);
+      setStatus(response.status);
 
-      console.log(list.postingDate)
+      console.log(response.status)
 console.log(response)});
 
   }, []);
 
   function applyNow(){
-    console.log(config)
+    console.log(config);
+
     axios.post(`http://localhost:9000/api/jobs/applyJob/${param.id}`, config)
-      .then(() => {
-alert("applied")      })
+
+      .then((response) => {
+console.log(response.status)
+
+
+if(response.data === "please Login"){
+  history.push("/pilot_dashboard/account")
+}
+})
       .catch(() => {
-        alert("not successful");
       });
+      if(status === 200){
+setDialog(true);      
+      }
   }
+
+  let closeChoicePopup = () => {
+    setDialog(false);
+  }
+let showApplied = () =>{
+  history.push("/pilot_dashboard/activities/appliedJobs")
+}
   return (
     <div className="j_l_containerMain" style={{ overflowX: "hidden" }}>
     <Container className={All.Container}>
@@ -94,6 +125,28 @@ alert("applied")      })
             </Col>
           </Visible>
         </Row>
+        <Dialog
+                open={dialog}
+                onClose={closeChoicePopup}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+              >
+
+                <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+                  <div style={{ position: "absolute", top: '20px', right: '20px' }}>
+                    <img src={Close} alt="" onClick={closeChoicePopup} style={{ cursor: "pointer" }} />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">Your Application has been submitted successfully</div>
+                    <div className="u_f_popup_btn_container">
+                      <button className="u_f_popup_btn1" onClick={showApplied}>Show Applied</button>
+                      <button className="u_f_popup_btn2" onClick={closeChoicePopup}>Close</button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
       </Container>
     </div>
   );

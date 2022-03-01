@@ -5,10 +5,11 @@ import Pilot from "./images/pilot.jpg";
 import { Row, Col } from "react-grid-system";
 import Edit from "./images/edit-1.svg";
 import PhoneInput from 'react-phone-number-input'
-import All from '../../website/All.module.css'
+import All from '../../website/All.module.css';
+import Axios from 'axios'
 
 function Pilot_BasicInfo() {
-  let details = {
+  let [data, setData] = useState({
     full_name: "",
     email: "",
     phone: "+91",
@@ -19,8 +20,7 @@ function Pilot_BasicInfo() {
     country: "",
     postal: "",
     bio: "",
-  };
-  let [data, setData] = useState(details);
+  });
   let [edit, setEdit] = useState(false)
 
   const changeHandler = (e) => {
@@ -125,6 +125,29 @@ function Pilot_BasicInfo() {
     }
     if(!error){
       alert("Ready to submit")
+      let config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      };
+      console.log(data)
+      Axios.post("http://localhost:9000/api/pilot/registerPilot", {
+        name: data.full_name,
+emailId: data.email,
+phoneNo : data.phone,
+dob: data.dob,
+gender: data.gender,
+address: data.address,
+city: data.city,
+country: data.country,
+postalAddress: data.postal,
+bio : data.bio,
+      }, config)
+        .then(() => {
+alert("successfull")        })
+        .catch(() => {
+          alert("not successful");
+        });
     }
   }
 

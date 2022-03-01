@@ -357,6 +357,7 @@ class ServiceCenters extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: [],
       txt: null,
       dropdown_selected: null,
       selected_country: null,
@@ -383,6 +384,14 @@ class ServiceCenters extends Component {
         })
         console.log(res.data)
       })
+
+      axios.get(`http://localhost:9000/api/center/getCenter`)
+      .then(res => {
+        const center = res.data;
+        console.log(res.data)
+        this.setState({ data : center });
+      })
+      
   }
 
   closeDropDown = () => {
@@ -642,44 +651,44 @@ class ServiceCenters extends Component {
                 </Row>
                 <Row>
 
-                  {this.state.service_center_list.map((service_center, index) => {
+                  {this.state.data.map((item, index) => {
                     return (
                       <Col lg={6} md={12}>
                         <div className="service_center_list">
                           <div className="s_c_profile_container">
                             <img src={nexevo_img} alt="" width="50px" />
                           </div>
-                          <span className="service_center_name" onClick = {() => this.serviceCenterDetails(service_center.id)}>
-                            {service_center.name}
+                          <span className="service_center_name" onClick = {() => this.serviceCenterDetails(item._id)}>
+                            {item.centerName}
                           </span>
                           <div className='rating_request_md_xl'>
                             <div className='service_center_rating_md_xl'>
-                              <span className={service_center.rating >= 1 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
-                              <span className={service_center.rating >= 2 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
-                              <span className={service_center.rating >= 3 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
-                              <span className={service_center.rating >= 4 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
-                              <span className={service_center.rating >= 5 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
+                              <span className={item.rating >= 1 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
+                              <span className={item.rating >= 2 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
+                              <span className={item.rating >= 3 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
+                              <span className={item.rating >= 4 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
+                              <span className={item.rating >= 5 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
                             </div>
                             <div>
-                              <Link className='s_c_review_link' to = {"/service_center/"+service_center.id}>Read Reviews</Link>
+                              <Link className='s_c_review_link' to = {"/service_center/"+item._id}>Read Reviews</Link>
                             </div>
                           </div>
                           <div className='s_c_other_details'>
                             <div className='s_c_other_details_title'>Working time:</div>
-                            <div className='s_c_other_details_content'>{service_center.workingHours}</div>
+                            <div className='s_c_other_details_content'>{item.workingHours}</div>
                             <div className='s_c_other_details_title'>Phone Number:</div>
-                            <div className='s_c_other_details_content s_c_other_details_phone'>{service_center.phone}</div>
+                            <div className='s_c_other_details_content s_c_other_details_phone'>{item.phoneNo}, {item.secondaryNumber}</div>
                             <div className='s_c_other_details_title'>Location:</div>
-                            <div className='s_c_other_details_content'>{service_center.location}</div>
+                            <div className='s_c_other_details_content'>{item.city}, {item.state}</div>
                             <div className='s_c_other_details_title'>Brands:</div>
-                            <div className='s_c_other_details_content'>{service_center.brands}</div>
+                            <div className='s_c_other_details_content'>{item.brandOfDrones}</div>
                           </div>
                           <hr style={{ border: "1px solid #efefef" }} />
                           <div style={{ display: "flex" }}>
                             <button className='s_c_button2' onClick={this.enquireNow}>Enquire Now</button>
-                            <Link onClick={() => this.whatsappChat(service_center.whatsapp_number)}><img src={whatsapp_icon} alt="" height={"35px"} /></Link>
+                            <Link onClick={() => this.whatsappChat(item.whatsappNumber)}><img src={whatsapp_icon} alt="" height={"35px"} /></Link>
 
-                            <img src={share2} alt="" className='s_c_share' onClick={() => this.shareLinkChange(service_center.id)} style={{cursor: "pointer"}}/>
+                            <img src={share2} alt="" className='s_c_share' onClick={() => this.shareLinkChange(item.id)} style={{cursor: "pointer"}}/>
                           </div>
                         </div>
                       </Col>

@@ -30,6 +30,8 @@ import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import s_c_form_img from "../images/s_c_form_img.png"
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
+import {useParams} from "react-router-dom"
+
 import {
   ScrollingProvider,
   useScrollSection,
@@ -163,7 +165,26 @@ export default function ServiceCenterDetails(props) {
   const submitEnquiry = () => {
     console.log("Submit");
   }
+//yaseen
+let param = useParams();
+let [details, setDetails] = useState({})
+let [brands, setBrands] = useState([])
 
+
+useEffect(() => {
+  axios.get(`http://localhost:9000/api/center/centerLanding/${param.id}`).then((response) => {
+    // setData({response})
+    setDetails(response.data);
+    // setStatus(response.status);
+
+    console.log(response.status)
+setBrands(response.data.brandOfDrones)});
+
+}, []);
+
+
+
+//yaseen
   return (
     <>
       <Helmet>
@@ -190,31 +211,33 @@ export default function ServiceCenterDetails(props) {
               </Box>
 
               <Box py={1}>
-                <h2 style={{marginTop: "35px"}}>{"Nexevo Technologies" || <Skeleton />} </h2>
+                <h2 style={{marginTop: "35px"}}>{ details.centerName || <Skeleton />} </h2>
               </Box>
               <Box py={1}>
                 <h4>
-                  Bangalore, India.
+                  {details.city}, {details.country}.
                 </h4>
               </Box>
               <span className="s_c_rating">
-                <span className='star_checked'>&#9733;</span>
-                <span className='star_checked'>&#9733;</span>
-                <span className='star_checked'>&#9733;</span>
-                <span className='star_unchecked'>&#9733;</span>
-                <span className='star_unchecked'>&#9733;</span>
+              {/* <div className='service_center_rating_md_xl'> */}
+                              <span className={details.rating >= 1 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
+                              <span className={details.rating >= 2 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
+                              <span className={details.rating >= 3 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
+                              <span className={details.rating >= 4 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
+                              <span className={details.rating >= 5 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
+                            {/* </div> */}
               </span>
               <span>
                 <Link className="s_c_d_links" onClick={() => { selectTab("s_c_d_reviews_tab", "s_c_d_reviews_container") }}>Read Reviews</Link>
               </span>
               <div className='s_c_d_other_details'>
                 <div className='s_c_d_other_details_title'>Working time:</div>
-                <div className='s_c_d_other_details_content'>{service_center.workingHours}</div>
+                <div className='s_c_d_other_details_content'>{details.workingHours}</div>
                 <div className='s_c_d_other_details_title'>Address:</div>
-                <div className='s_c_d_other_details_content'>{service_center.address}</div>
+                <div className='s_c_d_other_details_content'>{details.address}</div>
                 <div className='s_c_d_other_details_title'>Brands we can service</div>
                 <div className='s_c_d_other_details_content'>
-                  {service_center.brands.slice(0, 4).map((brand, index) => {
+                  {brands.slice(0, 2).map((brand, index) => {
                     return (
                       <span className="s_c_d_brand" key={index}>{brand}</span>
                     )
@@ -224,7 +247,7 @@ export default function ServiceCenterDetails(props) {
               </div>
               <div style={{ display: "flex" }} className="s_c_d_enquiry_container">
                 <button className='s_c_d_button1' onClick={enquireNow}>Enquire Now</button>
-                <Link onClick={() => whatsappChat(service_center.whatsapp_number)}><img src={whatsapp_icon} alt="" height={"35px"} /></Link>
+                <Link onClick={() => whatsappChat(details.whatsappNumber)}><img src={whatsapp_icon} alt="" height={"35px"} /></Link>
               </div>
             </Col>
             <Col
@@ -245,12 +268,12 @@ export default function ServiceCenterDetails(props) {
               <div id="s_c_d_about_container">
                 <div className="s_c_d_tab_title">About</div>
                 <div className="s_c_d_tab_about_content">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab iste, praesentium ex vitae debitis quidem rem corrupti odio deserunt, aut facere fuga pariatur ducimus id laboriosam aliquid neque libero eveniet soluta, numquam quod. Culpa aliquid eligendi accusamus ipsa incidunt nostrum repudiandae ipsum, voluptatibus enim, tempore omnis animi hic reprehenderit. Ea dolor voluptatem minima nihil suscipit magni cum, officiis aliquid! Veniam quae assumenda error officia similique neque alias? Soluta possimus, et a deleniti eligendi perspiciatis, libero provident, vel pariatur cupiditate nihil repudiandae fugiat accusamus aliquam perferendis eos voluptate? Adipisci expedita quidem vel ea, quisquam odit eos qui a facere iusto eligendi esse totam laudantium dolorum veniam nam saepe assumenda officiis rerum nulla blanditiis voluptatum sapiente. Quibusdam eligendi animi eaque incidunt nostrum nesciunt aliquam commodi, provident.
+                  {details.description}
                 </div>
               </div>
               <div id="s_c_d_brands_container">
                 <div className="s_c_d_tab_title">Brands we can service</div>
-                {service_center.brands.map((brand, index) => {
+                {brands.map((brand, index) => {
                   return (
                     <div className="s_c_d_tab_brands">{brand}</div>
                   )
@@ -305,17 +328,17 @@ export default function ServiceCenterDetails(props) {
             <Col xl={4} lg={5} md={6} sm={12}>
               <div id="s_c_d_contact_details">
                 <div className="s_c_d_contact_details_title">Chat:</div>
-                <div className="s_c_d_contact_details_whatsapp" onClick={() => whatsappChat(service_center.whatsapp_number)}><img src={whatsapp_icon} alt="" height={"35px"} />Chat on whatsapp</div>
+                <div className="s_c_d_contact_details_whatsapp" onClick={() => whatsappChat(details.whatsappNumber)}><img src={whatsapp_icon} alt="" height={"35px"} />Chat on whatsapp</div>
                 <div className="s_c_d_contact_details_title">Phone Numbers:</div>
-                <div className="s_c_d_contact_details_content"><a href="tel:+91 9876543210">{service_center.phone}</a></div>
+                <div className="s_c_d_contact_details_content"><a href="tel:+91 9876543210">{details.phoneNo}, {details.secondaryNumber}</a></div>
                 <div className="s_c_d_contact_details_title">Email ID:</div>
-                <div className="s_c_d_contact_details_content"><Link>{service_center.email}</Link></div>
+                <div className="s_c_d_contact_details_content"><Link>{details.email}</Link></div>
                 <div className="s_c_d_contact_details_title">Website:</div>
-                <div className="s_c_d_contact_details_content"><Link>{service_center.website}</Link></div>
+                <div className="s_c_d_contact_details_content"><Link>{details.website}</Link></div>
                 <div className="s_c_d_contact_details_title">Working time</div>
-                <div className="s_c_d_contact_details_content">{service_center.workingHours}</div>
+                <div className="s_c_d_contact_details_content">{details.workingHours}</div>
                 <div className="s_c_d_contact_details_title">Address</div>
-                <div className="s_c_d_contact_details_content">{service_center.address}</div>
+                <div className="s_c_d_contact_details_content">{details.address}</div>
               </div>
               <div id="s_c_d_photos">
                 <div className="s_c_d_photos_title">
