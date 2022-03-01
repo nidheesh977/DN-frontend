@@ -546,12 +546,11 @@ export default class ViewJob extends React.Component {
                             <h5> {imageview.author || <Skeleton />}</h5>
                           </Link>
                           <Link
-                            to={{
-                              pathname: `/pilot_details/1`,
-                            }}
+                            to="/login"
                           >
                             <label
                               className={`${All.paddingbottom} ${All.TextBlueColor}`}
+                              style = {{cursor: "pointer"}}
                             >
                               Follow
                             </label>
