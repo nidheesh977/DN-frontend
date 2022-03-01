@@ -9,6 +9,7 @@ import Loader from "../Loader/loader";
 import Box from "@material-ui/core/Box";
 import { useHistory } from "react-router-dom";
 import CommentLike from "../CommentBox/CommentLike";
+import loadMore from "../images/Group 71.svg";
 
 class CommentBox extends React.Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class CommentBox extends React.Component {
       user_id: "",
       post_id: props.post_id,
       passedVal: "",
-      comments: [],
+      comments: [{"id":111,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"juyftr"},{"id":81,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"hello"},{"id":80,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"hello"},{"id":79,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"hi"},{"id":77,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"hello"},{"id":78,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"hello"},{"id":76,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"hi"}],
       comments_length : 0,
       comment_body: "",
       isLoading: false,
@@ -132,12 +133,7 @@ class CommentBox extends React.Component {
     return (
       <div className="comment-box">
         <label className={`${All.Bold} ${All.paddingtop} ${All.paddingbottom}`}>
-          {" "}
-          {comments_length 
-            ? <>{comments_length} Comments</>
-            : <>No comments yet</>
-          }
-          {" "}
+          Comments
         </label>
         <>
           <form className="comment-form" onSubmit={postComment}>
@@ -145,45 +141,45 @@ class CommentBox extends React.Component {
               <textarea
                 ref={(ref) => this.mainInput= ref}
                 id = "comment_input"
-                placeholder="Comment"
+                placeholder="Write your comment"
                 name="body"
                 rows="4"
                 className={All.FormControl}
                 onChange = {commentChangeHandler}
                 required
+                style = {{
+                  background: "white",
+                  border: "1px solid #D2D2D2",
+                  borderRadius: "10px"
+                }}
               ></textarea>
             </div>
-            <div className="comment-form-actions">
+            <div className="comment-form-actions" style = {{marginBottom: "30px"}}>
               {isLoading ? 
                 <>
-                  <Button
+                  <button
                     variant="contained"
                     color="default"
                     type="submit"
-                    className={All.LoaderBtn}
-                    style = {{width: "200px!important"}}
+                    className="post_comment_btn"
                   >
                     <Loader /> Loading
-                  </Button>
+                  </button>
                 </>
                : 
                 <>
-                  <Button
+                  <button
                     type="submit"
-                    className={All.BtnStyle_5}
-                    style = {{
-                      width: "200px!important",
-                      fontFamily: "muli-regular"
-                    }}
+                    className="post_comment_btn"
                   >
                     Post your comment
-                  </Button>
+                  </button>
                 </>
               }
             </div>
           </form>
         </>
-        <div className="comment-list">
+        <div className="comment-list" style = {{marginBottom: "20px"}}>
           {comments.map((comment, index) => {
             return(
               <>
@@ -198,7 +194,7 @@ class CommentBox extends React.Component {
                         float: "left",
                         width: "45px",
                         marginRight: "15px",
-                        marginTop: "25px",
+                        marginTop: "30px",
                         height: "45px",
                         borderRadius: "100px",
                       }}
@@ -212,7 +208,7 @@ class CommentBox extends React.Component {
                         float: "left",
                         width: "45px",
                         marginRight: "15px",
-                        marginTop: "25px",
+                        marginTop: "30px",
                         height: "45px",
                         borderRadius: "100px",
                       }}
@@ -237,6 +233,12 @@ class CommentBox extends React.Component {
               </>
             )
           })}
+        </div>
+        <div className="a_j_load_div" style={{ marginBottom: "40px" }}>
+          <button className="a_j_loadMore_btn">
+            <img src={loadMore} className="a_j_location_logo" />
+            <span className="a_j_location_text">Load More</span>
+          </button>{" "}
         </div>
       </div>
     );

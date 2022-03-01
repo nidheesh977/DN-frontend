@@ -632,7 +632,7 @@ class GalleryFilter extends React.Component {
                                                     <Link
                                                       className={All.White}
                                                       to={{
-                                                        pathname: `/ProfileSingle/${user.user_id}`,
+                                                        pathname: `/pilot_details/1`,
                                                       }}
                                                     >
                                                       <span className="FSize_14 Profile_icon">
@@ -707,7 +707,7 @@ class GalleryFilter extends React.Component {
                                                     <Link
                                                       className={All.White}
                                                       to={{
-                                                        pathname: `ProfileSingle/${user.user_id}`,
+                                                        pathname: `/pilot_details/1`,
                                                       }}
                                                     >
                                                       <span className="FSize_14 Profile_icon">
@@ -785,7 +785,7 @@ class GalleryFilter extends React.Component {
                                                     <Link
                                                       className={All.White}
                                                       to={{
-                                                        pathname: `ProfileSingle/${user.user_id}`,
+                                                        pathname: `/pilot_details/1`,
                                                       }}
                                                     >
                                                       <span className="FSize_14 Profile_icon">
@@ -860,7 +860,7 @@ class GalleryFilter extends React.Component {
                                                     <Link
                                                       className={All.White}
                                                       to={{
-                                                        pathname: `ProfileSingle/${user.user_id}`,
+                                                        pathname: `/pilot_details/1`,
                                                       }}
                                                     >
                                                       <span className="FSize_14 Profile_icon">

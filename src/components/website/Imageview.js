@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../filter/Filter.css";
-import { Container, Row, Col } from "react-grid-system";
+import { Container, Row, Col, Hidden } from "react-grid-system";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
@@ -26,7 +26,8 @@ import Close from "../images/close.svg";
 import Favorite from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 import sharePNG from "../images/share.png";
-import userIcon from "../images/user_image.png"
+import userIcon from "../images/user_image.png";
+import "../css/ImageView.css";
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -108,15 +109,17 @@ export default class ViewJob extends React.Component {
       items: [],
       user_id: "",
       role_id: "",
+      favorite : false,
       imageview: {
         id: 87,
         user_id: 17,
         author: "Nidheesh",
-        sale: "download",
+        sale: "forsale",
         slug: "ddddt-87",
         title: "ddddt",
         price: null,
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem asperiores quibusdam, molestiae ipsam, doloremque ad consequatur quis delectus expedita quisquam corporis recusandae repellendus eius sequi accusantium, vitae ullam! Neque numquam nisi ab quis. Dolorem sequi atque saepe iste reprehenderit ea fugit excepturi necessitatibus tempore qui nulla, rerum distinctio! Esse, pariatur.",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem asperiores quibusdam, molestiae ipsam, doloremque ad consequatur quis delectus expedita quisquam corporis recusandae repellendus eius sequi accusantium, vitae ullam! Neque numquam nisi ab quis. Dolorem sequi atque saepe iste reprehenderit ea fugit excepturi necessitatibus tempore qui nulla, rerum distinctio! Esse, pariatur.",
         comments: "true",
         tag: "1",
         src: "https://images.unsplash.com/photo-1454372182658-c712e4c5a1db?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8M3x8fGVufDB8fHx8&w=1000&q=80",
@@ -185,6 +188,8 @@ export default class ViewJob extends React.Component {
       error: false,
       open: false,
       share: false,
+      startProcess: false,
+      selected_file: {},
     };
     this.loadMore = this.loadMore.bind(this);
     this.addComment = this.addComment.bind(this);
@@ -196,31 +201,38 @@ export default class ViewJob extends React.Component {
     });
   }
 
+  favoriteChangeHandler = () => {
+    this.setState({
+      favorite: !this.state.favorite
+    })
+  }
+
   download(event) {
-    var image = this.state.imageview.src;
-    swal({
-      title: "Are you sure?",
-      text: "Do you want to download this image",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((download) => {
-      if (download) {
-        const config = {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-        };
-        const url = `https://demo-nexevo.in/haj/auth-app/public/api/auth/freedownload/${event.id}?user_id=${this.state.user_id}`;
-        axios.post(url, config).then((response) => {
-          swal(response.data.message, {
-            icon: "success",
-          });
-        });
-      } else {
-        swal("Download cancelled");
-      }
-    });
+    // var image = this.state.imageview.src;
+    // swal({
+    //   title: "Are you sure?",
+    //   text: "Do you want to download this image",
+    //   icon: "warning",
+    //   buttons: true,
+    //   dangerMode: true,
+    // }).then((download) => {
+    //   if (download) {
+    //     const config = {
+    //       headers: {
+    //         Authorization: "Bearer " + localStorage.getItem("access_token"),
+    //       },
+    //     };
+    //     const url = `https://demo-nexevo.in/haj/auth-app/public/api/auth/freedownload/${event.id}?user_id=${this.state.user_id}`;
+    //     axios.post(url, config).then((response) => {
+    //       swal(response.data.message, {
+    //         icon: "success",
+    //       });
+    //     });
+    //   } else {
+    //     swal("Download cancelled");
+    //   }
+    // });
+    this.props.history.push("/DownloadSubscription");
   }
 
   handleClose = () => {
@@ -301,7 +313,6 @@ export default class ViewJob extends React.Component {
 
   other_post = (id, user_id) => {
     this.props.history.push("/Imageview/" + id + "/" + user_id);
-    window.location.reload();
   };
 
   handleSubmit = (e) => {};
@@ -318,6 +329,27 @@ export default class ViewJob extends React.Component {
     });
   };
 
+  closeProcess = () => {
+    this.setState({
+      startProcess: false
+    })
+    this.setState({
+      selected_file: {}
+    })
+  }
+
+  handleProcessFileChange = (e) => {
+    this.setState({
+      selected_file: e.target.files[0]
+    })
+  }
+
+  startProcess = () => {
+    this.setState({
+      startProcess: true
+    })
+  }
+
   render() {
     const { imageview, value } = this.state;
     const { relatedposts, values } = this.state;
@@ -330,150 +362,37 @@ export default class ViewJob extends React.Component {
           <meta charSet="utf-8" />
           <meta name="description" content="Nested component" />
         </Helmet>
-        <section>
-          <Dialog
-            className="test"
-            onClose={this.handleShareClose}
-            aria-labelledby="customized-dialog-title"
-            open={this.state.share}
-            maxWidth={"md"}
-            fullWidth={true}
-          >
-            <DialogTitle
-              id="customized-dialog-title"
-              onClose={this.handleShareClose}
-              className={All.PopupHeader}
-            >
-              <Box display="flex" pt={6}>
-                <Box mt={2}>
-                  <h3 className={All.Bold} style={{ textAlign: "center" }}>
-                    Share
-                  </h3>
-                </Box>
-              </Box>
-            </DialogTitle>
-            <DialogContent
-              className={All.PopupBody}
-              style={{ marginBottom: "50px" }}
-            >
-              <Row>
-                <WhatsappShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <WhatsappIcon size={52} round={true} />
-                </WhatsappShareButton>
-                <FacebookShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <FacebookIcon size={52} round={true} />
-                </FacebookShareButton>
-                <EmailShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <EmailIcon size={52} round={true} />
-                </EmailShareButton>
-                <TwitterShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <TwitterIcon size={52} round={true} />
-                </TwitterShareButton>
-                <TelegramShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <TelegramIcon size={52} round={true} />
-                </TelegramShareButton>
-                <LinkedinShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <LinkedinIcon size={52} round={true} />
-                </LinkedinShareButton>
-                <PinterestShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <PinterestIcon size={52} round={true} />
-                </PinterestShareButton>
-                <VKShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <VKIcon size={52} round={true} />
-                </VKShareButton>
-                <ViberShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <ViberIcon size={52} round={true} />
-                </ViberShareButton>
-                <RedditShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <RedditIcon size={52} round={true} />
-                </RedditShareButton>
-                <LineShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <LineIcon size={52} round={true} />
-                </LineShareButton>
-              </Row>
-            </DialogContent>
-          </Dialog>
+        <section style={{ marginBottom: "20px" }}>
           <Container className={All.Container}>
             <Row>
               <Col lg={12}>
                 <div className={All.Desktop_popup}>
-                  <div className={`${All.DisplayFlex} ${All.Text_left}`}></div>
-                  <Row
-                    style={{ paddingBottom: "25px", paddingTop: "25px" }}
-                    className={`${All.Text_left}`}
-                  >
+                  <Row className="i_l_title_btn_container">
                     <Col sm={12} md={8}>
-                      {" "}
-                      <div className={All.lineheight_40}>
-                        {" "}
-                        <h4 style={{ backgroundColor: "white" }}>
-                          {imageview.title || <Skeleton />}
-                        </h4>{" "}
+                      <div className="i_l_img_title">
+                        {imageview.title || <Skeleton />}
                       </div>
                     </Col>
                     <Col sm={6} md={4}>
                       {this.state.userid == this.props.match.params.user_id ? (
                         <> </>
                       ) : (
-                        <div className={`${All.Text_right} ${All.Flex_auto}`}>
+                        <div className="i_l_download_btn_container">
                           {imageview.sale == "forsale" && (
-                            <Link
-                              to={{
-                                pathname: `/Cart/${imageview.slug}/download/${this.props.match.params.user_id}`,
-                              }}
+                            <button
+                              onClick={() => this.download(imageview)}
+                              className="i_l_download_btn"
                             >
-                              <Button className={All.BtnStyle_5}>
-                                Buy Now
-                              </Button>
-                            </Link>
+                              Buy Now
+                            </button>
                           )}
                           {imageview.sale == "download" && (
-                            <Button
+                            <button
                               onClick={() => this.download(imageview)}
-                              className={All.BtnStyle_5}
-                              style={{
-                                background:
-                                  "transparent linear-gradient(21deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box",
-                                height: "35px",
-                                fontSize: "14px !important",
-                                fontFamily: "muli-regular"
-                              }}
+                              className="i_l_download_btn"
                             >
                               Download
-                            </Button>
+                            </button>
                           )}
                         </div>
                       )}
@@ -494,12 +413,13 @@ export default class ViewJob extends React.Component {
                             zIndex: 1000,
                           }}
                         >
-                          <FavoriteBorder />
+                          {this.state.favorite?<Favorite style = {{cursor: "pointer"}} onClick = {this.favoriteChangeHandler}/>:<FavoriteBorder style = {{cursor: "pointer"}} onClick = {this.favoriteChangeHandler}/>}
                           <img
                             src={sharePNG}
                             style={{
                               marginLeft: "30px",
                               height: "24px",
+                              cursor: "pointer"
                             }}
                             onClick={this.shareOpen}
                           />
@@ -508,7 +428,7 @@ export default class ViewJob extends React.Component {
                           className="GalleryImg"
                           src={imageview.src}
                           alt="image"
-                          style = {{height: "auto"}}
+                          style={{ height: "auto"}}
                         />
                       </>
                     )}
@@ -648,7 +568,10 @@ export default class ViewJob extends React.Component {
                             {" "}
                             {imageview.description || <Skeleton />}
                           </label>
-                          <Link to="">
+                          <label className={All.paddingtop}>
+                            Wanna create something great?
+                          </label>
+                          <Link>
                             <label className={All.paddingtop}>
                               Feel free contact us{" "}
                               <span
@@ -679,27 +602,25 @@ export default class ViewJob extends React.Component {
                         <label>This Droners is available for work</label>
                       </Box>
                       <Box pt={2} pb={5}>
-                        <Link
-                          to={{
-                            pathname: `/pilot_details/1`,
-                          }}
-                        >
-                          <Button className={All.BtnStyle_11} style = {{height: "40px"}}>
+                          <Button
+                            className={All.BtnStyle_11}
+                            style={{ height: "40px" }}
+                            onClick = {this.startProcess}
+                          >
                             {" "}
                             <img style={{ paddingRight: 10 }} src={Hirebtn} />
                             Hire This Droner
                           </Button>
-                        </Link>
                       </Box>
                       <Box pb={2}>
                         <label className={All.Bold}>
                           More Shots from {imageview.author || <Skeleton />}
                         </label>
                       </Box>
-                      <Box>
+                      <Box style={{ marginBottom: "20px" }}>
                         {relatedposts.map((option) => (
                           <Link
-                            className={`${All.marginright_9} ${All.RecentImg}`}
+                            className={`${All.marginright_9}`}
                             onClick={() => {
                               other_post(option.id, option.user_id);
                             }}
@@ -711,12 +632,7 @@ export default class ViewJob extends React.Component {
                                     <Skeleton width={150} height={109} />
                                   )
                                 }
-                                style={{
-                                  width: " 120px",
-                                  height: "109px",
-                                  borderRadius: "10px",
-                                  marginBottom: "10px",
-                                }}
+                                className="more_shots"
                               />
                             )}
                             {option.tag == "2" && (
@@ -768,60 +684,41 @@ export default class ViewJob extends React.Component {
                   </Row>
                 </div>
                 <div className={All.Mobile_popup}>
-                  <div className={`${All.DisplayFlex} ${All.Text_left}`}></div>
-                  <Row
-                    style={{ paddingBottom: "25px", paddingTop: "25px" }}
-                    className={`${All.Text_left}`}
-                  >
-                    <Col xs = {6} sm={8} md={8}>
-                      {" "}
-                      <div
-                        className={`${All.lineheight_40} ${All.pt_xs_30} ${All.pb_xs_30} ${All.pt_sm} ${All.pb_sm} ${All.pt_md_30} ${All.pb_md_30} `}
-                      >
-                        {" "}
-                        <h4 style={{ backgroundColor: "white" }}>
-                          {" "}
-                          {imageview.title || <Skeleton />}
-                        </h4>{" "}
+                  <Row className="i_l_title_btn_container">
+                    <Col xs={6} sm={8} md={8}>
+                      <div className="i_l_img_title">
+                        {imageview.title || <Skeleton />}
                       </div>
                     </Col>
-                    <Col xs = {6} sm={4} md={4}>
+                    <Col xs={6} sm={4} md={4}>
                       {this.state.userid == this.props.match.params.user_id ? (
                         <> </>
                       ) : (
-                        <div className={`${All.Text_right} ${All.Flex_auto}`}>
+                        <div className="i_l_download_btn_container">
                           {imageview.sale == "forsale" && (
-                            <Link
-                              to={{
-                                pathname: `/Cart/${imageview.slug}/download/${this.props.match.params.user_id}`,
-                              }}
+                            <button
+                              onClick={() => this.download(imageview)}
+                              className="i_l_download_btn"
                             >
-                              <Button className={All.BtnStyle_5}>
-                                Buy Now
-                              </Button>
-                            </Link>
+                              Buy Now
+                            </button>
                           )}
                           {imageview.sale == "download" && (
-                            <Link>
-                              <Button
-                                onClick={() => this.download(imageview)}
-                                className={All.BtnStyle_5}
-                                style={{
-                                  background:
-                                    "transparent linear-gradient(21deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box",
-                                  height: "35px !important",
-                                  marginTop: "20px"
-                                }}
-                              >
-                                Download
-                              </Button>
-                            </Link>
+                            <button
+                              onClick={() => this.download(imageview)}
+                              className="i_l_download_btn"
+                            >
+                              Download
+                            </button>
                           )}
                         </div>
                       )}
                     </Col>
                   </Row>
-                  <div className="slider_image" style={{ position: "relative" }}>
+                  <div
+                    className="slider_image"
+                    style={{ position: "relative" }}
+                  >
                     {imageview.tag == "1" && (
                       <>
                         <span
@@ -832,12 +729,13 @@ export default class ViewJob extends React.Component {
                             zIndex: 1000,
                           }}
                         >
-                          <FavoriteBorder />
+                          <FavoriteBorder style = {{cursor: "pointer"}}/>
                           <img
                             src={sharePNG}
                             style={{
                               marginLeft: "30px",
                               height: "24px",
+                              cursor: "pointer"
                             }}
                             onClick={this.shareOpen}
                           />
@@ -846,7 +744,7 @@ export default class ViewJob extends React.Component {
                           className="GalleryImg"
                           src={imageview.src}
                           alt="image"
-                          style = {{height: "auto"}}
+                          style={{ height: "auto"}}
                         />
                       </>
                     )}
@@ -933,43 +831,48 @@ export default class ViewJob extends React.Component {
                             </label>
                           </Link>
                         </Box>
-                        {imageview.comments === "true" && (
-                          <CommentBox
-                            passedVal={this.state.fieldVal}
-                            userid={imageview.user_id}
-                            postid={this.state.post_id}
-                          />
-                        )}
+                        <Hidden md sm xs>
+                          {imageview.comments === "true" && (
+                            <CommentBox
+                              passedVal={this.state.fieldVal}
+                              userid={imageview.user_id}
+                              postid={this.state.post_id}
+                            />
+                          )}
+                        </Hidden>
                       </Box>
                     </Col>
 
                     <Col lg={3}>
                       <Box>
-                        <label className={`${All.Bold} ${All.paddingbottom_5}`}>
+                        <label
+                          className={`${All.Bold} ${All.paddingbottom_5} i_l_hire_title`}
+                        >
                           Like What You See?
                         </label>
                         <label>This Droners is available for work</label>
                       </Box>
-                      <Box pt={2} pb={5}>
-                        <Link
-                          to={{
-                            pathname: `/pilot_details/1`,
-                          }}
-                        >
-                          <Button className={All.BtnStyle_11} style = {{height: "40px"}}>
+                      <Box pt={2}>
+                        <Link>
+                          <Button
+                            className={All.BtnStyle_11}
+                            style={{ height: "40px", marginBottom: "10px" }}
+                            onClick = {this.startProcess}
+                          >
                             {" "}
                             <img style={{ paddingRight: 10 }} src={Hirebtn} />
                             Hire This Droner
                           </Button>
                         </Link>
                       </Box>
-                      <Box pb={2}>
+                      
+                      <Box pb={2} mt = {2}>
                         <label className={All.Bold}>
                           More Shots from {imageview.author || <Skeleton />}
                         </label>
                       </Box>
-                      <Box>
-                      {relatedposts.map((option) => (
+                      <Box style={{ marginBottom: "20px" }}>
+                        {relatedposts.map((option) => (
                           <Link
                             className={`${All.marginright_9} ${All.RecentImg}`}
                             onClick={() => {
@@ -1036,6 +939,15 @@ export default class ViewJob extends React.Component {
                           </Link>
                         ))}
                       </Box>
+                      <Hidden lg xl xxl>
+                        {imageview.comments === "true" && (
+                          <CommentBox
+                            passedVal={this.state.fieldVal}
+                            userid={imageview.user_id}
+                            postid={this.state.post_id}
+                          />
+                        )}
+                      </Hidden>
                     </Col>
                   </Row>
                 </div>
@@ -1049,6 +961,7 @@ export default class ViewJob extends React.Component {
             open={this.state.open}
             maxWidth={"md"}
             fullWidth={true}
+            PaperProps={{style: { borderRadius: 20 }   }}
           >
             <DialogTitle
               id="customized-dialog-title"
@@ -1137,6 +1050,135 @@ export default class ViewJob extends React.Component {
               </Box>
             </form>
           </Dialog>
+
+          <Dialog
+            open={this.state.share}
+            onClose={this.handleShareClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{style: { borderRadius: 20 }   }}
+          >
+            <DialogTitle
+              id="customized-dialog-title"
+              onClose={this.handleShareClose}
+              className={All.PopupHeader}
+            >
+              <Box display="flex" pt={6}>
+                <Box mt={2}>
+                  <h3 className={All.Bold} style={{ textAlign: "center" }}>
+                    Share
+                  </h3>
+                </Box>
+              </Box>
+            </DialogTitle>
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <Row>
+                <WhatsappShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
+                  <WhatsappIcon size={52} round={true} />
+                </WhatsappShareButton>
+                <FacebookShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
+                  <FacebookIcon size={52} round={true} />
+                </FacebookShareButton>
+                <EmailShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
+                  <EmailIcon size={52} round={true} />
+                </EmailShareButton>
+                <TwitterShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
+                  <TwitterIcon size={52} round={true} />
+                </TwitterShareButton>
+                <TelegramShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
+                  <TelegramIcon size={52} round={true} />
+                </TelegramShareButton>
+                <LinkedinShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
+                  <LinkedinIcon size={52} round={true} />
+                </LinkedinShareButton>
+                <PinterestShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
+                  <PinterestIcon size={52} round={true} />
+                </PinterestShareButton>
+                <VKShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
+                  <VKIcon size={52} round={true} />
+                </VKShareButton>
+                <ViberShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
+                  <ViberIcon size={52} round={true} />
+                </ViberShareButton>
+                <RedditShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
+                  <RedditIcon size={52} round={true} />
+                </RedditShareButton>
+                <LineShareButton
+                  url={window.location.href}
+                  style={{ margin: "10px" }}
+                >
+                  <LineIcon size={52} round={true} />
+                </LineShareButton>
+              </Row>
+            </DialogContent>
+          </Dialog>
+          <Dialog
+              open={this.state.startProcess}
+              onClose={this.closeProcess}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+              PaperProps={{style: { borderRadius: 20 }   }}
+            >
+
+              <DialogContent className={All.PopupBody} style={{ marginBottom: "50px"}}>
+                <div style={{ position: "absolute", top: '20px', right: '20px' }}>
+                  <img src={Close} alt="" onClick={this.closeProcess} style={{ cursor: "pointer" }} />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div className="h_p_start_process_form">
+                    <div className="h_p_start_process_form_title">Hire Pilot</div>
+                    <div className="h_p_start_process_form_label">Description</div>
+                    <textarea className='h_p_start_process_form_description'></textarea>
+                    <div className="h_p_start_process_form_label">Job Catalog (optional)</div>
+                    <label>
+                      <input type="file" name="" id="" className="h_p_start_process_form_file" onChange = {this.handleProcessFileChange}/>
+                      <div className="h_p_start_process_form_file_label">Choose file to attach</div>
+                      <div className="h_p_start_process_form_file_label_text">{this.state.selected_file.name?this.state.selected_file.name:"The file type should be in PDF, Docs"}</div>
+                    </label>
+                    <div className="h_p_start_process_form_btn_container">
+                      <button onClick={this.closeProcess} className='h_p_start_process_form_btn'>Submit</button>
+                    </div>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
         </section>
       </>
     );
