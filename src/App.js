@@ -1,5 +1,6 @@
 import React from "react";
 import { HashRouter, Switch, Route } from "react-router-dom";
+//import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "./components/header/Header";
 import Home from "./components/website/Home";
 import Company from "./components/website/Company";
@@ -56,6 +57,8 @@ import CreateJob from './components/website/CreateJob'
 import Company_dashboard from "./components/website/company_dashboard/Company_dashboard";
 import UpgradeProVersion from './components/website/UpgradeProVersion';
 import ApplyJobLanding from "./components/website/ApplyJobLanding";
+import Admin_dashboard from "./components/adminDashboard/Admin_dashboard";
+
 
 class App extends React.Component {
   constructor(props) {
@@ -242,6 +245,7 @@ class App extends React.Component {
             <Route component={Pilot_dashboard} path="/pilot_dashboard" />
             <Route component={ApplyJobLanding} path="/applyJobLanding/:id" />
             <Route component={Company_dashboard} path="/company_dashboard" />
+            <Route component={Admin_dashboard} path="/Admin_dashboard" />
             {/* yaseen */}
             <PublicRoute exact path="*" component={NoPageFound} />
           </Switch>
