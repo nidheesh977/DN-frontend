@@ -460,14 +460,6 @@ class UploadFiles extends Component {
                             3D Image
                           </option>
                           <option
-                            value="360_image"
-                            selected={
-                              this.state.selected_category == "360_image"
-                            }
-                          >
-                            360 Image
-                          </option>
-                          <option
                             value="video"
                             selected={this.state.selected_category == "video"}
                           >
@@ -786,19 +778,6 @@ class UploadFiles extends Component {
                           >
                             3D Images
                           </div>
-                          <div
-                            className={
-                              this.state.selected_files_details[
-                                this.state.file_edit
-                              ].select_type == "360_image"
-                                ? "u_f_file_type u_f_file_usage_selected"
-                                : "u_f_file_type"
-                            }
-                            id="u_f_file_type4"
-                            onClick={() => this.selectImageType("360_image")}
-                          >
-                            360 image
-                          </div>
                         </div>
                       ) : (
                         <div className="u_f_input_keywords_container">
@@ -824,7 +803,7 @@ class UploadFiles extends Component {
                               this.state.selected_files_details[
                                 this.state.file_edit
                               ].usage == "free"
-                                ? "u_f_file_usage_selected u_f_file_usage"
+                                ? "u_f_file_usage_selected u_f_file_usage premium_file_type"
                                 : "u_f_file_usage"
                             }
                             id="u_f_file_usage1"
@@ -837,7 +816,7 @@ class UploadFiles extends Component {
                               this.state.selected_files_details[
                                 this.state.file_edit
                               ].usage == "paid"
-                                ? "u_f_file_usage_selected u_f_file_usage"
+                                ? "u_f_file_usage_selected u_f_file_usage premium_file_type"
                                 : "u_f_file_usage"
                             }
                             id="u_f_file_usage2"

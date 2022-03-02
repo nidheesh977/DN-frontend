@@ -9,12 +9,10 @@ import heart from "../../images/heart (3).svg";
 import heartLike from "../../images/heart-blue.svg";
 import { Link } from "react-router-dom";
 import loadMore from "../../images/Group 71.svg";
-import axios from 'axios'
-
+import axios from "axios";
+import Skeleton from "react-loading-skeleton";
 
 function Pilot_appliedJobs() {
-
-
   let profiles = {
     listing: [
       {
@@ -27,7 +25,7 @@ function Pilot_appliedJobs() {
         desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
         location: "Bangalore",
         type: "Full Time",
-        like:true,
+        like: true,
       },
       {
         id: 2,
@@ -51,8 +49,7 @@ function Pilot_appliedJobs() {
         desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
         location: "Bangalore",
         type: "Full Time",
-        like:true,
-
+        like: true,
       },
       {
         id: 4,
@@ -64,11 +61,9 @@ function Pilot_appliedJobs() {
         desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
         location: "Bangalore",
         type: "Full Time",
-        like:false,
-
+        like: false,
       },
     ],
-
   };
   let config = {
     headers: {
@@ -76,30 +71,47 @@ function Pilot_appliedJobs() {
     },
   };
   useEffect(() => {
-    console.log(config)
-    axios.post(`http://localhost:9000/api/pilot/getAppliedJobs`, config).then((response) => {
-      // setData({response})
-      setList(response.data);
+    console.log(config);
+    axios
+      .post(`http://localhost:9000/api/pilot/getAppliedJobs`, config)
+      .then((response) => {
+        // setData({response})
+        setList(response.data);
 
-      // console.log(list.postingDate)
-console.log(response)});
-
+        // console.log(list.postingDate)
+        console.log(response);
+      })
+      .then(() => {
+        setLoading(false)
+      })
+      .catch((err) => {
+        setLoading(false)
+      })
   }, []);
 
   let [data, setData] = useState(profiles);
-  let [list, setList] = useState([])
+  let [list, setList] = useState([]);
+  let [loading, setLoading] = useState(true);
   return (
     <div className="pd_a_j_main">
-        {/* mapping */}
-        {list.slice(0).reverse().map((item) => {
+      {/* mapping */}
+      {loading && (
+        <Skeleton height={250} count={3} style={{ marginBottom: "20px" }} />
+      )}
+      {list
+        .slice(0)
+        .reverse()
+        .map((item) => {
           return (
             <div className="pd_a_j_data">
               <div style={{ marginBottom: "10px" }}>
-              <div className="pd_a_j_dataDateHead">
-                  Posted on:<span className="pd_a_j_dataDate">{item.postingDate.slice(0,10)}</span>
+                <div className="pd_a_j_dataDateHead">
+                  Posted on:
+                  <span className="pd_a_j_dataDate">
+                    {item.postingDate.slice(0, 10)}
+                  </span>
                 </div>
                 <div className="pd_a_j_dataTitle">{item.jobTitle}</div>
-               
               </div>
               <div className="pd_a_j_data_subTitle">{item.industry}</div>
               <div>
@@ -107,13 +119,19 @@ console.log(response)});
                   <div className="a_j_listing_img1">
                     <img src={profileUser} />
                   </div>
-                  <div className="a_j_listing_profileName">{item.employeeType}</div>
+                  <div className="a_j_listing_profileName">
+                    {item.employeeType}
+                  </div>
                   <div className="a_j_listing_img2">
                     <img src={money} />
                   </div>
-                  <div className="a_j_listing_money">${item.minSalary}.00 - ${item.maxSalary}.00</div>
+                  <div className="a_j_listing_money">
+                    ${item.minSalary}.00 - ${item.maxSalary}.00
+                  </div>
                 </div>
-                <div className="a_j_listing_text">{item.jobDesc.slice(0,148)}</div>
+                <div className="a_j_listing_text">
+                  {item.jobDesc.slice(0, 148)}
+                </div>
                 <hr className="a_j_listing_hr" />
               </div>
               <div className="a_j_listing_btns">
@@ -128,7 +146,7 @@ console.log(response)});
                 <Link to={`/applyJobLanding/${item._id}`} id="a_j_job_btn">
                   View Job
                 </Link>{" "}
-                <img src={item.like ? heart : heart}  className="a_j_like" />
+                <img src={item.like ? heart : heart} className="a_j_like" />
               </div>
             </div>
           );

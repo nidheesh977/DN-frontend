@@ -110,15 +110,7 @@ class Activities_Sidebar extends React.Component {
                     Images
                   </NavLink>
                 </div>
-                <div id="pd_filter1_checkbox_label">
-                  {" "}
-                  <NavLink
-                    activeClassName="h_p_sidebar_active"
-                    to="/pilot_dashboard/activities/360"
-                  >
-                    360° Images
-                  </NavLink>
-                </div>{" "}
+                {" "}
                 <div id="pd_filter1_checkbox_label">
                   {" "}
                   <NavLink

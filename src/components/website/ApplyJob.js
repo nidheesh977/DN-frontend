@@ -10,7 +10,7 @@ import work from "../images/work.svg";
 import { Link } from "react-router-dom";
 import dropdown from "../images/s_c_dropdown2.png";
 import Box from "@mui/material/Box";
-import axios from 'axios'
+import axios from "axios";
 
 import loadMore from "../images/Group 71.svg";
 import Slider from "@mui/material/Slider";
@@ -18,6 +18,7 @@ import { styled } from "@mui/material/styles";
 import { Helmet } from "react-helmet";
 import heart from "../images/heart (3).svg";
 import heartLike from "../images/heart-blue.svg";
+import Skeleton from "react-loading-skeleton";
 
 const AirbnbSlider = styled(Slider)(({ theme }) => ({
   color: "#00E7FC",
@@ -53,6 +54,7 @@ class ApplyJob extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
       data: [],
       view_pilot_type_filter: true,
       view_work_filter: false,
@@ -61,56 +63,56 @@ class ApplyJob extends Component {
       price_range_min: 0,
       price_range_max: 200,
       show_more_filters: false,
-      listing: [
-        {
-          id: 1,
-          name: "Drone Cinematograper",
-          date: "06 Jan 2022",
-          producer: "UTV Motion Pictures",
-          profile: "Professional Pilot",
-          range: "$150.00 - $200.00",
-          desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
-          location: "Bangalore",
-          type: "Full Time",
-          like: true,
-        },
-        {
-          id: 2,
-          name: "React Cinematograper",
-          date: "06 July 2022",
-          producer: "UTV Motion Moviess",
-          profile: "Full Stack Developer",
-          range: "$150.00 - $600.00",
-          desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
-          location: "Bangalore",
-          type: "Part Time",
-          like: false,
-        },
-        {
-          id: 3,
-          name: "Drone Cinematograper",
-          date: "06 Jan 2022",
-          producer: "UTV Motion Pictures",
-          profile: "Professional Pilot",
-          range: "$150.00 - $200.00",
-          desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
-          location: "Bangalore",
-          type: "Full Time",
-          like: true,
-        },
-        {
-          id: 4,
-          name: "Drone Cinematograper",
-          date: "06 Jan 2022",
-          producer: "UTV Motion Pictures",
-          profile: "Professional Pilot",
-          range: "$150.00 - $200.00",
-          desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
-          location: "Bangalore",
-          type: "Full Time",
-          like: false,
-        },
-      ],
+      // listing: [
+      //   {
+      //     id: 1,
+      //     name: "Drone Cinematograper",
+      //     date: "06 Jan 2022",
+      //     producer: "UTV Motion Pictures",
+      //     profile: "Professional Pilot",
+      //     range: "$150.00 - $200.00",
+      //     desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
+      //     location: "Bangalore",
+      //     type: "Full Time",
+      //     like: true,
+      //   },
+      //   {
+      //     id: 2,
+      //     name: "React Cinematograper",
+      //     date: "06 July 2022",
+      //     producer: "UTV Motion Moviess",
+      //     profile: "Full Stack Developer",
+      //     range: "$150.00 - $600.00",
+      //     desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
+      //     location: "Bangalore",
+      //     type: "Part Time",
+      //     like: false,
+      //   },
+      //   {
+      //     id: 3,
+      //     name: "Drone Cinematograper",
+      //     date: "06 Jan 2022",
+      //     producer: "UTV Motion Pictures",
+      //     profile: "Professional Pilot",
+      //     range: "$150.00 - $200.00",
+      //     desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
+      //     location: "Bangalore",
+      //     type: "Full Time",
+      //     like: true,
+      //   },
+      //   {
+      //     id: 4,
+      //     name: "Drone Cinematograper",
+      //     date: "06 Jan 2022",
+      //     producer: "UTV Motion Pictures",
+      //     profile: "Professional Pilot",
+      //     range: "$150.00 - $200.00",
+      //     desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
+      //     location: "Bangalore",
+      //     type: "Full Time",
+      //     like: false,
+      //   },
+      // ],
     };
   }
   dropdown = (id) => {
@@ -136,12 +138,25 @@ class ApplyJob extends Component {
   };
 
   componentDidMount() {
-    axios.get(`http://localhost:9000/api/jobs/getJobs?page=1`)
-      .then(res => {
+    axios
+      .get(`http://localhost:9000/api/jobs/getJobs?page=1`)
+      .then((res) => {
         const persons = res.data;
-        console.log(persons.results)
-        this.setState({ data : persons.results });
+        console.log(persons.results);
+        this.setState({ data: persons.results });
       })
+
+      .then(() => {
+        this.setState({
+          loading: false,
+        });
+      })
+
+      .catch((err) => {
+        this.setState({
+          loading: false,
+        });
+      });
   }
 
   render() {
@@ -502,64 +517,82 @@ class ApplyJob extends Component {
                   </div>
                 </div>
                 <div style={{ margin: "40px 0px 50px 0px" }}>
-                  {this.state.data.map((item, i) => {
-                    return (
-                      <div
-                        className="pd_a_j_data"
-                        style={{ margin: "20px 0px 0px 0px" }}
-                      >
-                        <div style={{ marginBottom: "10px" }}>
-                          <div className="pd_a_j_dataDateHead">
-                            Posted on:
-                            <span className="pd_a_j_dataDate">{item.postingDate.slice(0,10)}</span>
-                          </div>
-                          <div className="pd_a_j_dataTitle">{item.jobTitle}</div>
-                        </div>
-                        <div className="pd_a_j_data_subTitle">
-                          {item.companyName}
-                        </div>
-                        <div>
-                          <div className="a_j_container1">
-                            <div className="a_j_listing_img1">
-                              <img src={profileUser} />
+                  {this.state.loading
+                    &&<Skeleton height = {250} count = {3} style = {{marginBottom: "20px"}}/>
+                  }
+                  <>
+                    {this.state.data.map((item, i) => {
+                      return (
+                        <div
+                          className="pd_a_j_data"
+                          style={{ margin: "20px 0px 0px 0px" }}
+                        >
+                          <div style={{ marginBottom: "10px" }}>
+                            <div className="pd_a_j_dataDateHead">
+                              Posted on:
+                              <span className="pd_a_j_dataDate">
+                                {item.postingDate.slice(0, 10)}
+                              </span>
                             </div>
-                            <div className="a_j_listing_profileName">
-                              {item.employeeType}
-                            </div>
-                            <div className="a_j_listing_img2">
-                              <img src={money} />
-                            </div>
-                            <div className="a_j_listing_money">
-                             $ {item.minSalary}.00 - ${item.maxSalary}.00
+                            <div className="pd_a_j_dataTitle">
+                              {item.jobTitle}
                             </div>
                           </div>
-                          <div className="a_j_listing_text"> {item.jobDesc.slice(0,148)}</div>
-                          <hr className="a_j_listing_hr" />
+                          <div className="pd_a_j_data_subTitle">
+                            {item.companyName}
+                          </div>
+                          <div>
+                            <div className="a_j_container1">
+                              <div className="a_j_listing_img1">
+                                <img src={profileUser} />
+                              </div>
+                              <div className="a_j_listing_profileName">
+                                {item.employeeType}
+                              </div>
+                              <div className="a_j_listing_img2">
+                                <img src={money} />
+                              </div>
+                              <div className="a_j_listing_money">
+                                $ {item.minSalary}.00 - ${item.maxSalary}.00
+                              </div>
+                            </div>
+                            <div className="a_j_listing_text">
+                              {" "}
+                              {item.jobDesc.slice(0, 148)}
+                            </div>
+                            <hr className="a_j_listing_hr" />
+                          </div>
+                          <div className="a_j_listing_btns">
+                            <button className="a_j_location_btn">
+                              <img
+                                src={location}
+                                className="a_j_location_logo"
+                              />
+                              <span className="a_j_location_text">
+                                {item.city}
+                              </span>
+                            </button>{" "}
+                            <button className="a_j_location_btn">
+                              <img src={work} className="a_j_location_logo" />
+                              <span className="a_j_location_text">
+                                {item.jobType}
+                              </span>
+                            </button>
+                            <Link
+                              to={`/applyJobLanding/${item._id}`}
+                              id="a_j_job_btn"
+                            >
+                              View Job
+                            </Link>{" "}
+                            <img
+                              src={item.like ? heartLike : heart}
+                              className="a_j_like"
+                            />
+                          </div>
                         </div>
-                        <div className="a_j_listing_btns">
-                          <button className="a_j_location_btn">
-                            <img src={location} className="a_j_location_logo" />
-                            <span className="a_j_location_text">
-                              {item.city}
-                            </span>
-                          </button>{" "}
-                          <button className="a_j_location_btn">
-                            <img src={work} className="a_j_location_logo" />
-                            <span className="a_j_location_text">
-                              {item.jobType}
-                            </span>
-                          </button>
-                          <Link to=  {`/applyJobLanding/${item._id}`} id="a_j_job_btn">
-                            View Job
-                          </Link>{" "}
-                          <img
-                            src={item.like ? heartLike : heart}
-                            className="a_j_like"
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </>
                 </div>
                 <div className="a_j_load_div" style={{ marginBottom: "40px" }}>
                   <button className="a_j_loadMore_btn">

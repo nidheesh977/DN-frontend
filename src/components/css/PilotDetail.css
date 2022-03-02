@@ -336,7 +336,7 @@
 }
 
 .p_d_message_container{
-  height: 460px;
+  height: calc(100% - 234px);
   width: 360px;
   background: white;
   border: 1px solid #D8D8D8;
@@ -348,7 +348,7 @@
   position: fixed;
   z-index: 1;
   right: 0;
-  top: 160px;
+  bottom: 0px;
   z-index: 2;
 }
 

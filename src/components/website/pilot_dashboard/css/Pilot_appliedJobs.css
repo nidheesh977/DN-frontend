@@ -231,8 +231,9 @@ margin-top: 30px !important;      justify-content: center;
 
 .a_j_like{
   margin-top: 5px;
+  cursor: pointer;
 }
-@media only screen and (max-width: 1200px){
+@media only screen and (max-width: 1200px){ 
   .a_j_location_btn {
     padding: 6px 15px;
     font-family: muli-light;

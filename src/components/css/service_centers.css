@@ -44,7 +44,7 @@
   font-family: muli-bold;
   font-size: 15px;
   cursor: pointer;
-  margin-left: 60px;
+  margin-left: 55px;
   float: left;
   margin-right: 17px;
 }
@@ -93,7 +93,7 @@
 
 .service_center_list{
   background-color: white;
-  padding: 25px;
+  padding: 15px 25px 10px 25px;
   margin-bottom: 30px !important;
 }
 
@@ -104,10 +104,10 @@
 }
 
 .service_center_name{
+  display: inline-block;
   font-size: 17px !important;
   line-height: 30px;
   font-family: muli-bold;
-  padding-top: 10px;
   cursor: pointer;
 }
 
@@ -148,14 +148,14 @@
   font-family: muli-bold;
   font-size: 14px;
   line-height: 25px;
-  margin-left: 60px;
+  margin-left: 55px;
   margin-top: 10px;
 }
 
 .s_c_other_details_content{
   font-size: 14px;
   font-family: muli-regular;
-  margin-left: 60px;
+  margin-left: 55px;
   line-height: 25px;
 }
 
@@ -215,7 +215,6 @@
 .rating_request_md_xl{
   float: right;
   text-align: center;
-  padding: 0px 5px;
   text-decoration: underline;
 }
 
@@ -227,8 +226,9 @@
 .s_c_share{
   border-radius: 0% !important;
   margin-left: auto;
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
+  margin-top: 7px;
 }
 
 .s_c_enquiry_input{
@@ -282,4 +282,67 @@
 
 .s_c_list_btn:hover{
   background: #00E7FC !important;
+}
+
+.phone_form_title{
+  font-size: 25px;
+  font-family: muli-bold;
+  line-height: 36px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.phone_form_desc{
+  font-size: 16px;
+  font-family: muli-regular;
+  line-height: 24px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.phone_form_label{
+  font-size: 16px;
+  font-family: muli-bold;
+  line-height: 24px;
+  margin-bottom: 5px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.phone_form_input{
+  height: 40px;
+  border: 1px solid #D4D4D4;
+  border-radius: 5px;
+  padding: 0px 20px;
+  background-color: white;
+  width: calc(100% - 40px);
+  font-size: 14px;
+  font-family: muli-light;
+  width: 100%;
+}
+
+.phone_form_btn{
+  background: transparent linear-gradient(73deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
+  padding: 8px 48px;
+  font-size: 16px;
+  font-family: muli-regular;
+  border: 0px;
+  border-radius: 20px;
+}
+
+.phone_form_btn_container{
+  width: 100%;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.phone_form_phone .PhoneInputInput{
+  background-color: white;
+}
+
+.phone_form_input_error_msg{
+  font-size: 14px;
+  font-family: muli-light;
+  color: #f00;
+  visibility: hidden;
 }

@@ -249,6 +249,7 @@
   text-align: center;
   padding: 0px 23%;
   margin-top: 10px;
+  width: 100%;
 }
 
 .u_f_popup_btn_container{
@@ -380,4 +381,8 @@
 
 .u_f_edit_content_title:hover{
   color: #00E7FC;
+}
+
+.premium_file_type{
+  background: #4FFEA3;
 }
