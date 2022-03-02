@@ -30,6 +30,7 @@ class CreateJob extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      dialog: false,
       show_popup: true,
       main_tab: 1,
       create_job_step: 1,
@@ -118,7 +119,11 @@ class CreateJob extends Component {
     })
     document.getElementById(`${input}_error`).style.display = "none"
   }
-
+  closeChoicePopup = () =>{
+    this.setState({
+      dialog : false
+    })
+  }
   clearForm = () => {
     this.setState({
       company_name: "",
@@ -208,6 +213,7 @@ class CreateJob extends Component {
         jobDesc: this.state.description
       })
       this.clearForm();
+      this.state.dialog = true;
     }
     // Axios.post("http://localhost:9000/api/jobs/createJob", {
     //     companyName: "Nexevo Tech",
@@ -568,6 +574,27 @@ class CreateJob extends Component {
             </Row>
           </DialogContent>
         </Dialog>
+        <Dialog
+                open={this.state.dialog}
+                onClose={this.closeChoicePopup}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+              >
+
+                <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+                  <div style={{ position: "absolute", top: '20px', right: '20px' }}>
+                    <img src={Close} alt="" onClick={this.closeChoicePopup} style={{ cursor: "pointer" }} />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">Your Job has been submitted successfully</div>
+                    <div className="u_f_popup_btn_container">
+                      <button className="u_f_popup_btn2" onClick={this.closeChoicePopup}>Close</button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
       </section>
     )
   }

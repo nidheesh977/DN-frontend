@@ -11,13 +11,23 @@ import { Link } from "react-router-dom";
 import dropdown from "../images/s_c_dropdown2.png";
 import Box from "@mui/material/Box";
 import axios from 'axios'
-
+import MuiDialogContent from "@material-ui/core/DialogContent";
 import loadMore from "../images/Group 71.svg";
 import Slider from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
 import { Helmet } from "react-helmet";
 import heart from "../images/heart (3).svg";
 import heartLike from "../images/heart-blue.svg";
+import Close from "../images/close.svg";
+import { withStyles } from "@material-ui/core/styles";
+import Dialog from "@material-ui/core/Dialog";  
+
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
 
 const AirbnbSlider = styled(Slider)(({ theme }) => ({
   color: "#00E7FC",
@@ -111,6 +121,9 @@ class ApplyJob extends Component {
           like: false,
         },
       ],
+      liked : [],
+      dialogOpen: false,
+      dialogOpen1: false,
     };
   }
   dropdown = (id) => {
@@ -142,8 +155,74 @@ class ApplyJob extends Component {
         console.log(persons.results)
         this.setState({ data : persons.results });
       })
+      axios.post(`http://localhost:9000/api/pilot/getLikedJobs`, this.config)
+      .then(res => {
+        const persons = res.data;
+        console.log(persons)
+        this.setState({ liked: persons });
+      })
   }
+  config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
+  likePost = (id) =>{
+    console.log(this.config);
+    this.setState({
+      dialogOpen: true
+    })
+    this.state.liked.push(id)
 
+    axios.post(`http://localhost:9000/api/jobs/likeJob/${id}`, this.config)
+
+      .then((response) => {
+
+
+if(response.data === "please Login"){
+  // history.push("/pilot_dashboard/account")
+  alert("loginFirst");
+}
+
+
+})
+      .catch(() => {
+      });
+      
+  }
+  unlikePost = (id) =>{
+    console.log(this.config);
+    this.setState({
+      dialogOpen1: true
+    })
+    // this.state.liked.push(id)
+    let index = this.state.liked.indexOf(id);
+    this.state.liked.splice(index, 1);
+    axios.post(`http://localhost:9000/api/jobs/unlikeJob/${id}`, this.config)
+
+      .then((response) => {
+
+
+if(response.data === "please Login"){
+  // history.push("/pilot_dashboard/account")
+  alert("loginFirst");
+}
+
+
+})
+      .catch(() => {
+      });
+      
+  }
+  closeChoicePopup = () => {
+    this.setState({
+      dialogOpen: false
+    })}
+    closeChoicePopup1 = () => {
+      this.setState({
+        dialogOpen1: false
+      })}
+  
   render() {
     return (
       <>
@@ -552,10 +631,16 @@ class ApplyJob extends Component {
                           <Link to=  {`/applyJobLanding/${item._id}`} id="a_j_job_btn">
                             View Job
                           </Link>{" "}
-                          <img
-                            src={item.like ? heartLike : heart}
-                            className="a_j_like"
-                          />
+                          {
+                            this.state.liked.includes(item._id)?  <img
+                            src={heartLike}
+                            className="a_j_like" onClick={()=>this.unlikePost(item._id)}
+                          /> :  <img
+                          src={heart}
+                          className="a_j_like" onClick={()=>this.likePost(item._id)}
+                        />
+                          }
+                         
                         </div>
                       </div>
                     );
@@ -569,6 +654,48 @@ class ApplyJob extends Component {
                 </div>
               </Col>
             </Row>
+            <Dialog
+                open={this.state.dialogOpen}
+                onClose={this.closeChoicePopup}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+              >
+
+                <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+                  <div style={{ position: "absolute", top: '20px', right: '20px' }}>
+                    <img src={Close} alt="" onClick={this.closeChoicePopup} style={{ cursor: "pointer" }} />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">The Job has been saved successfully</div>
+                    <div className="u_f_popup_btn_container">
+                      <button className="u_f_popup_btn2" onClick={this.closeChoicePopup}>Close</button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
+              <Dialog
+                open={this.state.dialogOpen1}
+                onClose={this.closeChoicePopup1}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+              >
+
+                <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+                  <div style={{ position: "absolute", top: '20px', right: '20px' }}>
+                    <img src={Close} alt="" onClick={this.closeChoicePopup1} style={{ cursor: "pointer" }} />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">The Job has been Unsaved successfully</div>
+                    <div className="u_f_popup_btn_container">
+                      <button className="u_f_popup_btn2" onClick={this.closeChoicePopup1}>Close</button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
           </Container>
         </div>
       </>

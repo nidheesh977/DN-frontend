@@ -227,6 +227,7 @@ setBrands(response.data.brandOfDrones)});
                               <span className={details.rating >= 5 ? 'star_checked' : 'star_unchecked'}>&#9733;</span>
                             {/* </div> */}
               </span>
+              
               <span>
                 <Link className="s_c_d_links" onClick={() => { selectTab("s_c_d_reviews_tab", "s_c_d_reviews_container") }}>Read Reviews</Link>
               </span>
