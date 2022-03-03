@@ -11,8 +11,27 @@ import { Link } from "react-router-dom";
 import loadMore from "../../images/Group 71.svg";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import Close from "../../images/close.svg";
+import { withStyles } from "@material-ui/core/styles";
+import Dialog from "@material-ui/core/Dialog";
+import All from "..//All.module.css";
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
 
 function Pilot_appliedJobs() {
+  let [liked, setLiked] = useState([]);
+  let [dialog1, setDialog1] = useState(false)
+  let [dialog2, setDialog2] = useState(false)
+  let closeChoicePopup1 = () => {
+    setDialog1(false)}
+    let closeChoicePopup2 = () => {
+      setDialog2(false)}
+
   let profiles = {
     listing: [
       {
@@ -65,6 +84,50 @@ function Pilot_appliedJobs() {
       },
     ],
   };
+
+  let likePost = (id) =>{
+    setDialog1(true)
+    liked.push(id)
+
+    axios.post(`http://localhost:9000/api/jobs/likeJob/${id}`, config)
+
+      .then((response) => {
+        
+
+
+if(response.data === "please Login"){
+  // history.push("/pilot_dashboard/account")
+  alert("loginFirst");
+}
+
+
+})
+      .catch(() => {
+      });
+      
+  }
+let unlikePost = (id) =>{
+    console.log(config);
+    setDialog2(true)
+    let index = liked.indexOf(id);
+    liked.splice(index, 1);
+   
+    axios.post(`http://localhost:9000/api/jobs/unlikeJob/${id}`, config)
+
+      .then((response) => {
+
+
+if(response.data === "please Login"){
+  // history.push("/pilot_dashboard/account")
+  alert("loginFirst");
+}
+
+
+})
+      .catch(() => {
+      });
+      
+  }
   let config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -77,6 +140,8 @@ function Pilot_appliedJobs() {
       .then((response) => {
         // setData({response})
         setList(response.data);
+        if(response.data.length == 0){
+          document.getElementById("tohide").style.display = "block"      }
 
         // console.log(list.postingDate)
         console.log(response);
@@ -87,6 +152,13 @@ function Pilot_appliedJobs() {
       .catch((err) => {
         setLoading(false)
       })
+
+      axios.post(`http://localhost:9000/api/pilot/getLikedJobs`, config)
+.then(res => {
+  const persons = res.data;
+  console.log(persons)
+  setLiked(persons);
+})
   }, []);
 
   let [data, setData] = useState(profiles);
@@ -94,6 +166,9 @@ function Pilot_appliedJobs() {
   let [loading, setLoading] = useState(true);
   return (
     <div className="pd_a_j_main">
+       <div id="tohide"  style={{display: "none"}}>
+          <div>No Saved Jobs please Check Later</div>
+        </div>
       {/* mapping */}
       {loading && (
         <Skeleton height={250} count={3} style={{ marginBottom: "20px" }} />
@@ -146,7 +221,15 @@ function Pilot_appliedJobs() {
                 <Link to={`/applyJobLanding/${item._id}`} id="a_j_job_btn">
                   View Job
                 </Link>{" "}
-                <img src={item.like ? heart : heart} className="a_j_like" />
+                {
+                            liked.includes(item._id)?  <img
+                            src={heartLike}
+                            className="a_j_like" onClick={()=>unlikePost(item._id)}
+                          /> :  <img
+                          src={heart}
+                          className="a_j_like" onClick={()=>likePost(item._id)}
+                        />
+                          }  
               </div>
             </div>
           );
@@ -157,6 +240,48 @@ function Pilot_appliedJobs() {
           <span className="a_j_location_text">Load More</span>
         </button>{" "}
       </div>
+      <Dialog
+                open={dialog1}
+                onClose={closeChoicePopup1}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+              >
+
+                <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+                  <div style={{ position: "absolute", top: '20px', right: '20px' }}>
+                    <img src={Close} alt="" onClick={closeChoicePopup1} style={{ cursor: "pointer" }} />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">The Job has been saved successfully</div>
+                    <div className="u_f_popup_btn_container">
+                      <button className="u_f_popup_btn2" onClick={closeChoicePopup1}>Close</button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
+              <Dialog
+                open={dialog2}
+                onClose={closeChoicePopup2}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+              >
+
+                <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+                  <div style={{ position: "absolute", top: '20px', right: '20px' }}>
+                    <img src={Close} alt="" onClick={closeChoicePopup2} style={{ cursor: "pointer" }} />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">The Job has been Unsaved successfully</div>
+                    <div className="u_f_popup_btn_container">
+                      <button className="u_f_popup_btn2" onClick={closeChoicePopup2}>Close</button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
     </div>
   );
 }

@@ -73,59 +73,11 @@ class ApplyJob extends Component {
       price_range_min: 0,
       price_range_max: 200,
       show_more_filters: false,
-      // listing: [
-      //   {
-      //     id: 1,
-      //     name: "Drone Cinematograper",
-      //     date: "06 Jan 2022",
-      //     producer: "UTV Motion Pictures",
-      //     profile: "Professional Pilot",
-      //     range: "$150.00 - $200.00",
-      //     desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
-      //     location: "Bangalore",
-      //     type: "Full Time",
-      //     like: true,
-      //   },
-      //   {
-      //     id: 2,
-      //     name: "React Cinematograper",
-      //     date: "06 July 2022",
-      //     producer: "UTV Motion Moviess",
-      //     profile: "Full Stack Developer",
-      //     range: "$150.00 - $600.00",
-      //     desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
-      //     location: "Bangalore",
-      //     type: "Part Time",
-      //     like: false,
-      //   },
-      //   {
-      //     id: 3,
-      //     name: "Drone Cinematograper",
-      //     date: "06 Jan 2022",
-      //     producer: "UTV Motion Pictures",
-      //     profile: "Professional Pilot",
-      //     range: "$150.00 - $200.00",
-      //     desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
-      //     location: "Bangalore",
-      //     type: "Full Time",
-      //     like: true,
-      //   },
-      //   {
-      //     id: 4,
-      //     name: "Drone Cinematograper",
-      //     date: "06 Jan 2022",
-      //     producer: "UTV Motion Pictures",
-      //     profile: "Professional Pilot",
-      //     range: "$150.00 - $200.00",
-      //     desc: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quia tempora, molestias, modi praesentium alias expedita magnam quasi ullam optio, quibusdam ipsa asperiores officia harum",
-      //     location: "Bangalore",
-      //     type: "Full Time",
-      //     like: false,
-      //   },
-      // ],
+    
       liked: [],
       dialogOpen: false,
       dialogOpen1: false,
+
     };
   }
   dropdown = (id) => {
@@ -171,6 +123,7 @@ class ApplyJob extends Component {
     },
   };
   likePost = (id) =>{
+   
     console.log(this.config);
     this.setState({
       dialogOpen: true
@@ -198,7 +151,6 @@ if(response.data === "please Login"){
     this.setState({
       dialogOpen1: true
     })
-    // this.state.liked.push(id)
     let index = this.state.liked.indexOf(id);
     this.state.liked.splice(index, 1);
     axios.post(`http://localhost:9000/api/jobs/unlikeJob/${id}`, this.config)
