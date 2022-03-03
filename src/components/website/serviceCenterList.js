@@ -433,7 +433,8 @@ class ServiceCenters extends Component {
                         <img
                           src={DropDownPng}
                           alt=""
-                          height={"14px"}
+                          // height={"5px"}
+                          width = {"10px"}
                           id="s_c_dropdown_icon1"
                         />
                       </span>
@@ -473,7 +474,7 @@ class ServiceCenters extends Component {
                         <img
                           src={DropDownPng}
                           alt=""
-                          height={"14px"}
+                          width = {"10px"}
                           id="s_c_dropdown_icon2"
                         />
                       </span>
@@ -508,7 +509,7 @@ class ServiceCenters extends Component {
                         <img
                           src={DropDownPng}
                           alt=""
-                          height={"14px"}
+                          width = {"10px"}
                           id="s_c_dropdown_icon3"
                         />
                       </span>
@@ -543,7 +544,7 @@ class ServiceCenters extends Component {
                         <img
                           src={DropDownPng}
                           alt=""
-                          height={"14px"}
+                          width = {"10px"}
                           id="s_c_dropdown_icon4"
                         />
                       </span>
@@ -617,7 +618,7 @@ class ServiceCenters extends Component {
                       height={300}
                       width={"100%"}
                       count={1}
-                      style={{ marginBottom: "30px" }}
+                      style={{ marginBottom: "30px", backgroundColor: "#e9e9e9" }}
                     />
                   </SkeletonTheme>
                 )}
@@ -637,7 +638,7 @@ class ServiceCenters extends Component {
                       height={300}
                       width={"100%"}
                       count={1}
-                      style={{ marginBottom: "30px" }}
+                      style={{ marginBottom: "30px", backgroundColor: "#e9e9e9" }}
                     />
                   </SkeletonTheme>
                 )}
@@ -649,7 +650,7 @@ class ServiceCenters extends Component {
                       height={300}
                       width={"100%"}
                       count={1}
-                      style={{ marginBottom: "30px" }}
+                      style={{ marginBottom: "30px", backgroundColor: "#e9e9e9" }}
                     />
                   </SkeletonTheme>
                 )}
@@ -661,7 +662,7 @@ class ServiceCenters extends Component {
                       height={300}
                       width={"100%"}
                       count={1}
-                      style={{ marginBottom: "30px" }}
+                      style={{ marginBottom: "30px", backgroundColor: "#e9e9e9" }}
                     />
                   </SkeletonTheme>
                 )}

@@ -1361,6 +1361,9 @@ section.Cart figure{
 .PopupBody{
     padding: 0px 72px 0px 72px !important;
 }
+.PopupBody2{
+    padding: 0px 40px 0px 40px !important;
+}
 
 .PopupFooter{ 
     padding: 0px 72px 50px 72px !important; 
@@ -1759,6 +1762,7 @@ section.UploadFile .form label.MuiFormControlLabel-root {
 
     .PopupHeader{padding: 0px 20px 30px 20px !important;}
     .PopupBody{padding: 0px 20px 15px 20px !important;}
+    .PopupBody2{padding: 0px 40px 15px 40px !important;}
     .PopupFooter{padding: 0px 25px 30px 20px !important;} 
 
     .ml_xs_auto{margin-left: auto !important; }

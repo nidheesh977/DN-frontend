@@ -25,7 +25,6 @@ class UploadFiles extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      instructions: true,
       draft_count: 10,
       selected_tab: 1,
       files_selected: false,
@@ -37,7 +36,7 @@ class UploadFiles extends Component {
       total_file_objects_count: 0,
       file_objects_count: 0,
       file_edit: 0,
-      upload_choice: false,
+      upload_choice: true,
       new_keyword: "",
       suggested_keywords: ["Areal View", "UAV", "Aviation", "Drone"],
       showEditOptions: "",
@@ -49,13 +48,6 @@ class UploadFiles extends Component {
       .getElementById("u_f_nav_link1")
       .classList.add("u_f_nav_link_selected");
   }
-
-  goToPage = () => {
-    this.setState({
-      instructions: false,
-      upload_choice: true,
-    });
-  };
 
   changeTab = (tab) => {
     this.setState({
@@ -377,15 +369,6 @@ class UploadFiles extends Component {
             this.state.instructions ? "upload_inst_open" : "upload_inst_close"
           }
         >
-          {this.state.instructions && (
-            <UploadFileInstruction
-              button={
-                <button className="upload_inst_btn" onClick={this.goToPage}>
-                  Go to upload page
-                </button>
-              }
-            />
-          )}
           <div id="upload_file_nav">
             <span
               className="u_f_nav_link"

@@ -64,8 +64,14 @@
   background-color: white;
   text-align: right;
   position: sticky;
-  bottom: -40px;
+  bottom: 0px;
   padding: 10px;
+}
+
+@media (max-width: 576px){
+  .upload_inst_btn_continer{
+    bottom: -15px;
+  }
 }
 
 .upload_inst_error{
