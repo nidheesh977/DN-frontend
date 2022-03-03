@@ -58,6 +58,7 @@ import Company_dashboard from "./components/website/company_dashboard/Company_da
 import UpgradeProVersion from './components/website/UpgradeProVersion';
 import ApplyJobLanding from "./components/website/ApplyJobLanding";
 import Admin_dashboard from "./components/adminDashboard/Admin_dashboard";
+import CreatePilot from "./components/website/CreatePilot";
 
 
 class App extends React.Component {
@@ -246,6 +247,7 @@ class App extends React.Component {
             <Route component={ApplyJobLanding} path="/applyJobLanding/:id" />
             <Route component={Company_dashboard} path="/company_dashboard" />
             <Route component={Admin_dashboard} path="/Admin_dashboard" />
+            <Route component={CreatePilot} path="/createPilot" />
             {/* yaseen */}
             <PublicRoute exact path="*" component={NoPageFound} />
           </Switch>
