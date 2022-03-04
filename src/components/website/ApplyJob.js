@@ -69,16 +69,22 @@ class ApplyJob extends Component {
       view_pilot_type_filter: true,
       view_work_filter: false,
       view_hourly_rate_filter: true,
-      price_range: [20, 40],
       price_range_min: 0,
       price_range_max: 200,
       show_more_filters: false,
-
+      
       liked: [],
       dialogOpen: false,
       dialogOpen1: false,
       authourised: false,
-
+      filter_keyword: "",
+      filter_country: "",
+      filter_city: "",
+      pilot_type: [],
+      work_type: [],
+      price_range: [20, 40],
+      next_page: false,
+      page: "page1"
     };
   }
   dropdown = (id) => {
@@ -105,11 +111,23 @@ class ApplyJob extends Component {
 
   componentDidMount() {
     axios
-      .get(`http://localhost:9000/api/jobs/getJobs?page=1`)
+      .get(`http://localhost:9000/api/jobs/getJobs?${this.state.page}`)
       .then((res) => {
+        console.log(res)
         const persons = res.data;
         console.log(persons.results);
         this.setState({ data: persons.results, loading: false });
+        if (res.data.next){
+          this.setState({
+            next_page: true,
+            next_page: res.data.next
+          })
+        }
+        else{
+          this.setState({
+            next_page: false
+          })
+        }
       })
       .catch((err) => {
         this.setState({ loading: false });
@@ -198,6 +216,66 @@ if(response.data === "please Login"){
     });
   };
 
+  filterKeywordChangeHandler = (e) => {
+    this.setState({
+      filter_keyword: e.target.value
+    })
+  }
+
+  filterCountryChangeHandler = (e) => {
+    this.setState({
+      filter_country: e.target.value
+    })
+  }
+
+  filterCityChangeHandler = (e) => {
+    this.setState({
+      filter_city: e.target.value
+    })
+  }
+
+  loadMore = () => {
+
+  }
+
+  filterPilotTypeChangeHandler = (type) => {
+    let pilot_type = this.state.pilot_type
+    if (pilot_type.includes(type)){
+      pilot_type.splice(pilot_type.indexOf(type), 1)
+      this.setState({
+        pilot_type: pilot_type
+      })
+    }
+    else{
+      pilot_type.push(type)
+      this.setState({
+        pilot_type: pilot_type
+      })
+    }
+    setTimeout(()=>{
+      console.log(this.state.pilot_type)
+    }, 100)
+  }
+
+  filterWorkTypeChangeHandler = (type) => {
+    let work_type = this.state.work_type
+    if (work_type.includes(type)){
+      work_type.splice(work_type.indexOf(type), 1)
+      this.setState({
+        work_type: work_type
+      })
+    }
+    else{
+      work_type.push(type)
+      this.setState({
+        work_type: work_type
+      })
+    }
+    setTimeout(()=>{
+      console.log(this.state.work_type)
+    }, 100)
+  }
+
   render() {
     return (
       <>
@@ -229,25 +307,27 @@ if(response.data === "please Login"){
                     type="text"
                     className="a_j_keywords"
                     placeholder="Search Keywords"
+                    onChange = {this.filterKeywordChangeHandler}
                   />
                   <div className="h_p_filter1_title1">Country</div>
-                  <select className="a_j_select_dropdown">
-                    <option>select Country</option>
-                    <option>India</option>
-                    <option>India</option>
-                    <option>India</option>
-                    <option>India</option>
+                  <select className="a_j_select_dropdown" onChange = {this.filterCountryChangeHandler}>
+                    <option>Select Country</option>
+                    <option value = "India">India</option>
+                    <option value = "China">China</option>
+                    <option value = "Pakistan">Pakistan</option>
+                    <option value = "Russia">Russia</option>
                   </select>
                   <div className="h_p_filter1_title1">City</div>
                   <select
                     className="a_j_select_dropdown"
                     id="a_j_select_dropdown1"
+                    onChange = {this.filterCityChangeHandler}
                   >
                     <option>Select City</option>
-                    <option>Bangalore</option>
-                    <option>Bangalore</option>
-                    <option>Bangalore</option>
-                    <option>Bangalore</option>
+                    <option value = "Chennai">Chennai</option>
+                    <option value = "Bangalore">Bangalore</option>
+                    <option value = "Mumbai">Mumbai</option>
+                    <option value = "Delhi">Delhi</option>
                   </select>
 
                   <div
@@ -274,13 +354,13 @@ if(response.data === "please Login"){
                     id="h_p_pilot_type_filter"
                   >
                     <label className="h_p_filter1_filter1">
-                      <input type="checkbox" className="h_p_filter1_checkbox" />
+                      <input type="checkbox" className="h_p_filter1_checkbox" onClick = {()=>this.filterPilotTypeChangeHandler("licensed")}/>
                       <div className="h_p_filter1_checkbox_label">
                         Licensed Pilots
                       </div>
                     </label>
                     <label className="h_p_filter1_filter1">
-                      <input type="checkbox" className="h_p_filter1_checkbox" />
+                      <input type="checkbox" className="h_p_filter1_checkbox" onClick = {()=>this.filterPilotTypeChangeHandler("unlicensed")}/>
 
                       <div className="h_p_filter1_checkbox_label">
                         Unlicensed Pilots
@@ -311,13 +391,13 @@ if(response.data === "please Login"){
                     id="h_p_work_filter"
                   >
                     <label className="h_p_filter1_filter1">
-                      <input type="checkbox" className="h_p_filter1_checkbox" />
+                      <input type="checkbox" className="h_p_filter1_checkbox" onClick = {()=>this.filterWorkTypeChangeHandler("FullTime")} />
                       <div className="h_p_filter1_checkbox_label">
                         Full Time
                       </div>
                     </label>
                     <label className="h_p_filter1_filter1">
-                      <input type="checkbox" className="h_p_filter1_checkbox" />
+                      <input type="checkbox" className="h_p_filter1_checkbox"  onClick = {()=>this.filterWorkTypeChangeHandler("PartTime")}/>
                       <div className="h_p_filter1_checkbox_label">
                         Part Time
                       </div>
@@ -592,7 +672,7 @@ if(response.data === "please Login"){
                           <div className="pd_a_j_dataDateHead">
                             Posted on:
                             <span className="pd_a_j_dataDate">
-                              {item.postingDate.slice(0, 10)}
+                              {item.postingDate}
                             </span>
                           </div>
                           <div className="pd_a_j_dataTitle">
@@ -660,12 +740,14 @@ if(response.data === "please Login"){
                     );
                   })}
                 </div>
-                <div className="a_j_load_div" style={{ marginBottom: "40px" }}>
-                  <button className="a_j_loadMore_btn">
-                    <img src={loadMore} className="a_j_location_logo" />
-                    <span className="a_j_location_text">Load More</span>
-                  </button>{" "}
-                </div>
+                {this.state.next_page
+                  &&<div className="a_j_load_div" style={{ marginBottom: "40px" }}>
+                    <button className="a_j_loadMore_btn" onClick = {this.loadMore}>
+                      <img src={loadMore} className="a_j_location_logo" />
+                      <span className="a_j_location_text">Load More</span>
+                    </button>{" "}
+                  </div>
+                }
               </Col>
             </Row>
             <Dialog

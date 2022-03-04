@@ -5,8 +5,7 @@
 
 .a_j_keywords {
   width: calc(100% - 60px);
-  font-size: 13px;
-  color: #b2b2b2;
+  font-size: 14px;
   font-family: muli-light;
   line-height: 20px;
   padding: 10px 40px 10px 20px;
@@ -17,14 +16,14 @@
   -webkit-appearance: none;
   background-repeat: no-repeat;
   background-size: 15px;
-  background-position: calc(100% - 25px);
+  background-position: calc(100% - 15px);
   margin-bottom: 20px;
 }
 
 .h_p_filter1_dropdown1 {
   width: 11px;
   float: right;
-  margin-right: 25px;
+  margin-right: 15px;
   margin-top: 8px;
 }
 
@@ -51,7 +50,7 @@
   -webkit-appearance: none;
   background-repeat: no-repeat;
   background-size: 12px;
-  background-position: 91.75%;
+  background-position: calc(100% - 15px);
   color: #b2b2b2;
 }
 

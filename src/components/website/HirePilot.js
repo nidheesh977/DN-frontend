@@ -17,6 +17,7 @@ import IconButton from "@material-ui/core/IconButton";
 import close from '../images/close.svg'
 import { Helmet } from "react-helmet";
 import Close from "../images/close.svg";
+import axios from 'axios';
 
 const AirbnbSlider = styled(Slider)(({ theme }) => ({
   color: '#00E7FC',
@@ -104,7 +105,10 @@ class HirePilot extends Component {
       searchValue: "",
       startProcess: false,
       selected_file: {},
-      jobSaved: false
+      jobSaved: false,
+      pilot_list: [],
+      page: "page1",
+      nextPage: false
     }
   }
 
@@ -120,17 +124,19 @@ class HirePilot extends Component {
     })
   }
 
-  handleMoreKeyword = () => {
-    if (this.state.keywords_visible === 3) {
-      this.setState({
-        keywords_visible: this.state.keywords.length
-      })
+  handleMoreKeyword = (id) => {
+    let pilot_list = this.state.pilot_list
+    if(pilot_list[id].keyswordsVisible === 3){
+      pilot_list[id].keyswordsVisible = pilot_list[id].skills.length
     }
-    else {
-      this.setState({
-        keywords_visible: 3
-      })
+    else{
+      pilot_list[id].keyswordsVisible = 3
     }
+
+    this.setState({
+      pilot_list: pilot_list
+    })
+    console.log(pilot_list)
   }
 
   dropdown = (tab) => {
@@ -211,6 +217,16 @@ class HirePilot extends Component {
 
   sendMessage = (id) => {
     this.props.history.push("/pilot_details/" + id)
+  }
+
+  componentDidMount(){
+    axios.get(`http://localhost:9000/api/pilot/hirePilots?${this.state.page}`)
+    .then((res)=>{
+      this.setState({
+        pilot_list: res.data.results
+      })
+      console.log(res)
+    })
   }
 
   render() {
@@ -422,25 +438,31 @@ class HirePilot extends Component {
                 </div>
 
                 <Visible xxl xl lg md>
+                {this.state.pilot_list.map((pilot, index)=>{
+                        
+                        return(
                   <div className='h_p_listing_container'>
-
                     <Row>
                       <Col>
                         <div className="h_p_listing_img_container">
                           <img src={profileImg} alt="" className='h_p_listing_img' />
                         </div>
                         <div className="h_p_others_container">
-                          <div className="h_p_listing_name" onClick={() => this.pilotDetailPage(1)}>John Doe</div>
-                          <div className="h_p_listing_job">Professional Drone pilot</div>
-                          <div className="h_p_listing_location"><img src={locationIcon} alt="" height={"13px"} style={{ marginRight: "4px" }} /> Bangalore, India</div>
-                          <div className="h_p_listing_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod, possimus!</div>
+                          <div className="h_p_listing_name" onClick={() => this.pilotDetailPage(1)}>{pilot.name}</div>
+                          <div className="h_p_listing_job">{pilot.pilotType === "unlicensed"?"Professional Drone pilot":"Passionate Drone pilot"}</div>
+                          <div className="h_p_listing_location"><img src={locationIcon} alt="" height={"13px"} style={{ marginRight: "4px" }} /> {pilot.city}, {pilot.country}</div>
+                          <div className="h_p_listing_description">{pilot.bio}</div>
                           <div className="h_p_listing_keywords_container">
-                            {this.state.keywords.slice(0, this.state.keywords_visible).map((keyword, index) => {
-                              return (
-                                <div className="h_p_listing_keyword">{keyword}</div>
-                              )
-                            })}
-                            {this.state.keywords_visible <= 3 ? <div className="h_p_listing_keyword h_p_listing_keyword_more" onClick={this.handleMoreKeyword}>+ {this.state.keywords.length - 3} more</div> : <div className="h_p_listing_keyword h_p_listing_keyword_more" onClick={this.handleMoreKeyword}>- Show less</div>}
+                          {pilot.skills.slice(0, pilot.keyswordsVisible).map((keyword, index) => {
+                                return (
+                                  <div className="h_p_listing_keyword">{keyword}</div>
+                                )
+                              })}
+                            {pilot.skills.length > 3 &&
+                              <>
+                              {pilot.keyswordsVisible <= 3 ? <div className="h_p_listing_keyword h_p_listing_keyword_more" onClick={()=>this.handleMoreKeyword(index)}>+ {pilot.skills.length - 3} more</div> : <div className="h_p_listing_keyword h_p_listing_keyword_more" onClick={()=>this.handleMoreKeyword(index)}>- Show less</div>}
+                              </>
+                              }
                           </div>
                         </div>
                         <div className="h_p_listing_pricing_rating">
@@ -449,11 +471,11 @@ class HirePilot extends Component {
                             <div className="h_p_listing_price_per">/hr</div>
                           </div>
                           <div className="h_p_rating_container">
-                            <div className={this.state.rating >= 1 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
-                            <div className={this.state.rating >= 2 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
-                            <div className={this.state.rating >= 3 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
-                            <div className={this.state.rating >= 4 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
-                            <div className={this.state.rating >= 5 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
+                            <div className={pilot.rating >= 1 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
+                            <div className={pilot.rating >= 2 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
+                            <div className={pilot.rating >= 3 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
+                            <div className={pilot.rating >= 4 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
+                            <div className={pilot.rating >= 5 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
                           </div>
                           <div className="h_p_listing_btn_container">
                             <button className="h_p_start_process_btn" onClick={this.clickStartProcess}>Start Process</button>
@@ -465,55 +487,64 @@ class HirePilot extends Component {
                     </Row>
                     
                   </div>
+                        )})}
                 </Visible>
                 <Visible sm xs>
+                      {this.state.pilot_list.map((pilot, index)=>{
+                        
+                      return(
                   <div className='h_p_listing_container'>
 
                     <Row>
-                      <Col>
-                        <div className="h_p_listing_img_container_sm">
-                          <img src={profileImg} alt="" className='h_p_listing_img' />
-                        </div>
-                        <div className="h_p_others_container_sm">
-                          <div className="h_p_listing_name" onClick={() => this.pilotDetailPage(1)} >John Doe</div>
-                          <div className="h_p_listing_job">Professional Drone pilot</div>
-                          <div className="h_p_listing_location"><img src={locationIcon} alt="" height={"13px"} style={{ marginRight: "4px" }} /> Bangalore, India</div>
-                          <div className="h_p_listing_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod, possimus!</div>
-                          <div className="h_p_listing_keywords_container">
-                            {this.state.keywords.slice(0, this.state.keywords_visible).map((keyword, index) => {
-                              return (
-                                <div className="h_p_listing_keyword">{keyword}</div>
-                              )
-                            })}
-                            {this.state.keywords_visible <= 3 ? <div className="h_p_listing_keyword h_p_listing_keyword_more" onClick={this.handleMoreKeyword}>+ {this.state.keywords.length - 3} more</div> : <div className="h_p_listing_keyword h_p_listing_keyword_more" onClick={this.handleMoreKeyword}>- Show less</div>}
+                        <Col>
+                          <div className="h_p_listing_img_container_sm">
+                            <img src={profileImg} alt="" className='h_p_listing_img' />
                           </div>
-                        </div>
-                        <hr style={{ borderBottom: "1px solid #dcdcdc" }} />
-                        <div className="h_p_listing_pricing_rating_sm">
-
-                          <div className='h_p_star-price_box'>
-                            <div className='h_p_price-container-1'>
-                              <div className='h_p_price-rate'>$20 <span className='h_p_hour_time'>/hr</span>  </div>
-
-                            </div>
-                            <div class="h_p_star_section">
-                              <div className={this.state.rating >= 1 ? "h_p_rating h_p_rating_selected  star-review-box  " : "h_p_rating h_p_rating_unselected   star-review-box"}>&#9733;</div>
-                              <div className={this.state.rating >= 2 ? "h_p_rating h_p_rating_selected  star-review-box" : "h_p_rating h_p_rating_unselected   star-review-box"}>&#9733;</div>
-                              <div className={this.state.rating >= 3 ? "h_p_rating h_p_rating_selected  star-review-box " : "h_p_rating h_p_rating_unselected   star-review-box "}>&#9733;</div>
-                              <div className={this.state.rating >= 4 ? "h_p_rating h_p_rating_selected star-review-box " : "h_p_rating h_p_rating_unselected   star-review-box"}>&#9733;</div>
-                              <div className={this.state.rating >= 5 ? "h_p_rating h_p_rating_selected star-review-box " : "h_p_rating h_p_rating_unselected   star-review-box"}>&#9733;</div>
-
+                          <div className="h_p_others_container_sm">
+                            <div className="h_p_listing_name" onClick={() => this.pilotDetailPage(1)} >{pilot.name}</div>
+                            <div className="h_p_listing_job">{pilot.pilotType === "unlicensed"?"Professional Drone pilot":"Passionate Drone pilot"}</div>
+                            <div className="h_p_listing_location"><img src={locationIcon} alt="" height={"13px"} style={{ marginRight: "4px" }} /> {pilot.city}, {pilot.country}</div>
+                            <div className="h_p_listing_description">{pilot.bio}</div>
+                            <div className="h_p_listing_keywords_container">
+                              {pilot.skills.slice(0, pilot.keyswordsVisible).map((keyword, index) => {
+                                return (
+                                  <div className="h_p_listing_keyword">{keyword}</div>
+                                )
+                              })}
+                              {pilot.skills.length > 3 &&
+                              <>
+                              {pilot.keyswordsVisible <= 3 ? <div className="h_p_listing_keyword h_p_listing_keyword_more" onClick={()=>this.handleMoreKeyword(index)}>+ {pilot.skills.length - 3} more</div> : <div className="h_p_listing_keyword h_p_listing_keyword_more" onClick={()=>this.handleMoreKeyword(index)}>- Show less</div>}
+                              </>
+                              }
                             </div>
                           </div>
-                          <div className="h_p_listing_btn-container">
-                            <button className="h_p_start_process_btn" onClick={this.clickStartProcess}>Start Process</button>
-                            <button className="h_p_save_pilot_btn" onClick = {this.showJobSave}><i class="fa fa-heart"></i></button>
-                            <div className="h_p_listing_send_msg_link " style={{ textAlign: "center" }} onClick = {() => this.sendMessage(1)}>Send Message</div>
+                          <hr style={{ borderBottom: "1px solid #dcdcdc" }} />
+                          <div className="h_p_listing_pricing_rating_sm">
+
+                            <div className='h_p_star-price_box'>
+                              <div className='h_p_price-container-1'>
+                                <div className='h_p_price-rate'>$20 <span className='h_p_hour_time'>/hr</span>  </div>
+
+                              </div>
+                              <div class="h_p_star_section">
+                                <div className={pilot.rating >= 1 ? "h_p_rating h_p_rating_selected  star-review-box  " : "h_p_rating h_p_rating_unselected   star-review-box"}>&#9733;</div>
+                                <div className={pilot.rating >= 2 ? "h_p_rating h_p_rating_selected  star-review-box" : "h_p_rating h_p_rating_unselected   star-review-box"}>&#9733;</div>
+                                <div className={pilot.rating >= 3 ? "h_p_rating h_p_rating_selected  star-review-box " : "h_p_rating h_p_rating_unselected   star-review-box "}>&#9733;</div>
+                                <div className={pilot.rating >= 4 ? "h_p_rating h_p_rating_selected star-review-box " : "h_p_rating h_p_rating_unselected   star-review-box"}>&#9733;</div>
+                                <div className={pilot.rating >= 5 ? "h_p_rating h_p_rating_selected star-review-box " : "h_p_rating h_p_rating_unselected   star-review-box"}>&#9733;</div>
+
+                              </div>
+                            </div>
+                            <div className="h_p_listing_btn-container">
+                              <button className="h_p_start_process_btn" onClick={this.clickStartProcess}>Start Process</button>
+                              <button className="h_p_save_pilot_btn" onClick = {this.showJobSave}><i class="fa fa-heart"></i></button>
+                              <div className="h_p_listing_send_msg_link " style={{ textAlign: "center" }} onClick = {() => this.sendMessage(1)}>Send Message</div>
+                            </div>
                           </div>
-                        </div>
-                      </Col>
+                        </Col>
                     </Row>
                   </div>
+                      )})}
                 </Visible>
               </Col>
             </Row>

@@ -17,7 +17,7 @@ function Admin_dashboard() {
 
   return (
     <div>
-      <div>
+      <div style = {{background: "aquamarine"}}>
         <div className="p_d_navbar">
           <Container
             className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}
@@ -34,8 +34,8 @@ function Admin_dashboard() {
           className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}
         >
           <Row gutterWidth={70}>
-            <Col xl={3} lg={4} md={12} sm={12}>
-              <div>
+            <Col xl={3} lg={4} md={12} sm={12} style = {{background: "#fff", height: "250px", position: "sticky", top: "100px"}}>
+              <div >
                 <div className="media_box">
                   <div className="sidebar_filter1_title">Jobs</div>
                   <hr className="sidebar_hr" />
@@ -68,16 +68,7 @@ function Admin_dashboard() {
                         Active Jobs
                       </NavLink>{" "}
                     </div>
-                    <div id="pd_filter1_checkbox_label">
-                      {" "}
-                      <NavLink
-                        to="/pilot_dashboard/account/notifications"
-                        activeClassName="h_p_sidebar_active"
-                        className="h_p_filter1_checkbox_label"
-                      >
-                        Notifications Settings
-                      </NavLink>
-                    </div>
+
                   </div>
                 </div>
               </div>

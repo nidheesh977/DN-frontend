@@ -123,7 +123,7 @@ list.status === "active" ? <div className="j_l_applyJobBtn" onClick={applyNow1}>
         </div>
 
         <Row gutterWidth={40}>
-            <Col>
+            <Col  style = {{background: "white", borderRadius: "10px", padding: "20px", marginLeft: "20px"}}>
               <div className="j_l_titleHead"> Job Description</div>
               <div className="j_l_desc">
                 {list.jobDesc}
