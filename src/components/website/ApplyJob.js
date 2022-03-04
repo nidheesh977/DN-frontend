@@ -77,6 +77,8 @@ class ApplyJob extends Component {
       liked: [],
       dialogOpen: false,
       dialogOpen1: false,
+      authourised: false,
+
     };
   }
   dropdown = (id) => {
@@ -118,14 +120,29 @@ class ApplyJob extends Component {
         const persons = res.data;
         console.log(persons);
         this.setState({ liked: persons });
-      });
+      }).catch((err)=>{
+       this.setState({
+         authourised: false
+       })
+      })
   }
   config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
     },
   };
-  likePost = (id) => {
+  likePost = (id) =>{
+
+    if(!localStorage.getItem("access_token")){
+alert("Please login / register")
+    }else{
+
+
+    if(this.state.authourised === false){
+      alert("Please create your Account")
+    }else{
+
+   
     console.log(this.config);
     this.setState({
       dialogOpen: true,
@@ -136,14 +153,23 @@ class ApplyJob extends Component {
       .post(`http://localhost:9000/api/jobs/likeJob/${id}`, this.config)
 
       .then((response) => {
-        if (response.data === "please Login") {
-          // history.push("/pilot_dashboard/account")
-          alert("loginFirst");
-        }
-      })
-      .catch(() => {});
-  };
-  unlikePost = (id) => {
+
+
+if(response.data === "please Login"){
+  // history.push("/pilot_dashboard/account")
+  alert("loginFirst");
+}
+
+
+})
+      .catch(() => {
+      });
+    }
+
+          }
+
+  }
+  unlikePost = (id) =>{
     console.log(this.config);
     this.setState({
       dialogOpen1: true,
