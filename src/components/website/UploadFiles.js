@@ -980,6 +980,12 @@ class UploadFiles extends Component {
                 aria-describedby="alert-dialog-description"
                 maxWidth={"md"}
                 fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
               >
                 <DialogContent
                   className={All.PopupBody}

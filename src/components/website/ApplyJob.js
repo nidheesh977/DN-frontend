@@ -10,7 +10,7 @@ import work from "../images/work.svg";
 import { Link } from "react-router-dom";
 import dropdown from "../images/s_c_dropdown2.png";
 import Box from "@mui/material/Box";
-import axios from 'axios'
+import axios from "axios";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import loadMore from "../images/Group 71.svg";
 import Slider from "@mui/material/Slider";
@@ -21,8 +21,8 @@ import heartLike from "../images/heart-blue.svg";
 import Skeleton from "react-loading-skeleton";
 import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
-import Dialog from "@material-ui/core/Dialog";  
-
+import Dialog from "@material-ui/core/Dialog";
+import nofoundresult from "../images/noresultfound.svg";
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -64,7 +64,7 @@ class ApplyJob extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
+      loading: true,
       data: [],
       view_pilot_type_filter: true,
       view_work_filter: false,
@@ -73,11 +73,10 @@ class ApplyJob extends Component {
       price_range_min: 0,
       price_range_max: 200,
       show_more_filters: false,
-    
+
       liked: [],
       dialogOpen: false,
       dialogOpen1: false,
-
     };
   }
   dropdown = (id) => {
@@ -108,76 +107,71 @@ class ApplyJob extends Component {
       .then((res) => {
         const persons = res.data;
         console.log(persons.results);
-        this.setState({ data: persons.results });
+        this.setState({ data: persons.results, loading: false });
       })
-      axios.post(`http://localhost:9000/api/pilot/getLikedJobs`, this.config)
-      .then(res => {
+      .catch((err) => {
+        this.setState({ loading: false });
+      });
+    axios
+      .post(`http://localhost:9000/api/pilot/getLikedJobs`, this.config)
+      .then((res) => {
         const persons = res.data;
-        console.log(persons)
+        console.log(persons);
         this.setState({ liked: persons });
-      })
+      });
   }
   config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
     },
   };
-  likePost = (id) =>{
-   
+  likePost = (id) => {
     console.log(this.config);
     this.setState({
-      dialogOpen: true
-    })
-    this.state.liked.push(id)
+      dialogOpen: true,
+    });
+    this.state.liked.push(id);
 
-    axios.post(`http://localhost:9000/api/jobs/likeJob/${id}`, this.config)
+    axios
+      .post(`http://localhost:9000/api/jobs/likeJob/${id}`, this.config)
 
       .then((response) => {
-
-
-if(response.data === "please Login"){
-  // history.push("/pilot_dashboard/account")
-  alert("loginFirst");
-}
-
-
-})
-      .catch(() => {
-      });
-      
-  }
-  unlikePost = (id) =>{
+        if (response.data === "please Login") {
+          // history.push("/pilot_dashboard/account")
+          alert("loginFirst");
+        }
+      })
+      .catch(() => {});
+  };
+  unlikePost = (id) => {
     console.log(this.config);
     this.setState({
-      dialogOpen1: true
-    })
+      dialogOpen1: true,
+    });
     let index = this.state.liked.indexOf(id);
     this.state.liked.splice(index, 1);
-    axios.post(`http://localhost:9000/api/jobs/unlikeJob/${id}`, this.config)
+    axios
+      .post(`http://localhost:9000/api/jobs/unlikeJob/${id}`, this.config)
 
       .then((response) => {
-
-
-if(response.data === "please Login"){
-  // history.push("/pilot_dashboard/account")
-  alert("loginFirst");
-}
-
-
-})
-      .catch(() => {
-      });
-      
-  }
+        if (response.data === "please Login") {
+          // history.push("/pilot_dashboard/account")
+          alert("loginFirst");
+        }
+      })
+      .catch(() => {});
+  };
   closeChoicePopup = () => {
     this.setState({
-      dialogOpen: false
-    })}
-    closeChoicePopup1 = () => {
-      this.setState({
-        dialogOpen1: false
-      })}
-  
+      dialogOpen: false,
+    });
+  };
+  closeChoicePopup1 = () => {
+    this.setState({
+      dialogOpen1: false,
+    });
+  };
+
   render() {
     return (
       <>
@@ -536,10 +530,33 @@ if(response.data === "please Login"){
                   </div>
                 </div>
                 <div style={{ margin: "40px 0px 50px 0px" }}>
-                  {this.state.loading
-                    &&<Skeleton height = {250} count = {3} style = {{marginBottom: "20px"}}/>
-                  }
-                   {this.state.data.map((item, i) => {
+                  {this.state.loading && (
+                    <Skeleton
+                      height={250}
+                      count={3}
+                      style={{ marginBottom: "20px" }}
+                    />
+                  )}
+                  {!this.state.loading && !this.state.data.length && (
+                    <div style={{ margin: "0px auto", display: "block" }}>
+                      <Box className={All.Text_center} pt={5}>
+                        <img
+                          src={nofoundresult}
+                          className={`${All.W_xs_100} ${All.W_sm_100}`}
+                        />
+                        <Box className={`${All.Text_center}`} px={5} pb={2}>
+                          <h2>No Results Found</h2>
+                        </Box>
+                        <Box className={`${All.Text_center}`} pb={5}>
+                          <label>
+                            It seems we can’t find any results based on your
+                            search.{" "}
+                          </label>
+                        </Box>
+                      </Box>
+                    </div>
+                  )}
+                  {this.state.data.map((item, i) => {
                     return (
                       <div
                         className="pd_a_j_data"
@@ -548,9 +565,13 @@ if(response.data === "please Login"){
                         <div style={{ marginBottom: "10px" }}>
                           <div className="pd_a_j_dataDateHead">
                             Posted on:
-                            <span className="pd_a_j_dataDate">{item.postingDate.slice(0,10)}</span>
+                            <span className="pd_a_j_dataDate">
+                              {item.postingDate.slice(0, 10)}
+                            </span>
                           </div>
-                          <div className="pd_a_j_dataTitle">{item.jobTitle}</div>
+                          <div className="pd_a_j_dataTitle">
+                            {item.jobTitle}
+                          </div>
                         </div>
                         <div className="pd_a_j_data_subTitle">
                           {item.companyName}
@@ -567,10 +588,13 @@ if(response.data === "please Login"){
                               <img src={money} />
                             </div>
                             <div className="a_j_listing_money">
-                             $ {item.minSalary}.00 - ${item.maxSalary}.00
+                              $ {item.minSalary}.00 - ${item.maxSalary}.00
                             </div>
                           </div>
-                          <div className="a_j_listing_text"> {item.jobDesc.slice(0,148)}</div>
+                          <div className="a_j_listing_text">
+                            {" "}
+                            {item.jobDesc.slice(0, 148)}
+                          </div>
                           <hr className="a_j_listing_hr" />
                         </div>
                         <div className="a_j_listing_btns">
@@ -586,19 +610,25 @@ if(response.data === "please Login"){
                               {item.jobType}
                             </span>
                           </button>
-                          <Link to=  {`/applyJobLanding/${item._id}`} id="a_j_job_btn">
+                          <Link
+                            to={`/applyJobLanding/${item._id}`}
+                            id="a_j_job_btn"
+                          >
                             View Job
                           </Link>{" "}
-                          {
-                            this.state.liked.includes(item._id)?  <img
-                            src={heartLike}
-                            className="a_j_like" onClick={()=>this.unlikePost(item._id)}
-                          /> :  <img
-                          src={heart}
-                          className="a_j_like" onClick={()=>this.likePost(item._id)}
-                        />
-                          }
-                         
+                          {this.state.liked.includes(item._id) ? (
+                            <img
+                              src={heartLike}
+                              className="a_j_like"
+                              onClick={() => this.unlikePost(item._id)}
+                            />
+                          ) : (
+                            <img
+                              src={heart}
+                              className="a_j_like"
+                              onClick={() => this.likePost(item._id)}
+                            />
+                          )}
                         </div>
                       </div>
                     );
@@ -613,47 +643,79 @@ if(response.data === "please Login"){
               </Col>
             </Row>
             <Dialog
-                open={this.state.dialogOpen}
-                onClose={this.closeChoicePopup}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                maxWidth={"md"}
-                fullWidth={true}
+              open={this.state.dialogOpen}
+              onClose={this.closeChoicePopup}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+            >
+              <DialogContent
+                className={All.PopupBody}
+                style={{ marginBottom: "50px" }}
               >
-
-                <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
-                  <div style={{ position: "absolute", top: '20px', right: '20px' }}>
-                    <img src={Close} alt="" onClick={this.closeChoicePopup} style={{ cursor: "pointer" }} />
+                <div
+                  style={{ position: "absolute", top: "20px", right: "20px" }}
+                >
+                  <img
+                    src={Close}
+                    alt=""
+                    onClick={this.closeChoicePopup}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div className="u_f_popup_title">
+                    The Job has been saved successfully
                   </div>
-                  <Row style={{ marginTop: "30px" }}>
-                    <div className="u_f_popup_title">The Job has been saved successfully</div>
-                    <div className="u_f_popup_btn_container">
-                      <button className="u_f_popup_btn2" onClick={this.closeChoicePopup}>Close</button>
-                    </div>
-                  </Row>
-                </DialogContent>
-              </Dialog>
-              <Dialog
-                open={this.state.dialogOpen1}
-                onClose={this.closeChoicePopup1}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                maxWidth={"md"}
-                fullWidth={true}
+                  <div className="u_f_popup_btn_container">
+                    <button
+                      className="u_f_popup_btn2"
+                      onClick={this.closeChoicePopup}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
+            <Dialog
+              open={this.state.dialogOpen1}
+              onClose={this.closeChoicePopup1}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+            >
+              <DialogContent
+                className={All.PopupBody}
+                style={{ marginBottom: "50px" }}
               >
-
-                <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
-                  <div style={{ position: "absolute", top: '20px', right: '20px' }}>
-                    <img src={Close} alt="" onClick={this.closeChoicePopup1} style={{ cursor: "pointer" }} />
+                <div
+                  style={{ position: "absolute", top: "20px", right: "20px" }}
+                >
+                  <img
+                    src={Close}
+                    alt=""
+                    onClick={this.closeChoicePopup1}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div className="u_f_popup_title">
+                    The Job has been Unsaved successfully
                   </div>
-                  <Row style={{ marginTop: "30px" }}>
-                    <div className="u_f_popup_title">The Job has been Unsaved successfully</div>
-                    <div className="u_f_popup_btn_container">
-                      <button className="u_f_popup_btn2" onClick={this.closeChoicePopup1}>Close</button>
-                    </div>
-                  </Row>
-                </DialogContent>
-              </Dialog>
+                  <div className="u_f_popup_btn_container">
+                    <button
+                      className="u_f_popup_btn2"
+                      onClick={this.closeChoicePopup1}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
           </Container>
         </div>
       </>

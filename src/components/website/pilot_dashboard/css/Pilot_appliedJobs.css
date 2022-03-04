@@ -132,15 +132,20 @@
 }
 
 .h_p_create_job_btn {
-  padding: 6px 17px;
+  padding: 5px 16px;
   font-family: muli-light;
   font-size: 13px;
   line-height: 19px;
   background: transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0%
     0% no-repeat padding-box;
   border-radius: 23px;
-  border: 0;
+  border: 1px solid #00e7fc;
 }
+
+.h_p_create_job_btn:hover{
+  background: white;
+}
+
 .a_j_listing_btns {
   display: flex;
   /* align-items: center; */
@@ -170,14 +175,14 @@
 }
 #a_j_job_btn, #a_j_job_btn1 {
   color: black;
-padding: 8px 60px 7px 60px;
+padding: 7px 59px 6px 59px;
 background: transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0% 0% no-repeat padding-box;
   font-family: muli-bold;
   font-size: 14px !important;
   line-height: 25px !important;
   height: 25px !important;
   border-radius: 23px;
-  border: 0;
+  border: 1px solid #00e7fc;
   margin-right: 1rem;
   /* width: 150px; */
   cursor: pointer;
@@ -186,8 +191,8 @@ background: transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0% 0% 
 }
 
 #a_j_job_btn:hover , #a_j_job_btn1:hover{
-
     color : black !important;
+    background: white;
 }
 
 .a_j_job_text {
@@ -216,11 +221,15 @@ background: transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0% 0% 
       font-size: 14px;
       line-height: 25px;
     border-radius: 23px;
-    border: 0;
+    border: 1px solid #00e7fc;
     margin-right: 1rem;
     width: 250px;
     margin-bottom: 10px;
 
+  }
+
+  .a_j_loadMore_btn:hover{
+    background: white;
   }
 
   .a_j_load_div{
@@ -246,14 +255,14 @@ margin-top: 30px !important;      justify-content: center;
   }
   #a_j_job_btn {
     color: black;
-  padding: 10px 40px;
+  padding: 9px 39px;
   background: transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0%
     0% no-repeat padding-box;
     font-family: muli-bold !important;
     font-size: 14px !important;
     line-height: 20px !important;
   border-radius: 23px;
-  border: 0;
+  border: 1px solid #00e7fc;
   height: 20px !important;
   margin-right: 1rem;
   /* width: 150px; */
@@ -300,15 +309,18 @@ justify-content: center}
  }
  #a_j_job_btn{
   margin-left: 20%;
-  line-height: 30px !important;
+  line-height: 26px !important;
   font-size: 13px !important;
   width: 50%;
   font-family: muli-bold !important;
-  height: 40px !important;
+  height: 80% !important;
   margin-top: 15px;
   display: inline-block;
    text-align: center;
+   border: 1px solid #00e7fc;
 }
+
+
  .a_j_listing_btns{
    display: contents;
  }
@@ -338,6 +350,7 @@ justify-content: center}
       text-align: center;
       width: 70%;
       margin: 10px;
+      border: 1px solid #00e7fc;
    }
    .a_j_listing_btns{
      display: contents;

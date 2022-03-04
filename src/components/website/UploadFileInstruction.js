@@ -46,14 +46,14 @@ class UploadFileInstruction extends Component {
             className={All.PopupBody2}
             style={{ marginTop: "32px" }}
           >
-            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+            {/* <div style={{ position: "absolute", top: "20px", right: "20px" }}>
               <img
                 src={Close}
                 alt=""
                 onClick={this.props.closePopup}
                 style={{ cursor: "pointer" }}
               />
-            </div>
+            </div> */}
             <h2 className="upload_inst_title1">
               Show your talent to this world
             </h2>

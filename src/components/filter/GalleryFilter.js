@@ -313,41 +313,6 @@ class GalleryFilter extends React.Component {
     window.addEventListener('scroll', this.handleScroll);
     const token = localStorage.getItem("access_token");
     this.setState({ userlogin: token });
-
-    const urls = `https://demo-nexevo.in/haj/auth-app/public/api/posttitle`;
-    const config = {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("access_token"),
-      },
-    };
-    // this.setState({ loading: true });
-    axios
-      .get(`https://demo-nexevo.in/haj/auth-app/public/api/homepagelisting`, config)
-      .then((response) => response.data)
-      .then(
-        (data) => {
-          this.setState({
-            listing: data,
-            listing_length: data.length,
-            loading: false,
-          });
-        },
-        (err) => { }
-      );
-    axios
-      .get(urls, config)
-      .then((res) => res.data)
-      .then((datas) => {
-        this.setState({ posttitle: datas });
-        this.setState({ loading: false });
-      });
-
-    axios.get("https://demo-nexevo.in/haj/auth-app/public/api/auth/user", config).then(
-      (res) => {
-        this.setState({ users: res.data, usersid: res.data.id });
-      },
-      (err) => { }
-    );
   }
 
   dropdown_open = (id) => {

@@ -26,14 +26,18 @@
 }
 
 .h_p_create_job_btn{
-  padding: 6px 17px;
+  padding: 5px 16px;
   font-family: muli-light;
   font-size: 13px;
   line-height: 19px;
   background: transparent linear-gradient(290deg, #4FFEA3 0%, #00E7FC 100%) 0% 0% no-repeat padding-box;
   border-radius: 23px;
-  border: 0;
+  border: 1px solid #00E7FC;
   cursor: pointer;
+}
+
+.h_p_create_job_btn:hover{
+  background: white;
 }
 
 .h_p_filter1_heading{
@@ -282,14 +286,18 @@
 
 .h_p_start_process_btn{
   background: transparent linear-gradient(290deg, #4FFEA3 0%, #00E7FC 100%) 0% 0%;
-  padding: 8px 20px;
+  padding: 7px 19px;
   font-size: 14px;
   font-family: muli-light;
   margin-bottom: 13px;
-  border: 0;
+  border: 1px solid #00E7FC;
   border-radius: 26px;
   margin-right: 2px;
   cursor: pointer;
+}
+
+.h_p_start_process_btn:hover{
+  background: white;
 }
 
 .h_p_save_pilot_btn{

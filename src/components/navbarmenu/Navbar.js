@@ -352,6 +352,7 @@ function Navbar(props) {
                       id="first"
                       className="nav_upload_img"
                       onClick = {uploadInstructions}
+                      style = {{textTransform: "initial"}}
                     >
                       <img style={{ paddingRight: 10 }} src={UploadFile} />{" "}
                       Upload file

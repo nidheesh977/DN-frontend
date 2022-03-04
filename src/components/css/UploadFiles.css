@@ -247,9 +247,44 @@
   line-height: 35px;
   margin-bottom: 31px;
   text-align: center;
-  padding: 0px 23%;
+  padding: 0px 130px;
   margin-top: 10px;
   width: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+  .u_f_popup_title{
+    font-size: 20px;
+    padding: 0px 50px;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .u_f_popup_title{
+    font-size: 22px;
+    padding: 0px 50px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .u_f_popup_title{
+    font-size: 25px;
+    padding: 0px 80px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .u_f_popup_title{
+    font-size: 25px;
+    padding: 0px 100px;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .u_f_popup_title{
+    font-size: 25px;
+    padding: 0px 130px;
+  }
 }
 
 .u_f_popup_btn_container{

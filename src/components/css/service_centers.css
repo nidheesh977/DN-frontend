@@ -223,6 +223,10 @@
   cursor: pointer;
 }
 
+.s_c_other_details_phone:hover{
+  color: #8bdcff !important;
+}
+
 .s_c_share{
   border-radius: 0% !important;
   margin-left: auto;
@@ -273,15 +277,15 @@
   font-family: muli-bold;
   font-size: 14px;
   line-height: 20px;
-  padding: 10px 22px;
+  padding: 9px 21px;
   background: #00E7FC;
   border-radius: 20px;
-  border: 0;
+  border: 1px solid #00E7FC;
   cursor: pointer;
 }
 
 .s_c_list_btn:hover{
-  background: #00E7FC !important;
+  background: white;
 }
 
 .phone_form_title{

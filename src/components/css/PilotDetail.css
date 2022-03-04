@@ -234,25 +234,41 @@
 }
 .p_d_message_btn {
   background-color: #00E7FC;
-  width: 150px;
-  text-align: center;
-  padding-left: 33px;
-  position: relative;
-}
-.p_d_follow_btn{
-  background-color: #F5F5F7;
+  border: 1px solid #00E7FC;
   width: 150px;
   text-align: center;
   padding-left: 33px;
   position: relative;
 }
 
+.p_d_message_btn:hover{
+  background: white;
+}
+
+.p_d_follow_btn{
+  background-color: #F5F5F7;
+  border: 1px solid #F5F5F7;
+  width: 150px;
+  text-align: center;
+  padding-left: 33px;
+  position: relative;
+}
+
+.p_d_follow_btn:hover{
+  background: white;
+}
+
 .p_d_hire_btn{
   background-color: #4FFEA3;
+  border: 1px solid #4FFEA3;
   width: 150px;
   text-align: center;
   padding-left: 25px;
   position: relative;
+}
+
+.p_d_hire_btn:hover{
+  background: white;
 }
 
 .p_d_hire_content{

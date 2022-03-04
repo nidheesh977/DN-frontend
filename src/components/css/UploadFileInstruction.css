@@ -19,26 +19,28 @@
 .upload_inst_title1{
   font-size: 30px;
   font-family: muli-bold;
-  line-height: 30px;
-  margin-bottom: 10px;
+  line-height: 40px;
+  margin-bottom: 15px;
 }
 
 .upload_inst_title2{
-  font-size: 25px;
+  font-size: 22px;
   font-family: muli-bold;
-  line-height: 50px;
+  line-height: 33px;
+  margin-bottom: 10px;
 }
 
 .upload_inst_title3{
-  font-size: 20px;
+  font-size: 16px;
   font-family: muli-bold;
   line-height: 30px;
+  margin-bottom: 8px;
 }
 
 .upload_inst_content{
   font-size: 16px;
-  line-height: 25px;
-  margin-bottom: 10px;
+  line-height: 26px;
+  margin-bottom: 15px;
 }
 
 .upload_inst_btn{
@@ -54,6 +56,11 @@
   outline: none;
   padding: 10px 30px;
   cursor: pointer;
+}
+
+.upload_inst_img{
+  margin-top: 10px;
+  margin-bottom: 30px;
 }
 
 .upload_inst_btn:hover{

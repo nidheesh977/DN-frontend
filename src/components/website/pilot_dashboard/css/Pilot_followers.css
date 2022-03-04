@@ -112,7 +112,7 @@
         font-size: 14px;
         line-height: 25px;
       border-radius: 23px;
-      border: 0;
+      border: 1px solid #00e7fc;
       margin-right: 1rem;
       width: 250px;
     }
