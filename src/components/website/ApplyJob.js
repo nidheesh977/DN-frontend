@@ -77,6 +77,7 @@ class ApplyJob extends Component {
       liked: [],
       dialogOpen: false,
       dialogOpen1: false,
+      authourised: false,
 
     };
   }
@@ -115,6 +116,10 @@ class ApplyJob extends Component {
         const persons = res.data;
         console.log(persons)
         this.setState({ liked: persons });
+      }).catch((err)=>{
+       this.setState({
+         authourised: false
+       })
       })
   }
   config = {
@@ -123,6 +128,16 @@ class ApplyJob extends Component {
     },
   };
   likePost = (id) =>{
+
+    if(!localStorage.getItem("access_token")){
+alert("Please login / register")
+    }else{
+
+
+    if(this.state.authourised === false){
+      alert("Please create your Account")
+    }else{
+
    
     console.log(this.config);
     this.setState({
@@ -144,7 +159,10 @@ if(response.data === "please Login"){
 })
       .catch(() => {
       });
-      
+    }
+
+          }
+
   }
   unlikePost = (id) =>{
     console.log(this.config);
