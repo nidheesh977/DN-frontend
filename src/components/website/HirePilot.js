@@ -19,6 +19,8 @@ import { Helmet } from "react-helmet";
 import Close from "../images/close.svg";
 import axios from 'axios';
 
+const domain = process.env.REACT_APP_MY_API
+
 const AirbnbSlider = styled(Slider)(({ theme }) => ({
   color: '#00E7FC',
   height: 3,
@@ -108,7 +110,9 @@ class HirePilot extends Component {
       jobSaved: false,
       pilot_list: [],
       page: "page1",
-      nextPage: false
+      nextPage: false,
+      loading: true,
+      after_response: false,
     }
   }
 
@@ -220,10 +224,12 @@ class HirePilot extends Component {
   }
 
   componentDidMount(){
-    axios.get(`http://localhost:9000/api/pilot/hirePilots?${this.state.page}`)
+    axios.get(`${domain}/api/pilot/hirePilots?${this.state.page}`)
     .then((res)=>{
       this.setState({
-        pilot_list: res.data.results
+        pilot_list: res.data.results,
+        loading: false,
+        after_response: true
       })
       console.log(res)
     })

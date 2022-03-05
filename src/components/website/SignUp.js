@@ -275,7 +275,7 @@ function SignUp(props) {
                 <div className={All.FormGroup}>
                   <label className={All.Bold + " form_label"} for="password">Create Password </label>
                   <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
-                  <input name="password" type="password" name="password" className={All.FormControl} id="password" ref={register({ required: "You must specify a password", minLength: { value: 8, message: "Password must have at least 8 characters" } })} onChange = {changeHandler} />
+                  <input name="password" type="password" className={All.FormControl} id="password" ref={register({ required: "You must specify a password", minLength: { value: 8, message: "Password must have at least 8 characters" } })} onChange = {changeHandler} />
                   {viewPassword?<VisibilityIcon  className={All.VisibilityIcon} onClick={PasswordShow}/>:<img src = {invisible} className={All.VisibilityIcon} onClick={PasswordShow} style = {{padding: "2px 1px 0px 0px"}}/>}
              </div>
                   <div className="login_input_error_msg" id = "password_error">Password is required</div>

@@ -12,6 +12,8 @@ import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import heartLike from "../images/heart-blue.svg";
 
+const domain = process.env.REACT_APP_MY_API
+
 const DialogContent = withStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -50,7 +52,7 @@ function ApplyJobLanding() {
   };
 
   useEffect(() => {
-    axios.get(`http://localhost:9000/api/jobs/jobLanding/${param.id}`).then(
+    axios.get(`${domain}/api/jobs/jobLanding/${param.id}`).then(
       (response) => {
         // setData({response})
         setList(response.data);
@@ -60,7 +62,7 @@ function ApplyJobLanding() {
         console.log(response);
       },
 
-      axios.post(`http://localhost:9000/api/pilot/getLikedJobs`, config).then(
+      axios.post(`${domain}/api/pilot/getLikedJobs`, config).then(
         (res) => {
           setAuthourised(true);
           const persons = res.data;
@@ -69,7 +71,7 @@ function ApplyJobLanding() {
         },
 
         axios
-          .post(`http://localhost:9000/api/pilot/getAppliedJobs1`, config)
+          .post(`${domain}/api/pilot/getAppliedJobs1`, config)
           .then((res) => {
 
             const jobs = res.data.appliedJobs;
@@ -93,7 +95,7 @@ function ApplyJobLanding() {
     console.log(config);
 applied.push(id)
     axios
-      .post(`http://localhost:9000/api/jobs/applyJob/${param.id}`, config)
+      .post(`${domain}/api/jobs/applyJob/${param.id}`, config)
 
       .then((response) => {
         console.log(response.status);
@@ -123,7 +125,7 @@ applied.push(id)
     liked.push(id);
 
     axios
-      .post(`http://localhost:9000/api/jobs/likeJob/${id}`, config)
+      .post(`${domain}/api/jobs/likeJob/${id}`, config)
 
       .then((response) => {
         if (response.data === "please Login") {
@@ -142,7 +144,7 @@ applied.push(id)
     liked.splice(index, 1);
 
     axios
-      .post(`http://localhost:9000/api/jobs/unlikeJob/${id}`, config)
+      .post(`${domain}/api/jobs/unlikeJob/${id}`, config)
 
       .then((response) => {
         if (response.data === "please Login") {

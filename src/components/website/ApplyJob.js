@@ -23,6 +23,9 @@ import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import nofoundresult from "../images/noresultfound.svg";
+import env from "dotenv"
+
+const domain = process.env.REACT_APP_MY_API
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -72,7 +75,7 @@ class ApplyJob extends Component {
       price_range_min: 0,
       price_range_max: 200,
       show_more_filters: false,
-      
+
       liked: [],
       dialogOpen: false,
       dialogOpen1: false,
@@ -84,7 +87,7 @@ class ApplyJob extends Component {
       work_type: [],
       price_range: [20, 40],
       next_page: false,
-      page: "page1"
+      page: "page1",
     };
   }
   dropdown = (id) => {
@@ -111,83 +114,71 @@ class ApplyJob extends Component {
 
   componentDidMount() {
     axios
-      .get(`http://localhost:9000/api/jobs/getJobs?${this.state.page}`)
+      .get(`${domain}/api/jobs/getJobs?${this.state.page}`)
       .then((res) => {
-        console.log(res)
+        console.log(res);
         const persons = res.data;
         console.log(persons.results);
         this.setState({ data: persons.results, loading: false });
-        if (res.data.next){
+        if (res.data.next) {
           this.setState({
             next_page: true,
-            next_page: res.data.next
-          })
-        }
-        else{
+            next_page: res.data.next,
+          });
+        } else {
           this.setState({
-            next_page: false
-          })
+            next_page: false,
+          });
         }
       })
       .catch((err) => {
         this.setState({ loading: false });
       });
     axios
-      .post(`http://localhost:9000/api/pilot/getLikedJobs`, this.config)
+      .post(`${domain}/api/pilot/getLikedJobs`, this.config)
       .then((res) => {
         const persons = res.data;
         console.log(persons);
         this.setState({ liked: persons });
-      }).catch((err)=>{
-       this.setState({
-         authourised: false
-       })
       })
+      .catch((err) => {
+        this.setState({
+          authourised: false,
+        });
+      });
   }
   config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
     },
   };
-  likePost = (id) =>{
+  likePost = (id) => {
+    if (!localStorage.getItem("access_token")) {
+      alert("Please login / register");
+    } else {
+      if (this.state.authourised === false) {
+        alert("Please create your Account");
+      } else {
+        console.log(this.config);
+        this.setState({
+          dialogOpen: true,
+        });
+        this.state.liked.push(id);
 
-    if(!localStorage.getItem("access_token")){
-alert("Please login / register")
-    }else{
+        axios
+          .post(`${domain}/api/jobs/likeJob/${id}`, this.config)
 
-
-    if(this.state.authourised === false){
-      alert("Please create your Account")
-    }else{
-
-   
-    console.log(this.config);
-    this.setState({
-      dialogOpen: true,
-    });
-    this.state.liked.push(id);
-
-    axios
-      .post(`http://localhost:9000/api/jobs/likeJob/${id}`, this.config)
-
-      .then((response) => {
-
-
-if(response.data === "please Login"){
-  // history.push("/pilot_dashboard/account")
-  alert("loginFirst");
-}
-
-
-})
-      .catch(() => {
-      });
+          .then((response) => {
+            if (response.data === "please Login") {
+              // history.push("/pilot_dashboard/account")
+              alert("loginFirst");
+            }
+          })
+          .catch(() => {});
+      }
     }
-
-          }
-
-  }
-  unlikePost = (id) =>{
+  };
+  unlikePost = (id) => {
     console.log(this.config);
     this.setState({
       dialogOpen1: true,
@@ -195,7 +186,7 @@ if(response.data === "please Login"){
     let index = this.state.liked.indexOf(id);
     this.state.liked.splice(index, 1);
     axios
-      .post(`http://localhost:9000/api/jobs/unlikeJob/${id}`, this.config)
+      .post(`${domain}/api/jobs/unlikeJob/${id}`, this.config)
 
       .then((response) => {
         if (response.data === "please Login") {
@@ -218,63 +209,59 @@ if(response.data === "please Login"){
 
   filterKeywordChangeHandler = (e) => {
     this.setState({
-      filter_keyword: e.target.value
-    })
-  }
+      filter_keyword: e.target.value,
+    });
+  };
 
   filterCountryChangeHandler = (e) => {
     this.setState({
-      filter_country: e.target.value
-    })
-  }
+      filter_country: e.target.value,
+    });
+  };
 
   filterCityChangeHandler = (e) => {
     this.setState({
-      filter_city: e.target.value
-    })
-  }
+      filter_city: e.target.value,
+    });
+  };
 
-  loadMore = () => {
-
-  }
+  loadMore = () => {};
 
   filterPilotTypeChangeHandler = (type) => {
-    let pilot_type = this.state.pilot_type
-    if (pilot_type.includes(type)){
-      pilot_type.splice(pilot_type.indexOf(type), 1)
+    let pilot_type = this.state.pilot_type;
+    if (pilot_type.includes(type)) {
+      pilot_type.splice(pilot_type.indexOf(type), 1);
       this.setState({
-        pilot_type: pilot_type
-      })
-    }
-    else{
-      pilot_type.push(type)
+        pilot_type: pilot_type,
+      });
+    } else {
+      pilot_type.push(type);
       this.setState({
-        pilot_type: pilot_type
-      })
+        pilot_type: pilot_type,
+      });
     }
-    setTimeout(()=>{
-      console.log(this.state.pilot_type)
-    }, 100)
-  }
+    setTimeout(() => {
+      console.log(this.state.pilot_type);
+    }, 100);
+  };
 
   filterWorkTypeChangeHandler = (type) => {
-    let work_type = this.state.work_type
-    if (work_type.includes(type)){
-      work_type.splice(work_type.indexOf(type), 1)
+    let work_type = this.state.work_type;
+    if (work_type.includes(type)) {
+      work_type.splice(work_type.indexOf(type), 1);
       this.setState({
-        work_type: work_type
-      })
-    }
-    else{
-      work_type.push(type)
+        work_type: work_type,
+      });
+    } else {
+      work_type.push(type);
       this.setState({
-        work_type: work_type
-      })
+        work_type: work_type,
+      });
     }
-    setTimeout(()=>{
-      console.log(this.state.work_type)
-    }, 100)
-  }
+    setTimeout(() => {
+      console.log(this.state.work_type);
+    }, 100);
+  };
 
   render() {
     return (
@@ -307,27 +294,30 @@ if(response.data === "please Login"){
                     type="text"
                     className="a_j_keywords"
                     placeholder="Search Keywords"
-                    onChange = {this.filterKeywordChangeHandler}
+                    onChange={this.filterKeywordChangeHandler}
                   />
                   <div className="h_p_filter1_title1">Country</div>
-                  <select className="a_j_select_dropdown" onChange = {this.filterCountryChangeHandler}>
+                  <select
+                    className="a_j_select_dropdown"
+                    onChange={this.filterCountryChangeHandler}
+                  >
                     <option>Select Country</option>
-                    <option value = "India">India</option>
-                    <option value = "China">China</option>
-                    <option value = "Pakistan">Pakistan</option>
-                    <option value = "Russia">Russia</option>
+                    <option value="India">India</option>
+                    <option value="China">China</option>
+                    <option value="Pakistan">Pakistan</option>
+                    <option value="Russia">Russia</option>
                   </select>
                   <div className="h_p_filter1_title1">City</div>
                   <select
                     className="a_j_select_dropdown"
                     id="a_j_select_dropdown1"
-                    onChange = {this.filterCityChangeHandler}
+                    onChange={this.filterCityChangeHandler}
                   >
                     <option>Select City</option>
-                    <option value = "Chennai">Chennai</option>
-                    <option value = "Bangalore">Bangalore</option>
-                    <option value = "Mumbai">Mumbai</option>
-                    <option value = "Delhi">Delhi</option>
+                    <option value="Chennai">Chennai</option>
+                    <option value="Bangalore">Bangalore</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Delhi">Delhi</option>
                   </select>
 
                   <div
@@ -354,13 +344,25 @@ if(response.data === "please Login"){
                     id="h_p_pilot_type_filter"
                   >
                     <label className="h_p_filter1_filter1">
-                      <input type="checkbox" className="h_p_filter1_checkbox" onClick = {()=>this.filterPilotTypeChangeHandler("licensed")}/>
+                      <input
+                        type="checkbox"
+                        className="h_p_filter1_checkbox"
+                        onClick={() =>
+                          this.filterPilotTypeChangeHandler("licensed")
+                        }
+                      />
                       <div className="h_p_filter1_checkbox_label">
                         Licensed Pilots
                       </div>
                     </label>
                     <label className="h_p_filter1_filter1">
-                      <input type="checkbox" className="h_p_filter1_checkbox" onClick = {()=>this.filterPilotTypeChangeHandler("unlicensed")}/>
+                      <input
+                        type="checkbox"
+                        className="h_p_filter1_checkbox"
+                        onClick={() =>
+                          this.filterPilotTypeChangeHandler("unlicensed")
+                        }
+                      />
 
                       <div className="h_p_filter1_checkbox_label">
                         Unlicensed Pilots
@@ -391,13 +393,25 @@ if(response.data === "please Login"){
                     id="h_p_work_filter"
                   >
                     <label className="h_p_filter1_filter1">
-                      <input type="checkbox" className="h_p_filter1_checkbox" onClick = {()=>this.filterWorkTypeChangeHandler("FullTime")} />
+                      <input
+                        type="checkbox"
+                        className="h_p_filter1_checkbox"
+                        onClick={() =>
+                          this.filterWorkTypeChangeHandler("FullTime")
+                        }
+                      />
                       <div className="h_p_filter1_checkbox_label">
                         Full Time
                       </div>
                     </label>
                     <label className="h_p_filter1_filter1">
-                      <input type="checkbox" className="h_p_filter1_checkbox"  onClick = {()=>this.filterWorkTypeChangeHandler("PartTime")}/>
+                      <input
+                        type="checkbox"
+                        className="h_p_filter1_checkbox"
+                        onClick={() =>
+                          this.filterWorkTypeChangeHandler("PartTime")
+                        }
+                      />
                       <div className="h_p_filter1_checkbox_label">
                         Part Time
                       </div>
@@ -445,12 +459,15 @@ if(response.data === "please Login"){
                     <Hidden xs sm>
                       <Col lg={4} md={4} sm={6} xs={6}>
                         <div className="h_p_filter1_title1">Country</div>
-                        <select className="a_j_select_dropdown">
-                          <option>select Country</option>
-                          <option>India</option>
-                          <option>India</option>
-                          <option>India</option>
-                          <option>India</option>
+                        <select
+                          className="a_j_select_dropdown"
+                          onChange={this.filterCountryChangeHandler}
+                        >
+                          <option>Select Country</option>
+                          <option value="India">India</option>
+                          <option value="China">China</option>
+                          <option value="Pakistan">Pakistan</option>
+                          <option value="Russia">Russia</option>
                         </select>
                       </Col>
                       <Col lg={4} md={4} sm={6} xs={6}>
@@ -458,12 +475,13 @@ if(response.data === "please Login"){
                         <select
                           className="a_j_select_dropdown"
                           id="a_j_select_dropdown1"
+                          onChange={this.filterCityChangeHandler}
                         >
                           <option>Select City</option>
-                          <option>Bangalore</option>
-                          <option>Bangalore</option>
-                          <option>Bangalore</option>
-                          <option>Bangalore</option>
+                          <option value="Chennai">Chennai</option>
+                          <option value="Bangalore">Bangalore</option>
+                          <option value="Mumbai">Mumbai</option>
+                          <option value="Delhi">Delhi</option>
                         </select>
                       </Col>
                     </Hidden>
@@ -489,12 +507,15 @@ if(response.data === "please Login"){
                         <Hidden md lg>
                           <Col sm={6} xs={6}>
                             <div className="h_p_filter1_title1">Country</div>
-                            <select className="a_j_select_dropdown">
-                              <option>select Country</option>
-                              <option>India</option>
-                              <option>India</option>
-                              <option>India</option>
-                              <option>India</option>
+                            <select
+                              className="a_j_select_dropdown"
+                              onChange={this.filterCountryChangeHandler}
+                            >
+                              <option>Select Country</option>
+                              <option value="India">India</option>
+                              <option value="China">China</option>
+                              <option value="Pakistan">Pakistan</option>
+                              <option value="Russia">Russia</option>
                             </select>
                           </Col>
                           <Col sm={6} xs={6}>
@@ -502,12 +523,13 @@ if(response.data === "please Login"){
                             <select
                               className="a_j_select_dropdown"
                               id="a_j_select_dropdown1"
+                              onChange={this.filterCityChangeHandler}
                             >
                               <option>Select City</option>
-                              <option>Bangalore</option>
-                              <option>Bangalore</option>
-                              <option>Bangalore</option>
-                              <option>Bangalore</option>
+                              <option value="Chennai">Chennai</option>
+                              <option value="Bangalore">Bangalore</option>
+                              <option value="Mumbai">Mumbai</option>
+                              <option value="Delhi">Delhi</option>
                             </select>
                           </Col>
                         </Hidden>
@@ -740,14 +762,20 @@ if(response.data === "please Login"){
                     );
                   })}
                 </div>
-                {this.state.next_page
-                  &&<div className="a_j_load_div" style={{ marginBottom: "40px" }}>
-                    <button className="a_j_loadMore_btn" onClick = {this.loadMore}>
+                {this.state.next_page && (
+                  <div
+                    className="a_j_load_div"
+                    style={{ marginBottom: "40px" }}
+                  >
+                    <button
+                      className="a_j_loadMore_btn"
+                      onClick={this.loadMore}
+                    >
                       <img src={loadMore} className="a_j_location_logo" />
                       <span className="a_j_location_text">Load More</span>
                     </button>{" "}
                   </div>
-                }
+                )}
               </Col>
             </Row>
             <Dialog

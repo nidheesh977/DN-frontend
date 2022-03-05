@@ -59,13 +59,12 @@ const Login = (props) => {
       document.getElementById("password").focus()
     }
     else{
-      alert("Logged In")
       axios.post("http://localhost:9000/api/user/login", {
       
         email: email,
         password: password,
       }).then((res) => {
-  // alert("successful") 
+  alert("successful") 
               localStorage.setItem('access_token', res.data.token);
               localStorage.setItem('token_type', "Bearer");
               history.push("/")
@@ -74,6 +73,10 @@ const Login = (props) => {
               console.log(res);
 
               
+      })
+      .catch(err=>{
+console.log(err)
+alert("invalid credentials")
       })
 
         }

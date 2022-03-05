@@ -95,74 +95,75 @@ function Navbar(props) {
     setInstructions(true)
   }
 
-  useEffect(() => {
-    userService.User().then((res) => {
-      setLoading(false);
-      try {
-        if (res.data.id >= 0) {
-          Setuser(res.data);
-          Setuserlogin(true);
-        } else {
-          try {
-            axios
-              .post(
-                "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
-                {
-                  header: {
-                    Refreshtoken: localStorage.getItem("refresh_token"),
-                  },
-                }
-              )
-              .then((res) => {
-                if (res.data.token_type === "Bearer") {
-                  localStorage.setItem("access_token", res.data.access_token);
-                  localStorage.setItem("refresh_token", res.data.refresh_token);
-                  Setuserlogin(true);
-                  window.location.reload();
-                } else {
-                  localStorage.clear();
-                }
-              });
-          } catch {
-            localStorage.clear();
-          }
-        }
-      } catch {
-        try {
-          axios
-            .post(
-              "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
-              {
-                header: { Refreshtoken: localStorage.getItem("refresh_token") },
-              }
-            )
-            .then((res) => {
-              if (res.data.token_type === "Bearer") {
-                localStorage.setItem("access_token", res.data.access_token);
-                localStorage.setItem("refresh_token", res.data.refresh_token);
-                window.location.reload();
-              } else {
-                localStorage.clear();
-              }
-            });
-        } catch {
-          localStorage.clear();
-        }
-      }
-    });
+  // useEffect(() => {
+    // userService.User().then((res) => {
+    //   setLoading(false);
+    //   try {
+    //     if (res.data.id >= 0) {
+    //       Setuser(res.data);
+    //       Setuserlogin(true);
+    //     } else {
+          // try {
+          //   axios
+          //     .post(
+          //       "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
+          //       {
+          //         header: {
+          //           Refreshtoken: localStorage.getItem("refresh_token"),
+          //         },
+          //       }
+          //     )
+          //     .then((res) => {
+          //       if (res.data.token_type === "Bearer") {
+          //         localStorage.setItem("access_token", res.data.access_token);
+          //         localStorage.setItem("refresh_token", res.data.refresh_token);
+          //         Setuserlogin(true);
+          //         window.location.reload();
+          //       } else {
+          //         localStorage.clear();
+          //       }
+          //     });
+          // } catch {
+          //   localStorage.clear();
+          // }
+        // }
+      // } catch {
+        // try {
+        //   axios
+        //     .post(
+        //       "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
+        //       {
+        //         header: { Refreshtoken: localStorage.getItem("refresh_token") },
+        //       }
+        //     )
+        //     .then((res) => {
+        //       if (res.data.token_type === "Bearer") {
+        //         localStorage.setItem("access_token", res.data.access_token);
+        //         localStorage.setItem("refresh_token", res.data.refresh_token);
+        //         window.location.reload();
+        //       } else {
+        //         localStorage.clear();
+        //       }
+        //     });
+        // } catch {
+        //   localStorage.clear();
+        // }
+    //   }
+    // });
 
-    userService.Profile().then((res) => {
-      setLoading(false);
-      if (
-        res.data.profile !=
-        "https://demo-nexevo.in/haj/auth-app/public/uploads/profile"
-      ) {
-        setProfileImage(res.data.profile);
-      } else {
-        setProfileImage(ProfileIcon);
-      }
-    });
-  }, []);
+    // userService.Profile().then((res) => {
+    //   setLoading(false);
+    //   if (
+    //     res.data.profile !=
+    //     "https://demo-nexevo.in/haj/auth-app/public/uploads/profile"
+    //   ) {
+    //     setProfileImage(res.data.profile);
+    //   } else {
+    //     setProfileImage(ProfileIcon);
+    //   }
+    // });
+  // }, []
+  // );
 
   render();
   {
