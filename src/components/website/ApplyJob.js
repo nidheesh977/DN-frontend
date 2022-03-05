@@ -24,6 +24,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import nofoundresult from "../images/noresultfound.svg";
 
+
 const DialogContent = withStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -111,7 +112,7 @@ class ApplyJob extends Component {
 
   componentDidMount() {
     axios
-      .get(`http://localhost:9000/api/jobs/getJobs?${this.state.page}`)
+      .get(`http://3.110.84.72:9000/api/jobs/getJobs?${this.state.page}`)
       .then((res) => {
         console.log(res)
         const persons = res.data;
@@ -133,7 +134,7 @@ class ApplyJob extends Component {
         this.setState({ loading: false });
       });
     axios
-      .post(`http://localhost:9000/api/pilot/getLikedJobs`, this.config)
+      .post(`http://3.110.84.72:9000/api/pilot/getLikedJobs`, this.config)
       .then((res) => {
         const persons = res.data;
         console.log(persons);
@@ -168,7 +169,7 @@ alert("Please login / register")
     this.state.liked.push(id);
 
     axios
-      .post(`http://localhost:9000/api/jobs/likeJob/${id}`, this.config)
+      .post(`${process.env.REACT_APP_MYSERVER}/api/jobs/likeJob/${id}`, this.config)
 
       .then((response) => {
 
@@ -195,7 +196,7 @@ if(response.data === "please Login"){
     let index = this.state.liked.indexOf(id);
     this.state.liked.splice(index, 1);
     axios
-      .post(`http://localhost:9000/api/jobs/unlikeJob/${id}`, this.config)
+      .post(`${process.env.REACT_APP_MYSERVER}/api/jobs/unlikeJob/${id}`, this.config)
 
       .then((response) => {
         if (response.data === "please Login") {

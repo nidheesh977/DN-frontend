@@ -218,6 +218,53 @@ export default function ServiceCenterDetails(props) {
         .then((response) => {
         
           setReviews(response.data);
+          axios
+          .post(`http://localhost:9000/api/pilot/getSinglePilot`, config)
+          .then((response) => {
+        
+    setLikedReviews(response.data.likedReviews);
+    
+            console.log(response);
+            // setBrands(response.data.brandOfDrones)
+          });
+          
+
+     
+        });
+       
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  
+  const unlikeReview = (id) => {
+    axios
+      .post(
+        `http://localhost:9000/api/review/unlikeReview`,
+        {
+          reviewId: id,
+        },
+        config
+      )
+      .then((response) => {
+        alert("unliked ");
+        console.log(response)
+        axios
+        .get(`http://localhost:9000/api/review/getReviews/${param.id}`)
+        .then((response) => {
+        
+          setReviews(response.data);
+          axios
+          .post(`http://localhost:9000/api/pilot/getSinglePilot`, config)
+          .then((response) => {
+        
+    setLikedReviews(response.data.likedReviews);
+    
+            console.log(response);
+            // setBrands(response.data.brandOfDrones)
+          });
+          
 
      
         });
@@ -232,6 +279,7 @@ export default function ServiceCenterDetails(props) {
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  const [likedReviews, setLikedReviews] = useState([])
   const enquireNow = () => {
     setEnquiry(true);
   };
@@ -330,6 +378,17 @@ export default function ServiceCenterDetails(props) {
         // setDetails(response.data);
         // setStatus(response.status);
         setReviews(response.data);
+
+        console.log(response);
+        // setBrands(response.data.brandOfDrones)
+      });
+  }, []);
+  useEffect(() => {
+    axios
+      .post(`http://localhost:9000/api/pilot/getSinglePilot`, config)
+      .then((response) => {
+    
+setLikedReviews(response.data.likedReviews);
 
         console.log(response);
         // setBrands(response.data.brandOfDrones)
@@ -618,14 +677,24 @@ export default function ServiceCenterDetails(props) {
                           </div>
 
                           <div className="s_c_d_review_like_share">
-                            <div
+
+                            {
+                              likedReviews.includes(review._id) ?   <div
+                              className="s_c_d_review_like"
+                              style={{color:"#00e7fc", fontFamily:"muli-bold"}}
+                              onClick={() => unlikeReview(review._id)}
+                            >
+                              Liked ({review.likes.length})
+                            </div>  :   <div
                               className="s_c_d_review_like"
                               onClick={() => likeReview(review._id)}
                             >
                               Like ({review.likes.length})
                             </div>
+                            }
+                          
                             <div className="s_c_d_review_share">
-                              Share ({review.shares.length})
+                              Share
                             </div>
                           </div>
                         </div>
