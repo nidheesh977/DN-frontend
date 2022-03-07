@@ -27,6 +27,7 @@ import env from "dotenv"
 
 const domain = process.env.REACT_APP_MY_API
 
+
 const DialogContent = withStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -152,33 +153,44 @@ class ApplyJob extends Component {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
     },
   };
-  likePost = (id) => {
-    if (!localStorage.getItem("access_token")) {
-      alert("Please login / register");
-    } else {
-      if (this.state.authourised === false) {
-        alert("Please create your Account");
-      } else {
-        console.log(this.config);
-        this.setState({
-          dialogOpen: true,
-        });
-        this.state.liked.push(id);
 
-        axios
-          .post(`${domain}/api/jobs/likeJob/${id}`, this.config)
+  likePost = (id) =>{
 
-          .then((response) => {
-            if (response.data === "please Login") {
-              // history.push("/pilot_dashboard/account")
-              alert("loginFirst");
-            }
-          })
-          .catch(() => {});
-      }
+    if(!localStorage.getItem("access_token")){
+alert("Please login / register")
+    }else{
+
+
+   
+
+   
+    console.log(this.config);
+    this.setState({
+      dialogOpen: true,
+    });
+    this.state.liked.push(id);
+
+    axios
+      .post(`${process.env.REACT_APP_MYSERVER}/api/jobs/likeJob/${id}`, this.config)
+
+      .then((response) => {
+
+
+if(response.data === "please Login"){
+  // history.push("/pilot_dashboard/account")
+  alert("loginFirst");
+}
+
+
+})
+      .catch(() => {
+      });
     }
-  };
-  unlikePost = (id) => {
+
+          
+
+  }
+  unlikePost = (id) =>{
     console.log(this.config);
     this.setState({
       dialogOpen1: true,
@@ -186,7 +198,7 @@ class ApplyJob extends Component {
     let index = this.state.liked.indexOf(id);
     this.state.liked.splice(index, 1);
     axios
-      .post(`${domain}/api/jobs/unlikeJob/${id}`, this.config)
+      .post(`${process.env.REACT_APP_MYSERVER}/api/jobs/unlikeJob/${id}`, this.config)
 
       .then((response) => {
         if (response.data === "please Login") {
@@ -196,6 +208,7 @@ class ApplyJob extends Component {
       })
       .catch(() => {});
   };
+  
   closeChoicePopup = () => {
     this.setState({
       dialogOpen: false,
@@ -694,7 +707,7 @@ class ApplyJob extends Component {
                           <div className="pd_a_j_dataDateHead">
                             Posted on:
                             <span className="pd_a_j_dataDate">
-                              {item.postingDate}
+                              {item.postingDate.slice(0,10)}
                             </span>
                           </div>
                           <div className="pd_a_j_dataTitle">

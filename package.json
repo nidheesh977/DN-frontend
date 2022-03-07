@@ -130,7 +130,7 @@
     "video-react": "^0.14.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": " set HTTP=true&&react-scripts start",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "build": "react-scripts build",
     "test": "react-scripts test",

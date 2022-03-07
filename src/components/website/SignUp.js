@@ -45,58 +45,7 @@ function SignUp(props) {
 
   const history = useHistory();
   const onSubmit = (event) => {
-    //   axios.post("https://demo-nexevo.in/haj/auth-app/public/api/emailcheck", {email: event.email})
-    //   .then(res => {
-    //     if (res.data.message == "Email Available!"){
-    //       setLoading(true);
-    //       axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/register', {
-    //         name: event.name,
-    //         email: event.email,
-    //         phone: value,
-    //         password: event.password
-    //       }).then(res => {
-    //         try{
-    //           if (res.data.token_type == "Bearer"){
-    //             swal('Register Successfull', {
-    //               icon: "success",
-    //             });
-    //             setLoading(false);
-    //             localStorage.setItem('access_token', res.data.access_token);
-    //             localStorage.setItem('token_type', res.data.token_type);
-    //             history.push("/Profile");
-    //           }
-    //           else{
-    //             try{
-    //               setError(true)
-    //               setErrorMsg(res.data.message.phone[0])
-    //             }
-
-    //             catch(err){
-    //               setLoading(false);  
-    //               swal("Some error occured on the server. We will fix it soon.", {
-    //                 icon: "error",
-    //               });
-    //             }
-    //           }
-    //         }
-    //         catch{
-    //           setLoading(false);  
-    //             swal("Some error occured on the server. We will fix it soon.", {
-    //               icon: "error",
-    //             });
-    //         }
-            
-    //       })
-    //     }
-    //     else{
-    //       setError(true)
-    //       setErrorMsg(res.data.message)
-    //     }
-    //   })
-
-    // setLoading(false);  
- 
-
+  
 
     if (value){
 
@@ -124,7 +73,7 @@ function SignUp(props) {
           } else {
             x.type = "password";
           }
-          var y = document.getElementById("confirmPassword"); 
+          var y = document.getElementById("confirmPassword");
           if (y.type === "password") {
             y.type = "text";
           } else {
@@ -301,7 +250,7 @@ function SignUp(props) {
                   <Loader /> Loading</Button>
                  </> ) : ( <>
                   <Button variant="contained" color="default" type="submit" onClick={handleClick} className={All.BtnStyle_5} >
-                  {/* <Button variant="contained" color="default" type="submit" className={All.BtnStyle_5}> */}
+
                    Submit</Button>
                  </> )}
                   </Box>

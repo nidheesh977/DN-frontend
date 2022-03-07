@@ -99,7 +99,7 @@ function Register() {
                                       <Box  className={`${All.Width_82} ${All.Width_100} ${All.shipping_txt} `} textAlign="right" pl={0}><span textAlign="right" className={All.FSize_12}>Only for shipping process</span></Box>
                                     <div className={All.FormGroup}>  
                                         <label className={All.Bold} for="usr">Password:</label>
-                                        <input name="password" type="password" name="password" className={All.FormControl} id="usr" ref={register({ required: "You must specify a password", minLength: {  value: 8, message: "Password must have at least 8 characters" }})}/>
+                                        <input name="password" type="password" className={All.FormControl} id="usr" ref={register({ required: "You must specify a password", minLength: {  value: 8, message: "Password must have at least 8 characters" }})}/>
                                         {errors.password && errors.password.type === "required" && <p class="error">This is required field</p>} 
                                         {errors.password && errors.password.type === "minLength" && <p class="error">This is field minLength 8</p>} 
                                     </div>   

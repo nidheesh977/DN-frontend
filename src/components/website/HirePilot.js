@@ -454,7 +454,7 @@ class HirePilot extends Component {
                           <img src={profileImg} alt="" className='h_p_listing_img' />
                         </div>
                         <div className="h_p_others_container">
-                          <div className="h_p_listing_name" onClick={() => this.pilotDetailPage(1)}>{pilot.name}</div>
+                          <div className="h_p_listing_name" onClick={() => this.pilotDetailPage(pilot._id)}>{pilot.name}</div>
                           <div className="h_p_listing_job">{pilot.pilotType === "unlicensed"?"Professional Drone pilot":"Passionate Drone pilot"}</div>
                           <div className="h_p_listing_location"><img src={locationIcon} alt="" height={"13px"} style={{ marginRight: "4px" }} /> {pilot.city}, {pilot.country}</div>
                           <div className="h_p_listing_description">{pilot.bio}</div>
