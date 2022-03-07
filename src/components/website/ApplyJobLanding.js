@@ -20,7 +20,7 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-function ApplyJobLanding() {
+function ApplyJobLanding(props) {
   let history = useHistory();
   let param = useParams();
   // let {data, setData}= useState({})
@@ -32,6 +32,8 @@ function ApplyJobLanding() {
   let [liked, setLiked] = useState([]);
   let [applied, setapplied] = useState([]);
   let [authourised, setAuthourised] = useState(false);
+  let [applySuccess, setApplySuccess] = useState(false)
+  let [applyFailure, setApplyFailure] = useState(false)
 
   let config = {
     headers: {
@@ -50,6 +52,14 @@ function ApplyJobLanding() {
   let closeChoicePopup2 = () => {
     setDialog2(false);
   };
+
+  const closeApplySuccess = () => {
+    setApplySuccess(false)
+  }
+
+  const closeApplyFailure = () => {
+    setApplyFailure(false)
+  }
 
   useEffect(() => {
     axios.get(`${domain}/api/jobs/jobLanding/${param.id}`).then(
@@ -84,11 +94,7 @@ function ApplyJobLanding() {
 
   function applyNow(id) {
     if(!localStorage.getItem("access_token")){
-      alert("Please Login or Signup");
-    }else{
-
-    if(authourised === false){
-      alert("PLease Create an Account");
+      setApplyFailure(true)
     }else{
 
 
@@ -98,6 +104,7 @@ applied.push(id)
       .post(`${domain}/api/jobs/applyJob/${param.id}`, config)
 
       .then((response) => {
+        setApplySuccess(true)
         console.log(response.status);
 
         if (response.data === "please Login") {
@@ -109,17 +116,13 @@ applied.push(id)
       setDialog(true);
     }
   }
-}
+
 
   }
   let likePost = (id) => {
 
     if(!localStorage.getItem("access_token")){
-      alert("Please Login or Signup");
-    }else{
-
-    if(authourised === false){
-      alert("PLease Create an Account");
+      setApplyFailure(true)
     }else{
     setDialog1(true);
     liked.push(id);
@@ -135,7 +138,7 @@ applied.push(id)
       })
       .catch(() => {});
     }
-  }
+  
   };
   let unlikePost = (id) => {
     console.log(config);
@@ -322,6 +325,75 @@ applied.push(id)
                 <button className="u_f_popup_btn2" onClick={closeChoicePopup2}>
                   Close
                 </button>
+              </div>
+            </Row>
+          </DialogContent>
+        </Dialog>
+        <Dialog
+          open={applySuccess}
+          onClose={closeApplySuccess}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+          PaperProps={{style: { borderRadius: 10, width: "820px" } }}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={closeApplySuccess}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="a_j_popup_title">
+                Thank you!!
+              </div>
+              <div className="a_j_popup_content" style = {{marginBottom: "25px!important"}}>
+                Your application has been submitted successfully
+              </div>
+              <div className="u_f_popup_btn_container">
+              <div className="j_l_applyJobLoginBtn" style = {{width: "155px"}} onClick = {closeApplySuccess}>
+                Close
+              </div>
+              </div>
+            </Row>
+          </DialogContent>
+        </Dialog>
+        <Dialog
+          open={applyFailure}
+          onClose={closeApplyFailure}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+          PaperProps={{style: { borderRadius: 10, width: "820px" } }}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={closeApplyFailure}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="a_j_popup_title" style = {{padding: "0px 60px"}}>
+                You aren't logged into DroneZone. Please login to continue?
+              </div>
+              <div className="u_f_popup_btn_container" style = {{marginTop: "8px"}}>
+              <div className="j_l_applyJobLoginBtn" style = {{width: "fit-content"}} onClick = {()=>props.history.push("/login")}>
+                Login / Sign Up
+              </div>
               </div>
             </Row>
           </DialogContent>

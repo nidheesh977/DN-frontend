@@ -109,16 +109,38 @@
 }
 
 .j_l_applyJobBtn {
-  padding: 10px 60px;
+  padding: 9px 59px;
   font-family: muli-bold;
   font-size: 14px;
   line-height: 20px;
   background: transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0%
     0% no-repeat padding-box;
   border-radius: 23px;
-  border: 0;
+  border: 1px solid #00e7fc;
   cursor: pointer;
   margin-right: 20px;
+}
+
+.j_l_applyJobLoginBtn {
+  padding: 7px 15px;
+  font-family: muli-bold;
+  font-size: 14px;
+  line-height: 20px;
+  background: transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0%
+    0% no-repeat padding-box;
+  border-radius: 23px;
+  border: 1px solid #00e7fc;
+  cursor: pointer;
+  margin-right: 20px;
+  margin: auto;
+}
+
+.j_l_applyJobBtn:hover{
+  background: white
+}
+
+.j_l_applyJobLoginBtn:hover{
+  background: white
 }
 
 .j_l_titleHead {
@@ -195,4 +217,20 @@ button{
 
 textarea{
   resize: none
+}
+
+.a_j_popup_title{
+  font-size: 30px;
+  font-family: muli-bold;
+  margin-bottom: 25px;
+  width: 100%;
+  text-align: center;
+}
+
+.a_j_popup_content{
+  font-size: 18px;
+  font-family: muli-light;
+  margin-bottom: 33px;
+  width: 100%;
+  text-align: center;
 }

@@ -252,6 +252,11 @@
   width: 100%;
 }
 
+.u_f_popup_content{
+  width: 100%;
+  text-align: center;
+}
+
 @media only screen and (max-width: 600px) {
   .u_f_popup_title{
     font-size: 20px;

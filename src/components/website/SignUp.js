@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Helmet } from "react-helmet";
 import { Container, Row, Col, Visible } from 'react-grid-system';
 import All from '../website/All.module.css'
@@ -21,6 +21,7 @@ import Loader from '../Loader/loader'
 import swal from 'sweetalert';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import invisible from '../images/invisible (2).png'
+
 
 function SignUp(props) {
 
@@ -170,6 +171,9 @@ function SignUp(props) {
     const raiseError = (id, msg) => {
       document.getElementById(`${id}_error`).innerText = msg
       document.getElementById(`${id}_error`).style.display = "contents"
+      if(id === "phone"){
+        document.getElementById("phone").focus()
+      }
     }
 
     const validateEmail = (email) => {
@@ -267,7 +271,7 @@ function SignUp(props) {
                 <div className={All.FormGroup}>
                   <label className={All.Bold + " form_label"} for="phone">Phone Number <span className={All.FSize_12}>(with country code)</span></label>
                   {/* <PhoneInput defaultCountry="IN" className={All.Phonenumber} name="phone" id="phone" value={value} onChange={setValue}/> */}
-                  <PhoneInput defaultCountry="IN" className={All.Phonenumber} name="phone" id="phone" value={formValues.phone}  onChange={phoneChangeHandler}/>
+                  <PhoneInput defaultCountry="IN" className={All.Phonenumber} name="phone" id="phone" value={formValues.phone}  onChange={phoneChangeHandler} />
                   <div className="login_input_error_msg" id = "phone_error">Phone number is required</div>
                 </div>
 

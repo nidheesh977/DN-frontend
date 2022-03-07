@@ -4,7 +4,19 @@ import All from '../website/All.module.css'
 import "../css/UserCategory.css"
 import { Radio } from "@material-ui/core";
 import axios from "axios"
+import Dialog from "@material-ui/core/Dialog";
+import Close from "../images/close.svg";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import { withStyles } from "@material-ui/core/styles";
 
+
+const domain = process.env.REACT_APP_MY_API
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
 
 class UserCategory extends Component {
   constructor(props) {
@@ -14,7 +26,8 @@ class UserCategory extends Component {
       email: "",
       phone: "",
       password: "",
-      user_category: "pilot"
+      user_category: "pilot",
+      signupSuccess: false
     }
   }
 
@@ -47,8 +60,7 @@ class UserCategory extends Component {
     console.log(this.state.password)
     console.log(this.state.user_category)
 
-    axios.post("http://localhost:9000/api/user/register", {
-      
+    axios.post(`${domain}/api/user/register`, {
       name:  this.state.name,
       email: this.state.email,
       phoneNo: this.state.phone,
@@ -68,6 +80,12 @@ console.log(res)
     .catch(() => {
       alert("not successful");
     });
+  }
+
+  closeSignupSuccess = () => {
+    this.setState({
+      signupSuccess: false
+    })
   }
 
   render() {
@@ -155,6 +173,37 @@ console.log(res)
             </div>
           </Col>
         </Row>
+        <Dialog
+            open={this.state.email.signupSuccess}
+            onClose={this.closeSignupSuccess}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{style: { width: "820px", borderRadius: "10px" }   }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={this.closeSignupSuccess}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div className="u_f_popup_title">Registered successfully</div>
+                <div className="u_f_popup_btn_container">
+                  <button className="u_f_popup_btn2" onClick={this.closeSignupSuccess}>
+                    Go to homepage
+                  </button>
+                </div>
+              </Row>
+            </DialogContent>
+          </Dialog>
       </Container>
     )
   }
