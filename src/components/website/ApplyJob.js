@@ -157,9 +157,7 @@ alert("Please login / register")
     }else{
 
 
-    if(this.state.authourised === false){
-      alert("Please create your Account")
-    }else{
+   
 
    
     console.log(this.config);
@@ -185,7 +183,7 @@ if(response.data === "please Login"){
       });
     }
 
-          }
+          
 
   }
   unlikePost = (id) =>{
@@ -673,7 +671,7 @@ if(response.data === "please Login"){
                           <div className="pd_a_j_dataDateHead">
                             Posted on:
                             <span className="pd_a_j_dataDate">
-                              {item.postingDate}
+                              {item.postingDate.slice(0,10)}
                             </span>
                           </div>
                           <div className="pd_a_j_dataTitle">

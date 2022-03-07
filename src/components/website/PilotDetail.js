@@ -15,7 +15,7 @@ import Close from "../images/close.svg";
 import "reactjs-popup/dist/index.css";
 import { useState, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import whatsapp_icon from "../images/whatsapp_icon.png";
 import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import s_c_form_img from "../images/s_c_form_img.png";
@@ -33,6 +33,7 @@ import hirePilotIcon from "../images/hirePilotIcon.svg";
 import downloadIcon from "../images/downloadIcon.svg";
 import videoIcon from "../images/video-icon.svg";
 import loadMore from "../images/Group 71.svg";
+import axios from "axios"
 
 const styles = (theme) => ({
   root: {
@@ -78,7 +79,6 @@ const DialogActions = withStyles((theme) => ({
     padding: theme.spacing(1),
   },
 }))(MuiDialogActions);
-
 export default function PilotDetails(props) {
   useEffect(() => {
     console.log(props.match.params.id);
@@ -312,6 +312,27 @@ export default function PilotDetails(props) {
     });
   };
 
+  //yaseen
+
+  let config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
+let [pilotData, setPilotData] = useState({});
+  useEffect(() => {
+    axios.get(`http://localhost:9000/api/pilot/pilotDetails/${props.match.params.id}`).then(
+      (response) => {
+ setPilotData(response.data)
+        console.log(response);
+      },
+
+    
+    );
+  }, []);
+
+  //yaseen
+
   return (
     <>
       <Helmet>
@@ -368,7 +389,7 @@ export default function PilotDetails(props) {
                         paddingLeft: "15px",
                       }}
                     >
-                      <div className="p_d_message_sender_name">John Doe</div>
+                      <div className="p_d_message_sender_name">{pilotData.name}</div>
                       <div className="p_d_message_text">
                         Lorem Ipsum is simply dummy text of the printing and
                         typesetting industry.
@@ -415,7 +436,7 @@ export default function PilotDetails(props) {
               <Box py={1}>
                 <div className="p_d_name_container">
                   <div className="p_d_name">
-                    {"Stephen Raj" || <Skeleton />}
+                    {pilotData.name || <Skeleton />}
                   </div>
                   <span className="s_c_rating">
                     <span className="star_checked">&#9733;</span>
@@ -427,14 +448,14 @@ export default function PilotDetails(props) {
                 </div>
               </Box>
               <Box py={1}>
-                <div className="p_d_profession">Professional Pilot</div>
+                <div className="p_d_profession">{pilotData.pilotType}</div>
               </Box>
 
-              <div className="p_d_location">Bangalore, India</div>
+              <div className="p_d_location">{pilotData.city}, {pilotData.country}</div>
 
-              {/* <div className="p_d_description">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aperiam, possimus quia. Nostrum explicabo mollitia velit saepe quasi totam cum neque. Ea natus voluptatem ipsa id qui odio, ipsam sit est.
-              </div> */}
+              <div className="p_d_description">
+                {pilotData.bio}
+              </div>
 
               <div className="p_d_btn_container">
                 <button className="p_d_follow_btn p_d_btn">
@@ -547,7 +568,6 @@ export default function PilotDetails(props) {
             <Visible xxl xl lg>
               <div className="p_d_tabs_right" style={{ float: "right" }}>
                 <div
-                  className="p_d_tab"
                   className={
                     category === 6 ? "p_d_tab p_d_tab_selected" : "p_d_tab"
                   }
@@ -557,7 +577,6 @@ export default function PilotDetails(props) {
                   Followers
                 </div>
                 <div
-                  className="p_d_tab"
                   className={
                     category === 7 ? "p_d_tab p_d_tab_selected" : "p_d_tab"
                   }
@@ -690,20 +709,20 @@ export default function PilotDetails(props) {
               <Col xl={7} lg={7} md={6} sm={12}>
                 <div className="p_d_about_name_container">
                   <div className="p_d_about_title">Name:</div>
-                  <div className="p_d_about_name">Stephen Raj</div>
+                  <div className="p_d_about_name">{pilotData.name}</div>
                 </div>
 
                 <div className="p_d_about_description_container">
                   <div className="p_d_about_title">Description</div>
                   <div className="p_d_about_content">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, in ipsa. Soluta non veritatis aliquam ducimus ipsum accusantium possimus earum officiis nesciunt eos? Obcaecati dolorem id architecto, totam provident suscipit repudiandae error, perferendis doloribus iste magni culpa velit et aspernatur ipsam nobis hic sint quisquam, cupiditate fugiat temporibus! Pariatur fugiat animi, ex repellat ratione nobis nemo maxime modi ipsa voluptas. Rem exercitationem possimus aliquid distinctio. Officiis quas reprehenderit quaerat minima voluptatem distinctio, cum culpa quos hic reiciendis provident praesentium iusto! Aperiam voluptatem magnam aliquam sunt totam nisi repellat ab! Quibusdam, repellat earum minus laboriosam possimus iure ullam, corporis aliquam fuga minima, dolorum quaerat voluptate eius asperiores dignissimos.
+                    {pilotData.bio}
                   </div>
                 </div>
 
                 <div className="p_d_about_skills_container">
                   <div className="p_d_about_title">Skills:</div>
                   <div className="p_d_about_skills_keyword_container">
-                    {skills.map((skill, index) => {
+                    {pilotData.skills.map((skill, index) => {
                       return (
                         <div className="p_d_about_skills_keyword">{skill}</div>
                       );
@@ -718,28 +737,28 @@ export default function PilotDetails(props) {
                 <div className="p_d_pilot_details">
                   <div className="p_d_about_details_title">Pilot type</div>
                   <div className="p_d_about_details_content">
-                    Passionate Pilot
+                    {pilotData.piotType}
                   </div>
                   <div className="p_d_about_details_title">DOB</div>
-                  <div className="p_d_about_details_content">14 July, 2021</div>
+                  <div className="p_d_about_details_content">{pilotData.dob}</div>
                   <div className="p_d_about_details_title">Gender</div>
-                  <div className="p_d_about_details_content">Male</div>
+                  <div className="p_d_about_details_content">{pilotData.gender}</div>
                   <div className="p_d_about_details_title">Work type</div>
-                  <div className="p_d_about_details_content">Full time</div>
+                  <div className="p_d_about_details_content">{pilotData.workType}</div>
                   <div className="p_d_about_details_title">
                     Monthly payment ($)
                   </div>
-                  <div className="p_d_about_details_content">10 - 50</div>
+                  <div className="p_d_about_details_content">{pilotData.monthlyPayment}</div>
                   <div className="p_d_about_details_title">Industry</div>
-                  <div className="p_d_about_details_content">Agriculture</div>
+                  <div className="p_d_about_details_content">{pilotData.industry}</div>
                   <div className="p_d_about_details_title">
                     Training center name
                   </div>
                   <div className="p_d_about_details_content">
-                    Nexevo technologies
+                    {pilotData.trainingCenter}
                   </div>
                   <div className="p_d_about_details_title">Coaching year</div>
-                  <div className="p_d_about_details_content">2018 - 2020</div>
+                  <div className="p_d_about_details_content">{pilotData.completedYear}</div>
                 </div>
                 <div className="p_d_hire_container">
                   <div className="p_d_hire_content">

@@ -80,7 +80,7 @@ function CreatePilot() {
   }
 
   const saveChanges = () => {
-    var fields = ["full_name", "email", "phone", "dob", "gender", "address", "city", "country", "postal", "bio"]
+    var fields = [ "dob", "gender", "address", "city", "country", "postal", "bio"]
     var error = false
     const validateEmail = (email) => {
       return String(email)
@@ -133,13 +133,12 @@ function CreatePilot() {
       }
       else if (data[fields[i]] === ""){
         document.getElementById(`${fields[i]}_error`).style.visibility = "visible"
-        document.getElementById(`${fields[i]}`).focus()
+        // document.getElementById(`${fields[i]}`).focus()
         error = true
         break
       }
     }
     if(!error){
-      alert("Ready to submit")
       let config = {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -173,7 +172,7 @@ skills : data.skills,
       }, config)
         .then(() => {
 alert("successfull")  
-history.push('/pilot_dashboard')
+history.push('/')
 
 })
         .catch((err) => {
@@ -256,43 +255,28 @@ console.log(err)        });
       </div>
       <div className="pd_b_i_profile_titleBox">
         <div className="pd_b_i_profile_title">Basic Information</div>
-        <div className="pd_b_i_profile_edit" onClick = {editHandler}>Edit</div>
       </div>
-      <div>
-        <div className="pd_b_i_profile_head">Full Name</div>
-        <input type="text" className="pd_b_i_profile_input" value={data.full_name} id = "full_name" onChange = {changeHandler} disabled = {!edit} />
-        <div className="input_error_msg" id = "full_name_error">Full name is required</div>
-      </div>
+      
       <Row>
         <Col>
           <div>
-            <div>
-              <div style={{ marginBottom: "15px" }}>
-                <div className="pd_b_i_profile_head1">Email ID</div>
-                <div className="pd_b_i_profile_verify">Verify</div>
-              </div>
-            </div>
-            <input
+   
+            {/* <input
               type="text"
               className="pd_b_i_profile_input"
               value={data.email}
               id = "email"
               onChange = {changeHandler}
               disabled = {!edit}
-            />
-            <div className="input_error_msg" id = "email_error">Email ID is required</div>
+            /> */}
           </div>
         </Col>
         <Col>
           <div>
             <div>
-              <div style={{ marginBottom: "15px" }}>
-                <div className="pd_b_i_profile_head1">Phone Number</div>
-                <div className="pd_b_i_profile_verify">Verify</div>
-              </div>
+             
             </div>
-            <PhoneInput defaultCountry="IN" className={All.Phonenumber + " s_c_d_phone_input"} name="phone" id="phone" value={data.phone} onChange = {phoneChangeHandler} disabled = {!edit}/>
-            <div className="input_error_msg" id = "phone_error">Phone number is required</div>
+            {/* <PhoneInput defaultCountry="IN" className={All.Phonenumber + " s_c_d_phone_input"} name="phone" id="phone" value={data.phone} onChange = {phoneChangeHandler} disabled = {!edit}/> */}
           </div>
         </Col>
       </Row>
@@ -321,7 +305,6 @@ console.log(err)        });
               value={data.gender}
               onChange = {changeHandler}
               id = "gender"
-              onChange = {changeHandler}
               disabled = {!edit}
             />
             <div className="input_error_msg" id = "gender_error">Gender is required</div>
@@ -403,7 +386,6 @@ console.log(err)        });
 
       <div className="pd_b_i_profile_titleBox">
         <div className="pd_b_i_profile_title">Professional Information</div>
-        <div className="pd_b_i_profile_edit" onClick = {clickEdit}>Edit</div>
       </div>
       
       <div style={{ marginBottom: "30px" }}>
