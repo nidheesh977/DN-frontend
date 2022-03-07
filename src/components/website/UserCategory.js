@@ -67,11 +67,11 @@ class UserCategory extends Component {
       password: this.state.password,
       role: this.state.user_category,
     }, this.config).then((res) => {
-alert("successful") 
+alert("successful")
 console.log(res)
             localStorage.setItem('access_token', res.data.token);
             localStorage.setItem('token_type', "Bearer");
-            this.props.history.push("/")
+            this.props.history.push("/createPilot")
             window.location.reload();
             console.log(localStorage.getItem("access_token"))
             

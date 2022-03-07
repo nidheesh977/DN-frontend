@@ -23,10 +23,9 @@ import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import nofoundresult from "../images/noresultfound.svg";
-import env from "dotenv"
+import env from "dotenv";
 
-const domain = process.env.REACT_APP_MY_API
-
+const domain = process.env.REACT_APP_MY_API;
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -89,6 +88,8 @@ class ApplyJob extends Component {
       price_range: [20, 40],
       next_page: false,
       page: "page1",
+      likeSuccess: false,
+      dislikeSuccess: true
     };
   }
   dropdown = (id) => {
@@ -154,43 +155,32 @@ class ApplyJob extends Component {
     },
   };
 
-  likePost = (id) =>{
+  likePost = (id) => {
+    if (!localStorage.getItem("access_token")) {
+      alert("Please login / register");
+    } else {
+      console.log(this.config);
 
-    if(!localStorage.getItem("access_token")){
-alert("Please login / register")
-    }else{
-
-
-   
-
-   
-    console.log(this.config);
-    this.setState({
-      dialogOpen: true,
-    });
-    this.state.liked.push(id);
-
-    axios
-      .post(`${process.env.REACT_APP_MYSERVER}/api/jobs/likeJob/${id}`, this.config)
-
-      .then((response) => {
-
-
-if(response.data === "please Login"){
-  // history.push("/pilot_dashboard/account")
-  alert("loginFirst");
-}
-
-
-})
-      .catch(() => {
-      });
+      axios
+        .post(
+          `${process.env.REACT_APP_MYSERVER}/api/jobs/likeJob/${id}`,
+          this.config
+        )
+        .then((response) => {
+          if (response.data === "please Login") {
+            // history.push("/pilot_dashboard/account")
+            alert("loginFirst");
+          }
+          let liked = this.state.liked;
+          liked.push(id);
+          this.setState({
+            liked: liked,
+          });
+        })
+        .catch((err) => {});
     }
-
-          
-
-  }
-  unlikePost = (id) =>{
+  };
+  unlikePost = (id) => {
     console.log(this.config);
     this.setState({
       dialogOpen1: true,
@@ -198,7 +188,10 @@ if(response.data === "please Login"){
     let index = this.state.liked.indexOf(id);
     this.state.liked.splice(index, 1);
     axios
-      .post(`${process.env.REACT_APP_MYSERVER}/api/jobs/unlikeJob/${id}`, this.config)
+      .post(
+        `${process.env.REACT_APP_MYSERVER}/api/jobs/unlikeJob/${id}`,
+        this.config
+      )
 
       .then((response) => {
         if (response.data === "please Login") {
@@ -208,7 +201,7 @@ if(response.data === "please Login"){
       })
       .catch(() => {});
   };
-  
+
   closeChoicePopup = () => {
     this.setState({
       dialogOpen: false,
@@ -707,7 +700,7 @@ if(response.data === "please Login"){
                           <div className="pd_a_j_dataDateHead">
                             Posted on:
                             <span className="pd_a_j_dataDate">
-                              {item.postingDate.slice(0,10)}
+                              {item.postingDate.slice(0, 10)}
                             </span>
                           </div>
                           <div className="pd_a_j_dataTitle">
@@ -792,12 +785,13 @@ if(response.data === "please Login"){
               </Col>
             </Row>
             <Dialog
-              open={this.state.dialogOpen}
-              onClose={this.closeChoicePopup}
+              open={this.state.likeSuccess}
+              onClose={this.likeSuccessPopup}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
               maxWidth={"md"}
               fullWidth={true}
+              PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
             >
               <DialogContent
                 className={All.PopupBody}
@@ -809,7 +803,7 @@ if(response.data === "please Login"){
                   <img
                     src={Close}
                     alt=""
-                    onClick={this.closeChoicePopup}
+                    onClick={this.likeSuccessPopup}
                     style={{ cursor: "pointer" }}
                   />
                 </div>
@@ -820,7 +814,7 @@ if(response.data === "please Login"){
                   <div className="u_f_popup_btn_container">
                     <button
                       className="u_f_popup_btn2"
-                      onClick={this.closeChoicePopup}
+                      onClick={this.likeSuccessPopup}
                     >
                       Close
                     </button>
@@ -829,12 +823,13 @@ if(response.data === "please Login"){
               </DialogContent>
             </Dialog>
             <Dialog
-              open={this.state.dialogOpen1}
-              onClose={this.closeChoicePopup1}
+              open={this.state.dislikeSuccess}
+              onClose={this.dislikeSuccessPopup}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
               maxWidth={"md"}
               fullWidth={true}
+              PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
             >
               <DialogContent
                 className={All.PopupBody}
@@ -846,20 +841,27 @@ if(response.data === "please Login"){
                   <img
                     src={Close}
                     alt=""
-                    onClick={this.closeChoicePopup1}
+                    onClick={this.dislikeSuccessPopup}
                     style={{ cursor: "pointer" }}
                   />
                 </div>
                 <Row style={{ marginTop: "30px" }}>
                   <div className="u_f_popup_title">
-                    The Job has been Unsaved successfully
+                    Are you sure want to remove this job from your saved list?
                   </div>
                   <div className="u_f_popup_btn_container">
                     <button
                       className="u_f_popup_btn2"
-                      onClick={this.closeChoicePopup1}
+                      onClick={this.dislikeSuccessPopup}
+                      style = {{}}
                     >
-                      Close
+                      No
+                    </button>
+                    <button
+                      className="u_f_popup_btn2"
+                      onClick={this.dislikeSuccessPopup}
+                    >
+                      Yes
                     </button>
                   </div>
                 </Row>

@@ -32,7 +32,13 @@ function ApplyJobLanding(props) {
   let [liked, setLiked] = useState([]);
   let [applied, setapplied] = useState([]);
   let [authourised, setAuthourised] = useState(false);
-  let [applySuccess, setApplySuccess] = useState(false)
+  let [applySuccess, setApplySuccess] = useState(false 
+    
+    
+    
+    
+    
+    )
   let [applyFailure, setApplyFailure] = useState(false)
 
   let config = {
@@ -272,6 +278,7 @@ applied.push(id)
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
           fullWidth={true}
+          PaperProps={{style: { borderRadius: 10, width: "820px" } }}
         >
           <DialogContent
             className={All.PopupBody}
@@ -304,6 +311,7 @@ applied.push(id)
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
           fullWidth={true}
+          PaperProps={{style: { borderRadius: 10, width: "820px" } }}
         >
           <DialogContent
             className={All.PopupBody}

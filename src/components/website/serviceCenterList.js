@@ -776,7 +776,11 @@ class ServiceCenters extends Component {
                               Brands:
                             </div>
                             <div className="s_c_other_details_content">
-                              {item.brandOfDrones}
+                              {item.brandOfDrones.map((brand, index)=>{
+                                return(
+                                  <div className="service_center_brand_list" key = {index}>{brand}{index+1 !== item.brandOfDrones.length && ","}&nbsp;</div>
+                                )
+                              })}
                             </div>
                           </div>
                           <hr style={{ border: "1px solid #efefef" }} />

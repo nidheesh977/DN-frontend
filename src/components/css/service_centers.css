@@ -350,3 +350,7 @@
   color: #f00;
   visibility: hidden;
 }
+
+.service_center_brand_list{
+  display: inline-block;
+}

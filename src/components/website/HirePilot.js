@@ -18,6 +18,7 @@ import close from '../images/close.svg'
 import { Helmet } from "react-helmet";
 import Close from "../images/close.svg";
 import axios from 'axios';
+import Skeleton from "react-loading-skeleton";
 
 const domain = process.env.REACT_APP_MY_API
 
@@ -444,6 +445,14 @@ class HirePilot extends Component {
                 </div>
 
                 <Visible xxl xl lg md>
+                  {this.state.loading && !this.state.pilot_list.length
+                  && <Skeleton
+                  height={250}
+                  count={3}
+                  style={{ marginBottom: "20px" }}
+                />
+                  }
+                
                 {this.state.pilot_list.map((pilot, index)=>{
                         
                         return(
