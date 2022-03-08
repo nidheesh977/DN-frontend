@@ -1,12 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import "./css/Pilot_followers.css"
 import { Container, Row, Col, Visible, Hidden } from 'react-grid-system';
 import Pilot from "./images/pilot.jpg";
 import loadMore from "../../images/Group 71.svg";
 import {Link} from "react-router-dom"
-
+import axios from 'axios';
 
 function Pilot_following() {
+    let config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      };
+
+      let [myFollowing, setMyFollowing] = useState([]);
+  useEffect(()=>{
+    axios.post(`http://localhost:9000/api/follow/getMyFollowingPopulated`, config).then(
+      (res) => {
+ 
+        const folowers = res.data;
+        console.log(folowers);
+setMyFollowing(folowers) 
+
+
+})
+
+  }, [])
     let initialValue = {
         profiles: [{ name: "Abhishek", profile: "Passionate Pilot" , src: "https://i.pinimg.com/474x/0e/9c/eb/0e9ceb5002e527dd90b14be502ae91b7.jpg"},
         { name: "Shahrukh Khan", profile: "Professional Pilot", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd1UoWwl6Ts_ZFvqHq8A8QxjRGPSQfWOiC4zUAWVUmYmHukvKGsIYakl7i9qcGEfAuTPM&usqp=CAU" },
@@ -26,7 +45,6 @@ function Pilot_following() {
                 <Row>
                     <Col>
                         <div className='pd_followers_title'>Following</div>
-
                     </Col>
                     <Col>
                         <select className='pd_followers_select'>
@@ -39,25 +57,25 @@ function Pilot_following() {
             </div>
             <hr className='pd_followers_hr' />
             {
-                data.profiles.map((item, i) => {
+                myFollowing.map((item, i) => {
                     return (
                         <div>
                             <Row>
                                 <Col xl={1.4} xs={2}>
                                     <div className='pd_followers_pilotImageBox' >
-                                        <img src={item.src} alt="pilot img" className='pd_followers_pilot_img' />
+                                        <img src="https://i.pinimg.com/474x/82/ab/35/82ab3533ee71daf256f23c1ccf20ad6f--avatar-maker.jpg" alt="pilot img" className='pd_followers_pilot_img' />
                                     </div>
                                 </Col>
                                 <Col xs={5.25}>
                                     <div className='pd_followers_pilotDetails'>
                                         <div className='pd_followers_pilotName'>{item.name}</div>
-                                        <div className='pd_followers_pilotType'>{item.profile}</div>
+                                        <div className='pd_followers_pilotType'>{item.pilotType}</div>
                                     </div>
                                 </Col>
                                 <Col>
                                     <div className='pd_followers_profile'>
                                         <div className='pd_followers_profileBox'>
-                                            <Link to="/pilot_details/1">
+                                            <Link to={`/pilot_details/${item._id}`}>
                                             <button className="pd_followers_profileBtn">View Profile</button>
                                             </Link>
                                             <div className='pd_followers_profileUnfollow'>Unfollow</div>

@@ -698,7 +698,7 @@ if(response.data === "please Login"){
                           </div>
                           <div className="a_j_listing_text">
                             {" "}
-                            {item.jobDesc.slice(0, 148)}
+                            {item.jobDesc.slice(0, 148)}...
                           </div>
                           <hr className="a_j_listing_hr" />
                         </div>
