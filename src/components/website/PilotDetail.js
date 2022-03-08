@@ -33,7 +33,8 @@ import hirePilotIcon from "../images/hirePilotIcon.svg";
 import downloadIcon from "../images/downloadIcon.svg";
 import videoIcon from "../images/video-icon.svg";
 import loadMore from "../images/Group 71.svg";
-import axios from "axios"
+import userDone from "../images/userDone.svg"
+import axios from "axios";
 
 const styles = (theme) => ({
   root: {
@@ -319,18 +320,70 @@ export default function PilotDetails(props) {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
     },
   };
-let [pilotData, setPilotData] = useState({});
-  useEffect(() => {
-    axios.get(`http://localhost:9000/api/pilot/pilotDetails/${props.match.params.id}`).then(
-      (response) => {
- setPilotData(response.data)
+  let [pilotData, setPilotData] = useState({});
+  let [fol, setFol] = useState([]);
+  useEffect(( ) => {
+    axios
+      .get(
+        `http://localhost:9000/api/pilot/pilotDetails/${props.match.params.id}`
+      )
+      .then((response) => {
+        setPilotData(response.data);
+        pilotData.map((item, i)=>{
+          return(
+            fol.push()
+          )
+        })
         console.log(response);
-      },
-
-    
-    );
+      })
   }, []);
+let [myFollowing, setMyFollowing] = useState([]);
+  useEffect(()=>{
+    axios.post(`http://localhost:9000/api/follow/getMyFollowing`, config).then(
+      (res) => {
+ 
+        const folowers = res.data;
+        console.log(folowers);
+setMyFollowing(folowers)      })
 
+  }, [])
+
+  let followMe = () => {
+    axios
+      .post(
+        `http://localhost:9000/api/follow/createFollow/${props.match.params.id}`,
+        config
+      )
+      .then((response) => {
+        alert("followed");
+        axios.post(`http://localhost:9000/api/follow/getMyFollowing`, config).then(
+          (res) => {
+     
+            const folowers = res.data;
+            console.log(folowers);
+    setMyFollowing(folowers)      })
+        console.log(response);
+        // setBrands(response.data.brandOfDrones)
+      });
+  };
+  let unfollow = () => {
+    axios
+      .post(
+        `http://localhost:9000/api/follow/removeFollow/${props.match.params.id}`,
+        config
+      )
+      .then((response) => {
+        alert("unfollowed");
+        axios.post(`http://localhost:9000/api/follow/getMyFollowing`, config).then(
+          (res) => {
+     
+            const folowers = res.data;
+            console.log(folowers);
+    setMyFollowing(folowers)      })
+        console.log(response);
+        // setBrands(response.data.brandOfDrones)
+      });
+  };
   //yaseen
 
   return (
@@ -389,7 +442,9 @@ let [pilotData, setPilotData] = useState({});
                         paddingLeft: "15px",
                       }}
                     >
-                      <div className="p_d_message_sender_name">{pilotData.name}</div>
+                      <div className="p_d_message_sender_name">
+                        {pilotData.name}
+                      </div>
                       <div className="p_d_message_text">
                         Lorem Ipsum is simply dummy text of the printing and
                         typesetting industry.
@@ -442,8 +497,8 @@ let [pilotData, setPilotData] = useState({});
                     <span className="star_checked">&#9733;</span>
                     <span className="star_checked">&#9733;</span>
                     <span className="star_checked">&#9733;</span>
-                    <span className="star_unchecked">&#9733;</span>
-                    <span className="star_unchecked">&#9733;</span>
+                    <span className="star_checked">&#9733;</span>
+                    <span className="star_checked">&#9733;</span>
                   </span>
                 </div>
               </Box>
@@ -451,14 +506,29 @@ let [pilotData, setPilotData] = useState({});
                 <div className="p_d_profession">{pilotData.pilotType}</div>
               </Box>
 
-              <div className="p_d_location">{pilotData.city}, {pilotData.country}</div>
-
-              <div className="p_d_description">
-                {pilotData.bio}
+              <div className="p_d_location">
+                {pilotData.city}, {pilotData.country}
               </div>
 
+              <div className="p_d_description">{pilotData.bio}</div>
+
               <div className="p_d_btn_container">
-                <button className="p_d_follow_btn p_d_btn">
+                {myFollowing.includes(pilotData.userId) ? <button
+                  className="p_d_follow_btn p_d_btn"
+                  onClick={unfollow}
+                  style={{background: "transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0% 0% no-repeat padding-box", opacity:"0.9"}}
+                >
+                  <img
+                    className="p_d_soc_icon1"
+                    src={userDone}
+                    alt=""
+                    height={"20px"}
+                  />{" "}
+                  Followed
+                </button> : <button
+                  className="p_d_follow_btn p_d_btn"
+                  onClick={followMe}
+                >
                   <img
                     className="p_d_soc_icon1"
                     src={addIcon}
@@ -466,7 +536,8 @@ let [pilotData, setPilotData] = useState({});
                     height={"20px"}
                   />{" "}
                   Follow me
-                </button>
+                </button>}
+                
                 <button className="p_d_hire_btn p_d_btn  " onClick={clickHire}>
                   <img
                     className="p_d_soc_icon2"
@@ -615,7 +686,10 @@ let [pilotData, setPilotData] = useState({});
                   </Col>
                 );
               })}
-              <div className="a_j_load_div" style={{ margin: "40px 0px", width: "100%" }}>
+              <div
+                className="a_j_load_div"
+                style={{ margin: "40px 0px", width: "100%" }}
+              >
                 <button className="a_j_loadMore_btn">
                   <img src={loadMore} className="a_j_location_logo" />
                   <span className="a_j_location_text">Load More</span>
@@ -640,7 +714,10 @@ let [pilotData, setPilotData] = useState({});
                   </Col>
                 );
               })}
-              <div className="a_j_load_div" style={{ margin: "40px 0px", width: "100%" }}>
+              <div
+                className="a_j_load_div"
+                style={{ margin: "40px 0px", width: "100%" }}
+              >
                 <button className="a_j_loadMore_btn">
                   <img src={loadMore} className="a_j_location_logo" />
                   <span className="a_j_location_text">Load More</span>
@@ -670,7 +747,10 @@ let [pilotData, setPilotData] = useState({});
                   </Col>
                 );
               })}
-              <div className="a_j_load_div" style={{ margin: "40px 0px", width: "100%" }}>
+              <div
+                className="a_j_load_div"
+                style={{ margin: "40px 0px", width: "100%" }}
+              >
                 <button className="a_j_loadMore_btn">
                   <img src={loadMore} className="a_j_location_logo" />
                   <span className="a_j_location_text">Load More</span>
@@ -695,7 +775,10 @@ let [pilotData, setPilotData] = useState({});
                   </Col>
                 );
               })}
-              <div className="a_j_load_div" style={{ margin: "40px 0px", width: "100%" }}>
+              <div
+                className="a_j_load_div"
+                style={{ margin: "40px 0px", width: "100%" }}
+              >
                 <button className="a_j_loadMore_btn">
                   <img src={loadMore} className="a_j_location_logo" />
                   <span className="a_j_location_text">Load More</span>
@@ -714,9 +797,7 @@ let [pilotData, setPilotData] = useState({});
 
                 <div className="p_d_about_description_container">
                   <div className="p_d_about_title">Description</div>
-                  <div className="p_d_about_content">
-                    {pilotData.bio}
-                  </div>
+                  <div className="p_d_about_content">{pilotData.bio}</div>
                 </div>
 
                 <div className="p_d_about_skills_container">
@@ -740,17 +821,27 @@ let [pilotData, setPilotData] = useState({});
                     {pilotData.piotType}
                   </div>
                   <div className="p_d_about_details_title">DOB</div>
-                  <div className="p_d_about_details_content">{pilotData.dob}</div>
+                  <div className="p_d_about_details_content">
+                    {pilotData.dob}
+                  </div>
                   <div className="p_d_about_details_title">Gender</div>
-                  <div className="p_d_about_details_content">{pilotData.gender}</div>
+                  <div className="p_d_about_details_content">
+                    {pilotData.gender}
+                  </div>
                   <div className="p_d_about_details_title">Work type</div>
-                  <div className="p_d_about_details_content">{pilotData.workType}</div>
+                  <div className="p_d_about_details_content">
+                    {pilotData.workType}
+                  </div>
                   <div className="p_d_about_details_title">
                     Monthly payment ($)
                   </div>
-                  <div className="p_d_about_details_content">{pilotData.monthlyPayment}</div>
+                  <div className="p_d_about_details_content">
+                    {pilotData.monthlyPayment}
+                  </div>
                   <div className="p_d_about_details_title">Industry</div>
-                  <div className="p_d_about_details_content">{pilotData.industry}</div>
+                  <div className="p_d_about_details_content">
+                    {pilotData.industry}
+                  </div>
                   <div className="p_d_about_details_title">
                     Training center name
                   </div>
@@ -758,7 +849,9 @@ let [pilotData, setPilotData] = useState({});
                     {pilotData.trainingCenter}
                   </div>
                   <div className="p_d_about_details_title">Coaching year</div>
-                  <div className="p_d_about_details_content">{pilotData.completedYear}</div>
+                  <div className="p_d_about_details_content">
+                    {pilotData.completedYear}
+                  </div>
                 </div>
                 <div className="p_d_hire_container">
                   <div className="p_d_hire_content">
@@ -860,7 +953,10 @@ let [pilotData, setPilotData] = useState({});
                   </>
                 );
               })}
-              <div className="a_j_load_div" style={{ margin: "40px 0px", width: "100%" }}>
+              <div
+                className="a_j_load_div"
+                style={{ margin: "40px 0px", width: "100%" }}
+              >
                 <button className="a_j_loadMore_btn">
                   <img src={loadMore} className="a_j_location_logo" />
                   <span className="a_j_location_text">Load More</span>
@@ -950,7 +1046,10 @@ let [pilotData, setPilotData] = useState({});
                   </>
                 );
               })}
-              <div className="a_j_load_div" style={{ margin: "40px 0px", width: "100%" }}>
+              <div
+                className="a_j_load_div"
+                style={{ margin: "40px 0px", width: "100%" }}
+              >
                 <button className="a_j_loadMore_btn">
                   <img src={loadMore} className="a_j_location_logo" />
                   <span className="a_j_location_text">Load More</span>
