@@ -157,6 +157,8 @@ export default function PilotDetails(props) {
     },
   ]);
 
+  const domain = process.env.REACT_APP_MY_API
+
   const [writeReview, setWriteReview] = useState(false);
 
   const [newReview, setNewReview] = useState("");
@@ -325,7 +327,7 @@ export default function PilotDetails(props) {
   useEffect(( ) => {
     axios
       .get(
-        `http://localhost:9000/api/pilot/pilotDetails/${props.match.params.id}`
+        `${domain}/api/pilot/pilotDetails/${props.match.params.id}`
       )
       .then((response) => {
         setPilotData(response.data);
@@ -339,7 +341,7 @@ export default function PilotDetails(props) {
   }, []);
 let [myFollowing, setMyFollowing] = useState([]);
   useEffect(()=>{
-    axios.post(`http://localhost:9000/api/follow/getMyFollowing`, config).then(
+    axios.post(`${domain}/api/follow/getMyFollowing`, config).then(
       (res) => {
  
         const folowers = res.data;
@@ -351,12 +353,12 @@ setMyFollowing(folowers)      })
   let followMe = () => {
     axios
       .post(
-        `http://localhost:9000/api/follow/createFollow/${props.match.params.id}`,
+        `${domain}/api/follow/createFollow/${props.match.params.id}`,
         config
       )
       .then((response) => {
         alert("followed");
-        axios.post(`http://localhost:9000/api/follow/getMyFollowing`, config).then(
+        axios.post(`${domain}/api/follow/getMyFollowing`, config).then(
           (res) => {
      
             const folowers = res.data;
@@ -369,12 +371,12 @@ setMyFollowing(folowers)      })
   let unfollow = () => {
     axios
       .post(
-        `http://localhost:9000/api/follow/removeFollow/${props.match.params.id}`,
+        `${domain}/api/follow/removeFollow/${props.match.params.id}`,
         config
       )
       .then((response) => {
         alert("unfollowed");
-        axios.post(`http://localhost:9000/api/follow/getMyFollowing`, config).then(
+        axios.post(`${domain}/api/follow/getMyFollowing`, config).then(
           (res) => {
      
             const folowers = res.data;
