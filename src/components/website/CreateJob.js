@@ -558,7 +558,7 @@ class CreateJob extends Component {
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
           fullWidth={true}
-          PaperProps={{style: { borderRadius: 20 }   }}
+          PaperProps={{style: { borderRadius: 10 }   }}
         >
 
           <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
