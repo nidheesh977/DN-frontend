@@ -609,7 +609,7 @@ class HirePilot extends Component {
                     <img src={Close} alt="" onClick={this.closeChoicePopup} style={{ cursor: "pointer" }} />
                   </div>
                   <Row style={{ marginTop: "30px" }}>
-                    <div className="u_f_popup_title" style = {{width: "100%"}}>Job saved successfully</div>
+                    <div className="u_f_popup_title" style = {{width: "100%"}}>Pilot saved successfully</div>
                     <div className="u_f_popup_btn_container">
                       <button className="u_f_popup_btn2" onClick={this.closeJobSave}>Close</button>
                     </div>
