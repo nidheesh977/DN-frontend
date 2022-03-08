@@ -9,6 +9,8 @@ import All from './All.module.css';
 import Axios from 'axios'
 import {useHistory} from 'react-router-dom'
 
+const domain = process.env.REACT_APP_MY_API
+
 function CreatePilot() {
 
     let history = useHistory();
@@ -23,10 +25,10 @@ function CreatePilot() {
     country: "",
     postal: "",
     bio: "",
-    pilot_type: "",
+    pilot_type: "licensed",
     drone_id: "",
     drone_type: " ",
-    work_type: "",
+    work_type: "full_time",
     hourly_pay: "",
     monthly_pay: "",
     industry: " ",
@@ -145,7 +147,7 @@ function CreatePilot() {
         },
       };
       console.log(data)
-      Axios.post("http://localhost:9000/api/pilot/registerPilot", {
+      Axios.post(`${domain}/api/pilot/registerPilot`, {
         name: data.full_name,
 emailId: data.email,
 phoneNo : data.phone,

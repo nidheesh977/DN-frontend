@@ -89,7 +89,10 @@ class ApplyJob extends Component {
       next_page: false,
       page: "page1",
       likeSuccess: false,
-      dislikeSuccess: true
+      likeFailed: false,
+      dislikeSuccess: false,
+      dislikeID: 0,
+      loginErrorPopup: false,
     };
   }
   dropdown = (id) => {
@@ -155,48 +158,131 @@ class ApplyJob extends Component {
     },
   };
 
+  // likePost = (id) => {
+  //   console.log(id)
+  //   if (!localStorage.getItem("access_token")) {
+  //     this.setState({
+  //       loginErrorPopup: true
+  //     })
+  //   } else {
+  //     console.log(this.config);
+
+  //     axios
+  //       .post(`${domain}/api/jobs/likeJob/${id}`, this.config)
+  //       .then((response) => {
+  //         console.log(response.data)
+  //         if (response.data === "please Login") {
+  //           this.setState({
+  //             loginErrorPopup: true
+  //           })
+  //         }
+  //         else{
+  //           let liked = this.state.liked;
+  //           liked.push(id);
+  //           this.setState({
+  //             liked: liked,
+  //           });
+  //           console.log(liked)
+  //         }
+  //       })
+  //       .catch((err) => {});
+  //   }
+  // };
+
+  // unlikePost = (id) => {
+  //   console.log(this.config);
+  //   this.setState({
+  //     dialogOpen1: true,
+  //   });
+
+  //   axios.post(`${domain}/api/jobs/unlikeJob/${id}`, this.config)
+  //     .then((response) => {
+  //       console.log(response.data)
+  //       if (response.data === "please Login") {
+  //         // this.props.history.push("/pilot_dashboard/account")
+  //         this.setState({
+  //           loginErrorPopup: true
+  //         })
+  //       }
+
+  //       else{
+  //         console.log("dislike successful")
+  //         let index = this.state.liked.indexOf(id);
+  //         let liked_list = this.state.liked
+  //         liked_list.splice(index, 1);
+  //         this.setState({
+  //           liked: liked_list
+  //         })
+  //         console.log(liked_list)
+  //       }
+
+  //       console.log("liked_list")
+
+  //     })
+  //     .catch((error) => {
+  //       console.log(error)
+  //       this.setState({
+  //         loginErrorPopup: true
+  //       })
+  //     });
+  // };
+
   likePost = (id) => {
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
     if (!localStorage.getItem("access_token")) {
-      alert("Please login / register");
+      this.setState({
+        loginErrorPopup: true,
+      });
     } else {
-      console.log(this.config);
+      let liked = this.state.liked;
+      liked.push(id);
+      this.setState({
+        liked: liked,
+        likeSuccess: true
+      });
 
       axios
-        .post(
-          `${process.env.REACT_APP_MYSERVER}/api/jobs/likeJob/${id}`,
-          this.config
-        )
+        .post(`${domain}/api/jobs/likeJob/${id}`, config)
+
         .then((response) => {
           if (response.data === "please Login") {
             // history.push("/pilot_dashboard/account")
-            alert("loginFirst");
+            this.setState({
+              loginErrorPopup: true,
+            });
           }
-          let liked = this.state.liked;
-          liked.push(id);
-          this.setState({
-            liked: liked,
-          });
         })
-        .catch((err) => {});
+        .catch(() => {});
     }
   };
   unlikePost = (id) => {
-    console.log(this.config);
-    this.setState({
-      dialogOpen1: true,
-    });
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    console.log(config);
     let index = this.state.liked.indexOf(id);
-    this.state.liked.splice(index, 1);
+    let liked_list = this.state.liked
+    liked_list.splice(index, 1);
+    this.setState({
+      liked: liked_list
+    })
+    console.log(liked_list)
+
     axios
-      .post(
-        `${process.env.REACT_APP_MYSERVER}/api/jobs/unlikeJob/${id}`,
-        this.config
-      )
+      .post(`${domain}/api/jobs/unlikeJob/${id}`, config)
 
       .then((response) => {
         if (response.data === "please Login") {
           // history.push("/pilot_dashboard/account")
-          alert("loginFirst");
+          this.setState({
+            loginErrorPopup: true
+          })
         }
       })
       .catch(() => {});
@@ -267,6 +353,39 @@ class ApplyJob extends Component {
     setTimeout(() => {
       console.log(this.state.work_type);
     }, 100);
+  };
+
+  dislikeSuccessClosePopup = (id) => {
+    this.setState({
+      dislikeSuccess: false,
+      dislikeId: id,
+    });
+  };
+
+  dislikeSuccessPopup = (id) => {
+    this.setState({
+      dislikeSuccess: true,
+      dislikeID: id
+    });
+  };
+
+  likeSuccessPopupClose = () => {
+    this.setState({
+      likeSuccess: false,
+    });
+  };
+
+  dislikeSuccessSubmitPopup = () => {
+    this.setState({
+      dislikeSuccess: false,
+    });
+    this.unlikePost(this.state.dislikeID);
+  };
+
+  loginErrorPopupClose = () => {
+    this.setState({
+      loginErrorPopup: false,
+    });
   };
 
   render() {
@@ -754,7 +873,7 @@ class ApplyJob extends Component {
                             <img
                               src={heartLike}
                               className="a_j_like"
-                              onClick={() => this.unlikePost(item._id)}
+                              onClick={() => this.dislikeSuccessPopup(item._id)}
                             />
                           ) : (
                             <img
@@ -786,7 +905,7 @@ class ApplyJob extends Component {
             </Row>
             <Dialog
               open={this.state.likeSuccess}
-              onClose={this.likeSuccessPopup}
+              onClose={this.likeSuccessPopupClose}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
               maxWidth={"md"}
@@ -803,7 +922,7 @@ class ApplyJob extends Component {
                   <img
                     src={Close}
                     alt=""
-                    onClick={this.likeSuccessPopup}
+                    onClick={this.likeSuccessPopupClose}
                     style={{ cursor: "pointer" }}
                   />
                 </div>
@@ -814,7 +933,7 @@ class ApplyJob extends Component {
                   <div className="u_f_popup_btn_container">
                     <button
                       className="u_f_popup_btn2"
-                      onClick={this.likeSuccessPopup}
+                      onClick={this.likeSuccessPopupClose}
                     >
                       Close
                     </button>
@@ -824,7 +943,7 @@ class ApplyJob extends Component {
             </Dialog>
             <Dialog
               open={this.state.dislikeSuccess}
-              onClose={this.dislikeSuccessPopup}
+              onClose={this.dislikeSuccessClosePopup}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
               maxWidth={"md"}
@@ -841,7 +960,7 @@ class ApplyJob extends Component {
                   <img
                     src={Close}
                     alt=""
-                    onClick={this.dislikeSuccessPopup}
+                    onClick={this.dislikeSuccessClosePopup}
                     style={{ cursor: "pointer" }}
                   />
                 </div>
@@ -852,17 +971,62 @@ class ApplyJob extends Component {
                   <div className="u_f_popup_btn_container">
                     <button
                       className="u_f_popup_btn2"
-                      onClick={this.dislikeSuccessPopup}
-                      style = {{}}
+                      onClick={this.dislikeSuccessClosePopup}
+                      style={{ background: "#F5F5F7", marginRight: "20px" }}
                     >
                       No
                     </button>
                     <button
                       className="u_f_popup_btn2"
-                      onClick={this.dislikeSuccessPopup}
+                      onClick={this.dislikeSuccessSubmitPopup}
                     >
                       Yes
                     </button>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
+            <Dialog
+              open={this.state.loginErrorPopup}
+              onClose={this.loginErrorPopupClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+              PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
+            >
+              <DialogContent
+                className={All.PopupBody}
+                style={{ marginBottom: "50px" }}
+              >
+                <div
+                  style={{ position: "absolute", top: "20px", right: "20px" }}
+                >
+                  <img
+                    src={Close}
+                    alt=""
+                    onClick={this.loginErrorPopupClose}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div
+                    className="a_j_popup_title"
+                    style={{ padding: "0px 60px" }}
+                  >
+                    You aren't logged into DroneZone. Please login to continue?
+                  </div>
+                  <div
+                    className="u_f_popup_btn_container"
+                    style={{ marginTop: "8px" }}
+                  >
+                    <div
+                      className="j_l_applyJobLoginBtn"
+                      style={{ width: "fit-content" }}
+                      onClick={() => this.props.history.push("/login")}
+                    >
+                      Login / Sign Up
+                    </div>
                   </div>
                 </Row>
               </DialogContent>

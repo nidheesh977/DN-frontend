@@ -419,7 +419,7 @@ class ServiceCenters extends Component {
               <button
                 className="s_c_list_btn"
                 onClick={() =>
-                  this.props.history.push("/service_center_dashboard")
+                  this.props.history.push("/service_center_dashboard/account")
                 }
               >
                 List your service center
