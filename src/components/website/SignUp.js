@@ -1,129 +1,175 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
-import { Container, Row, Col, Visible } from 'react-grid-system';
-import All from '../website/All.module.css'
-import PhoneInput from 'react-phone-number-input'
-import { useState } from 'react';
-import 'react-phone-number-input/style.css'
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Button from '@material-ui/core/Button';
-import DronePerson from '../images/drone_person_new.png'
-import axios from 'axios'
+import { Container, Row, Col, Visible } from "react-grid-system";
+import All from "../website/All.module.css";
+import PhoneInput from "react-phone-number-input";
+import { useState } from "react";
+import "react-phone-number-input/style.css";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Button from "@material-ui/core/Button";
+import DronePerson from "../images/drone_person_new.png";
+import axios from "axios";
 //import DummyImage from '../images/dummy-image.png'
-import DroneImg from '../images/drone-img.svg'
-import Box from '@material-ui/core/Box';
+import DroneImg from "../images/drone-img.svg";
+import Box from "@material-ui/core/Box";
 import { useForm } from "react-hook-form";
-import Alert from '@material-ui/lab/Alert';
-import Snackbar from '@material-ui/core/Snackbar';
-import { useHistory } from 'react-router-dom';
-import Loader from '../Loader/loader' 
-import swal from 'sweetalert';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import invisible from '../images/invisible (2).png'
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
+import { useHistory } from "react-router-dom";
+import Loader from "../Loader/loader";
+import swal from "sweetalert";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import invisible from "../images/invisible (2).png";
+import Dialog from "@material-ui/core/Dialog";
+import Close from "../images/close.svg";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import { withStyles } from "@material-ui/core/styles";
 
+const domain = process.env.REACT_APP_MY_API;
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
 
 function SignUp(props) {
-
-  const { register, handleSubmit, errors, watch, control} = useForm();
+  const { register, handleSubmit, errors, watch, control } = useForm();
   const password = useRef({});
   password.current = watch("password", "");
-  const [value, setValue] = useState("+91")
-  const [viewPassword, setViewPassword] = useState()
-  
+  const [value, setValue] = useState("+91");
+  const [viewPassword, setViewPassword] = useState();
+
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [error_msg, setErrorMsg] = useState("");
+  const [dob, setDob] = useState(new Date());
+  const [serverError, setServerError] = useState(false);
 
   const [formValues, setFormValues] = useState({
     name: "",
     email: "",
-    phone: "+91",
+    phone: "",
+    dob: "",
+    country: "",
     password: "",
-    confirmPassword: ""
-  })
+    confirmPassword: "",
+  });
 
   const history = useHistory();
   const onSubmit = (event) => {
-  
-
-    if (value){
-
-      props.history.push({
-        pathname: "/select_category",
-        state: {
-          name: formValues.name,
-          email: formValues.email,
-          phone: formValues.phone,
-          password: formValues.password,
-        }
-      })
-    }else{
-      setError(true)
-      setErrorMsg("Phone number is required")
+    setLoading(true);
+    if (value) {
+      axios
+        .post(`${domain}/api/user/checkMail`, { email: formValues.email })
+        .then((res) => {
+          setLoading(false);
+          props.history.push({
+            pathname: "/select_category",
+            state: {
+              name: formValues.name,
+              email: formValues.email,
+              phone: formValues.phone,
+              dob: formValues.dob,
+              country: formValues.country,
+              password: formValues.password,
+              confirmPassword: formValues.confirmPassword,
+            },
+          });
+        })
+        .catch((err) => {
+          console.log(err.response);
+          setLoading(false);
+          try {
+            if (err.response.data === "User already exists") {
+              document.getElementById("email_error").innerText =
+                "Email ID already taken";
+              document.getElementById("email_error").style.display = "contents";
+              document.getElementById("email").focus();
+            } else {
+              serverError(true);
+            }
+          } catch {
+            setServerError(true);
+          }
+        });
+    } else {
+      setError(true);
+      setErrorMsg("Phone number is required");
     }
-    
-    }  
+  };
 
-        const PasswordShow = () => {
-          setViewPassword(!viewPassword)
-          var x = document.getElementById("password"); 
-          if (x.type === "password") {
-            x.type = "text";
-          } else {
-            x.type = "password";
-          }
-          var y = document.getElementById("confirmPassword");
-          if (y.type === "password") {
-            y.type = "text";
-          } else {
-            y.type = "password";
-          }
-        };
+  const PasswordShow = () => {
+    setViewPassword(!viewPassword);
+    var x = document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+    var y = document.getElementById("confirmPassword");
+    if (y.type === "password") {
+      y.type = "text";
+    } else {
+      y.type = "password";
+    }
+  };
 
-    
   const [open, setOpen] = React.useState(false);
 
   const changeHandler = (e) => {
     setFormValues({
       ...formValues,
-      [e.target.name]: e.target.value
-    })
-    document.getElementById(e.target.name+"_error").style.display = "none"
-  }
+      [e.target.name]: e.target.value,
+    });
+    document.getElementById(e.target.name + "_error").style.display = "none";
+
+    if (e.target.name === "name") {
+      if (e.target.value.length > 100) {
+        console.log(e.target.value.length);
+        document.getElementById(`name_error`).innerText =
+          "Name should not exceed 100 characters";
+        document.getElementById(`name_error`).style.display = "contents";
+        document.getElementById("name").focus();
+      }
+    }
+
+    if (e.target.name === "email") {
+      document.getElementById("email").innerText = "Email ID is required";
+    }
+  };
 
   const phoneChangeHandler = (e) => {
-    document.getElementById(`phone_error`).style.display = "none"
-    try{
-      if(e.length>=1){
+    document.getElementById(`phone_error`).style.display = "none";
+    try {
+      if (e.length >= 1) {
         setFormValues({
           ...formValues,
-          phone: e
-        })
-      }
-      else{
+          phone: e,
+        });
+      } else {
         setFormValues({
           ...formValues,
-          phone: ""
-        })
+          phone: "",
+        });
       }
-    }
-    catch{
+    } catch {
       setFormValues({
         ...formValues,
-        phone: ""
-      })
+        phone: "",
+      });
     }
-  }
+  };
 
   const handleClick = () => {
     const raiseError = (id, msg) => {
-      document.getElementById(`${id}_error`).innerText = msg
-      document.getElementById(`${id}_error`).style.display = "contents"
-      if(id === "phone"){
-        document.getElementById("phone").focus()
+      document.getElementById(`${id}_error`).innerText = msg;
+      document.getElementById(`${id}_error`).style.display = "contents";
+      if (id === "phone") {
+        document.getElementById("phone").focus();
       }
-    }
+    };
 
     const validateEmail = (email) => {
       return String(email)
@@ -133,57 +179,91 @@ function SignUp(props) {
         );
     };
 
-    if (formValues.name === "" || formValues.name.length < 2){
-      if (formValues.name === ""){
-        raiseError("name", "Name is required")
+    if (
+      formValues.name === "" ||
+      formValues.name.length < 2 ||
+      formValues.name.length > 100
+    ) {
+      if (formValues.name === "") {
+        raiseError("name", "Name is required");
+      } else if (formValues.name.length < 2) {
+        raiseError("name", "Name must have atleast 2 characters");
+      } else if (formValues.name.length > 100) {
+        raiseError("name", "Name should not exceed 100 characters");
       }
-      else{
-        raiseError("name", "Name must have atleast 2 characters")
+    }
+    if (
+      formValues.country === "" ||
+      formValues.country.length < 2 ||
+      formValues.country.length > 100
+    ) {
+      if (formValues.country === "") {
+        raiseError("country", "Country / Region is required");
+      } else if (formValues.country.length < 2) {
+        raiseError(
+          "country",
+          "Country / Region must have atleast 2 characters"
+        );
+      } else if (formValues.name.length > 100) {
+        raiseError(
+          "country",
+          "Country / Region should not exceed 100 characters"
+        );
       }
     }
 
-    else if (formValues.email === "" || !validateEmail(formValues.email)){
-      if (formValues.email === ""){
-        raiseError("email", "Email ID is required")
-      }
-      else{
-        raiseError("email", "Email ID is not valid")
-      }
-    }
-
-    else if (formValues.phone === "" || formValues.phone.length <= 7){
-      if (formValues.phone === ""){
-        raiseError("phone", "Phone number is required")
-      }
-      else{
-        raiseError("phone", "Phone number is not valid")
+    if (formValues.email === "" || !validateEmail(formValues.email)) {
+      if (formValues.email === "") {
+        raiseError("email", "Email ID is required");
+      } else {
+        raiseError("email", "Email ID is not valid");
       }
     }
 
-    else if (formValues.password === "" || formValues.password.length < 8){
-      if (formValues.password === ""){
-        raiseError("password", "Password is required")
-      }
-      else{
-        raiseError("password", "Password must have atleast 8 characters")
+    if (
+      formValues.phone === "" ||
+      formValues.phone.length < 10 ||
+      formValues.phone.length > 13
+    ) {
+      if (formValues.phone === "") {
+        raiseError("phone", "Phone number is required");
+      } else if (formValues.phone.length < 10) {
+        raiseError("phone", "Phone number must have atleast 10 characters");
+      } else if (formValues.phone.length > 13) {
+        raiseError("phone", "Phone number should not exceed 13 characters");
       }
     }
 
-    else if (formValues.password!==formValues.confirmPassword){
-      raiseError("confirmPassword", "Password doesn't match")
+    if (formValues.dob === "") {
+      raiseError("dob", "Date of birth is required");
+    }
+
+    if (formValues.password === "" || formValues.password.length < 8) {
+      if (formValues.password === "") {
+        raiseError("password", "Password is required");
+      } else {
+        raiseError("password", "Password must have atleast 8 characters");
+      }
+    }
+
+    if (formValues.password !== formValues.confirmPassword) {
+      raiseError("confirmPassword", "Password doesn't match");
+    }
+
+    if (formValues.confirmPassword === "") {
+      raiseError("confirmPassword", "Confirm password is required");
     }
 
     setOpen(true);
-   
   };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
-    } 
+    }
     setOpen(false);
-    setError(false)
-    setErrorMsg("")
+    setError(false);
+    setErrorMsg("");
   };
 
   return (
@@ -195,10 +275,16 @@ function SignUp(props) {
       </Helmet>
 
       <section className={All.Register}>
-      <Container className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}>
+        <Container
+          className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}
+        >
           <Row>
             <Visible xxl xl lg>
-              <Col lg={6} className={All.DronePerson} style = {{marginTop: "50px"}}>
+              <Col
+                lg={6}
+                className={All.DronePerson}
+                style={{ marginTop: "50px" }}
+              >
                 <img src={DronePerson} />
               </Col>
             </Visible>
@@ -208,63 +294,270 @@ function SignUp(props) {
               </Box>
               <form className={All.form} onSubmit={handleSubmit(onSubmit)}>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold + " form_label"} htmlFor="name">Name</label>
-                  <input type="text" name="name" className={All.FormControl} id="name" ref={register({ required: true, minLength: 2 })} onChange = {changeHandler}/>
-                  <div className="login_input_error_msg" id = "name_error">Name is required</div>
+                  <label className={All.Bold + " form_label"} htmlFor="name">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    className={All.FormControl}
+                    id="name"
+                    ref={register({
+                      required: true,
+                      minLength: 2,
+                      maxLength: 100,
+                    })}
+                    onChange={changeHandler}
+                  />
+                  <div className="login_input_error_msg" id="name_error">
+                    Name is required
+                  </div>
                 </div>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold + " form_label"} for="email">Email ID </label>
-                  <input type="text" className={All.FormControl} id="email" name="email" ref={register({ required: true, pattern: { value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i, message: "invalid email address" } })} onChange = {changeHandler} />
-                  <div className="login_input_error_msg" id = "email_error">Email ID is required</div>
+                  <label className={All.Bold + " form_label"} for="email">
+                    Email ID{" "}
+                  </label>
+                  <input
+                    type="text"
+                    className={All.FormControl}
+                    id="email"
+                    name="email"
+                    ref={register({
+                      required: true,
+                      pattern: {
+                        value:
+                          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i,
+                        message: "invalid email address",
+                      },
+                    })}
+                    onChange={changeHandler}
+                  />
+                  <div className="login_input_error_msg" id="email_error">
+                    Email ID is required
+                  </div>
                 </div>
+                {/* <PhoneInput
+                    defaultCountry="IN"
+                    className={All.Phonenumber}
+                    name="phone"
+                    id="phone"
+                    value={formValues.phone}
+                    onChange={phoneChangeHandler}
+                  /> */}
+
                 <div className={All.FormGroup}>
-                  <label className={All.Bold + " form_label"} for="phone">Phone Number <span className={All.FSize_12}>(with country code)</span></label>
+                  <label className={All.Bold + " form_label"} htmlFor="name">
+                    Country / Region
+                  </label>
+                  <input
+                    type="text"
+                    name="country"
+                    className={All.FormControl}
+                    id="country"
+                    ref={register({
+                      required: true,
+                      minLength: 2,
+                      maxLength: 100,
+                    })}
+                    onChange={changeHandler}
+                  />
+                  <div className="login_input_error_msg" id="country_error">
+                    Country / Region is required
+                  </div>
+                </div>
+
+                <div className={All.FormGroup}>
+                  <label className={All.Bold + " form_label"} for="phone">
+                    Phone Number{" "}
+                  </label>
                   {/* <PhoneInput defaultCountry="IN" className={All.Phonenumber} name="phone" id="phone" value={value} onChange={setValue}/> */}
-                  <PhoneInput defaultCountry="IN" className={All.Phonenumber} name="phone" id="phone" value={formValues.phone}  onChange={phoneChangeHandler} />
-                  <div className="login_input_error_msg" id = "phone_error">Phone number is required</div>
+                  <input
+                    type="number"
+                    name="phone"
+                    className={All.FormControl}
+                    id="phone"
+                    ref={register({
+                      required: true,
+                      minLength: 10,
+                      maxLength: 13,
+                    })}
+                    onChange={changeHandler}
+                  />
+                  <div className="login_input_error_msg" id="phone_error">
+                    Phone number is required
+                  </div>
                 </div>
 
-                <Box pb={2} className={`${All.Width_76} ${All.shipping_txt} `} textAlign="right" pl={0}><span textAlign="right" className={All.FSize_12}></span></Box>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold + " form_label"} for="password">Create Password </label>
+                  <label className={All.Bold + " form_label"} htmlFor="dob">
+                    DOB
+                  </label>
+                  <input
+                    type="date"
+                    name="dob"
+                    className={All.FormControl}
+                    id="dob"
+                    ref={register({
+                      required: true,
+                    })}
+                    onChange={changeHandler}
+                  />
+                  <div className="login_input_error_msg" id="dob_error">
+                    Date of birth is required
+                  </div>
+                </div>
+
+                <div className={All.FormGroup}>
+                  <label className={All.Bold + " form_label"} for="password">
+                    Create Password{" "}
+                  </label>
                   <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
-                  <input name="password" type="password" className={All.FormControl} id="password" ref={register({ required: "You must specify a password", minLength: { value: 8, message: "Password must have at least 8 characters" } })} onChange = {changeHandler} />
-                  {viewPassword?<VisibilityIcon  className={All.VisibilityIcon} onClick={PasswordShow}/>:<img src = {invisible} className={All.VisibilityIcon} onClick={PasswordShow} style = {{padding: "2px 1px 0px 0px"}}/>}
-             </div>
-                  <div className="login_input_error_msg" id = "password_error">Password is required</div>
-
+                    <input
+                      name="password"
+                      type="password"
+                      className={All.FormControl}
+                      id="password"
+                      ref={register({
+                        required: "You must specify a password",
+                        minLength: {
+                          value: 8,
+                          message: "Password must have at least 8 characters",
+                        },
+                      })}
+                      onChange={changeHandler}
+                    />
+                    {viewPassword ? (
+                      <VisibilityIcon
+                        className={All.VisibilityIcon}
+                        onClick={PasswordShow}
+                      />
+                    ) : (
+                      <img
+                        src={invisible}
+                        className={All.VisibilityIcon}
+                        onClick={PasswordShow}
+                        style={{ padding: "2px 1px 0px 0px" }}
+                      />
+                    )}
+                  </div>
+                  <div className="login_input_error_msg" id="password_error">
+                    Password is required
+                  </div>
                 </div>
                 <div className={All.FormGroup}>
-                  <label className={All.Bold + " form_label"} for="confirmPassword">Confirm Password </label>
+                  <label
+                    className={All.Bold + " form_label"}
+                    for="confirmPassword"
+                  >
+                    Confirm Password{" "}
+                  </label>
                   <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
-                  <input type="password" name="confirmPassword" className={All.FormControl} id="confirmPassword" ref={register({ validate: value => value === password.current || "The passwords do not match", required: "You must specify a password" })} onChange = {changeHandler} />
-                  {viewPassword?<VisibilityIcon  className={All.VisibilityIcon} onClick={PasswordShow}/>:<img src = {invisible} className={All.VisibilityIcon} onClick={PasswordShow} style = {{padding: "2px 1px 0px 0px"}}/>}
-             </div>
-                  <div className="login_input_error_msg" id = "confirmPassword_error">Confirm password is required</div>
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      className={All.FormControl}
+                      id="confirmPassword"
+                      ref={register({
+                        validate: (value) =>
+                          value === password.current ||
+                          "The passwords do not match",
+                        required: "You must specify a password",
+                      })}
+                      onChange={changeHandler}
+                    />
+                    {viewPassword ? (
+                      <VisibilityIcon
+                        className={All.VisibilityIcon}
+                        onClick={PasswordShow}
+                      />
+                    ) : (
+                      <img
+                        src={invisible}
+                        className={All.VisibilityIcon}
+                        onClick={PasswordShow}
+                        style={{ padding: "2px 1px 0px 0px" }}
+                      />
+                    )}
+                  </div>
+                  <div
+                    className="login_input_error_msg"
+                    id="confirmPassword_error"
+                  >
+                    Confirm password is required
+                  </div>
                 </div>
 
                 <div className={All.FormGroup}>
-                <Box pb={3} pt={6}>
-                {isLoading ? ( <>
-                  <Button variant="contained" color="default" type="submit" className={All.LoaderBtn}>
-                  <Loader /> Loading</Button>
-                 </> ) : ( <>
-                  <Button variant="contained" color="default" type="submit" onClick={handleClick} className={All.BtnStyle_5} >
-
-                   Submit</Button>
-                 </> )}
+                  <Box pb={3} pt={6}>
+                    {isLoading ? (
+                      <>
+                        <Button
+                          variant="contained"
+                          color="default"
+                          type="submit"
+                          className={All.LoaderBtn}
+                        >
+                          <Loader /> Loading
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          variant="contained"
+                          color="default"
+                          type="submit"
+                          onClick={handleClick}
+                          className={All.BtnStyle_5}
+                        >
+                          Submit
+                        </Button>
+                      </>
+                    )}
                   </Box>
                 </div>
-
               </form>
             </Col>
           </Row>
+          <Dialog
+            open={serverError}
+            onClose={() => setServerError(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={() => setServerError(false)}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div className="u_f_popup_title">
+                  Something went wrong on the server. Please try again later.
+                </div>
+                <div className="u_f_popup_btn_container">
+                  <button
+                    className="u_f_popup_btn2"
+                    onClick={() => setServerError(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </Row>
+            </DialogContent>
+          </Dialog>
         </Container>
       </section>
-
-
     </>
-  )
+  );
 }
 
-export default SignUp
+export default SignUp;

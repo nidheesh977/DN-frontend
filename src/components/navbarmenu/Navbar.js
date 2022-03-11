@@ -95,6 +95,19 @@ function Navbar(props) {
     setInstructions(true)
   }
 
+  const openMyAccount = () => {
+    const userRole = localStorage.getItem("role")
+    if (userRole === "pilot" || userRole === "visitor" || userRole === "candidate"){
+      history.push("/pilot_dashboard/activities/images")
+    }
+    else if (userRole === "service_center"){
+      history.push("/service_center_dashboard")
+    }
+    else if (userRole === "company"){
+      history.push("/company_dashboard/activities/jobs")
+    }
+  }
+
   // useEffect(() => {
     // userService.User().then((res) => {
     //   setLoading(false);
@@ -327,7 +340,7 @@ function Navbar(props) {
                   id="myAccount"
                 >
                   <Link
-                    to="/pilot_dashboard/activities/images"
+                    onClick = {openMyAccount}
                     className="nav-links my_account_btn"
                     style={{ display: "flex", alignItems: "center" }}
                   >

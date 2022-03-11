@@ -597,7 +597,7 @@ class GalleryFilter extends React.Component {
                                                     <Link
                                                       className={All.White}
                                                       to={{
-                                                        pathname: `/pilot_details/1`,
+                                                        pathname: `/pilot_details/6225df2f6abfb18582fc58c3`,
                                                       }}
                                                     >
                                                       <span className="FSize_14 Profile_icon">
@@ -672,7 +672,7 @@ class GalleryFilter extends React.Component {
                                                     <Link
                                                       className={All.White}
                                                       to={{
-                                                        pathname: `/pilot_details/1`,
+                                                        pathname: `/pilot_details/6225df2f6abfb18582fc58c3`,
                                                       }}
                                                     >
                                                       <span className="FSize_14 Profile_icon">
@@ -750,7 +750,7 @@ class GalleryFilter extends React.Component {
                                                     <Link
                                                       className={All.White}
                                                       to={{
-                                                        pathname: `/pilot_details/1`,
+                                                        pathname: `/pilot_details/6225df2f6abfb18582fc58c3`,
                                                       }}
                                                     >
                                                       <span className="FSize_14 Profile_icon">
@@ -825,7 +825,7 @@ class GalleryFilter extends React.Component {
                                                     <Link
                                                       className={All.White}
                                                       to={{
-                                                        pathname: `/pilot_details/1`,
+                                                        pathname: `/pilot_details/6225df2f6abfb18582fc58c3`,
                                                       }}
                                                     >
                                                       <span className="FSize_14 Profile_icon">

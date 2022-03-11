@@ -331,11 +331,11 @@ export default function PilotDetails(props) {
       )
       .then((response) => {
         setPilotData(response.data);
-        pilotData.map((item, i)=>{
-          return(
-            fol.push()
-          )
-        })
+        // pilotData.map((item, i)=>{
+        //   return(
+        //     fol.push()
+        //   )
+        // })
         console.log(response);
       })
   }, []);

@@ -19,6 +19,8 @@ import locationIcon from '../images/location.svg'
 import workIcon from '../images/work.svg';
 import Axios from 'axios'
 
+const domain = process.env.REACT_APP_MY_API
+
 const DialogContent = withStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -168,6 +170,8 @@ class CreateJob extends Component {
 
   }
 
+  
+
   PostJob = () => {
     console.log(this.state)
     if (this.state.min_salery == "") {
@@ -191,12 +195,15 @@ class CreateJob extends Component {
     }
 
     else {
-
+      const config = {
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('access_token')
+        }
+      }
      
       $('html,body').scrollTop(0);
-      Axios.post("http://localhost:9000/api/jobs/createJob", {
+      Axios.post(`${domain}/api/jobs/createJob`, {
         companyName: this.state.company_name,
-        userId: "62178487f48b4cce740ff3ea",
         jobTitle: this.state.job_title,
         industry : this.state.industry,
         address: this.state.address,
@@ -211,6 +218,12 @@ class CreateJob extends Component {
         postingDate: this.state.date,
         workLocation: this.state.location,
         jobDesc: this.state.description
+      }, config)
+      .then((res)=>{
+        console.log(res)
+      })
+      .catch(err=>{
+        console.log(err)
       })
       this.clearForm();
       this.state.dialog = true;

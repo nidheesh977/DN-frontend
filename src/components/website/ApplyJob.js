@@ -144,11 +144,13 @@ class ApplyJob extends Component {
       .then((res) => {
         const persons = res.data;
         console.log(persons);
-        this.setState({ liked: persons });
+        if (persons !== "please Login"){
+          this.setState({ liked: persons });
+        }
       })
       .catch((err) => {
         this.setState({
-          authourised: false,
+          authourised: false
         });
       });
   }

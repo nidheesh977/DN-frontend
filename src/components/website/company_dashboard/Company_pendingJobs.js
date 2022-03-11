@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../pilot_dashboard/css/Pilot_appliedJobs.css";
 import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import profileUser from "../../images/profile-user.svg";
@@ -11,6 +11,9 @@ import { Link } from "react-router-dom";
 import loadMore from "../../images/Group 71.svg";
 import bin from "./images/c_j_bin.png"
 import edit from "./images/c_j_edit.png"
+import axios from "axios";
+
+const domain = process.env.REACT_APP_MY_API
 
 function Company_pendingJobs() {
   let profiles = {
@@ -68,46 +71,62 @@ function Company_pendingJobs() {
     ],
   };
 
-  let [data, setData] = useState(profiles);
+  let [data, setData] = useState([]);
+
+  const config = {
+    headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+    }
+  }
+
+  useEffect(() => {
+    axios.post(`${domain}/api/jobs/pendingJobs`, config)
+    .then((res)=>{
+      console.log(res.data)
+      setData(res.data)
+    })
+
+  }, [])
+
   return (
     <div>
 
 {
-      data.listing.map((items, i) => {
+      data.map((items, i) => {
         return(<div>
           <div style={{margin: "0px 0px 40px 0px"}}>
           <div style={{ marginBottom: "10px" }}>
             <div className="pd_a_j_dataDateHead">
-              Posted on:<span className="pd_a_j_dataDate">{items.date}</span>
+              Posted on:<span className="pd_a_j_dataDate">{items.postingDate}</span>
             </div>
-            <div className="pd_a_j_dataTitle">{items.name}</div>
+            <div className="pd_a_j_dataTitle">{items.jobTitle}</div>
           </div>
-          <div className="pd_a_j_data_subTitle">{items.producer}</div>
+          <div className="pd_a_j_data_subTitle">{items.companyName}</div>
           <div>
             <div className="a_j_container1">
               <div className="a_j_listing_img1">
                 <img src={profileUser} />
               </div>
-              <div className="a_j_listing_profileName">{items.profile}</div>
+              <div className="a_j_listing_profileName">{items.employeeType}</div>
               <div className="a_j_listing_img2">
                 <img src={money} />
               </div>
-              <div className="a_j_listing_money">{items.range}</div>
+              <div className="a_j_listing_money">${items.minSalary}.00 - ${items.maxSalary}.00</div>
             </div>
             <div className="a_j_listing_text">
-             {items.desc}
+             {items.jobDesc}
             </div>
           </div>
           <div className="a_j_listing_btns" style={{marginTop: "20px"}}>
             <button className="a_j_location_btn">
               <img src={location} className="a_j_location_logo" />
-              <span className="a_j_location_text">{items.location}</span>
+              <span className="a_j_location_text">{items.workLocation}</span>
             </button>{" "}
             <button className="a_j_location_btn">
               <img src={work} className="a_j_location_logo" />
-              <span className="a_j_location_text">{items.type}</span>
+              <span className="a_j_location_text">{items.jobType}</span>
             </button>
-            <Link to="/applyJobLanding" id="a_j_job_btn">
+            <Link to={`/applyJobLanding/${items._id}`} id="a_j_job_btn">
               View Job
             </Link>{" "}
             <img src={edit} className="company_jobs_edit" />

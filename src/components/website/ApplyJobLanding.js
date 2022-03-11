@@ -92,7 +92,9 @@ function ApplyJobLanding(props) {
 
             const jobs = res.data.appliedJobs;
             console.log(jobs);
-            setapplied(jobs);
+            if (jobs){
+              setapplied(jobs);
+            }
           })
       )
     );
@@ -115,6 +117,9 @@ applied.push(id)
 
         if (response.data === "please Login") {
           history.push("/pilot_dashboard/account");
+        }
+        else{
+
         }
       })
       .catch(() => {});
@@ -187,7 +192,7 @@ applied.push(id)
             <Col>
               <div className="j_l_right">
                 {applied.includes(list._id) ? (
-                  <div className="j_l_applyJobBtn" style = {{opacity: "0.5"}}>Already Applied </div>
+                  <div className="j_l_applyJobBtn" style = {{opacity: "0.5", pointerEvents: "none"}}>Already Applied </div>
                 ) : (
                   <div className="j_l_applyJobBtn" onClick={()=>applyNow(list._id)}>
                     Apply Now{" "}

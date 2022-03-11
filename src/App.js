@@ -59,6 +59,9 @@ import UpgradeProVersion from './components/website/UpgradeProVersion';
 import ApplyJobLanding from "./components/website/ApplyJobLanding";
 import Admin_dashboard from "./components/adminDashboard/Admin_dashboard";
 import CreatePilot from "./components/website/CreatePilot";
+import Message from "./components/website/messages"
+import CreateCompany from "./components/website/CreateCompany";
+import CreateServiceCenter from "./components/website/CreateServiceCenter";
 
 
 class App extends React.Component {
@@ -92,6 +95,7 @@ class App extends React.Component {
     return (
       <HashRouter>
         <Header />
+        {/* <Message /> */}
         <UserContext.Provider>
           <ScrollToTop />
           <Switch>
@@ -242,6 +246,8 @@ class App extends React.Component {
             <PublicRoute component = {ServiceCenterDetails} path = "/service_center/:id" exact />
             <PublicRoute component = {ServiceCenterDashboard} path = "/service_center_dashboard"/>
             <PublicRoute component = {ApplyJob} path = "/apply_job" exact />
+            <Route component = {CreateCompany} path = "/createCompany" />
+            <Route component = {CreateServiceCenter} path = "/createServiceCenter" />
             {/* yaseen */}
             <Route component={Pilot_dashboard} path="/pilot_dashboard" />
             <Route component={ApplyJobLanding} path="/applyJobLanding/:id" />

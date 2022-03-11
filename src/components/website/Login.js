@@ -46,8 +46,9 @@ const Login = (props) => {
   const [isLoading, setLoading] = useState(false);
   var [email, setEmail] = useState("");
   var [password, setPassword] = useState("");
-
   const [loginSuccess, setLoginSuccess] = useState();
+  const [serverError, setServerError] = useState(false);
+  
 
   const closeLoginPopup = () => {
     setLoginSuccess(false);
@@ -83,14 +84,30 @@ const Login = (props) => {
           password: password,
         })
         .then((res) => {
+          console.log(res)
           localStorage.setItem("access_token", res.data.token);
           localStorage.setItem("token_type", "Bearer");
+          localStorage.setItem("role", res.data.role);
           setLoginSuccess(true);
           setLoading(false)
         })
         .catch((err) => {
-          document.getElementById("invalid_credentials").style.display = "contents";
-          setLoading(false)
+          // console.log(err.response)
+          try{
+            if(err.response.status !== 500){
+              console.log(err.response)
+              document.getElementById("invalid_credentials").style.display = "contents";
+              setLoading(false)
+            }
+            else{
+              setServerError(true)
+              setLoading(false)
+            }
+          }
+          catch{
+            setServerError(true)
+            setLoading(false)
+          }
         });
     }
   };
@@ -255,6 +272,42 @@ const Login = (props) => {
                 <div className="u_f_popup_btn_container">
                   <button className="u_f_popup_btn2" onClick={closeLoginPopup}>
                     Go to home page
+                  </button>
+                </div>
+              </Row>
+            </DialogContent>
+          </Dialog>
+          <Dialog
+            open={serverError}
+            onClose={() => setServerError(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={() => setServerError(false)}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div className="u_f_popup_title">
+                  Something went wrong on the server. Please try again later.
+                </div>
+                <div className="u_f_popup_btn_container">
+                  <button
+                    className="u_f_popup_btn2"
+                    onClick={() => setServerError(false)}
+                  >
+                    Close
                   </button>
                 </div>
               </Row>
