@@ -112,7 +112,7 @@ class ApplyJob extends Component {
 
   componentDidMount() {
     axios
-      .get(`http://3.110.84.72:9000/api/jobs/getJobs?${this.state.page}`)
+      .get(`http://localhost:9000/api/jobs/getJobs?${this.state.page}`)
       .then((res) => {
         console.log(res)
         const persons = res.data;
@@ -134,7 +134,7 @@ class ApplyJob extends Component {
         this.setState({ loading: false });
       });
     axios
-      .post(`http://3.110.84.72:9000/api/pilot/getLikedJobs`, this.config)
+      .post(`http://localhost:9000/api/pilot/getLikedJobs`, this.config)
       .then((res) => {
         const persons = res.data;
         console.log(persons);

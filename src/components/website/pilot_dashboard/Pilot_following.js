@@ -17,10 +17,10 @@ function Pilot_following() {
   useEffect(()=>{
     axios.post(`http://localhost:9000/api/follow/getMyFollowingPopulated`, config).then(
       (res) => {
- 
-        const folowers = res.data;
-        console.log(folowers);
-setMyFollowing(folowers) 
+        console.log(res);
+
+       setMyFollowing(res.data)
+
 
 
 })

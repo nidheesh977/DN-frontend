@@ -60,7 +60,7 @@ const Login = (props) => {
     }
     else{
       alert("Logged In")
-      axios.post("http://3.110.84.72:9000/api/user/login", {
+      axios.post("http://localhost:9000/api/user/login", {
       
         email: email,
         password: password,
