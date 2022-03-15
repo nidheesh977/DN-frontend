@@ -18,6 +18,9 @@ import close from '../images/close.svg'
 import { Helmet } from "react-helmet";
 import Close from "../images/close.svg";
 import axios from 'axios';
+import Skeleton from "react-loading-skeleton";
+
+const domain = process.env.REACT_APP_MY_API
 
 const AirbnbSlider = styled(Slider)(({ theme }) => ({
   color: '#00E7FC',
@@ -108,7 +111,9 @@ class HirePilot extends Component {
       jobSaved: false,
       pilot_list: [],
       page: "page1",
-      nextPage: false
+      nextPage: false,
+      loading: true,
+      after_response: false,
     }
   }
 
@@ -220,10 +225,12 @@ class HirePilot extends Component {
   }
 
   componentDidMount(){
-    axios.get(`http://localhost:9000/api/pilot/hirePilots?${this.state.page}`)
+    axios.get(`${domain}/api/pilot/hirePilots?${this.state.page}`)
     .then((res)=>{
       this.setState({
-        pilot_list: res.data.results
+        pilot_list: res.data.results,
+        loading: false,
+        after_response: true
       })
       console.log(res)
     })
@@ -440,6 +447,14 @@ class HirePilot extends Component {
                 </div>
 
                 <Visible xxl xl lg md>
+                  {this.state.loading && !this.state.pilot_list.length
+                  && <Skeleton
+                  height={250}
+                  count={3}
+                  style={{ marginBottom: "20px" }}
+                />
+                  }
+                
                 {this.state.pilot_list.map((pilot, index)=>{
                         
                         return(
@@ -557,7 +572,7 @@ class HirePilot extends Component {
               aria-describedby="alert-dialog-description"
               maxWidth={"md"}
               fullWidth={true}
-              PaperProps={{style: { borderRadius: 20 }   }}
+              PaperProps={{style: { borderRadius: 10 }   }}
             >
 
               <DialogContent className={All.PopupBody} style={{ marginBottom: "50px"}}>
@@ -596,7 +611,7 @@ class HirePilot extends Component {
                     <img src={Close} alt="" onClick={this.closeChoicePopup} style={{ cursor: "pointer" }} />
                   </div>
                   <Row style={{ marginTop: "30px" }}>
-                    <div className="u_f_popup_title" style = {{width: "100%"}}>Job saved successfully</div>
+                    <div className="u_f_popup_title" style = {{width: "100%"}}>Pilot saved successfully</div>
                     <div className="u_f_popup_btn_container">
                       <button className="u_f_popup_btn2" onClick={this.closeJobSave}>Close</button>
                     </div>

@@ -118,29 +118,29 @@ export default function PersistentDrawerLeft(props) {
   }
 
 
-  useEffect(() => {
-    Setuserlogin(isLogin())
-    const config = {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('access_token')
-      }
-    }
+  // useEffect(() => {
+  //   Setuserlogin(isLogin())
+  //   const config = {
+  //     headers: {
+  //       Authorization: 'Bearer ' + localStorage.getItem('access_token')
+  //     }
+  //   }
 
-    axios.get('https://demo-nexevo.in/haj/auth-app/public/api/auth/user', config)
-      .then(res => {
-        try{
-          if(res.data.id>=0){
-            Setuser(res.data);
-          }
-          else{
-            localStorage.clear()
-          }
-        }
-        catch{
-          localStorage.clear()
-        }
-      })
-    }, []);
+    // axios.get('https://demo-nexevo.in/haj/auth-app/public/api/auth/user', config)
+    //   .then(res => {
+    //     try{
+    //       if(res.data.id>=0){
+    //         Setuser(res.data);
+    //       }
+    //       else{
+    //         localStorage.clear()
+    //       }
+    //     }
+    //     catch{
+    //       localStorage.clear()
+    //     }
+    //   })
+    // }, []);
 
   return (
     <div className={classes.root}>

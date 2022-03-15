@@ -53,6 +53,8 @@ const styles = (theme) => ({
   },
 });
 
+const domain = process.env.REACT_APP_MY_API
+
 const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
   return (
@@ -173,7 +175,7 @@ export default function ServiceCenterDetails(props) {
   const submitData = () => {
     axios
       .post(
-        `http://localhost:9000/api/review/writeReview/${param.id}`,
+        `${domain}/api/review/writeReview/${param.id}`,
         {
           review: newReview,
           rating: newRating,
@@ -183,7 +185,7 @@ export default function ServiceCenterDetails(props) {
       .then(() => {
         alert("successfull");
         axios
-          .get(`http://localhost:9000/api/review/getReviews/${param.id}`)
+          .get(`${domain}/api/review/getReviews/${param.id}`)
           .then((response) => {
             // setData({response})
             // setDetails(response.data);
@@ -204,7 +206,7 @@ export default function ServiceCenterDetails(props) {
   const likeReview = (id) => {
     axios
       .post(
-        `http://localhost:9000/api/review/likeReview`,
+        `${domain}/api/review/likeReview`,
         {
           reviewId: id,
         },
@@ -214,12 +216,12 @@ export default function ServiceCenterDetails(props) {
         alert("liked ");
         console.log(response)
         axios
-        .get(`http://localhost:9000/api/review/getReviews/${param.id}`)
+        .get(`${domain}/api/review/getReviews/${param.id}`)
         .then((response) => {
         
           setReviews(response.data);
           axios
-          .post(`http://localhost:9000/api/pilot/getSinglePilot`, config)
+          .post(`${domain}/api/pilot/getSinglePilot`, config)
           .then((response) => {
         
     setLikedReviews(response.data.likedReviews);
@@ -241,7 +243,7 @@ export default function ServiceCenterDetails(props) {
   const unlikeReview = (id) => {
     axios
       .post(
-        `http://localhost:9000/api/review/unlikeReview`,
+        `${domain}/api/review/unlikeReview`,
         {
           reviewId: id,
         },
@@ -251,12 +253,12 @@ export default function ServiceCenterDetails(props) {
         alert("unliked ");
         console.log(response)
         axios
-        .get(`http://localhost:9000/api/review/getReviews/${param.id}`)
+        .get(`${domain}/api/review/getReviews/${param.id}`)
         .then((response) => {
         
           setReviews(response.data);
           axios
-          .post(`http://localhost:9000/api/pilot/getSinglePilot`, config)
+          .post(`${domain}/api/pilot/getSinglePilot`, config)
           .then((response) => {
         
     setLikedReviews(response.data.likedReviews);
@@ -360,7 +362,7 @@ export default function ServiceCenterDetails(props) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:9000/api/center/centerLanding/${param.id}`)
+      .get(`${domain}/api/center/centerLanding/${param.id}`)
       .then((response) => {
         // setData({response})
         setDetails(response.data);
@@ -372,7 +374,7 @@ export default function ServiceCenterDetails(props) {
   }, []);
   useEffect(() => {
     axios
-      .get(`http://localhost:9000/api/review/getReviews/${param.id}`)
+      .get(`${domain}/api/review/getReviews/${param.id}`)
       .then((response) => {
         // setData({response})
         // setDetails(response.data);
@@ -385,7 +387,7 @@ export default function ServiceCenterDetails(props) {
   }, []);
   useEffect(() => {
     axios
-      .post(`http://localhost:9000/api/pilot/getSinglePilot`, config)
+      .post(`${domain}/api/pilot/getSinglePilot`, config)
       .then((response) => {
     
 setLikedReviews(response.data.likedReviews);

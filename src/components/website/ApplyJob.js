@@ -23,7 +23,9 @@ import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import nofoundresult from "../images/noresultfound.svg";
+import env from "dotenv";
 
+const domain = process.env.REACT_APP_MY_API;
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -73,7 +75,7 @@ class ApplyJob extends Component {
       price_range_min: 0,
       price_range_max: 200,
       show_more_filters: false,
-      
+
       liked: [],
       dialogOpen: false,
       dialogOpen1: false,
@@ -85,7 +87,12 @@ class ApplyJob extends Component {
       work_type: [],
       price_range: [20, 40],
       next_page: false,
-      page: "page1"
+      page: "page1",
+      likeSuccess: false,
+      likeFailed: false,
+      dislikeSuccess: false,
+      dislikeID: 0,
+      loginErrorPopup: false,
     };
   }
   dropdown = (id) => {
@@ -112,98 +119,177 @@ class ApplyJob extends Component {
 
   componentDidMount() {
     axios
-      .get(`http://localhost:9000/api/jobs/getJobs?${this.state.page}`)
+      .get(`${domain}/api/jobs/getJobs?${this.state.page}`)
       .then((res) => {
-        console.log(res)
+        console.log(res);
         const persons = res.data;
         console.log(persons.results);
         this.setState({ data: persons.results, loading: false });
-        if (res.data.next){
+        if (res.data.next) {
           this.setState({
             next_page: true,
-            next_page: res.data.next
-          })
-        }
-        else{
+            next_page: res.data.next,
+          });
+        } else {
           this.setState({
-            next_page: false
-          })
+            next_page: false,
+          });
         }
       })
       .catch((err) => {
         this.setState({ loading: false });
       });
     axios
-      .post(`http://localhost:9000/api/pilot/getLikedJobs`, this.config)
+      .post(`${domain}/api/pilot/getLikedJobs`, this.config)
       .then((res) => {
         const persons = res.data;
         console.log(persons);
-        this.setState({ liked: persons });
-      }).catch((err)=>{
-       this.setState({
-         authourised: false
-       })
+        if (persons !== "please Login"){
+          this.setState({ liked: persons });
+        }
       })
+      .catch((err) => {
+        this.setState({
+          authourised: false
+        });
+      });
   }
   config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
     },
   };
-  likePost = (id) =>{
 
-    if(!localStorage.getItem("access_token")){
-alert("Please login / register")
-    }else{
+  // likePost = (id) => {
+  //   console.log(id)
+  //   if (!localStorage.getItem("access_token")) {
+  //     this.setState({
+  //       loginErrorPopup: true
+  //     })
+  //   } else {
+  //     console.log(this.config);
 
+  //     axios
+  //       .post(`${domain}/api/jobs/likeJob/${id}`, this.config)
+  //       .then((response) => {
+  //         console.log(response.data)
+  //         if (response.data === "please Login") {
+  //           this.setState({
+  //             loginErrorPopup: true
+  //           })
+  //         }
+  //         else{
+  //           let liked = this.state.liked;
+  //           liked.push(id);
+  //           this.setState({
+  //             liked: liked,
+  //           });
+  //           console.log(liked)
+  //         }
+  //       })
+  //       .catch((err) => {});
+  //   }
+  // };
 
-   
+  // unlikePost = (id) => {
+  //   console.log(this.config);
+  //   this.setState({
+  //     dialogOpen1: true,
+  //   });
 
-   
-    console.log(this.config);
-    this.setState({
-      dialogOpen: true,
-    });
-    this.state.liked.push(id);
+  //   axios.post(`${domain}/api/jobs/unlikeJob/${id}`, this.config)
+  //     .then((response) => {
+  //       console.log(response.data)
+  //       if (response.data === "please Login") {
+  //         // this.props.history.push("/pilot_dashboard/account")
+  //         this.setState({
+  //           loginErrorPopup: true
+  //         })
+  //       }
 
-    axios
-      .post(`${process.env.REACT_APP_MYSERVER}/api/jobs/likeJob/${id}`, this.config)
+  //       else{
+  //         console.log("dislike successful")
+  //         let index = this.state.liked.indexOf(id);
+  //         let liked_list = this.state.liked
+  //         liked_list.splice(index, 1);
+  //         this.setState({
+  //           liked: liked_list
+  //         })
+  //         console.log(liked_list)
+  //       }
 
-      .then((response) => {
+  //       console.log("liked_list")
 
+  //     })
+  //     .catch((error) => {
+  //       console.log(error)
+  //       this.setState({
+  //         loginErrorPopup: true
+  //       })
+  //     });
+  // };
 
-if(response.data === "please Login"){
-  // history.push("/pilot_dashboard/account")
-  alert("loginFirst");
-}
-
-
-})
-      .catch(() => {
+  likePost = (id) => {
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    if (!localStorage.getItem("access_token")) {
+      this.setState({
+        loginErrorPopup: true,
       });
+    } else {
+      let liked = this.state.liked;
+      liked.push(id);
+      this.setState({
+        liked: liked,
+        likeSuccess: true
+      });
+
+      axios
+        .post(`${domain}/api/jobs/likeJob/${id}`, config)
+
+        .then((response) => {
+          if (response.data === "please Login") {
+            // history.push("/pilot_dashboard/account")
+            this.setState({
+              loginErrorPopup: true,
+            });
+          }
+        })
+        .catch(() => {});
     }
-
-          
-
-  }
-  unlikePost = (id) =>{
-    console.log(this.config);
-    this.setState({
-      dialogOpen1: true,
-    });
+  };
+  unlikePost = (id) => {
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    console.log(config);
     let index = this.state.liked.indexOf(id);
-    this.state.liked.splice(index, 1);
+    let liked_list = this.state.liked
+    liked_list.splice(index, 1);
+    this.setState({
+      liked: liked_list
+    })
+    console.log(liked_list)
+
     axios
-      .post(`${process.env.REACT_APP_MYSERVER}/api/jobs/unlikeJob/${id}`, this.config)
+      .post(`${domain}/api/jobs/unlikeJob/${id}`, config)
 
       .then((response) => {
         if (response.data === "please Login") {
           // history.push("/pilot_dashboard/account")
-          alert("loginFirst");
+          this.setState({
+            loginErrorPopup: true
+          })
         }
       })
       .catch(() => {});
   };
+
   closeChoicePopup = () => {
     this.setState({
       dialogOpen: false,
@@ -217,63 +303,92 @@ if(response.data === "please Login"){
 
   filterKeywordChangeHandler = (e) => {
     this.setState({
-      filter_keyword: e.target.value
-    })
-  }
+      filter_keyword: e.target.value,
+    });
+  };
 
   filterCountryChangeHandler = (e) => {
     this.setState({
-      filter_country: e.target.value
-    })
-  }
+      filter_country: e.target.value,
+    });
+  };
 
   filterCityChangeHandler = (e) => {
     this.setState({
-      filter_city: e.target.value
-    })
-  }
+      filter_city: e.target.value,
+    });
+  };
 
-  loadMore = () => {
-
-  }
+  loadMore = () => {};
 
   filterPilotTypeChangeHandler = (type) => {
-    let pilot_type = this.state.pilot_type
-    if (pilot_type.includes(type)){
-      pilot_type.splice(pilot_type.indexOf(type), 1)
+    let pilot_type = this.state.pilot_type;
+    if (pilot_type.includes(type)) {
+      pilot_type.splice(pilot_type.indexOf(type), 1);
       this.setState({
-        pilot_type: pilot_type
-      })
-    }
-    else{
-      pilot_type.push(type)
+        pilot_type: pilot_type,
+      });
+    } else {
+      pilot_type.push(type);
       this.setState({
-        pilot_type: pilot_type
-      })
+        pilot_type: pilot_type,
+      });
     }
-    setTimeout(()=>{
-      console.log(this.state.pilot_type)
-    }, 100)
-  }
+    setTimeout(() => {
+      console.log(this.state.pilot_type);
+    }, 100);
+  };
 
   filterWorkTypeChangeHandler = (type) => {
-    let work_type = this.state.work_type
-    if (work_type.includes(type)){
-      work_type.splice(work_type.indexOf(type), 1)
+    let work_type = this.state.work_type;
+    if (work_type.includes(type)) {
+      work_type.splice(work_type.indexOf(type), 1);
       this.setState({
-        work_type: work_type
-      })
-    }
-    else{
-      work_type.push(type)
+        work_type: work_type,
+      });
+    } else {
+      work_type.push(type);
       this.setState({
-        work_type: work_type
-      })
+        work_type: work_type,
+      });
     }
-    setTimeout(()=>{
-      console.log(this.state.work_type)
-    }, 100)
-  }
+    setTimeout(() => {
+      console.log(this.state.work_type);
+    }, 100);
+  };
+
+  dislikeSuccessClosePopup = (id) => {
+    this.setState({
+      dislikeSuccess: false,
+      dislikeId: id,
+    });
+  };
+
+  dislikeSuccessPopup = (id) => {
+    this.setState({
+      dislikeSuccess: true,
+      dislikeID: id
+    });
+  };
+
+  likeSuccessPopupClose = () => {
+    this.setState({
+      likeSuccess: false,
+    });
+  };
+
+  dislikeSuccessSubmitPopup = () => {
+    this.setState({
+      dislikeSuccess: false,
+    });
+    this.unlikePost(this.state.dislikeID);
+  };
+
+  loginErrorPopupClose = () => {
+    this.setState({
+      loginErrorPopup: false,
+    });
+  };
 
   render() {
     return (
@@ -306,27 +421,30 @@ if(response.data === "please Login"){
                     type="text"
                     className="a_j_keywords"
                     placeholder="Search Keywords"
-                    onChange = {this.filterKeywordChangeHandler}
+                    onChange={this.filterKeywordChangeHandler}
                   />
                   <div className="h_p_filter1_title1">Country</div>
-                  <select className="a_j_select_dropdown" onChange = {this.filterCountryChangeHandler}>
+                  <select
+                    className="a_j_select_dropdown"
+                    onChange={this.filterCountryChangeHandler}
+                  >
                     <option>Select Country</option>
-                    <option value = "India">India</option>
-                    <option value = "China">China</option>
-                    <option value = "Pakistan">Pakistan</option>
-                    <option value = "Russia">Russia</option>
+                    <option value="India">India</option>
+                    <option value="China">China</option>
+                    <option value="Pakistan">Pakistan</option>
+                    <option value="Russia">Russia</option>
                   </select>
                   <div className="h_p_filter1_title1">City</div>
                   <select
                     className="a_j_select_dropdown"
                     id="a_j_select_dropdown1"
-                    onChange = {this.filterCityChangeHandler}
+                    onChange={this.filterCityChangeHandler}
                   >
                     <option>Select City</option>
-                    <option value = "Chennai">Chennai</option>
-                    <option value = "Bangalore">Bangalore</option>
-                    <option value = "Mumbai">Mumbai</option>
-                    <option value = "Delhi">Delhi</option>
+                    <option value="Chennai">Chennai</option>
+                    <option value="Bangalore">Bangalore</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Delhi">Delhi</option>
                   </select>
 
                   <div
@@ -353,13 +471,25 @@ if(response.data === "please Login"){
                     id="h_p_pilot_type_filter"
                   >
                     <label className="h_p_filter1_filter1">
-                      <input type="checkbox" className="h_p_filter1_checkbox" onClick = {()=>this.filterPilotTypeChangeHandler("licensed")}/>
+                      <input
+                        type="checkbox"
+                        className="h_p_filter1_checkbox"
+                        onClick={() =>
+                          this.filterPilotTypeChangeHandler("licensed")
+                        }
+                      />
                       <div className="h_p_filter1_checkbox_label">
                         Licensed Pilots
                       </div>
                     </label>
                     <label className="h_p_filter1_filter1">
-                      <input type="checkbox" className="h_p_filter1_checkbox" onClick = {()=>this.filterPilotTypeChangeHandler("unlicensed")}/>
+                      <input
+                        type="checkbox"
+                        className="h_p_filter1_checkbox"
+                        onClick={() =>
+                          this.filterPilotTypeChangeHandler("unlicensed")
+                        }
+                      />
 
                       <div className="h_p_filter1_checkbox_label">
                         Unlicensed Pilots
@@ -390,13 +520,25 @@ if(response.data === "please Login"){
                     id="h_p_work_filter"
                   >
                     <label className="h_p_filter1_filter1">
-                      <input type="checkbox" className="h_p_filter1_checkbox" onClick = {()=>this.filterWorkTypeChangeHandler("FullTime")} />
+                      <input
+                        type="checkbox"
+                        className="h_p_filter1_checkbox"
+                        onClick={() =>
+                          this.filterWorkTypeChangeHandler("FullTime")
+                        }
+                      />
                       <div className="h_p_filter1_checkbox_label">
                         Full Time
                       </div>
                     </label>
                     <label className="h_p_filter1_filter1">
-                      <input type="checkbox" className="h_p_filter1_checkbox"  onClick = {()=>this.filterWorkTypeChangeHandler("PartTime")}/>
+                      <input
+                        type="checkbox"
+                        className="h_p_filter1_checkbox"
+                        onClick={() =>
+                          this.filterWorkTypeChangeHandler("PartTime")
+                        }
+                      />
                       <div className="h_p_filter1_checkbox_label">
                         Part Time
                       </div>
@@ -444,12 +586,15 @@ if(response.data === "please Login"){
                     <Hidden xs sm>
                       <Col lg={4} md={4} sm={6} xs={6}>
                         <div className="h_p_filter1_title1">Country</div>
-                        <select className="a_j_select_dropdown">
-                          <option>select Country</option>
-                          <option>India</option>
-                          <option>India</option>
-                          <option>India</option>
-                          <option>India</option>
+                        <select
+                          className="a_j_select_dropdown"
+                          onChange={this.filterCountryChangeHandler}
+                        >
+                          <option>Select Country</option>
+                          <option value="India">India</option>
+                          <option value="China">China</option>
+                          <option value="Pakistan">Pakistan</option>
+                          <option value="Russia">Russia</option>
                         </select>
                       </Col>
                       <Col lg={4} md={4} sm={6} xs={6}>
@@ -457,12 +602,13 @@ if(response.data === "please Login"){
                         <select
                           className="a_j_select_dropdown"
                           id="a_j_select_dropdown1"
+                          onChange={this.filterCityChangeHandler}
                         >
                           <option>Select City</option>
-                          <option>Bangalore</option>
-                          <option>Bangalore</option>
-                          <option>Bangalore</option>
-                          <option>Bangalore</option>
+                          <option value="Chennai">Chennai</option>
+                          <option value="Bangalore">Bangalore</option>
+                          <option value="Mumbai">Mumbai</option>
+                          <option value="Delhi">Delhi</option>
                         </select>
                       </Col>
                     </Hidden>
@@ -488,12 +634,15 @@ if(response.data === "please Login"){
                         <Hidden md lg>
                           <Col sm={6} xs={6}>
                             <div className="h_p_filter1_title1">Country</div>
-                            <select className="a_j_select_dropdown">
-                              <option>select Country</option>
-                              <option>India</option>
-                              <option>India</option>
-                              <option>India</option>
-                              <option>India</option>
+                            <select
+                              className="a_j_select_dropdown"
+                              onChange={this.filterCountryChangeHandler}
+                            >
+                              <option>Select Country</option>
+                              <option value="India">India</option>
+                              <option value="China">China</option>
+                              <option value="Pakistan">Pakistan</option>
+                              <option value="Russia">Russia</option>
                             </select>
                           </Col>
                           <Col sm={6} xs={6}>
@@ -501,12 +650,13 @@ if(response.data === "please Login"){
                             <select
                               className="a_j_select_dropdown"
                               id="a_j_select_dropdown1"
+                              onChange={this.filterCityChangeHandler}
                             >
                               <option>Select City</option>
-                              <option>Bangalore</option>
-                              <option>Bangalore</option>
-                              <option>Bangalore</option>
-                              <option>Bangalore</option>
+                              <option value="Chennai">Chennai</option>
+                              <option value="Bangalore">Bangalore</option>
+                              <option value="Mumbai">Mumbai</option>
+                              <option value="Delhi">Delhi</option>
                             </select>
                           </Col>
                         </Hidden>
@@ -671,7 +821,7 @@ if(response.data === "please Login"){
                           <div className="pd_a_j_dataDateHead">
                             Posted on:
                             <span className="pd_a_j_dataDate">
-                              {item.postingDate.slice(0,10)}
+                              {item.postingDate.slice(0, 10)}
                             </span>
                           </div>
                           <div className="pd_a_j_dataTitle">
@@ -725,7 +875,7 @@ if(response.data === "please Login"){
                             <img
                               src={heartLike}
                               className="a_j_like"
-                              onClick={() => this.unlikePost(item._id)}
+                              onClick={() => this.dislikeSuccessPopup(item._id)}
                             />
                           ) : (
                             <img
@@ -739,23 +889,30 @@ if(response.data === "please Login"){
                     );
                   })}
                 </div>
-                {this.state.next_page
-                  &&<div className="a_j_load_div" style={{ marginBottom: "40px" }}>
-                    <button className="a_j_loadMore_btn" onClick = {this.loadMore}>
+                {this.state.next_page && (
+                  <div
+                    className="a_j_load_div"
+                    style={{ marginBottom: "40px" }}
+                  >
+                    <button
+                      className="a_j_loadMore_btn"
+                      onClick={this.loadMore}
+                    >
                       <img src={loadMore} className="a_j_location_logo" />
                       <span className="a_j_location_text">Load More</span>
                     </button>{" "}
                   </div>
-                }
+                )}
               </Col>
             </Row>
             <Dialog
-              open={this.state.dialogOpen}
-              onClose={this.closeChoicePopup}
+              open={this.state.likeSuccess}
+              onClose={this.likeSuccessPopupClose}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
               maxWidth={"md"}
               fullWidth={true}
+              PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
             >
               <DialogContent
                 className={All.PopupBody}
@@ -767,7 +924,7 @@ if(response.data === "please Login"){
                   <img
                     src={Close}
                     alt=""
-                    onClick={this.closeChoicePopup}
+                    onClick={this.likeSuccessPopupClose}
                     style={{ cursor: "pointer" }}
                   />
                 </div>
@@ -778,7 +935,7 @@ if(response.data === "please Login"){
                   <div className="u_f_popup_btn_container">
                     <button
                       className="u_f_popup_btn2"
-                      onClick={this.closeChoicePopup}
+                      onClick={this.likeSuccessPopupClose}
                     >
                       Close
                     </button>
@@ -787,12 +944,13 @@ if(response.data === "please Login"){
               </DialogContent>
             </Dialog>
             <Dialog
-              open={this.state.dialogOpen1}
-              onClose={this.closeChoicePopup1}
+              open={this.state.dislikeSuccess}
+              onClose={this.dislikeSuccessClosePopup}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
               maxWidth={"md"}
               fullWidth={true}
+              PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
             >
               <DialogContent
                 className={All.PopupBody}
@@ -804,21 +962,73 @@ if(response.data === "please Login"){
                   <img
                     src={Close}
                     alt=""
-                    onClick={this.closeChoicePopup1}
+                    onClick={this.dislikeSuccessClosePopup}
                     style={{ cursor: "pointer" }}
                   />
                 </div>
                 <Row style={{ marginTop: "30px" }}>
                   <div className="u_f_popup_title">
-                    The Job has been Unsaved successfully
+                    Are you sure want to remove this job from your saved list?
                   </div>
                   <div className="u_f_popup_btn_container">
                     <button
                       className="u_f_popup_btn2"
-                      onClick={this.closeChoicePopup1}
+                      onClick={this.dislikeSuccessClosePopup}
+                      style={{ background: "#F5F5F7", marginRight: "20px" }}
                     >
-                      Close
+                      No
                     </button>
+                    <button
+                      className="u_f_popup_btn2"
+                      onClick={this.dislikeSuccessSubmitPopup}
+                    >
+                      Yes
+                    </button>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
+            <Dialog
+              open={this.state.loginErrorPopup}
+              onClose={this.loginErrorPopupClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+              PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
+            >
+              <DialogContent
+                className={All.PopupBody}
+                style={{ marginBottom: "50px" }}
+              >
+                <div
+                  style={{ position: "absolute", top: "20px", right: "20px" }}
+                >
+                  <img
+                    src={Close}
+                    alt=""
+                    onClick={this.loginErrorPopupClose}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div
+                    className="a_j_popup_title"
+                    style={{ padding: "0px 60px" }}
+                  >
+                    You aren't logged into DroneZone. Please login to continue?
+                  </div>
+                  <div
+                    className="u_f_popup_btn_container"
+                    style={{ marginTop: "8px" }}
+                  >
+                    <div
+                      className="j_l_applyJobLoginBtn"
+                      style={{ width: "fit-content" }}
+                      onClick={() => this.props.history.push("/login")}
+                    >
+                      Login / Sign Up
+                    </div>
                   </div>
                 </Row>
               </DialogContent>

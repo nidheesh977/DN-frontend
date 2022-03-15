@@ -95,74 +95,88 @@ function Navbar(props) {
     setInstructions(true)
   }
 
-  useEffect(() => {
-    userService.User().then((res) => {
-      setLoading(false);
-      try {
-        if (res.data.id >= 0) {
-          Setuser(res.data);
-          Setuserlogin(true);
-        } else {
-          try {
-            axios
-              .post(
-                "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
-                {
-                  header: {
-                    Refreshtoken: localStorage.getItem("refresh_token"),
-                  },
-                }
-              )
-              .then((res) => {
-                if (res.data.token_type === "Bearer") {
-                  localStorage.setItem("access_token", res.data.access_token);
-                  localStorage.setItem("refresh_token", res.data.refresh_token);
-                  Setuserlogin(true);
-                  window.location.reload();
-                } else {
-                  localStorage.clear();
-                }
-              });
-          } catch {
-            localStorage.clear();
-          }
-        }
-      } catch {
-        try {
-          axios
-            .post(
-              "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
-              {
-                header: { Refreshtoken: localStorage.getItem("refresh_token") },
-              }
-            )
-            .then((res) => {
-              if (res.data.token_type === "Bearer") {
-                localStorage.setItem("access_token", res.data.access_token);
-                localStorage.setItem("refresh_token", res.data.refresh_token);
-                window.location.reload();
-              } else {
-                localStorage.clear();
-              }
-            });
-        } catch {
-          localStorage.clear();
-        }
-      }
-    });
+  const openMyAccount = () => {
+    const userRole = localStorage.getItem("role")
+    if (userRole === "pilot" || userRole === "visitor" || userRole === "candidate"){
+      history.push("/pilot_dashboard/activities/images")
+    }
+    else if (userRole === "service_center"){
+      history.push("/service_center_dashboard")
+    }
+    else if (userRole === "company"){
+      history.push("/company_dashboard/activities/jobs")
+    }
+  }
 
-    userService.Profile().then((res) => {
-      setLoading(false);
-      if (
-        res.data.profile !=
-        "https://demo-nexevo.in/haj/auth-app/public/uploads/profile"
-      ) {
-        setProfileImage(res.data.profile);
-      } else {
-        setProfileImage(ProfileIcon);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+    // userService.User().then((res) => {
+    //   setLoading(false);
+    //   try {
+    //     if (res.data.id >= 0) {
+    //       Setuser(res.data);
+    //       Setuserlogin(true);
+    //     } else {
+          // try {
+          //   axios
+          //     .post(
+          //       "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
+          //       {
+          //         header: {
+          //           Refreshtoken: localStorage.getItem("refresh_token"),
+          //         },
+          //       }
+          //     )
+          //     .then((res) => {
+          //       if (res.data.token_type === "Bearer") {
+          //         localStorage.setItem("access_token", res.data.access_token);
+          //         localStorage.setItem("refresh_token", res.data.refresh_token);
+          //         Setuserlogin(true);
+          //         window.location.reload();
+          //       } else {
+          //         localStorage.clear();
+          //       }
+          //     });
+          // } catch {
+          //   localStorage.clear();
+          // }
+        // }
+      // } catch {
+        // try {
+        //   axios
+        //     .post(
+        //       "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
+        //       {
+        //         header: { Refreshtoken: localStorage.getItem("refresh_token") },
+        //       }
+        //     )
+        //     .then((res) => {
+        //       if (res.data.token_type === "Bearer") {
+        //         localStorage.setItem("access_token", res.data.access_token);
+        //         localStorage.setItem("refresh_token", res.data.refresh_token);
+        //         window.location.reload();
+        //       } else {
+        //         localStorage.clear();
+        //       }
+        //     });
+        // } catch {
+        //   localStorage.clear();
+        // }
+    //   }
+    // });
+
+    // userService.Profile().then((res) => {
+    //   setLoading(false);
+    //   if (
+    //     res.data.profile !=
+    //     "https://demo-nexevo.in/haj/auth-app/public/uploads/profile"
+    //   ) {
+    //     setProfileImage(res.data.profile);
+    //   } else {
+    //     setProfileImage(ProfileIcon);
+    //   }
+    // });
+  // }, []
+  // );
 
   render();
   {
@@ -326,7 +340,7 @@ function Navbar(props) {
                   id="myAccount"
                 >
                   <Link
-                    to="/pilot_dashboard/activities/images"
+                    onClick = {openMyAccount}
                     className="nav-links my_account_btn"
                     style={{ display: "flex", alignItems: "center" }}
                   >

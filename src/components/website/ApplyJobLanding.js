@@ -12,13 +12,15 @@ import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import heartLike from "../images/heart-blue.svg";
 
+const domain = process.env.REACT_APP_MY_API
+
 const DialogContent = withStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
   },
 }))(MuiDialogContent);
 
-function ApplyJobLanding() {
+function ApplyJobLanding(props) {
   let history = useHistory();
   let param = useParams();
   // let {data, setData}= useState({})
@@ -30,6 +32,14 @@ function ApplyJobLanding() {
   let [liked, setLiked] = useState([]);
   let [applied, setapplied] = useState([]);
   let [authourised, setAuthourised] = useState(false);
+  let [applySuccess, setApplySuccess] = useState(false 
+    
+    
+    
+    
+    
+    )
+  let [applyFailure, setApplyFailure] = useState(false)
 
   let config = {
     headers: {
@@ -49,8 +59,16 @@ function ApplyJobLanding() {
     setDialog2(false);
   };
 
+  const closeApplySuccess = () => {
+    setApplySuccess(false)
+  }
+
+  const closeApplyFailure = () => {
+    setApplyFailure(false)
+  }
+
   useEffect(() => {
-    axios.get(`http://localhost:9000/api/jobs/jobLanding/${param.id}`).then(
+    axios.get(`${domain}/api/jobs/jobLanding/${param.id}`).then(
       (response) => {
         // setData({response})
         setList(response.data);
@@ -60,7 +78,7 @@ function ApplyJobLanding() {
         console.log(response);
       },
 
-      axios.post(`http://localhost:9000/api/pilot/getLikedJobs`, config).then(
+      axios.post(`${domain}/api/pilot/getLikedJobs`, config).then(
         (res) => {
           setAuthourised(true);
           const persons = res.data;
@@ -69,12 +87,14 @@ function ApplyJobLanding() {
         },
 
         axios
-          .post(`http://localhost:9000/api/pilot/getAppliedJobs1`, config)
+          .post(`${domain}/api/pilot/getAppliedJobs1`, config)
           .then((res) => {
 
             const jobs = res.data.appliedJobs;
             console.log(jobs);
-            setapplied(jobs);
+            if (jobs){
+              setapplied(jobs);
+            }
           })
       )
     );
@@ -82,24 +102,24 @@ function ApplyJobLanding() {
 
   function applyNow(id) {
     if(!localStorage.getItem("access_token")){
-      alert("Please Login or Signup");
-    }else{
-
-    if(authourised === false){
-      alert("PLease Create an Account");
+      setApplyFailure(true)
     }else{
 
 
     console.log(config);
 applied.push(id)
     axios
-      .post(`http://localhost:9000/api/jobs/applyJob/${param.id}`, config)
+      .post(`${domain}/api/jobs/applyJob/${param.id}`, config)
 
       .then((response) => {
+        setApplySuccess(true)
         console.log(response.status);
 
         if (response.data === "please Login") {
           history.push("/pilot_dashboard/account");
+        }
+        else{
+
         }
       })
       .catch(() => {});
@@ -107,23 +127,19 @@ applied.push(id)
       setDialog(true);
     }
   }
-}
+
 
   }
   let likePost = (id) => {
 
     if(!localStorage.getItem("access_token")){
-      alert("Please Login or Signup");
-    }else{
-
-    if(authourised === false){
-      alert("PLease Create an Account");
+      setApplyFailure(true)
     }else{
     setDialog1(true);
     liked.push(id);
 
     axios
-      .post(`http://localhost:9000/api/jobs/likeJob/${id}`, config)
+      .post(`${domain}/api/jobs/likeJob/${id}`, config)
 
       .then((response) => {
         if (response.data === "please Login") {
@@ -133,7 +149,7 @@ applied.push(id)
       })
       .catch(() => {});
     }
-  }
+  
   };
   let unlikePost = (id) => {
     console.log(config);
@@ -142,7 +158,7 @@ applied.push(id)
     liked.splice(index, 1);
 
     axios
-      .post(`http://localhost:9000/api/jobs/unlikeJob/${id}`, config)
+      .post(`${domain}/api/jobs/unlikeJob/${id}`, config)
 
       .then((response) => {
         if (response.data === "please Login") {
@@ -176,7 +192,7 @@ applied.push(id)
             <Col>
               <div className="j_l_right">
                 {applied.includes(list._id) ? (
-                  <div className="j_l_applyJobBtn" style = {{opacity: "0.5"}}>Already Applied </div>
+                  <div className="j_l_applyJobBtn" style = {{opacity: "0.5", pointerEvents: "none"}}>Already Applied </div>
                 ) : (
                   <div className="j_l_applyJobBtn" onClick={()=>applyNow(list._id)}>
                     Apply Now{" "}
@@ -267,6 +283,7 @@ applied.push(id)
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
           fullWidth={true}
+          PaperProps={{style: { borderRadius: 10, width: "820px" } }}
         >
           <DialogContent
             className={All.PopupBody}
@@ -299,6 +316,7 @@ applied.push(id)
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
           fullWidth={true}
+          PaperProps={{style: { borderRadius: 10, width: "820px" } }}
         >
           <DialogContent
             className={All.PopupBody}
@@ -320,6 +338,75 @@ applied.push(id)
                 <button className="u_f_popup_btn2" onClick={closeChoicePopup2}>
                   Close
                 </button>
+              </div>
+            </Row>
+          </DialogContent>
+        </Dialog>
+        <Dialog
+          open={applySuccess}
+          onClose={closeApplySuccess}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+          PaperProps={{style: { borderRadius: 10, width: "820px" } }}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={closeApplySuccess}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="a_j_popup_title">
+                Thank you!!
+              </div>
+              <div className="a_j_popup_content" style = {{marginBottom: "25px!important"}}>
+                Your application has been submitted successfully
+              </div>
+              <div className="u_f_popup_btn_container">
+              <div className="j_l_applyJobLoginBtn" style = {{width: "155px"}} onClick = {closeApplySuccess}>
+                Close
+              </div>
+              </div>
+            </Row>
+          </DialogContent>
+        </Dialog>
+        <Dialog
+          open={applyFailure}
+          onClose={closeApplyFailure}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+          PaperProps={{style: { borderRadius: 10, width: "820px" } }}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={closeApplyFailure}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="a_j_popup_title" style = {{padding: "0px 60px"}}>
+                You aren't logged into DroneZone. Please login to continue?
+              </div>
+              <div className="u_f_popup_btn_container" style = {{marginTop: "8px"}}>
+              <div className="j_l_applyJobLoginBtn" style = {{width: "fit-content"}} onClick = {()=>props.history.push("/login")}>
+                Login / Sign Up
+              </div>
               </div>
             </Row>
           </DialogContent>

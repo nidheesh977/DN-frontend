@@ -24,6 +24,9 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent);
 
 function Pilot_savedJobs() {
+
+  const domain = process.env.REACT_APP_MY_API
+
   let [liked, setLiked] = useState([]);
   let [dialog1, setDialog1] = useState(false)
   let [dialog2, setDialog2] = useState(false)
@@ -89,7 +92,7 @@ function Pilot_savedJobs() {
     setDialog1(true)
     liked.push(id)
 
-    axios.post(`http://localhost:9000/api/jobs/likeJob/${id}`, config)
+    axios.post(`${domain}/api/jobs/likeJob/${id}`, config)
 
       .then((response) => {
         
@@ -112,7 +115,7 @@ let unlikePost = (id) =>{
     let index = liked.indexOf(id);
     liked.splice(index, 1);
    
-    axios.post(`http://localhost:9000/api/jobs/unlikeJob/${id}`, config)
+    axios.post(`${domain}/api/jobs/unlikeJob/${id}`, config)
 
       .then((response) => {
 
@@ -136,7 +139,7 @@ if(response.data === "please Login"){
   useEffect(() => {
     console.log(config);
     axios
-      .post(`http://localhost:9000/api/pilot/getSavedJobs`, config)
+      .post(`${domain}/api/pilot/getSavedJobs`, config)
       .then((response) => {
         // setData({response})
         setList(response.data);
@@ -153,7 +156,7 @@ if(response.data === "please Login"){
         setLoading(false)
       })
 
-      axios.post(`http://localhost:9000/api/pilot/getLikedJobs`, config)
+      axios.post(`${domain}/api/pilot/getLikedJobs`, config)
 .then(res => {
   const persons = res.data;
   console.log(persons)

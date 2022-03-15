@@ -51,6 +51,8 @@ import s_c_form_img from "../images/s_c_form_img.png";
 import close from "../images/close.svg";
 import loadMore from "../images/Group 71.svg";
 
+const domain = process.env.REACT_APP_MY_API
+
 const styles = (theme) => ({
   root: {
     margin: 0,
@@ -128,7 +130,9 @@ class ServiceCenters extends Component {
       phoneNumberForm: false,
       phoneFormSuccess: false,
       phoneFormSuccessMsg: "Form submitted successfully",
-      showNumber: false
+      showNumber: false,
+      after_data_fetch: false,
+      next_page: false
     };
   }
 
@@ -148,15 +152,20 @@ class ServiceCenters extends Component {
       });
 
     axios
-      .get(`http://localhost:9000/api/center/getCenter`)
+      .get(`${domain}/api/center/getCenter`)
       .then((res) => {
         const center = res.data;
         console.log(res.data);
-        this.setState({ data: center });
         this.setState({
+          data: center,
           loading: false,
           after_data_fetch: true,
         });
+        if (res.data.next){
+          this.setState({
+            next_page: true
+          })
+        }
       })
       .catch((err) => {
         this.setState({
@@ -410,7 +419,7 @@ class ServiceCenters extends Component {
               <button
                 className="s_c_list_btn"
                 onClick={() =>
-                  this.props.history.push("/service_center_dashboard")
+                  this.props.history.push("/service_center_dashboard/account")
                 }
               >
                 List your service center
@@ -767,7 +776,11 @@ class ServiceCenters extends Component {
                               Brands:
                             </div>
                             <div className="s_c_other_details_content">
-                              {item.brandOfDrones}
+                              {item.brandOfDrones.map((brand, index)=>{
+                                return(
+                                  <div className="service_center_brand_list" key = {index}>{brand}{index+1 !== item.brandOfDrones.length && ","}&nbsp;</div>
+                                )
+                              })}
                             </div>
                           </div>
                           <hr style={{ border: "1px solid #efefef" }} />
@@ -1120,15 +1133,17 @@ class ServiceCenters extends Component {
                 </Dialog>
               </>
             )}
-            <div className="a_j_load_div" style={{ margin: "40px 0px" }}>
-              <button className="a_j_loadMore_btn">
-                <img src={loadMore} className="a_j_location_logo" />
-                <span className="a_j_location_text">Load More</span>
-              </button>{" "}
-            </div>
+            {this.state.next_page&&(
+              <div className="a_j_load_div" style={{ margin: "40px 0px" }}>
+                <button className="a_j_loadMore_btn">
+                  <img src={loadMore} className="a_j_location_logo" />
+                  <span className="a_j_location_text">Load More</span>
+                </button>{" "}
+              </div>
+            )}
             {!this.state.data.length &&
               !this.state.loading &&
-              this.state.after_data_fetch(
+              this.state.after_data_fetch &&
                 <div style={{ margin: "0px auto", display: "block" }}>
                   <Box className={All.Text_center} pt={5}>
                     <img
@@ -1145,7 +1160,7 @@ class ServiceCenters extends Component {
                     </Box>
                   </Box>
                 </div>
-              )}
+              }
           </Container>
         </div>
       </>

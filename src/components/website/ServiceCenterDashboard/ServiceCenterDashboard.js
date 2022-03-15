@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import All from '../../website/All.module.css'
 import ServiceCenterActivities from './ServiceCenterActivities'
 import {Container, Row, Col, Visible, Hidden} from 'react-grid-system'
-import {NavLink, Switch, Route} from 'react-router-dom'
+import {NavLink, Switch, Route, Link} from 'react-router-dom'
 import ServiceCenterAccount from './ServiceCenterAccount'
 
 class ServiceCenterDashboard extends Component{
@@ -21,6 +21,12 @@ class ServiceCenterDashboard extends Component{
     this.props.history.push(to)
   }
 
+  logout = () => {
+    window.localStorage.clear();
+    this.props.history.push("/");
+    window.location.reload();
+  }
+
   render(){
     // console.log(this.props.location)
     return(
@@ -36,9 +42,12 @@ class ServiceCenterDashboard extends Component{
             <div style ={{marginTop: "25px"}}></div>
           </Visible>
           <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
-            <div style={{display: "flex"}}>
-              <div className={this.props.location.pathname === "/service_center_dashboard" ?"s_c_db_main_tab s_c_db_main_tab_selected":"s_c_db_main_tab"} onClick={() => this.selectMainTab(1, "/service_center_dashboard")}>Activities</div>
-              <div className={this.props.location.pathname === "/service_center_dashboard/account"?"s_c_db_main_tab s_c_db_main_tab_selected":"s_c_db_main_tab"} onClick={() => this.selectMainTab(2, "/service_center_dashboard/account")}>My Account</div>
+            <div style={{}}>
+              <div className={this.props.location.pathname === "/service_center_dashboard" ?"s_c_db_main_tab s_c_db_main_tab_selected":"s_c_db_main_tab"} onClick={() => this.selectMainTab(1, "/service_center_dashboard")} style = {{display: "inline-block"}}>Activities</div>
+              <div className={this.props.location.pathname === "/service_center_dashboard/account"?"s_c_db_main_tab s_c_db_main_tab_selected":"s_c_db_main_tab"} onClick={() => this.selectMainTab(2, "/service_center_dashboard/account")} style = {{display: "inline-block"}}>My Account</div>
+              <Link style={{ float: "right", display: "inline-block" }} onClick={this.logout}>
+              Logout
+            </Link>
             </div>
           </Container>
         </div>

@@ -6,9 +6,8 @@ import Sidebar from '../navbarmenu/Sidebar'
 class Header extends React.Component {
     constructor(props) {
       super(props);
-
       this.state = {
-        isDesktop: false
+        isDesktop: false,
       };
 
       this.updatePredicate = this.updatePredicate.bind(this);
