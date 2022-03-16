@@ -34,6 +34,7 @@ import downloadIcon from "../images/downloadIcon.svg";
 import videoIcon from "../images/video-icon.svg";
 import loadMore from "../images/Group 71.svg";
 import userDone from "../images/userDone.svg"
+import userCross from "../images/userCross.svg"
 import axios from "axios";
 
 const styles = (theme) => ({
@@ -324,7 +325,7 @@ export default function PilotDetails(props) {
   };
   let [pilotData, setPilotData] = useState({});
   let [fol, setFol] = useState([]);
-  useEffect(( ) => {
+  useEffect(() => {
     axios
       .get(
         `${domain}/api/pilot/pilotDetails/${props.match.params.id}`
@@ -515,7 +516,7 @@ setMyFollowing(folowers)      })
               <div className="p_d_description">{pilotData.bio}</div>
 
               <div className="p_d_btn_container">
-                {myFollowing.includes(pilotData.userId) ? <button
+                {myFollowing.includes(pilotData._id) ? <button
                   className="p_d_follow_btn p_d_btn"
                   onClick={unfollow}
                   style={{background: "transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0% 0% no-repeat padding-box", opacity:"0.9"}}

@@ -404,60 +404,36 @@ class CreateServiceCenter extends Component {
     return (
       <>
         <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
+ <Row>
+            <Col lg={6} className={All.DronePerson} >
+              <Hidden xs sm md>
+                <div className="backgroundImginPage"></div>
+              </Hidden>
+            </Col>
+            <Col lg={6}>      
                 <div className='pd_b_i_main'>
-                  <div className='pd_b_i_images'>
-                    <img src={Cover} alt="" className='pd_b_i_cover' />
-                    <div className='pd_b_i_profile'>
-                      <div className='pd_b_i_profile_container'>
-                        <img src={Pilot} alt="" className='pd_b_i_pilot' />
-                        <div><img src={Edit} alt="" className='pd_b_i_edit' /></div>
-
-                      </div>
-
-                    </div>
-                    <div><img src={Edit} alt="" className='pd_b_i_edit1' /></div>
-
-                  </div>
+                  
                   <div className="pd_b_i_profile_titleBox">
-                    <div className='pd_b_i_profile_title'>Create Service center account</div>
-                  </div>
-                  <Row>
-                    <Col lg = {6}>
-                      <div>
+                  <div className="pd_b_i_profile_title" style={{fontSize: "20px"}}>Welcome almost done, Please fill below fields to complete your profile setup</div>                  </div>
+                 
+                  <div>
                         <label htmlFor="service_center_name" className='pd_b_i_profile_head'>Service center name</label>
                         <input type="text" className='pd_b_i_profile_input' id = "service_center_name" onChange = {(e) => this.handleChange(e, "service_center_name")} disabled = {!this.state.edit}/>
                         <div className="input_error_msg" id = "service_center_name_error">Service center name is required</div>
                       </div>
-                    </Col>
-                    <Col lg = {6}>
-                      <div>
-                        <div>
-                          <div style={{ marginBottom: "15px" }}>
-                            <label htmlFor="email" className='pd_b_i_profile_head1' >Email ID</label>
-                            <div className='pd_b_i_profile_verify' >Verify</div>
-
-                          </div>
-                        </div>
-                        <input type="text" className='pd_b_i_profile_input' id = "email" onChange = {(e) => this.handleChange(e, "email")} disabled = {!this.state.edit}/>
-                        <div className="input_error_msg" id = "email_error">Email ID is required</div>
-                      </div>
-                    </Col>
-                  </Row>
                   <Row>
-                    <Col>
-                      <div>
+                    <Col lg = {6}>
+                    <div>
                         <div>
                           <div style={{ marginBottom: "15px" }}>
-                            <label htmlFor="phone" className='pd_b_i_profile_head1'>Phone Number</label>
-                            <div className='pd_b_i_profile_verify'>Verify</div>
+                            <label htmlFor="whatsapp_number" className='pd_b_i_profile_head1'>Center Contact Number</label>
                           </div>
                         </div>
-
-                        {/* <input type="text" className='pd_b_i_profile_input' id = "phone" onChange = {(e) => this.handleChange(e, "phone")} disabled = {!this.state.edit}/> */}
-                        <PhoneInput defaultCountry="IN" className={All.Phonenumber + " s_c_d_phone_input"} name="phone" id="phone" value={this.state.phone} onChange = {this.phoneChangeHandler} disabled = {!this.state.edit}/>
-                        <div className="input_error_msg" id = "phone_error">Phone number is required</div>
+                        <PhoneInput defaultCountry="IN" className={All.Phonenumber + " s_c_d_phone_input"} name="phone" id="whatsapp_number" value={this.state.whatsapp_number} onChange = {this.whatsappNumberChangeHandler} disabled = {!this.state.edit}/>
+                        <div className="input_error_msg" id = "whatsapp_number_error">Whatsapp number is required</div>
                       </div>
                     </Col>
+                    
                     <Col>
                       <div>
                         <div>
@@ -470,11 +446,7 @@ class CreateServiceCenter extends Component {
                       </div>
                     </Col>
                   </Row>
-                  <div>
-                    <label htmlFor="address" className='pd_b_i_profile_head'>Address</label>
-                    <input type="text" className='pd_b_i_profile_input' id = 'address' onChange = {(e) => this.handleChange(e, "address")} disabled = {!this.state.edit}/>
-                    <div className="input_error_msg" id = "address_error">Address is required</div>
-                  </div>
+
                   <Row>
                     <Col xl={6}>
                       <div>
@@ -533,7 +505,7 @@ class CreateServiceCenter extends Component {
                       <div>
                         <div>
                           <div style={{ marginBottom: "15px" }}>
-                            <label htmlFor="secondary_phone" className='pd_b_i_profile_head1'>Secondary Mobile number</label>
+                            <label htmlFor="secondary_phone" className='pd_b_i_profile_head1'>Alternate Number (optional)</label>
                           </div>
                         </div>
                         {/* <input type="text" id = "secondary_phone" className='pd_b_i_profile_input' disabled = {!this.state.edit}/> */}
@@ -550,14 +522,14 @@ class CreateServiceCenter extends Component {
                         </div>
 
 
-                        <input type="text" id = "website_input" className='pd_b_i_profile_input' disabled = {!this.state.edit} onChange={(e) => this.handleChange(e, "website")} />
+                        <input type="text" id = "website_input" placeholder="Ex: www.test.com" className='pd_b_i_profile_input' disabled = {!this.state.edit} onChange={(e) => this.handleChange(e, "website")} />
                         <div className="input_error_msg" id = "website_error">Website is required</div>
                       </div>
                     </Col>
                   </Row>
                   <div>
                     <label htmlFor="brand_input" className='pd_b_i_profile_head'>Brand of drones</label>
-                    <input type="text" id = "brand_input"  className='pd_b_i_profile_input' placeholder="Search drone brands" disabled = {!this.state.edit} onChange={(e) => this.handleChange(e, "brand")} onKeyDown = {this.addBrand} value = {this.state.brand}/>
+                    <input type="text" id = "brand_input"  className='pd_b_i_profile_input' placeholder="Type and click Enter to add" disabled = {!this.state.edit} onChange={(e) => this.handleChange(e, "brand")} onKeyDown = {this.addBrand} value = {this.state.brand}/>
                     <div className="input_error_msg" id = "brand_error">Brand of drones is required</div>
                   </div>
                   <div className="s_c_a_brand_container">
@@ -598,7 +570,8 @@ class CreateServiceCenter extends Component {
 
                   </div>
                 </div>
-              
+              </Col>
+              </Row>
         </Container>
       </>
     )
