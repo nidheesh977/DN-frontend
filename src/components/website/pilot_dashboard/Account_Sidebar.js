@@ -66,7 +66,7 @@ class Account_Sidebar extends React.Component {
                       activeClassName="h_p_sidebar_active"
                       className="h_p_filter1_checkbox_label"
                     >
-                      Basic Information
+                      Profile Information
                     </NavLink>
                   </div>
                   <div id="pd_filter1_checkbox_label">

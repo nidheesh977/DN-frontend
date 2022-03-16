@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import Cover from "./pilot_dashboard/images/cover.jpg";
 import "./pilot_dashboard/css/Pilot_BasicInfo.css";
 import Pilot from "./pilot_dashboard/images/pilot.jpg";
-import { Row, Col, Container } from "react-grid-system";
+import { Row, Col, Container, Hidden } from "react-grid-system";
 import Edit from "./pilot_dashboard/images/edit-1.svg";
 import PhoneInput from "react-phone-number-input";
 import All from "./All.module.css";
 import Axios from "axios";
 import { useHistory } from "react-router-dom";
+import DronePerson from "../images/drone_person_new.png";
+import "../css/Common.css"
+
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -36,6 +39,9 @@ function CreatePilot() {
     training_center_name: "",
     completed_year: "",
     skills: [],
+    drones:[],
+    years: null,
+    months: null
   });
   let [edit, setEdit] = useState(true);
 
@@ -91,6 +97,9 @@ function CreatePilot() {
       "monthly_pay",
       "industry",
       "skills",
+      "years",
+      "months",
+      "drones"
     ];
     var error = false;
     const validateEmail = (email) => {
@@ -211,7 +220,19 @@ function CreatePilot() {
     }
     document.getElementById("skills_error").style.visibility = "hidden";
   };
-
+  const addDrones = (e) => {
+    if (e.key === "Enter" && e.target.value !== "") {
+      var skill_list = data.drones;
+      skill_list.push(e.target.value);
+      setData({
+        ...data,
+        drones: skill_list,
+      });
+      console.log(data.drones);
+      document.getElementById(e.target.id).value = "";
+    }
+    document.getElementById("skills_error").style.visibility = "hidden";
+  };
   const editHandler = () => {
     setEdit(true);
     setTimeout(() => {
@@ -255,25 +276,19 @@ function CreatePilot() {
     });
   };
   return (
-    <Container>
-      {" "}
-      <div className="pd_b_i_main">
-        <div className="pd_b_i_images">
-          <img src={Cover} alt="" className="pd_b_i_cover" />
-          <div className="pd_b_i_profile">
-            <div className="pd_b_i_profile_container">
-              <img src={Pilot} alt="" className="pd_b_i_pilot" />
-              <div>
-                <img src={Edit} alt="" className="pd_b_i_edit" />
-              </div>
-            </div>
-          </div>
-          <div>
-            <img src={Edit} alt="" className="pd_b_i_edit1" />
-          </div>
-        </div>
+    <Container className={All.Container}>
+ <Row>
+            <Col lg={6} className={All.DronePerson} >
+              <Hidden xs sm md>
+                <div className="backgroundImginPage">
+
+                </div>
+              </Hidden>
+            </Col>
+            <Col lg={6}>      <div className="pd_b_i_main">
+        
         <div className="pd_b_i_profile_titleBox">
-          <div className="pd_b_i_profile_title">Create Pilot</div>
+        <div className="pd_b_i_profile_title" style={{fontSize: "20px"}}>Welcome almost done, Please fill below fields to complete your profile setup</div>
         </div>
 
         <Row>
@@ -331,22 +346,8 @@ function CreatePilot() {
             </div>
           </Col>
         </Row>
-        <div>
-          <div className="pd_b_i_profile_head">Address</div>
-          <input
-            type="text"
-            className="pd_b_i_profile_input"
-            value={data.address}
-            id="address"
-            onChange={changeHandler}
-            disabled={!edit}
-          />
-          <div className="input_error_msg" id="address_error">
-            Address is required
-          </div>
-        </div>
-        <Row>
-          <Col xl={6}>
+        
+       
             <div>
               <div className="pd_b_i_profile_head">City</div>
               <input
@@ -361,58 +362,31 @@ function CreatePilot() {
                 City is required
               </div>
             </div>
-          </Col>
-          <Col xl={6}>
+    
+            
             <div>
-              <div className="pd_b_i_profile_head">Country</div>
-              <input
-                type="text"
-                className="pd_b_i_profile_input"
-                value={data.country}
-                id="country"
-                onChange={changeHandler}
-                disabled={!edit}
-              />
-              <div className="input_error_msg" id="country_error">
-                Country is required
-              </div>
-            </div>
-          </Col>
-          <Col xl={6}>
-            <div>
-              <div className="pd_b_i_profile_head">Postal Address</div>
-              <input
-                type="text"
-                className="pd_b_i_profile_input"
-                value={data.postal}
-                id="postal"
-                onChange={changeHandler}
-                disabled={!edit}
-              />
-              <div className="input_error_msg" id="postal_error">
-                Postal address is required
-              </div>
-            </div>
-          </Col>
-        </Row>
-        <div>
-          <div className="pd_b_i_profile_head">Bio</div>
-          <textarea
-            type="text"
-            className="pd_b_i_profile_inputDesc"
-            placeholder="Maximum 50 words..."
-            value={data.bio}
-            id="bio"
-            onChange={changeHandler}
-            disabled={!edit}
-          ></textarea>
-          <div className="input_bio_error_msg" id="bio_error">
-            Bio is required
+            <label htmlFor="skills" className="pd_b_i_profile_head">
+              Do you own a Drone? (if Yes, Specify the drone models)
+            </label>
+            <input
+              type="text"
+              className="pd_b_i_profile_input"
+              id="drones"
+              onKeyUp={addDrones}
+              disabled={!edit}
+              placeholder="Type and click Enter to add"
+            />
+            {data.drones.map((skill, index) => {
+              return (
+                <div className="pd_i_skill" key={index}>
+                  {skill}
+                </div>
+              );
+            })}
+ <div style={{marginBottom:"10px"}}></div>
           </div>
-          <div className="pd_b_i_profile_text">
-            Brief description for your profile. URLs are hyperlinked
-          </div>
-        </div>
+           
+       
 
         <div style={{ marginBottom: "30px" }}>
           <div className="pd_b_i_profile_head">Pilot type</div>
@@ -490,21 +464,7 @@ function CreatePilot() {
               <div className="input_error_msg" id="drone_id_error">
                 Drone ID is required
               </div>
-              <label htmlFor="drone_type" className="pd_b_i_profile_head">
-                Drone Type
-              </label>
-              <input
-                type="text"
-                value={data.drone_type}
-                className="pd_b_i_profile_input"
-                name="drone_type"
-                id="drone_type"
-                onChange={handleChange}
-                disabled={!edit}
-              />
-              <div className="input_error_msg" id="drone_type_error">
-                Drone type is required
-              </div>
+            
             </div>
           )}
 
@@ -603,6 +563,47 @@ function CreatePilot() {
               Industry is required
             </div>
           </div>
+          <div>
+            <label htmlFor="industry" className="pd_b_i_profile_head">
+              Experience
+            </label>
+            <Row>
+          <Col>
+            <div>
+              <input
+                type="number"
+                className="pd_b_i_profile_input"
+                value={data.years}
+                id="years"
+                onChange={changeHandler}
+                placeholder="Years"
+                disabled={!edit}
+              />
+              <div className="input_error_msg" id="years_error">
+                Year of experience is required
+              </div>
+            </div>
+          </Col>
+          <Col>
+            <div>
+              <input
+                type="number"
+                name="months"
+                className="pd_b_i_profile_input"
+                value={data.months}
+                onChange={changeHandler}
+                id="months"
+                disabled={!edit}
+                placeholder="Months"
+
+              />
+              <div className="input_error_msg" id="months_error">
+                Months of experience is required
+              </div>
+            </div>
+          </Col>
+        </Row>
+          </div>
           {data.pilot_type === "licensed" && (
             <React.Fragment>
               <div>
@@ -654,7 +655,9 @@ function CreatePilot() {
               className="pd_b_i_profile_input"
               id="skills"
               onKeyUp={addSkill}
-              disabled={!edit}
+              disabled={!edit} 
+              placeholder="Type and click Enter to add"
+
             />
             {data.skills.map((skill, index) => {
               return (
@@ -668,6 +671,12 @@ function CreatePilot() {
             </div>
           </div>
           <div className="pd_b_i_notifications_save">
+          <button
+              className="common_backBtn"
+              onClick={saveChanges}
+            >
+              Back
+            </button>
             <button
               className="pd_b_i_notifications_saveBtn"
               onClick={saveChanges}
@@ -713,7 +722,10 @@ function CreatePilot() {
               </Row>
             </DialogContent>
           </Dialog> */}
-    </Container>
+          </Col>
+          </Row>
+          </Container>
+
   );
 }
 

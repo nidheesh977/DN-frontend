@@ -4,10 +4,12 @@ import "./company_dashboard/css/Company_BasicInfo.css";
 import Pilot from "./company_dashboard/images/pilot.jpg";
 import logo from "./company_dashboard/images/logo.jpg";
 import logoCover from "./company_dashboard/images/logocompany.png";
-import { Container, Row, Col } from "react-grid-system";
+import { Container, Row, Col, Hidden } from "react-grid-system";
 import Edit from "./company_dashboard/images/edit-1.svg";
 import PhoneInput from "react-phone-number-input";
 import All from "./All.module.css";
+import "../css/Common.css"
+
 
 function CreateCompany() {
   var [data, setData] = useState({
@@ -133,24 +135,19 @@ function CreateCompany() {
 
   return (
     <Container className={All.Container}>
+ <Row>
+            <Col lg={6} className={All.DronePerson} >
+              <Hidden xs sm md>
+                <div className="backgroundImginPage"></div>
+              </Hidden>
+            </Col>
+            <Col lg={6}>    
       <div className="pd_b_i_main">
-        <div className="pd_b_i_images">
-          <img src={logoCover} alt="" className="pd_b_i_cover" />
-          <div className="pd_b_i_profile">
-            <div className="pd_b_i_profile_container">
-              <img src={logo} alt="" className="pd_b_i_pilot" />
-              <div>
-                <img src={Edit} alt="" className="pd_b_i_edit" />
-              </div>
-            </div>
-          </div>
-          <div>
-            <img src={Edit} alt="" className="pd_b_i_edit1" />
-          </div>
-        </div>
+        
         <div className="pd_b_i_profile_titleBox">
-          <div className="pd_b_i_profile_title">Create Company account</div>
+        <div className="pd_b_i_profile_title" style={{fontSize: "20px"}}>Welcome almost done, Please fill below fields to complete your profile setup</div>
         </div>
+       
         <div>
           <label htmlFor="company_name" className="pd_b_i_profile_head">
             Company Name
@@ -168,56 +165,56 @@ function CreateCompany() {
           </div>
         </div>
         <Row>
-          <Col lg = {6}>
+          <Col>
             <div>
-              <div>
-                <div style={{ marginBottom: "15px" }}>
-                  <label htmlFor="email" className="pd_b_i_profile_head1">
-                    Email ID
-                  </label>
-                  <div className="pd_b_i_profile_verify">Verify</div>
-                </div>
-              </div>
+              <div className="pd_b_i_profile_head">Official Contact Number</div>
               <input
-                type="text"
+                type="number"
                 className="pd_b_i_profile_input"
-                disabled={!edit}
-                id="email"
-                value={data.email}
+                value={data.dob}
+                id="dob"
                 onChange={changeHandler}
+                disabled={!edit}
               />
-              <div className="input_error_msg" id="email_error">
-                Email ID is required
+              <div className="input_error_msg" id="dob_error">
+                Contact Number is required
               </div>
             </div>
           </Col>
-          <Col lg = {6}>
+          <Col>
             <div>
-              <div>
-                <div style={{ marginBottom: "15px" }}>
-                  <label htmlFor="phone" className="pd_b_i_profile_head1">
-                    Phone Number
-                  </label>
-                  <div className="pd_b_i_profile_verify">Verify</div>
-                </div>
-              </div>
-
-              <PhoneInput
-                defaultCountry="IN"
-                className={All.Phonenumber + " s_c_d_phone_input"}
-                name="phone"
-                id="phone"
-                value={data.phone}
-                onChange={phoneChangeHandler}
+              <div className="pd_b_i_profile_head">Official Email</div>
+              <input
+                type="text"
+                name="gender"
+                className="pd_b_i_profile_input"
+                value={data.gender}
+                onChange={changeHandler}
+                id="gender"
                 disabled={!edit}
               />
-              <div className="input_error_msg" id="phone_error">
-                Phone number is required
+              <div className="input_error_msg" id="gender_error">
+                Official Email is required
               </div>
             </div>
           </Col>
         </Row>
-
+                               
+        <div>
+              <div className="pd_b_i_profile_head">Contact Persons Name</div>
+              <input
+                type="text"
+                name="gender"
+                className="pd_b_i_profile_input"
+                value={data.gender}
+                onChange={changeHandler}
+                id="gender"
+                disabled={!edit}
+              />
+              <div className="input_error_msg" id="gender_error">
+                Name is required
+              </div>
+            </div>
         <div>
           <label htmlFor="industry" className="pd_b_i_profile_head">
             Industry
@@ -233,77 +230,9 @@ function CreateCompany() {
             Industry is required
           </div>
         </div>
-        <div>
-          <label htmlFor="address" className="pd_b_i_profile_head">
-            Address
-          </label>
-          <input
-            type="text"
-            className="pd_b_i_profile_input"
-            id="address"
-            value={data.address}
-            onChange={changeHandler}
-            disabled={!edit}
-          />
-          <div className="input_error_msg" id="address_error">
-            Address is required
-          </div>
-        </div>
-        <Row>
-          <Col xl={6}>
-            <div>
-              <label htmlFor="city" className="pd_b_i_profile_head">
-                City
-              </label>
-              <input
-                type="text"
-                className="pd_b_i_profile_input"
-                disabled={!edit}
-                value={data.city}
-                id="city"
-                onChange={changeHandler}
-              />
-              <div className="input_error_msg" id="city_error">
-                City is required
-              </div>
-            </div>
-          </Col>
-          <Col xl={6}>
-            <div>
-              <label htmlFor="country" className="pd_b_i_profile_head">
-                Country
-              </label>
-              <input
-                type="text"
-                className="pd_b_i_profile_input"
-                disabled={!edit}
-                value={data.country}
-                id="country"
-                onChange={changeHandler}
-              />
-              <div className="input_error_msg" id="country_error">
-                Country is required
-              </div>
-            </div>
-          </Col>
-          <Col xl={6}>
-            <div>
-              <label htmlFor="postal_address" className="pd_b_i_profile_head">
-                Postal Address
-              </label>
-              <input
-                type="text"
-                className="pd_b_i_profile_input"
-                disabled={!edit}
-                id="postal_address"
-                onChange={changeHandler}
-              />
-              <div className="input_error_msg" id="postal_address_error">
-                Postal address is required
-              </div>
-            </div>
-          </Col>
-        </Row>
+        
+ 
+ 
         <div>
           <label htmlFor="gstin_no" className="pd_b_i_profile_head">
             GSTIN No
@@ -322,7 +251,7 @@ function CreateCompany() {
         </div>
         <div>
           <label htmlFor="experience" className="pd_b_i_profile_head">
-            Experience of the company
+            Started In?
           </label>
           <input
             type="text"
@@ -330,28 +259,14 @@ function CreateCompany() {
             value={data.experience}
             onChange={changeHandler}
             id="experience"
+            placeholder="Ex: 2019"
             disabled={!edit}
           />
           <div className="input_error_msg" id="experience_error">
             Experience is required
           </div>
         </div>
-        <div>
-          <label htmlFor="description" className="pd_b_i_profile_head">
-            Description
-          </label>
-          <textarea
-            type="text"
-            className="cd_b_i_profile_inputDesc"
-            value={data.description}
-            onChange={changeHandler}
-            id="description"
-            disabled={!edit}
-          ></textarea>
-          <div className="input_error_msg" id="description_error">
-            Description is required
-          </div>
-        </div>
+       
         <div className="pd_b_i_notifications_save">
           <button
             className="pd_b_i_notifications_saveBtn"
@@ -361,6 +276,8 @@ function CreateCompany() {
           </button>
         </div>
       </div>
+      </Col>
+      </Row>
     </Container>
   );
 }

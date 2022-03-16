@@ -62,6 +62,7 @@ import CreatePilot from "./components/website/CreatePilot";
 import Message from "./components/website/messages"
 import CreateCompany from "./components/website/CreateCompany";
 import CreateServiceCenter from "./components/website/CreateServiceCenter";
+import Categories from "./components/website/Categories";
 
 
 class App extends React.Component {
@@ -254,6 +255,7 @@ class App extends React.Component {
             <Route component={Company_dashboard} path="/company_dashboard" />
             <Route component={Admin_dashboard} path="/Admin_dashboard" />
             <Route component={CreatePilot} path="/createPilot" />
+            <Route component={Categories} path="/chooseCategories" />
             {/* yaseen */}
             <PublicRoute exact path="*" component={NoPageFound} />
           </Switch>

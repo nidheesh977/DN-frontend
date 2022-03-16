@@ -179,7 +179,7 @@ alert("successfull")        })
         <div className="pd_b_i_profile_edit" onClick = {editHandler}>Edit</div>
       </div>
       <div>
-        <div className="pd_b_i_profile_head">Full Name</div>
+        <div className="pd_b_i_profile_head">Name</div>
         <input type="text" className="pd_b_i_profile_input" value={data.full_name} id = "full_name" onChange = {changeHandler} disabled = {!edit} />
         <div className="input_error_msg" id = "full_name_error">Full name is required</div>
       </div>
@@ -241,7 +241,6 @@ alert("successfull")        })
               value={data.gender}
               onChange = {changeHandler}
               id = "gender"
-              onChange = {changeHandler}
               disabled = {!edit}
             />
             <div className="input_error_msg" id = "gender_error">Gender is required</div>
