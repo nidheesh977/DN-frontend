@@ -1,6 +1,6 @@
 import React, { useState, Component, useEffect, useCallback } from "react";
 import { Link, NavLink, useHistory } from "react-router-dom";
-import "../Navbar.css";
+import "./Navbar.css";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,167 +21,196 @@ import { logout, isLogin, login, getRefreshToken } from "../../middleware/auth";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Alert } from "@material-ui/lab";
 import PageLoader from "../Loader/pageloader";
-
 import { authenticationService } from "../../middleware/auth";
 import { userService } from "../_services/user.service";
 import UploadFileInstruction from "../website/UploadFileInstruction";
 
-$(document).ready(function () {
-  $(".SearchBoxIcon").click(function () {
-    $(".search-box").toggle();
-    $(".MenuSearchBox").focus();
-  });
-});
+import { Container, Nav, Navbar } from "react-bootstrap";
 
-function Navbar(props) {
+// $(document).ready(function () {
+//   $(".SearchBoxIcon").click(function () {
+//     $(".search-box").toggle();
+//     $(".MenuSearchBox").focus();
+//   });
+// });
 
-  const history = useHistory()
+const domain = process.env.REACT_APP_MY_API
 
-  const [user, Setuser] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [userlogin, Setuserlogin] = useState(false);
-  useEffect(() => Setuserlogin(isLogin()), [props]);
-  const [auth, setAuth] = React.useState(true);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [anchorEls, setAnchorEls] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const opens = Boolean(anchorEls);
-  const [ProfileImage, setProfileImage] = useState();
-  const [click, setClick] = useState(false);
-  const handleClick = () => setClick(!click);
-  const closeMobileMenu = () => setClick(false);
+function NavBar(props) {
+  const history = useHistory();
 
-  const currentUser = useState(authenticationService.currentUserValue);
+  // const [user, Setuser] = useState([]);
+  // const [loading, setLoading] = useState(false);
+  const [userlogin, setUserlogin] = useState(true);
+  const [role, setRole] = useState("")
+  // useEffect(() => Setuserlogin(isLogin()), [props]);
+  // const [auth, setAuth] = React.useState(true);
+  // const [anchorEl, setAnchorEl] = React.useState(null);
+  // const [anchorEls, setAnchorEls] = React.useState(null);
+  // const open = Boolean(anchorEl);
+  // const opens = Boolean(anchorEls);
+  // const [ProfileImage, setProfileImage] = useState();
+  // const [click, setClick] = useState(false);
+  // const handleClick = () => setClick(!click);
+  // const closeMobileMenu = () => setClick(false);
 
-  function refreshPagelogout() {
-    localStorage.clear();
-    logout();
-    Setuserlogin(false);
-  }
+  // const currentUser = useState(authenticationService.currentUserValue);
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
+  // function refreshPagelogout() {
+  //   localStorage.clear();
+  //   logout();
+  //   Setuserlogin(false);
+  // }
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleChange = (event) => {
+  //   setAuth(event.target.checked);
+  // };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleMenu = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
 
-  const handleCloses = () => {
-    setAnchorEls(null);
-  };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
 
-  const handleLogout = () => {
-    logout();
-    Setuserlogin(false);
-  };
+  // const handleCloses = () => {
+  //   setAnchorEls(null);
+  // };
 
-  const [instructions, setInstructions] = useState(false)
+  // const handleLogout = () => {
+  //   logout();
+  //   Setuserlogin(false);
+  // };
+
+  const [instructions, setInstructions] = useState(false);
 
   const goToPage = () => {
-      setInstructions(false)
-      history.push("/UploadFile")
+    setInstructions(false);
+    history.push("/UploadFile");
   };
 
   const closePopup = () => {
-    setInstructions(false)
-  }
+    setInstructions(false);
+  };
 
   const uploadInstructions = () => {
-    setInstructions(true)
-  }
+    setInstructions(true);
+  };
 
-  const openMyAccount = () => {
-    const userRole = localStorage.getItem("role")
-    if (userRole === "pilot" || userRole === "visitor" || userRole === "candidate"){
-      history.push("/pilot_dashboard/activities/images")
+  useEffect(() => {
+    let access_token = localStorage.getItem("access_token")
+
+    if (access_token){
+      axios.post(`${domain}/access_token_valid`, {"access_token": access_token})
+      .then(res => {
+        setUserlogin(true)
+      })
+      .catch(err => {
+        axios.post(`${domain}/refresh_token`, {"access_token": access_token})
+        .then((res) => {
+          localStorage.setItem("access_token", res.data.access_token)
+          setUserlogin(true)
+        })
+        .catch(err => {
+          setUserlogin(false)
+        })
+      })
     }
-    else if (userRole === "service_center"){
-      history.push("/service_center_dashboard")
+    else{
+      setUserlogin(false)
     }
-    else if (userRole === "company"){
-      history.push("/company_dashboard/activities/jobs")
-    }
-  }
+  }, [])
+
+  // const openMyAccount = () => {
+  //   const userRole = localStorage.getItem("role");
+  //   if (
+  //     userRole === "pilot" ||
+  //     userRole === "visitor" ||
+  //     userRole === "candidate"
+  //   ) {
+  //     history.push("/pilot_dashboard/activities/images");
+  //   } else if (userRole === "service_center") {
+  //     history.push("/service_center_dashboard");
+  //   } else if (userRole === "company") {
+  //     history.push("/company_dashboard/activities/jobs");
+  //   }
+  // };
 
   // useEffect(() => {
-    // userService.User().then((res) => {
-    //   setLoading(false);
-    //   try {
-    //     if (res.data.id >= 0) {
-    //       Setuser(res.data);
-    //       Setuserlogin(true);
-    //     } else {
-          // try {
-          //   axios
-          //     .post(
-          //       "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
-          //       {
-          //         header: {
-          //           Refreshtoken: localStorage.getItem("refresh_token"),
-          //         },
-          //       }
-          //     )
-          //     .then((res) => {
-          //       if (res.data.token_type === "Bearer") {
-          //         localStorage.setItem("access_token", res.data.access_token);
-          //         localStorage.setItem("refresh_token", res.data.refresh_token);
-          //         Setuserlogin(true);
-          //         window.location.reload();
-          //       } else {
-          //         localStorage.clear();
-          //       }
-          //     });
-          // } catch {
-          //   localStorage.clear();
-          // }
-        // }
-      // } catch {
-        // try {
-        //   axios
-        //     .post(
-        //       "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
-        //       {
-        //         header: { Refreshtoken: localStorage.getItem("refresh_token") },
-        //       }
-        //     )
-        //     .then((res) => {
-        //       if (res.data.token_type === "Bearer") {
-        //         localStorage.setItem("access_token", res.data.access_token);
-        //         localStorage.setItem("refresh_token", res.data.refresh_token);
-        //         window.location.reload();
-        //       } else {
-        //         localStorage.clear();
-        //       }
-        //     });
-        // } catch {
-        //   localStorage.clear();
-        // }
-    //   }
-    // });
+  // userService.User().then((res) => {
+  //   setLoading(false);
+  //   try {
+  //     if (res.data.id >= 0) {
+  //       Setuser(res.data);
+  //       Setuserlogin(true);
+  //     } else {
+  // try {
+  //   axios
+  //     .post(
+  //       "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
+  //       {
+  //         header: {
+  //           Refreshtoken: localStorage.getItem("refresh_token"),
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       if (res.data.token_type === "Bearer") {
+  //         localStorage.setItem("access_token", res.data.access_token);
+  //         localStorage.setItem("refresh_token", res.data.refresh_token);
+  //         Setuserlogin(true);
+  //         window.location.reload();
+  //       } else {
+  //         localStorage.clear();
+  //       }
+  //     });
+  // } catch {
+  //   localStorage.clear();
+  // }
+  // }
+  // } catch {
+  // try {
+  //   axios
+  //     .post(
+  //       "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
+  //       {
+  //         header: { Refreshtoken: localStorage.getItem("refresh_token") },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       if (res.data.token_type === "Bearer") {
+  //         localStorage.setItem("access_token", res.data.access_token);
+  //         localStorage.setItem("refresh_token", res.data.refresh_token);
+  //         window.location.reload();
+  //       } else {
+  //         localStorage.clear();
+  //       }
+  //     });
+  // } catch {
+  //   localStorage.clear();
+  // }
+  //   }
+  // });
 
-    // userService.Profile().then((res) => {
-    //   setLoading(false);
-    //   if (
-    //     res.data.profile !=
-    //     "https://demo-nexevo.in/haj/auth-app/public/uploads/profile"
-    //   ) {
-    //     setProfileImage(res.data.profile);
-    //   } else {
-    //     setProfileImage(ProfileIcon);
-    //   }
-    // });
+  // userService.Profile().then((res) => {
+  //   setLoading(false);
+  //   if (
+  //     res.data.profile !=
+  //     "https://demo-nexevo.in/haj/auth-app/public/uploads/profile"
+  //   ) {
+  //     setProfileImage(res.data.profile);
+  //   } else {
+  //     setProfileImage(ProfileIcon);
+  //   }
+  // });
   // }, []
   // );
 
   render();
   {
     return (
-      <div id="navbar">
+      <div style={{ height: "75px" }}>
         {/* <Joyride steps={getSteps()}
           showSkipButton={true}
           styles={{
@@ -198,201 +227,102 @@ function Navbar(props) {
             }
           }}
         /> */}
-        {loading === true && <PageLoader />}
-        <section className="navbar_sticky">
-          <nav className="navbar navbar-desktop">
-            <Link to="/" className="nav-item">
-              <img className="nav-links" src={Logo} />
-            </Link>
-            <div className="menu-icon" onClick={handleClick}>
-              <i className={click ? "fas fa-times" : "fas fa-bars"} />
-            </div>
-            <ul className={click ? "nav-menu active" : "nav-menu"}>
-              <span className="menu">
-                <Link className="nav-item"></Link>
-              </span>
-              <span className="menu">
-                <li className="nav-item SearchBoxIcon">
-                  {/* <Search /> */}
-                  {/* <i class="fa fa-search" aria-hidden="true"></i> */}
-                  <Link to="/Searchresult">
-                    <img
-                      className="fa fa-search"
-                      src={SearchIcon}
-                      style={{ marginRight: "15px" }}
-                    />
-                  </Link>
-                  {/* <div class="search-box">
-              <form action={`${process.env.PUBLIC_URL}/Search`}>
-                <input type="text" className="MenuSearchBox" placeholder=""/>
-                <input type="submit" value="Search" />
-                </form>
-              </div> */}
-                  {/* <input type="text" className="search-field" placeholder="Search …" value="" name="sad" /> */}
-                  {/* <SearchFilter /> */}
-                </li>
-                <li className="nav-item">
-                  <NavLink
-                    to="/apply_job"
-                    className="nav-links"
-                    activeStyle={{ color: "blue!important" }}
-                  >
-                    Apply jobs
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <Link to="/hire_pilots" className="nav-links">
-                    Hire Pilots
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-links" to="/service_centers">
-                    Find Service Centers
-                  </Link>
-                </li>
+        {/* {loading === true && <PageLoader />} */}
 
-                {/* ============================== testing ================================ */}
-
-                <>
-                  <li
-                    className="nav-item"
-                    id="login"
-                    style={{
-                      display: localStorage.getItem("access_token")
-                        ? "none"
-                        : "block",
-                      marginTop: "25px",
-                    }}
-                  >
-                    <Link
-                      to="/login"
-                      className="nav-links2"
-                      onClick={closeMobileMenu}
-                    >
-                      Log In
-                    </Link>
-                  </li>
-                  <li
-                    className="nav-item"
-                    id="signup"
-                    style={{
-                      display: localStorage.getItem("access_token")
-                        ? "none"
-                        : "block",
-                      marginTop: "25px",
-                    }}
-                  >
-                    <Link className="nav-links2" to="/sign_up">
-                      Sign up
-                    </Link>
-                  </li>
-                </>
-                {/* ============================== testing ================================ */}
-                {/* {userlogin === false &&
-                  <>
-                    <li className='nav-item'>
-                      <Link to='/login' className='nav-links2' onClick={closeMobileMenu}>Log In</Link>
-                    </li>
-                    <li className='nav-item'>
-                      <Link className='nav-links2' to="/sign_up">
-                        Sign up
-                      </Link>
-
-                    </li>
-                  </>
-                } */}
-                {/* {userlogin === true &&
-                  // <li className='nav-item'>
-                  //   {ProfileImage ? <Link><img className="nav-links" style={{ width: '40px', height: '40px', borderRadius: '100%' }} src={ProfileImage} onClick={handleMenu} />My account</Link> : <Link><img className="nav-links" style={{ width: '30px', height: '30px', borderRadius: '100%' }} src={ProfileIcon} onClick={handleMenu}/><span style = {{marginTop: "25px"}}>My account</span></Link>}
-                  //   <Menu
-                  //     id="simple-menu"
-                  //     anchorEl={anchorEl}
-                  //     keepMounted
-                  //     open={Boolean(anchorEl)}
-                  //     onClose={handleClose}
-                  //   >
-                  //     <MenuItem className='nav-links' onClick={handleClose}>
-                  //       {currentUser[0] == '2' &&
-                  //         <Link to='/OfficeProfile' className='navSignup padding_0' onClick={closeMobileMenu}> {(user.company_name)}</Link>}
-                  //       {currentUser[0] == '1' &&
-                  //         <Link to='/Profile' className='navSignup padding_0' onClick={closeMobileMenu}> {(user.name)}</Link>}
-                  //     </MenuItem>
-                  //     <MenuItem className='nav-links' onClick={handleClose}>   <Link to='/UpgradeProVersion' className='navSignup padding_0' onClick={closeMobileMenu}>My account </Link></MenuItem>
-                  //   </Menu>
-                  // </li>
-                  <>
-                    <li className='nav-item'>
-                      <Link className="nav-links my_account_btn" style={{ display: "flex", alignItems: 'center' }}>
-                        <img style={{ width: '30px', height: '30px', borderRadius: '100%' }} src={ProfileIcon} /><span style={{ paddingLeft: "10px", fontSize: "16px" }}>My account</span>
-                      </Link>
-                    </li>
-                  </>
-                } */}
-
-                <li
-                  className="nav-item"
-                  style={{
-                    display: localStorage.getItem("access_token")
-                      ? "block"
-                      : "none",
-                    marginTop: "15px",
-                  }}
-                  id="myAccount"
-                >
-                  <Link
-                    onClick = {openMyAccount}
-                    className="nav-links my_account_btn"
-                    style={{ display: "flex", alignItems: "center" }}
-                  >
-                    <img
-                      style={{
-                        width: "30px",
-                        height: "30px",
-                        borderRadius: "100%",
-                      }}
-                      src={ProfileIcon}
-                    />
-
-                    <span style={{ paddingLeft: "10px", fontSize: "16px" }}>
-                      My account
-                    </span>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <div className="nav-links">
-                    <Button
-                      variant="contained"
-                      color="default"
-                      id="first"
-                      className="nav_upload_img"
-                      onClick = {uploadInstructions}
-                      style = {{textTransform: "initial"}}
-                    >
-                      <img style={{ paddingRight: 10 }} src={UploadFile} />{" "}
-                      Upload file
-                    </Button>
-                  </div>
-                </li>
-                {instructions && (
-                  <UploadFileInstruction
-                    button={
-                      <button
-                        className="upload_inst_btn"
-                        onClick={goToPage}
-                      >
-                        Go to upload page
-                      </button>
-                    }
-                    closePopup = {closePopup}
+        <Navbar
+          bg="dark"
+          variant="dark"
+          style={{
+            width: "100%",
+            height: "75px",
+            padding: "25px 30px 25px 19px",
+            background: "black"
+          }}
+        >
+          <Container style={{ maxWidth: "1310px" }}>
+            <Navbar.Brand>
+              <Link to="/" className="nav-item">
+                <img className="nav-links" src={Logo} />
+              </Link>
+            </Navbar.Brand>
+            <Nav className="d-flex">
+              <Nav.Link>
+                <Link to="/searchresult" className="NavLink">
+                  <img
+                    src={SearchIcon}
+                    alt="search_icon"
+                    style={{ marginRight: "15px" }}
                   />
-                )}
-              </span>
-            </ul>
-          </nav>
-        </section>
+                </Link>
+              </Nav.Link>
+              <Nav.Link style = {{marginRight: "25px"}}>
+                <Link to="/apply_job" className="NavLink">
+                  Apply jobs
+                </Link>
+              </Nav.Link>
+              <Nav.Link style = {{marginRight: "7px"}}>
+                <Link to="/hire_pilots" className="NavLink">
+                  Hire Pilots
+                </Link>
+              </Nav.Link>
+              <Nav.Link style = {{marginRight: "14px"}}>
+                <Link to="/service_centers" className="NavLink">
+                  Find Service Centers
+                </Link>
+              </Nav.Link>
+              {!userlogin
+              ?<>
+                <Nav.Link style = {{marginRight: "16px"}}>
+                  <Link to="/login" className="NavLink NavLinkSignupLogin">
+                    Login
+                  </Link>
+                </Nav.Link>
+                <Nav.Link style = {{marginRight: "11px"}}>
+                  <Link to="/sign_up" className="NavLink NavLinkSignupLogin">
+                    Sign up
+                  </Link>
+                </Nav.Link>
+              </>
+              :<Nav.Link>
+              <Link
+                to="/pilot_dashboard/activities/images"
+                className="NavLink NavLinkMyAccount"
+              >
+                <img
+                  src={ProfileIcon}
+                  alt=""
+                  height={"24px"}
+                  width={"24px"}
+                />{" "}
+                My accout
+              </Link>
+            </Nav.Link>
+              }
+              
+              
+              <Nav.Link>
+                <Link className="NavLink NavLinkUploadFile" onClick = {uploadInstructions}>
+                  <img src={UploadFile} alt="" height={"18px"} width={"18px"} />{" "}
+                  Upload file
+                </Link>
+              </Nav.Link>
+            </Nav>
+          </Container>
+        </Navbar>
+
+        {instructions && (
+          <UploadFileInstruction
+            button={
+              <button className="upload_inst_btn" onClick={goToPage}>
+                Go to upload page
+              </button>
+            }
+            closePopup={closePopup}
+          />
+        )}
       </div>
     );
   }
 }
 
-export default Navbar;
+export default NavBar;

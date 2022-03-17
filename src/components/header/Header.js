@@ -1,7 +1,6 @@
 import React from 'react'
 import Navbar from '../navbarmenu/Navbar' 
 import Sidebar from '../navbarmenu/Sidebar'  
- 
 
 class Header extends React.Component {
     constructor(props) {
@@ -9,7 +8,6 @@ class Header extends React.Component {
       this.state = {
         isDesktop: false,
       };
-
       this.updatePredicate = this.updatePredicate.bind(this);
     }
 
@@ -29,7 +27,7 @@ class Header extends React.Component {
     }
   
     updatePredicate() {
-      this.setState({ isDesktop: window.innerWidth > 992 });
+      this.setState({ isDesktop: window.innerWidth > 991 });
     }
 
 

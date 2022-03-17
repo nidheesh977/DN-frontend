@@ -1,0 +1,56 @@
+.NavLink{
+  color: white;
+}
+
+.NavLinkMyAccount{
+  background: transparent linear-gradient(187deg, #4FFEA3 0%, #00E7FC 100%) 0% 0% no-repeat padding-box;
+  border: 1px solid #4FFEA3;
+  color: black !important;
+  line-height: 24px;
+  padding: 5px 8px 7px 5px;
+  border-radius: 18px;
+}
+
+.NavLinkMyAccount:hover{
+  color: black !important;
+  background: white;
+}
+
+.NavLinkUploadFile{
+  background: #4FFEA3;
+  border: 1px solid #4FFEA3;
+  color: black !important;
+  line-height: 24px;
+  padding: 5px 8px 7px 15px !important;
+  border-radius: 18px;
+  font-family: muli-regular;
+}
+
+.NavLinkUploadFile:hover{
+  color: black !important;
+  background: white;
+}
+
+.NavLinkUploadFile2{
+  background: #4FFEA3;
+  border: 1px solid #4FFEA3;
+  color: black !important;
+  line-height: 24px;
+  padding: 3px 8px 5px 15px !important;
+  border-radius: 18px;
+  font-family: muli-regular;
+  margin-right: 10px;
+}
+
+.NavLinkUploadFile2:hover{
+  color: black !important;
+  background: #4FFEA3;
+}
+
+.NavLinkSignupLogin{
+  color: #4FFEA3;
+}
+
+.navbar{
+  background: black!important;
+}

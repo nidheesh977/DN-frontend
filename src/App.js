@@ -1,4 +1,5 @@
 import React from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { HashRouter, Switch, Route } from "react-router-dom";
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "./components/header/Header";
