@@ -579,7 +579,6 @@ class ServiceCenters extends Component {
                     <button
                       className="s_c_button1"
                       onClick={() => this.closeDropDown()}
-                      style = {{    padding: "8px 0 9px 0"}}
                     >
                       Search
                     </button>
