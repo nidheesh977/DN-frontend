@@ -26,7 +26,7 @@ function CreatePilot() {
     country: "",
     postal: "",
     bio: "",
-    pilot_type: "Licensed",
+    pilot_type: "licensed",
     drone_id: "",
     drone_type: "",
     work_type: "full_time",
@@ -87,18 +87,13 @@ function CreatePilot() {
     var fields = [
       "dob",
       "gender",
-      "address",
       "city",
-      "country",
-      "postal",
-      "bio",
+      "drone_id",
       "attachment",
       "monthly_pay",
+      "hourly_pay",
       "industry",
       "skills",
-      "years",
-      "months",
-      "drones"
     ];
     var error = false;
     const validateEmail = (email) => {
@@ -109,57 +104,43 @@ function CreatePilot() {
         );
     };
     for (var i = 0; i < fields.length; i++) {
-      if (data[fields[i]] === "" && fields[i] !== "attachment") {
+      if (data[fields[i]] === "" && fields[i] !== "drone_id" && fields[i] !== "attachment" && fields[i] !== "monthly_pay" && fields[i] !== "hourly_pay" ) {
         document.getElementById(`${fields[i]}_error`).style.visibility = "visible";
         document.getElementById(`${fields[i]}`).focus();
         error = true;
       }
       if (fields[i] === "bio") {
         if (data.bio === "") {
-          document.getElementById(`${fields[i]}_error`).style.visibility =
-            "visible";
-          document.getElementById(`${fields[i]}_error`).style.display =
-            "contents";
+          document.getElementById(`${fields[i]}_error`).style.visibility = "visible";
+          document.getElementById(`${fields[i]}_error`).style.display = "contents";
           document.getElementById(`${fields[i]}`).focus();
           error = true;
         }
       }
-      if (fields[i] === "email") {
-        if (data.email === "") {
-          document.getElementById(`email_error`).innerHTML =
-            "Email ID is Required";
-          document.getElementById(`email_error`).style.visibility = "visible";
-          document.getElementById(`email`).focus();
-          error = true;
-        } else if (!validateEmail(data.email)) {
-          document.getElementById(`email_error`).innerHTML =
-            "Email ID is not valid";
-          document.getElementById(`email_error`).style.visibility = "visible";
-          document.getElementById(`email`).focus();
-          error = true;
-        }
+
+      if(data.pilot_type === "licensed" && fields[i] === "attachment" && data.attachment === ""){
+        document.getElementById("attachment_error").style.visibility = "visible"
+        error = true;
       }
-      if (fields[i] === "phone") {
-        if (data.phone === "") {
-          document.getElementById(`phone_error`).innerHTML =
-            "Phone number is Required";
-          document.getElementById(`phone_error`).style.visibility = "visible";
-          document.getElementById(`phone`).focus();
-          error = true;
-        } else if (data.phone.length <= 7) {
-          document.getElementById(`phone_error`).innerHTML =
-            "Phone number is not valid";
-          document.getElementById(`phone_error`).style.visibility = "visible";
-          document.getElementById(`phone`).focus();
-          error = true;
-        }
+
+      if (data.pilot_type === "unlicensed" && fields[i] === "drone_id" && data.drone_id === ""){
+        document.getElementById("drone_id_error").style.visibility = "visible"
+        error = true;
       }
-      if(fields[i] === "attachment" && data.attachment === ""){
-        document.getElementById("certificate_error").style.visibility = "visible"
+
+      if (data.work_type === "full_time" && fields[i] === "monthly_pay" && data.monthly_pay === ""){
+        document.getElementById("monthly_pay_error").style.visibility = "visible"
+        error = true;
+      }
+
+      if (data.work_type === "part_time" && fields[i] === "hourly_pay" && data.hourly_pay === ""){
+        document.getElementById("hourly_pay_error").style.visibility = "visible"
+        error = true;
       }
 
       if(fields[i] === "skills" && data.skills.length === 0){
         document.getElementById("skills_error").style.visibility = "visible"
+        error = true;
       }
       
     }
@@ -173,33 +154,25 @@ function CreatePilot() {
       Axios.post(
         `${domain}/api/pilot/registerPilot`,
         {
-          name: data.full_name,
-          emailId: data.email,
-          phoneNo: data.phone,
           dob: data.dob,
           gender: data.gender,
-          address: data.address,
           city: data.city,
-          country: data.country,
-          postalAddress: data.postal,
-          bio: data.bio,
           pilotType: data.pilot_type,
-          // certificates : data.attachment,
+          certificates : data.attachment,
           droneId: data.drone_id,
           droneType: data.drone_type,
           workType: data.work_type,
           hourlyPayment: data.hourly_pay,
           monthlyPayment: data.monthly_pay,
           industry: data.industry,
-          trainingCenter: data.training_center_name,
-          completedYear: data.completed_year,
+          drones: data.drones,
           skills: data.skills,
         },
         config
       )
         .then(() => {
           alert("successfull");
-          history.push("/");
+          history.push("/pilot_dashboard/account");
         })
         .catch((err) => {
           console.log(err);
@@ -375,10 +348,10 @@ function CreatePilot() {
               disabled={!edit}
               placeholder="Type and click Enter to add"
             />
-            {data.drones.map((skill, index) => {
+            {data.drones.map((drone, index) => {
               return (
                 <div className="pd_i_skill" key={index}>
-                  {skill}
+                  {drone}
                 </div>
               );
             })}
@@ -392,8 +365,8 @@ function CreatePilot() {
           <div>
             <input
               type="radio"
-              name="Licensed"
-              checked={data.pilot_type === "Licensed"}
+              name="licensed"
+              checked={data.pilot_type === "licensed"}
               id="licensed"
               onClick={changePilotType}
               disabled={!edit}
@@ -407,14 +380,14 @@ function CreatePilot() {
             </label>
             <input
               type="radio"
-              name="Unlicensed"
-              id="Unlicensed"
-              checked={data.pilot_type === "Unlicensed"}
+              name="unlicensed"
+              id="unlicensed"
+              checked={data.pilot_type === "unlicensed"}
               onClick={changePilotType}
               disabled={!edit}
             />{" "}
             <label
-              htmlFor="Unlicensed"
+              htmlFor="unlicensed"
               className="pd_p_i_profile_text"
               style={{ cursor: "pointer" }}
             >
@@ -423,7 +396,7 @@ function CreatePilot() {
           </div>
         </div>
         <div>
-          {data.pilot_type === "Licensed" ? (
+          {data.pilot_type === "licensed" ? (
             <React.Fragment>
               <div className="pd_b_i_profile_head">Certificates </div>
               <label for="pd_p_i_hidden" className="pd_p_i_attachnment_label">
@@ -435,7 +408,7 @@ function CreatePilot() {
                       : "Attach your DGCA certificate"}
                   </span>
                 </div>
-                <div className="input_error_msg" id="certificate_error">
+                <div className="input_error_msg" id="attachment_error">
                   Certificate is required
                 </div>
                 <input

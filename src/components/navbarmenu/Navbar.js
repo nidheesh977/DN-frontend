@@ -328,7 +328,7 @@ function Navbar(props) {
                   id="myAccount"
                 >
                   <Link
-                    to="/pilot_dashboard/activities/images"
+                    to={localStorage.getItem("role") === "undefined" ?"/choose-categories":"/pilot_dashboard/account"}
                     className="nav-links my_account_btn"
                     style={{ display: "flex", alignItems: "center" }}
                   >

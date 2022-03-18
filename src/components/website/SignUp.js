@@ -101,9 +101,11 @@ function SignUp(props) {
               document.getElementById("email").focus();
             } else {
               serverError(true);
+              setLoading(false);
             }
           } catch {
             setServerError(true);
+            setLoading(false);
           }
         });
     } else {
@@ -334,6 +336,7 @@ function SignUp(props) {
                       maxLength: 13,
                     })}
                     onChange={changeHandler}
+                    autoComplete = {false}
                   />
                   <div className="login_input_error_msg" id="phone_error">
                     Phone number is required

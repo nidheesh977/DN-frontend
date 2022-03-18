@@ -73,7 +73,7 @@ console.log(response.data)
                     onMouseOver={() => mouseGotIN(item._id)}
                     onMouseOut={() => mouseGotOut(item._id)}
                   >
-                    <img  src={`http://localhost:9000/${item.file}` }  className="pd_images_image" />
+                    <img  src={`http://52.66.165.88:9000/${item.file}` }  className="pd_images_image" />
                     <div className={item.premium ? "pd_premiumBadge" : "pd_images_imageHidden"}>
                       <img src={premiumIcon} className="pd_premiumBadge_star" />
                     </div>
