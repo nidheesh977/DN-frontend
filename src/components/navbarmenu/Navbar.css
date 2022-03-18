@@ -36,7 +36,7 @@
   border: 1px solid #4FFEA3;
   color: black !important;
   line-height: 24px;
-  padding: 3px 8px 5px 15px !important;
+  padding: 0px 8px 5px 15px !important;
   border-radius: 18px;
   font-family: muli-regular;
   margin-right: 10px;
@@ -44,7 +44,7 @@
 
 .NavLinkUploadFile2:hover{
   color: black !important;
-  background: #4FFEA3;
+  background: #fff;
 }
 
 .NavLinkSignupLogin{

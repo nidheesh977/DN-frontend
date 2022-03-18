@@ -164,9 +164,9 @@ export default function PersistentDrawerLeft(props) {
             <Link
               className="NavLink NavLinkUploadFile2"
               onClick={uploadInstructions}
-              style = {{padding: "3px 8px 5px 15px !important"}}
+              style = {{padding: "0px 8px 5px 15px !important"}}
             >
-              <img src={UploadFile} alt="" height={"18px"} width={"18px"} />{" "}
+              <img src={UploadFile} alt="" height={"23px"} width={"23px"} style = {{paddingTop: "5px"}} />{" "}
               <React.Fragment style={{ color: "black !important" }}>
                 Upload file
               </React.Fragment>

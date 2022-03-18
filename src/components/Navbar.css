@@ -861,12 +861,17 @@ button.swal-button.swal-button--confirm{
 
 .my_account_btn:hover {
   color: #000 !important;
+  background: #fff;
 }
 
 .nav_upload_img{
   background-color: #4FFEA3 !important;
   border-radius: 20px !important;
   border: 1px solid #4FFEA3 !important;
+}
+
+.nav_upload_img:hover{
+  background-color: #fff !important;
 }
 
 .nav-links2 {

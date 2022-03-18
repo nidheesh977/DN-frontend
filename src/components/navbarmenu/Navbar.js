@@ -25,6 +25,7 @@ import PageLoader from "../Loader/pageloader";
 import { authenticationService } from "../../middleware/auth";
 import { userService } from "../_services/user.service";
 import UploadFileInstruction from "../website/UploadFileInstruction";
+import "./Navbar.css"
 
 $(document).ready(function () {
   $(".SearchBoxIcon").click(function () {
@@ -353,7 +354,7 @@ function Navbar(props) {
                       id="first"
                       className="nav_upload_img"
                       onClick = {uploadInstructions}
-                      style = {{textTransform: "initial"}}
+                      style = {{textTransform: "initial", bottom: "2px", padding: "6px 20px 6px 20px"}}
                     >
                       <img style={{ paddingRight: 10 }} src={UploadFile} />{" "}
                       Upload file
