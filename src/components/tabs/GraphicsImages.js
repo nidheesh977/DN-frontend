@@ -12,7 +12,6 @@ import nofoundresult from '../images/noresultfound.svg'
 
 import { userService } from '../_services/user.service';
 
-const API_URL = 'https://demo-nexevo.in/haj/auth-app/public/api/auth';
 
 export default class GraphicsImages extends React.Component {
     constructor(props) {
@@ -68,9 +67,9 @@ export default class GraphicsImages extends React.Component {
       }
       
     render() {
-        const { listing, value } = this.state;
-        const {users,  values} = this.state;
-        const { loading, data } = this.state;
+        const { listing } = this.state;
+        const {users} = this.state;
+        const { loading } = this.state;
         return loading === true
             
             ? 

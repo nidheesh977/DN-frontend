@@ -9,7 +9,6 @@ import All from '../website/All.module.css'
 import ProfileEditIcon from '../images/profile-edit.svg'
 import axios from 'axios'
 import swal from 'sweetalert';
-import Skeleton from 'react-loading-skeleton';
 import { userService } from '../_services/user.service';
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -44,9 +43,7 @@ class Profile extends React.Component {
 
     userService.User().then(res => {
       this.setState({ user: res.data })
-    },
-      err => {
-      }
+    }
     )
 
     userService.Profile().then(res => {
@@ -59,10 +56,7 @@ class Profile extends React.Component {
       else {
         this.setState({ croppedImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png" })
       }
-    },
-      err => {
-
-      }
+    }
     )
   }
 
@@ -110,8 +104,6 @@ class Profile extends React.Component {
           icon: "success",
         });
       })
-        .catch(error => {
-        });
     }
   }
   handleCancel() {
@@ -125,7 +117,6 @@ class Profile extends React.Component {
 
   render() {
     const { open, scroll } = this.state;
-    const { classes, theme } = this.props
     return (
       <>
         {/* <Snackbar  open={this.state.open}  autoHideDuration={6000} ><Alert variant="filled"  severity="success">{this.state.SuccessMessages} </Alert></Snackbar> */}

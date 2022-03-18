@@ -104,7 +104,7 @@ export default function GoPremium() {
     
             // alert(result.data.order_id);
             // alert(result.data.order_id);
-            let val=result.data.order_id;
+            
             const options = {
                 key: "rzp_test_tzURXA4gSDw99d", // Enter the Key ID generated from the Dashboard
                 amount: amount,
@@ -113,14 +113,8 @@ export default function GoPremium() {
                 description: "Test Transaction",
                 // image: { logo }, 
                 order_id: order_id, 
-                handler: async function (response) {      
-                    const data = {
-                        orderCreationId: val,
-                        razorpay_payment_id: response.razorpay_payment_id,
-                        // razorpayOrderId: response.razorpay_order_id,
-                        // razorpaySignature: response.razorpay_signature, 
-                    };
-                    const result = await axios.post("https://demo-nexevo.in/haj/auth-app/public/api/auth/payment", data); 
+                handler: async function (response) {
+                    
                     swal("Payment Sucessfull", {
                         icon: "success",
                       });

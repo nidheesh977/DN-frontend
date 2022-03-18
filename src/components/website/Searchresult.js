@@ -11,13 +11,8 @@ import Button from '@material-ui/core/Button';
 import DroneImg from '../images/drone-img.svg'
 import Divider from '@material-ui/core/Divider';
 import Skeleton from 'react-loading-skeleton';
-import work from '../images/work.svg'
 import Location from '../images/location.svg'
 import nofoundresult from '../images/noresultfound.svg'
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
-import Favorite from '@material-ui/icons/Favorite';
 import Like from '../Like';
 
 

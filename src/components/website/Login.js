@@ -9,14 +9,8 @@ import Box from "@material-ui/core/Box";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import DronePerson from "../images/drone_person_new.png";
-import Alert from "@material-ui/lab/Alert";
-import Snackbar from "@material-ui/core/Snackbar";
-import DroneImg from "../images/drone-img.svg";
 import Loader from "../Loader/loader";
-import swal from "sweetalert";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import { authenticationService } from "../../middleware/auth";
-import { trackWindowScroll } from "react-lazy-load-image-component";
 import "../css/Login.css";
 import Dialog from "@material-ui/core/Dialog";
 import Close from "../images/close.svg";
@@ -137,7 +131,7 @@ const Login = (props) => {
           <Row>
             <Col lg={6} className={All.DronePerson}>
               <Hidden xs sm md>
-                <img src={DronePerson} />
+                <img src={DronePerson} alt = "dronePerson"/>
               </Hidden>
             </Col>
             <Col lg={6} className={All.Login}>
@@ -242,7 +236,7 @@ const Login = (props) => {
             </Col>
             <Col lg={6}>
               <Hidden lg xl xxl>
-                <img src={DronePerson} width={"80%"} />
+                <img src={DronePerson} width={"80%"} alt = "dronePerson"/>
               </Hidden>
             </Col>
           </Row>

@@ -102,24 +102,31 @@ function NavBar(props) {
     let access_token = localStorage.getItem("access_token")
 
     if (access_token){
-      axios.post(`${domain}/access_token_valid`, {"access_token": access_token})
-      .then(res => {
-        setUserlogin(true)
-      })
-      .catch(err => {
-        axios.post(`${domain}/refresh_token`, {"access_token": access_token})
-        .then((res) => {
-          localStorage.setItem("access_token", res.data.access_token)
-          setUserlogin(true)
-        })
-        .catch(err => {
-          setUserlogin(false)
-        })
-      })
+      setUserlogin(true)
     }
     else{
       setUserlogin(false)
     }
+
+    // if (access_token){
+    //   axios.post(`${domain}/access_token_valid`, {"access_token": access_token})
+    //   .then(res => {
+    //     setUserlogin(true)
+    //   })
+    //   .catch(err => {
+    //     axios.post(`${domain}/refresh_token`, {"access_token": access_token})
+    //     .then((res) => {
+    //       localStorage.setItem("access_token", res.data.access_token)
+    //       setUserlogin(true)
+    //     })
+    //     .catch(err => {
+    //       setUserlogin(false)
+    //     })
+    //   })
+    // }
+    // else{
+    //   setUserlogin(false)
+    // }
   }, [])
 
   // const openMyAccount = () => {

@@ -12,7 +12,7 @@ class Header extends React.Component {
     }
 
     componentDidMount(){
-      if (localStorage.getItem("access_token") == undefined){
+      if (localStorage.getItem("access_token") === undefined){
         localStorage.clear()
       }
     }

@@ -131,61 +131,17 @@ import { Container, Row, Col } from 'react-grid-system'
 import '../css/DownloadSubscription.css'
 import All from './All.module.css'
 import Dialog from "@material-ui/core/Dialog";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
-import MuiDialogActions from "@material-ui/core/DialogActions";
-import IconButton from "@material-ui/core/IconButton";
-import ProfileImg from "../ProfileImg/Profile";
 import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import payment_success from '../images/payment_success.png';
 import { Helmet } from "react-helmet";
-
-const styles = (theme) => ({
-    root: {
-        margin: 0,
-        padding: theme.spacing(2),
-    },
-    closeButton: {
-        position: "absolute",
-        right: theme.spacing(4),
-        top: theme.spacing(2),
-        color: theme.palette.grey[500],
-    },
-});
-
-const DialogTitle = withStyles(styles)((props) => {
-    const { children, classes, onClose, ...other } = props;
-    return (
-        <MuiDialogTitle disableTypography className={classes.root} {...other}>
-            <Typography variant="h6">{children}</Typography>
-            {onClose ? (
-                <IconButton
-                    aria-label="close"
-                    className={classes.closeButton}
-                    onClick={onClose}
-                >
-                    {/* <CloseIcon className="test"/> */}
-                    <img src={Close} />
-                </IconButton>
-            ) : null}
-        </MuiDialogTitle>
-    );
-});
 
 const DialogContent = withStyles((theme) => ({
     root: {
         padding: theme.spacing(2),
     },
 }))(MuiDialogContent);
-
-const DialogActions = withStyles((theme) => ({
-    root: {
-        margin: 0,
-        padding: theme.spacing(1),
-    },
-}))(MuiDialogActions);
 
 class DownloadSubscription extends Component {
     constructor(props) {

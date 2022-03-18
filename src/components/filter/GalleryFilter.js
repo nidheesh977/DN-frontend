@@ -170,18 +170,17 @@ class GalleryFilter extends React.Component {
       },
     };
 
-    axios
-      .post(
-        `https://demo-nexevo.in/haj/auth-app/public/api/homepagelistingfillter?type=${type}`,
-        config
-      )
-      .then((response) => response.data)
-      .then(
-        (data) => {
-          this.setState({ listing: data, listing_length: data.length });
-        },
-        (err) => { console.log(err) }
-      );
+    // axios
+    //   .post(
+    //     `https://demo-nexevo.in/haj/auth-app/public/api/homepagelistingfillter?type=${type}`,
+    //     config
+    //   )
+    //   .then(
+    //     (data) => {
+    //       this.setState({ listing: data, listing_length: data.length });
+    //     },
+    //     (err) => { console.log(err) }
+    //   );
   }
 
   handleChangesTimeframe = (event) => {
@@ -197,20 +196,20 @@ class GalleryFilter extends React.Component {
       },
     };
 
-    axios
-      .post(
-        "https://demo-nexevo.in/haj/auth-app/public/api/homepagelistingfillter",
-        {
-          timeframe: timeframe,
-          keywords: keywords,
-          type: type,
-        },
-        config2
-      )
-      .then((res) => {
-        this.setState({ listing: res.data, listing_length: res.data.length });
-      })
-      .catch((error) => { });
+    // axios
+    //   .post(
+    //     "https://demo-nexevo.in/haj/auth-app/public/api/homepagelistingfillter",
+    //     {
+    //       timeframe: timeframe,
+    //       keywords: keywords,
+    //       type: type,
+    //     },
+    //     config2
+    //   )
+    //   .then((res) => {
+    //     this.setState({ listing: res.data, listing_length: res.data.length });
+    //   })
+    //   .catch((error) => { });
   };
 
   // onClickAll(event){
@@ -241,32 +240,32 @@ class GalleryFilter extends React.Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    switch (id) {
-      case 5:
-        axios
-          .get(`https://demo-nexevo.in/haj/auth-app/public/api/listingall`, config)
-          .then((response) => response.data)
-          .then(
-            (data) => {
-              this.setState({ listing: data, listing_length: data.length });
-            },
-            (err) => { }
-          );
-        break;
-      default:
-        axios
-          .get(
-            `https://demo-nexevo.in/haj/auth-app/public/api/categorylisting/${id}`,
-            config
-          )
-          .then((response) => response.data)
-          .then(
-            (data) => {
-              this.setState({ listing: data, listing_length: data.length });
-            },
-            (err) => { }
-          );
-    }
+    // switch (id) {
+    //   case 5:
+    //     axios
+    //       .get(`https://demo-nexevo.in/haj/auth-app/public/api/listingall`, config)
+    //       .then((response) => response.data)
+    //       .then(
+    //         (data) => {
+    //           this.setState({ listing: data, listing_length: data.length });
+    //         },
+    //         (err) => { }
+    //       );
+    //     break;
+    //   default:
+    //     axios
+    //       .get(
+    //         `https://demo-nexevo.in/haj/auth-app/public/api/categorylisting/${id}`,
+    //         config
+    //       )
+    //       .then((response) => response.data)
+    //       .then(
+    //         (data) => {
+    //           this.setState({ listing: data, listing_length: data.length });
+    //         },
+    //         (err) => { }
+    //       );
+    // }
   };
   // Categories filter axios api End
 

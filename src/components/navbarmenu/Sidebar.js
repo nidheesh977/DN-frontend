@@ -118,24 +118,31 @@ export default function PersistentDrawerLeft(props) {
     let access_token = localStorage.getItem("access_token")
 
     if (access_token){
-      axios.post(`${domain}/access_token_valid`, {"access_token": access_token})
-      .then(res => {
-        Setuserlogin(true)
-      })
-      .catch(err => {
-        axios.post(`${domain}/refresh_token`, {"access_token": access_token})
-        .then((res) => {
-          localStorage.setItem("access_token", res.data.access_token)
-          Setuserlogin(true)
-        })
-        .catch(err => {
-          Setuserlogin(false)
-        })
-      })
+      Setuserlogin(true)
     }
     else{
       Setuserlogin(false)
     }
+
+    // if (access_token){
+    //   axios.post(`${domain}/access_token_valid`, {"access_token": access_token})
+    //   .then(res => {
+    //     Setuserlogin(true)
+    //   })
+    //   .catch(err => {
+    //     axios.post(`${domain}/refresh_token`, {"access_token": access_token})
+    //     .then((res) => {
+    //       localStorage.setItem("access_token", res.data.access_token)
+    //       Setuserlogin(true)
+    //     })
+    //     .catch(err => {
+    //       Setuserlogin(false)
+    //     })
+    //   })
+    // }
+    // else{
+    //   Setuserlogin(false)
+    // }
   }, [])
 
   return (

@@ -4,41 +4,20 @@ import { HashRouter, Switch, Route } from "react-router-dom";
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "./components/header/Header";
 import Home from "./components/website/Home";
-import Company from "./components/website/Company";
 import SignUp from "./components/website/SignUp";
 import Login from "./components/website/Login";
-import Profile from "./components/website/Profile";
-import ProfileEdit from "./components/website/ProfileEdit";
 import TermsCondition from "./components/website/TermsCondition";
 import DownloadSubscription from "./components/website/DownloadSubscription";
 import GoPremium from "./components/website/GoPremium";
-import ViewJob from "./components/website/ViewJob";
 import Imageview from "./components/website/Imageview";
-import HiringDroners from "./components/website/GetJobs";
 import ForgotPassword from "./components/website/ForgotPassword";
-import EndUserProfile from "./components/website/EndUserProfile";
-import HiringDorners from "./components/website/HiringDorners";
-import BlogDetail from "./components/website/BlogDetail";
-import BlogCategory from "./components/website/BlogCategory";
-import Blog from "./components/website/Blog";
 import NoPageFound from "./components/website/NoPageFound.js";
-import GetJobs from "../src/components/website/GetJobs";
-import OfficeProfileEdit from "../src/components/website/OfficeProfileEdit";
-import Industry from "../src/components/website/Industry";
 // import Dashboard from '../src/components/website/Dashboard'
-import OfficeProfile from "../src/components/website/OfficeProfile";
-import Cart from "../src/components/website/Cart";
 import "./components/website/All.module.css";
 // import Navbar from '../src/components/Navbar'
 import { UserContext } from "../src/hooks/UserContext";
-import JobPostEdit from "../src/components/website/JobPostEdit";
 import PublicRoute from "../src/hooks/PublicRoute";
-import PrivateRoute from "../src/hooks/PrivateRoute"; 
-import AdminRoute from "../src/hooks/AdminRoute";
-import UserRoute from "../src/hooks/UserRoute";
 import searchresult from "../src/components/website/Searchresult";
-import PostEdit from "../src/components/website/PostEdit";
-import JobAppliedDroners from "../src/components/website/JobAppliedDroners";
 // import Alert from "../src/components/alert/Alert.component";
 import Role from "../src/components/_helpers/role";
 import { authenticationService } from "../src/middleware/auth";
@@ -56,7 +35,6 @@ import PilotDetails from './components/website/PilotDetail'
 import ServiceCenterDashboard from "./components/website/ServiceCenterDashboard/ServiceCenterDashboard";
 import CreateJob from './components/website/CreateJob'
 import Company_dashboard from "./components/website/company_dashboard/Company_dashboard";
-import UpgradeProVersion from './components/website/UpgradeProVersion';
 import ApplyJobLanding from "./components/website/ApplyJobLanding";
 import Admin_dashboard from "./components/adminDashboard/Admin_dashboard";
 import CreatePilot from "./components/website/CreatePilot";
@@ -117,45 +95,16 @@ class App extends React.Component {
               exact
             />
             <PublicRoute
-              path="/Company"
-              component={Company}
-              exact
-            />
-            <PublicRoute
               exact
               path="/ForgotPassword"
               component={ForgotPassword}
             />
             <PublicRoute component={Home} path="/" exact />
-            <PrivateRoute exact path="/profile" component={Profile} />
-            <PrivateRoute exact path="/ProfileEdit" component={ProfileEdit} />
-            <PrivateRoute
-              exact
-              path="/Cart/:slug/download/:userId"
-              component={Cart}
-            />
-            {/* <PrivateRoute
-              exact
-              path={"/Imageview/:id/:user_id"}
-              component={Imageview}
-            /> */}
-            <AdminRoute
-              exact
-              path="/GetJobs"
-              roles={[Role.Admin]}
-              component={GetJobs}
-            />
             <PublicRoute
               exact
               path="/TermsCondition"
               component={TermsCondition}
             />
-            {/* <PublicRoute
-              restricted={true}
-              exact
-              path="/UpgradeProVersion"
-              component={UpgradeProVersion}
-            /> */}
             <PublicRoute
               path="/DownloadSubscription"
               component={DownloadSubscription}
@@ -171,19 +120,6 @@ class App extends React.Component {
               component={GoPremium}
               exact
             />
-            {/* <PrivateRoute exact path="/GoPremium" component={GoPremium} /> */}
-            {/* <PublicRoute
-              restricted={true}
-              path="/UploadFile"
-              component={UploadFiles}
-              exact
-            /> */}
-            <PrivateRoute exact path={"/ViewJob/:id"} component={ViewJob} />
-            {/* <PrivateRoute
-              exact
-              path="/HiringDroners"
-              component={HiringDroners}
-            /> */}
             <PublicRoute
               exact
               path={"/Imageview/:id/:user_id"}
@@ -199,49 +135,7 @@ class App extends React.Component {
               path="/pilot_details/:id"
               component={PilotDetails}
             />
-            <PrivateRoute
-              exact
-              path={"/ProfileSingle/:id"}
-              component={EndUserProfile}
-            />
-            <PrivateRoute
-              exact
-              path="/HiringDorners"
-              component={HiringDorners}
-            />
-            <AdminRoute
-              exact
-              path="/PostJobEdit/:id"
-              roles={[Role.Admin]}
-              component={JobPostEdit}
-            />
-            <PrivateRoute exact path="/BlogDetail" component={BlogDetail} />
-            <PrivateRoute exact path="/BlogCategory" component={BlogCategory} />
-            <PrivateRoute
-              exact
-              path="/OfficeProfileEdit"
-              component={OfficeProfileEdit}
-            />
-            <PrivateRoute exact path="/Blog" component={Blog} />
-            {/* <PrivateRoute exact path="/searchresult" component={searchresult} /> */}
             <PublicRoute component = {searchresult} path = "/searchresult" exact />
-            <PrivateRoute exact path="/search/Industry" component={Industry} />
-            <PrivateRoute
-              exact
-              path="/OfficeProfile"
-              component={OfficeProfile}
-            />
-            <PrivateRoute
-              exact
-              path="/JobAppliedDroners/:id"
-              component={JobAppliedDroners}
-            />
-            <UserRoute
-              exact
-              path="/PostEdit/:id/:user_id"
-              roles={[Role.Admin]}
-              component={PostEdit}
-            />
             <PublicRoute component = {UploadFiles} path = "/UploadFile" exact />
             <PublicRoute component = {ServiceCenters} path = "/service_centers" exact />
             <PublicRoute component = {CreateJob} path = "/create_job" exact />
