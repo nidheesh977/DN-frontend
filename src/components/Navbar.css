@@ -98,7 +98,7 @@ nav ul a {
   padding: 3px 0px;
 } 
 .MuiPaper-root.MuiDrawer-paper a {
-  color: #4FFEA3;
+  color: #4FFEA3 !important;
   padding: 5px 0px;
 }
 input.nav-search-text {

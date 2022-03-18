@@ -248,7 +248,7 @@ function SignUp(props) {
   return (
     <>
       <Helmet>
-        <title>Create an account</title>
+        <title>Signup</title>
         <meta charSet="utf-8" />
         <meta name="description" content="Nested component" />
       </Helmet>
@@ -269,7 +269,7 @@ function SignUp(props) {
             </Visible>
             <Col lg={6}>
               <Box pb={3} className={`${All.pt_sm} ${All.pt_xs} ${All.pt_md}`}>
-                <h2>Create an account</h2>
+                <h2>Sign Up</h2>
               </Box>
               <form className={All.form} onSubmit={handleSubmit(onSubmit)}>
                 <div className={All.FormGroup}>

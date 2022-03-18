@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-grid-system";
 import Picture from "./images/drone_img.jpg";
 import Premium from "./images/goldenStar.svg";
@@ -9,6 +9,8 @@ import productLike from "../../images/product_like.png";
 import moreIcon from "../../images/Path.svg";
 import loadMore from "../../images/Group 71.svg";
 import { Item } from "semantic-ui-react";
+import axios from 'axios'
+const domain = process.env.REACT_APP_MY_API
 
 function mouseGotIN(id) {
   document.getElementById("pd_more/" + id).style.display = "block";
@@ -23,9 +25,22 @@ function showMore(id) {
 }
 
 function Pilot_pendingImages() {
+  let config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
+  useEffect(() => {
+    axios.post(`${domain}/api/image/getPendingImages`,config).then(
+      (response) => {
+console.log(response.data)       
+  setValue(response.data)
+      }
+    );
+  }, []);
   let details = {
     images: [
-      { id: 1, views: "5K", downloads: "2K", likes: "1K", premium: false, tag1: "Tall Building", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/543077.jpg" },
+      { id: 1, views: "5K", downloads: "2K", likes: "1K", premium: false, tag1: "Tall Building", tag2: "Adult", src: "http://localhost:9000/uploads\\1647585843781drone_person_new.png" },
       { id: 2, views: "8K", downloads: "7K", likes: "4K", premium: true, tag1: "Building", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/628286.jpg" },
       { id: 3, views: "3K", downloads: "2K", likes: "1K", premium: false, tag1: "Tall Building", tag2: "taller Height" , src: "https://wallpaperaccess.com/thumb/543077.jpg"},
       { id: 4, views: "9K", downloads: "3K", likes: "2K", premium: true, tag1: "Tall Building", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/628286.jpg"  },
@@ -38,19 +53,22 @@ function Pilot_pendingImages() {
   };
 
   let [data, setData] = useState(details);
+
+  let [value, setValue] = useState([]);
+
   return (
     <div>
      <Row gutterWidth={12}>
-          {data.images.map((item) => {
+          {value.map((item) => {
             return (
               <Col  xl={4} lg={6} md={4} sm={6} xs={12}>
                 <div style={{ height: "310px" }}>
                   <div
                     className="pd_images_imageContainer"
-                    onMouseOver={() => mouseGotIN(item.id)}
-                    onMouseOut={() => mouseGotOut(item.id)}
+                    onMouseOver={() => mouseGotIN(item._id)}
+                    onMouseOut={() => mouseGotOut(item._id)}
                   >
-                    <img src={item.src} className="pd_images_image" />
+                    <img src={`http://localhost:9000/${item.file}` } className="pd_images_image" />
                     <div
                       className={
                         item.premium
@@ -64,16 +82,16 @@ function Pilot_pendingImages() {
                   
                   <div
                     className="pd_moreBtn"
-                    id={"pd_more/" + item.id}
-                    onMouseOver={() => mouseGotIN(item.id)}
-                    onMouseOut={() => mouseGotOut(item.id)}
-                    onClick={() => showMore(item.id)}
+                    id={"pd_more/" + item._id}
+                    onMouseOver={() => mouseGotIN(item._id)}
+                    onMouseOut={() => mouseGotOut(item._id)}
+                    onClick={() => showMore(item._id)}
                   >
                     <img src={moreIcon} className="pd_image_more" />
                   </div>
                   <div
                     className="pd_images_moreOptions"
-                    id={"pd_images_more/" + item.id}
+                    id={"pd_images_more/" + item._id}
                   >
                     <div className="pd_images_moreOption">Edit</div>
                     <div className="pd_images_moreOption">Remove</div>
@@ -81,8 +99,9 @@ function Pilot_pendingImages() {
 
                   {/* tags */}
                       <div className="pd_images_tags">
-                      <div className="pd_images_tag1">{item.tag1}</div>
-                      <div className="pd_images_tag2">{item.tag2}</div>
+                      <div className="pd_images_tag1">{item.category}</div>
+                      {item.adult === true ? <div className="pd_images_tag2">Adult</div> : null
+}
                       </div>
                   {/* tags */}
                 </div>
