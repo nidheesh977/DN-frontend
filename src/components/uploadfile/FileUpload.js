@@ -72,7 +72,7 @@ class FileUpload extends React.Component {
 							ref={input => this.fileInput = input}
 							className="form-control" />
 						<img src={Upload} />
-						<p className={All.FSize_16}><span style={{ color: '#67edfa' }} className={All.FSize_16}>browser </span>to choose a File, if you want upload more than limited size<span><Link to='/UpgradeProVersion' style={{ color: '#67edfa', textDecorationLine: 'none' }} className={All.FSize_16}> Go Pro</Link></span></p>
+						
 
 						{
 							this.state.fileName

@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "./components/header/Header";
 import Home from "./components/website/Home";
@@ -63,6 +63,8 @@ import Message from "./components/website/messages"
 import CreateCompany from "./components/website/CreateCompany";
 import CreateServiceCenter from "./components/website/CreateServiceCenter";
 import Categories from "./components/website/Categories";
+import EmailVerification from "./components/website/EmailVerification";
+import VerifiedEmail from "./components/website/VerifiedEmail";
 
 
 class App extends React.Component {
@@ -94,7 +96,7 @@ class App extends React.Component {
   render() {
     const { currentUser, isAdmin } = this.state;
     return (
-      <HashRouter>
+      <BrowserRouter>
         <Header />
         {/* <Message /> */}
         <UserContext.Provider>
@@ -255,14 +257,17 @@ class App extends React.Component {
             <Route component={Company_dashboard} path="/company_dashboard" />
             <Route component={Admin_dashboard} path="/Admin_dashboard" />
             <Route component={CreatePilot} path="/createPilot" />
-            <Route component={Categories} path="/chooseCategories" />
+            <Route component={Categories} path="/choose-categories" />
+            <Route component={EmailVerification} path="/verify-email" />
+            <Route component={VerifiedEmail} path="/users/:id/verify/:token" />
             {/* yaseen */}
             <PublicRoute exact path="*" component={NoPageFound} />
           </Switch>
         </UserContext.Provider>
         <Footer/>
-      </HashRouter>
+      </BrowserRouter>
     );
   }
 }
 export default App;
+

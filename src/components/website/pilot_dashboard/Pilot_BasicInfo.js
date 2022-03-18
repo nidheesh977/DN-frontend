@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Cover from "./images/cover.jpg";
 import "./css/Pilot_BasicInfo.css";
 import Pilot from "./images/pilot.jpg";
@@ -6,9 +6,37 @@ import { Row, Col } from "react-grid-system";
 import Edit from "./images/edit-1.svg";
 import PhoneInput from 'react-phone-number-input'
 import All from '../../website/All.module.css';
-import Axios from 'axios'
+import axios from 'axios'
+const domain = process.env.REACT_APP_MY_API
 
 function Pilot_BasicInfo() {
+
+  let config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
+  useEffect(() => {
+    axios.post(`${domain}/api/user/pilotDetails`,config).then(
+      (response) => {
+        let data = response.data;
+        setData({
+          full_name: data.name,
+          email: data.emailId,
+          phone: data.phoneNo,
+          dob: data.dob,
+          gender: data.gender,
+          address: data.address,
+          city: data.city,
+          country: data.country,
+          postal: data.postalAddress,
+          bio: data.bio
+
+        })
+  
+      }
+    );
+  }, []);
   let [data, setData] = useState({
     full_name: "",
     email: "",
@@ -131,7 +159,7 @@ function Pilot_BasicInfo() {
         },
       };
       console.log(data)
-      Axios.post("http://localhost:9000/api/pilot/registerPilot", {
+      axios.post("http://localhost:9000/api/pilot/registerPilot", {
         name: data.full_name,
 emailId: data.email,
 phoneNo : data.phone,
@@ -208,7 +236,7 @@ alert("successfull")        })
             <div>
               <div style={{ marginBottom: "15px" }}>
                 <div className="pd_b_i_profile_head1">Phone Number</div>
-                <div className="pd_b_i_profile_verify">Verify</div>
+                {/* <div className="pd_b_i_profile_verify">Verify</div> */}
               </div>
             </div>
             <PhoneInput defaultCountry="IN" className={All.Phonenumber + " s_c_d_phone_input"} name="phone" id="phone" value={data.phone} onChange = {phoneChangeHandler} disabled = {!edit}/>

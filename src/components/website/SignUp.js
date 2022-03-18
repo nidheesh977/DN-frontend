@@ -61,26 +61,38 @@ function SignUp(props) {
   const onSubmit = (event) => {
     setLoading(true);
     if (value) {
+      setLoading(true);
+
       axios
         .post(`${domain}/api/user/checkMail`, { email: formValues.email })
         .then((res) => {
-          setLoading(false);
-          props.history.push({
-            pathname: "/select_category",
-            state: {
-              name: formValues.name,
-              email: formValues.email,
-              phone: formValues.phone,
-              dob: formValues.dob,
-              country: formValues.country,
-              password: formValues.password,
-              confirmPassword: formValues.confirmPassword,
-            },
-          });
+          setLoading(true);
+          axios
+              .post(
+                `${domain}/api/user/register`,
+                {
+                  name: formValues.name,
+                  email: formValues.email,
+                  phoneNo: formValues.phone,
+                  password: formValues.password,
+                }              )
+              .then((res) => {
+               
+                console.log(res);
+                localStorage.setItem("access_token", res.data.token);
+                localStorage.setItem("token_type", "Bearer");
+                console.log(localStorage.getItem("access_token"));
+                setLoading(false);
+
+                history.push("/verify-email")
+              })
+              .catch((err) => {
+               console.log(err)
+              });
+            
         })
         .catch((err) => {
           console.log(err.response);
-          setLoading(false);
           try {
             if (err.response.data === "User already exists") {
               document.getElementById("email_error").innerText =
@@ -108,12 +120,7 @@ function SignUp(props) {
     } else {
       x.type = "password";
     }
-    var y = document.getElementById("confirmPassword");
-    if (y.type === "password") {
-      y.type = "text";
-    } else {
-      y.type = "password";
-    }
+   
   };
 
   const [open, setOpen] = React.useState(false);
@@ -192,26 +199,7 @@ function SignUp(props) {
         raiseError("name", "Name should not exceed 100 characters");
       }
     }
-    if (
-      formValues.country === "" ||
-      formValues.country.length < 2 ||
-      formValues.country.length > 100
-    ) {
-      if (formValues.country === "") {
-        raiseError("country", "Country / Region is required");
-      } else if (formValues.country.length < 2) {
-        raiseError(
-          "country",
-          "Country / Region must have atleast 2 characters"
-        );
-      } else if (formValues.name.length > 100) {
-        raiseError(
-          "country",
-          "Country / Region should not exceed 100 characters"
-        );
-      }
-    }
-
+    
     if (formValues.email === "" || !validateEmail(formValues.email)) {
       if (formValues.email === "") {
         raiseError("email", "Email ID is required");
@@ -234,9 +222,6 @@ function SignUp(props) {
       }
     }
 
-    if (formValues.dob === "") {
-      raiseError("dob", "Date of birth is required");
-    }
 
     if (formValues.password === "" || formValues.password.length < 8) {
       if (formValues.password === "") {
@@ -246,13 +231,7 @@ function SignUp(props) {
       }
     }
 
-    if (formValues.password !== formValues.confirmPassword) {
-      raiseError("confirmPassword", "Password doesn't match");
-    }
-
-    if (formValues.confirmPassword === "") {
-      raiseError("confirmPassword", "Confirm password is required");
-    }
+   
 
     setOpen(true);
   };
@@ -336,36 +315,9 @@ function SignUp(props) {
                     Email ID is required
                   </div>
                 </div>
-                {/* <PhoneInput
-                    defaultCountry="IN"
-                    className={All.Phonenumber}
-                    name="phone"
-                    id="phone"
-                    value={formValues.phone}
-                    onChange={phoneChangeHandler}
-                  /> */}
+  
 
-                <div className={All.FormGroup}>
-                  <label className={All.Bold + " form_label"} htmlFor="name">
-                    Country / Region
-                  </label>
-                  <input
-                    type="text"
-                    name="country"
-                    className={All.FormControl}
-                    id="country"
-                    ref={register({
-                      required: true,
-                      minLength: 2,
-                      maxLength: 100,
-                    })}
-                    onChange={changeHandler}
-                  />
-                  <div className="login_input_error_msg" id="country_error">
-                    Country / Region is required
-                  </div>
-                </div>
-
+             
                 <div className={All.FormGroup}>
                   <label className={All.Bold + " form_label"} for="phone">
                     Phone Number{" "}
@@ -385,25 +337,6 @@ function SignUp(props) {
                   />
                   <div className="login_input_error_msg" id="phone_error">
                     Phone number is required
-                  </div>
-                </div>
-
-                <div className={All.FormGroup}>
-                  <label className={All.Bold + " form_label"} htmlFor="dob">
-                    DOB
-                  </label>
-                  <input
-                    type="date"
-                    name="dob"
-                    className={All.FormControl}
-                    id="dob"
-                    ref={register({
-                      required: true,
-                    })}
-                    onChange={changeHandler}
-                  />
-                  <div className="login_input_error_msg" id="dob_error">
-                    Date of birth is required
                   </div>
                 </div>
 
@@ -444,48 +377,7 @@ function SignUp(props) {
                     Password is required
                   </div>
                 </div>
-                <div className={All.FormGroup}>
-                  <label
-                    className={All.Bold + " form_label"}
-                    for="confirmPassword"
-                  >
-                    Confirm Password{" "}
-                  </label>
-                  <div className={`${All.Positionrelative} ${All.DisplayFlex}`}>
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      className={All.FormControl}
-                      id="confirmPassword"
-                      ref={register({
-                        validate: (value) =>
-                          value === password.current ||
-                          "The passwords do not match",
-                        required: "You must specify a password",
-                      })}
-                      onChange={changeHandler}
-                    />
-                    {viewPassword ? (
-                      <VisibilityIcon
-                        className={All.VisibilityIcon}
-                        onClick={PasswordShow}
-                      />
-                    ) : (
-                      <img
-                        src={invisible}
-                        className={All.VisibilityIcon}
-                        onClick={PasswordShow}
-                        style={{ padding: "2px 1px 0px 0px" }}
-                      />
-                    )}
-                  </div>
-                  <div
-                    className="login_input_error_msg"
-                    id="confirmPassword_error"
-                  >
-                    Confirm password is required
-                  </div>
-                </div>
+          
 
                 <div className={All.FormGroup}>
                   <Box pb={3} pt={6}>
