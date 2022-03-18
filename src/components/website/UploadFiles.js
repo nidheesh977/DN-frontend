@@ -479,23 +479,9 @@ class UploadFiles extends Component {
                                   >
                                     Browse&nbsp;
                                   </span>
-                                  to choose a File <br />
-                                  If you want to upload more than limited size
-                                  <span>
-                                    <Link
-                                      to="/UpgradeProVersion"
-                                      style={{
-                                        color: "#67edfa",
-                                        textDecorationLine: "none",
-                                        zIndex: 1,
-                                        position: "relative",
-                                      }}
-                                      className={All.FSize_16}
-                                    >
-                                      {" "}
-                                      Go Pro
-                                    </Link>
-                                  </span>
+                                  to choose a File 
+                                 
+                         
                                 </p>
                               </div>
                             </div>
@@ -773,56 +759,10 @@ class UploadFiles extends Component {
                           <div className="u_f_file_type" id="u_f_file_type3">
                             3D Images
                           </div>
-                          <div className="u_f_file_type" id="u_f_file_type4">
-                            360 image
-                          </div>
+ 
                         </div>
                       )}
-                      <div className="u_f_input_title">Usage</div>
-                      {this.state.files_selected ? (
-                        <div className="u_f_input_keywords_container">
-                          <div
-                            className={
-                              this.state.selected_files_details[
-                                this.state.file_edit
-                              ].usage == "free"
-                                ? "u_f_file_usage_selected u_f_file_usage premium_file_type"
-                                : "u_f_file_usage"
-                            }
-                            id="u_f_file_usage1"
-                            onClick={() => this.changeUsage("free")}
-                          >
-                            Free
-                          </div>
-                          <div
-                            className={
-                              this.state.selected_files_details[
-                                this.state.file_edit
-                              ].usage == "paid"
-                                ? "u_f_file_usage_selected u_f_file_usage premium_file_type"
-                                : "u_f_file_usage"
-                            }
-                            id="u_f_file_usage2"
-                            onClick={() => this.changeUsage("paid")}
-                          >
-                            Paid
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="u_f_input_keywords_container">
-                          <div className="u_f_file_usage" id="u_f_file_usage1">
-                            Free
-                          </div>
-                          <div className="u_f_file_usage" id="u_f_file_usage2">
-                            Paid
-                          </div>
-                        </div>
-                      )}
-                      {/* <div className="u_f_input_title">Price(Dollars)</div>
-                      {this.state.files_selected
-                        ? <><input type="number" name="" id="u_f_price" className='u_f_input_field' value={this.state.selected_files_details[this.state.file_edit].price} onChange={this.priceChange} disabled={this.state.selected_files_details[this.state.file_edit].usage == 'free'} /></>
-                        : <input type="number" name="" id="u_f_price" className='u_f_input_field' disabled/>
-                      } */}
+                     
                       <div className="u_f_input_title">Category</div>
                       {this.state.files_selected ? (
                         <input

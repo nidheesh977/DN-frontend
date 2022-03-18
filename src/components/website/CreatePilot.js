@@ -11,7 +11,6 @@ import { useHistory } from "react-router-dom";
 import DronePerson from "../images/drone_person_new.png";
 import "../css/Common.css"
 
-
 const domain = process.env.REACT_APP_MY_API;
 
 function CreatePilot() {

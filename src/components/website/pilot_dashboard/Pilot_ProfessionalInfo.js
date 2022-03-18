@@ -1,21 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col } from "react-grid-system";
 import Edit from "./images/edit-1.svg";
 import Cover from "./images/cover.jpg";
 import "./css/Pilot_BasicInfo.css";
 import Pilot from "./images/pilot.jpg";
+import axios from 'axios'
+const domain = process.env.REACT_APP_MY_API
+
 
 function Pilot_ProfessionalInfo() {
+  let config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
+  useEffect(() => {
+    axios.post(`${domain}/api/user/pilotDetails`,config).then(
+      (response) => {
+        console.log(response.data)
+        let data = response.data;
+        setData({
+          name: data.name,
+         skills: data.skills,
+         pilot_type: data.pilotType,
+         drone_id: data.droneId,
+         work_type: data.workType,
+         hourly_pay: data.hourlyPayment,
+         monthly_pay: data.monthlyPayment,
+         industry: data.industry,
+         training_center_name: data.trainingCenter,
+         completed_year: data.completedYear,
+         attachment_selected: false,
+          attachment: data.attachment
+
+        })
+  
+      }
+    );
+  }, []);
   let [data, setData] = useState({
-    name: "Yaseen Ahmed",
-    pilot_type: "licensed",
-    drone_id: "NE082",
-    drone_type: "Passionate Pilot",
-    work_type: "full_time",
+    name: "",
+    pilot_type: "",
+    drone_id: "",
+    drone_type: "",
+    work_type: "",
     hourly_pay: "",
     monthly_pay: "",
-    industry: "Information Science",
-    attachment_selected: false,
+    industry: "",
+    attachment_selected: null,
     attachment: "",
     training_center_name: "",
     completed_year: "",
