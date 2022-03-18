@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-grid-system";
 import Picture from "./images/drone_img.jpg";
 import Premium from "./images/goldenStar.svg";
@@ -9,6 +9,8 @@ import productLike from "../../images/product_like.png";
 import moreIcon from "../../images/Path.svg";
 import loadMore from "../../images/Group 71.svg";
 import videoIcon from '../../images/video-icon.svg'
+import axios from 'axios'
+const domain = process.env.REACT_APP_MY_API
 
 
 
@@ -29,6 +31,21 @@ function showMore(id){
 }
 
 function Pilot_approvedVideos() {
+  let config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
+  useEffect(() => {
+    axios.post(`${domain}/api/image/getApprovedVideos`,config).then(
+      (response) => {
+console.log(response.data)       
+  setValue(response.data)
+      }
+    );
+  }, []);
+  let [value, setValue] = useState([]);
+
   let details = {
     images: [
       { id: 1, views: "5K", downloads: "2K", likes: "1K", premium: false, src: "https://wallpaperaccess.com/thumb/520042.jpg" },
@@ -44,46 +61,55 @@ function Pilot_approvedVideos() {
   };
 
   let [data, setData] = useState(details);
+  let removeVideoIcon = (id) =>{
+    document.getElementById(`videoIcon-${id}`).style.display = "none"
+  }
   return (
     <div>
       <Row gutterWidth={12}>
-          {data.images.map((item) => {
+          {value.map((item) => {
             return (
               <Col  xl={4} lg={6} md={4} sm={6} xs={12}>
                 <div style={{ height: "310px" }}>
                   <div
                     className="pd_images_imageContainer"
-                    onMouseOver={() => mouseGotIN(item.id)}
-                    onMouseOut={() => mouseGotOut(item.id)}
+                    onMouseOver={() => mouseGotIN(item._id)}
+                    onMouseOut={() => mouseGotOut(item._id)}
                   >
-                    <img src={item.src} className="pd_images_image" />
-                    <div className={item.premium ? "pd_premiumBadge" : "pd_images_imageHidden"}>
+    <video
+                    // src={`http://localhost:9000/${item.file}`}
+                    className="pd_images_image" style={{backgroundColor:"black", objectFit:"cover"}} controls onPlay={()=>removeVideoIcon(item._id)}
+                  >
+                    <source src={`http://localhost:9000/${item.file}`} type="video/mp4" />
+                    <source src={`http://localhost:9000/${item.file}`} type="video/ogg" />
+                    Your browser does not support the video tag.
+                  </video>                    <div className={item.premium ? "pd_premiumBadge" : "pd_images_imageHidden"}>
                       <img src={premiumIcon} className="pd_premiumBadge_star" />
                     </div>
                   </div>
-                  <div className="pd_video_icon"><img src={videoIcon}/></div>
+                  <div className="pd_video_icon"  id={`videoIcon-${item._id}`}><img src={videoIcon}/></div>
                   <div
                     className="pd_likes_container"
-                    id={"pd_likes/" + item.id}
+                    id={"pd_likes/" + item._id}
                   >
                     <img src={viewIcon} className="pd_likes_img" />{" "}
-                    <span>{item.views}</span>
+                    <span>{item.views.length}</span>
                     <img src={downloadIcon} className="pd_likes_img" />{" "}
-                    <span>{item.downloads}</span>
+                    <span>{item.downloads.length}</span>
                     <img src={productLike} className="pd_likes_img" />{" "}
-                    <span>{item.likes}</span>
+                    <span>{item.likes.length}</span>
                   </div>
                   <div
                     className="pd_moreBtn"
-                    id={"pd_more/" + item.id}
-                    onMouseOver={() => mouseGotIN(item.id)}
-                    onMouseOut={() => mouseGotOut(item.id)}
-                    onClick={()=>showMore(item.id)}
+                    id={"pd_more/" + item._id}
+                    onMouseOver={() => mouseGotIN(item._id)}
+                    onMouseOut={() => mouseGotOut(item._id)}
+                    onClick={()=>showMore(item._id)}
                   >
                      
                     <img src={moreIcon} className="pd_image_more" />
                   </div>
-                  <div className="pd_images_moreOptions" id={"pd_images_more/" + item.id}>
+                  <div className="pd_images_moreOptions" id={"pd_images_more/" + item._id}>
                       <div className="pd_images_moreOption">Edit</div>
                       <div className="pd_images_moreOption">Remove</div>
                       </div>

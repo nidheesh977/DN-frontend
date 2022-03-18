@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-grid-system";
 import Picture from "./images/drone_img.jpg";
 import Premium from "./images/goldenStar.svg";
@@ -10,6 +10,8 @@ import moreIcon from "../../images/Path.svg";
 import loadMore from "../../images/Group 71.svg";
 import { Item } from "semantic-ui-react";
 import videoIcon from '../../images/video-icon.svg'
+import axios from 'axios'
+const domain = process.env.REACT_APP_MY_API
 
 
 function mouseGotIN(id) {
@@ -25,6 +27,21 @@ function showMore(id) {
 }
 
 function Pilot_rejectedVideos() {
+  let config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
+  useEffect(() => {
+    axios.post(`${domain}/api/image/getRejectedVideos`,config).then(
+      (response) => {
+console.log(response.data)       
+  setValue(response.data)
+      }
+    );
+  }, []);
+  let [value, setValue] = useState([]);
+
   let details = {
     images: [
       { id: 1, views: "5K", downloads: "2K", likes: "1K", premium: false, tag1: "Tall Building", tag2: "Adult" , src: "https://wallpaperaccess.com/thumb/14247.jpg"},
@@ -40,19 +57,29 @@ function Pilot_rejectedVideos() {
   };
 
   let [data, setData] = useState(details);
+  let removeVideoIcon = (id) =>{
+    document.getElementById(`videoIcon-${id}`).style.display = "none"
+  }
   return (
     <div>
    <Row gutterWidth={12}>
-          {data.images.map((item) => {
+          {value.map((item) => {
             return (
               <Col  xl={4} lg={6} md={4} sm={6} xs={12}>
                 <div style={{ height: "310px" }}>
                   <div
                     className="pd_images_imageContainer"
-                    onMouseOver={() => mouseGotIN(item.id)}
-                    onMouseOut={() => mouseGotOut(item.id)}
+                    onMouseOver={() => mouseGotIN(item._id)}
+                    onMouseOut={() => mouseGotOut(item._id)}
                   >
-                    <img src={item.src} className="pd_images_image" />
+                      <video
+                    // src={`http://localhost:9000/${item.file}`}
+                    className="pd_images_image" style={{backgroundColor:"black", objectFit:"cover"}} controls onPlay={()=>removeVideoIcon(item._id)}
+                  >
+                    <source src={`http://localhost:9000/${item.file}`} type="video/mp4" />
+                    <source src={`http://localhost:9000/${item.file}`} type="video/ogg" />
+                    Your browser does not support the video tag.
+                  </video>
                     <div
                       className={
                         item.premium
@@ -63,29 +90,29 @@ function Pilot_rejectedVideos() {
                       <img src={premiumIcon} className="pd_premiumBadge_star" />
                     </div>
                   </div>
-                  <div className="pd_video_icon"><img src={videoIcon}/></div>
+                  <div className="pd_video_icon" id={`videoIcon-${item._id}`}><img src={videoIcon} /></div>
 
                   <div
                     className="pd_moreBtn"
-                    id={"pd_more/" + item.id}
-                    onMouseOver={() => mouseGotIN(item.id)}
-                    onMouseOut={() => mouseGotOut(item.id)}
-                    onClick={() => showMore(item.id)}
+                    id={"pd_more/" + item._id}
+                    onMouseOver={() => mouseGotIN(item._id)}
+                    onMouseOut={() => mouseGotOut(item._id)}
+                    onClick={() => showMore(item._id)}
                   >
                     <img src={moreIcon} className="pd_image_more" />
                   </div>
                   <div
                     className="pd_images_moreOptions"
-                    id={"pd_images_more/" + item.id}
+                    id={"pd_images_more/" + item._id}
                   >
                     <div className="pd_images_moreOption">Edit</div>
                     <div className="pd_images_moreOption">Remove</div>
                   </div>
 
                   {/* tags */}
-                      <div className="pd_images_tags">
-                      <div className="pd_images_tag1">{item.tag1}</div>
-                      <div className="pd_images_tagDanger">{item.tag2}</div>
+                  <div className="pd_images_tags">
+                      <div className="pd_images_tag1">{item.category}</div>
+                      <div className="pd_images_tagDanger">{item.rejectReason}</div>
                       </div>
                   {/* tags */}
                 </div>
