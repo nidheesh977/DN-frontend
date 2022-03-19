@@ -190,7 +190,7 @@ height: 50,
     else{
       setFormValues({
         ...formValues,
-        ["phone"]: e.target.value.slice(code.length+1,17),
+        ["phone"]: e.target.value.slice(code.length+1,10+code.length+1),
       });
       document.getElementById(e.target.name + "_error").style.display = "none";
     }
@@ -332,7 +332,7 @@ height: 50,
             </Visible>
             <Col lg={6}>
               <Box pb={3} className={`${All.pt_sm} ${All.pt_xs} ${All.pt_md}`}>
-                <h2>Sign Up</h2>
+                <h2>Create an account</h2>
               </Box>
               <form className={All.form} onSubmit={handleSubmit(onSubmit)}>
                 <div className={All.FormGroup}>

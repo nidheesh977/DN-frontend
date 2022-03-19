@@ -278,7 +278,9 @@ class UploadFiles extends Component {
       this.state.selected_files_details[this.state.file_edit].keywords;
     var index = keywords.indexOf(keyword);
     if (index > -1) {
-      selected_files_details[this.state.file_edit].suggested_keywords.push(selected_files_details[this.state.file_edit].keywords[index]);
+      selected_files_details[this.state.file_edit].suggested_keywords.push(
+        selected_files_details[this.state.file_edit].keywords[index]
+      );
       selected_files_details[this.state.file_edit].keywords.splice(index, 1);
     }
 
@@ -417,7 +419,7 @@ class UploadFiles extends Component {
                         ) : (
                           ""
                         )}
-                        <select
+                        {/* <select
                           name=""
                           id="u_f_select_category"
                           onChange={this.categoryChanged}
@@ -448,7 +450,7 @@ class UploadFiles extends Component {
                           >
                             Video
                           </option>
-                        </select>
+                        </select> */}
                       </div>
                     ) : (
                       ""
@@ -479,9 +481,7 @@ class UploadFiles extends Component {
                                   >
                                     Browse&nbsp;
                                   </span>
-                                  to choose a File 
-                                 
-                         
+                                  to choose a File
                                 </p>
                               </div>
                             </div>
@@ -560,12 +560,19 @@ class UploadFiles extends Component {
                                       }
                                     >
                                       <div className="u_f_file_name_adult_container">
-                                        <div
-                                          className="u_f_file_name_on_file"
-                                          id={"file_name_" + index}
-                                        >
-                                          {file.name}
-                                        </div>
+                                        {file.category ? (
+                                          <div
+                                            className="u_f_file_name_on_file"
+                                            id={"file_name_" + index}
+                                          >
+                                            {file.category}
+                                          </div>
+                                        ) : (
+                                          <div
+                                            id={"file_name_" + index}
+                                          >
+                                          </div>
+                                        )}
                                         {file.adult_content ? (
                                           <div
                                             className="u_f_file_adult"
@@ -580,11 +587,17 @@ class UploadFiles extends Component {
 
                                       {file.type[0] == "v" ? (
                                         <>
-                                          <video src={file.file} />
+                                          <video
+                                            src={file.file}
+                                            style={{ borderRadius: "9px" }}
+                                          />
                                         </>
                                       ) : (
                                         <>
-                                          <img src={file.file} />
+                                          <img
+                                            src={file.file}
+                                            style={{ borderRadius: "9px" }}
+                                          />
                                         </>
                                       )}
                                       <div
@@ -759,10 +772,9 @@ class UploadFiles extends Component {
                           <div className="u_f_file_type" id="u_f_file_type3">
                             3D Images
                           </div>
- 
                         </div>
                       )}
-                     
+
                       <div className="u_f_input_title">Category</div>
                       {this.state.files_selected ? (
                         <input
@@ -869,9 +881,7 @@ class UploadFiles extends Component {
                           {this.state.suggested_keywords.map(
                             (keyword, index) => {
                               return (
-                                <div
-                                  className="u_f_input_keywords"
-                                >
+                                <div className="u_f_input_keywords">
                                   {keyword} <i class="fas fa-plus"></i>
                                 </div>
                               );
