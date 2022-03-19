@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { Container, Row, Col, Visible } from "react-grid-system";
 import All from "../website/All.module.css";
@@ -25,6 +25,10 @@ import Dialog from "@material-ui/core/Dialog";
 import Close from "../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
+import Select from 'react-select'
+import countryList from 'react-select-country-list'
+import "../css/Signup.css"
+import Countries from "../../apis/country.json"
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -33,8 +37,50 @@ const DialogContent = withStyles((theme) => ({
     padding: theme.spacing(2),
   },
 }))(MuiDialogContent);
-
 function SignUp(props) {
+  let [test, setTest] = useState([])
+
+ 
+
+  
+    const [value1, setValue1] = useState('')
+    // const options = useMemo(() => countryList().getData(), [])
+  const [codes, setCodes] = useState([])
+  const [code, setCode] = useState('')
+    const changeHandler1 = value => {
+      setValue1(value)
+      console.log(value)
+
+      setFormValues({
+        ...formValues,
+        ["country"]: value.label,
+      });
+
+      console.log(formValues)
+
+      var result= codes.filter(obj=> obj.code == value.value);
+console.log(result[0].dial_code);
+setCode(result[0].dial_code);
+    }
+    useEffect(() => {
+      console.log(Countries)
+    //   axios.get(`https://gist.githubusercontent.com/anubhavshrimal/75f6183458db8c453306f93521e93d37/raw/f77e7598a8503f1f70528ae1cbf9f66755698a16/CountryCodes.json`).then(
+    //     (response) => {
+    // console.log(response.data)       
+    // const data = response.data
+    
+    const options = Countries.map(d => ({
+      "value" : d.code,
+      "label" : d.name
+    
+    }))
+    setTest(options)
+    setCodes(Countries) 
+    // }
+    //   );
+    }, []);
+
+   
   const { register, handleSubmit, errors, watch, control } = useForm();
   const password = useRef({});
   password.current = watch("password", "");
@@ -75,6 +121,7 @@ function SignUp(props) {
                   email: formValues.email,
                   phoneNo: formValues.phone,
                   password: formValues.password,
+                  country: formValues.country,
                 }              )
               .then((res) => {
                
@@ -124,15 +171,29 @@ function SignUp(props) {
     }
    
   };
-
+  const customStyles = {
+    container: provided => ({
+      ...provided,
+height: 50,
+})
+  };
   const [open, setOpen] = React.useState(false);
 
   const changeHandler = (e) => {
-    setFormValues({
-      ...formValues,
-      [e.target.name]: e.target.value,
-    });
-    document.getElementById(e.target.name + "_error").style.display = "none";
+    if (e.target.name!=="phone"){
+      setFormValues({
+        ...formValues,
+        [e.target.name]: e.target.value,
+      });
+      document.getElementById(e.target.name + "_error").style.display = "none";
+    }
+    else{
+      setFormValues({
+        ...formValues,
+        ["phone"]: e.target.value.slice(code.length+1,17),
+      });
+      document.getElementById(e.target.name + "_error").style.display = "none";
+    }
 
     if (e.target.name === "name") {
       if (e.target.value.length > 100) {
@@ -317,8 +378,16 @@ function SignUp(props) {
                     Email ID is required
                   </div>
                 </div>
-  
+                <div className={All.FormGroup}>
+                  <label className={All.Bold + " form_label"} for="country">
+                    Select Country{" "}
+                  </label>
+                  <div className="react-select-dropdown">
+                <Select  styles={customStyles}
+   options={test} value={value1} onChange={changeHandler1} />
 
+                </div>
+                </div>
              
                 <div className={All.FormGroup}>
                   <label className={All.Bold + " form_label"} for="phone">
@@ -326,14 +395,15 @@ function SignUp(props) {
                   </label>
                   {/* <PhoneInput defaultCountry="IN" className={All.Phonenumber} name="phone" id="phone" value={value} onChange={setValue}/> */}
                   <input
-                    type="number"
+                    type="text"
                     name="phone"
                     className={All.FormControl}
                     id="phone"
+                    value={`${code} ${formValues.phone}`}
                     ref={register({
                       required: true,
                       minLength: 10,
-                      maxLength: 13,
+                      // maxLength: 13,
                     })}
                     onChange={changeHandler}
                     autoComplete = {false}
@@ -380,8 +450,8 @@ function SignUp(props) {
                     Password is required
                   </div>
                 </div>
-          
-
+               
+                
                 <div className={All.FormGroup}>
                   <Box pb={3} pt={6}>
                     {isLoading ? (

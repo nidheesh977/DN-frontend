@@ -110,6 +110,7 @@
     "react-scroll-to-top": "^1.0.8",
     "react-search": "^2.1.1",
     "react-search-box": "^2.0.2",
+    "react-select": "^5.2.2",
     "react-select-country-list": "^2.2.3",
     "react-select-plus": "^1.0.0-rc.3.patch12",
     "react-share": "^4.4.0",
