@@ -42,6 +42,7 @@ import CreateServiceCenter from "./components/website/CreateServiceCenter";
 import Categories from "./components/website/Categories";
 import EmailVerification from "./components/website/EmailVerification";
 import VerifiedEmail from "./components/website/VerifiedEmail";
+import RecoverPassword from "./components/website/RecoverPassword";
 
 
 class App extends React.Component {
@@ -153,6 +154,7 @@ class App extends React.Component {
             <Route component={Categories} path="/choose-categories" />
             <Route component={EmailVerification} path="/verify-email" />
             <Route component={VerifiedEmail} path="/users/:id/verify/:token" />
+            <Route component={RecoverPassword} path="/users/:id/forgetPassword/:token" />
             {/* yaseen */}
             <PublicRoute exact path="*" component={NoPageFound} />
           </Switch>

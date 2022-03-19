@@ -13,6 +13,7 @@ import swal from 'sweetalert';
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import Loader from '../Loader/loader'
+const domain = process.env.REACT_APP_MY_API
 
 export default function EmailId(props) {
 
@@ -20,23 +21,39 @@ export default function EmailId(props) {
     const [open, setOpen] = React.useState(false);
     const onSubmit = (event) => {
         setLoading(true);
-        axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/forgotpassword', {
-            email: event.email,
+        axios.post(`${domain}/api/user/forgetPassword`, {
+            email: email,
           }).then(res => {
-              if (res.data.message == "We have e-mailed your password reset code!"){
+              console.log(res)
 
-                swal('Check Your Email', {
-                    icon: "success",
-                });
-                setLoading(false); 
-                props.next();            
+              if(res.data === "invalid email"){
+                setLoading(false);
+document.getElementById("validmail").style.display = "block"
+document.getElementById("mailsent").style.display = "none"
+
               }
               else{
-                swal("Invalid email id", {
-                    icon: "error",
-                });
-                setLoading(false);
+                
+                    setLoading(false);
+                    document.getElementById("validmail").style.display = "none"
+
+    document.getElementById("mailsent").style.display = "block"
+                  
               }
+        //       if (res.data.message == "We have e-mailed your password reset code!"){
+
+        //         swal('Check Your Email', {
+        //             icon: "success",
+        //         });
+        //         setLoading(false); 
+        //         props.next();            
+        //       }
+        //       else{
+        //         swal("Invalid email id", {
+        //             icon: "error",
+        //         });
+        //         setLoading(false);
+        //       }
           })
     }
 
@@ -45,6 +62,7 @@ export default function EmailId(props) {
     const [state, setState] = React.useState({
         checkedA: true,
     });
+    const [email, setEmail] = useState("")
 
     const handleClick = () => {
         setOpen(true);
@@ -59,7 +77,7 @@ export default function EmailId(props) {
       };
       
     const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
+       setEmail(event.target.value);
     };
     return (
         <>
@@ -82,10 +100,10 @@ export default function EmailId(props) {
                             <Box pb={3}>
                                 <h2>Forgot Password</h2>
                             </Box>
-                            <form className={All.form} onSubmit={handleSubmit(onSubmit)}>
+                            <form className={All.form} onSubmit={(e)=> e.preventDefault()}>
                                 <div className={All.FormGroup}>
                                     <label className={All.Bold} for="usr">Email ID:</label>
-                                    <input type="text" className={All.FormControl} id="usr" value={props.getState("email", "")} onChange={props.handleChange} name="email" 
+                                    <input type="text" className={All.FormControl} id="usr" value={email} onChange={handleChange} name="email" 
                                             ref={register({
                                                 required: "Enter your e-mail",
                                                 pattern: {
@@ -94,15 +112,16 @@ export default function EmailId(props) {
                                                 },
                                             })}
                                     />
-
+                                    <div id="validmail" style={{display:"none", color:"red"}}>Enter a valid email id</div>
+                                    <div id="mailsent" style={{display:"none", color : "red"}}>Recovery Mail has been sent to your mail Id</div>
                                 </div>
 
                                 <Box pt={4}>
                                     {isLoading ? ( <>
-                                            <Button variant="contained" color="default" type="submit" onClick={handleClick} className={All.LoaderBtn}>
+                                            <Button variant="contained" color="default" type="submit" className={All.LoaderBtn}>
                                             <Loader /> Loading</Button>
                                             </> ) : ( <>
-                                            <Button variant="contained" color="default" type="submit" onClick={handleClick} className={All.BtnStyle_5}>
+                                            <Button variant="contained" color="default" type="submit" onClick={onSubmit} className={All.BtnStyle_5}>
                                             <img style={{ paddingRight: 10 }} src={DroneImg} /> submit</Button>
                                             </> )}
                                 </Box> 
