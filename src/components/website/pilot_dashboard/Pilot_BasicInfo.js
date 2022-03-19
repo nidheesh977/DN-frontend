@@ -159,23 +159,23 @@ function Pilot_BasicInfo() {
         },
       };
       console.log(data)
-      axios.post("http://localhost:9000/api/pilot/registerPilot", {
-        name: data.full_name,
-emailId: data.email,
-phoneNo : data.phone,
-dob: data.dob,
-gender: data.gender,
-address: data.address,
-city: data.city,
-country: data.country,
-postalAddress: data.postal,
-bio : data.bio,
-      }, config)
-        .then(() => {
-alert("successfull")        })
-        .catch(() => {
-          alert("not successful");
-        });
+//       axios.post("http://localhost:9000/api/pilot/registerPilot", {
+//         name: data.full_name,
+// emailId: data.email,
+// phoneNo : data.phone,
+// dob: data.dob,
+// gender: data.gender,
+// address: data.address,
+// city: data.city,
+// country: data.country,
+// postalAddress: data.postal,
+// bio : data.bio,
+//       }, config)
+//         .then(() => {
+// alert("successfull")        })
+//         .catch(() => {
+//           alert("not successful");
+//         });
     }
   }
 

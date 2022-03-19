@@ -1,0 +1,21 @@
+.react-select-dropdown{
+    width: 77%;
+    margin-top: 15px;
+    outline: white;
+    border: none !important
+}
+.react-select-dropdown:hover, .react-select-dropdown:focus{
+    outline: white !important;
+    border: none !important
+}
+@media only screen and (max-width: 770px) {
+    
+    .react-select-dropdown{
+        width: 100%;
+    }
+    .react-select-dropdown:hover, .react-select-dropdown:focus{
+        outline: white !important;
+        border: none !important
+    }
+    
+}
