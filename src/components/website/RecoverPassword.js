@@ -70,6 +70,13 @@ const RecoverPassword = (props) => {
       document.getElementById("password").focus();
     } else {
       setLoading(true)
+      if(email.length < 8){
+        document.getElementById("lessNumber").style.display = "block"
+        setLoading(false)
+
+      }else{
+
+      
       if(email === password){
         console.log(email, password)
         axios
@@ -100,6 +107,7 @@ document.getElementById("linkExpired").style.display ="block" }
           document.getElementById('invalid_credentials').style.display = "block"
 
       }
+    }
     //   axios
     //     .post(`${domain}/api/user/login`, {
     //       email: email,
@@ -137,6 +145,8 @@ document.getElementById("linkExpired").style.display ="block" }
   const handleChange = (e) => {
     document.getElementById(`${e.target.id}_error`).style.display = "none";
     document.getElementById(`invalid_credentials`).style.display = "none";
+    document.getElementById(`lessNumber`).style.display = "none";
+    document.getElementById(`linkExpired`).style.display = "none";
     if (e.target.name === "email") {
       setEmail(e.target.value);
     } else if (e.target.name === "password") {
@@ -213,7 +223,8 @@ document.getElementById("linkExpired").style.display ="block" }
                   >
                     Passwords Doesn't Match
                   </div>
-                  <div id="linkExpired" style={{color:"red", display:"none"}} >Link Expired, Recover Password again</div>
+                  <div id="linkExpired" style={{color:"red", display:"none", marginTop:"10px"}} >Link Expired, Recover Password again</div>
+                  <div id="lessNumber" style={{color:"red", display:"none", marginTop:"10px"}} >Password must be minimum 8 characters</div>
                 </div>
                 <div className={All.FormGroup}>
                   {isLoading ? (
