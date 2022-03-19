@@ -5,6 +5,7 @@ import Pilot from "./images/pilot.jpg";
 import loadMore from "../../images/Group 71.svg";
 import {Link} from "react-router-dom"
 import axios from 'axios';
+const domain = process.env.REACT_APP_MY_API
 
 function Pilot_following() {
     let config = {
@@ -15,7 +16,7 @@ function Pilot_following() {
 
       let [myFollowing, setMyFollowing] = useState([]);
   useEffect(()=>{
-    axios.post(`http://localhost:9000/api/follow/getMyFollowingPopulated`, config).then(
+    axios.post(`${domain}/api/follow/getMyFollowingPopulated`, config).then(
       (res) => {
         console.log(res);
 

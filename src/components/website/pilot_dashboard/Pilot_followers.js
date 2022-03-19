@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 
+const domain = process.env.REACT_APP_MY_API
 
 function Pilot_followers() {
 
@@ -18,7 +19,7 @@ function Pilot_followers() {
 
       let [myFollowers, setMyFollowers] = useState([]);
   useEffect(()=>{
-    axios.post(`http://localhost:9000/api/follow/getMyFollowersPopulated`, config).then(
+    axios.post(`${domain}/api/follow/getMyFollowersPopulated`, config).then(
       (res) => {
         console.log(res);
 

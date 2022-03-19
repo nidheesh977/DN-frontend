@@ -184,6 +184,7 @@ export default function ServiceCenterDetails(props) {
       )
       .then(() => {
         alert("successfull");
+        setWriteReview(false)
         axios
           .get(`${domain}/api/review/getReviews/${param.id}`)
           .then((response) => {
@@ -213,7 +214,6 @@ export default function ServiceCenterDetails(props) {
         config
       )
       .then((response) => {
-        alert("liked ");
         console.log(response)
         axios
         .get(`${domain}/api/review/getReviews/${param.id}`)
@@ -250,7 +250,6 @@ export default function ServiceCenterDetails(props) {
         config
       )
       .then((response) => {
-        alert("unliked ");
         console.log(response)
         axios
         .get(`${domain}/api/review/getReviews/${param.id}`)

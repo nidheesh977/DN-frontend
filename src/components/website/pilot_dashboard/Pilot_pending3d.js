@@ -68,7 +68,7 @@ console.log(response.data)
                     onMouseOver={() => mouseGotIN(item._id)}
                     onMouseOut={() => mouseGotOut(item._id)}
                   >
-                    <img src={`http://localhost:9000/${item.file}` } className="pd_images_image" />
+                    <img src={`${domain}/${item.file}` } className="pd_images_image" />
                     <div
                       className={
                         item.premium

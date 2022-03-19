@@ -17,13 +17,17 @@ const domain = process.env.REACT_APP_MY_API;
 function VerifiedEmail() {
   let param = useParams();
   let [message, setMessage] = useState("");
-  console.log(param.id);
   useEffect(() => {
     axios
       .post(`${domain}/api/user/verifyMail/${param.id}/verify/${param.token}`)
       .then((response) => {
         console.log(response.data);
         setMessage(response.data);
+        localStorage.setItem("access_token", response.data.token)
+      })
+      .catch(err => {
+        console.log(err)
+        console.log(err.response)
       });
   }, []);
   const history = useHistory();

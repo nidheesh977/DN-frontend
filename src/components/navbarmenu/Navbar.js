@@ -93,7 +93,13 @@ function Navbar(props) {
   }
 
   const uploadInstructions = () => {
-    setInstructions(true)
+    if(!localStorage.getItem("access_token")){
+     history.push("/login")
+    }
+    else{
+      setInstructions(true)
+    }
+
   }
 
   // useEffect(() => {
@@ -328,7 +334,7 @@ function Navbar(props) {
                   id="myAccount"
                 >
                   <Link
-                    to={localStorage.getItem("role") === "undefined" ?"/choose-categories":"/pilot_dashboard/account"}
+                    to={localStorage.getItem("role") === "pilot" ?"/pilot_dashboard/account":"/choose-categories"}
                     className="nav-links my_account_btn"
                     style={{ display: "flex", alignItems: "center" }}
                   >

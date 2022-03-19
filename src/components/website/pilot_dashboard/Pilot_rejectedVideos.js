@@ -76,8 +76,8 @@ console.log(response.data)
                     // src={`http://localhost:9000/${item.file}`}
                     className="pd_images_image" style={{backgroundColor:"black", objectFit:"cover"}} controls onPlay={()=>removeVideoIcon(item._id)}
                   >
-                    <source src={`http://localhost:9000/${item.file}`} type="video/mp4" />
-                    <source src={`http://localhost:9000/${item.file}`} type="video/ogg" />
+                    <source src={`${domain}/${item.file}`} type="video/mp4" />
+                    <source src={`${domain}/${item.file}`} type="video/ogg" />
                     Your browser does not support the video tag.
                   </video>
                     <div

@@ -12,9 +12,6 @@ import All from '../../website/All.module.css'
 import axios from 'axios'
 const domain = process.env.REACT_APP_MY_API
 
-
-
-
 function mouseGotIN(_id) {
   document.getElementById("pd_likes/" + _id).style.display = "block";
   document.getElementById("pd_more/" + _id).style.display = "block";
@@ -73,7 +70,7 @@ console.log(response.data)
                     onMouseOver={() => mouseGotIN(item._id)}
                     onMouseOut={() => mouseGotOut(item._id)}
                   >
-                    <img  src={`http://localhost:9000/${item.file}` }  className="pd_images_image" />
+                    <img  src={`${domain}/${item.file}` }  className="pd_images_image" />
                     <div className={item.premium ? "pd_premiumBadge" : "pd_images_imageHidden"}>
                       <img src={premiumIcon} className="pd_premiumBadge_star" />
                     </div>
