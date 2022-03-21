@@ -39,7 +39,15 @@ console.log(response.data)
     );
   }, []);
   let [value, setValue] = useState([]);
-
+  const deleteImage = (id) =>{
+    axios.post(`http://localhost:9000/api/image/deleteImage/${id}`, config).then((res)=>{
+      axios.post(`${domain}/api/image/getRejectedImages`,config).then(
+        (response) => {
+  console.log(response.data)       
+    setValue(response.data)
+        }
+      ); })
+  }
   let details = {
     images: [
       { id: 1, views: "5K", downloads: "2K", likes: "1K", premium: false, tag1: "Tall Building", tag2: "Adult" , src: "https://wallpaperaccess.com/thumb/14247.jpg"},
@@ -92,7 +100,7 @@ console.log(response.data)
                     id={"pd_images_more/" + item._id}
                   >
                     <div className="pd_images_moreOption">Edit</div>
-                    <div className="pd_images_moreOption">Remove</div>
+                    <div className="pd_images_moreOption" onClick={()=>deleteImage(item._id)}>Remove</div>
                   </div>
 
                   {/* tags */}
