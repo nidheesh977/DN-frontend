@@ -493,6 +493,18 @@
   color: white;
 }
 
+.u_f_upload_success_tick{
+  position: absolute;
+  top: calc(50% - 10px);
+  left: calc(50% - 22px);
+  font-size: 25px;
+  line-height: 24px;
+  width: 50px;
+  font-family: muli-bold;
+  text-align: center;
+  color: white;
+}
+
 .u_f_size_exceed_close{
   position: absolute;
   top: calc(50% - 32px);

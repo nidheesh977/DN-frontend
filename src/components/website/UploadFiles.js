@@ -350,6 +350,7 @@ class UploadFiles extends Component {
     var details = this.state.selected_files_details;
     details[id].type = e.target.files[0].type;
     details[id].size = e.target.files[0].size;
+    details[id].row = e.target.files[0];
     row_files[id] = e.target.files;
     this.setState({
       row_files: row_files,
@@ -370,57 +371,62 @@ class UploadFiles extends Component {
     let error = false
     let selected_files = this.state.selected_files_details
     for (let i = selected_files.length-1; i >= 0; i--){
-      let file_error = false
-      if (selected_files[i].custom_name === ""){
-        error = true
-        file_error = true
-        selected_files[i].error = true
-        this.setState({
-          selected_files_details: selected_files,
-          file_edit: i
-        })
-        let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
-        window.scrollTo({top: y, behavior: 'smooth'});
-      }
-      if (selected_files[i].category === ""){
-        error = true
-        file_error = true
-        selected_files[i].error = true
-        this.setState({
-          selected_files_details: selected_files,
-          file_edit: i
-        })
-        let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
-        window.scrollTo({top: y, behavior: 'smooth'});
-      }
-      if (selected_files[i].experience === ""){
-        error = true
-        file_error = true
-        selected_files[i].error = true
-        this.setState({
-          selected_files_details: selected_files,
-          file_edit: i
-        })
-        let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
-        window.scrollTo({top: y, behavior: 'smooth'});
-      }
-      if (selected_files[i].keywords.length === 0){
-        error = true
-        file_error = true
-        selected_files[i].error = true
-        this.setState({
-          selected_files_details: selected_files,
-          file_edit: i
-        })
-        let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
-        window.scrollTo({top: y, behavior: 'smooth'});
-      }
-
-      if (!file_error){
-        selected_files[i].error = false
-        this.setState({
-          selected_files_details: selected_files
-        })
+      if (
+        (selected_files[i].row.type[0] === "v" && selected_files[i].size/1000000 <= 10) || 
+        (selected_files[i].row.type[0] !== "v" && selected_files[i].size/1000000 <= 2)
+      ){
+        let file_error = false
+        if (selected_files[i].custom_name === ""){
+          error = true
+          file_error = true
+          selected_files[i].error = true
+          this.setState({
+            selected_files_details: selected_files,
+            file_edit: i
+          })
+          let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
+          window.scrollTo({top: y, behavior: 'smooth'});
+        }
+        if (selected_files[i].category === ""){
+          error = true
+          file_error = true
+          selected_files[i].error = true
+          this.setState({
+            selected_files_details: selected_files,
+            file_edit: i
+          })
+          let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
+          window.scrollTo({top: y, behavior: 'smooth'});
+        }
+        if (selected_files[i].experience === ""){
+          error = true
+          file_error = true
+          selected_files[i].error = true
+          this.setState({
+            selected_files_details: selected_files,
+            file_edit: i
+          })
+          let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
+          window.scrollTo({top: y, behavior: 'smooth'});
+        }
+        if (selected_files[i].keywords.length === 0){
+          error = true
+          file_error = true
+          selected_files[i].error = true
+          this.setState({
+            selected_files_details: selected_files,
+            file_edit: i
+          })
+          let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
+          window.scrollTo({top: y, behavior: 'smooth'});
+        }
+  
+        if (!file_error){
+          selected_files[i].error = false
+          this.setState({
+            selected_files_details: selected_files
+          })
+        }
       }
     }
 
@@ -434,51 +440,56 @@ class UploadFiles extends Component {
       for (let i = 0; i < this.state.selected_files_details.length; i++){
   
         let currentFile = this.state.selected_files_details[i]
-        if (currentFile.upload_status !== "uploaded"){
-  
-          let files = this.state.selected_files_details
-          files[i].upload_status = "uploading"
-          this.setState({
-            selected_files_details: files
-          })
+        if (
+          (selected_files[i].row.type[0] === "v" && selected_files[i].size/1000000 <= 10) || 
+          (selected_files[i].row.type[0] !== "v" && selected_files[i].size/1000000 <= 2)
+        ){
+          if (currentFile.upload_status !== "uploaded"){
     
-          let data = new FormData();
-    
-          console.log(currentFile)
-    
-          data.append("file", currentFile.row)
-          data.append("postName", currentFile.custom_name)
-          if (currentFile.type[0] === "v"){
-            data.append("fileType", "video")
-          }
-          else if (currentFile.type[0] === "i"){
-            data.append("fileType", "image")
-          }
-          else{
-            data.append("fileType", currentFile.type)
-          }
-          data.append("experience", currentFile.experience)
-          data.append("keywords", currentFile.keywords)
-          data.append("adult", currentFile.adult_content)
-          data.append("category", currentFile.category)
-          
-          console.log(data)
-    
-          axios.post(`${domain}/api/image/createImage`, data, config)
-          .then(res => {
-            console.log(res.data)
-            files[i].upload_status = "uploaded"
+            let files = this.state.selected_files_details
+            files[i].upload_status = "uploading"
             this.setState({
               selected_files_details: files
             })
-          })
-          .catch(err=>{
-            console.log(err.data)
-            files[i].upload_status = "upload_failed"
-            this.setState({
-              selected_files_details: files
+      
+            let data = new FormData();
+      
+            console.log(currentFile)
+      
+            data.append("file", currentFile.row)
+            data.append("postName", currentFile.custom_name)
+            if (currentFile.type[0] === "v"){
+              data.append("fileType", "video")
+            }
+            else if (currentFile.type[0] === "i"){
+              data.append("fileType", "image")
+            }
+            else{
+              data.append("fileType", currentFile.type)
+            }
+            data.append("experience", currentFile.experience)
+            data.append("keywords", currentFile.keywords)
+            data.append("adult", currentFile.adult_content)
+            data.append("category", currentFile.category)
+            
+            console.log(data)
+      
+            axios.post(`${domain}/api/image/createImage`, data, config)
+            .then(res => {
+              console.log(res.data)
+              files[i].upload_status = "uploaded"
+              this.setState({
+                selected_files_details: files
+              })
             })
-          })
+            .catch(err=>{
+              console.log(err.data)
+              files[i].upload_status = "upload_failed"
+              this.setState({
+                selected_files_details: files
+              })
+            })
+          }
         }
       }
     }
@@ -527,6 +538,7 @@ class UploadFiles extends Component {
                           <>
                             <input
                               type="file"
+                              accept="video/mp4,video/x-m4v,video/*,image/*"
                               name=""
                               id="add_files"
                               multiple
@@ -542,8 +554,7 @@ class UploadFiles extends Component {
                               for="add_files"
                               id="u_f_add_more"
                             >
-                              <i class="fas fa-plus u_f_add_more_icon"></i> Add
-                              more
+                              <i class="fas fa-plus u_f_add_more_icon"></i> Add more
                             </label>
                             <select
                               name=""
@@ -744,7 +755,7 @@ class UploadFiles extends Component {
                                               {file.upload_status === "uploaded" && 
                                                 <>
                                                   <div className = "u_f_upload_success_border"></div>
-                                                  <div className = "u_f_upload_percentage">100%</div>
+                                                  <div className = "u_f_upload_success_tick"><i class="fa fa-check" aria-hidden="true"></i></div>
                                                 </>
                                               }
                                               {file.size/1000000 > 10 &&
@@ -770,7 +781,7 @@ class UploadFiles extends Component {
                                               {file.upload_status === "uploaded" && 
                                                 <>
                                                   <div className = "u_f_upload_success_border"></div>
-                                                  <div className = "u_f_upload_percentage">100%</div>
+                                                  <div className = "u_f_upload_success_tick"><i class="fa fa-check" aria-hidden="true"></i></div>
                                                 </>
                                               }
                                               {file.upload_status === "upload_failed" && <i class="fa fa-times-circle" aria-hidden="true" style = {{position: "absolute", top: "calc(50% - 50px)", left: "calc(50% - 50px)", color: "red", fontSize: "100px", opacity: "0.7"}}></i>}
