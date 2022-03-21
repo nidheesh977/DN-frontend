@@ -40,6 +40,15 @@ console.log(response.data)
       }
     );
   }, []);
+  const deleteImage = (id) =>{
+    axios.post(`http://localhost:9000/api/image/deleteImage/${id}`, config).then((res)=>{
+      axios.post(`${domain}/api/image/getRejectedVideos`,config).then(
+        (response) => {
+  console.log(response.data)       
+    setValue(response.data)
+        }
+      ); })
+  }
   let [value, setValue] = useState([]);
 
   let details = {
@@ -106,7 +115,7 @@ console.log(response.data)
                     id={"pd_images_more/" + item._id}
                   >
                     <div className="pd_images_moreOption">Edit</div>
-                    <div className="pd_images_moreOption">Remove</div>
+                    <div className="pd_images_moreOption" onClick={()=>deleteImage(item._id)}>Remove</div>
                   </div>
 
                   {/* tags */}

@@ -138,6 +138,15 @@ function Pilot_pendingVideos() {
 let removeVideoIcon = (id) =>{
   document.getElementById(`videoIcon-${id}`).style.display = "none"
 }
+const deleteImage = (id) =>{
+  axios.post(`http://localhost:9000/api/image/deleteImage/${id}`, config).then((res)=>{
+    axios
+    .post(`${domain}/api/image/getPendingVideos`, config)
+    .then((response) => {
+      console.log(response.data);
+      setValue(response.data);
+    }); })
+}
   return (
     <div>
       <Row gutterWidth={12}>
@@ -184,7 +193,7 @@ let removeVideoIcon = (id) =>{
                   id={"pd_images_more/" + item._id}
                 >
                   <div className="pd_images_moreOption">Edit</div>
-                  <div className="pd_images_moreOption">Remove</div>
+                  <div className="pd_images_moreOption" onClick={()=> deleteImage(item._id)}>Remove</div>
                 </div>
 
                 {/* tags */}
