@@ -249,6 +249,8 @@ function CreatePilot() {
       )
         .then(() => {
           setAccountCreateSuccess(true);
+          localStorage.setItem("role", "pilot");
+
         })
         .catch((err) => {
           try{

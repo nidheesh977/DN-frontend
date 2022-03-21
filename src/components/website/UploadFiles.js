@@ -14,6 +14,9 @@ import MuiDialogContent from "@material-ui/core/DialogContent";
 import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
 import moreIcon from "../images/Path.svg";
+import axios from "axios";
+
+const domain = process.env.REACT_APP_MY_API;
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -40,6 +43,7 @@ class UploadFiles extends Component {
       new_keyword: "",
       suggested_keywords: ["Areal View", "UAV", "Aviation", "Drone"],
       showEditOptions: "",
+      error: false
     };
   }
 
@@ -112,6 +116,8 @@ class UploadFiles extends Component {
         keywords: [],
         adult_content: false,
         select_type: e.target.files[i].type,
+        row: e.target.files[i],
+        upload_status: "selected"
       });
       this.setState({
         selected_files_details: details,
@@ -140,9 +146,11 @@ class UploadFiles extends Component {
   fileNameChange = (e) => {
     var files_details = this.state.selected_files_details;
     files_details[this.state.file_edit].custom_name = e.target.value;
+    
     this.setState({
       selected_files_details: files_details,
     });
+    
   };
 
   priceChange = (e) => {
@@ -156,17 +164,21 @@ class UploadFiles extends Component {
   categoryChange = (e) => {
     var files_details = this.state.selected_files_details;
     files_details[this.state.file_edit].category = e.target.value;
+    
     this.setState({
       selected_files_details: files_details,
     });
+    
   };
 
   experienceChange = (e) => {
     var files_details = this.state.selected_files_details;
     files_details[this.state.file_edit].experience = e.target.value;
+    
     this.setState({
       selected_files_details: files_details,
     });
+    
   };
 
   changeUsage = (usage) => {
@@ -199,12 +211,8 @@ class UploadFiles extends Component {
       upload_choice: false,
       selected_tab: 2,
     });
-    document
-      .getElementById("u_f_nav_link1")
-      .classList.remove("u_f_nav_link_selected");
-    document
-      .getElementById("u_f_nav_link2")
-      .classList.add("u_f_nav_link_selected");
+    document.getElementById("u_f_nav_link1").classList.remove("u_f_nav_link_selected");
+    document.getElementById("u_f_nav_link2").classList.add("u_f_nav_link_selected");
   };
 
   uploadNew = () => {
@@ -270,6 +278,7 @@ class UploadFiles extends Component {
     this.setState({
       selected_files_details: files_details,
     });
+    
   };
 
   removeSelectedKeyword = (keyword) => {
@@ -357,6 +366,124 @@ class UploadFiles extends Component {
     reader.readAsDataURL(e.target.files[0]);
   };
 
+  publish = () => {
+    let error = false
+    let selected_files = this.state.selected_files_details
+    for (let i = selected_files.length-1; i >= 0; i--){
+      let file_error = false
+      if (selected_files[i].custom_name === ""){
+        error = true
+        file_error = true
+        selected_files[i].error = true
+        this.setState({
+          selected_files_details: selected_files,
+          file_edit: i
+        })
+        let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
+        window.scrollTo({top: y, behavior: 'smooth'});
+      }
+      if (selected_files[i].category === ""){
+        error = true
+        file_error = true
+        selected_files[i].error = true
+        this.setState({
+          selected_files_details: selected_files,
+          file_edit: i
+        })
+        let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
+        window.scrollTo({top: y, behavior: 'smooth'});
+      }
+      if (selected_files[i].experience === ""){
+        error = true
+        file_error = true
+        selected_files[i].error = true
+        this.setState({
+          selected_files_details: selected_files,
+          file_edit: i
+        })
+        let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
+        window.scrollTo({top: y, behavior: 'smooth'});
+      }
+      if (selected_files[i].keywords.length === 0){
+        error = true
+        file_error = true
+        selected_files[i].error = true
+        this.setState({
+          selected_files_details: selected_files,
+          file_edit: i
+        })
+        let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
+        window.scrollTo({top: y, behavior: 'smooth'});
+      }
+
+      if (!file_error){
+        selected_files[i].error = false
+        this.setState({
+          selected_files_details: selected_files
+        })
+      }
+    }
+
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+
+    if (!error){
+      for (let i = 0; i < this.state.selected_files_details.length; i++){
+  
+        let currentFile = this.state.selected_files_details[i]
+        if (currentFile.upload_status !== "uploaded"){
+  
+          let files = this.state.selected_files_details
+          files[i].upload_status = "uploading"
+          this.setState({
+            selected_files_details: files
+          })
+    
+          let data = new FormData();
+    
+          console.log(currentFile)
+    
+          data.append("file", currentFile.row)
+          data.append("postName", currentFile.custom_name)
+          if (currentFile.type[0] === "v"){
+            data.append("fileType", "video")
+          }
+          else if (currentFile.type[0] === "i"){
+            data.append("fileType", "image")
+          }
+          else{
+            data.append("fileType", currentFile.type)
+          }
+          data.append("experience", currentFile.experience)
+          data.append("keywords", currentFile.keywords)
+          data.append("adult", currentFile.adult_content)
+          data.append("category", currentFile.category)
+          
+          console.log(data)
+    
+          axios.post(`${domain}/api/image/createImage`, data, config)
+          .then(res => {
+            console.log(res.data)
+            files[i].upload_status = "uploaded"
+            this.setState({
+              selected_files_details: files
+            })
+          })
+          .catch(err=>{
+            console.log(err.data)
+            files[i].upload_status = "upload_failed"
+            this.setState({
+              selected_files_details: files
+            })
+          })
+        }
+      }
+    }
+  };
+
   render() {
     return (
       <>
@@ -408,49 +535,59 @@ class UploadFiles extends Component {
                               ref="addFileRef"
                             />
                             <label
-                              style={{ display: "inline-block" }}
+                              style={{
+                                display: "inline-block",
+                                marginBottom: "10px",
+                              }}
                               for="add_files"
                               id="u_f_add_more"
                             >
                               <i class="fas fa-plus u_f_add_more_icon"></i> Add
                               more
                             </label>
+                            <select
+                              name=""
+                              id="u_f_select_category"
+                              onChange={this.categoryChanged}
+                              style={{ marginRight: "10px" }}
+                            >
+                              <option
+                                value="all"
+                                selected={
+                                  this.state.selected_category === "all"
+                                }
+                              >
+                                All Files
+                              </option>
+                              <option
+                                value="image"
+                                selected={
+                                  this.state.selected_category === "image"
+                                }
+                              >
+                                Image
+                              </option>
+                              <option
+                                value="3d_image"
+                                selected={
+                                  this.state.selected_category === "3d_image"
+                                }
+                              >
+                                3D Image
+                              </option>
+                              <option
+                                value="video"
+                                selected={
+                                  this.state.selected_category === "video"
+                                }
+                              >
+                                Video
+                              </option>
+                            </select>
                           </>
                         ) : (
                           ""
                         )}
-                        {/* <select
-                          name=""
-                          id="u_f_select_category"
-                          onChange={this.categoryChanged}
-                        >
-                          <option
-                            value="all"
-                            selected={this.state.selected_category == "all"}
-                          >
-                            All Files
-                          </option>
-                          <option
-                            value="image"
-                            selected={this.state.selected_category == "image"}
-                          >
-                            Image
-                          </option>
-                          <option
-                            value="3d_image"
-                            selected={
-                              this.state.selected_category == "3d_image"
-                            }
-                          >
-                            3D Image
-                          </option>
-                          <option
-                            value="video"
-                            selected={this.state.selected_category == "video"}
-                          >
-                            Video
-                          </option>
-                        </select> */}
                       </div>
                     ) : (
                       ""
@@ -487,7 +624,7 @@ class UploadFiles extends Component {
                             </div>
                           </div>
                           <div>
-                            {this.state.selected_category == "all" ? (
+                            {this.state.selected_category === "all" ? (
                               <>
                                 <input
                                   type="file"
@@ -502,7 +639,7 @@ class UploadFiles extends Component {
                               </>
                             ) : (
                               <>
-                                {this.state.selected_category == "video" ? (
+                                {this.state.selected_category === "video" ? (
                                   <input
                                     type="file"
                                     ref="image"
@@ -535,114 +672,128 @@ class UploadFiles extends Component {
                             {this.state.selected_files_details.map(
                               (file, index) => {
                                 return (
-                                  <Col
-                                    xxl={6}
-                                    xl={6}
-                                    lg={6}
-                                    md={6}
-                                    sm={12}
-                                    xs={12}
-                                  >
-                                    <div
-                                      className={
-                                        this.state.file_edit == index
-                                          ? "u_f_selected_file u_f_file_preview_container"
-                                          : "u_f_file_preview_container"
-                                      }
-                                      onMouseDown={(e) => {
-                                        this.selectImage(e, index);
-                                      }}
-                                      onMouseOver={() =>
-                                        this.fileNameShow(index)
-                                      }
-                                      onMouseLeave={() =>
-                                        this.fileNameHide(index)
-                                      }
-                                    >
-                                      <div className="u_f_file_name_adult_container">
-                                        {file.category ? (
-                                          <div
-                                            className="u_f_file_name_on_file"
-                                            id={"file_name_" + index}
-                                          >
-                                            {file.category}
-                                          </div>
-                                        ) : (
-                                          <div
-                                            id={"file_name_" + index}
-                                          >
-                                          </div>
-                                        )}
-                                        {file.adult_content ? (
-                                          <div
-                                            className="u_f_file_adult"
-                                            id={"file_adult_" + index}
-                                          >
-                                            Adult
-                                          </div>
-                                        ) : (
-                                          <div id={"file_adult_" + index}></div>
-                                        )}
-                                      </div>
-
-                                      {file.type[0] == "v" ? (
-                                        <>
-                                          <video
-                                            src={file.file}
-                                            style={{ borderRadius: "9px" }}
-                                          />
-                                        </>
-                                      ) : (
-                                        <>
-                                          <img
-                                            src={file.file}
-                                            style={{ borderRadius: "9px" }}
-                                          />
-                                        </>
-                                      )}
-                                      <div
-                                        className="u_f_edit_icon"
-                                        id={`u_f_edit_icon_${index}`}
-                                        onClick={() =>
-                                          this.showEditOptions(index)
-                                        }
+                                  <>
+                                    {(this.state.selected_files_details[index]
+                                      .select_type[0] ===
+                                      this.state.selected_category[0] ||
+                                      this.state.selected_category === "all") && (
+                                      <Col
+                                        xxl={6}
+                                        xl={6}
+                                        lg={6}
+                                        md={6}
+                                        sm={12}
+                                        xs={12}
+                                        id = {`u_f_file_${index}`}
                                       >
-                                        <img src={moreIcon} alt="" />
-                                      </div>
-                                      {this.state.showEditOptions === index && (
                                         <div
-                                          className="u_f_edit_content"
+                                          className={
+                                            this.state.file_edit == index
+                                              ? "u_f_selected_file u_f_file_preview_container"
+                                              : file.error?"u_f_file_preview_container u_f_file_error":"u_f_file_preview_container"
+                                          }
+                                          onMouseDown={(e) => {
+                                            this.selectImage(e, index);
+                                          }}
+                                          onMouseOver={() =>
+                                            this.fileNameShow(index)
+                                          }
                                           onMouseLeave={() =>
-                                            this.hideEditOptions(index)
+                                            this.fileNameHide(index)
                                           }
                                         >
-                                          <label>
-                                            <input
-                                              type="file"
-                                              name=""
-                                              id=""
-                                              accept="video/*,image/*"
-                                              style={{ display: "none" }}
-                                              onChange={(e) =>
-                                                this.changeFile(e, index)
-                                              }
-                                            />
-                                            <div className="u_f_edit_content_title">
-                                              Change
-                                            </div>
-                                          </label>
+                                          <div className="u_f_file_name_adult_container">
+                                            {file.category ? (
+                                              <div
+                                                className="u_f_file_name_on_file"
+                                                id={"file_name_" + index}
+                                              >
+                                                {file.category}
+                                              </div>
+                                            ):(
+                                              <div
+                                                id={"file_name_" + index}
+                                              ></div>
+                                            )}
+                                            {file.adult_content ? (
+                                              <div
+                                                className="u_f_file_adult"
+                                                id={"file_adult_" + index}
+                                              >
+                                                Adult
+                                              </div>
+                                            ) : (
+                                              <div
+                                                id={"file_adult_" + index}
+                                              ></div>
+                                            )}
+                                          </div>
+
+                                          {file.type[0] == "v" ? (
+                                            <>
+                                              <video
+                                                src={file.file}
+                                                style={{ borderRadius: "9px" }}
+                                              />
+                                              {file.upload_status === "uploaded" && <i class="fa fa-check-circle" aria-hidden="true" style = {{position: "absolute", top: "calc(50% - 50px)", left: "calc(50% - 50px)", color: "green", fontSize: "100px", opacity: "0.7"}}></i>}
+                                              {file.upload_status === "upload_failed" && <i class="fa fa-times-circle" aria-hidden="true" style = {{position: "absolute", top: "calc(50% - 50px)", left: "calc(50% - 50px)", color: "red", fontSize: "100px", opacity: "0.7"}}></i>}
+                                            </>
+                                          ) : (
+                                            <>
+                                              <img
+                                                src={file.file}
+                                                style={{ borderRadius: "9px" }}
+                                              />
+                                              {file.upload_status === "selected" && <div className = "u_f_upload_success">100%</div>}
+                                              {file.upload_status === "upload_failed" && <i class="fa fa-times-circle" aria-hidden="true" style = {{position: "absolute", top: "calc(50% - 50px)", left: "calc(50% - 50px)", color: "red", fontSize: "100px", opacity: "0.7"}}></i>}
+                                            </>
+                                          )}
                                           <div
-                                            className="u_f_edit_content_title"
+                                            className="u_f_edit_icon"
+                                            id={`u_f_edit_icon_${index}`}
                                             onClick={() =>
-                                              this.removeFile(index)
+                                              this.showEditOptions(index)
                                             }
                                           >
-                                            Remove
+                                            <img src={moreIcon} alt="" />
                                           </div>
+                                          {this.state.showEditOptions ===
+                                            index && (
+                                            <div
+                                              className="u_f_edit_content"
+                                              onMouseLeave={() =>
+                                                this.hideEditOptions(index)
+                                              }
+                                            >
+                                              <label>
+                                                <input
+                                                  type="file"
+                                                  name=""
+                                                  id=""
+                                                  accept="video/*,image/*"
+                                                  style={{ display: "none" }}
+                                                  onChange={(e) =>
+                                                    this.changeFile(e, index)
+                                                  }
+                                                />
+                                                <div className="u_f_edit_content_title">
+                                                  Change
+                                                </div>
+                                              </label>
+                                              <div
+                                                className="u_f_edit_content_title"
+                                                onClick={() =>
+                                                  this.removeFile(index)
+                                                }
+                                              >
+                                                Remove
+                                              </div>
+                                            </div>
+                                          )}
                                         </div>
-                                      )}
-                                    </div>
-                                  </Col>
+                                      </Col>
+                                    )}
+                                  </>
                                 );
                               }
                             )}
@@ -697,18 +848,25 @@ class UploadFiles extends Component {
                       )}
                       <div className="u_f_input_title">Post name</div>
                       {this.state.files_selected ? (
-                        <input
-                          type="text"
-                          name=""
-                          id="u_f_post_name"
-                          className="u_f_input_field"
-                          value={
-                            this.state.selected_files_details[
-                              this.state.file_edit
-                            ].custom_name
+                        <>
+                          <input
+                            type="text"
+                            name=""
+                            id="u_f_post_name"
+                            className="u_f_input_field"
+                            value={
+                              this.state.selected_files_details[
+                                this.state.file_edit
+                              ].custom_name
+                            }
+                            onChange={this.fileNameChange}
+                          />
+                          {
+                            this.state.selected_files_details[this.state.file_edit].error === true &&
+                            this.state.selected_files_details[this.state.file_edit].custom_name === "" &&
+                            <div className="u_f_error_msg">Post name is required</div>
                           }
-                          onChange={this.fileNameChange}
-                        />
+                        </>
                       ) : (
                         <input
                           type="text"
@@ -775,20 +933,27 @@ class UploadFiles extends Component {
                         </div>
                       )}
 
-                      <div className="u_f_input_title">Category</div>
+                      <div className="u_f_input_title">Industry</div>
                       {this.state.files_selected ? (
-                        <input
-                          type="text"
-                          name=""
-                          id="u_f_category"
-                          className="u_f_input_field"
-                          value={
-                            this.state.selected_files_details[
-                              this.state.file_edit
-                            ].category
+                        <>
+                          <input
+                            type="text"
+                            name=""
+                            id="u_f_category"
+                            className="u_f_input_field"
+                            value={
+                              this.state.selected_files_details[
+                                this.state.file_edit
+                              ].category
+                            }
+                            onChange={this.categoryChange}
+                          />
+                          {
+                            this.state.selected_files_details[this.state.file_edit].error === true &&
+                            this.state.selected_files_details[this.state.file_edit].category === "" &&
+                            <div className="u_f_error_msg">Industry is required</div>
                           }
-                          onChange={this.categoryChange}
-                        />
+                        </>
                       ) : (
                         <input
                           type="text"
@@ -800,24 +965,28 @@ class UploadFiles extends Component {
                       )}
                       <div className="u_f_input_title">
                         Explore your experience{" "}
-                        <span className="u_f_input_title_optional">
-                          (Optional)
-                        </span>
                       </div>
                       {this.state.files_selected ? (
-                        <textarea
-                          name=""
-                          id="u_f_textarea"
-                          cols="30"
-                          rows="10"
-                          className="u_f_textarea"
-                          value={
-                            this.state.selected_files_details[
-                              this.state.file_edit
-                            ].experience
+                        <>
+                          <textarea
+                            name=""
+                            id="u_f_textarea"
+                            cols="30"
+                            rows="10"
+                            className="u_f_textarea"
+                            value={
+                              this.state.selected_files_details[
+                                this.state.file_edit
+                              ].experience
+                            }
+                            onChange={this.experienceChange}
+                          ></textarea>
+                          {
+                            this.state.selected_files_details[this.state.file_edit].error === true &&
+                            this.state.selected_files_details[this.state.file_edit].experience === "" &&
+                            <div className="u_f_error_msg">Experience is required</div>
                           }
-                          onChange={this.experienceChange}
-                        ></textarea>
+                        </>
                       ) : (
                         <textarea
                           name=""
@@ -838,9 +1007,16 @@ class UploadFiles extends Component {
                         onKeyUp={this.checkNewKeywordSubmit}
                         disabled={!this.state.files_selected}
                         value={this.state.new_keyword}
+                        placeholder = "Type and press enter to select."
                       />
+                      
                       {this.state.files_selected && (
                         <div className="u_f_input_keywords_container">
+                          {
+                            this.state.selected_files_details[this.state.file_edit].error === true &&
+                            this.state.selected_files_details[this.state.file_edit].keywords.length === 0 &&
+                            <div className="u_f_error_msg">Select atleast one keyword.</div>
+                          }
                           {this.state.selected_files_details[
                             this.state.file_edit
                           ].keywords.map((keyword, index) => {
@@ -917,7 +1093,9 @@ class UploadFiles extends Component {
                       )}
                       <div id="u_f_btn">
                         <button id="u_f_save_draft">Save Draft</button>
-                        <button id="u_f_submit">Publish</button>
+                        <button id="u_f_submit" onClick={this.publish}>
+                          Publish
+                        </button>
                       </div>
                     </div>
                   </Col>

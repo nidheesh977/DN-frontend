@@ -81,8 +81,9 @@ const Login = (props) => {
           console.log(res)
           localStorage.setItem("access_token", res.data.token);
           localStorage.setItem("token_type", "Bearer");
-          localStorage.setItem("role", res.data.role);
-          setLoginSuccess(true);
+          localStorage.setItem("role", "pilot");
+          history.push("/");
+          window.location.reload();
           setLoading(false)
         })
         .catch((err) => {

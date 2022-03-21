@@ -23,7 +23,9 @@ function VerifiedEmail() {
       .then((response) => {
         console.log(response.data);
         setMessage(response.data);
-        localStorage.setItem("access_token", response.data.token)
+        if (response.data.token){
+          localStorage.setItem("access_token", response.data.token)
+        }
       })
       .catch(err => {
         console.log(err)

@@ -128,6 +128,7 @@ setCode(result[0].dial_code);
                 console.log(res);
                 localStorage.setItem("access_token", res.data.token);
                 localStorage.setItem("token_type", "Bearer");
+                localStorage.setItem("role", res.data.role);
                 console.log(localStorage.getItem("access_token"));
                 setLoading(false);
 
