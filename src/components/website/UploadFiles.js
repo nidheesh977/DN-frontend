@@ -735,8 +735,25 @@ class UploadFiles extends Component {
                                                 src={file.file}
                                                 style={{ borderRadius: "9px" }}
                                               />
-                                              {file.upload_status === "uploaded" && <i class="fa fa-check-circle" aria-hidden="true" style = {{position: "absolute", top: "calc(50% - 50px)", left: "calc(50% - 50px)", color: "green", fontSize: "100px", opacity: "0.7"}}></i>}
-                                              {file.upload_status === "upload_failed" && <i class="fa fa-times-circle" aria-hidden="true" style = {{position: "absolute", top: "calc(50% - 50px)", left: "calc(50% - 50px)", color: "red", fontSize: "100px", opacity: "0.7"}}></i>}
+                                              {file.upload_status === "uploading" && 
+                                                <>
+                                                  <div className = "u_f_uploading_border"></div>
+                                                  <div className = "u_f_upload_percentage">75%</div>
+                                                </>
+                                              }
+                                              {file.upload_status === "uploaded" && 
+                                                <>
+                                                  <div className = "u_f_upload_success_border"></div>
+                                                  <div className = "u_f_upload_percentage">100%</div>
+                                                </>
+                                              }
+                                              {file.size/1000000 > 10 &&
+                                                <>
+                                                  <div className = "u_f_size_exceed_border"></div>
+                                                  <div className = "u_f_size_exceed_close"><i class="fa fa-times" aria-hidden="true" style={{fontSize: "25px"}}></i></div>
+                                                  <div className="u_f_size_exceed_msg">Size excided</div>
+                                                </>
+                                              }
                                             </>
                                           ) : (
                                             <>
@@ -744,8 +761,25 @@ class UploadFiles extends Component {
                                                 src={file.file}
                                                 style={{ borderRadius: "9px" }}
                                               />
-                                              {file.upload_status === "selected" && <div className = "u_f_upload_success">100%</div>}
+                                              {file.upload_status === "uploading" && 
+                                                <>
+                                                  <div className = "u_f_uploading_border"></div>
+                                                  <div className = "u_f_upload_percentage">75%</div>
+                                                </>
+                                              }
+                                              {file.upload_status === "uploaded" && 
+                                                <>
+                                                  <div className = "u_f_upload_success_border"></div>
+                                                  <div className = "u_f_upload_percentage">100%</div>
+                                                </>
+                                              }
                                               {file.upload_status === "upload_failed" && <i class="fa fa-times-circle" aria-hidden="true" style = {{position: "absolute", top: "calc(50% - 50px)", left: "calc(50% - 50px)", color: "red", fontSize: "100px", opacity: "0.7"}}></i>}
+                                              {file.size/1000000 > 2 &&
+                                                <>
+                                                  <div className = "u_f_size_exceed_border"></div>
+                                                  <div className = "u_f_size_exceed_x">{file.size/1000000}<i class="fa-solid fa-xmark"></i></div>
+                                                </>
+                                              }
                                             </>
                                           )}
                                           <div
