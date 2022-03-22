@@ -14,8 +14,8 @@ import "./css/Pilot_downloads.css"
 import Heart from "./images/heart-green.png"
 import axios from "axios";
 
-
 const domain = process.env.REACT_APP_MY_API
+
 
 
 function mouseGotIN(id) {
@@ -32,7 +32,7 @@ function mouseGotOut(id) {
 }
 
 
-function Pilot_downloads3d() {
+function Pilot_likesImages() {
   let config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -40,7 +40,7 @@ function Pilot_downloads3d() {
   };
 let [media, setMedia] = useState([])
   useEffect(()=>{
-    axios.post(`http://localhost:9000/api/pilot/getDownloadedMedia`, config).then(res =>{
+    axios.post(`http://localhost:9000/api/pilot/getLikedMedia`, config).then(res =>{
       console.log(res.data)
       setMedia(res.data)
     })
@@ -52,7 +52,7 @@ let [media, setMedia] = useState([])
           {media.map((item, i) => {
             return (
               <>
-              { item.fileType === "3d" ?
+              { item.fileType === "image" ?
               
               <Col  xl={4} lg={6} md={4} sm={6} xs={12}>
 
@@ -67,7 +67,7 @@ let [media, setMedia] = useState([])
                       <img src={premiumIcon} className="pd_premiumBadge_star" />
                     </div>
                   </div>
-                  <div id={"pd_toshowDetails/" + i} style={{display: "none", backgroundColor : "#1AFFFFFF"}}>
+                  <div id={"pd_toshowDetails/" + i} style={{display: "none"}}>
                   <div className="pd_person_details">
                     <img src={person} /> <span className="pd_personName">{item.name}</span>
                   </div>
@@ -95,4 +95,4 @@ let [media, setMedia] = useState([])
   );
 }
 
-export default Pilot_downloads3d;
+export default Pilot_likesImages;

@@ -6,8 +6,8 @@ import All from "../../website/All.module.css";
 
 function Pilot_nav() {
   let [active, setActive] = useState({
-    link1: true,
-    link2: false,
+    link1: false,
+    link2: true,
   });
   let history = useHistory();
 
