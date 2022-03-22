@@ -458,14 +458,14 @@ class UploadFiles extends Component {
       
             data.append("file", currentFile.row)
             data.append("postName", currentFile.custom_name)
-            if (currentFile.type[0] === "v"){
+            if (currentFile.select_type[0] === "v"){
               data.append("fileType", "video")
             }
-            else if (currentFile.type[0] === "i"){
+            else if (currentFile.select_type[0] === "i"){
               data.append("fileType", "image")
             }
             else{
-              data.append("fileType", currentFile.type)
+              data.append("fileType", currentFile.select_type)
             }
             data.append("experience", currentFile.experience)
             data.append("keywords", currentFile.keywords)
@@ -762,7 +762,7 @@ class UploadFiles extends Component {
                                                 <>
                                                   <div className = "u_f_size_exceed_border"></div>
                                                   <div className = "u_f_size_exceed_close"><i class="fa fa-times" aria-hidden="true" style={{fontSize: "25px"}}></i></div>
-                                                  <div className="u_f_size_exceed_msg">Size excided</div>
+                                                  <div className="u_f_size_exceed_msg">Size exceeded</div>
                                                 </>
                                               }
                                             </>
@@ -954,7 +954,7 @@ class UploadFiles extends Component {
                             className={
                               this.state.selected_files_details[
                                 this.state.file_edit
-                              ].select_type == "3D_image"
+                              ].select_type === "3D_image"
                                 ? "u_f_file_type u_f_file_usage_selected"
                                 : "u_f_file_type"
                             }

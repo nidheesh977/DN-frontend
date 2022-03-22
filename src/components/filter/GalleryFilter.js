@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import $ from "jquery";
 import SearchResults from "react-filter-search";
 import nofoundresult from "../images/noresultfound.svg";
-import Like from "../Like";
+// import Like from "../Like";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import LanguageIcon from "@material-ui/icons/Language";
@@ -28,7 +28,6 @@ import "../css/GaleryFilter.css"
 import DropDownPng from '../images/s_c_dropdown2.png'
 import { Dropdown } from "materialize-css";
 
-const API_URL = "https://demo-nexevo.in/haj/auth-app/public/api/auth";
 
 function handleClick() {
   var v = document.getElementById("FilterDropdowns");
@@ -69,21 +68,21 @@ function clickHandler(el) {
   mainVideo.src = el.srcElement.currentSrc;
 }
 
+const domain = process.env.REACT_APP_MY_API;
+
 class GalleryFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       userlogin: "",
-      listing: [{"id":125,"user_id":17,"author":"Nidheesh","title":"tryjutryutryu","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1645192329.png"},{"id":124,"user_id":17,"author":"Nidheesh","title":"dfgsdfg","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640332697.jpg"},{"id":123,"user_id":1,"author":"Haj Mohamed","title":"ggggdddh","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640266992.jpg"},{"id":122,"user_id":1,"author":"Haj Mohamed","title":"Strawberry","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172407.mp4"},{"id":121,"user_id":17,"author":"Nidheesh","title":"test","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172334.mp4"},{"id":120,"user_id":1,"author":"Haj Mohamed","title":"Test Video","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172299.mp4"},{"id":119,"user_id":1,"author":"Haj Mohamed","title":"Test Image","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640171670.png"},{"id":118,"user_id":17,"author":"Nidheesh","title":"sdfas","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640167498.jpg"},{"id":117,"user_id":17,"author":"Nidheesh","title":"testttt","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640077412.jpg"},{"id":116,"user_id":17,"author":"Nidheesh","title":"sdfvdf","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063729.jfif"},{"id":115,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063673.jpg"},{"id":113,"user_id":17,"author":"Nidheesh","title":"sdfgdfg","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639719698.mp4"},{"id":112,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639662056.jpeg"},{"id":88,"user_id":17,"author":"Nidheesh","title":"test","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1638876500.mp4"},{"id":87,"user_id":17,"author":"Nidheesh","title":"ddddt","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639641791.jpeg"},{"id":86,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640062701.jpeg"},{"id":84,"user_id":14,"author":"Ajith Karu","title":"Dummy","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1627899071.png"},{"id":83,"user_id":14,"author":"Ajith Karu","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1626174083.png"},{"id":61,"user_id":17,"author":"Nidheesh","title":"asdasd","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063030.jpg"},{"id":60,"user_id":1,"author":"Haj Mohamed","title":"asdasd","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1618899801.png", "id":125,"user_id":17,"author":"Nidheesh","title":"tryjutryutryu","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1645192329.png"},{"id":124,"user_id":17,"author":"Nidheesh","title":"dfgsdfg","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640332697.jpg"},{"id":123,"user_id":1,"author":"Haj Mohamed","title":"ggggdddh","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640266992.jpg"},{"id":122,"user_id":1,"author":"Haj Mohamed","title":"Strawberry","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172407.mp4"},{"id":121,"user_id":17,"author":"Nidheesh","title":"test","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172334.mp4"},{"id":120,"user_id":1,"author":"Haj Mohamed","title":"Test Video","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172299.mp4"},{"id":119,"user_id":1,"author":"Haj Mohamed","title":"Test Image","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640171670.png"},{"id":118,"user_id":17,"author":"Nidheesh","title":"sdfas","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640167498.jpg"},{"id":117,"user_id":17,"author":"Nidheesh","title":"testttt","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640077412.jpg"},{"id":116,"user_id":17,"author":"Nidheesh","title":"sdfvdf","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063729.jfif"},{"id":115,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063673.jpg"},{"id":113,"user_id":17,"author":"Nidheesh","title":"sdfgdfg","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639719698.mp4"},{"id":112,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639662056.jpeg"},{"id":88,"user_id":17,"author":"Nidheesh","title":"test","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1638876500.mp4"},{"id":87,"user_id":17,"author":"Nidheesh","title":"ddddt","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639641791.jpeg"},{"id":86,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640062701.jpeg"},{"id":84,"user_id":14,"author":"Ajith Karu","title":"Dummy","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1627899071.png"},{"id":83,"user_id":14,"author":"Ajith Karu","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1626174083.png"},{"id":61,"user_id":17,"author":"Nidheesh","title":"asdasd","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063030.jpg"},{"id":60,"user_id":1,"author":"Haj Mohamed","title":"asdasd","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1618899801.png", "id":125,"user_id":17,"author":"Nidheesh","title":"tryjutryutryu","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1645192329.png"},{"id":124,"user_id":17,"author":"Nidheesh","title":"dfgsdfg","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640332697.jpg"},{"id":123,"user_id":1,"author":"Haj Mohamed","title":"ggggdddh","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640266992.jpg"},{"id":122,"user_id":1,"author":"Haj Mohamed","title":"Strawberry","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172407.mp4"},{"id":121,"user_id":17,"author":"Nidheesh","title":"test","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172334.mp4"},{"id":120,"user_id":1,"author":"Haj Mohamed","title":"Test Video","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172299.mp4"},{"id":119,"user_id":1,"author":"Haj Mohamed","title":"Test Image","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640171670.png"},{"id":118,"user_id":17,"author":"Nidheesh","title":"sdfas","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640167498.jpg"},{"id":117,"user_id":17,"author":"Nidheesh","title":"testttt","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640077412.jpg"},{"id":116,"user_id":17,"author":"Nidheesh","title":"sdfvdf","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063729.jfif"},{"id":115,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063673.jpg"},{"id":113,"user_id":17,"author":"Nidheesh","title":"sdfgdfg","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639719698.mp4"},{"id":112,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639662056.jpeg"},{"id":88,"user_id":17,"author":"Nidheesh","title":"test","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1638876500.mp4"},{"id":87,"user_id":17,"author":"Nidheesh","title":"ddddt","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639641791.jpeg"},{"id":86,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640062701.jpeg"},{"id":84,"user_id":14,"author":"Ajith Karu","title":"Dummy","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1627899071.png"},{"id":83,"user_id":14,"author":"Ajith Karu","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1626174083.png"},{"id":61,"user_id":17,"author":"Nidheesh","title":"asdasd","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063030.jpg"},{"id":60,"user_id":1,"author":"Haj Mohamed","title":"asdasd","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1618899801.png", "id":125,"user_id":17,"author":"Nidheesh","title":"tryjutryutryu","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1645192329.png"},{"id":124,"user_id":17,"author":"Nidheesh","title":"dfgsdfg","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640332697.jpg"},{"id":123,"user_id":1,"author":"Haj Mohamed","title":"ggggdddh","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640266992.jpg"},{"id":122,"user_id":1,"author":"Haj Mohamed","title":"Strawberry","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172407.mp4"},{"id":121,"user_id":17,"author":"Nidheesh","title":"test","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172334.mp4"},{"id":120,"user_id":1,"author":"Haj Mohamed","title":"Test Video","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172299.mp4"},{"id":119,"user_id":1,"author":"Haj Mohamed","title":"Test Image","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640171670.png"},{"id":118,"user_id":17,"author":"Nidheesh","title":"sdfas","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640167498.jpg"},{"id":117,"user_id":17,"author":"Nidheesh","title":"testttt","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640077412.jpg"},{"id":116,"user_id":17,"author":"Nidheesh","title":"sdfvdf","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063729.jfif"},{"id":115,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063673.jpg"},{"id":113,"user_id":17,"author":"Nidheesh","title":"sdfgdfg","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639719698.mp4"},{"id":112,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639662056.jpeg"},{"id":88,"user_id":17,"author":"Nidheesh","title":"test","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1638876500.mp4"},{"id":87,"user_id":17,"author":"Nidheesh","title":"ddddt","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639641791.jpeg"},{"id":86,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640062701.jpeg"},{"id":84,"user_id":14,"author":"Ajith Karu","title":"Dummy","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1627899071.png"},{"id":83,"user_id":14,"author":"Ajith Karu","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1626174083.png"},{"id":61,"user_id":17,"author":"Nidheesh","title":"asdasd","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063030.jpg"},{"id":60,"user_id":1,"author":"Haj Mohamed","title":"asdasd","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1618899801.png", "id":125,"user_id":17,"author":"Nidheesh","title":"tryjutryutryu","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1645192329.png"},{"id":124,"user_id":17,"author":"Nidheesh","title":"dfgsdfg","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640332697.jpg"},{"id":123,"user_id":1,"author":"Haj Mohamed","title":"ggggdddh","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640266992.jpg"},{"id":122,"user_id":1,"author":"Haj Mohamed","title":"Strawberry","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172407.mp4"},{"id":121,"user_id":17,"author":"Nidheesh","title":"test","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172334.mp4"},{"id":120,"user_id":1,"author":"Haj Mohamed","title":"Test Video","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640172299.mp4"},{"id":119,"user_id":1,"author":"Haj Mohamed","title":"Test Image","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640171670.png"},{"id":118,"user_id":17,"author":"Nidheesh","title":"sdfas","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640167498.jpg"},{"id":117,"user_id":17,"author":"Nidheesh","title":"testttt","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640077412.jpg"},{"id":116,"user_id":17,"author":"Nidheesh","title":"sdfvdf","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063729.jfif"},{"id":115,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063673.jpg"},{"id":113,"user_id":17,"author":"Nidheesh","title":"sdfgdfg","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639719698.mp4"},{"id":112,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639662056.jpeg"},{"id":88,"user_id":17,"author":"Nidheesh","title":"test","tag":"3","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1638876500.mp4"},{"id":87,"user_id":17,"author":"Nidheesh","title":"ddddt","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1639641791.jpeg"},{"id":86,"user_id":17,"author":"Nidheesh","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640062701.jpeg"},{"id":84,"user_id":14,"author":"Ajith Karu","title":"Dummy","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1627899071.png"},{"id":83,"user_id":14,"author":"Ajith Karu","title":"test","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1626174083.png"},{"id":61,"user_id":17,"author":"Nidheesh","title":"asdasd","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1640063030.jpg"},{"id":60,"user_id":1,"author":"Haj Mohamed","title":"asdasd","tag":"1","src":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/files\/file1618899801.png"}],
-      listing_length: 20,
-      posttitle: [{"id":60,"caption":"asdasd"},{"id":87,"caption":"ddddt"},{"id":124,"caption":"dfgsdfg"},{"id":84,"caption":"Dummy"},{"id":123,"caption":"ggggdddh"},{"id":118,"caption":"sdfas"},{"id":113,"caption":"sdfgdfg"},{"id":116,"caption":"sdfvdf"},{"id":122,"caption":"Strawberry"},{"id":83,"caption":"test"},{"id":119,"caption":"Test Image"},{"id":120,"caption":"Test Video"},{"id":117,"caption":"testttt"},{"id":125,"caption":"tryjutryutryu"}],
+      listing: [],
       visible: 10,
       valuees: 0,
       users: "",
       usersid: "",
       all_id: "1",
       value: "",
-      loading: false,
+      loading: true,
       userId: props.user,
       images: "1",
       categoriesImage: "1",
@@ -94,27 +93,22 @@ class GalleryFilter extends React.Component {
       error: false,
       links: [
         {
-          id: 5,
+          id: "all",
           name: "All",
           className: "GalleryFilter",
         },
         {
-          id: 1,
+          id: "image",
           name: "Images",
           className: "GalleryFilter",
         },
-        // {
-        //   id: 2,
-        //   name: "360 Images",
-        //   className: "GalleryFilter",
-        // },
         {
-          id: 3,
+          id: "video",
           name: "Video",
           className: "GalleryFilter",
         },
         {
-          id: 4,
+          id: "3d",
           name: "3D images",
           className: "GalleryFilter",
         },
@@ -122,25 +116,8 @@ class GalleryFilter extends React.Component {
 
       times: ["Today", "Week", "Month", "Ever"],
 
-      keywords: [
-        {
-          key: 1,
-          type: "Images",
-        },
-        {
-          key: 2,
-          type: "360 Images",
-        },
-        {
-          key: 3,
-          type: "Videos",
-        },
-        {
-          key: 4,
-          type: "3D Images",
-        },
-      ],
-      activeLink: 5,
+      
+      activeLink: "all",
     };
     this.loadMore = this.loadMore.bind(this);
     this.handleChanges = this.handleChanges.bind(this);
@@ -186,15 +163,6 @@ class GalleryFilter extends React.Component {
   handleChangesTimeframe = (event) => {
     let type = $("#type").val();
     let timeframe = $("#timeframe").val();
-
-
-
-    let keywords = $("#keywords").val();
-    const config2 = {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("access_token"),
-      },
-    };
 
     // axios
     //   .post(
@@ -312,6 +280,24 @@ class GalleryFilter extends React.Component {
     window.addEventListener('scroll', this.handleScroll);
     const token = localStorage.getItem("access_token");
     this.setState({ userlogin: token });
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    axios.get(`${domain}/api/image/getImages`, config)
+    .then(res => {
+      console.log(res.data)
+      this.setState({
+        listing: res.data,
+        loading: false
+      })
+    })
+    .catch(err => {
+      this.setState({
+        loading: false
+      })
+    })
   }
 
   dropdown_open = (id) => {
@@ -526,7 +512,7 @@ class GalleryFilter extends React.Component {
                 ) : (
                   <>
                     <div>
-                      {listing_length == 0 ? (
+                      {listing.length === 0 ? (
                         <div style={{ margin: "0px auto", display: "block" }}>
                           <Box className={All.Text_center} pt={5}>
                             <img
@@ -561,8 +547,64 @@ class GalleryFilter extends React.Component {
                                     {results
                                       .slice(0, this.state.visible)
                                       .map((user, index) => (
+                                        <>
+                                        {/* { */}
                                         <li key={index} onMouseOver={() => this.mouseOverFilter(index)} onMouseLeave={() => this.mouseLeaveFilter(index)}>
-                                          {user.tag === "1" ? (
+                                          {user.fileType === "video" ? (
+                                            <div>
+                                            <figure>
+                                              <Link
+                                                to={{
+                                                  pathname: `Imageview/${user._id}/${user.userId}`,
+                                                  data: user,
+                                                  state: { foo: "bar" },
+                                                }}
+                                                onClick={this.clickMe.bind(
+                                                  this,
+                                                  user
+                                                )}
+                                              >
+                                                <div className="content-overlay-video"></div>
+                                                <video className="thumbnail GalleryImg">
+                                                  <source
+                                                    src={`${domain}/${user.file}`}
+                                                    type="video/mp4"
+                                                  />
+                                                </video>
+                                              </Link>
+                                              <figcaption id = {"file_details_"+index} className="file_figcaption">
+                                                <Link
+                                                  className={All.White}
+                                                  to={{
+                                                    pathname: `/pilot_details/6225df2f6abfb18582fc58c3`,
+                                                  }}
+                                                >
+                                                  <span className="FSize_14 Profile_icon">
+                                                    {user.name}{" "}
+                                                  </span>
+                                                </Link>
+                                                  <span className="LikeIcon MuliLight">
+                                                    {" "}
+                                                    <FormControlLabel
+                                                      className="MuliLight"
+                                                      control={
+                                                        <Checkbox
+                                                          icon={
+                                                            <FavoriteBorder />
+                                                          }
+                                                          checkedIcon={
+                                                            <Favorite />
+                                                          }
+                                                          name="checkedH"
+                                                        />
+                                                      }
+                                                      label={user.like}
+                                                    />
+                                                  </span>
+                                              </figcaption>
+                                            </figure>
+                                          </div>
+                                          ): user.fileType === "image" || user.fileType === "3d" ?(
                                             <div>
                                               <figure>
                                                 <Link
@@ -577,10 +619,7 @@ class GalleryFilter extends React.Component {
                                                   )}
                                                 >
                                                   <div className="content-overlay"></div>
-                                                  <img
-                                                    className="GalleryImg"
-                                                    src={user.src}
-                                                  />
+                                                  <img className="thumbnail GalleryImg" src={`${domain}/${user.file}`}/>
                                                 </Link>
                                                 <figcaption id = {"file_details_"+index} className="file_figcaption">
                                                   {user.user_id ==
@@ -596,275 +635,39 @@ class GalleryFilter extends React.Component {
                                                     <Link
                                                       className={All.White}
                                                       to={{
-                                                        pathname: `/pilot_details/6225df2f6abfb18582fc58c3`,
+                                                        pathname: `/pilot_details/${user.userId}`,
                                                       }}
                                                     >
                                                       <span className="FSize_14 Profile_icon">
-                                                        {user.author} {" "}
+                                                        {user.name} {" "}
                                                       </span>
                                                     </Link>
                                                   )}
-                                                  {this.state.userlogin ? (
-                                                    // <span className="LikeIcon MuliLight"> <FormControlLabel className="MuliLight" control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedH" />} label={user.like} /></span>
-                                                    <span className="LikeIcon  MuliLight">
-                                                      <Like id={user.id} />{" "}
-                                                    </span>
-                                                  ) : (
-                                                    <Link to="/login">
-                                                      <span className="LikeIcon MuliLight">
-                                                        {" "}
-                                                        <FormControlLabel
-                                                          className="MuliLight"
-                                                          control={
-                                                            <Checkbox
-                                                              icon={
-                                                                <FavoriteBorder />
-                                                              }
-                                                              checkedIcon={
-                                                                <Favorite />
-                                                              }
-                                                              name="checkedH"
-                                                            />
+                                                  <span className="LikeIcon MuliLight">
+                                                    {" "}
+                                                    <FormControlLabel
+                                                      className="MuliLight"
+                                                      control={
+                                                        <Checkbox
+                                                          icon={
+                                                            <FavoriteBorder />
                                                           }
-                                                          label={user.like}
-                                                        />
-                                                      </span>
-                                                    </Link>
-                                                  )}
-                                                </figcaption>
-                                              </figure>
-                                            </div>
-                                          ) : user.tag === "2" ? (
-                                            <div>
-                                              <figure>
-                                                <Link
-                                                  to={{
-                                                    pathname: `/Imageview/${user.id}/${user.user_id}`,
-                                                    data: user,
-                                                    state: { foo: "bar" },
-                                                  }}
-                                                  onClick={this.clickMe.bind(
-                                                    this,
-                                                    user
-                                                  )}
-                                                >
-                                                  <div className="content-overlay"></div>
-                                                  <img
-                                                    className="GalleryImg"
-                                                    src={user.src}
-                                                  />
-                                                </Link>
-                                                <figcaption id = {"file_details_"+index} className="file_figcaption">
-                                                  {user.user_id ==
-                                                    this.state.usersid ? (
-                                                    <Link
-                                                      className={All.White}
-                                                      to={{
-                                                        pathname: `/Profile/`,
-                                                      }}
-                                                    >
-                                                      <span className="FSize_14 Profile_icon">
-                                                        {user.author}{" "}
-                                                      </span>
-                                                    </Link>
-                                                  ) : (
-                                                    <Link
-                                                      className={All.White}
-                                                      to={{
-                                                        pathname: `/pilot_details/6225df2f6abfb18582fc58c3`,
-                                                      }}
-                                                    >
-                                                      <span className="FSize_14 Profile_icon">
-                                                        {user.author}{" "}
-                                                      </span>
-                                                    </Link>
-                                                  )}
-                                                  {this.state.userlogin ? (
-                                                    // <span className="LikeIcon MuliLight"> <FormControlLabel className="MuliLight" control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedH" />} label={user.like} /></span>
-                                                    <span className="LikeIcon  MuliLight">
-                                                      <Like id={user.id} />{" "}
-                                                    </span>
-                                                  ) : (
-                                                    <Link to="/login">
-                                                      <span className="LikeIcon MuliLight">
-                                                        {" "}
-                                                        <FormControlLabel
-                                                          className="MuliLight"
-                                                          control={
-                                                            <Checkbox
-                                                              icon={
-                                                                <FavoriteBorder />
-                                                              }
-                                                              checkedIcon={
-                                                                <Favorite />
-                                                              }
-                                                              name="checkedH"
-                                                            />
+                                                          checkedIcon={
+                                                            <Favorite />
                                                           }
-                                                          label={user.like}
+                                                          name="checkedH"
                                                         />
-                                                      </span>
-                                                    </Link>
-                                                  )}
-                                                </figcaption>
-                                              </figure>
-                                            </div>
-                                          ) : user.tag === "3" ? (
-                                            <div>
-                                              <figure>
-                                                <Link
-                                                  to={{
-                                                    pathname: `Imageview/${user.id}/${user.user_id}`,
-                                                    data: user,
-                                                    state: { foo: "bar" },
-                                                  }}
-                                                  onClick={this.clickMe.bind(
-                                                    this,
-                                                    user
-                                                  )}
-                                                >
-                                                  <div className="content-overlay-video"></div>
-
-                                                  <video className="thumbnail GalleryImg">
-                                                    <source
-                                                      src={user.src}
-                                                      type="video/mp4"
+                                                      }
+                                                      label={user.like}
                                                     />
-                                                  </video>
-                                                </Link>
-                                                <figcaption id = {"file_details_"+index} className="file_figcaption">
-                                                  {user.user_id ==
-                                                    this.state.usersid ? (
-                                                    <Link
-                                                      className={All.White}
-                                                      to={{
-                                                        pathname: `/Profile/`,
-                                                      }}
-                                                    >
-                                                      <span className="FSize_14 Profile_icon">
-                                                        {user.author}{" "}
-                                                      </span>
-                                                    </Link>
-                                                  ) : (
-                                                    <Link
-                                                      className={All.White}
-                                                      to={{
-                                                        pathname: `/pilot_details/6225df2f6abfb18582fc58c3`,
-                                                      }}
-                                                    >
-                                                      <span className="FSize_14 Profile_icon">
-                                                        {user.author}{" "}
-                                                      </span>
-                                                    </Link>
-                                                  )}
-                                                  {this.state.userlogin ? (
-                                                    //  <span className="LikeIcon MuliLight"> <FormControlLabel className="MuliLight" control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedH" />} label={user.like} /></span>
-                                                    <span className="LikeIcon  MuliLight">
-                                                      <Like id={user.id} />{" "}
-                                                    </span>
-                                                  ) : (
-                                                    <Link to="/login">
-                                                      <span className="LikeIcon MuliLight">
-                                                        {" "}
-                                                        <FormControlLabel
-                                                          className="MuliLight"
-                                                          control={
-                                                            <Checkbox
-                                                              icon={
-                                                                <FavoriteBorder />
-                                                              }
-                                                              checkedIcon={
-                                                                <Favorite />
-                                                              }
-                                                              name="checkedH"
-                                                            />
-                                                          }
-                                                          label={user.like}
-                                                        />
-                                                      </span>
-                                                    </Link>
-                                                  )}
+                                                  </span>
                                                 </figcaption>
                                               </figure>
                                             </div>
-                                          ) : user.tag === "4" ? (
-                                            <div>
-                                              <figure>
-                                                <Link
-                                                  to={{
-                                                    pathname: `Imageview/${user.id}/${user.user_id}`,
-                                                    data: user,
-                                                    state: { foo: "bar" },
-                                                  }}
-                                                  onClick={this.clickMe.bind(
-                                                    this,
-                                                    user
-                                                  )}
-                                                >
-                                                  <div className="content-overlay"></div>
-                                                  <img
-                                                    className="GalleryImg"
-                                                    src={user.src}
-                                                  />
-                                                </Link>
-                                                <figcaption id = {"file_details_"+index} className="file_figcaption">
-                                                  {user.user_id ==
-                                                    this.state.usersid ? (
-                                                    <Link
-                                                      className={All.White}
-                                                      to={{
-                                                        pathname: `/Profile/`,
-                                                      }}
-                                                    >
-                                                      <span className="FSize_14 Profile_icon">
-                                                        {user.author}{" "}
-                                                      </span>
-                                                    </Link>
-                                                  ) : (
-                                                    <Link
-                                                      className={All.White}
-                                                      to={{
-                                                        pathname: `/pilot_details/6225df2f6abfb18582fc58c3`,
-                                                      }}
-                                                    >
-                                                      <span className="FSize_14 Profile_icon">
-                                                        {user.author}{" "}
-                                                      </span>
-                                                    </Link>
-                                                  )}
-                                                  {this.state.userlogin ? (
-                                                    <span className="LikeIcon  MuliLight">
-                                                      <Like id={user.id} />{" "}
-                                                    </span>
-                                                  ) : (
-                                                    <Link to="/login">
-                                                      <span className="LikeIcon MuliLight">
-                                                        {" "}
-                                                        <FormControlLabel
-                                                          className="MuliLight"
-                                                          control={
-                                                            <Checkbox
-                                                              icon={
-                                                                <FavoriteBorder />
-                                                              }
-                                                              checkedIcon={
-                                                                <Favorite />
-                                                              }
-                                                              name="checkedH"
-                                                            />
-                                                          }
-                                                          label={user.like}
-                                                        />
-                                                      </span>
-                                                    </Link>
-                                                  )}
-                                                </figcaption>
-                                              </figure>
-                                            </div>
-                                          ) : (
-                                            <div></div>
-                                          )}
+                                          ): <></>}
                                         </li>
+                                        </>
+                                                    // }
                                       ))}
                                   </>
                                 </ul>
