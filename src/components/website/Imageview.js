@@ -1,1185 +1,150 @@
-import React, { Component } from "react";
-import "../filter/Filter.css";
-import { Container, Row, Col, Hidden } from "react-grid-system";
-import { Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
+import React, { useEffect , useState} from "react";
+import { Container, Row, Col } from "react-grid-system";
 import All from "../website/All.module.css";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import "react-responsive-modal/styles.css";
-import Hirebtn from "../images/hirebtn.svg";
-import { Helmet } from "react-helmet";
-import swal from "sweetalert";
-import Skeleton from "react-loading-skeleton";
+import "./Imageview.css";
+import Like from "../images/heart (3).svg"
+import Heart from "../images/heart-blue.svg"
+import Share from "../images/share.png"
+import { saveAs } from 'file-saver'
 import axios from "axios";
-import CommentBox from "../CommentBox";
-import { Player } from "video-react";
-import { userService } from "../_services/user.service";
-import Dialog from "@material-ui/core/Dialog";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import MuiDialogContent from "@material-ui/core/DialogContent";
-import MuiDialogActions from "@material-ui/core/DialogActions";
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import Close from "../images/close.svg";
-import Favorite from "@material-ui/icons/Favorite";
-import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
-import sharePNG from "../images/share.png";
-import userIcon from "../images/user_image.png";
-import "../css/ImageView.css";
-import {
-  EmailShareButton,
-  FacebookShareButton,
-  LineShareButton,
-  LinkedinShareButton,
-  PinterestShareButton,
-  RedditShareButton,
-  TelegramShareButton,
-  TwitterShareButton,
-  ViberShareButton,
-  VKShareButton,
-  WhatsappShareButton,
-} from "react-share";
-import {
-  EmailIcon,
-  FacebookIcon,
-  LineIcon,
-  LinkedinIcon,
-  PinterestIcon,
-  RedditIcon,
-  TelegramIcon,
-  TwitterIcon,
-  ViberIcon,
-  VKIcon,
-  WhatsappIcon,
-} from "react-share";
+import {useParams, useHistory, Link} from "react-router-dom"
 
-const API_URL = "https://demo-nexevo.in/haj/auth-app/public/api/auth";
+function Imageview() {
+  let param = useParams();
+  let history = useHistory()
+  let [image, setImage] = useState([])
+  let [otherImages, setOtherImages] = useState([])
+  let[likedData, setLikedData] = useState([])
+  useEffect(()=>{
+    axios.get(`http://localhost:9000/api/image/getImage/${param.id}`).then(res=>{
+console.log(res) 
+setImage(res.data[0])   })
+  }, [])
+  useEffect(()=>{
+    axios.get(`http://localhost:9000/api/image/getUserImages/${param.user_id}`).then(res=>{
+console.log(res.data.slice(0,5)) 
+setOtherImages(res.data.slice(0,5))
+  })
+  }, [])
+  useEffect(()=>{
+    axios.post(`http://localhost:9000/api/user/checkUser`, config).then(res=>{
+      console.log(res.data)
 
-const styles = (theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
-  },
-  closeButton: {
-    position: "absolute",
-    right: theme.spacing(4),
-    top: theme.spacing(2),
-    color: theme.palette.grey[500],
-  },
-});
+setLikedData(res.data.likedMedia)  })
+  }, [])
+  const downloadImage = (id) => {
+    saveAs(`http://localhost:9000/${image.file}`, `${image.file}`) 
+    axios.post(`http://localhost:9000/api/image/downloadImage/${id}`, config).then(res=>{
+      console.log(res.data)
+    })
 
-const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
+  }
+  let config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
+
+  let clicked = (id,userId) =>{
+    history.push(`/imageview/${id}/${userId}`)
+    window.location.reload();
+  }
+  let likeImage = () =>{
+    axios.post(`http://localhost:9000/api/image/likeImage/${image._id}`, config).then(res=>{
+      console.log(res.data)
+      axios.post(`http://localhost:9000/api/user/checkUser`, config).then(res=>{
+setLikedData(res.data.likedMedia)  })
+    })
+  }
+  let unlikeImage = () =>{
+    axios.post(`http://localhost:9000/api/image/unlikeImage/${image._id}`, config).then(res=>{
+      console.log(res.data)
+      axios.post(`http://localhost:9000/api/user/checkUser`, config).then(res=>{
+setLikedData(res.data.likedMedia)  })
+    })
+  }
   return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
-          {/* <CloseIcon className="test"/> */}
-          <img src={Close} />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  );
-});
+    <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
+      <Container>
+        <div style={{ marginTop: "35px" }}>
+          <div className="i_v_back">Back</div>
+          <button className="i_v_download" onClick={()=>downloadImage(image._id)}>Download</button>
+        </div>
 
-const DialogContent = withStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-}))(MuiDialogContent);
+        <img
+          style={{
+            width: "100%", height:"700px",
+            margin: "32px 0px 45px 0px",
+            borderRadius: "10px",
+          }} className="mainImage"
+          src={`http://localhost:9000/${image.file}`}
+        />
+        <div>
+          {
+            likedData.includes(image._id) ? <img src={Heart} className="likeImage"  onClick={unlikeImage} /> :<img src={Like} className="likeImage" onClick={likeImage} />
+          }
+            </div>
+        <div> <img src={Share} className="shareImage" /> </div>
 
-const DialogActions = withStyles((theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-  },
-}))(MuiDialogActions);
-
-export default class ViewJob extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: [],
-      user_id: "",
-      role_id: "",
-      favorite : false,
-      imageview: {
-        id: 87,
-        user_id: 17,
-        author: "Nidheesh",
-        sale: "forsale",
-        slug: "ddddt-87",
-        title: "ddddt",
-        price: null,
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem asperiores quibusdam, molestiae ipsam, doloremque ad consequatur quis delectus expedita quisquam corporis recusandae repellendus eius sequi accusantium, vitae ullam! Neque numquam nisi ab quis. Dolorem sequi atque saepe iste reprehenderit ea fugit excepturi necessitatibus tempore qui nulla, rerum distinctio! Esse, pariatur.",
-        comments: "true",
-        tag: "1",
-        src: "https://images.unsplash.com/photo-1454372182658-c712e4c5a1db?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8M3x8fGVufDB8fHx8&w=1000&q=80",
-        profile:
-          "https://demo-nexevo.in/haj/auth-app/public/uploads/profile/profile1643970630.png",
-      },
-      userid: "",
-      user_profile: "",
-      relatedposts: [
-        {
-          id: 61,
-          user_id: 17,
-          author: "Nidheesh",
-          title: "asdasd",
-          tag: "1",
-          src: "https://demo-nexevo.in/haj/auth-app/public/files/file1640063030.jpg",
-        },
-        {
-          id: 86,
-          user_id: 17,
-          author: "Nidheesh",
-          title: "test",
-          tag: "1",
-          src: "https://demo-nexevo.in/haj/auth-app/public/files/file1640062701.jpeg",
-        },
-        {
-          id: 87,
-          user_id: 17,
-          author: "Nidheesh",
-          title: "ddddt",
-          tag: "1",
-          src: "https://demo-nexevo.in/haj/auth-app/public/files/file1639641791.jpeg",
-        },
-        {
-          id: 61,
-          user_id: 17,
-          author: "Nidheesh",
-          title: "asdasd",
-          tag: "1",
-          src: "https://demo-nexevo.in/haj/auth-app/public/files/file1640063030.jpg",
-        },
-        {
-          id: 61,
-          user_id: 17,
-          author: "Nidheesh",
-          title: "asdasd",
-          tag: "1",
-          src: "https://demo-nexevo.in/haj/auth-app/public/files/file1640063030.jpg",
-        },
-        {
-          id: 87,
-          user_id: 17,
-          author: "Nidheesh",
-          title: "ddddt",
-          tag: "1",
-          src: "https://demo-nexevo.in/haj/auth-app/public/files/file1639641791.jpeg",
-        },
-        ,
-      ],
-      loading: false,
-      id: "",
-      post_id: "",
-      fieldVal: "",
-      comments: [],
-      visible: 10,
-      error: false,
-      open: false,
-      share: false,
-      startProcess: false,
-      selected_file: {},
-    };
-    this.loadMore = this.loadMore.bind(this);
-    this.addComment = this.addComment.bind(this);
-  }
-
-  loadMore() {
-    this.setState((prev) => {
-      return { visible: prev.visible + 8 };
-    });
-  }
-
-  favoriteChangeHandler = () => {
-    this.setState({
-      favorite: !this.state.favorite
-    })
-  }
-
-  download(event) {
-    // var image = this.state.imageview.src;
-    // swal({
-    //   title: "Are you sure?",
-    //   text: "Do you want to download this image",
-    //   icon: "warning",
-    //   buttons: true,
-    //   dangerMode: true,
-    // }).then((download) => {
-    //   if (download) {
-    //     const config = {
-    //       headers: {
-    //         Authorization: "Bearer " + localStorage.getItem("access_token"),
-    //       },
-    //     };
-    //     const url = `https://demo-nexevo.in/haj/auth-app/public/api/auth/freedownload/${event.id}?user_id=${this.state.user_id}`;
-    //     axios.post(url, config).then((response) => {
-    //       swal(response.data.message, {
-    //         icon: "success",
-    //       });
-    //     });
-    //   } else {
-    //     swal("Download cancelled");
-    //   }
-    // });
-    this.props.history.push("/DownloadSubscription");
-  }
-
-  handleClose = () => {
-    this.setState({
-      open: false,
-    });
-  };
-
-  componentDidMount() {
-    const id = this.props.match.params.id;
-    const user_id = this.props.match.params.user_id;
-
-    this.setState({
-      fieldVal: id,
-    });
-    const config = {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("access_token"),
-      },
-    };
-
-    userService.User().then(
-      (res) => {
-        this.setState({ user_id: res.data.id });
-        this.setState({ userid: res.data.id });
-        this.setState({ role_id: res.data.role_id });
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-
-    const url = `${API_URL}/singlelisting/${id}`;
-
-    axios
-      .get(url, config)
-      .then((res) => {
-        try {
-          this.setState({ imageview: res.data });
-          console.log(res.data);
-        } catch {}
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    const urls = `https://demo-nexevo.in/haj/auth-app/public/api/auth/relatedposts/${user_id}`;
-    axios
-      .get(urls, config)
-      .then((res) => res.data)
-      .then((data) => {
-        this.setState({ relatedposts: data });
-      });
-
-    this.setState({ loading: true });
-
-    axios
-      .post(
-        "https://demo-nexevo.in/haj/auth-app/public/api/auth/profilesingle",
-        {
-          user_id: user_id,
-        },
-        config
-      )
-      .then((res) => {
-        this.setState({
-          user_profile: res.data.profile,
-        });
-      });
-  }
-
-  addComment(comment) {
-    this.setState({
-      loading: false,
-      comments: [comment, ...this.state.comments],
-    });
-  }
-
-  other_post = (id, user_id) => {
-    this.props.history.push("/Imageview/" + id + "/" + user_id);
-  };
-
-  handleSubmit = (e) => {};
-
-  handleShareClose = () => {
-    this.setState({
-      share: false,
-    });
-  };
-
-  shareOpen = () => {
-    this.setState({
-      share: true,
-    });
-  };
-
-  closeProcess = () => {
-    this.setState({
-      startProcess: false
-    })
-    this.setState({
-      selected_file: {}
-    })
-  }
-
-  handleProcessFileChange = (e) => {
-    this.setState({
-      selected_file: e.target.files[0]
-    })
-  }
-
-  startProcess = () => {
-    this.setState({
-      startProcess: true
-    })
-  }
-
-  render() {
-    const { imageview, value } = this.state;
-    const { relatedposts, values } = this.state;
-    var user_profile = this.state.user_profile;
-    var other_post = this.other_post;
-    return (
-      <>
-        <Helmet>
-          <title>Image View</title>
-          <meta charSet="utf-8" />
-          <meta name="description" content="Nested component" />
-        </Helmet>
-        <section style={{ marginBottom: "20px" }}>
-          <Container className={All.Container}>
+        <Row gutterWidth={45}>
+          {/* left */}
+          <Col lg={8}>
             <Row>
-              <Col lg={12}>
-                <div className={All.Desktop_popup}>
-                  <Row className="i_l_title_btn_container">
-                    <Col sm={12} md={8}>
-                      <div className="i_l_img_title">
-                        {imageview.title || <Skeleton />}
-                      </div>
-                    </Col>
-                    <Col sm={6} md={4}>
-                      {this.state.userid == this.props.match.params.user_id ? (
-                        <> </>
-                      ) : (
-                        <div className="i_l_download_btn_container">
-                          {imageview.sale == "forsale" && (
-                            <button
-                              onClick={() => this.download(imageview)}
-                              className="i_l_download_btn"
-                            >
-                              Buy Now
-                            </button>
-                          )}
-                          {imageview.sale == "download" && (
-                            <button
-                              onClick={() => this.download(imageview)}
-                              className="i_l_download_btn"
-                            >
-                              Download
-                            </button>
-                          )}
-                        </div>
-                      )}
-                    </Col>
-                  </Row>
-
-                  <div
-                    className="slider_image"
-                    style={{ position: "relative" }}
-                  >
-                    {imageview.tag == "1" && (
-                      <>
-                        <span
-                          style={{
-                            position: "absolute",
-                            top: "30px",
-                            right: "30px",
-                            zIndex: 1000,
-                          }}
-                        >
-                          {this.state.favorite?<Favorite style = {{cursor: "pointer"}} onClick = {this.favoriteChangeHandler}/>:<FavoriteBorder style = {{cursor: "pointer"}} onClick = {this.favoriteChangeHandler}/>}
-                          <img
-                            src={sharePNG}
-                            style={{
-                              marginLeft: "30px",
-                              height: "24px",
-                              cursor: "pointer"
-                            }}
-                            onClick={this.shareOpen}
-                          />
-                        </span>
-                        <img
-                          className="GalleryImg"
-                          src={imageview.src}
-                          alt="image"
-                          style={{ height: "auto"}}
-                        />
-                      </>
-                    )}
-                    {imageview.tag == "2" && (
-                      <>
-                        <span
-                          style={{
-                            position: "absolute",
-                            top: "10px",
-                            right: "30px",
-                            zIndex: 1000,
-                          }}
-                        >
-                          <FavoriteBorder />
-                          <img
-                            src={sharePNG}
-                            style={{
-                              marginLeft: "30px",
-                            }}
-                            onClick={this.shareOpen}
-                          />
-                        </span>
-                        <img
-                          className="GalleryImg"
-                          src={imageview.src}
-                          alt="image"
-                        />
-                      </>
-                    )}
-                    {imageview.tag == "3" && (
-                      <>
-                        <span
-                          style={{
-                            position: "absolute",
-                            top: "10px",
-                            right: "30px",
-                            zIndex: 1000,
-                          }}
-                        >
-                          <FavoriteBorder />
-                          <img
-                            src={sharePNG}
-                            style={{
-                              marginLeft: "30px",
-                            }}
-                            onClick={this.shareOpen}
-                          />
-                        </span>
-                        <video
-                          src={imageview.src}
-                          controls
-                          className="GalleryImg"
-                        ></video>
-                      </>
-                    )}
-                    {imageview.tag == "4" && (
-                      <>
-                        <span
-                          style={{
-                            position: "absolute",
-                            top: "10px",
-                            right: "30px",
-                            zIndex: 1000,
-                          }}
-                        >
-                          <FavoriteBorder />
-                          <img
-                            src={sharePNG}
-                            style={{
-                              marginLeft: "30px",
-                            }}
-                            onClick={this.shareOpen}
-                          />
-                        </span>
-                        <img
-                          className="GalleryImg"
-                          src={imageview.src}
-                          alt="image"
-                        />
-                      </>
-                    )}
-                  </div>
-
-                  <Row className={`${All.Text_left} slideProfileDetail `}>
-                    <Col lg={9}>
-                      <Box className={`  ${All.Text_left}`}>
-                        <Box textAlign={"Left"}>
-                          <Link
-                            to={{
-                              pathname: `/pilot_details/1`,
-                            }}
-                          >
-                            <img
-                              class="alignleft"
-                              src={userIcon}
-                              alt="Image Sample 1"
-                              style={{
-                                display: "inline",
-                                float: "left",
-                                width: "75px",
-                                marginRight: "15px",
-                                height: "75px",
-                                borderRadius: "100px",
-                              }}
-                            />
-                          </Link>
-                        </Box>
-
-                        <Box pt={1}>
-                          <Link
-                            to={{
-                              pathname: `/pilot_details/1`,
-                            }}
-                          >
-                            <h5> {imageview.author || <Skeleton />}</h5>
-                          </Link>
-                          <Link
-                            to="/login"
-                          >
-                            <label
-                              className={`${All.paddingbottom} ${All.TextBlueColor}`}
-                              style = {{cursor: "pointer"}}
-                            >
-                              Follow
-                            </label>
-                          </Link>
-                        </Box>
-
-                        <Box className={All.JobDescription}>
-                          <label
-                            className={`${All.paddingtop} ${All.paddingbottom}`}
-                          >
-                            Hello Everyone,
-                          </label>
-                          <label className={All.paddingtop}>
-                            {" "}
-                            {imageview.description || <Skeleton />}
-                          </label>
-                          <label className={All.paddingtop}>
-                            Wanna create something great?
-                          </label>
-                          <Link>
-                            <label className={All.paddingtop}>
-                              Feel free contact us{" "}
-                              <span
-                                className={`${All.DarkBlue} ${All.FSize_16}`}
-                              >
-                                Info@nexevo.in
-                              </span>
-                            </label>
-                          </Link>
-                        </Box>
-                        {imageview.comments === "true" && (
-                          <CommentBox
-                            passedVal={this.state.fieldVal}
-                            userid={imageview.user_id}
-                            postid={this.state.post_id}
-                          />
-                        )}
-                        {/* <CommentForm addComment={this.addComment} />
-                                    <CommentList comments={this.state.comments} /> */}
-                      </Box>
-                    </Col>
-
-                    <Col lg={3}>
-                      <Box>
-                        <label className={`${All.Bold} ${All.paddingbottom_5}`}>
-                          Like What You See?
-                        </label>
-                        <label>This Droners is available for work</label>
-                      </Box>
-                      <Box pt={2} pb={5}>
-                          <Button
-                            className={All.BtnStyle_11}
-                            style={{ height: "40px" }}
-                            onClick = {this.startProcess}
-                          >
-                            {" "}
-                            <img style={{ paddingRight: 10 }} src={Hirebtn} />
-                            Hire This Droner
-                          </Button>
-                      </Box>
-                      <Box pb={2}>
-                        <label className={All.Bold}>
-                          More Shots from {imageview.author || <Skeleton />}
-                        </label>
-                      </Box>
-                      <Box style={{ marginBottom: "20px" }}>
-                        {relatedposts.map((option) => (
-                          <Link
-                            className={`${All.marginright_9}`}
-                            onClick={() => {
-                              other_post(option.id, option.user_id);
-                            }}
-                          >
-                            {option.tag == "1" && (
-                              <img
-                                src={
-                                  option.src || (
-                                    <Skeleton width={150} height={109} />
-                                  )
-                                }
-                                className="more_shots"
-                              />
-                            )}
-                            {option.tag == "2" && (
-                              <img
-                                src={
-                                  option.src || (
-                                    <Skeleton width={150} height={109} />
-                                  )
-                                }
-                                style={{
-                                  width: " 120px",
-                                  height: "109px",
-                                  borderRadius: "10px",
-                                  marginBottom: "10px",
-                                }}
-                              />
-                            )}
-                            {option.tag == "3" && (
-                              <video
-                                style={{
-                                  width: "120px",
-                                  height: "109px",
-                                  borderRadius: "10px",
-                                  marginBottom: "10px",
-                                }}
-                              >
-                                <source src={option.src} type="video/mp4" />
-                              </video>
-                            )}
-                            {option.tag == "4" && (
-                              <img
-                                src={
-                                  option.src || (
-                                    <Skeleton width={150} height={109} />
-                                  )
-                                }
-                                style={{
-                                  width: " 120px",
-                                  height: "109px",
-                                  borderRadius: "10px",
-                                  marginBottom: "10px",
-                                }}
-                              />
-                            )}
-                          </Link>
-                        ))}
-                      </Box>
-                    </Col>
-                  </Row>
-                </div>
-                <div className={All.Mobile_popup}>
-                  <Row className="i_l_title_btn_container">
-                    <Col xs={6} sm={8} md={8}>
-                      <div className="i_l_img_title">
-                        {imageview.title || <Skeleton />}
-                      </div>
-                    </Col>
-                    <Col xs={6} sm={4} md={4}>
-                      {this.state.userid == this.props.match.params.user_id ? (
-                        <> </>
-                      ) : (
-                        <div className="i_l_download_btn_container">
-                          {imageview.sale == "forsale" && (
-                            <button
-                              onClick={() => this.download(imageview)}
-                              className="i_l_download_btn"
-                            >
-                              Buy Now
-                            </button>
-                          )}
-                          {imageview.sale == "download" && (
-                            <button
-                              onClick={() => this.download(imageview)}
-                              className="i_l_download_btn"
-                            >
-                              Download
-                            </button>
-                          )}
-                        </div>
-                      )}
-                    </Col>
-                  </Row>
-                  <div
-                    className="slider_image"
-                    style={{ position: "relative" }}
-                  >
-                    {imageview.tag == "1" && (
-                      <>
-                        <span
-                          style={{
-                            position: "absolute",
-                            top: "30px",
-                            right: "30px",
-                            zIndex: 1000,
-                          }}
-                        >
-                          <FavoriteBorder style = {{cursor: "pointer"}}/>
-                          <img
-                            src={sharePNG}
-                            style={{
-                              marginLeft: "30px",
-                              height: "24px",
-                              cursor: "pointer"
-                            }}
-                            onClick={this.shareOpen}
-                          />
-                        </span>
-                        <img
-                          className="GalleryImg"
-                          src={imageview.src}
-                          alt="image"
-                          style={{ height: "auto"}}
-                        />
-                      </>
-                    )}
-
-                    {imageview.tag == "2" && (
-                      <img
-                        className="GalleryImg"
-                        src={imageview.src}
-                        alt="image"
-                      />
-                    )}
-
-                    {imageview.tag == "3" && (
-                      <video
-                        src={imageview.src}
-                        controls
-                        className="GalleryImg"
-                      ></video>
-                    )}
-
-                    {imageview.tag == "4" && (
-                      <img
-                        className="GalleryImg"
-                        src={imageview.src}
-                        alt="image"
-                      />
-                    )}
-                  </div>
-                  <Row className={`${All.Text_left} slideProfileDetail `}>
-                    <Col
-                      lg={9}
-                      // className={`${All.Order_sm_2} ${All.Order_xs_2} ${All.Order_md_2}`}
-                    >
-                      <Box className={`${All.Text_left}`}>
-                        <Box textAlign={"Left"}>
-                          <img
-                            class="alignleft"
-                            src={userIcon}
-                            alt="Image Sample 1"
-                            style={{
-                              display: "inline",
-                              float: "left",
-                              width: "75px",
-                              marginRight: "15px",
-                              height: "75px",
-                              borderRadius: "100px",
-                            }}
-                          />
-                        </Box>
-
-                        <Box pt={1}>
-                          <Link to="/profile">
-                            <h5 className={All.Bold}>
-                              {imageview.author || <Skeleton />}
-                            </h5>
-                          </Link>
-                          <label
-                            className={`${All.paddingbottom} ${All.TextBlueColor}`}
-                          >
-                            Follow
-                          </label>
-                        </Box>
-
-                        <Box className={All.JobDescription}>
-                          <label
-                            className={`${All.paddingtop} ${All.paddingbottom}`}
-                          >
-                            Hello Everyone,
-                          </label>
-                          <label className={All.paddingtop}>
-                            {imageview.description || <Skeleton />}
-                          </label>
-                          <label className={All.paddingtop}>
-                            Wanna create something great?
-                          </label>
-                          <Link to="">
-                            <label className={All.paddingtop}>
-                              Feel free contact us{" "}
-                              <span
-                                className={`${All.DarkBlue} ${All.FSize_16}`}
-                              >
-                                Info@nexevo.in
-                              </span>
-                            </label>
-                          </Link>
-                        </Box>
-                        <Hidden md sm xs>
-                          {imageview.comments === "true" && (
-                            <CommentBox
-                              passedVal={this.state.fieldVal}
-                              userid={imageview.user_id}
-                              postid={this.state.post_id}
-                            />
-                          )}
-                        </Hidden>
-                      </Box>
-                    </Col>
-
-                    <Col lg={3}>
-                      <Box>
-                        <label
-                          className={`${All.Bold} ${All.paddingbottom_5} i_l_hire_title`}
-                        >
-                          Like What You See?
-                        </label>
-                        <label>This Droners is available for work</label>
-                      </Box>
-                      <Box pt={2}>
-                        <Link>
-                          <Button
-                            className={All.BtnStyle_11}
-                            style={{ height: "40px", marginBottom: "10px" }}
-                            onClick = {this.startProcess}
-                          >
-                            {" "}
-                            <img style={{ paddingRight: 10 }} src={Hirebtn} />
-                            Hire This Droner
-                          </Button>
-                        </Link>
-                      </Box>
-                      
-                      <Box pb={2} mt = {2}>
-                        <label className={All.Bold}>
-                          More Shots from {imageview.author || <Skeleton />}
-                        </label>
-                      </Box>
-                      <Box style={{ marginBottom: "20px" }}>
-                        {relatedposts.map((option) => (
-                          <Link
-                            className={`${All.marginright_9} ${All.RecentImg}`}
-                            onClick={() => {
-                              other_post(option.id, option.user_id);
-                            }}
-                          >
-                            {option.tag == "1" && (
-                              <img
-                                src={
-                                  option.src || (
-                                    <Skeleton width={150} height={109} />
-                                  )
-                                }
-                                style={{
-                                  width: " 120px",
-                                  height: "109px",
-                                  borderRadius: "10px",
-                                  marginBottom: "10px",
-                                }}
-                              />
-                            )}
-                            {option.tag == "2" && (
-                              <img
-                                src={
-                                  option.src || (
-                                    <Skeleton width={150} height={109} />
-                                  )
-                                }
-                                style={{
-                                  width: " 120px",
-                                  height: "109px",
-                                  borderRadius: "10px",
-                                  marginBottom: "10px",
-                                }}
-                              />
-                            )}
-                            {option.tag == "3" && (
-                              <video
-                                style={{
-                                  width: "120px",
-                                  height: "109px",
-                                  borderRadius: "10px",
-                                  marginBottom: "10px",
-                                }}
-                              >
-                                <source src={option.src} type="video/mp4" />
-                              </video>
-                            )}
-                            {option.tag == "4" && (
-                              <img
-                                src={
-                                  option.src || (
-                                    <Skeleton width={150} height={109} />
-                                  )
-                                }
-                                style={{
-                                  width: " 120px",
-                                  height: "109px",
-                                  borderRadius: "10px",
-                                  marginBottom: "10px",
-                                }}
-                              />
-                            )}
-                          </Link>
-                        ))}
-                      </Box>
-                      <Hidden lg xl xxl>
-                        {imageview.comments === "true" && (
-                          <CommentBox
-                            passedVal={this.state.fieldVal}
-                            userid={imageview.user_id}
-                            postid={this.state.post_id}
-                          />
-                        )}
-                      </Hidden>
-                    </Col>
-                  </Row>
-                </div>
+              <Col lg={1.2} xs={3}>
+                {" "}
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQarxp3w2V2uosNwCyzIp1tILCurA27Wq0tXXjO_xykwjz2aIWKABGd621rpjLWcR3ZGs8&usqp=CAU"
+                  style={{ height: "75px", width: "75px", borderRadius: "37.5px" }}
+                />
+              </Col>
+              <Col>
+                {" "}
+                <div className="i_v_name"><div>{image.name}</div>
+                <div className="i_v_follow">Follow</div></div>
               </Col>
             </Row>
-          </Container>
-          <Dialog
-            className="test"
-            onClose={this.handleClose}
-            aria-labelledby="customized-dialog-title"
-            open={this.state.open}
-            maxWidth={"md"}
-            fullWidth={true}
-            PaperProps={{style: { borderRadius: 20 }   }}
-          >
-            <DialogTitle
-              id="customized-dialog-title"
-              onClose={this.handleClose}
-              className={All.PopupHeader}
-            >
-              <Box display="flex" pt={6}>
-                <Box pr={2}>
+            <div style={{marginTop: "20px"}}>
+              <div className="i_v_hello">Hello Everyone,</div>
+              <div className="i_v_experience">{image.experience}</div>
+            </div>
+            <div className="i_v_create">Wanna create something great?</div>
+            <div className="i_v_contact">Feel Free to contact us  <span className="i_v_email"> info@nexevo.in</span></div>
+          </Col>
+
+          {/* //right */}
+          <Col lg={4}>
+            <div className="i_v_text1">Like what you see?</div>
+            <div className="i_v_text2">This Droner is available for work</div>
+            <button className="hire_btn">Hire This Droner</button>
+
+            <div className="i_v_moreShots">More Shots from Stephen Raj</div>
+            <Row>
+              {otherImages.map((item, i)=>{
+                return(
+                  <Col lg={6} xs={6}>
+                  {" "}
+          
                   <img
                     style={{
-                      width: "75px",
-                      height: "75px",
-                      borderRadius: "50%",
+                      width: "100%",
+                      height: "130px",
+                      margin: "0px 0px 10px 0px",
+                      borderRadius: "5px",
                     }}
-                    src={user_profile}
+                    src={`http://localhost:9000/${item.file}`}
+                    onClick={()=>clicked(item._id, item.userId)}
                   />
-                </Box>
-                <Box mt={2}>
-                  <h3 className={All.Bold}>Hire Pilot</h3>
-                </Box>
-              </Box>
-            </DialogTitle>
-            <form
-              className={`${All.form} ${All.paddingbottom_30}`}
-              onSubmit={this.handleSubmit}
-            >
-              <DialogContent className={All.PopupBody}>
-                <Row>
-                  <Col>
-                    <input
-                      type="text"
-                      name="name"
-                      className={`${All.FormControl} ${All.Popupmodel}`}
-                      id="name"
-                      placeholder="Name"
-                    />
-                    <input
-                      type="email"
-                      name="email"
-                      className={`${All.FormControl} ${All.Popupmodel}`}
-                      id="email"
-                      placeholder="Email ID"
-                    />
-                    <input
-                      type="number"
-                      name="mobile"
-                      className={`${All.FormControl} ${All.Popupmodel}`}
-                      id="mobile"
-                      placeholder="Mobile Number"
-                    />
-                    <input
-                      type="text"
-                      name="job_position"
-                      className={`${All.FormControl} ${All.Popupmodel}`}
-                      id="job_position"
-                      placeholder="Job Position"
-                    />
-                  </Col>
-                  <Col>
-                    <textarea
-                      type="email"
-                      name="message"
-                      className={`${All.FormControl} ${All.Popupmodel}`}
-                      id="message"
-                      placeholder="Create the message"
-                      style={{
-                        height: "150px",
-                        width: "100%",
-                      }}
-                    />
-                  </Col>
-                </Row>
-              </DialogContent>
-              <Box textAlign="Center" className={All.PopupFooter}>
-                {/* <Button  onClose={handleCloseReport} variant="contained" color="default" type="button" className={`${All.BtnStyle_4} ${All.FloatLeft}`}>
-              Cancel</Button>  */}
-                <Button
-                  variant="contained"
-                  color="default"
-                  type="submit"
-                  className={`${All.BtnStyle_3} ${All.FloatRight}`}
-                  id="follow"
-                >
-                  Send
-                </Button>
-              </Box>
-            </form>
-          </Dialog>
-
-          <Dialog
-            open={this.state.share}
-            onClose={this.handleShareClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            maxWidth={"md"}
-            fullWidth={true}
-            PaperProps={{style: { borderRadius: 20 }   }}
-          >
-            <DialogTitle
-              id="customized-dialog-title"
-              onClose={this.handleShareClose}
-              className={All.PopupHeader}
-            >
-              <Box display="flex" pt={6}>
-                <Box mt={2}>
-                  <h3 className={All.Bold} style={{ textAlign: "center" }}>
-                    Share
-                  </h3>
-                </Box>
-              </Box>
-            </DialogTitle>
-            <DialogContent
-              className={All.PopupBody}
-              style={{ marginBottom: "50px" }}
-            >
-              <Row>
-                <WhatsappShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <WhatsappIcon size={52} round={true} />
-                </WhatsappShareButton>
-                <FacebookShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <FacebookIcon size={52} round={true} />
-                </FacebookShareButton>
-                <EmailShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <EmailIcon size={52} round={true} />
-                </EmailShareButton>
-                <TwitterShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <TwitterIcon size={52} round={true} />
-                </TwitterShareButton>
-                <TelegramShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <TelegramIcon size={52} round={true} />
-                </TelegramShareButton>
-                <LinkedinShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <LinkedinIcon size={52} round={true} />
-                </LinkedinShareButton>
-                <PinterestShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <PinterestIcon size={52} round={true} />
-                </PinterestShareButton>
-                <VKShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <VKIcon size={52} round={true} />
-                </VKShareButton>
-                <ViberShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <ViberIcon size={52} round={true} />
-                </ViberShareButton>
-                <RedditShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <RedditIcon size={52} round={true} />
-                </RedditShareButton>
-                <LineShareButton
-                  url={window.location.href}
-                  style={{ margin: "10px" }}
-                >
-                  <LineIcon size={52} round={true} />
-                </LineShareButton>
-              </Row>
-            </DialogContent>
-          </Dialog>
-          <Dialog
-              open={this.state.startProcess}
-              onClose={this.closeProcess}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              maxWidth={"md"}
-              fullWidth={true}
-              PaperProps={{style: { borderRadius: 20 }   }}
-            >
-
-              <DialogContent className={All.PopupBody} style={{ marginBottom: "50px"}}>
-                <div style={{ position: "absolute", top: '20px', right: '20px' }}>
-                  <img src={Close} alt="" onClick={this.closeProcess} style={{ cursor: "pointer" }} />
-                </div>
-                <Row style={{ marginTop: "30px" }}>
-                  <div className="h_p_start_process_form">
-                    <div className="h_p_start_process_form_title">Hire Pilot</div>
-                    <div className="h_p_start_process_form_label">Description</div>
-                    <textarea className='h_p_start_process_form_description'></textarea>
-                    <div className="h_p_start_process_form_label">Job Catalog (optional)</div>
-                    <label>
-                      <input type="file" name="" id="" className="h_p_start_process_form_file" onChange = {this.handleProcessFileChange}/>
-                      <div className="h_p_start_process_form_file_label">Choose file to attach</div>
-                      <div className="h_p_start_process_form_file_label_text">{this.state.selected_file.name?this.state.selected_file.name:"The file type should be in PDF, Docs"}</div>
-                    </label>
-                    <div className="h_p_start_process_form_btn_container">
-                      <button onClick={this.closeProcess} className='h_p_start_process_form_btn'>Submit</button>
-                    </div>
-                  </div>
-                </Row>
-              </DialogContent>
-            </Dialog>
-        </section>
-      </>
-    );
-  }
+                </Col>
+                )
+              })}
+            
+             
+            </Row>
+          </Col>
+        </Row>
+      </Container>
+    </Container>
+  );
 }
+
+export default Imageview;
