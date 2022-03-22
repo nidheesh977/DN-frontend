@@ -24,10 +24,9 @@ import ImageIcon from "@material-ui/icons/Image";
 import PanoramaIcon from "@material-ui/icons/Panorama";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import { withStyles } from "@material-ui/core/styles";
-import "../css/GaleryFilter.css"
-import DropDownPng from '../images/s_c_dropdown2.png'
+import "../css/GaleryFilter.css";
+import DropDownPng from "../images/s_c_dropdown2.png";
 import { Dropdown } from "materialize-css";
-
 
 function handleClick() {
   var v = document.getElementById("FilterDropdowns");
@@ -116,8 +115,8 @@ class GalleryFilter extends React.Component {
 
       times: ["Today", "Week", "Month", "Ever"],
 
-      
       activeLink: "all",
+      liked_list: [],
     };
     this.loadMore = this.loadMore.bind(this);
     this.handleChanges = this.handleChanges.bind(this);
@@ -264,20 +263,69 @@ class GalleryFilter extends React.Component {
 
   handleScroll = () => {
     try {
-      const wrappedElement = document.getElementById('main_div');
-      if (wrappedElement.getBoundingClientRect().bottom <= window.innerHeight + 1) {
+      const wrappedElement = document.getElementById("main_div");
+      if (
+        wrappedElement.getBoundingClientRect().bottom <=
+        window.innerHeight + 1
+      ) {
         if (this.state.visible < this.state.listing.length) {
-          this.loadMore()
+          this.loadMore();
         }
       }
+    } catch {
+      console.log("Error");
     }
-    catch {
-      console.log("Error")
+  };
+
+  likeFile = (id, index) => {
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    if (this.state.liked_list.includes(id)) {
+      axios
+        .post(`${domain}/api/image/unlikeImage/${id}`, config)
+        .then(() => {
+          axios
+            .post(`${domain}/api/user/checkUser`, config)
+            .then((res) => {
+              console.log(res.data);
+              let filesList = this.state.listing
+              filesList[index].likes.splice(filesList[index].likes.indexOf(res.data._id), 1)
+              this.setState({
+                liked_list: res.data.likedMedia,
+                listing: filesList
+              });
+            })
+            .catch((err) => {
+              this.setState({});
+            });
+        });
+    } else {
+      axios
+        .post(`${domain}/api/image/likeImage/${id}`, config)
+        .then(() => {
+          axios
+            .post(`${domain}/api/user/checkUser`, config)
+            .then((res) => {
+              console.log(res.data);
+              let filesList = this.state.listing
+              filesList[index].likes.push(res.data._id)
+              this.setState({
+                liked_list: res.data.likedMedia,
+                listing: filesList
+              });
+            })
+            .catch((err) => {
+              this.setState({});
+            });
+        });
     }
-  }
+  };
 
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
     const token = localStorage.getItem("access_token");
     this.setState({ userlogin: token });
     let config = {
@@ -285,44 +333,62 @@ class GalleryFilter extends React.Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    axios.get(`${domain}/api/image/getImages`, config)
-    .then(res => {
-      console.log(res.data)
-      this.setState({
-        listing: res.data,
-        loading: false
+    axios
+      .get(`${domain}/api/image/getImages`, config)
+      .then((res) => {
+        console.log(res.data);
+        this.setState({
+          listing: res.data,
+          loading: false,
+        });
       })
-    })
-    .catch(err => {
-      this.setState({
-        loading: false
+      .catch((err) => {
+        this.setState({
+          loading: false,
+        });
+      });
+    axios
+      .post(`${domain}/api/user/checkUser`, config)
+      .then((res) => {
+        console.log(res.data);
+        this.setState({
+          liked_list: res.data.likedMedia,
+        });
       })
-    })
+      .catch((err) => {
+        this.setState({});
+      });
   }
 
   dropdown_open = (id) => {
-    document.getElementById("g_f_filter" + id).classList.add("g_f_filter_selected")
-  }
+    document
+      .getElementById("g_f_filter" + id)
+      .classList.add("g_f_filter_selected");
+  };
 
   dropdown_close = (id) => {
-    document.getElementById("g_f_filter" + id).classList.remove("g_f_filter_selected")
-  }
+    document
+      .getElementById("g_f_filter" + id)
+      .classList.remove("g_f_filter_selected");
+  };
 
   dropdown_select = (id) => {
-    document.getElementById("g_f_filter" + id).classList.remove("g_f_filter_selected")
-  }
+    document
+      .getElementById("g_f_filter" + id)
+      .classList.remove("g_f_filter_selected");
+  };
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
   }
 
   mouseOverFilter = (id) => {
-    document.getElementById("file_details_"+id).style.visibility = "visible"
-  }
+    document.getElementById("file_details_" + id).style.visibility = "visible";
+  };
 
   mouseLeaveFilter = (id) => {
-    document.getElementById("file_details_"+id).style.visibility = "hidden"
-  }
+    document.getElementById("file_details_" + id).style.visibility = "hidden";
+  };
 
   render() {
     const { links, activeLink } = this.state;
@@ -336,10 +402,10 @@ class GalleryFilter extends React.Component {
     const { loading, data } = this.state;
 
     const { classes } = this.props;
-    var listing_length = this.state.listing_length
-    var dropdown_open = this.dropdown_open
-    var dropdown_close = this.dropdown_close
-    var dropdown_select = this.dropdown_select
+    var listing_length = this.state.listing_length;
+    var dropdown_open = this.dropdown_open;
+    var dropdown_close = this.dropdown_close;
+    var dropdown_select = this.dropdown_select;
 
     return (
       <>
@@ -391,9 +457,7 @@ class GalleryFilter extends React.Component {
                       id="type"
                       defaultValue={"1"}
                     >
-                      <option value="1">
-                        All
-                      </option>
+                      <option value="1">All</option>
                       {this.state.userlogin && (
                         <option value="2">Following</option>
                       )}
@@ -458,9 +522,17 @@ class GalleryFilter extends React.Component {
                     <Col ><button className="g_f_btn1" style = {{margin: "10px 0", borderRadius: "20px !important"}}>Search</button></Col>
                   </Row> */}
                   <Row gutterWidth={20}>
-                    <Col xxl = {3} xl = {3} lg = {3} md = {6} sm = {6} xs = {12}>
-                      <select className="g_f_filter" id="g_f_filter1" onFocus={() => dropdown_open(1)} onBlur={() => dropdown_close(1)} onChange={() => dropdown_select(1)}>
-                        <option disabled selected>Select Country</option>
+                    <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
+                      <select
+                        className="g_f_filter"
+                        id="g_f_filter1"
+                        onFocus={() => dropdown_open(1)}
+                        onBlur={() => dropdown_close(1)}
+                        onChange={() => dropdown_select(1)}
+                      >
+                        <option disabled selected>
+                          Select Country
+                        </option>
                         <option>India</option>
                         <option>China</option>
                         <option>Russia</option>
@@ -470,25 +542,50 @@ class GalleryFilter extends React.Component {
                         <option>Burger, Shake and a Smile</option>
                         <option>Sugar, Spice and all things nice</option>
                       </select> */}
-
                     </Col>
-                    <Col xxl = {3} xl = {3} lg = {3} md = {6} sm = {6} xs = {12}>
-                      <select className="g_f_filter" id="g_f_filter2" onFocus={() => dropdown_open(2)} onBlur={() => dropdown_close(2)} onChange={() => dropdown_select(2)}>
-                        <option disabled selected>Select City</option>
+                    <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
+                      <select
+                        className="g_f_filter"
+                        id="g_f_filter2"
+                        onFocus={() => dropdown_open(2)}
+                        onBlur={() => dropdown_close(2)}
+                        onChange={() => dropdown_select(2)}
+                      >
+                        <option disabled selected>
+                          Select City
+                        </option>
                         <option>Bangalore</option>
                         <option>Chennai</option>
                         <option>Mumbai</option>
                       </select>
                     </Col>
-                    <Col xxl = {3} xl = {3} lg = {3} md = {6} sm = {6} xs = {12}>
-                      <select className="g_f_filter" id="g_f_filter3" onFocus={() => dropdown_open(3)} onBlur={() => dropdown_close(3)} onChange={() => dropdown_select(3)}>
-                        <option disabled selected>Select Industry</option>
+                    <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
+                      <select
+                        className="g_f_filter"
+                        id="g_f_filter3"
+                        onFocus={() => dropdown_open(3)}
+                        onBlur={() => dropdown_close(3)}
+                        onChange={() => dropdown_select(3)}
+                      >
+                        <option disabled selected>
+                          Select Industry
+                        </option>
                         <option>Nexevo</option>
                         <option>Nexevo technologies</option>
                         <option>Nexevo tech</option>
                       </select>
                     </Col>
-                    <Col xxl = {3} xl = {3} lg = {3} md = {6} sm = {6} xs = {12}><button className="g_f_btn1" style={{ margin: "10px 0", borderRadius: "20px !important" }}>Search</button></Col>
+                    <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
+                      <button
+                        className="g_f_btn1"
+                        style={{
+                          margin: "10px 0",
+                          borderRadius: "20px !important",
+                        }}
+                      >
+                        Search
+                      </button>
+                    </Col>
                   </Row>
                 </div>
 
@@ -500,7 +597,9 @@ class GalleryFilter extends React.Component {
                 </div>
                 {loading === true ? (
                   <div>
-                    <figure style={{display: "flex", justifyContent: "center"}}>
+                    <figure
+                      style={{ display: "flex", justifyContent: "center" }}
+                    >
                       <Skeleton
                         height={250}
                         width={270}
@@ -548,126 +647,193 @@ class GalleryFilter extends React.Component {
                                       .slice(0, this.state.visible)
                                       .map((user, index) => (
                                         <>
-                                        {/* { */}
-                                        <li key={index} onMouseOver={() => this.mouseOverFilter(index)} onMouseLeave={() => this.mouseLeaveFilter(index)}>
-                                          {user.fileType === "video" ? (
-                                            <div>
-                                            <figure>
-                                              <Link
-                                                to={{
-                                                  pathname: `Imageview/${user._id}/${user.userId}`,
-                                                  data: user,
-                                                  state: { foo: "bar" },
-                                                }}
-                                                onClick={this.clickMe.bind(
-                                                  this,
-                                                  user
-                                                )}
-                                              >
-                                                <div className="content-overlay-video"></div>
-                                                <video className="thumbnail GalleryImg">
-                                                  <source
-                                                    src={`${domain}/${user.file}`}
-                                                    type="video/mp4"
-                                                  />
-                                                </video>
-                                              </Link>
-                                              <figcaption id = {"file_details_"+index} className="file_figcaption">
-                                                <Link
-                                                  className={All.White}
-                                                  to={{
-                                                    pathname: `/pilot_details/6225df2f6abfb18582fc58c3`,
-                                                  }}
-                                                >
-                                                  <span className="FSize_14 Profile_icon">
-                                                    {user.name}{" "}
-                                                  </span>
-                                                </Link>
-                                                  <span className="LikeIcon MuliLight">
-                                                    {" "}
-                                                    <FormControlLabel
-                                                      className="MuliLight"
-                                                      control={
-                                                        <Checkbox
-                                                          icon={
-                                                            <FavoriteBorder />
-                                                          }
-                                                          checkedIcon={
-                                                            <Favorite />
-                                                          }
-                                                          name="checkedH"
-                                                        />
-                                                      }
-                                                      label={user.like}
-                                                    />
-                                                  </span>
-                                              </figcaption>
-                                            </figure>
-                                          </div>
-                                          ): user.fileType === "image" || user.fileType === "3d" ?(
-                                            <div>
-                                              <figure>
-                                                <Link
-                                                  to={{
-                                                    pathname: `Imageview/${user.id}/${user.user_id}`,
-                                                    data: user,
-                                                    state: { foo: "bar" },
-                                                  }}
-                                                  onClick={this.clickMe.bind(
-                                                    this,
-                                                    user
-                                                  )}
-                                                >
-                                                  <div className="content-overlay"></div>
-                                                  <img className="thumbnail GalleryImg" src={`${domain}/${user.file}`}/>
-                                                </Link>
-                                                <figcaption id = {"file_details_"+index} className="file_figcaption">
-                                                  {user.user_id ==
-                                                    this.state.usersid ? (
-                                                    <Link
-                                                      className={All.White}
-                                                      to="/Profile/">
-                                                      <span className="FSize_14 Profile_icon">
-                                                        {user.author} {" "}
-                                                      </span>
-                                                    </Link>
-                                                  ) : (
+                                          {/* { */}
+                                          <li
+                                            key={index}
+                                            onMouseOver={() =>
+                                              this.mouseOverFilter(index)
+                                            }
+                                            onMouseLeave={() =>
+                                              this.mouseLeaveFilter(index)
+                                            }
+                                          >
+                                            {user.fileType === "video" ? (
+                                              <div>
+                                                <figure>
+                                                  <Link
+                                                    to={{
+                                                      pathname: `Imageview/${user._id}/${user.userId}`,
+                                                      data: user,
+                                                      state: { foo: "bar" },
+                                                    }}
+                                                    onClick={this.clickMe.bind(
+                                                      this,
+                                                      user
+                                                    )}
+                                                  >
+                                                    <div className="content-overlay-video"></div>
+                                                    <video className="thumbnail GalleryImg">
+                                                      <source
+                                                        src={`${domain}/${user.file}`}
+                                                        type="video/mp4"
+                                                      />
+                                                    </video>
+                                                  </Link>
+                                                  <figcaption
+                                                    id={"file_details_" + index}
+                                                    className="file_figcaption"
+                                                  >
                                                     <Link
                                                       className={All.White}
                                                       to={{
-                                                        pathname: `/pilot_details/${user.userId}`,
+                                                        pathname: `/pilot_details/6225df2f6abfb18582fc58c3`,
                                                       }}
                                                     >
                                                       <span className="FSize_14 Profile_icon">
-                                                        {user.name} {" "}
+                                                        {user.name}{" "}
                                                       </span>
                                                     </Link>
-                                                  )}
-                                                  <span className="LikeIcon MuliLight">
-                                                    {" "}
-                                                    <FormControlLabel
-                                                      className="MuliLight"
-                                                      control={
-                                                        <Checkbox
-                                                          icon={
-                                                            <FavoriteBorder />
-                                                          }
-                                                          checkedIcon={
-                                                            <Favorite />
-                                                          }
-                                                          name="checkedH"
-                                                        />
-                                                      }
-                                                      label={user.like}
+                                                    <span className="LikeIcon MuliLight">
+                                                      {" "}
+                                                      <FormControlLabel
+                                                        onClick={() =>
+                                                          this.likeFile(
+                                                            user._id, index
+                                                          )
+                                                        }
+                                                        className="MuliLight"
+                                                        control={
+                                                          <Checkbox
+                                                            icon={
+                                                              <>
+                                                                {this.state.liked_list.includes(
+                                                                  user._id
+                                                                ) ? (
+                                                                  <Favorite />
+                                                                ) : (
+                                                                  <FavoriteBorder />
+                                                                )}
+                                                              </>
+                                                            }
+                                                            checkedIcon={
+                                                              <>
+                                                                {this.state.liked_list.includes(
+                                                                  user._id
+                                                                ) ? (
+                                                                  <Favorite />
+                                                                ) : (
+                                                                  <FavoriteBorder />
+                                                                )}
+                                                              </>
+                                                            }
+                                                            name="checkedH"
+                                                          />
+                                                        }
+                                                        label={
+                                                          user.likes.length
+                                                        }
+                                                      />
+                                                    </span>
+                                                  </figcaption>
+                                                </figure>
+                                              </div>
+                                            ) : user.fileType === "image" ||
+                                              user.fileType === "3d" ? (
+                                              <div>
+                                                <figure>
+                                                  <Link
+                                                    to={{
+                                                      pathname: `Imageview/${user._id}/${user.userId}`,
+                                                      data: user,
+                                                      state: { foo: "bar" },
+                                                    }}
+                                                    onClick={this.clickMe.bind(
+                                                      this,
+                                                      user
+                                                    )}
+                                                  >
+                                                    <div className="content-overlay"></div>
+                                                    <img
+                                                      className="thumbnail GalleryImg"
+                                                      src={`${domain}/${user.file}`}
                                                     />
-                                                  </span>
-                                                </figcaption>
-                                              </figure>
-                                            </div>
-                                          ): <></>}
-                                        </li>
+                                                  </Link>
+                                                  <figcaption
+                                                    id={"file_details_" + index}
+                                                    className="file_figcaption"
+                                                  >
+                                                    {user.user_id ==
+                                                    this.state.usersid ? (
+                                                      <Link
+                                                        className={All.White}
+                                                        to="/Profile/"
+                                                      >
+                                                        <span className="FSize_14 Profile_icon">
+                                                          {user.author}{" "}
+                                                        </span>
+                                                      </Link>
+                                                    ) : (
+                                                      <Link
+                                                        className={All.White}
+                                                        to={{
+                                                          pathname: `/pilot_details/${user.userId}`,
+                                                        }}
+                                                      >
+                                                        <span className="FSize_14 Profile_icon">
+                                                          {user.name}{" "}
+                                                        </span>
+                                                      </Link>
+                                                    )}
+                                                    <span className="LikeIcon MuliLight">
+                                                      {" "}
+                                                      <FormControlLabel
+                                                        onClick={() =>
+                                                          this.likeFile(
+                                                            user._id, index
+                                                          )
+                                                        }
+                                                        className="MuliLight"
+                                                        control={
+                                                          <Checkbox
+                                                            icon={
+                                                              <>
+                                                                {this.state.liked_list.includes(
+                                                                  user._id
+                                                                ) ? (
+                                                                  <Favorite />
+                                                                ) : (
+                                                                  <FavoriteBorder />
+                                                                )}
+                                                              </>
+                                                            }
+                                                            checkedIcon={
+                                                              <>
+                                                                {this.state.liked_list.includes(
+                                                                  user._id
+                                                                ) ? (
+                                                                  <Favorite />
+                                                                ) : (
+                                                                  <FavoriteBorder />
+                                                                )}
+                                                              </>
+                                                            }
+                                                            name="checkedH"
+                                                          />
+                                                        }
+                                                        label={
+                                                          user.likes.length
+                                                        }
+                                                      />
+                                                    </span>
+                                                  </figcaption>
+                                                </figure>
+                                              </div>
+                                            ) : (
+                                              <></>
+                                            )}
+                                          </li>
                                         </>
-                                                    // }
+                                        // }
                                       ))}
                                   </>
                                 </ul>

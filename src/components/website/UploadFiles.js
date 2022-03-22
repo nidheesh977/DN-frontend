@@ -60,7 +60,7 @@ class UploadFiles extends Component {
           industries: res.data
         })
         const options = this.state.industries.map(d => ({
-          "value" : d.id,
+          "value" : d.industry,
           "label" : d.industry
         
         }))
@@ -68,6 +68,17 @@ class UploadFiles extends Component {
           industryOptions: options
         })
 
+      })
+      axios.get(`${domain}/api/keyword/getKeywords`)
+      .then(res=>{
+        console.log(res)
+        let keywords = []
+        for (let i = 0; i < res.data.length; i++){
+          keywords.push(res.data[i].keyword)
+        }
+        this.setState({
+          suggested_keywords: keywords
+        })
       })
   }
 
@@ -130,7 +141,7 @@ class UploadFiles extends Component {
         price: "",
         category: "",
         experience: "",
-        suggested_keywords: ["Areal View", "UAV", "Aviation", "Drone"],
+        suggested_keywords: this.state.suggested_keywords,
         keywords: [],
         adult_content: false,
         select_type: e.target.files[i].type,
@@ -157,17 +168,16 @@ class UploadFiles extends Component {
 //yaseen
 
 industryChange = (value)=>{
+  console.log("Changed")
   console.log(value)
 }
 
 customStyles = {
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-    // const color = chroma(data.color);
-    console.log({ data, isDisabled, isFocused, isSelected });
     return {
       ...styles,
       backgroundColor: isFocused ? "#999999" : null,
-      color: "#333333"
+      color: "#333333",
     };
   }
 }
@@ -216,13 +226,14 @@ colourStyles = {
     });
   };
 
-  categoryChange = (e) => {
+  categoryChange = (value) => {
     var files_details = this.state.selected_files_details;
-    files_details[this.state.file_edit].category = e.target.value;
+    files_details[this.state.file_edit].category = value;
     
     this.setState({
       selected_files_details: files_details,
     });
+    console.log(value)
     
   };
 
@@ -525,7 +536,7 @@ colourStyles = {
             data.append("experience", currentFile.experience)
             data.append("keywords", currentFile.keywords)
             data.append("adult", currentFile.adult_content)
-            data.append("category", currentFile.category)
+            data.append("category", currentFile.category.value)
             
             console.log(data)
       
@@ -774,7 +785,7 @@ colourStyles = {
                                                 className="u_f_file_name_on_file"
                                                 id={"file_name_" + index}
                                               >
-                                                {file.category}
+                                                {file.category.value}
                                               </div>
                                             ):(
                                               <div
@@ -858,7 +869,7 @@ colourStyles = {
                                             <img src={moreIcon} alt="" />
                                           </div>
                                           {this.state.showEditOptions ===
-                                            index && (
+                                            index && file.upload_status === "selected" &&(
                                             <div
                                               className="u_f_edit_content"
                                               onMouseLeave={() =>
@@ -1036,18 +1047,8 @@ colourStyles = {
                       <div className="u_f_input_title">Industry</div>
                       {this.state.files_selected ? (
                         <>
-                          <input
-                            type="text"
-                            name=""
-                            id="u_f_category"
-                            className="u_f_input_field"
-                            value={
-                              this.state.selected_files_details[
-                                this.state.file_edit
-                              ].category
-                            }
-                            onChange={this.categoryChange}
-                          />
+                        <Select options={this.state.industryOptions} onChange={this.categoryChange} styles={this.customStyles} value={this.state.selected_files_details[this.state.file_edit].category} className = "u_f_category_dropdown" />
+                        <div style = {{marginBottom: "30px"}}></div>
                           {
                             this.state.selected_files_details[this.state.file_edit].error === true &&
                             this.state.selected_files_details[this.state.file_edit].category === "" &&
@@ -1097,17 +1098,6 @@ colourStyles = {
                           disabled
                         ></textarea>
                       )}
-
-              {/* //yaseen */}
-              <label className={All.Bold + " form_label"} for="country">
-                    Select Country{" "}
-                  </label>
-                  <div>
-                <Select options={this.state.industryOptions} onChange={this.industryChange} styles={this.customStyles}  />
-  {/* //  options={test} value={value1} onChange={changeHandler1} /> */}
-
-                </div>
-              {/* yaseen */}
                       <div className="u_f_input_title">Keywords</div>
                       <input
                         type="text"
@@ -1138,8 +1128,8 @@ colourStyles = {
                                   this.removeSelectedKeyword(keyword)
                                 }
                               >
-                                {keyword}{" "}
-                                <i class="fa fa-check" aria-hidden="true"></i>
+                                {keyword}{" "} &nbsp;
+                                <i class="fa fa-times" aria-hidden="true"></i>
                               </div>
                             );
                           })}

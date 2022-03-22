@@ -9,6 +9,8 @@ import { saveAs } from 'file-saver'
 import axios from "axios";
 import {useParams, useHistory, Link} from "react-router-dom"
 
+const domain = process.env.REACT_APP_MY_API;
+
 function Imageview() {
   let param = useParams();
   let history = useHistory()
@@ -16,25 +18,25 @@ function Imageview() {
   let [otherImages, setOtherImages] = useState([])
   let[likedData, setLikedData] = useState([])
   useEffect(()=>{
-    axios.get(`http://localhost:9000/api/image/getImage/${param.id}`).then(res=>{
+    axios.get(`${domain}/api/image/getImage/${param.id}`).then(res=>{
 console.log(res) 
 setImage(res.data[0])   })
   }, [])
   useEffect(()=>{
-    axios.get(`http://localhost:9000/api/image/getUserImages/${param.user_id}`).then(res=>{
+    axios.get(`${domain}/api/image/getUserImages/${param.user_id}`).then(res=>{
 console.log(res.data.slice(0,5)) 
 setOtherImages(res.data.slice(0,5))
   })
   }, [])
   useEffect(()=>{
-    axios.post(`http://localhost:9000/api/user/checkUser`, config).then(res=>{
+    axios.post(`${domain}/api/user/checkUser`, config).then(res=>{
       console.log(res.data)
 
 setLikedData(res.data.likedMedia)  })
   }, [])
   const downloadImage = (id) => {
-    saveAs(`http://localhost:9000/${image.file}`, `${image.file}`) 
-    axios.post(`http://localhost:9000/api/image/downloadImage/${id}`, config).then(res=>{
+    saveAs(`${domain}/${image.file}`, `${image.file}`) 
+    axios.post(`${domain}/api/image/downloadImage/${id}`, config).then(res=>{
       console.log(res.data)
     })
 
@@ -50,16 +52,16 @@ setLikedData(res.data.likedMedia)  })
     window.location.reload();
   }
   let likeImage = () =>{
-    axios.post(`http://localhost:9000/api/image/likeImage/${image._id}`, config).then(res=>{
+    axios.post(`${domain}/api/image/likeImage/${image._id}`, config).then(res=>{
       console.log(res.data)
-      axios.post(`http://localhost:9000/api/user/checkUser`, config).then(res=>{
+      axios.post(`${domain}/api/user/checkUser`, config).then(res=>{
 setLikedData(res.data.likedMedia)  })
     })
   }
   let unlikeImage = () =>{
-    axios.post(`http://localhost:9000/api/image/unlikeImage/${image._id}`, config).then(res=>{
+    axios.post(`${domain}/api/image/unlikeImage/${image._id}`, config).then(res=>{
       console.log(res.data)
-      axios.post(`http://localhost:9000/api/user/checkUser`, config).then(res=>{
+      axios.post(`${domain}/api/user/checkUser`, config).then(res=>{
 setLikedData(res.data.likedMedia)  })
     })
   }
@@ -67,17 +69,17 @@ setLikedData(res.data.likedMedia)  })
     <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
       <Container>
         <div style={{ marginTop: "35px" }}>
-          <div className="i_v_back">Back</div>
+          <div className="i_v_back">{image.postName}</div>
           <button className="i_v_download" onClick={()=>downloadImage(image._id)}>Download</button>
         </div>
 
         <img
           style={{
-            width: "100%", height:"700px",
+            width: "100%", minHeight:"700px",
             margin: "32px 0px 45px 0px",
             borderRadius: "10px",
           }} className="mainImage"
-          src={`http://localhost:9000/${image.file}`}
+          src={`${domain}/${image.file}`}
         />
         <div>
           {
@@ -131,7 +133,7 @@ setLikedData(res.data.likedMedia)  })
                       margin: "0px 0px 10px 0px",
                       borderRadius: "5px",
                     }}
-                    src={`http://localhost:9000/${item.file}`}
+                    src={`${domain}/${item.file}`}
                     onClick={()=>clicked(item._id, item.userId)}
                   />
                 </Col>
