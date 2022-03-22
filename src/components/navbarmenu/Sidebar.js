@@ -167,7 +167,7 @@ export default function PersistentDrawerLeft(props) {
               style = {{padding: "0px 8px 5px 15px !important"}}
             >
               <img src={UploadFile} alt="" height={"23px"} width={"23px"} style = {{paddingTop: "5px"}} />{" "}
-              <React.Fragment style={{ color: "black !important" }}>
+              <React.Fragment >
                 Upload file
               </React.Fragment>
             </Link>

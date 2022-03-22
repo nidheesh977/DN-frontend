@@ -493,6 +493,18 @@
   color: white;
 }
 
+.u_f_upload_success_tick{
+  position: absolute;
+  top: calc(50% - 10px);
+  left: calc(50% - 22px);
+  font-size: 25px;
+  line-height: 24px;
+  width: 50px;
+  font-family: muli-bold;
+  text-align: center;
+  color: white;
+}
+
 .u_f_size_exceed_close{
   position: absolute;
   top: calc(50% - 32px);
@@ -514,7 +526,7 @@
   padding: 5px 0px;
   width: 130px;
   background-color: white;
-  border: 2px solid red;
+  border: 1px solid red;
   border-radius: 20px;
   font-size: 16px;
   font-family: muli-regular;
