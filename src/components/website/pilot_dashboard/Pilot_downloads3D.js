@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-grid-system";
 import Picture from "./images/drone_img.jpg";
 import Premium from "./images/goldenStar.svg";
@@ -12,6 +12,7 @@ import All from '../../website/All.module.css'
 import person from "../../images/profile.svg"
 import "./css/Pilot_downloads.css"
 import Heart from "./images/heart-green.png"
+import axios from "axios";
 
 
 
@@ -30,122 +31,56 @@ function mouseGotOut(id) {
 }
 
 
-function Pilot_downloads3D() {
-  let details = {
-    images: [
-      {
-        id: 1,
-        views: "5K",
-        downloads: "2K",
-        likes: "1K",
-        premium: false,
-        pilot: "Yasar Arafath",
-        src: "https://wallpaperaccess.com/thumb/104870.jpg",
-      },
-      {
-        id: 2,
-        views: "8K",
-        downloads: "7K",
-        likes: "4K",
-        premium: true,
-        pilot: "Yaseen Ahmed",
-        src: "https://wallpaperaccess.com/thumb/228944.jpg",
-      },
-      {
-        id: 3,
-        views: "3K",
-        downloads: "2K",
-        likes: "1K",
-        premium: false,
-        pilot: "Yasar Arafath",
-        src: "https://wallpaperaccess.com/thumb/33971.jpg",
-      },
-      {
-        id: 4,
-        views: "9K",
-        downloads: "3K",
-        likes: "2K",
-        premium: true,
-        pilot: "Yasar Arafath",
-        src: "https://wallpaperaccess.com/thumb/4896.jpg",
-      },
-      {
-        id: 5,
-        views: "0K",
-        downloads: "9K",
-        likes: "3K",
-        premium: false,
-        pilot: "Yasar Arafath",
-        src: "https://wallpaperaccess.com/full/309831.jpg",
-      },
-      {
-        id: 6,
-        views: "5K",
-        downloads: "8K",
-        likes: "9K",
-        premium: true,
-        pilot: "Yasar Arafath",
-        src: "https://wallpaperaccess.com/thumb/449975.jpg",
-      },
-      {
-        id: 7,
-        views: "6K",
-        downloads: "3K",
-        likes: "6K",
-        premium: false,
-        pilot: "Yasar Arafath",
-        src: "https://wallpaperaccess.com/thumb/132010.png",
-      },
-      {
-        id: 8,
-        views: "7K",
-        downloads: "6K",
-        likes: "0K",
-        premium: true,
-        pilot: "Yasar Arafath",
-        src: "https://wallpaperaccess.com/full/211836.jpg",
-      },
-      {
-        id: 9,
-        views: "9K",
-        downloads: "7K",
-        likes: "8K",
-        premium: true,
-        pilot: "Yasar Arafath",
-        src: "https://wallpaperaccess.com/thumb/196893.jpg",
-      },
-    ],
+function Pilot_downloads3d() {
+  let config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
   };
-  let [data, setData] = useState(details);
+let [media, setMedia] = useState([])
+  useEffect(()=>{
+    axios.post(`http://localhost:9000/api/pilot/getDownloadedMedia`, config).then(res =>{
+      console.log(res.data)
+      setMedia(res.data)
+    })
+  },[])
+ 
   return (
     <div>
         <Row gutterWidth={12}>
-          {data.images.map((item) => {
+          {media.map((item, i) => {
             return (
+              <>
+              { item.fileType === "3d" ?
+              
               <Col  xl={4} lg={6} md={4} sm={6} xs={12}>
-                <div style={{ height: "270px" }}>
+
+               <div style={{ height: "270px" }}>
                   <div
                     className="pd_images_imageContainer"
-                    onMouseOver={() => mouseGotIN(item.id)}
-                    onMouseOut={() => mouseGotOut(item.id)}
+                    onMouseOver={() => mouseGotIN(i)}
+                    onMouseOut={() => mouseGotOut(i)}
                   >
-                    <img src={item.src} className="pd_images_image" />
+                    <img src={`http://localhost:9000/${item.file}`} className="pd_images_image" />
                     <div className={item.premium ? "pd_premiumBadge" : "pd_images_imageHidden"}>
                       <img src={premiumIcon} className="pd_premiumBadge_star" />
                     </div>
                   </div>
-                  <div id={"pd_toshowDetails/" + item.id} style={{display: "none"}}>
+                  <div id={"pd_toshowDetails/" + i} style={{display: "none"}}>
                   <div className="pd_person_details">
-                    <img src={person} /> <span className="pd_personName">{item.pilot}</span>
+                    <img src={person} /> <span className="pd_personName">{item.name}</span>
                   </div>
                  
                  <div className="pd_specificLikes">
-                     <img src={Heart} /> <span className="pd_personName">{item.likes}</span>
+                     <img src={Heart} /> <span className="pd_personName">{item.likes.length}</span>
                  </div>
                  </div>
                 
-                </div>
+                </div> 
+                
               </Col>
+              : null}
+              </>
             );
           })}
         </Row>
@@ -159,4 +94,4 @@ function Pilot_downloads3D() {
   );
 }
 
-export default Pilot_downloads3D;
+export default Pilot_downloads3d;

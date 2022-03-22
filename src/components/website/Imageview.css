@@ -1,0 +1,122 @@
+.i_v_back{
+    display: inline;
+    font-family: muli-bold;
+    font-size: 22px;
+    /* line-height: 26px; */
+}
+
+.i_v_download{
+    display: inline;
+
+    float: right;
+    padding: 7px 30px;
+  font-family: muli-bold;
+  font-size: 14px;
+  line-height: 20px;
+  background: transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0%
+    0% no-repeat padding-box;
+  border-radius: 23px;
+  border: 1px solid #00e7fc;
+  cursor: pointer;
+  
+  margin: auto;
+}
+
+.i_v_text1{
+    font-family: muli-bold;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 5px;
+}
+.i_v_text2{
+    font-family: muli-light;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 15px;
+}
+
+.hire_btn{
+    display: inline;
+height: 40px;
+width: 100%;
+  font-family: muli-bold;
+  font-size: 14px;
+  line-height: 20px;
+  background: transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0%
+    0% no-repeat padding-box;
+  border-radius: 23px;
+  border: 1px solid #00e7fc;
+  cursor: pointer;
+  
+  margin: auto;
+margin-bottom: 30px;
+}
+
+.i_v_moreShots{
+    font-family: muli-bold;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 18px;
+}
+
+.i_v_name{
+    margin-top: 10px;
+    font-family: muli-bold;
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.i_v_follow{
+    font-family: muli-light;
+    font-size: 16px;
+    line-height: 24px;
+    color: #00E7FC;
+}
+
+.i_v_hello{
+    font-family: muli-light;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 20px;
+}
+.i_v_experience{
+    font-family: muli-light;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 10px;
+}
+
+.i_v_create{
+    font-family: muli-light;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 5px;
+}
+.i_v_contact{
+    font-family: muli-light;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 20px;
+}
+ .i_v_email{
+    font-family: muli-light;
+    font-size: 16px;
+    line-height: 24px;
+    color: #00E7FC;
+ }
+ .mainImage{
+     position: relative;
+ }
+
+ .likeImage{
+     position: absolute;
+     right: 130px;
+     top: 105px;
+     height: 30px
+ }
+ .shareImage{
+    position: absolute;
+    right: 60px;
+    top: 100px;
+    height: 35px
+}

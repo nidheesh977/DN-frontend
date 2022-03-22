@@ -15,6 +15,7 @@ import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
 import moreIcon from "../images/Path.svg";
 import axios from "axios";
+import Select from 'react-select'
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -43,7 +44,9 @@ class UploadFiles extends Component {
       new_keyword: "",
       suggested_keywords: ["Areal View", "UAV", "Aviation", "Drone"],
       showEditOptions: "",
-      error: false
+      error: false,
+      industries: [],
+      industryOptions: []
     };
   }
 
@@ -51,6 +54,21 @@ class UploadFiles extends Component {
     document
       .getElementById("u_f_nav_link1")
       .classList.add("u_f_nav_link_selected");
+      axios.get(`${domain}/api/industry/getIndustries`).then(res=>{
+        console.log(res)
+        this.setState({
+          industries: res.data
+        })
+        const options = this.state.industries.map(d => ({
+          "value" : d.id,
+          "label" : d.industry
+        
+        }))
+        this.setState({
+          industryOptions: options
+        })
+
+      })
   }
 
   changeTab = (tab) => {
@@ -136,7 +154,44 @@ class UploadFiles extends Component {
       selected_category: e.target.value,
     });
   };
+//yaseen
 
+industryChange = (value)=>{
+  console.log(value)
+}
+
+customStyles = {
+  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+    // const color = chroma(data.color);
+    console.log({ data, isDisabled, isFocused, isSelected });
+    return {
+      ...styles,
+      backgroundColor: isFocused ? "#999999" : null,
+      color: "#333333"
+    };
+  }
+}
+colourStyles = {
+  menuList: styles => ({
+      ...styles,
+      background: 'papayawhip'
+  }),
+  option: (styles, {isFocused, isSelected}) => ({
+      ...styles,
+      background: isFocused
+          ? 'hsla(291, 64%, 42%, 0.5)'
+          : isSelected
+              ? 'hsla(291, 64%, 42%, 1)'
+              : undefined,
+      zIndex: 1
+  }),
+  menu: base => ({
+      ...base,
+      zIndex: 100
+  })
+  }
+  
+//yaseen
   selectImage = (e, id) => {
     this.setState({
       file_edit: id,
@@ -1031,6 +1086,17 @@ class UploadFiles extends Component {
                           disabled
                         ></textarea>
                       )}
+
+              {/* //yaseen */}
+              <label className={All.Bold + " form_label"} for="country">
+                    Select Country{" "}
+                  </label>
+                  <div>
+                <Select options={this.state.industryOptions} onChange={this.industryChange} styles={this.customStyles}  />
+  {/* //  options={test} value={value1} onChange={changeHandler1} /> */}
+
+                </div>
+              {/* yaseen */}
                       <div className="u_f_input_title">Keywords</div>
                       <input
                         type="text"
