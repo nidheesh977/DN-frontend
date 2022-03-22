@@ -6,9 +6,12 @@ import { Switch, Route, NavLink } from "react-router-dom";
 import Pilot_downloadsImages from "./Pilot_downloadsImages";
 import Pilot_downloadsVideos from "./Pilot_downloadsVideos";
 import Pilot_downloads3D from "./Pilot_downloads3D";
+import Pilot_likesImages from "./Pilot_likesImages";
+import Pilot_likes3d from "./Pilot_likes3d";
+import Pilot_likedVideos from "./Pilot_likedVideos";
 const domain = process.env.REACT_APP_MY_API
 
-function Pilot_downloads() {
+function Pilot_Likes() {
   return (
     <div>
       <div className="pd_downloads_main">
@@ -16,7 +19,7 @@ function Pilot_downloads() {
           <NavLink
             exact
             activeClassName="pd_downloads_active"
-            to="/pilot_dashboard/activities/downloads/"
+            to="/pilot_dashboard/activities/likes/"
             id="pd_download_navItem"
           >
             Images
@@ -25,7 +28,7 @@ function Pilot_downloads() {
         <div>
           <NavLink
             activeClassName="pd_downloads_active"
-            to="/pilot_dashboard/activities/downloads/videos"
+            to="/pilot_dashboard/activities/likes/videos"
             id="pd_download_navItem"
           >
             Videos
@@ -34,7 +37,7 @@ function Pilot_downloads() {
         <div>
           <NavLink
             activeClassName="pd_downloads_active"
-            to="/pilot_dashboard/activities/downloads/3d"
+            to="/pilot_dashboard/activities/likes/3d"
             id="pd_download_navItem"
           >
             3D Images
@@ -48,16 +51,16 @@ function Pilot_downloads() {
         <Switch>
          
           <Route
-            path="/pilot_dashboard/activities/downloads/3d"
-            component={Pilot_downloads3D}
+            path="/pilot_dashboard/activities/likes/3d"
+            component={Pilot_likes3d}
           />
           <Route
-            path="/pilot_dashboard/activities/downloads/videos"
-            component={Pilot_downloadsVideos}
+            path="/pilot_dashboard/activities/likes/videos"
+            component={Pilot_likedVideos}
           />
            <Route
-            path="/pilot_dashboard/activities/downloads/"
-            component={Pilot_downloadsImages}
+            path="/pilot_dashboard/activities/likes/"
+            component={Pilot_likesImages}
           />
         </Switch>
       </div>
@@ -66,4 +69,4 @@ function Pilot_downloads() {
   );
 }
 
-export default Pilot_downloads;
+export default Pilot_Likes;

@@ -609,7 +609,7 @@ class GalleryFilter extends React.Component {
                                               <figure>
                                                 <Link
                                                   to={{
-                                                    pathname: `Imageview/${user.id}/${user.user_id}`,
+                                                    pathname: `Imageview/${user._id}/${user.userId}`,
                                                     data: user,
                                                     state: { foo: "bar" },
                                                   }}

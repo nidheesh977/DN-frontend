@@ -14,6 +14,7 @@ import "./css/Pilot_downloads.css"
 import Heart from "./images/heart-green.png"
 import axios from "axios";
 
+const domain = process.env.REACT_APP_MY_API
 
 
 
@@ -61,7 +62,7 @@ let [media, setMedia] = useState([])
                     onMouseOver={() => mouseGotIN(i)}
                     onMouseOut={() => mouseGotOut(i)}
                   >
-                    <img src={`http://localhost:9000/${item.file}`} className="pd_images_image" />
+                    <img src={`${domain}/${item.file}`} className="pd_images_image" />
                     <div className={item.premium ? "pd_premiumBadge" : "pd_images_imageHidden"}>
                       <img src={premiumIcon} className="pd_premiumBadge_star" />
                     </div>
