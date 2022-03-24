@@ -1,0 +1,15 @@
+adult: false
+category: "segyerwhy"
+createdAt: "2022-03-21T19:37:37.722Z"
+downloads: ['6221c17dbf91fddfb38a1dc9']
+experience: "weywerhyrweyurewu"
+file: "uploads\\1647891457703big_buck_bunny_480p_1mb.mp4"
+fileType: "video"
+keywords: ['df,Areal View']
+likes: ['6221c17dbf91fddfb38a1dc9']
+name: "Yaseen Ahmed"
+postName: "big_buck_bunny_480p_1mb.mp4"
+status: "active"
+updatedAt: "2022-03-23T07:25:36.489Z"
+userId: "6221c17dbf91fddfb38a1dc9"
+views: []

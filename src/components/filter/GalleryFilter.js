@@ -324,6 +324,16 @@ class GalleryFilter extends React.Component {
     }
   };
 
+  redirectPilotLanding = (id) => {
+    console.log(id)
+    axios.post(`${domain}/api/pilot/getPilotId`, {userId: id})
+    .then(res => {
+      if (res.data[0]._id){
+        window.location.href = `/pilot_details/${res.data[0]._id}`
+      }
+    })
+  }
+
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
     const token = localStorage.getItem("access_token");
@@ -647,8 +657,8 @@ class GalleryFilter extends React.Component {
                                       .slice(0, this.state.visible)
                                       .map((user, index) => (
                                         <>
-                                          {/* { */}
-                                          <li
+                                        {this.state.activeLink === "all" || this.state.activeLink === user.fileType ? <>
+                                        <li
                                             key={index}
                                             onMouseOver={() =>
                                               this.mouseOverFilter(index)
@@ -683,16 +693,18 @@ class GalleryFilter extends React.Component {
                                                     id={"file_details_" + index}
                                                     className="file_figcaption"
                                                   >
-                                                    <Link
+                                                    <div
                                                       className={All.White}
-                                                      to={{
-                                                        pathname: `/pilot_details/6225df2f6abfb18582fc58c3`,
-                                                      }}
+                                                      // to={{
+                                                      //   pathname: `/pilot_details/${user.userId}`,
+                                                      // }}
+                                                      style = {{display: "inline-block", cursor: "pointer"}}
+                                                      onClick = {() => this.redirectPilotLanding(user.userId)}
                                                     >
                                                       <span className="FSize_14 Profile_icon">
                                                         {user.name}{" "}
                                                       </span>
-                                                    </Link>
+                                                    </div>
                                                     <span className="LikeIcon MuliLight">
                                                       {" "}
                                                       <FormControlLabel
@@ -773,16 +785,18 @@ class GalleryFilter extends React.Component {
                                                         </span>
                                                       </Link>
                                                     ) : (
-                                                      <Link
+                                                      <div
                                                         className={All.White}
-                                                        to={{
-                                                          pathname: `/pilot_details/${user.userId}`,
-                                                        }}
+                                                        // to={{
+                                                        //   pathname: `/pilot_details/${user.userId}`,
+                                                        // }}
+                                                        style = {{display: "inline-block", cursor: "pointer"}}
+                                                        onClick = {() => this.redirectPilotLanding(user.userId)}
                                                       >
                                                         <span className="FSize_14 Profile_icon">
                                                           {user.name}{" "}
                                                         </span>
-                                                      </Link>
+                                                      </div>
                                                     )}
                                                     <span className="LikeIcon MuliLight">
                                                       {" "}
@@ -832,6 +846,10 @@ class GalleryFilter extends React.Component {
                                               <></>
                                             )}
                                           </li>
+                                        </>
+                                        :<></>
+                                        }
+                                          
                                         </>
                                         // }
                                       ))}

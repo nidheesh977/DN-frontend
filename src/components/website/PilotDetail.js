@@ -33,8 +33,8 @@ import hirePilotIcon from "../images/hirePilotIcon.svg";
 import downloadIcon from "../images/downloadIcon.svg";
 import videoIcon from "../images/video-icon.svg";
 import loadMore from "../images/Group 71.svg";
-import userDone from "../images/userDone.svg"
-import userCross from "../images/userCross.svg"
+import userDone from "../images/userDone.svg";
+import userCross from "../images/userCross.svg";
 import axios from "axios";
 
 const styles = (theme) => ({
@@ -82,170 +82,22 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 export default function PilotDetails(props) {
-  useEffect(() => {
-    console.log(props.match.params.id);
-  }, []);
-
-  const [service_center, setServiceCenter] = useState({
-    id: "1",
-    name: "Nexevo Technologies1",
-    bio: "Nexevo Technologies is a professional drone service center1",
-    workingHours: "9.30AM to 7.00PM",
-    location: "Kasthui Nagar, Bangalore.",
-    rating: 1,
-    phone: "+91 9876543210, +91 9876543210",
-    brands: ["DJI", "UVify", "Hubsan", "Parrot", "Autel Robotics"],
-    whatsapp_number: "917305055356",
-    address:
-      "#2, HM-155, 1st Floor, 2nd H Main, Opp. Cuppa cafe, East of NGEF, Kasthuri Nagar, Bangalore - 560043",
-    email: "shopname@gmail.com",
-    website: "www.domain.com",
-    photos: [
-      "https://www.bayleafdigital.com/wp-content/uploads/2018/11/5-reasons-demo-software.jpg",
-      "https://www.bayleafdigital.com/wp-content/uploads/2018/11/5-reasons-demo-software.jpg",
-      "https://www.bayleafdigital.com/wp-content/uploads/2018/11/5-reasons-demo-software.jpg",
-      "https://www.bayleafdigital.com/wp-content/uploads/2018/11/5-reasons-demo-software.jpg",
-      "https://www.bayleafdigital.com/wp-content/uploads/2018/11/5-reasons-demo-software.jpg",
-      "https://www.bayleafdigital.com/wp-content/uploads/2018/11/5-reasons-demo-software.jpg",
-    ],
-  });
-
-  const [service_center_review, setServiceCenterReview] = useState([
-    {
-      id: "1",
-      img: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-      name: "Stephen Raj",
-      rating: 5,
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab iste, praesentium ex vitae debitis quidem rem corrupti odio deserunt, aut facere fuga pariatur ducimus id laboriosam aliquid neque libero eveniet soluta, numquam quod.",
-      likes: 10,
-    },
-    {
-      id: "1",
-      img: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-      name: "Stephen Raj",
-      rating: 4,
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab iste, praesentium ex vitae debitis quidem rem corrupti odio deserunt, aut facere fuga pariatur ducimus id laboriosam aliquid neque libero eveniet soluta, numquam quod.",
-      likes: 10,
-    },
-    {
-      id: "1",
-      img: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-      name: "Stephen Raj",
-      rating: 3,
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab iste, praesentium ex vitae debitis quidem rem corrupti odio deserunt, aut facere fuga pariatur ducimus id laboriosam aliquid neque libero eveniet soluta, numquam quod.",
-      likes: 10,
-    },
-    {
-      id: "1",
-      img: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-      name: "Stephen Raj",
-      rating: 2,
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab iste, praesentium ex vitae debitis quidem rem corrupti odio deserunt, aut facere fuga pariatur ducimus id laboriosam aliquid neque libero eveniet soluta, numquam quod.",
-      likes: 10,
-    },
-    {
-      id: "1",
-      img: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-      name: "Stephen Raj",
-      rating: 1,
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab iste, praesentium ex vitae debitis quidem rem corrupti odio deserunt, aut facere fuga pariatur ducimus id laboriosam aliquid neque libero eveniet soluta, numquam quod.",
-      likes: 10,
-    },
-  ]);
-
-  const domain = process.env.REACT_APP_MY_API
-
-  const [writeReview, setWriteReview] = useState(false);
+  const domain = process.env.REACT_APP_MY_API;
 
   const [newReview, setNewReview] = useState("");
-
-  const [newRating, setNewRating] = useState(3);
-
-  const [enquiry, setEnquiry] = useState(false);
-
-  const [rating, setRating] = useState(false);
 
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
   const [category, setCategory] = useState(1);
 
-  const [files, setFiles] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
-
-  const [skills, setSkills] = useState([
-    "Ariel View",
-    "UAV",
-    "Aviation",
-    "Drone",
-    "Forest",
-    "Road",
-    "Eagle view",
-    "Top view",
-    "Forest",
-    "Ariel View",
-    "UAV",
-    "Drone",
-    "Forest",
-    "Road",
-    "Aviation",
-    "Drone",
-    "Forest",
-    "Road",
-    "Eagle view",
-    "Top view",
-    "Forest",
-    "Drone",
-    "Forest",
-    "Road",
-    "Ariel View",
-    "UAV",
-    "Aviation",
-    "Drone",
-    "Forest",
-    "Road",
-    "Eagle view",
-    "Top view",
-    "Forest",
-  ]);
+  const [files, setFiles] = useState([]);
 
   const [viewMessage, setViewMessage] = useState(false);
 
   const messages = [1, 2, 3, 4, 5, 6];
-  const follows = [1, 2, 3, 4, 5, 6];
-
-  const enquireNow = () => {
-    setEnquiry(true);
-  };
-
-  const whatsappChat = (whatsapp_number) => {
-    window.open("https://wa.me/" + whatsapp_number + "?text=Hello", "_blank");
-  };
-
-  const closeEnquiry = () => {
-    setEnquiry(false);
-  };
-
-  const submitReview = () => {
-    if (newReview != "") {
-      setRating(true);
-    } else {
-      setError(true);
-      setErrorMsg("Review is required");
-    }
-  };
-
-  const closeRating = () => {
-    setRating(false);
-  };
-
-  const changeReviewHandler = (e) => {
-    setNewReview(e.target.value);
-  };
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
 
   const handleErrorClose = () => {
     setErrorMsg("");
@@ -327,9 +179,7 @@ export default function PilotDetails(props) {
   let [fol, setFol] = useState([]);
   useEffect(() => {
     axios
-      .get(
-        `${domain}/api/pilot/pilotDetails/${props.match.params.id}`
-      )
+      .get(`${domain}/api/pilot/pilotDetails/${props.match.params.id}`)
       .then((response) => {
         setPilotData(response.data);
         // pilotData.map((item, i)=>{
@@ -338,18 +188,40 @@ export default function PilotDetails(props) {
         //   )
         // })
         console.log(response);
-      })
-  }, []);
-let [myFollowing, setMyFollowing] = useState([]);
-  useEffect(()=>{
-    axios.post(`${domain}/api/follow/getMyFollowing`, config).then(
-      (res) => {
- 
-        const folowers = res.data;
-        console.log(folowers);
-setMyFollowing(folowers)      })
+      });
+    axios
+      .get(`${domain}/api/pilot/getPilotMedia/${props.match.params.id}`)
+      .then((res) => {
+        console.log(res.data);
+        setFiles(res.data);
+      });
 
-  }, [])
+    axios
+      .post(`${domain}/api/follow/getUserFollowers`, {
+        id: props.match.params.id,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setFollowers(res.data);
+      });
+
+    axios
+      .post(`${domain}/api/follow/getUserFollowing`, {
+        id: props.match.params.id,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setFollowing(res.data);
+      });
+  }, []);
+  let [myFollowing, setMyFollowing] = useState([]);
+  useEffect(() => {
+    axios.post(`${domain}/api/follow/getMyFollowing`, config).then((res) => {
+      const folowers = res.data;
+      console.log(folowers);
+      setMyFollowing(folowers);
+    });
+  }, []);
 
   let followMe = () => {
     axios
@@ -358,13 +230,13 @@ setMyFollowing(folowers)      })
         config
       )
       .then((response) => {
-        alert("followed");
-        axios.post(`${domain}/api/follow/getMyFollowing`, config).then(
-          (res) => {
-     
+        axios
+          .post(`${domain}/api/follow/getMyFollowing`, config)
+          .then((res) => {
             const folowers = res.data;
             console.log(folowers);
-    setMyFollowing(folowers)      })
+            setMyFollowing(folowers);
+          });
         console.log(response);
         // setBrands(response.data.brandOfDrones)
       });
@@ -376,15 +248,53 @@ setMyFollowing(folowers)      })
         config
       )
       .then((response) => {
-        alert("unfollowed");
-        axios.post(`${domain}/api/follow/getMyFollowing`, config).then(
-          (res) => {
-     
+        axios
+          .post(`${domain}/api/follow/getMyFollowing`, config)
+          .then((res) => {
             const folowers = res.data;
             console.log(folowers);
-    setMyFollowing(folowers)      })
+            setMyFollowing(folowers);
+          });
         console.log(response);
         // setBrands(response.data.brandOfDrones)
+      });
+  };
+
+  let followMeId = (id) => {
+    axios.post(`${domain}/api/pilot/getPilotId`, {userId: id})
+    .then(res => {
+      axios
+      .post(`${domain}/api/follow/createFollow/${res.data[0]._id}`, config)
+      .then((response) => {
+        axios
+          .post(`${domain}/api/follow/getMyFollowing`, config)
+          .then((res) => {
+            const folowers = res.data;
+            console.log(folowers);
+            setMyFollowing(folowers);
+          });
+        console.log(response);
+        // setBrands(response.data.brandOfDrones)
+      });
+    })
+    
+  };
+
+  let unfollowId = (id) => {
+    axios.post(`${domain}/api/pilot/getPilotId`, {userId: id})
+    .then(res => {
+    axios.post(`${domain}/api/follow/removeFollow/${res.data[0]._id}`, config)
+      .then((response) => {
+        axios
+          .post(`${domain}/api/follow/getMyFollowing`, config)
+          .then((res) => {
+            const folowers = res.data;
+            console.log(folowers);
+            setMyFollowing(folowers);
+          });
+        console.log(response);
+        // setBrands(response.data.brandOfDrones)
+      })
       });
   };
   //yaseen
@@ -506,7 +416,12 @@ setMyFollowing(folowers)      })
                 </div>
               </Box>
               <Box py={1}>
-                <div className="p_d_profession">{pilotData.pilotType}</div>
+                <div
+                  className="p_d_profession"
+                  style={{ textTransform: "capitalize" }}
+                >
+                  {pilotData.pilotType} pilot
+                </div>
               </Box>
 
               <div className="p_d_location">
@@ -516,31 +431,36 @@ setMyFollowing(folowers)      })
               <div className="p_d_description">{pilotData.bio}</div>
 
               <div className="p_d_btn_container">
-                {myFollowing.includes(pilotData._id) ? <button
-                  className="p_d_follow_btn p_d_btn"
-                  onClick={unfollow}
-                  style={{background: "transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0% 0% no-repeat padding-box", opacity:"0.9"}}
-                >
-                  <img
-                    className="p_d_soc_icon1"
-                    src={userDone}
-                    alt=""
-                    height={"20px"}
-                  />{" "}
-                  Followed
-                </button> : <button
-                  className="p_d_follow_btn p_d_btn"
-                  onClick={followMe}
-                >
-                  <img
-                    className="p_d_soc_icon1"
-                    src={addIcon}
-                    alt=""
-                    height={"20px"}
-                  />{" "}
-                  Follow me
-                </button>}
-                
+                {myFollowing.includes(pilotData.userId) ? (
+                  <button
+                    className="p_d_follow_btn p_d_btn"
+                    onClick={unfollow}
+                    style={{
+                      background:
+                        "transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0% 0% no-repeat padding-box",
+                      opacity: "0.9",
+                    }}
+                  >
+                    <img
+                      className="p_d_soc_icon1"
+                      src={userDone}
+                      alt=""
+                      height={"20px"}
+                    />{" "}
+                    Followed
+                  </button>
+                ) : (
+                  <button className="p_d_follow_btn p_d_btn" onClick={followMe}>
+                    <img
+                      className="p_d_soc_icon1"
+                      src={addIcon}
+                      alt=""
+                      height={"20px"}
+                    />{" "}
+                    Follow me
+                  </button>
+                )}
+
                 <button className="p_d_hire_btn p_d_btn  " onClick={clickHire}>
                   <img
                     className="p_d_soc_icon2"
@@ -550,7 +470,7 @@ setMyFollowing(folowers)      })
                   />{" "}
                   Hire me
                 </button>
-                <button
+                {/* <button
                   className="p_d_message_btn p_d_btn "
                   onClick={openMessage}
                 >
@@ -564,7 +484,7 @@ setMyFollowing(folowers)      })
                 </button>
                 <button className="p_d_more_btn p_d_btn ">
                   <img src={moreIcon} alt="" style={{ marginBottom: "5px" }} />
-                </button>
+                </button> */}
               </div>
             </Col>
             <Col
@@ -665,25 +585,34 @@ setMyFollowing(folowers)      })
           <hr style={{ border: "1px solid #eee", marginBottom: "40px" }} />
           {category === 1 && (
             <Row gutterWidth={10}>
-              {files.map((id, index) => {
+              {files.map((file, index) => {
                 return (
                   <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
                     <div className="p_d_files_container">
-                      <img
-                        className="p_d_files"
-                        src="https://149355317.v2.pressablecdn.com/wp-content/uploads/2019/04/Drone-Photography-UAV-Coach.jpg"
-                        alt=""
-                        width={"100%"}
-                        height={"250px"}
-                      />
-                      {id % 3 === 0 ? (
-                        <img
-                          src={videoIcon}
-                          alt=""
-                          className="p_d_files_video_icon"
-                        />
+                      {file.fileType === "video" ? (
+                        <>
+                          <video
+                            className="p_d_files"
+                            src={`${domain}/${file.file}`}
+                            alt=""
+                            width={"100%"}
+                            height={"250px"}
+                          />
+                          <img
+                            src={videoIcon}
+                            alt=""
+                            className="p_d_files_video_icon"
+                            style={{ top: "calc(50% - 30px)" }}
+                          />
+                        </>
                       ) : (
-                        ""
+                        <img
+                          className="p_d_files"
+                          src={`${domain}/${file.file}`}
+                          alt=""
+                          width={"100%"}
+                          height={"250px"}
+                        />
                       )}
                     </div>
                   </Col>
@@ -702,19 +631,25 @@ setMyFollowing(folowers)      })
           )}
           {category === 2 && (
             <Row gutterWidth={10}>
-              {files.map((id, index) => {
+              {files.map((file, index) => {
                 return (
-                  <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
-                    <div className="p_d_files_container">
-                      <img
-                        className="p_d_files"
-                        src="https://149355317.v2.pressablecdn.com/wp-content/uploads/2019/04/Drone-Photography-UAV-Coach.jpg"
-                        alt=""
-                        width={"100%"}
-                        height={"250px"}
-                      />
-                    </div>
-                  </Col>
+                  <>
+                    {file.fileType === "image" ? (
+                      <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
+                        <div className="p_d_files_container">
+                          <img
+                            className="p_d_files"
+                            src={`${domain}/${file.file}`}
+                            alt=""
+                            width={"100%"}
+                            height={"250px"}
+                          />
+                        </div>
+                      </Col>
+                    ) : (
+                      ""
+                    )}
+                  </>
                 );
               })}
               <div
@@ -730,24 +665,31 @@ setMyFollowing(folowers)      })
           )}
           {category === 3 && (
             <Row gutterWidth={10}>
-              {files.map((id, index) => {
+              {files.map((file, index) => {
                 return (
-                  <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
-                    <div className="p_d_files_container">
-                      <img
-                        className="p_d_files"
-                        src="https://149355317.v2.pressablecdn.com/wp-content/uploads/2019/04/Drone-Photography-UAV-Coach.jpg"
-                        alt=""
-                        width={"100%"}
-                        height={"250px"}
-                      />
-                      <img
-                        src={videoIcon}
-                        alt=""
-                        className="p_d_files_video_icon"
-                      />
-                    </div>
-                  </Col>
+                  <>
+                    {file.fileType === "video" ? (
+                      <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
+                        <div className="p_d_files_container">
+                          <video
+                            className="p_d_files"
+                            src={`${domain}/${file.file}`}
+                            alt=""
+                            width={"100%"}
+                            height={"250px"}
+                          />
+                          <img
+                            src={videoIcon}
+                            alt=""
+                            className="p_d_files_video_icon"
+                            style={{ top: "calc(50% - 30px)" }}
+                          />
+                        </div>
+                      </Col>
+                    ) : (
+                      ""
+                    )}
+                  </>
                 );
               })}
               <div
@@ -763,19 +705,25 @@ setMyFollowing(folowers)      })
           )}
           {category === 4 && (
             <Row gutterWidth={10}>
-              {files.map((id, index) => {
+              {files.map((file, index) => {
                 return (
-                  <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
-                    <div className="p_d_files_container">
-                      <img
-                        className="p_d_files"
-                        src="https://149355317.v2.pressablecdn.com/wp-content/uploads/2019/04/Drone-Photography-UAV-Coach.jpg"
-                        alt=""
-                        width={"100%"}
-                        height={"250px"}
-                      />
-                    </div>
-                  </Col>
+                  <>
+                    {file.fileType === "3d" ? (
+                      <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
+                        <div className="p_d_files_container">
+                          <img
+                            className="p_d_files"
+                            src={`${domain}/${file.file}`}
+                            alt=""
+                            width={"100%"}
+                            height={"250px"}
+                          />
+                        </div>
+                      </Col>
+                    ) : (
+                      ""
+                    )}
+                  </>
                 );
               })}
               <div
@@ -820,8 +768,11 @@ setMyFollowing(folowers)      })
               <Col xl={4} lg={5} md={6} sm={12}>
                 <div className="p_d_pilot_details">
                   <div className="p_d_about_details_title">Pilot type</div>
-                  <div className="p_d_about_details_content">
-                    {pilotData.piotType}
+                  <div
+                    className="p_d_about_details_content"
+                    style={{ textTransform: "cap" }}
+                  >
+                    {pilotData.pilotType} pilot
                   </div>
                   <div className="p_d_about_details_title">DOB</div>
                   <div className="p_d_about_details_content">
@@ -851,7 +802,7 @@ setMyFollowing(folowers)      })
                   <div className="p_d_about_details_content">
                     {pilotData.trainingCenter}
                   </div>
-                  <div className="p_d_about_details_title">Coaching year</div>
+                  <div className="p_d_about_details_title">Completed year</div>
                   <div className="p_d_about_details_content">
                     {pilotData.completedYear}
                   </div>
@@ -876,7 +827,7 @@ setMyFollowing(folowers)      })
 
           {category === 6 && (
             <div className="p_d_followers_container">
-              {follows.map((follow, index) => {
+              {followers.map((follow, index) => {
                 return (
                   <>
                     <Visible xxl xl lg>
@@ -884,7 +835,11 @@ setMyFollowing(folowers)      })
                         <div className="p_d_follower_details_container">
                           <div className="p_d_followers_img_container">
                             <img
-                              src="https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
+                              src={
+                                follow.src
+                                  ? `${domain}/${follow.src}`
+                                  : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
+                              }
                               alt=""
                               height={"150px"}
                               width={"150px"}
@@ -894,22 +849,35 @@ setMyFollowing(folowers)      })
                           <div className="p_d_followers_other_details_xxl">
                             <div className="p_d_followers_name_username">
                               <div className="p_d_followers_name">
-                                Yasar Arafath
+                                {follow.name}
                               </div>
                               <div
                                 className="p_d_followers_username"
                                 style={{
                                   overflow: "hidden",
                                   textOverflow: "ellipsis",
+                                  textTransform: "capitalize",
                                 }}
                               >
-                                User_Name_Yasar_Arafath
+                                {follow.role}
                               </div>
                             </div>
                             <div className="p_d_followers_btn_container">
-                              <button className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl">
-                                Follow
-                              </button>
+                              {myFollowing.includes(follow._id) ? (
+                                <button
+                                  className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
+                                  onClick={() => unfollowId(follow._id)}
+                                >
+                                  Unfollow
+                                </button>
+                              ) : (
+                                <button
+                                  className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
+                                  onClick={() => followMeId(follow._id)}
+                                >
+                                  Follow
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -925,7 +893,11 @@ setMyFollowing(folowers)      })
                         <div className="p_d_follower_details_container">
                           <div className="p_d_followers_img_container">
                             <img
-                              src="https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
+                              src={
+                                follow.src
+                                  ? `${domain}/${follow.src}`
+                                  : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
+                              }
                               alt=""
                               height={"100px"}
                               width={"100px"}
@@ -934,15 +906,27 @@ setMyFollowing(folowers)      })
                           </div>
                           <div className="p_d_followers_other_details_md">
                             <div className="p_d_followers_name">
-                              Yasar Arafath
+                              {follow.name}
                             </div>
-                            <div className="p_d_followers_username">
-                              User_Name_Yasar_Arafath
+                            <div className="p_d_followers_username" style = {{textTransform: "capitalize"}}>
+                              {follow.role}
                             </div>
                             <div className="p_d_followers_btn_container">
-                              <button className="p_d_followers_follow_btn">
-                                Follow
-                              </button>
+                              {myFollowing.includes(follow._id) ? (
+                                <button
+                                  className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
+                                  onClick={() => unfollowId(follow._id)}
+                                >
+                                  Unfollow
+                                </button>
+                              ) : (
+                                <button
+                                  className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
+                                  onClick={() => followMeId(follow._id)}
+                                >
+                                  Follow
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -970,7 +954,7 @@ setMyFollowing(folowers)      })
 
           {category === 7 && (
             <div className="p_d_followers_container">
-              {follows.map((follow, index) => {
+              {following.map((follow, index) => {
                 return (
                   <>
                     <Visible xxl xl lg>
@@ -978,7 +962,11 @@ setMyFollowing(folowers)      })
                         <div className="p_d_follower_details_container">
                           <div className="p_d_followers_img_container">
                             <img
-                              src="https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
+                              src={
+                                follow.src
+                                  ? `${domain}/${follow.src}`
+                                  : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
+                              }
                               alt=""
                               height={"150px"}
                               width={"150px"}
@@ -988,22 +976,35 @@ setMyFollowing(folowers)      })
                           <div className="p_d_followers_other_details_xxl">
                             <div className="p_d_followers_name_username">
                               <div className="p_d_followers_name">
-                                Yasar Arafath
+                                {follow.name}
                               </div>
                               <div
                                 className="p_d_followers_username"
                                 style={{
                                   overflow: "hidden",
                                   textOverflow: "ellipsis",
+                                  textTransform: "capitalize"
                                 }}
                               >
-                                User_Name_Yasar_Arafath
+                                {follow.role}
                               </div>
                             </div>
                             <div className="p_d_followers_btn_container">
-                              <button className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl">
-                                Unfollow
-                              </button>
+                            {myFollowing.includes(follow._id) ? (
+                                <button
+                                  className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
+                                  onClick={() => unfollowId(follow._id)}
+                                >
+                                  Unfollow
+                                </button>
+                              ) : (
+                                <button
+                                  className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
+                                  onClick={() => followMeId(follow._id)}
+                                >
+                                  Follow
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -1019,7 +1020,11 @@ setMyFollowing(folowers)      })
                         <div className="p_d_follower_details_container">
                           <div className="p_d_followers_img_container">
                             <img
-                              src="https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
+                              src={
+                                follow.src
+                                  ? `${domain}/${follow.src}`
+                                  : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
+                              }
                               alt=""
                               height={"100px"}
                               width={"100px"}
@@ -1027,15 +1032,27 @@ setMyFollowing(folowers)      })
                           </div>
                           <div className="p_d_followers_other_details_md">
                             <div className="p_d_followers_name">
-                              Yasar Arafath
+                              {follow.name}
                             </div>
-                            <div className="p_d_followers_username">
-                              User_Name_Yasar_Arafath
+                            <div className="p_d_followers_username" style = {{textTransform: "capitalize"}}>
+                              {follow.role}
                             </div>
                             <div className="p_d_followers_btn_container">
-                              <button className="p_d_followers_follow_btn">
-                                Unfollow
-                              </button>
+                            {myFollowing.includes(follow._id) ? (
+                                <button
+                                  className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
+                                  onClick={() => unfollowId(follow._id)}
+                                >
+                                  Unfollow
+                                </button>
+                              ) : (
+                                <button
+                                  className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
+                                  onClick={() => followMeId(follow._id)}
+                                >
+                                  Follow
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>

@@ -20,7 +20,7 @@ function Imageview() {
   let [likedData, setLikedData] = useState([]);
   useEffect(() => {
     axios
-      .get(`http://localhost:9000/api/image/getImage/${param.id}`)
+      .get(`${domain}/api/image/getImage/${param.id}`)
       .then((res) => {
         console.log(res);
         setImage(res.data[0]);
@@ -28,7 +28,7 @@ function Imageview() {
   }, []);
   useEffect(() => {
     axios
-      .get(`http://localhost:9000/api/image/getUserImages/${param.user_id}`)
+      .get(`${domain}/api/image/getUserImages/${param.user_id}`)
       .then((res) => {
         console.log(res.data.slice(0, 5));
         setOtherImages(res.data.slice(0, 5));
@@ -36,7 +36,7 @@ function Imageview() {
   }, []);
   useEffect(() => {
     axios
-      .post(`http://localhost:9000/api/user/checkUser`, config)
+      .post(`${domain}/api/user/checkUser`, config)
       .then((res) => {
         console.log(res.data);
 
@@ -46,7 +46,7 @@ function Imageview() {
   const downloadImage = (id) => {
     saveAs(`${domain}/${image.file}`, `${image.file}`);
     axios
-      .post(`http://localhost:9000/api/image/downloadImage/${id}`, config)
+      .post(`${domain}/api/image/downloadImage/${id}`, config)
       .then((res) => {
         console.log(res.data);
       });
@@ -63,11 +63,11 @@ function Imageview() {
   };
   let likeImage = () => {
     axios
-      .post(`http://localhost:9000/api/image/likeImage/${image._id}`, config)
+      .post(`${domain}/api/image/likeImage/${image._id}`, config)
       .then((res) => {
         console.log(res.data);
         axios
-          .post(`http://localhost:9000/api/user/checkUser`, config)
+          .post(`${domain}/api/user/checkUser`, config)
           .then((res) => {
             setLikedData(res.data.likedMedia);
           });
@@ -75,11 +75,11 @@ function Imageview() {
   };
   let unlikeImage = () => {
     axios
-      .post(`http://localhost:9000/api/image/unlikeImage/${image._id}`, config)
+      .post(`${domain}/api/image/unlikeImage/${image._id}`, config)
       .then((res) => {
         console.log(res.data);
         axios
-          .post(`http://localhost:9000/api/user/checkUser`, config)
+          .post(`${domain}/api/user/checkUser`, config)
           .then((res) => {
             setLikedData(res.data.likedMedia);
           });
@@ -97,7 +97,7 @@ document.getElementById("hideComment").style.display = "block"
     <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
       <Container>
         <div style={{ marginTop: "35px" }}>
-          <div className="i_v_back">Back</div>
+          <div className="i_v_back" style = {{width: "50%", overflow: "hidden", textOverflow: "ellipsis"}}>{image.postName}</div>
           <button
             className="i_v_download"
             onClick={() => downloadImage(image._id)}
@@ -112,7 +112,6 @@ document.getElementById("hideComment").style.display = "block"
               backgroundColor: "black",
               objectFit: "cover",
               width: "100%",
-              height: "700px",
               margin: "32px 0px 45px 0px",
               borderRadius: "10px",
             }}
@@ -126,7 +125,6 @@ document.getElementById("hideComment").style.display = "block"
           <img
             style={{
               width: "100%",
-              height: "700px",
               margin: "32px 0px 45px 0px",
               borderRadius: "10px",
             }}
@@ -319,6 +317,7 @@ document.getElementById("hideComment").style.display = "block"
                           height: "130px",
                           margin: "0px 0px 10px 0px",
                           borderRadius: "5px",
+                          objectFit: "cover"
                         }}
                         src={`${domain}/${item.file}`}
                         onClick={() => clicked(item._id, item.userId)}

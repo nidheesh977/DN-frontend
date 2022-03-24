@@ -378,7 +378,8 @@ export default function ServiceCenterDetails(props) {
         // setData({response})
         // setDetails(response.data);
         // setStatus(response.status);
-        setReviews(response.data);
+        // setReviews(response.data);
+        console.log(response.data)
 
         console.log(response);
         // setBrands(response.data.brandOfDrones)

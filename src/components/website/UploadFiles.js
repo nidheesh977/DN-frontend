@@ -15,7 +15,7 @@ import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
 import moreIcon from "../images/Path.svg";
 import axios from "axios";
-import Select from 'react-select'
+import Select from "react-select";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -46,7 +46,8 @@ class UploadFiles extends Component {
       showEditOptions: "",
       error: false,
       industries: [],
-      industryOptions: []
+      industryOptions: [],
+      resolutionCheckCount: 0,
     };
   }
 
@@ -54,32 +55,27 @@ class UploadFiles extends Component {
     document
       .getElementById("u_f_nav_link1")
       .classList.add("u_f_nav_link_selected");
-      axios.get(`${domain}/api/industry/getIndustries`).then(res=>{
-        console.log(res)
-        this.setState({
-          industries: res.data
-        })
-        const options = this.state.industries.map(d => ({
-          "value" : d.industry,
-          "label" : d.industry
-        
-        }))
-        this.setState({
-          industryOptions: options
-        })
-
-      })
-      axios.get(`${domain}/api/keyword/getKeywords`)
-      .then(res=>{
-        console.log(res)
-        let keywords = []
-        for (let i = 0; i < res.data.length; i++){
-          keywords.push(res.data[i].keyword)
-        }
-        this.setState({
-          suggested_keywords: keywords
-        })
-      })
+    axios.get(`${domain}/api/industry/getIndustries`).then((res) => {
+      this.setState({
+        industries: res.data,
+      });
+      const options = this.state.industries.map((d) => ({
+        value: d.industry,
+        label: d.industry,
+      }));
+      this.setState({
+        industryOptions: options,
+      });
+    });
+    axios.get(`${domain}/api/keyword/getKeywords`).then((res) => {
+      let keywords = [];
+      for (let i = 0; i < res.data.length; i++) {
+        keywords.push(res.data[i].keyword);
+      }
+      this.setState({
+        suggested_keywords: keywords,
+      });
+    });
   }
 
   changeTab = (tab) => {
@@ -97,9 +93,54 @@ class UploadFiles extends Component {
       .classList.add("u_f_nav_link_selected");
   };
 
+  checkResolution = () => {
+    if (
+      this.state.resolutionCheckCount < this.state.selected_files_details.length
+    ) {
+      // setTimeout(()=>{
+      //   console.log(document.getElementById("u_f_video_0").videoHeight)
+      //   console.log(document.getElementById("u_f_video_0").videoWidth)
+      // },1000)
+      if (
+        this.state.selected_files_details[this.state.resolutionCheckCount]
+          .select_type[0] !== "v"
+      ) {
+        let resolution_satisfied = true;
+        let img = new Image();
+        img.src = window.URL.createObjectURL(
+          this.state.selected_files_details[this.state.resolutionCheckCount].row
+        );
+        img.onload = () => {
+          if (img.width < 1100 || img.height < 500) {
+            resolution_satisfied = false;
+          } else {
+            resolution_satisfied = true;
+          }
+          let files = this.state.selected_files_details;
+          files[this.state.resolutionCheckCount].resolution_satisfied =
+            resolution_satisfied;
+          this.setState({
+            selected_files_details: files,
+            resolutionCheckCount: this.state.resolutionCheckCount + 1,
+          });
+          setTimeout(() => {
+            this.checkResolution();
+          }, 20);
+        };
+      } else {
+        this.setState({
+          resolutionCheckCount: this.state.resolutionCheckCount + 1,
+        });
+        setTimeout(() => {
+          this.checkResolution();
+        }, 20);
+      }
+    }
+  };
+
   createFileObject = (files) => {
     const reader = new FileReader();
-    reader.onload = () => {
+    reader.onload = (e) => {
       if (reader.readyState === 2) {
         var files_details = this.state.selected_files_details;
         files_details[this.state.total_file_objects_count].file = reader.result;
@@ -116,6 +157,7 @@ class UploadFiles extends Component {
             file_objects_count: 0,
           });
           this.refs.addFileRef.value = "";
+          this.checkResolution();
         }
       }
     };
@@ -130,7 +172,24 @@ class UploadFiles extends Component {
       files_count: e.target.files.length,
     });
     for (var i = 0; i < e.target.files.length; i++) {
+      // let resolution_satisfied = true
+      // let img = new Image();
+      // img.src = window.URL.createObjectURL(e.target.files[0]);
+      // img.onload = () => {
+      //   alert(img.width + " " + img.height);
+      //   if (img.width < 1100 || img.height < 500){
+      //     resolution_satisfied = false
+      //   }
+      //   else{
+      //     resolution_satisfied = true
+      //   }
+      // };
       var details = this.state.selected_files_details;
+      var keywords = [];
+      for (var j = 0; j < this.state.suggested_keywords.length; j++) {
+        keywords.push(this.state.suggested_keywords[j]);
+      }
+
       details.push({
         file: "",
         name: e.target.files[i].name,
@@ -141,12 +200,13 @@ class UploadFiles extends Component {
         price: "",
         category: "",
         experience: "",
-        suggested_keywords: this.state.suggested_keywords,
+        suggested_keywords: keywords,
         keywords: [],
         adult_content: false,
         select_type: e.target.files[i].type,
         row: e.target.files[i],
-        upload_status: "selected"
+        upload_status: "selected",
+        resolution_satisfied: true,
       });
       this.setState({
         selected_files_details: details,
@@ -159,49 +219,42 @@ class UploadFiles extends Component {
   };
 
   categoryChanged = (e) => {
-    console.log(e.target.value);
-    console.log(e.target);
     this.setState({
       selected_category: e.target.value,
     });
   };
-//yaseen
+  //yaseen
 
-industryChange = (value)=>{
-  console.log("Changed")
-  console.log(value)
-}
-
-customStyles = {
-  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-    return {
+  customStyles = {
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+      return {
+        ...styles,
+        backgroundColor: isFocused ? "#999999" : null,
+        color: "#333333",
+      };
+    },
+  };
+  colourStyles = {
+    menuList: (styles) => ({
       ...styles,
-      backgroundColor: isFocused ? "#999999" : null,
-      color: "#333333",
-    };
-  }
-}
-colourStyles = {
-  menuList: styles => ({
-      ...styles,
-      background: 'papayawhip'
-  }),
-  option: (styles, {isFocused, isSelected}) => ({
+      background: "papayawhip",
+    }),
+    option: (styles, { isFocused, isSelected }) => ({
       ...styles,
       background: isFocused
-          ? 'hsla(291, 64%, 42%, 0.5)'
-          : isSelected
-              ? 'hsla(291, 64%, 42%, 1)'
-              : undefined,
-      zIndex: 1
-  }),
-  menu: base => ({
+        ? "hsla(291, 64%, 42%, 0.5)"
+        : isSelected
+        ? "hsla(291, 64%, 42%, 1)"
+        : undefined,
+      zIndex: 1,
+    }),
+    menu: (base) => ({
       ...base,
-      zIndex: 100
-  })
-  }
-  
-//yaseen
+      zIndex: 100,
+    }),
+  };
+
+  //yaseen
   selectImage = (e, id) => {
     this.setState({
       file_edit: id,
@@ -211,11 +264,10 @@ colourStyles = {
   fileNameChange = (e) => {
     var files_details = this.state.selected_files_details;
     files_details[this.state.file_edit].custom_name = e.target.value;
-    
+
     this.setState({
       selected_files_details: files_details,
     });
-    
   };
 
   priceChange = (e) => {
@@ -229,22 +281,19 @@ colourStyles = {
   categoryChange = (value) => {
     var files_details = this.state.selected_files_details;
     files_details[this.state.file_edit].category = value;
-    
+
     this.setState({
       selected_files_details: files_details,
     });
-    console.log(value)
-    
   };
 
   experienceChange = (e) => {
     var files_details = this.state.selected_files_details;
     files_details[this.state.file_edit].experience = e.target.value;
-    
+
     this.setState({
       selected_files_details: files_details,
     });
-    
   };
 
   changeUsage = (usage) => {
@@ -277,8 +326,12 @@ colourStyles = {
       upload_choice: false,
       selected_tab: 2,
     });
-    document.getElementById("u_f_nav_link1").classList.remove("u_f_nav_link_selected");
-    document.getElementById("u_f_nav_link2").classList.add("u_f_nav_link_selected");
+    document
+      .getElementById("u_f_nav_link1")
+      .classList.remove("u_f_nav_link_selected");
+    document
+      .getElementById("u_f_nav_link2")
+      .classList.add("u_f_nav_link_selected");
   };
 
   uploadNew = () => {
@@ -344,7 +397,6 @@ colourStyles = {
     this.setState({
       selected_files_details: files_details,
     });
-    
   };
 
   removeSelectedKeyword = (keyword) => {
@@ -392,6 +444,7 @@ colourStyles = {
         file_edit: 0,
         upload_choice: false,
         showEditOptions: "",
+        resolutionCheckCount: 0,
       });
       document.getElementById("u_f_post_name").value = "";
     } else {
@@ -407,6 +460,7 @@ colourStyles = {
         selected_files_details: selected_files_details,
         total_file_objects_count: this.state.total_file_objects_count - 1,
         file_edit: 0,
+        resolutionCheckCount: this.state.resolutionCheckCount - 1,
       });
     }
   };
@@ -431,67 +485,111 @@ colourStyles = {
       }
     };
     reader.readAsDataURL(e.target.files[0]);
+    if (e.target.files[0].type[0] !== "v") {
+      let img = new Image();
+      img.src = window.URL.createObjectURL(e.target.files[0]);
+      img.onload = () => {
+        if (img.width < 1100 || img.height < 500) {
+          let files = this.state.selected_files_details;
+          files[id].resolution_satisfied = false;
+          this.setState({
+            selected_files_details: files,
+          });
+        } else {
+          let files = this.state.selected_files_details;
+          files[id].resolution_satisfied = true;
+          this.setState({
+            selected_files_details: files,
+          });
+        }
+      };
+    } else {
+      let files = this.state.selected_files_details;
+      files[id].resolution_satisfied = true;
+      this.setState({
+        selected_files_details: files,
+      });
+    }
   };
 
   publish = () => {
-    let error = false
-    let selected_files = this.state.selected_files_details
-    for (let i = selected_files.length-1; i >= 0; i--){
+    let error = false;
+    let selected_files = this.state.selected_files_details;
+    for (let i = selected_files.length - 1; i >= 0; i--) {
       if (
-        (selected_files[i].row.type[0] === "v" && selected_files[i].size/1000000 <= 10) || 
-        (selected_files[i].row.type[0] !== "v" && selected_files[i].size/1000000 <= 2)
-      ){
-        let file_error = false
-        if (selected_files[i].custom_name === ""){
-          error = true
-          file_error = true
-          selected_files[i].error = true
+        ((selected_files[i].row.type[0] === "v" &&
+          selected_files[i].size / 1000000 <= 10) ||
+          (selected_files[i].row.type[0] !== "v" &&
+            selected_files[i].size / 1000000 <= 2)) &&
+        selected_files[i].resolution_satisfied === true
+      ) {
+        let file_error = false;
+        if (selected_files[i].custom_name === "") {
+          error = true;
+          file_error = true;
+          selected_files[i].error = true;
           this.setState({
             selected_files_details: selected_files,
-            file_edit: i
-          })
-          let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
-          window.scrollTo({top: y, behavior: 'smooth'});
+            file_edit: i,
+          });
+          let y =
+            document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
+              .top +
+            window.pageYOffset +
+            -150;
+          window.scrollTo({ top: y, behavior: "smooth" });
         }
-        if (selected_files[i].category === ""){
-          error = true
-          file_error = true
-          selected_files[i].error = true
+        if (selected_files[i].category === "") {
+          error = true;
+          file_error = true;
+          selected_files[i].error = true;
           this.setState({
             selected_files_details: selected_files,
-            file_edit: i
-          })
-          let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
-          window.scrollTo({top: y, behavior: 'smooth'});
+            file_edit: i,
+          });
+          let y =
+            document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
+              .top +
+            window.pageYOffset +
+            -150;
+          window.scrollTo({ top: y, behavior: "smooth" });
         }
-        if (selected_files[i].experience === ""){
-          error = true
-          file_error = true
-          selected_files[i].error = true
+        if (selected_files[i].experience === "") {
+          error = true;
+          file_error = true;
+          selected_files[i].error = true;
           this.setState({
             selected_files_details: selected_files,
-            file_edit: i
-          })
-          let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
-          window.scrollTo({top: y, behavior: 'smooth'});
+            file_edit: i,
+          });
+          let y =
+            document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
+              .top +
+            window.pageYOffset +
+            -150;
+          window.scrollTo({ top: y, behavior: "smooth" });
         }
-        if (selected_files[i].keywords.length === 0){
-          error = true
-          file_error = true
-          selected_files[i].error = true
+        if (selected_files[i].keywords.length === 0) {
+          error = true;
+          file_error = true;
+          selected_files[i].error = true;
           this.setState({
             selected_files_details: selected_files,
-            file_edit: i
-          })
-          let y = document.getElementById(`u_f_file_${i}`).getBoundingClientRect().top + window.pageYOffset + (-150);
-          window.scrollTo({top: y, behavior: 'smooth'});
+            file_edit: i,
+          });
+          let y =
+            document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
+              .top +
+            window.pageYOffset +
+            -150;
+          window.scrollTo({ top: y, behavior: "smooth" });
         }
-  
-        if (!file_error){
-          selected_files[i].error = false
+
+        if (!file_error) {
+          selected_files[i].error = false;
           this.setState({
-            selected_files_details: selected_files
-          })
+            selected_files_details: selected_files,
+          });
         }
       }
     }
@@ -502,59 +600,53 @@ colourStyles = {
       },
     };
 
-    if (!error){
-      for (let i = 0; i < this.state.selected_files_details.length; i++){
-  
-        let currentFile = this.state.selected_files_details[i]
+    if (!error) {
+      for (let i = 0; i < this.state.selected_files_details.length; i++) {
+        let currentFile = this.state.selected_files_details[i];
         if (
-          (selected_files[i].row.type[0] === "v" && selected_files[i].size/1000000 <= 10) || 
-          (selected_files[i].row.type[0] !== "v" && selected_files[i].size/1000000 <= 2)
-        ){
-          if (currentFile.upload_status !== "uploaded"){
-    
-            let files = this.state.selected_files_details
-            files[i].upload_status = "uploading"
+          ((selected_files[i].row.type[0] === "v" &&
+            selected_files[i].size / 1000000 <= 10) ||
+            (selected_files[i].row.type[0] !== "v" &&
+              selected_files[i].size / 1000000 <= 2)) &&
+          selected_files[i].resolution_satisfied === true
+        ) {
+          if (currentFile.upload_status !== "uploaded") {
+            let files = this.state.selected_files_details;
+            files[i].upload_status = "uploading";
             this.setState({
-              selected_files_details: files
-            })
-      
+              selected_files_details: files,
+            });
+
             let data = new FormData();
-      
-            console.log(currentFile)
-      
-            data.append("file", currentFile.row)
-            data.append("postName", currentFile.custom_name)
-            if (currentFile.select_type[0] === "v"){
-              data.append("fileType", "video")
+
+            data.append("file", currentFile.row);
+            data.append("postName", currentFile.custom_name);
+            if (currentFile.select_type[0] === "v") {
+              data.append("fileType", "video");
+            } else if (currentFile.select_type[0] === "i") {
+              data.append("fileType", "image");
+            } else {
+              data.append("fileType", currentFile.select_type);
             }
-            else if (currentFile.select_type[0] === "i"){
-              data.append("fileType", "image")
-            }
-            else{
-              data.append("fileType", currentFile.select_type)
-            }
-            data.append("experience", currentFile.experience)
-            data.append("keywords", currentFile.keywords)
-            data.append("adult", currentFile.adult_content)
-            data.append("category", currentFile.category.value)
-            
-            console.log(data)
-      
-            axios.post(`${domain}/api/image/createImage`, data, config)
-            .then(res => {
-              console.log(res.data)
-              files[i].upload_status = "uploaded"
-              this.setState({
-                selected_files_details: files
+            data.append("experience", currentFile.experience);
+            data.append("keywords", currentFile.keywords);
+            data.append("adult", currentFile.adult_content);
+            data.append("category", currentFile.category.value);
+
+            axios
+              .post(`${domain}/api/image/createImage`, data, config)
+              .then((res) => {
+                files[i].upload_status = "uploaded";
+                this.setState({
+                  selected_files_details: files,
+                });
               })
-            })
-            .catch(err=>{
-              console.log(err.data)
-              files[i].upload_status = "upload_failed"
-              this.setState({
-                selected_files_details: files
-              })
-            })
+              .catch((err) => {
+                files[i].upload_status = "upload_failed";
+                this.setState({
+                  selected_files_details: files,
+                });
+              });
           }
         }
       }
@@ -620,7 +712,8 @@ colourStyles = {
                               for="add_files"
                               id="u_f_add_more"
                             >
-                              <i class="fas fa-plus u_f_add_more_icon"></i> Add more
+                              <i class="fas fa-plus u_f_add_more_icon"></i> Add
+                              more
                             </label>
                             <select
                               name=""
@@ -753,7 +846,8 @@ colourStyles = {
                                     {(this.state.selected_files_details[index]
                                       .select_type[0] ===
                                       this.state.selected_category[0] ||
-                                      this.state.selected_category === "all") && (
+                                      this.state.selected_category ===
+                                        "all") && (
                                       <Col
                                         xxl={6}
                                         xl={6}
@@ -761,13 +855,15 @@ colourStyles = {
                                         md={6}
                                         sm={12}
                                         xs={12}
-                                        id = {`u_f_file_${index}`}
+                                        id={`u_f_file_${index}`}
                                       >
                                         <div
                                           className={
                                             this.state.file_edit == index
                                               ? "u_f_selected_file u_f_file_preview_container"
-                                              : file.error?"u_f_file_preview_container u_f_file_error":"u_f_file_preview_container"
+                                              : file.error
+                                              ? "u_f_file_preview_container u_f_file_error"
+                                              : "u_f_file_preview_container"
                                           }
                                           onMouseDown={(e) => {
                                             this.selectImage(e, index);
@@ -787,7 +883,7 @@ colourStyles = {
                                               >
                                                 {file.category.value}
                                               </div>
-                                            ):(
+                                            ) : (
                                               <div
                                                 id={"file_name_" + index}
                                               ></div>
@@ -811,26 +907,70 @@ colourStyles = {
                                               <video
                                                 src={file.file}
                                                 style={{ borderRadius: "9px" }}
+                                                id={`u_f_video_${index}`}
                                               />
-                                              {file.upload_status === "uploading" && 
+                                              {file.upload_status ===
+                                                "uploading" && (
                                                 <>
-                                                  <div className = "u_f_uploading_border"></div>
-                                                  <div className = "u_f_upload_percentage">75%</div>
+                                                  <div className="u_f_uploading_border"></div>
+                                                  <div className="u_f_upload_percentage">
+                                                    75%
+                                                  </div>
                                                 </>
-                                              }
-                                              {file.upload_status === "uploaded" && 
+                                              )}
+                                              {file.upload_status ===
+                                                "uploaded" && (
                                                 <>
-                                                  <div className = "u_f_upload_success_border"></div>
-                                                  <div className = "u_f_upload_success_tick"><i class="fa fa-check" aria-hidden="true"></i></div>
+                                                  <div className="u_f_upload_success_border"></div>
+                                                  <div className="u_f_upload_success_tick">
+                                                    <i
+                                                      class="fa fa-check"
+                                                      aria-hidden="true"
+                                                    ></i>
+                                                  </div>
                                                 </>
-                                              }
-                                              {file.size/1000000 > 10 &&
+                                              )}
+                                              {file.size / 1000000 > 10 && (
                                                 <>
-                                                  <div className = "u_f_size_exceed_border"></div>
-                                                  <div className = "u_f_size_exceed_close"><i class="fa fa-times" aria-hidden="true" style={{fontSize: "25px"}}></i></div>
-                                                  <div className="u_f_size_exceed_msg">Size exceeded</div>
+                                                  <div className="u_f_size_exceed_border"></div>
+                                                  <div className="u_f_size_exceed_close">
+                                                    <i
+                                                      class="fa fa-times"
+                                                      aria-hidden="true"
+                                                      style={{
+                                                        fontSize: "25px",
+                                                      }}
+                                                    ></i>
+                                                  </div>
+                                                  <div className="u_f_size_exceed_msg">
+                                                    Size exceeded
+                                                  </div>
                                                 </>
-                                              }
+                                              )}
+                                              {!file.resolution_satisfied &&
+                                                file.size / 1000000 <= 10 && (
+                                                  <>
+                                                    <div className="u_f_size_exceed_border"></div>
+                                                    <div className="u_f_size_exceed_close">
+                                                      <i
+                                                        class="fa fa-times"
+                                                        aria-hidden="true"
+                                                        style={{
+                                                          fontSize: "25px",
+                                                        }}
+                                                      ></i>
+                                                    </div>
+                                                    <div
+                                                      className="u_f_size_exceed_msg"
+                                                      style={{
+                                                        fontSize: "11px",
+                                                      }}
+                                                    >
+                                                      File Resolution should be
+                                                      minimum 1100x500
+                                                    </div>
+                                                  </>
+                                                )}
                                             </>
                                           ) : (
                                             <>
@@ -838,25 +978,84 @@ colourStyles = {
                                                 src={file.file}
                                                 style={{ borderRadius: "9px" }}
                                               />
-                                              {file.upload_status === "uploading" && 
+                                              {file.upload_status ===
+                                                "uploading" && (
                                                 <>
-                                                  <div className = "u_f_uploading_border"></div>
-                                                  <div className = "u_f_upload_percentage">75%</div>
+                                                  <div className="u_f_uploading_border"></div>
+                                                  <div className="u_f_upload_percentage">
+                                                    75%
+                                                  </div>
                                                 </>
-                                              }
-                                              {file.upload_status === "uploaded" && 
+                                              )}
+                                              {file.upload_status ===
+                                                "uploaded" && (
                                                 <>
-                                                  <div className = "u_f_upload_success_border"></div>
-                                                  <div className = "u_f_upload_success_tick"><i class="fa fa-check" aria-hidden="true"></i></div>
+                                                  <div className="u_f_upload_success_border"></div>
+                                                  <div className="u_f_upload_success_tick">
+                                                    <i
+                                                      class="fa fa-check"
+                                                      aria-hidden="true"
+                                                    ></i>
+                                                  </div>
                                                 </>
-                                              }
-                                              {file.upload_status === "upload_failed" && <i class="fa fa-times-circle" aria-hidden="true" style = {{position: "absolute", top: "calc(50% - 50px)", left: "calc(50% - 50px)", color: "red", fontSize: "100px", opacity: "0.7"}}></i>}
-                                              {file.size/1000000 > 2 &&
+                                              )}
+                                              {file.upload_status ===
+                                                "upload_failed" && (
+                                                <i
+                                                  class="fa fa-times-circle"
+                                                  aria-hidden="true"
+                                                  style={{
+                                                    position: "absolute",
+                                                    top: "calc(50% - 50px)",
+                                                    left: "calc(50% - 50px)",
+                                                    color: "red",
+                                                    fontSize: "100px",
+                                                    opacity: "0.7",
+                                                  }}
+                                                ></i>
+                                              )}
+
+                                              {file.size / 1000000 > 2 && (
                                                 <>
-                                                  <div className = "u_f_size_exceed_border"></div>
-                                                  <div className = "u_f_size_exceed_x">{file.size/1000000}<i class="fa-solid fa-xmark"></i></div>
+                                                  <div className="u_f_size_exceed_border"></div>
+                                                  <div className="u_f_size_exceed_close">
+                                                    <i
+                                                      class="fa fa-times"
+                                                      aria-hidden="true"
+                                                      style={{
+                                                        fontSize: "25px",
+                                                      }}
+                                                    ></i>
+                                                  </div>
+                                                  <div className="u_f_size_exceed_msg">
+                                                    Size exceeded
+                                                  </div>
                                                 </>
-                                              }
+                                              )}
+                                              {!file.resolution_satisfied &&
+                                                file.size / 1000000 <= 2 && (
+                                                  <>
+                                                    <div className="u_f_size_exceed_border"></div>
+                                                    <div className="u_f_size_exceed_close">
+                                                      <i
+                                                        class="fa fa-times"
+                                                        aria-hidden="true"
+                                                        style={{
+                                                          fontSize: "25px",
+                                                        }}
+                                                      ></i>
+                                                    </div>
+                                                    <div
+                                                      className="u_f_size_exceed_msg"
+                                                      style={{
+                                                        fontSize: "11px",
+                                                      }}
+                                                    >
+                                                      File Resolution should be
+                                                      minimum 1100x500
+                                                    </div>
+                                                  </>
+                                                )}
                                             </>
                                           )}
                                           <div
@@ -869,38 +1068,40 @@ colourStyles = {
                                             <img src={moreIcon} alt="" />
                                           </div>
                                           {this.state.showEditOptions ===
-                                            index && file.upload_status === "selected" &&(
-                                            <div
-                                              className="u_f_edit_content"
-                                              onMouseLeave={() =>
-                                                this.hideEditOptions(index)
-                                              }
-                                            >
-                                              <label>
-                                                <input
-                                                  type="file"
-                                                  name=""
-                                                  id=""
-                                                  accept="video/*,image/*"
-                                                  style={{ display: "none" }}
-                                                  onChange={(e) =>
-                                                    this.changeFile(e, index)
-                                                  }
-                                                />
-                                                <div className="u_f_edit_content_title">
-                                                  Change
-                                                </div>
-                                              </label>
+                                            index &&
+                                            file.upload_status ===
+                                              "selected" && (
                                               <div
-                                                className="u_f_edit_content_title"
-                                                onClick={() =>
-                                                  this.removeFile(index)
+                                                className="u_f_edit_content"
+                                                onMouseLeave={() =>
+                                                  this.hideEditOptions(index)
                                                 }
                                               >
-                                                Remove
+                                                <label>
+                                                  <input
+                                                    type="file"
+                                                    name=""
+                                                    id=""
+                                                    accept="video/*,image/*"
+                                                    style={{ display: "none" }}
+                                                    onChange={(e) =>
+                                                      this.changeFile(e, index)
+                                                    }
+                                                  />
+                                                  <div className="u_f_edit_content_title">
+                                                    Change
+                                                  </div>
+                                                </label>
+                                                <div
+                                                  className="u_f_edit_content_title"
+                                                  onClick={() =>
+                                                    this.removeFile(index)
+                                                  }
+                                                >
+                                                  Remove
+                                                </div>
                                               </div>
-                                            </div>
-                                          )}
+                                            )}
                                         </div>
                                       </Col>
                                     )}
@@ -972,11 +1173,16 @@ colourStyles = {
                             }
                             onChange={this.fileNameChange}
                           />
-                          {
-                            this.state.selected_files_details[this.state.file_edit].error === true &&
-                            this.state.selected_files_details[this.state.file_edit].custom_name === "" &&
-                            <div className="u_f_error_msg">Post name is required</div>
-                          }
+                          {this.state.selected_files_details[
+                            this.state.file_edit
+                          ].error === true &&
+                            this.state.selected_files_details[
+                              this.state.file_edit
+                            ].custom_name === "" && (
+                              <div className="u_f_error_msg">
+                                Post name is required
+                              </div>
+                            )}
                         </>
                       ) : (
                         <input
@@ -1020,12 +1226,12 @@ colourStyles = {
                             className={
                               this.state.selected_files_details[
                                 this.state.file_edit
-                              ].select_type === "3D_image"
+                              ].select_type === "3d"
                                 ? "u_f_file_type u_f_file_usage_selected"
                                 : "u_f_file_type"
                             }
                             id="u_f_file_type3"
-                            onClick={() => this.selectImageType("3D_image")}
+                            onClick={() => this.selectImageType("3d")}
                           >
                             3D Images
                           </div>
@@ -1047,13 +1253,28 @@ colourStyles = {
                       <div className="u_f_input_title">Industry</div>
                       {this.state.files_selected ? (
                         <>
-                        <Select options={this.state.industryOptions} onChange={this.categoryChange} styles={this.customStyles} value={this.state.selected_files_details[this.state.file_edit].category} className = "u_f_category_dropdown" />
-                        <div style = {{marginBottom: "30px"}}></div>
-                          {
-                            this.state.selected_files_details[this.state.file_edit].error === true &&
-                            this.state.selected_files_details[this.state.file_edit].category === "" &&
-                            <div className="u_f_error_msg">Industry is required</div>
-                          }
+                          <Select
+                            options={this.state.industryOptions}
+                            onChange={this.categoryChange}
+                            styles={this.customStyles}
+                            value={
+                              this.state.selected_files_details[
+                                this.state.file_edit
+                              ].category
+                            }
+                            className="u_f_category_dropdown"
+                          />
+                          <div style={{ marginBottom: "30px" }}></div>
+                          {this.state.selected_files_details[
+                            this.state.file_edit
+                          ].error === true &&
+                            this.state.selected_files_details[
+                              this.state.file_edit
+                            ].category === "" && (
+                              <div className="u_f_error_msg">
+                                Industry is required
+                              </div>
+                            )}
                         </>
                       ) : (
                         <input
@@ -1082,11 +1303,16 @@ colourStyles = {
                             }
                             onChange={this.experienceChange}
                           ></textarea>
-                          {
-                            this.state.selected_files_details[this.state.file_edit].error === true &&
-                            this.state.selected_files_details[this.state.file_edit].experience === "" &&
-                            <div className="u_f_error_msg">Experience is required</div>
-                          }
+                          {this.state.selected_files_details[
+                            this.state.file_edit
+                          ].error === true &&
+                            this.state.selected_files_details[
+                              this.state.file_edit
+                            ].experience === "" && (
+                              <div className="u_f_error_msg">
+                                Experience is required
+                              </div>
+                            )}
                         </>
                       ) : (
                         <textarea
@@ -1108,16 +1334,21 @@ colourStyles = {
                         onKeyUp={this.checkNewKeywordSubmit}
                         disabled={!this.state.files_selected}
                         value={this.state.new_keyword}
-                        placeholder = "Type and press enter to select."
+                        placeholder="Type and press enter to select."
                       />
-                      
+
                       {this.state.files_selected && (
                         <div className="u_f_input_keywords_container">
-                          {
-                            this.state.selected_files_details[this.state.file_edit].error === true &&
-                            this.state.selected_files_details[this.state.file_edit].keywords.length === 0 &&
-                            <div className="u_f_error_msg">Select atleast one keyword.</div>
-                          }
+                          {this.state.selected_files_details[
+                            this.state.file_edit
+                          ].error === true &&
+                            this.state.selected_files_details[
+                              this.state.file_edit
+                            ].keywords.length === 0 && (
+                              <div className="u_f_error_msg">
+                                Select atleast one keyword.
+                              </div>
+                            )}
                           {this.state.selected_files_details[
                             this.state.file_edit
                           ].keywords.map((keyword, index) => {
@@ -1128,7 +1359,7 @@ colourStyles = {
                                   this.removeSelectedKeyword(keyword)
                                 }
                               >
-                                {keyword}{" "} &nbsp;
+                                {keyword} &nbsp;
                                 <i class="fa fa-times" aria-hidden="true"></i>
                               </div>
                             );
