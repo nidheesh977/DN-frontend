@@ -1020,12 +1020,12 @@ colourStyles = {
                             className={
                               this.state.selected_files_details[
                                 this.state.file_edit
-                              ].select_type === "3D_image"
+                              ].select_type === "3d"
                                 ? "u_f_file_type u_f_file_usage_selected"
                                 : "u_f_file_type"
                             }
                             id="u_f_file_type3"
-                            onClick={() => this.selectImageType("3D_image")}
+                            onClick={() => this.selectImageType("3d")}
                           >
                             3D Images
                           </div>

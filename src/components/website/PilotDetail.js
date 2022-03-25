@@ -354,7 +354,7 @@ setMyFollowing(folowers)      })
   let followMe = () => {
     axios
       .post(
-        `${domain}/api/follow/createFollow/${props.match.params.id}`,
+        `http://localhost:9000/api/follow/createFollow/${props.match.params.id}`,
         config
       )
       .then((response) => {
@@ -372,7 +372,7 @@ setMyFollowing(folowers)      })
   let unfollow = () => {
     axios
       .post(
-        `${domain}/api/follow/removeFollow/${props.match.params.id}`,
+        `http://localhost:9000/api/follow/removeFollow/${props.match.params.id}`,
         config
       )
       .then((response) => {
@@ -516,7 +516,7 @@ setMyFollowing(folowers)      })
               <div className="p_d_description">{pilotData.bio}</div>
 
               <div className="p_d_btn_container">
-                {myFollowing.includes(pilotData._id) ? <button
+                {myFollowing.includes(pilotData.userId) ? <button
                   className="p_d_follow_btn p_d_btn"
                   onClick={unfollow}
                   style={{background: "transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0% 0% no-repeat padding-box", opacity:"0.9"}}
