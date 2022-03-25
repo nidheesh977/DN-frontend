@@ -684,7 +684,7 @@ class GalleryFilter extends React.Component {
                                                     <div className="content-overlay-video"></div>
                                                     <video className="thumbnail GalleryImg">
                                                       <source
-                                                        src={`${domain}/${user.file}`}
+                                                        src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${user.file}`}
                                                         type="video/mp4"
                                                       />
                                                     </video>
@@ -767,7 +767,7 @@ class GalleryFilter extends React.Component {
                                                     <div className="content-overlay"></div>
                                                     <img
                                                       className="thumbnail GalleryImg"
-                                                      src={`${domain}/${user.file}`}
+                                                      src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${user.file}`}
                                                     />
                                                   </Link>
                                                   <figcaption

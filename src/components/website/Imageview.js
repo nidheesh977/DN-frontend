@@ -58,8 +58,9 @@ function Imageview() {
   };
 
   let clicked = (id, userId) => {
-    history.push(`/imageview/${id}/${userId}`);
-    window.location.reload();
+    window.location.href = `/imageview/${id}/${userId}`
+    // history.push(`/imageview/${id}/${userId}`);
+    // window.location.reload();
   };
   let likeImage = () => {
     axios
@@ -117,8 +118,8 @@ document.getElementById("hideComment").style.display = "block"
             }}
             controls
           >
-            <source src={`${domain}/${image.file}`} type="video/mp4" />
-            <source src={`${domain}/${image.file}`} type="video/ogg" />
+            <source src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`} type="video/mp4" />
+            <source src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`} type="video/ogg" />
             Your browser does not support the video tag.
           </video>
         ) : (
@@ -129,7 +130,7 @@ document.getElementById("hideComment").style.display = "block"
               borderRadius: "10px",
             }}
             className="mainImage"
-            src={`${domain}/${image.file}`}
+            src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
           />
         )}
 
@@ -301,11 +302,11 @@ document.getElementById("hideComment").style.display = "block"
                         onClick={() => clicked(item._id, item.userId)}
                       >
                         <source
-                          src={`${domain}/${item.file}`}
+                          src={`https://dn-nexevo-thumbnail.s3.ap-south-1.amazonaws.com/${item.file}`}
                           type="video/mp4"
                         />
                         <source
-                          src={`${domain}/${item.file}`}
+                          src={`https://dn-nexevo-thumbnail.s3.ap-south-1.amazonaws.com/${item.file}`}
                           type="video/ogg"
                         />
                         Your browser does not support the video tag.
@@ -319,7 +320,7 @@ document.getElementById("hideComment").style.display = "block"
                           borderRadius: "5px",
                           objectFit: "cover"
                         }}
-                        src={`${domain}/${item.file}`}
+                        src={`https://dn-nexevo-thumbnail.s3.ap-south-1.amazonaws.com/${item.file}`}
                         onClick={() => clicked(item._id, item.userId)}
                       />
                     )}

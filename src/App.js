@@ -80,69 +80,69 @@ class App extends React.Component {
         <UserContext.Provider>
           <ScrollToTop />
           <Switch>
-            <PublicRoute
+            <Route
               path="/login"
               component={Login}
               exact
             />
-            <PublicRoute
+            <Route
               path="/sign_up"
               component={SignUp}
               exact
             />
-            <PublicRoute
+            <Route
               path="/select_category"
               component={UserCategory}
               exact
             />
-            <PublicRoute
+            <Route
               exact
               path="/ForgotPassword"
               component={ForgotPassword}
             />
-            <PublicRoute component={Home} path="/" exact />
-            <PublicRoute
+            <Route component={Home} path="/" exact />
+            <Route
               exact
               path="/TermsCondition"
               component={TermsCondition}
             />
-            <PublicRoute
+            <Route
               path="/DownloadSubscription"
               component={DownloadSubscription}
               exact
             />
-            <PublicRoute
+            <Route
               path="/HireSubscription"
               component={HireSubscription}
               exact
             />
-            <PublicRoute
+            <Route
               path="/GoPremium"
               component={GoPremium}
               exact
             />
-            <PublicRoute
+            <Route
               exact
               path={"/Imageview/:id/:user_id"}
               component={Imageview}
             />
-            <PublicRoute
+            <Route
               exact
               path="/hire_pilots"
               component={HirePilot}
             />
-            <PublicRoute
+            <Route
               exact
               path="/pilot_details/:id"
               component={PilotDetails}
             />
-            <PublicRoute component = {searchresult} path = "/searchresult" exact />
-            <PublicRoute component = {UploadFiles} path = "/UploadFile" exact />
-            <PublicRoute component = {ServiceCenters} path = "/service_centers" exact />
-            <PublicRoute component = {CreateJob} path = "/create_job" exact />
-            <PublicRoute component = {ServiceCenterDetails} path = "/service_center/:id" exact />
-            <PublicRoute component = {ServiceCenterDashboard} path = "/service_center_dashboard"/>
-            <PublicRoute component = {ApplyJob} path = "/apply_job" exact />
+            <Route component = {searchresult} path = "/searchresult" exact />
+            <Route component = {UploadFiles} path = "/UploadFile" exact />
+            <Route component = {ServiceCenters} path = "/service_centers" exact />
+            <Route component = {CreateJob} path = "/create_job" exact />
+            <Route component = {ServiceCenterDetails} path = "/service_center/:id" exact />
+            <Route component = {ServiceCenterDashboard} path = "/service_center_dashboard"/>
+            <Route component = {ApplyJob} path = "/apply_job" exact />
             <Route component = {CreateCompany} path = "/createCompany" />
             <Route component = {CreateServiceCenter} path = "/createServiceCenter" />
             {/* yaseen */}
@@ -156,7 +156,7 @@ class App extends React.Component {
             <Route component={VerifiedEmail} path="/users/:id/verify/:token" />
             <Route component={RecoverPassword} path="/users/:id/forgetPassword/:token" />
             {/* yaseen */}
-            <PublicRoute exact path="*" component={NoPageFound} />
+            <Route exact path="*" component={NoPageFound} />
           </Switch>
         </UserContext.Provider>
         <Footer/>

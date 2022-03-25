@@ -9,8 +9,8 @@ import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
-import ProfileImg from "../ProfileImg/Profile";
-import CoverImg from "../ProfileCoverImg/ProfileCoverImg";
+// import ProfileImg from "../ProfileImg/Profile";
+// import CoverImg from "../ProfileCoverImg/ProfileCoverImg";
 import Close from "../images/close.svg";
 import "reactjs-popup/dist/index.css";
 import { useState, useEffect } from "react";
@@ -36,6 +36,8 @@ import loadMore from "../images/Group 71.svg";
 import userDone from "../images/userDone.svg";
 import userCross from "../images/userCross.svg";
 import axios from "axios";
+import Avatar from "material-ui/Avatar";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 const styles = (theme) => ({
   root: {
@@ -397,7 +399,11 @@ export default function PilotDetails(props) {
                 className={`${All.D_Block_sm} ${All.D_Block_xs}`}
               >
                 <Box pr={5}>
-                  <ProfileImg />
+                <MuiThemeProvider >
+                  <div className={All.M_ProfileCenter}>
+                    <Avatar src={`${domain}/${pilotData.profilePic}`} size={100} />
+                  </div>
+                </MuiThemeProvider> 
                 </Box>
               </Box>
 
@@ -491,7 +497,10 @@ export default function PilotDetails(props) {
               md={6}
               className={`${All.Order_xs_1} ${All.Order_sm_1}  ${All.coverImg} ${All.pr_xs_30} ${All.pl_xs_30}`}
             >
-              <CoverImg />
+              {/* <CoverImg id = {props.match.params.id} /> */}
+              <MuiThemeProvider >
+                <Avatar src={`${domain}/${pilotData.coverPic}`} className={All.BackgroundcoverImg} size={100} />
+              </MuiThemeProvider>
             </Col>
           </Row>
           <div className="p_d_tabs">
@@ -590,10 +599,10 @@ export default function PilotDetails(props) {
                   <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
                     <div className="p_d_files_container">
                       {file.fileType === "video" ? (
-                        <>
+                        <Link to = {`/Imageview/${file._id}/${file.userId}`}>
                           <video
                             className="p_d_files"
-                            src={`${domain}/${file.file}`}
+                            src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
                             alt=""
                             width={"100%"}
                             height={"250px"}
@@ -604,15 +613,17 @@ export default function PilotDetails(props) {
                             className="p_d_files_video_icon"
                             style={{ top: "calc(50% - 30px)" }}
                           />
-                        </>
+                        </Link>
                       ) : (
-                        <img
-                          className="p_d_files"
-                          src={`${domain}/${file.file}`}
-                          alt=""
-                          width={"100%"}
-                          height={"250px"}
-                        />
+                        <Link to = {`/Imageview/${file._id}/${file.userId}`}>
+                          <img
+                            className="p_d_files"
+                            src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
+                            alt=""
+                            width={"100%"}
+                            height={"250px"}
+                          />
+                        </Link>
                       )}
                     </div>
                   </Col>
@@ -639,7 +650,7 @@ export default function PilotDetails(props) {
                         <div className="p_d_files_container">
                           <img
                             className="p_d_files"
-                            src={`${domain}/${file.file}`}
+                            src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
                             alt=""
                             width={"100%"}
                             height={"250px"}
@@ -673,7 +684,7 @@ export default function PilotDetails(props) {
                         <div className="p_d_files_container">
                           <video
                             className="p_d_files"
-                            src={`${domain}/${file.file}`}
+                            src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
                             alt=""
                             width={"100%"}
                             height={"250px"}
@@ -713,7 +724,7 @@ export default function PilotDetails(props) {
                         <div className="p_d_files_container">
                           <img
                             className="p_d_files"
-                            src={`${domain}/${file.file}`}
+                            src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
                             alt=""
                             width={"100%"}
                             height={"250px"}

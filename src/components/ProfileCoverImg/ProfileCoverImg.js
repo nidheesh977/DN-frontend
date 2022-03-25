@@ -23,6 +23,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { userService } from '../_services/user.service';
 import user_image from "../images/user_image.png"
 
+const domain = process.env.REACT_APP_MY_API;
 
 class ProfileCoverImg extends React.Component {
   constructor(props) {
@@ -36,8 +37,8 @@ class ProfileCoverImg extends React.Component {
       cropperOpen: false,
       img: null,
       zoom: 2,
-      defaultCoverPic: user_image,
-      croppedImg: user_image,
+      defaultCoverPic: "https://images.unsplash.com/photo-1506947411487-a56738267384?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8ZHJvbmUlMjBwaWxvdHxlbnwwfHwwfHw%3D&w=1000&q=80",
+      croppedImg: "https://images.unsplash.com/photo-1506947411487-a56738267384?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8ZHJvbmUlMjBwaWxvdHxlbnwwfHwwfHw%3D&w=1000&q=80",
       profile: [],
       user: [],
       open: true,
@@ -45,34 +46,7 @@ class ProfileCoverImg extends React.Component {
 
     };
   }
-  componentDidMount() {
-    userService.User().then(res => {
-      this.setState({ user: res.data })
-    },
-      err => {
-      }
-    )
-
-
-    userService.Profile()
-    .then(res => {
-      this.setState({ profile: res.data })
-      if (res.data.cover != "https://demo-nexevo.in/haj/auth-app/public/uploads/cover") {
-        this.setState({ croppedImg: res.data.cover })
-      }
-      else {
-        this.setState({
-          croppedImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"
-        })
-      }
-      // console.log(this.state.profile.profile);
-    },
-      err => {
-      }
-    )
-
-
-  }
+  
   handleZoomSlider(event, value) {
     let state = this.state;
     state.zoom = value;
@@ -118,6 +92,24 @@ class ProfileCoverImg extends React.Component {
     }
 
   }
+
+  componentDidMount(){
+    console.log(this.props)
+    // axios
+    //   .get(`${domain}/api/pilot/pilotDetails/${this.props.match.params.id}`)
+    //   .then((response) => {
+    //     this.setState({
+
+    //     })
+    //     // setPilotData(response.data);
+    //     // pilotData.map((item, i)=>{
+    //     //   return(
+    //     //     fol.push()
+    //     //   )
+    //     // })
+    //     console.log(response);
+    //   });
+  }
   handleCancel() {
     let state = this.state;
     state.cropperOpen = false;
@@ -150,10 +142,10 @@ class ProfileCoverImg extends React.Component {
               label="Upload an Image"
               labelPosition="before"
               containerElement="label"
-              style={{
-                width: '86% ',
-                height: '86% ',
-              }}
+              // style={{
+              //   width: '86% ',
+              //   height: '86% ',
+              // }}
             >
               <input
                 ref="in"

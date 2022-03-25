@@ -29,35 +29,15 @@ class Profile extends React.Component {
     this.state = {
       cropperOpen: false,
       img: null,
-      defaultProfileImg: user_image,
+      defaultProfileImg: "https://cdn.pixabay.com/photo/2018/06/04/14/31/drone-3453361__480.jpg",
       zoom: 2,
-      croppedImg: user_image,
+      croppedImg: "https://cdn.pixabay.com/photo/2018/06/04/14/31/drone-3453361__480.jpg",
       profile: [],
       user: [],
       open: true,
       SuccessMessages: [],
     };
 
-  }
-  componentDidMount() {
-
-    userService.User().then(res => {
-      this.setState({ user: res.data })
-    }
-    )
-
-    userService.Profile().then(res => {
-
-      this.setState({ profile: res.data })
-      if (res.data.profile != "https://demo-nexevo.in/haj/auth-app/public/uploads/profile") {
-        console.log(res.data)
-        this.setState({ croppedImg: res.data.profile })
-      }
-      else {
-        this.setState({ croppedImg: "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png" })
-      }
-    }
-    )
   }
 
 

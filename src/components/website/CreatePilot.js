@@ -57,6 +57,8 @@ function CreatePilot() {
   const [serverError, setServerError] = useState(false);
 
   const changeHandler = (e) => {
+    console.log(e.target.id)
+    console.log(e.target.value)
     if (e.target.id === "bio") {
       document.getElementById(`${e.target.id}_error`).style.visibility =
         "hidden";
@@ -400,15 +402,19 @@ function CreatePilot() {
               <Col>
                 <div>
                   <div className="pd_b_i_profile_head">Gender</div>
-                  <input
-                    type="text"
+                  <select
                     name="gender"
                     className="pd_b_i_profile_input"
-                    value={data.gender}
+                    // value={data.gender}
                     onChange={changeHandler}
                     id="gender"
                     disabled={!edit}
-                  />
+                    style = {{width: "100%"}}
+                  >
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Others">Others</option>
+                  </select>
                   <div className="input_error_msg" id="gender_error">
                     Gender is required
                   </div>
