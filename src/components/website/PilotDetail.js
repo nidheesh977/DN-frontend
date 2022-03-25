@@ -228,7 +228,7 @@ export default function PilotDetails(props) {
   let followMe = () => {
     axios
       .post(
-        `${domain}/api/follow/createFollow/${props.match.params.id}`,
+        `http://localhost:9000/api/follow/createFollow/${props.match.params.id}`,
         config
       )
       .then((response) => {
@@ -246,7 +246,7 @@ export default function PilotDetails(props) {
   let unfollow = () => {
     axios
       .post(
-        `${domain}/api/follow/removeFollow/${props.match.params.id}`,
+        `http://localhost:9000/api/follow/removeFollow/${props.match.params.id}`,
         config
       )
       .then((response) => {

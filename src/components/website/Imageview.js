@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Container, Row, Col } from "react-grid-system";
 import All from "../website/All.module.css";
 import "./Imageview.css";
@@ -11,13 +11,16 @@ import { useParams, useHistory, Link } from "react-router-dom";
 
 const domain = process.env.REACT_APP_MY_API;
 
-
 function Imageview() {
+  const formRef = useRef();
+
   let param = useParams();
   let history = useHistory();
   let [image, setImage] = useState([]);
   let [otherImages, setOtherImages] = useState([]);
   let [likedData, setLikedData] = useState([]);
+  let [comment, setComment] = useState("");
+  let [comments, setComments] = useState([]);
   useEffect(() => {
     axios
       .get(`${domain}/api/image/getImage/${param.id}`)
@@ -31,9 +34,10 @@ function Imageview() {
       .get(`${domain}/api/image/getUserImages/${param.user_id}`)
       .then((res) => {
         console.log(res.data.slice(0, 5));
-        setOtherImages(res.data.slice(0, 5));
+        setOtherImages(res.data.slice(0, 6));
       });
   }, []);
+  let [pilotData, setPilotData] = useState({});
   useEffect(() => {
     axios
       .post(`${domain}/api/user/checkUser`, config)
@@ -43,13 +47,100 @@ function Imageview() {
         setLikedData(res.data.likedMedia);
       });
   }, []);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
+      .then((res) => {
+        console.log(res.data);
+        setComments(res.data);
+      });
+  }, []);
+let likeComment = (id) =>{
+  axios.post(`http://localhost:9000/api/comments/likeComment`, {commentId : id}, config).then(res=>{
+    axios
+    .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
+    .then((res) => {
+      console.log(res.data);
+      setComments(res.data);
+    });
+    axios.post(`http://localhost:9000/api/comments/getMyComments`,config).then(res=>{
+      console.log(res)
+      setLikedComments(res.data)
+})
+  })
+ 
+}
+
+let unlikeComment = (id) =>{
+  axios.post(`http://localhost:9000/api/comments/unlikeComment`, {commentId : id}, config).then(res=>{
+    axios
+    .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
+    .then((res) => {
+      console.log(res.data);
+      setComments(res.data);
+    });
+    axios.post(`http://localhost:9000/api/comments/getMyComments`,config).then(res=>{
+      console.log(res)
+      setLikedComments(res.data)
+})
+  })
+
+}
+  //yaseen
+  let [fol, setFol] = useState([]);
+
+  let [myFollowing, setMyFollowing] = useState([]);
+  useEffect(() => {
+    axios.post(`${domain}/api/follow/getMyFollowing`, config).then((res) => {
+      const folowers = res.data;
+      console.log(folowers);
+      setMyFollowing(folowers);
+    });
+  }, []);
+
+  let followMe = (userId) => {
+    axios.post(`http://localhost:9000/api/pilot/getPilotId`,{userId : userId}).then(res=>{
+      console.log(res)
+        axios
+        .post(`http://localhost:9000/api/follow/createFollow/${res.data[0]._id}`, config)
+        .then((response) => {
+          axios.post(`${domain}/api/follow/getMyFollowing`, config).then((res) => {
+            const folowers = res.data;
+            console.log(folowers);
+            setMyFollowing(folowers);
+          });
+          console.log(response);
+      });
+    })
+  };
+  let unfollow = (userId) => {
+axios.post(`http://localhost:9000/api/pilot/getPilotId`,{userId : userId}).then(res=>{
+console.log(res)
+  axios
+  .post(`http://localhost:9000/api/follow/removeFollow/${res.data[0]._id}`, config)
+  .then((response) => {
+    axios.post(`${domain}/api/follow/getMyFollowing`, config).then((res) => {
+      const folowers = res.data;
+      console.log(folowers);
+      setMyFollowing(folowers);
+    });
+    console.log(response);
+    // setBrands(response.data.brandOfDrones)
+  });})
+
+  };
+
+  //yaseen
   const downloadImage = (id) => {
-    saveAs(`${domain}/${image.file}`, `${image.file}`);
+    saveAs(`https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${image.file}`, `${image.file}`);
     axios
       .post(`${domain}/api/image/downloadImage/${id}`, config)
       .then((res) => {
         console.log(res.data);
       });
+  };
+  let commentChangeHandler = (e) => {
+    setComment(e.target.value);
   };
   let config = {
     headers: {
@@ -86,14 +177,42 @@ function Imageview() {
           });
       });
   };
+  let [likedComments, setLikedComments] = useState([])
+  useEffect(()=>{
+    axios.post(`http://localhost:9000/api/comments/getMyComments`,config).then(res=>{
+      console.log(res)
+      setLikedComments(res.data)
+    })
+    },[])
+    let [userId, setUserId] = useState("")
+    useEffect(()=>{
+      axios.post(`http://localhost:9000/api/comments/getMyUserId`,config).then(res=>{
+        console.log(res)
+setUserId(res.data)      })
+      },[])
+  let commentsClicked = () => {
+    document.getElementById("hideComment").style.display = "block";
+  };
 
-  let commentsClicked =() =>{
-document.getElementById("hideComment").style.display = "block"
-  }
-
-  let addComment =() =>{
-    document.getElementById("hideComment").style.display = "none"
-      }
+  let addComment = () => {
+    console.log(comment);
+    axios
+      .post(
+        `http://localhost:9000/api/comments/createComment/${param.id}`,
+        { comment },
+        config
+      )
+      .then((res) => {
+        axios
+          .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
+          .then((res) => {
+            console.log(res.data);
+            setComments(res.data);
+            document.getElementById("hideComment").style.display = "none";
+            formRef.current.value = "";
+          });
+      });
+  };
   return (
     <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
       <Container>
@@ -118,8 +237,14 @@ document.getElementById("hideComment").style.display = "block"
             }}
             controls
           >
-            <source src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`} type="video/mp4" />
-            <source src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`} type="video/ogg" />
+            <source
+              src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
+              type="video/mp4"
+            />
+            <source
+              src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
+              type="video/ogg"
+            />
             Your browser does not support the video tag.
           </video>
         ) : (
@@ -152,7 +277,7 @@ document.getElementById("hideComment").style.display = "block"
               <Col lg={1.4} xs={3}>
                 {" "}
                 <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQarxp3w2V2uosNwCyzIp1tILCurA27Wq0tXXjO_xykwjz2aIWKABGd621rpjLWcR3ZGs8&usqp=CAU"
+                  src={`${domain}/${image.profilePic}`}
                   style={{
                     height: "75px",
                     width: "75px",
@@ -164,7 +289,11 @@ document.getElementById("hideComment").style.display = "block"
                 {" "}
                 <div className="i_v_name">
                   <div>{image.name}</div>
-                  <div className="i_v_follow">Follow</div>
+                  {myFollowing.includes(image.userId) ? (
+                    <div className="i_v_follow" onClick={()=>unfollow(image.userId)}>Followed</div>
+                  ) : (
+                    <div className="i_v_follow"  onClick={()=>followMe(image.userId)}>Follow</div>
+                  )}
                 </div>
               </Col>
             </Row>
@@ -181,99 +310,81 @@ document.getElementById("hideComment").style.display = "block"
               <Col lg={9}>
                 <div style={{ marginBottom: "60px" }}>
                   <div className="i_v_commentsTitle">Comments</div>
-                  <div className="i_v_addComment" onClick={commentsClicked}>Add a comment</div>
+                  <div className="i_v_addComment" onClick={commentsClicked}>
+                    Add a comment
+                  </div>
 
-                  <div className="comments_to_hide" id="hideComment" style={{display: "none"}}>
-                    <textarea className="i_v_commentInput" type="text" style={{height:"50px", width: "100%", borderRadius: "10px", border: "1px solid lightgray", padding: "10px"}} />
-                    <div className="i_v_addComment" style={{margin:"10px"}} onClick={addComment}>Submit</div>
+                  <div
+                    className="comments_to_hide"
+                    id="hideComment"
+                    style={{ display: "none" }}
+                  >
+                    <textarea
+                      className="i_v_commentInput"
+                      type="text"
+                      ref={formRef}
+                      style={{
+                        height: "50px",
+                        width: "100%",
+                        borderRadius: "10px",
+                        border: "1px solid lightgray",
+                        padding: "10px",
+                      }}
+                      onChange={commentChangeHandler}
+                    />
+                    <div
+                      className="i_v_addComment"
+                      style={{ margin: "10px" }}
+                      onClick={addComment}
+                    >
+                      Submit
+                    </div>
                   </div>
                 </div>
 
-                <Row>
-                  <Col lg={1.25} xs={2}>
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQarxp3w2V2uosNwCyzIp1tILCurA27Wq0tXXjO_xykwjz2aIWKABGd621rpjLWcR3ZGs8&usqp=CAU"
-                      style={{
-                        height: "45px",
-                        width: "45px",
-                        borderRadius: "22.5px",
-                      }}
-                    />
-                  </Col>
-                  <Col>
-                    <div className="i_v_comment_pilotName">Yaseen Ahmed</div>
-                    <div style={{ float: "right" }}>
-                      <Row gutterWidth={5}>
-                        <Col>
-                          <img src={Like} />{" "}
+                {/* comments mapping */}
+
+                {comments.map((item, i) => {
+                  return (
+                    <>
+                      <Row>
+                        <Col lg={1.25} xs={2}>
+                          <img
+                            src={`${domain}/${item.profilePic}`}
+                            style={{
+                              height: "45px",
+                              width: "45px",
+                              borderRadius: "22.5px",
+                            }}
+                          />
                         </Col>
                         <Col>
-                        <div>10</div></Col>
-                      </Row>
-                    </div>
-                    <div>This is a test comment for the image</div>
-                  </Col>
-                </Row>
-
-                <hr className="i_v_hr" />
-                <Row>
-                  <Col lg={1.25} xs={2}>
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQarxp3w2V2uosNwCyzIp1tILCurA27Wq0tXXjO_xykwjz2aIWKABGd621rpjLWcR3ZGs8&usqp=CAU"
-                      style={{
-                        height: "45px",
-                        width: "45px",
-                        borderRadius: "22.5px",
-                      }}
-                    />
-                  </Col>
-                  <Col>
-                    <div className="i_v_comment_pilotName">Yaseen Ahmed</div>
-                    <div style={{ float: "right" }}>
-                      <Row gutterWidth={5}>
-                        <Col>
-                          <img src={Like} />{" "}
+                          <div className="i_v_comment_pilotName">
+                            {item.name}
+                          </div>
+                          <div style={{ float: "right" }}>
+                            <Row gutterWidth={10}>
+                              <Col>
+                              {
+                                likedComments.includes(item._id) ? <img src={Heart}  onClick={()=>unlikeComment(item._id)}/> : <img src={Like} onClick={()=>likeComment(item._id)} />
+                              }
+                                {" "}
+                              </Col>
+                              <Col>
+                                <div>{item.likes.length}</div>
+                              </Col>
+                            </Row>
+                          </div>
+                          <div>{item.comment}</div>
                         </Col>
-                        <Col>
-                        <div>10</div></Col>
                       </Row>
-                    </div>
-                    <div>This is a test comment for the image</div>
-                  </Col>
-                </Row>
 
-                <hr className="i_v_hr" />
-                <Row>
-                  <Col lg={1.25} xs={2}>
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQarxp3w2V2uosNwCyzIp1tILCurA27Wq0tXXjO_xykwjz2aIWKABGd621rpjLWcR3ZGs8&usqp=CAU"
-                      style={{
-                        height: "45px",
-                        width: "45px",
-                        borderRadius: "22.5px",
-                      }}
-                    />
-                  </Col>
-                  <Col>
-                    <div className="i_v_comment_pilotName">Yaseen Ahmed</div>
-                    <div style={{ float: "right" }}>
-                      <Row gutterWidth={5}>
-                        <Col>
-                          <img src={Like} />{" "}
-                        </Col>
-                        <Col>
-                        <div>10</div></Col>
-                      </Row>
-                    </div>
-                    <div>This is a test comment for the image</div>
-                  </Col>
-                </Row>
-
-                <hr className="i_v_hr" />
+                      <hr className="i_v_hr" />
+                    </>
+                  );
+                })}
               </Col>
-              
             </Row>
-            
           </Col>
 
           {/* //right */}
@@ -282,7 +393,7 @@ document.getElementById("hideComment").style.display = "block"
             <div className="i_v_text2">This Droner is available for work</div>
             <button className="hire_btn">Hire This Droner</button>
 
-            <div className="i_v_moreShots">More Shots from Stephen Raj</div>
+            <div className="i_v_moreShots">More Shots from {image.name}</div>
             <Row>
               {otherImages.map((item, i) => {
                 return (
@@ -294,7 +405,7 @@ document.getElementById("hideComment").style.display = "block"
                           backgroundColor: "black",
                           objectFit: "cover",
                           width: "100%",
-                          height: "130px",
+                          height: "115px",
                           margin: "0px 0px 10px 0px",
                           borderRadius: "5px",
                         }}
@@ -315,7 +426,6 @@ document.getElementById("hideComment").style.display = "block"
                       <img
                         style={{
                           width: "100%",
-                          height: "130px",
                           margin: "0px 0px 10px 0px",
                           borderRadius: "5px",
                           objectFit: "cover"
