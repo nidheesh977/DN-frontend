@@ -16,7 +16,6 @@ import { withStyles } from "@material-ui/core/styles";
 import moreIcon from "../images/Path.svg";
 import axios from "axios";
 import Select from "react-select";
-import { range } from "lodash";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -30,7 +29,7 @@ class UploadFiles extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      draft_count: 10,
+      draft_count: 0,
       selected_tab: 1,
       files_selected: false,
       row_files: [],
@@ -41,7 +40,7 @@ class UploadFiles extends Component {
       total_file_objects_count: 0,
       file_objects_count: 0,
       file_edit: 0,
-      upload_choice: true,
+      upload_choice: false,
       new_keyword: "",
       suggested_keywords: ["Areal View", "UAV", "Aviation", "Drone"],
       showEditOptions: "",
@@ -53,6 +52,12 @@ class UploadFiles extends Component {
   }
 
   componentDidMount() {
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+
     document
       .getElementById("u_f_nav_link1")
       .classList.add("u_f_nav_link_selected");
@@ -77,6 +82,18 @@ class UploadFiles extends Component {
         suggested_keywords: keywords,
       });
     });
+    axios
+    .post(`${domain}/api/draft/getDrafts`, config)
+    .then((res) => {
+      this.setState({
+        draft_count: res.data.length
+      })
+      if (res.data.length >= 1){
+        this.setState({
+          upload_choice: true
+        })
+      }
+    })
   }
 
   changeTab = (tab) => {
@@ -86,7 +103,7 @@ class UploadFiles extends Component {
       },
     };
 
-    if (tab === 1 && this.state.selected_tab !== 1 ){
+    if (tab === 1 && this.state.selected_tab !== 1) {
       this.setState({
         draft_count: 10,
         selected_tab: 1,
@@ -101,51 +118,54 @@ class UploadFiles extends Component {
         file_edit: 0,
         upload_choice: true,
         new_keyword: "",
-        suggested_keywords: ["Areal View", "UAV", "Aviation", "Drone"],
         showEditOptions: "",
         error: false,
-        industries: [],
-        industryOptions: [],
         resolutionCheckCount: 0,
-      })
+      });
     }
 
-    if (tab === 2 && this.state.selected_tab !== 2 ){
-      axios.post(`${domain}/api/draft/getDrafts`, config)
-      .then((res) => {
-        console.log(res.data)
-        let files = []
-        for (var i = 0; i < res.data.length; i++){
-          let keywords = [];
-          for (let i = 0; i < res.data.length; i++) {
-            keywords.push(res.data[i].keyword);
-          }
-          
+    if (tab === 2 && this.state.selected_tab !== 2) {
+      axios
+        .post(`${domain}/api/draft/getDrafts`, config)
+        .then((res) => {
+          console.log(res.data);
+          let files = [];
+          for (var i = 0; i < res.data.length; i++) {
+            let keywords = [];
+            for (let j = 0; j < this.state.suggested_keywords.length; j++) {
+              keywords.push(this.state.suggested_keywords[j]);
+            }
+
             var file = {
-            file: res.data.file,
-            row:res.data.file,
-            name:res.data.postName,
-            custom_name:res.data.postName,
-            type:res.data.fileType,
-            experience:res.data.experience,
-            keywords:res.data.keywords,
-            adult:res.data.adult,
-            category:res.data.category,
-            resolution_satisfied: true,
-            suggested_keywords: keywords,
-            select_type: res.data.fileType,
-            size: res.data.file.size,
-            draft: true
+              file: `${domain}/${res.data[i].file}`,
+              row: res.data[i].file,
+              name: res.data[i].postName,
+              custom_name: res.data[i].postName,
+              type: res.data[i].fileType,
+              experience: res.data[i].experience,
+              keywords: res.data[i].keywords,
+              adult: res.data[i].adult,
+              category: res.data[i].category,
+              resolution_satisfied: true,
+              suggested_keywords: keywords,
+              select_type: res.data[i].fileType,
+              // size: res.data.file.size,
+              draft: true,
+              industryOptions: this.state.industryOptions,
+            };
+            files.push(file);
           }
-          files.push(file)
-        }
-        this.setState({
-          selected_files: files
+          console.log(files);
+          this.setState({
+            selected_files_details: files,
+          });
+          this.setState({
+            files_selected: true,
+          });
         })
-      })
-      .catch((err)=> {
-        console.log(err.data)
-      })
+        .catch((err) => {
+          console.log(err.data);
+        });
     }
 
     this.setState({
@@ -276,7 +296,7 @@ class UploadFiles extends Component {
         row: e.target.files[i],
         upload_status: "selected",
         resolution_satisfied: true,
-        draft: false
+        draft: false,
       });
       this.setState({
         selected_files_details: details,
@@ -392,6 +412,52 @@ class UploadFiles extends Component {
   };
 
   continueEdit = () => {
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    axios
+        .post(`${domain}/api/draft/getDrafts`, config)
+        .then((res) => {
+          console.log(res.data);
+          let files = [];
+          for (var i = 0; i < res.data.length; i++) {
+            let keywords = [];
+            for (let j = 0; j < this.state.suggested_keywords.length; j++) {
+              keywords.push(this.state.suggested_keywords[j]);
+            }
+
+            var file = {
+              file: `${domain}/${res.data[i].file}`,
+              row: res.data[i].file,
+              name: res.data[i].postName,
+              custom_name: res.data[i].postName,
+              type: res.data[i].fileType,
+              experience: res.data[i].experience,
+              keywords: res.data[i].keywords,
+              adult: res.data[i].adult,
+              category: res.data[i].category,
+              resolution_satisfied: true,
+              suggested_keywords: keywords,
+              select_type: res.data[i].fileType,
+              // size: res.data.file.size,
+              draft: true,
+              industryOptions: this.state.industryOptions,
+            };
+            files.push(file);
+          }
+          console.log(files);
+          this.setState({
+            selected_files_details: files,
+          });
+          this.setState({
+            files_selected: true,
+          });
+        })
+        .catch((err) => {
+          console.log(err.data);
+        });
     this.setState({
       upload_choice: false,
       selected_tab: 2,
@@ -586,81 +652,153 @@ class UploadFiles extends Component {
     let error = false;
     let selected_files = this.state.selected_files_details;
     for (let i = selected_files.length - 1; i >= 0; i--) {
-      if (
-        ((selected_files[i].row.type[0] === "v" &&
-          selected_files[i].size / 1000000 <= 10) ||
-          (selected_files[i].row.type[0] !== "v" &&
-            selected_files[i].size / 1000000 <= 2)) &&
-        selected_files[i].resolution_satisfied === true
-      ) {
-        let file_error = false;
-        if (selected_files[i].custom_name === "") {
-          error = true;
-          file_error = true;
-          selected_files[i].error = true;
-          this.setState({
-            selected_files_details: selected_files,
-            file_edit: i,
-          });
-          let y =
-            document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
-              .top +
-            window.pageYOffset +
-            -150;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-        if (selected_files[i].category === "") {
-          error = true;
-          file_error = true;
-          selected_files[i].error = true;
-          this.setState({
-            selected_files_details: selected_files,
-            file_edit: i,
-          });
-          let y =
-            document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
-              .top +
-            window.pageYOffset +
-            -150;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-        if (selected_files[i].experience === "") {
-          error = true;
-          file_error = true;
-          selected_files[i].error = true;
-          this.setState({
-            selected_files_details: selected_files,
-            file_edit: i,
-          });
-          let y =
-            document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
-              .top +
-            window.pageYOffset +
-            -150;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-        if (selected_files[i].keywords.length === 0) {
-          error = true;
-          file_error = true;
-          selected_files[i].error = true;
-          this.setState({
-            selected_files_details: selected_files,
-            file_edit: i,
-          });
-          let y =
-            document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
-              .top +
-            window.pageYOffset +
-            -150;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
+      if (!selected_files[i].draft) {
+        if (
+          ((selected_files[i].row.type[0] === "v" &&
+            selected_files[i].size / 1000000 <= 10) ||
+            (selected_files[i].row.type[0] !== "v" &&
+              selected_files[i].size / 1000000 <= 2)) &&
+          selected_files[i].resolution_satisfied === true
+        ) {
+          let file_error = false;
+          if (selected_files[i].custom_name === "") {
+            error = true;
+            file_error = true;
+            selected_files[i].error = true;
+            this.setState({
+              selected_files_details: selected_files,
+              file_edit: i,
+            });
+            let y =
+              document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
+                .top +
+              window.pageYOffset +
+              -150;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
+          if (selected_files[i].category === "") {
+            error = true;
+            file_error = true;
+            selected_files[i].error = true;
+            this.setState({
+              selected_files_details: selected_files,
+              file_edit: i,
+            });
+            let y =
+              document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
+                .top +
+              window.pageYOffset +
+              -150;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
+          if (selected_files[i].experience === "") {
+            error = true;
+            file_error = true;
+            selected_files[i].error = true;
+            this.setState({
+              selected_files_details: selected_files,
+              file_edit: i,
+            });
+            let y =
+              document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
+                .top +
+              window.pageYOffset +
+              -150;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
+          if (selected_files[i].keywords.length === 0) {
+            error = true;
+            file_error = true;
+            selected_files[i].error = true;
+            this.setState({
+              selected_files_details: selected_files,
+              file_edit: i,
+            });
+            let y =
+              document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
+                .top +
+              window.pageYOffset +
+              -150;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
 
-        if (!file_error) {
-          selected_files[i].error = false;
-          this.setState({
-            selected_files_details: selected_files,
-          });
+          if (!file_error) {
+            selected_files[i].error = false;
+            this.setState({
+              selected_files_details: selected_files,
+            });
+          }
         }
+      }
+      else{
+        let file_error = false;
+          if (selected_files[i].custom_name === "") {
+            error = true;
+            file_error = true;
+            selected_files[i].error = true;
+            this.setState({
+              selected_files_details: selected_files,
+              file_edit: i,
+            });
+            let y =
+              document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
+                .top +
+              window.pageYOffset +
+              -150;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
+          if (selected_files[i].category === "") {
+            error = true;
+            file_error = true;
+            selected_files[i].error = true;
+            this.setState({
+              selected_files_details: selected_files,
+              file_edit: i,
+            });
+            let y =
+              document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
+                .top +
+              window.pageYOffset +
+              -150;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
+          if (selected_files[i].experience === "") {
+            error = true;
+            file_error = true;
+            selected_files[i].error = true;
+            this.setState({
+              selected_files_details: selected_files,
+              file_edit: i,
+            });
+            let y =
+              document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
+                .top +
+              window.pageYOffset +
+              -150;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
+          if (selected_files[i].keywords.length === 0) {
+            error = true;
+            file_error = true;
+            selected_files[i].error = true;
+            this.setState({
+              selected_files_details: selected_files,
+              file_edit: i,
+            });
+            let y =
+              document.getElementById(`u_f_file_${i}`).getBoundingClientRect()
+                .top +
+              window.pageYOffset +
+              -150;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
+
+          if (!file_error) {
+            selected_files[i].error = false;
+            this.setState({
+              selected_files_details: selected_files,
+            });
+          }
       }
     }
 
@@ -670,61 +808,103 @@ class UploadFiles extends Component {
       },
     };
 
-    if (!error) {
+    if (this.state.selected_tab === 2) {
       for (let i = 0; i < this.state.selected_files_details.length; i++) {
-        let currentFile = this.state.selected_files_details[i];
-        if (
-          ((selected_files[i].row.type[0] === "v" &&
-            selected_files[i].size / 1000000 <= 10) ||
-            (selected_files[i].row.type[0] !== "v" &&
-              selected_files[i].size / 1000000 <= 2)) &&
-          selected_files[i].resolution_satisfied === true
-        ) {
-          if (currentFile.upload_status !== "uploaded") {
-            let files = this.state.selected_files_details;
-            files[i].upload_status = "uploading";
+        let files = this.state.selected_files_details;
+        let currentFile = files[i];
+        let data = new FormData();
+
+        data.append("file", currentFile.row);
+        data.append("postName", currentFile.custom_name);
+        if (currentFile.select_type[0] === "v") {
+          data.append("fileType", "video");
+        } else if (currentFile.select_type[0] === "i") {
+          data.append("fileType", "image");
+        } else {
+          data.append("fileType", currentFile.select_type);
+        }
+        data.append("experience", currentFile.experience);
+        data.append("keywords", currentFile.keywords);
+        data.append("adult", currentFile.adult_content);
+        data.append("category", currentFile.category.value);
+
+        let link = `${domain}/api/draft/createDraft`;
+        if (type === "draft") {
+          link = `${domain}/api/draft/createDraft`;
+        } else {
+          link = `${domain}/api/image/createImage`;
+        }
+        axios
+          .post(link, data, config)
+          .then((res) => {
+            files[i].upload_status = "uploaded";
             this.setState({
               selected_files_details: files,
             });
-
-            let data = new FormData();
-
-            data.append("file", currentFile.row);
-            data.append("postName", currentFile.custom_name);
-            if (currentFile.select_type[0] === "v") {
-              data.append("fileType", "video");
-            } else if (currentFile.select_type[0] === "i") {
-              data.append("fileType", "image");
-            } else {
-              data.append("fileType", currentFile.select_type);
-            }
-            data.append("experience", currentFile.experience);
-            data.append("keywords", currentFile.keywords);
-            data.append("adult", currentFile.adult_content);
-            data.append("category", currentFile.category.value);
-
-            let link = `${domain}/api/image/createImage`
-            if(type === "draft"){
-              link = `${domain}/api/draft/createDraft`
-            }
-            else{
-              link = `${domain}/api/image/createImage`
-            }
-
-            axios
-              .post(link, data, config)
-              .then((res) => {
-                files[i].upload_status = "uploaded";
-                this.setState({
-                  selected_files_details: files,
-                });
-              })
-              .catch((err) => {
-                files[i].upload_status = "upload_failed";
-                this.setState({
-                  selected_files_details: files,
-                });
+          })
+          .catch((err) => {
+            files[i].upload_status = "upload_failed";
+            this.setState({
+              selected_files_details: files,
+            });
+          });
+      }
+    } else {
+      if (!error) {
+        for (let i = 0; i < this.state.selected_files_details.length; i++) {
+          let currentFile = this.state.selected_files_details[i];
+          if (
+            ((selected_files[i].row.type[0] === "v" &&
+              selected_files[i].size / 1000000 <= 10) ||
+              (selected_files[i].row.type[0] !== "v" &&
+                selected_files[i].size / 1000000 <= 2)) &&
+            selected_files[i].resolution_satisfied === true
+          ) {
+            if (currentFile.upload_status !== "uploaded") {
+              let files = this.state.selected_files_details;
+              files[i].upload_status = "uploading";
+              this.setState({
+                selected_files_details: files,
               });
+
+              let data = new FormData();
+
+              data.append("file", currentFile.row);
+              data.append("postName", currentFile.custom_name);
+              if (currentFile.select_type[0] === "v") {
+                data.append("fileType", "video");
+              } else if (currentFile.select_type[0] === "i") {
+                data.append("fileType", "image");
+              } else {
+                data.append("fileType", currentFile.select_type);
+              }
+              data.append("experience", currentFile.experience);
+              data.append("keywords", currentFile.keywords);
+              data.append("adult", currentFile.adult_content);
+              data.append("category", currentFile.category.value);
+
+              let link = `${domain}/api/image/createImage`;
+              if (type === "draft") {
+                link = `${domain}/api/draft/createDraft`;
+              } else {
+                link = `${domain}/api/image/createImage`;
+              }
+
+              axios
+                .post(link, data, config)
+                .then((res) => {
+                  files[i].upload_status = "uploaded";
+                  this.setState({
+                    selected_files_details: files,
+                  });
+                })
+                .catch((err) => {
+                  files[i].upload_status = "upload_failed";
+                  this.setState({
+                    selected_files_details: files,
+                  });
+                });
+            }
           }
         }
       }
@@ -959,7 +1139,9 @@ class UploadFiles extends Component {
                                                 className="u_f_file_name_on_file"
                                                 id={"file_name_" + index}
                                               >
-                                                {file.category.value}
+                                                {file.category.value
+                                                  ? file.category.value
+                                                  : file.category}
                                               </div>
                                             ) : (
                                               <div
@@ -1331,17 +1513,39 @@ class UploadFiles extends Component {
                       <div className="u_f_input_title">Industry</div>
                       {this.state.files_selected ? (
                         <>
-                          <Select
-                            options={this.state.industryOptions}
-                            onChange={this.categoryChange}
-                            styles={this.customStyles}
-                            value={
-                              this.state.selected_files_details[
-                                this.state.file_edit
-                              ].category
-                            }
-                            className="u_f_category_dropdown"
-                          />
+                          {this.state.selected_files_details[
+                            this.state.file_edit
+                          ].category.value ? (
+                            <Select
+                              options={this.state.industryOptions}
+                              onChange={this.categoryChange}
+                              styles={this.customStyles}
+                              value={
+                                this.state.selected_files_details[
+                                  this.state.file_edit
+                                ].category
+                              }
+                              className="u_f_category_dropdown"
+                            />
+                          ) : (
+                            <Select
+                              options={this.state.industryOptions}
+                              onChange={this.categoryChange}
+                              styles={this.customStyles}
+                              value={{
+                                value:
+                                  this.state.selected_files_details[
+                                    this.state.file_edit
+                                  ].category,
+                                label:
+                                  this.state.selected_files_details[
+                                    this.state.file_edit
+                                  ].category,
+                              }}
+                              className="u_f_category_dropdown"
+                            />
+                          )}
+
                           <div style={{ marginBottom: "30px" }}></div>
                           {this.state.selected_files_details[
                             this.state.file_edit
@@ -1502,8 +1706,16 @@ class UploadFiles extends Component {
                         </div>
                       )}
                       <div id="u_f_btn">
-                        <button id="u_f_save_draft" onClick = {() => this.saveFiles("draft")}>Save Draft</button>
-                        <button id="u_f_submit" onClick={() => this.saveFiles("publish")}>
+                        <button
+                          id="u_f_save_draft"
+                          onClick={() => this.saveFiles("draft")}
+                        >
+                          Save Draft
+                        </button>
+                        <button
+                          id="u_f_submit"
+                          onClick={() => this.saveFiles("publish")}
+                        >
                           Publish
                         </button>
                       </div>
