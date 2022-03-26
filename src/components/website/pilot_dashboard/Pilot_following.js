@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom';
 import "./css/Pilot_followers.css"
 import { Container, Row, Col, Visible, Hidden } from 'react-grid-system';
 import Pilot from "./images/pilot.jpg";
@@ -8,6 +9,7 @@ import axios from 'axios';
 const domain = process.env.REACT_APP_MY_API
 
 function Pilot_following() {
+    const history = useHistory()
     let config = {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -16,7 +18,7 @@ function Pilot_following() {
 
       let [myFollowing, setMyFollowing] = useState([]);
   useEffect(()=>{
-    axios.post(`${domain}/api/follow/getMyFollowingPopulated`, config).then(
+    axios.post(`${domain}/api/follow/getMyFollowingPopulated`,  config).then(
       (res) => {
         console.log(res);
 
@@ -27,19 +29,31 @@ function Pilot_following() {
 })
 
   }, [])
-    let initialValue = {
-        profiles: [{ name: "Abhishek", profile: "Passionate Pilot" , src: "https://i.pinimg.com/474x/0e/9c/eb/0e9ceb5002e527dd90b14be502ae91b7.jpg"},
-        { name: "Shahrukh Khan", profile: "Professional Pilot", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd1UoWwl6Ts_ZFvqHq8A8QxjRGPSQfWOiC4zUAWVUmYmHukvKGsIYakl7i9qcGEfAuTPM&usqp=CAU" },
-        { name: "Yasar Arafath", profile: "Passionate Pilot", src: "https://i.pinimg.com/474x/82/ab/35/82ab3533ee71daf256f23c1ccf20ad6f--avatar-maker.jpg" },
-        { name: "Yaseen Ahmed", profile: "Professional Pilot", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3skJyybaYrESeetWiGU5ybPilo9jez3w5u4JeS2EUUsqG7ZSTEP90tRAsvUNQ8pNEaeE&usqp=CAU" },
-        { name: "Yasar Arafath", profile: "Passionate Pilot" , src: "https://cdn2.vectorstock.com/i/1000x1000/38/21/male-face-avatar-logo-template-pictograph-vector-11333821.jpg"},
-        { name: "Yaseen Ahmed", profile: "Professional Pilot", src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNo2N_JJycCNmkFVJPVNdTZcx5QSVpQvir2QpzMzxN80U3QOO1FbWwpsz-Axd8VW7ADTY&usqp=CAU" },
-        { name: "Yasar Arafath", profile: "Professional Pilot", src: "https://png.pngtree.com/png-vector/20191101/ourlarge/pngtree-male-avatar-simple-cartoon-design-png-image_1934458.jpg" },
-        { name: "Yaseen Ahmed", profile: "Passionate Pilot", src: "https://i.pinimg.com/474x/82/ab/35/82ab3533ee71daf256f23c1ccf20ad6f--avatar-maker.jpg" },
+  const viewProfile = (userId, role) =>{
+    if(role === "pilot"){
+        console.log("i m a pilot")
+        axios.post(`http://localhost:9000/api/pilot/getPilotId`,{userId : userId}).then(res=>{
+            console.log(res.data[0]._id)
+            history.push(`/pilot_details/${res.data[0]._id}`)
+        }).catch(err=>
+            console.log(err))
+    }    }
+    
+    
 
-        ]
-    }
-    let [data, setData] = useState(initialValue);
+const removeFollow = (userId) =>{
+    axios.post(`http://localhost:9000/api/follow/unfollow1/${userId}`, config).then(res=>{
+        axios.post(`${domain}/api/follow/getMyFollowingPopulated`, config).then(
+            (res) => {
+              console.log(res);
+      
+             setMyFollowing(res.data)
+      
+      
+      
+      })
+         })
+}
     return (
         <div className="pd_followers_mainBox">
             <div className='pd_followers_headBox'>
@@ -48,10 +62,12 @@ function Pilot_following() {
                         <div className='pd_followers_title'>Following</div>
                     </Col>
                     <Col>
-                        <select className='pd_followers_select'>
+                    <select className='pd_followers_select'>
                             <option disabled selected>All Profiles</option>
-                            <option>Professional Pilot</option>
-                            <option>Passionate Pilot</option>
+                            <option>Droners</option>
+                            <option>Service Centers</option>
+                            <option>Companies</option>
+                            <option>DN User</option>
                         </select>
                     </Col>
                 </Row>
@@ -64,22 +80,29 @@ function Pilot_following() {
                             <Row>
                                 <Col xl={1.4} xs={2}>
                                     <div className='pd_followers_pilotImageBox' >
-                                        <img src="https://i.pinimg.com/474x/82/ab/35/82ab3533ee71daf256f23c1ccf20ad6f--avatar-maker.jpg" alt="pilot img" className='pd_followers_pilot_img' />
+                                      
+                                    {
+                                            !item.profilePic ? <img src="https://st2.depositphotos.com/1006318/5909/v/950/depositphotos_59094623-stock-illustration-female-avatar-woman.jpg" alt="pilot img" className='pd_followers_pilot_img' /> : <img src={item.profilePic} alt="pilot img" className='pd_followers_pilot_img' />
+                                        }
                                     </div>
                                 </Col>
                                 <Col xs={5.25}>
                                     <div className='pd_followers_pilotDetails'>
                                         <div className='pd_followers_pilotName'>{item.name}</div>
-                                        <div className='pd_followers_pilotType'>{item.pilotType}</div>
+                                        <div className='pd_followers_pilotType' style={{textTransform : "capitalize"}}>{item.role}</div>
                                     </div>
                                 </Col>
                                 <Col>
                                     <div className='pd_followers_profile'>
                                         <div className='pd_followers_profileBox'>
-                                            <Link to={`/pilot_details/${item._id}`}>
-                                            <button className="pd_followers_profileBtn">View Profile</button>
-                                            </Link>
-                                            <div className='pd_followers_profileUnfollow'>Unfollow</div>
+                                        {
+                                                item.role === "pilot" ?  
+                                                <button className="pd_followers_profileBtn" onClick={()=>viewProfile(item._id, item.role)}>View Profile</button>
+                                                 :<div>
+                                            <button className="pd_followers_profileBtn" style={{opacity: "0.5"}}>View Profile</button>
+                                            </div>
+                                            }
+                                            <div className='pd_followers_profileUnfollow'  onClick={()=>removeFollow(item._id)}>Unfollow</div>
                                         </div>
                                     </div>
 

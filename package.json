@@ -54,6 +54,7 @@
     "npm": "^8.3.0",
     "pannellum-react": "^1.2.4",
     "prop-types": "^15.8.1",
+    "public-ip": "^5.0.0",
     "razorpay": "^2.0.6",
     "react": "^16.14.0",
     "react-autosuggest": "^10.1.0",
