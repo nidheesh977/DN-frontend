@@ -677,7 +677,7 @@ class ServiceCenters extends Component {
                 )}
               </Col>
             </Row>
-            {this.state.data.length && (
+            {this.state.data.length !== 0 && (
               <>
                 <Row>
                   {this.state.data.map((item, index) => {
@@ -778,7 +778,7 @@ class ServiceCenters extends Component {
                             <div className="s_c_other_details_content">
                               {item.brandOfDrones.map((brand, index)=>{
                                 return(
-                                  <div className="service_center_brand_list" key = {index}>{brand}{index+1 !== item.brandOfDrones.length && ","}&nbsp;</div>
+                                  <div className="service_center_brand_list" key = {index}>{brand}{index+1 !== item.brandOfDrones.length !== 0 && ","}&nbsp;</div>
                                 )
                               })}
                             </div>
@@ -1141,7 +1141,7 @@ class ServiceCenters extends Component {
                 </button>{" "}
               </div>
             )}
-            {!this.state.data.length &&
+            {this.state.data.length === 0 &&
               !this.state.loading &&
               this.state.after_data_fetch &&
                 <div style={{ margin: "0px auto", display: "block" }}>

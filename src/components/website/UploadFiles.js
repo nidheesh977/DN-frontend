@@ -16,6 +16,7 @@ import { withStyles } from "@material-ui/core/styles";
 import moreIcon from "../images/Path.svg";
 import axios from "axios";
 import Select from "react-select";
+import { range } from "lodash";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -79,6 +80,74 @@ class UploadFiles extends Component {
   }
 
   changeTab = (tab) => {
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+
+    if (tab === 1 && this.state.selected_tab !== 1 ){
+      this.setState({
+        draft_count: 10,
+        selected_tab: 1,
+        files_selected: false,
+        row_files: [],
+        selected_files_preview: [],
+        selected_files_details: [],
+        selected_category: "all",
+        files_count: 0,
+        total_file_objects_count: 0,
+        file_objects_count: 0,
+        file_edit: 0,
+        upload_choice: true,
+        new_keyword: "",
+        suggested_keywords: ["Areal View", "UAV", "Aviation", "Drone"],
+        showEditOptions: "",
+        error: false,
+        industries: [],
+        industryOptions: [],
+        resolutionCheckCount: 0,
+      })
+    }
+
+    if (tab === 2 && this.state.selected_tab !== 2 ){
+      axios.post(`${domain}/api/draft/getDrafts`, config)
+      .then((res) => {
+        console.log(res.data)
+        let files = []
+        for (var i = 0; i < res.data.length; i++){
+          let keywords = [];
+          for (let i = 0; i < res.data.length; i++) {
+            keywords.push(res.data[i].keyword);
+          }
+          
+            var file = {
+            file: res.data.file,
+            row:res.data.file,
+            name:res.data.postName,
+            custom_name:res.data.postName,
+            type:res.data.fileType,
+            experience:res.data.experience,
+            keywords:res.data.keywords,
+            adult:res.data.adult,
+            category:res.data.category,
+            resolution_satisfied: true,
+            suggested_keywords: keywords,
+            select_type: res.data.fileType,
+            size: res.data.file.size,
+            draft: true
+          }
+          files.push(file)
+        }
+        this.setState({
+          selected_files: files
+        })
+      })
+      .catch((err)=> {
+        console.log(err.data)
+      })
+    }
+
     this.setState({
       selected_tab: tab,
     });
@@ -207,6 +276,7 @@ class UploadFiles extends Component {
         row: e.target.files[i],
         upload_status: "selected",
         resolution_satisfied: true,
+        draft: false
       });
       this.setState({
         selected_files_details: details,
@@ -512,7 +582,7 @@ class UploadFiles extends Component {
     }
   };
 
-  publish = () => {
+  saveFiles = (type) => {
     let error = false;
     let selected_files = this.state.selected_files_details;
     for (let i = selected_files.length - 1; i >= 0; i--) {
@@ -633,8 +703,16 @@ class UploadFiles extends Component {
             data.append("adult", currentFile.adult_content);
             data.append("category", currentFile.category.value);
 
+            let link = `${domain}/api/image/createImage`
+            if(type === "draft"){
+              link = `${domain}/api/draft/createDraft`
+            }
+            else{
+              link = `${domain}/api/image/createImage`
+            }
+
             axios
-              .post(`${domain}/api/image/createImage`, data, config)
+              .post(link, data, config)
               .then((res) => {
                 files[i].upload_status = "uploaded";
                 this.setState({
@@ -1424,8 +1502,8 @@ class UploadFiles extends Component {
                         </div>
                       )}
                       <div id="u_f_btn">
-                        <button id="u_f_save_draft">Save Draft</button>
-                        <button id="u_f_submit" onClick={this.publish}>
+                        <button id="u_f_save_draft" onClick = {() => this.saveFiles("draft")}>Save Draft</button>
+                        <button id="u_f_submit" onClick={() => this.saveFiles("publish")}>
                           Publish
                         </button>
                       </div>

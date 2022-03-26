@@ -8,6 +8,78 @@ import Share from "../images/share.png";
 import { saveAs } from "file-saver";
 import axios from "axios";
 import { useParams, useHistory, Link } from "react-router-dom";
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  LineShareButton,
+  LinkedinShareButton,
+  PinterestShareButton,
+  RedditShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+  ViberShareButton,
+  VKShareButton,
+  WhatsappShareButton,
+} from "react-share";
+import {
+  EmailIcon,
+  FacebookIcon,
+  LineIcon,
+  LinkedinIcon,
+  PinterestIcon,
+  RedditIcon,
+  TelegramIcon,
+  TwitterIcon,
+  ViberIcon,
+  VKIcon,
+  WhatsappIcon,
+} from "react-share";
+import Dialog from "@material-ui/core/Dialog";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import close from "../images/close.svg";
+import Box from "@material-ui/core/Box";
+
+const styles = (theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: "absolute",
+    right: theme.spacing(4),
+    top: theme.spacing(2),
+    color: theme.palette.grey[500],
+  },
+});
+
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          className={classes.closeButton}
+          onClick={onClose}
+        >
+          {/* <CloseIcon className="test"/> */}
+          <img src={close} />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -21,15 +93,16 @@ function Imageview() {
   let [likedData, setLikedData] = useState([]);
   let [comment, setComment] = useState("");
   let [comments, setComments] = useState([]);
+  let [share, setShare] = useState(false);
+  let [shareLink, setShareLink] = useState("");
   useEffect(() => {
-    axios
-      .get(`${domain}/api/image/getImage/${param.id}`)
-      .then((res) => {
-        console.log(res);
-        setImage(res.data[0]);
-      });
+    axios.get(`${domain}/api/image/getImage/${param.id}`).then((res) => {
+      console.log(res);
+      setImage(res.data[0]);
+    });
   }, []);
   useEffect(() => {
+    setShareLink(window.location.href)
     axios
       .get(`${domain}/api/image/getUserImages/${param.user_id}`)
       .then((res) => {
@@ -39,13 +112,11 @@ function Imageview() {
   }, []);
   let [pilotData, setPilotData] = useState({});
   useEffect(() => {
-    axios
-      .post(`${domain}/api/user/checkUser`, config)
-      .then((res) => {
-        console.log(res.data);
+    axios.post(`${domain}/api/user/checkUser`, config).then((res) => {
+      console.log(res.data);
 
-        setLikedData(res.data.likedMedia);
-      });
+      setLikedData(res.data.likedMedia);
+    });
   }, []);
   useEffect(() => {
     axios
@@ -55,37 +126,55 @@ function Imageview() {
         setComments(res.data);
       });
   }, []);
-let likeComment = (id) =>{
-  axios.post(`http://localhost:9000/api/comments/likeComment`, {commentId : id}, config).then(res=>{
+  let likeComment = (id) => {
     axios
-    .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
-    .then((res) => {
-      console.log(res.data);
-      setComments(res.data);
-    });
-    axios.post(`http://localhost:9000/api/comments/getMyComments`,config).then(res=>{
-      console.log(res)
-      setLikedComments(res.data)
-})
-  })
- 
-}
+      .post(
+        `http://localhost:9000/api/comments/likeComment`,
+        { commentId: id },
+        config
+      )
+      .then((res) => {
+        axios
+          .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
+          .then((res) => {
+            console.log(res.data);
+            setComments(res.data);
+          });
+        axios
+          .post(`http://localhost:9000/api/comments/getMyComments`, config)
+          .then((res) => {
+            console.log(res);
+            setLikedComments(res.data);
+          });
+      });
+  };
 
-let unlikeComment = (id) =>{
-  axios.post(`http://localhost:9000/api/comments/unlikeComment`, {commentId : id}, config).then(res=>{
+  const handleShareClose = () => {
+    setShare(false);
+  };
+
+  let unlikeComment = (id) => {
     axios
-    .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
-    .then((res) => {
-      console.log(res.data);
-      setComments(res.data);
-    });
-    axios.post(`http://localhost:9000/api/comments/getMyComments`,config).then(res=>{
-      console.log(res)
-      setLikedComments(res.data)
-})
-  })
-
-}
+      .post(
+        `http://localhost:9000/api/comments/unlikeComment`,
+        { commentId: id },
+        config
+      )
+      .then((res) => {
+        axios
+          .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
+          .then((res) => {
+            console.log(res.data);
+            setComments(res.data);
+          });
+        axios
+          .post(`http://localhost:9000/api/comments/getMyComments`, config)
+          .then((res) => {
+            console.log(res);
+            setLikedComments(res.data);
+          });
+      });
+  };
   //yaseen
   let [fol, setFol] = useState([]);
 
@@ -99,40 +188,61 @@ let unlikeComment = (id) =>{
   }, []);
 
   let followMe = (userId) => {
-    axios.post(`http://localhost:9000/api/pilot/getPilotId`,{userId : userId}).then(res=>{
-      console.log(res)
+    axios
+      .post(`http://localhost:9000/api/pilot/getPilotId`, { userId: userId })
+      .then((res) => {
+        console.log(res);
         axios
-        .post(`http://localhost:9000/api/follow/createFollow/${res.data[0]._id}`, config)
-        .then((response) => {
-          axios.post(`${domain}/api/follow/getMyFollowing`, config).then((res) => {
-            const folowers = res.data;
-            console.log(folowers);
-            setMyFollowing(folowers);
+          .post(
+            `http://localhost:9000/api/follow/createFollow/${res.data[0]._id}`,
+            config
+          )
+          .then((response) => {
+            axios
+              .post(`${domain}/api/follow/getMyFollowing`, config)
+              .then((res) => {
+                const folowers = res.data;
+                console.log(folowers);
+                setMyFollowing(folowers);
+              });
+            console.log(response);
           });
-          console.log(response);
       });
-    })
   };
   let unfollow = (userId) => {
-axios.post(`http://localhost:9000/api/pilot/getPilotId`,{userId : userId}).then(res=>{
-console.log(res)
-  axios
-  .post(`http://localhost:9000/api/follow/removeFollow/${res.data[0]._id}`, config)
-  .then((response) => {
-    axios.post(`${domain}/api/follow/getMyFollowing`, config).then((res) => {
-      const folowers = res.data;
-      console.log(folowers);
-      setMyFollowing(folowers);
-    });
-    console.log(response);
-    // setBrands(response.data.brandOfDrones)
-  });})
-
+    axios
+      .post(`http://localhost:9000/api/pilot/getPilotId`, { userId: userId })
+      .then((res) => {
+        console.log(res);
+        axios
+          .post(
+            `http://localhost:9000/api/follow/removeFollow/${res.data[0]._id}`,
+            config
+          )
+          .then((response) => {
+            axios
+              .post(`${domain}/api/follow/getMyFollowing`, config)
+              .then((res) => {
+                const folowers = res.data;
+                console.log(folowers);
+                setMyFollowing(folowers);
+              });
+            console.log(response);
+            // setBrands(response.data.brandOfDrones)
+          });
+      });
   };
+
+  const clickShareLink = () => {
+    setShare(true)
+  }
 
   //yaseen
   const downloadImage = (id) => {
-    saveAs(`https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${image.file}`, `${image.file}`);
+    saveAs(
+      `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${image.file}`,
+      `${image.file}`
+    );
     axios
       .post(`${domain}/api/image/downloadImage/${id}`, config)
       .then((res) => {
@@ -149,7 +259,7 @@ console.log(res)
   };
 
   let clicked = (id, userId) => {
-    window.location.href = `/imageview/${id}/${userId}`
+    window.location.href = `/imageview/${id}/${userId}`;
     // history.push(`/imageview/${id}/${userId}`);
     // window.location.reload();
   };
@@ -158,11 +268,9 @@ console.log(res)
       .post(`${domain}/api/image/likeImage/${image._id}`, config)
       .then((res) => {
         console.log(res.data);
-        axios
-          .post(`${domain}/api/user/checkUser`, config)
-          .then((res) => {
-            setLikedData(res.data.likedMedia);
-          });
+        axios.post(`${domain}/api/user/checkUser`, config).then((res) => {
+          setLikedData(res.data.likedMedia);
+        });
       });
   };
   let unlikeImage = () => {
@@ -170,26 +278,29 @@ console.log(res)
       .post(`${domain}/api/image/unlikeImage/${image._id}`, config)
       .then((res) => {
         console.log(res.data);
-        axios
-          .post(`${domain}/api/user/checkUser`, config)
-          .then((res) => {
-            setLikedData(res.data.likedMedia);
-          });
+        axios.post(`${domain}/api/user/checkUser`, config).then((res) => {
+          setLikedData(res.data.likedMedia);
+        });
       });
   };
-  let [likedComments, setLikedComments] = useState([])
-  useEffect(()=>{
-    axios.post(`http://localhost:9000/api/comments/getMyComments`,config).then(res=>{
-      console.log(res)
-      setLikedComments(res.data)
-    })
-    },[])
-    let [userId, setUserId] = useState("")
-    useEffect(()=>{
-      axios.post(`http://localhost:9000/api/comments/getMyUserId`,config).then(res=>{
-        console.log(res)
-setUserId(res.data)      })
-      },[])
+  let [likedComments, setLikedComments] = useState([]);
+  useEffect(() => {
+    axios
+      .post(`http://localhost:9000/api/comments/getMyComments`, config)
+      .then((res) => {
+        console.log(res);
+        setLikedComments(res.data);
+      });
+  }, []);
+  let [userId, setUserId] = useState("");
+  useEffect(() => {
+    axios
+      .post(`http://localhost:9000/api/comments/getMyUserId`, config)
+      .then((res) => {
+        console.log(res);
+        setUserId(res.data);
+      });
+  }, []);
   let commentsClicked = () => {
     document.getElementById("hideComment").style.display = "block";
   };
@@ -217,7 +328,17 @@ setUserId(res.data)      })
     <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
       <Container>
         <div style={{ marginTop: "35px" }}>
-          <div className="i_v_back" style = {{width: "50%", overflow: "hidden", textOverflow: "ellipsis"}}>{image.postName}</div>
+          <div
+            className="i_v_back"
+            style={{
+              width: "50%",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {image.postName && image.postName.substring(0, 20)}
+            
+          </div>
           <button
             className="i_v_download"
             onClick={() => downloadImage(image._id)}
@@ -267,7 +388,7 @@ setUserId(res.data)      })
           )}
         </div>
         <div>
-          <img src={Share} className="shareImage" />
+          <img src={Share} className="shareImage" onClick = {clickShareLink} />
         </div>
 
         <Row gutterWidth={45}>
@@ -290,9 +411,19 @@ setUserId(res.data)      })
                 <div className="i_v_name">
                   <div>{image.name}</div>
                   {myFollowing.includes(image.userId) ? (
-                    <div className="i_v_follow" onClick={()=>unfollow(image.userId)}>Followed</div>
+                    <div
+                      className="i_v_follow"
+                      onClick={() => unfollow(image.userId)}
+                    >
+                      Followed
+                    </div>
                   ) : (
-                    <div className="i_v_follow"  onClick={()=>followMe(image.userId)}>Follow</div>
+                    <div
+                      className="i_v_follow"
+                      onClick={() => followMe(image.userId)}
+                    >
+                      Follow
+                    </div>
                   )}
                 </div>
               </Col>
@@ -365,10 +496,17 @@ setUserId(res.data)      })
                           <div style={{ float: "right" }}>
                             <Row gutterWidth={10}>
                               <Col>
-                              {
-                                likedComments.includes(item._id) ? <img src={Heart}  onClick={()=>unlikeComment(item._id)}/> : <img src={Like} onClick={()=>likeComment(item._id)} />
-                              }
-                                {" "}
+                                {likedComments.includes(item._id) ? (
+                                  <img
+                                    src={Heart}
+                                    onClick={() => unlikeComment(item._id)}
+                                  />
+                                ) : (
+                                  <img
+                                    src={Like}
+                                    onClick={() => likeComment(item._id)}
+                                  />
+                                )}{" "}
                               </Col>
                               <Col>
                                 <div>{item.likes.length}</div>
@@ -428,7 +566,7 @@ setUserId(res.data)      })
                           width: "100%",
                           margin: "0px 0px 10px 0px",
                           borderRadius: "5px",
-                          objectFit: "cover"
+                          objectFit: "cover",
                         }}
                         src={`https://dn-nexevo-thumbnail.s3.ap-south-1.amazonaws.com/${item.file}`}
                         onClick={() => clicked(item._id, item.userId)}
@@ -441,6 +579,66 @@ setUserId(res.data)      })
           </Col>
         </Row>
       </Container>
+      <Dialog
+        open={share}
+        onClose={handleShareClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+      >
+        <DialogTitle
+          id="customized-dialog-title"
+          onClose={handleShareClose}
+          className={All.PopupHeader}
+        >
+          <Box display="flex" pt={6}>
+            <Box mt={2}>
+              <h3 className={All.Bold} style={{ textAlign: "center" }}>
+                Share
+              </h3>
+            </Box>
+          </Box>
+        </DialogTitle>
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+            <WhatsappShareButton url={shareLink} style={{ margin: "10px" }}>
+              <WhatsappIcon size={52} round={true} />
+            </WhatsappShareButton>
+            <FacebookShareButton url={shareLink} style={{ margin: "10px" }}>
+              <FacebookIcon size={52} round={true} />
+            </FacebookShareButton>
+            <EmailShareButton url={shareLink} style={{ margin: "10px" }}>
+              <EmailIcon size={52} round={true} />
+            </EmailShareButton>
+            <TwitterShareButton url={shareLink} style={{ margin: "10px" }}>
+              <TwitterIcon size={52} round={true} />
+            </TwitterShareButton>
+            <TelegramShareButton url={shareLink} style={{ margin: "10px" }}>
+              <TelegramIcon size={52} round={true} />
+            </TelegramShareButton>
+            <LinkedinShareButton url={shareLink} style={{ margin: "10px" }}>
+              <LinkedinIcon size={52} round={true} />
+            </LinkedinShareButton>
+            <PinterestShareButton url={shareLink} style={{ margin: "10px" }}>
+              <PinterestIcon size={52} round={true} />
+            </PinterestShareButton>
+            <VKShareButton url={shareLink} style={{ margin: "10px" }}>
+              <VKIcon size={52} round={true} />
+            </VKShareButton>
+            <ViberShareButton url={shareLink} style={{ margin: "10px" }}>
+              <ViberIcon size={52} round={true} />
+            </ViberShareButton>
+            <RedditShareButton url={shareLink} style={{ margin: "10px" }}>
+              <RedditIcon size={52} round={true} />
+            </RedditShareButton>
+            <LineShareButton url={shareLink} style={{ margin: "10px" }}>
+              <LineIcon size={52} round={true} />
+            </LineShareButton>
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 }

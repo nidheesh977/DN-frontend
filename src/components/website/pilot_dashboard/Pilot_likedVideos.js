@@ -43,7 +43,7 @@ function Pilot_likedVideos() {
   };
   let [media, setMedia] = useState([])
   useEffect(()=>{
-    axios.post(`http://localhost:9000/api/pilot/getLikedMedia`, config).then(res =>{
+    axios.post(`${domain}/api/pilot/getLikedMedia`, config).then(res =>{
       console.log(res.data)
       setMedia(res.data)
     })
@@ -66,8 +66,8 @@ function Pilot_likedVideos() {
  <video
                     className="pd_images_image" style={{backgroundColor:"black", objectFit:"cover"}} controls onPlay={()=>removeVideoIcon(item._id)}
                   >
-                    <source src={`${domain}/${item.file}`} type="video/mp4" />
-                    <source src={`${domain}/${item.file}`} type="video/ogg" />
+                    <source src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`} type="video/mp4" />
+                    <source src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`} type="video/ogg" />
                     Your browser does not support the video tag.
                   </video>                    <div className={item.premium ? "pd_premiumBadge" : "pd_images_imageHidden"}>
                       <img src={premiumIcon} className="pd_premiumBadge_star" />

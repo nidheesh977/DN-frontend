@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cover from "./pilot_dashboard/images/cover.jpg";
 import "./pilot_dashboard/css/Pilot_BasicInfo.css";
 import Pilot from "./pilot_dashboard/images/pilot.jpg";
@@ -14,6 +14,7 @@ import Dialog from "@material-ui/core/Dialog";
 import Close from "../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
+import Select from "react-select";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -23,6 +24,16 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
+const customStyles = {
+  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+    return {
+      ...styles,
+      backgroundColor: isFocused ? "#999999" : null,
+      color: "#333333",
+    };
+  },
+};
+
 function CreatePilot() {
   let history = useHistory();
   let [data, setData] = useState({
@@ -30,7 +41,7 @@ function CreatePilot() {
     email: "",
     phone: "+91",
     dob: "",
-    gender: "",
+    gender: "Male",
     address: "",
     city: "",
     country: "",
@@ -55,10 +66,11 @@ function CreatePilot() {
   let [edit, setEdit] = useState(true);
   let [accountCreateSuccess, setAccountCreateSuccess] = useState(false);
   const [serverError, setServerError] = useState(false);
+  let [industries, setIndustries] = useState([])
+  let [suggestedSkills, setSuggestedSkills] = useState([])
+  let [showSuggestedSkills, setShowSuggestedSkills] = useState("less")
 
   const changeHandler = (e) => {
-    console.log(e.target.id)
-    console.log(e.target.value)
     if (e.target.id === "bio") {
       document.getElementById(`${e.target.id}_error`).style.visibility =
         "hidden";
@@ -71,8 +83,32 @@ function CreatePilot() {
       ...data,
       [e.target.id]: e.target.value,
     });
-    console.log(data);
   };
+
+  const selectSkill = (id) => {
+    var skill_list = data.skills;
+    var suggestedSkillsList = suggestedSkills
+    skill_list.push(suggestedSkills[id]);
+    suggestedSkillsList.splice(id, 1);
+    setData({
+      ...data,
+      skills: skill_list,
+    });
+    setSuggestedSkills(suggestedSkillsList)
+    document.getElementById("skills_error").style.visibility = "hidden";
+  }
+
+  const removeSelectedSkill = (id) => {
+    var skill_list = data.skills;
+    var suggestedSkillsList = suggestedSkills
+    suggestedSkillsList.push(skill_list[id]);
+    skill_list.splice(id, 1);
+    setData({
+      ...data,
+      skills: skill_list,
+    });
+    setSuggestedSkills(suggestedSkillsList)
+  }
 
   const phoneChangeHandler = (e) => {
     document.getElementById(`phone_error`).style.visibility = "hidden";
@@ -94,7 +130,6 @@ function CreatePilot() {
         phone: "",
       });
     }
-    console.log(data);
   };
 
   const saveChanges = () => {
@@ -114,7 +149,6 @@ function CreatePilot() {
     var error = false;
     var focusField = ""
     for (var i = 0; i < fields.length; i++) {
-      console.log(focusField)
       if (
         data[fields[i]] === "" &&
         fields[i] !== "drone_id" &&
@@ -227,7 +261,6 @@ function CreatePilot() {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       };
-      console.log(data);
       Axios.post(
         `${domain}/api/pilot/registerPilot`,
         {
@@ -260,7 +293,6 @@ function CreatePilot() {
               setServerError(true)
             }
             else{
-              console.log(err);
             }
           }catch{
             setServerError(true)
@@ -268,6 +300,34 @@ function CreatePilot() {
         });
     }
   };
+
+  useEffect(()=>{
+    Axios.get(`${domain}/api/skill/getSkills`)
+    .then((res) => {
+      if(res.data){
+        const skills = res.data.map((skill)=>(
+          skill.skill
+        ))
+        setSuggestedSkills(skills)
+      }
+      
+    })
+    Axios.get(`${domain}/api/industry/getIndustries`).then((res) => {
+      const options = res.data.map((d) => ({
+        value: d.industry,
+        label: d.industry,
+      }));
+      setIndustries(options);
+    });
+  }, [])
+
+  const showMoreSuggestions = () => {
+    setShowSuggestedSkills("all")
+  }
+
+  const showLessSuggestions = () => {
+    setShowSuggestedSkills("less")
+  }
 
   const closeSuccessPopup = () => {
     setAccountCreateSuccess(false);
@@ -281,7 +341,6 @@ function CreatePilot() {
         ...data,
         skills: skill_list,
       });
-      console.log(data.skills);
       document.getElementById(e.target.id).value = "";
     }
     document.getElementById("skills_error").style.visibility = "hidden";
@@ -294,11 +353,19 @@ function CreatePilot() {
         ...data,
         drones: skill_list,
       });
-      console.log(data.drones);
       document.getElementById(e.target.id).value = "";
     }
     document.getElementById("skills_error").style.visibility = "hidden";
   };
+
+  const industryChange = (value) => {
+    setData({
+      ...data,
+      industry: value.value,
+    });
+    document.getElementById(`industry_error`).style.visibility = "hidden";
+  }
+
   const editHandler = () => {
     setEdit(true);
     setTimeout(() => {
@@ -395,7 +462,7 @@ function CreatePilot() {
                     disabled={!edit}
                   />
                   <div className="input_error_msg" id="dob_error">
-                    DOB is required
+                    DOB is required 
                   </div>
                 </div>
               </Col>
@@ -624,13 +691,19 @@ function CreatePilot() {
                 <label htmlFor="industry" className="pd_b_i_profile_head">
                   Industry
                 </label>
-                <input
+                {/* <input
                   type="text"
                   className="pd_b_i_profile_input"
                   id="industry"
                   onChange={handleChange}
                   value={data.industry}
                   disabled={!edit}
+                /> */}
+                <Select
+                  options={industries}
+                  onChange={industryChange}
+                  styles={customStyles}
+                  className="u_f_category_dropdown"
                 />
                 <div className="input_error_msg" id="industry_error">
                   Industry is required
@@ -737,8 +810,8 @@ function CreatePilot() {
                 />
                 {data.skills.map((skill, index) => {
                   return (
-                    <div className="pd_i_skill" key={index}>
-                      {skill}
+                    <div className="pd_i_skill" key={index} onClick = {()=>removeSelectedSkill(index)}>
+                      {skill} <i class="fa fa-times" aria-hidden="true"></i>
                     </div>
                   );
                 })}
@@ -746,6 +819,37 @@ function CreatePilot() {
                   Add atleast one skill
                 </div>
               </div>
+              {suggestedSkills.length !== 0 &&
+                <div>
+                  <label htmlFor="skills" className="pd_b_i_profile_head">
+                    Suggested Skills
+                  </label>
+                  {suggestedSkills.map((skill, index) => {
+                    return (
+                      <>
+                        {(showSuggestedSkills === "all" || index < 5) &&
+                          <div className="pd_i_skill" key={index} onClick = {() => selectSkill(index)}>
+                            {skill} <i class="fas fa-plus"></i>
+                          </div>
+                        }
+                      </>
+                    );
+                  })}
+                  {showSuggestedSkills === "all" && suggestedSkills.length > 5 &&
+                    <div className="pd_i_skill" onClick = {showLessSuggestions} style = {{fontFamily: "muli-bold"}}>
+                      Show less
+                    </div>
+                  }
+                  {showSuggestedSkills === "less" && suggestedSkills.length > 5 &&
+                    <div className="pd_i_skill" onClick = {showMoreSuggestions} style = {{fontFamily: "muli-bold"}}>
+                      Show more
+                    </div>
+                  }
+                  <div className="input_error_msg">
+                    &nbsp;
+                  </div>
+                </div>
+              }
               <div className="pd_b_i_notifications_save">
                 <button className="common_backBtn" onClick={saveChanges}>
                   Back

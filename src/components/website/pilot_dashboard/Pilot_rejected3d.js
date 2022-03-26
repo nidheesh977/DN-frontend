@@ -40,7 +40,7 @@ console.log(response.data)
   }, []);
   let [value, setValue] = useState([]);
   const deleteImage = (id) =>{
-    axios.post(`http://localhost:9000/api/image/deleteImage/${id}`, config).then((res)=>{
+    axios.post(`${domain}/api/image/deleteImage/${id}`, config).then((res)=>{
       axios.post(`${domain}/api/image/getRejected3d`,config).then(
         (response) => {
   console.log(response.data)       
@@ -48,21 +48,7 @@ console.log(response.data)
         }
       ); })
   }
-  let details = {
-    images: [
-      { id: 1, views: "5K", downloads: "2K", likes: "1K", premium: false, tag1: "Tall Building", tag2: "Adult" , src: "https://wallpaperaccess.com/thumb/14247.jpg"},
-      { id: 2, views: "8K", downloads: "7K", likes: "4K", premium: true, tag1: "Building", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/91952.jpg" },
-      { id: 3, views: "3K", downloads: "2K", likes: "1K", premium: false, tag1: "Tall Building", tag2: "Height" , src: "https://wallpaperaccess.com/thumb/14247.jpg"},
-      { id: 4, views: "9K", downloads: "3K", likes: "2K", premium: true, tag1: "Tall Building", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/349967.jpg" },
-      { id: 5, views: "0K", downloads: "9K", likes: "3K", premium: false, tag1: "Abusive", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/14247.jpg" },
-      { id: 6, views: "5K", downloads: "8K", likes: "9K", premium: true, tag1: "Tall Building", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/91952.jpg" },
-      { id: 7, views: "6K", downloads: "3K", likes: "6K", premium: false, tag1: "Tall Building", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/349967.jpg"  },
-      { id: 8, views: "7K", downloads: "6K", likes: "0K", premium: true, tag1: "Tall Building", tag2: "Adult", src: "https://wallpaperaccess.com/thumb/91952.jpg" },
-      { id: 9, views: "9K", downloads: "7K", likes: "8K", premium: true, tag1: "Tall Building", tag2: "Adult" , src: "https://wallpaperaccess.com/thumb/14247.jpg"},
-    ],
-  };
-
-  let [data, setData] = useState(details);
+  
   return (
     <div>
     <Row gutterWidth={12}>
@@ -75,7 +61,7 @@ console.log(response.data)
                     onMouseOver={() => mouseGotIN(item._id)}
                     onMouseOut={() => mouseGotOut(item._id)}
                   >
-                    <img src={`${domain}/${item.file}` }  className="pd_images_image" />
+                    <img src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}` }  className="pd_images_image" />
                     <div
                       className={
                         item.premium

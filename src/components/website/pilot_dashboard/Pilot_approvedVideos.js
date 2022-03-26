@@ -46,7 +46,7 @@ console.log(response.data)
   }, []);
   let [value, setValue] = useState([]);
 const deleteImage = (id) =>{
-  axios.post(`http://localhost:9000/api/image/deleteImage/${id}`, config).then((res)=>{
+  axios.post(`${domain}/api/image/deleteImage/${id}`, config).then((res)=>{
     axios.post(`${domain}/api/image/getApprovedVideos`,config).then(
       (response) => {
 console.log(response.data)       
@@ -54,21 +54,7 @@ console.log(response.data)
       }
     );  })
 }
-  let details = {
-    images: [
-      { id: 1, views: "5K", downloads: "2K", likes: "1K", premium: false, src: "https://wallpaperaccess.com/thumb/520042.jpg" },
-      { id: 2, views: "8K", downloads: "7K", likes: "4K",premium: true, src: "https://wallpaperaccess.com/thumb/543077.jpg" },
-      { id: 3, views: "3K", downloads: "2K", likes: "1K", premium: false,  src: "https://wallpaperaccess.com/thumb/520042.jpg" },
-      { id: 4, views: "9K", downloads: "3K", likes: "2K",premium: true , src: "https://wallpaperaccess.com/thumb/543077.jpg"  },
-      { id: 5, views: "0K", downloads: "9K", likes: "3K",premium: false,  src: "https://wallpaperaccess.com/thumb/520042.jpg" },
-      { id: 6, views: "5K", downloads: "8K", likes: "9K", premium: true, src: "https://wallpaperaccess.com/thumb/543077.jpg"  },
-      { id: 7, views: "6K", downloads: "3K", likes: "6K",premium: false,  src: "https://wallpaperaccess.com/thumb/520042.jpg" },
-      { id: 8, views: "7K", downloads: "6K", likes: "0K", premium: true, src: "https://wallpaperaccess.com/thumb/543077.jpg"  },
-      { id: 9, views: "9K", downloads: "7K", likes: "8K", premium: true,  src: "https://wallpaperaccess.com/thumb/520042.jpg" },
-    ],
-  };
-
-  let [data, setData] = useState(details);
+  
   let removeVideoIcon = (id) =>{
     document.getElementById(`videoIcon-${id}`).style.display = "none"
   }
@@ -87,8 +73,8 @@ console.log(response.data)
     <video
                     className="pd_images_image" style={{backgroundColor:"black", objectFit:"cover"}} controls onPlay={()=>removeVideoIcon(item._id)}
                   >
-                    <source src={`${domain}/${item.file}`} type="video/mp4" />
-                    <source src={`${domain}/${item.file}`} type="video/ogg" />
+                    <source src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`} type="video/mp4" />
+                    <source src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`} type="video/ogg" />
                     Your browser does not support the video tag.
                   </video>                    <div className={item.premium ? "pd_premiumBadge" : "pd_images_imageHidden"}>
                       <img src={premiumIcon} className="pd_premiumBadge_star" />

@@ -40,7 +40,7 @@ function Pilot_likesImages() {
   };
 let [media, setMedia] = useState([])
   useEffect(()=>{
-    axios.post(`http://localhost:9000/api/pilot/getLikedMedia`, config).then(res =>{
+    axios.post(`${domain}/api/pilot/getLikedMedia`, config).then(res =>{
       console.log(res.data)
       setMedia(res.data)
     })
@@ -62,7 +62,7 @@ let [media, setMedia] = useState([])
                     onMouseOver={() => mouseGotIN(i)}
                     onMouseOut={() => mouseGotOut(i)}
                   >
-                    <img src={`${domain}/${item.file}`} className="pd_images_image" />
+                    <img src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`} className="pd_images_image" />
                     <div className={item.premium ? "pd_premiumBadge" : "pd_images_imageHidden"}>
                       <img src={premiumIcon} className="pd_premiumBadge_star" />
                     </div>

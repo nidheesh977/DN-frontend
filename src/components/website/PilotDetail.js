@@ -401,7 +401,10 @@ export default function PilotDetails(props) {
                 <Box pr={5}>
                 <MuiThemeProvider >
                   <div className={All.M_ProfileCenter}>
-                    <Avatar src={`${domain}/${pilotData.profilePic}`} size={100} />
+                    {pilotData.profilePic
+                      ?<Avatar src={`${domain}/${pilotData.profilePic}`} size={100} />
+                      :<Avatar src={`https://cdn-icons-png.flaticon.com/512/149/149071.png`} size={100} />
+                    }
                   </div>
                 </MuiThemeProvider> 
                 </Box>
@@ -499,7 +502,10 @@ export default function PilotDetails(props) {
             >
               {/* <CoverImg id = {props.match.params.id} /> */}
               <MuiThemeProvider >
-                <Avatar src={`${domain}/${pilotData.coverPic}`} className={All.BackgroundcoverImg} size={100} />
+                {pilotData.profilePic
+                ?<Avatar src={`${domain}/${pilotData.coverPic}`} className={All.BackgroundcoverImg} size={100} />
+                :<Avatar src={`https://cdn-icons-png.flaticon.com/512/149/149071.png`} className={All.BackgroundcoverImg} size={100} />
+                }
               </MuiThemeProvider>
             </Col>
           </Row>
@@ -847,8 +853,8 @@ export default function PilotDetails(props) {
                           <div className="p_d_followers_img_container">
                             <img
                               src={
-                                follow.src
-                                  ? `${domain}/${follow.src}`
+                                follow.profilePic
+                                  ? `${domain}/${follow.profilePic}`
                                   : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
                               }
                               alt=""
@@ -905,8 +911,8 @@ export default function PilotDetails(props) {
                           <div className="p_d_followers_img_container">
                             <img
                               src={
-                                follow.src
-                                  ? `${domain}/${follow.src}`
+                                follow.profilePic
+                                  ? `${domain}/${follow.profilePic}`
                                   : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
                               }
                               alt=""
@@ -974,8 +980,8 @@ export default function PilotDetails(props) {
                           <div className="p_d_followers_img_container">
                             <img
                               src={
-                                follow.src
-                                  ? `${domain}/${follow.src}`
+                                follow.profilePic
+                                  ? `${domain}/${follow.profilePic}`
                                   : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
                               }
                               alt=""
@@ -1032,8 +1038,8 @@ export default function PilotDetails(props) {
                           <div className="p_d_followers_img_container">
                             <img
                               src={
-                                follow.src
-                                  ? `${domain}/${follow.src}`
+                                follow.profilePic
+                                  ? `${domain}/${follow.profilePic}`
                                   : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
                               }
                               alt=""
