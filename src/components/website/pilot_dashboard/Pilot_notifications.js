@@ -1,15 +1,34 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import "./css/Pilot_notifications.css"
 import Edit from "./images/edit (3).svg"
 
 function Pilot_notifications() {
-
+    let config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      };
+    let [data, setData] = useState({})
+useEffect(()=>{
+    axios.get(`http://localhost:9000/api/user/getUserData`, config).then(res=>{
+        console.log(res.data)
+        setNotifications(
+            {
+                drone_zone_news: res.data.droneNews,
+                account_privacy: res.data.accountPrivacy,
+                hires_me: res.data.hiresMe,
+                follow_me: res.data.followsMe,
+                comments: res.data.commentsMe
+            }
+        )
+    })
+}, [])
     let [notifications, setNotifications] = useState({
-        drone_zone_news: false,
+        drone_zone_news: true,
         account_privacy: false,
         hires_me: false,
-        mensions_me: false,
-        accept_invitation: false,
+       
         follow_me: false,
         comments: false
     })
@@ -28,8 +47,23 @@ function Pilot_notifications() {
     }
 
     const saveChanges = () => {
-        alert("Ready to submit")
-    }
+axios.post(`http://localhost:9000/api/user/updateNotifications`, {droneNews: notifications.drone_zone_news, accountPrivacy: notifications.account_privacy,
+hiresMe: notifications.hires_me, followsMe: notifications.follow_me, commentsMe: notifications.comments}, config).then(res=>{
+    axios.get(`http://localhost:9000/api/user/getUserData`, config).then(res=>{
+        console.log(res.data)
+        setNotifications(
+            {
+                drone_zone_news: res.data.droneNews,
+                account_privacy: res.data.accountPrivacy,
+                hires_me: res.data.hiresMe,
+                follow_me: res.data.followsMe,
+                comments: res.data.commentsMe
+            }
+        )
+    })
+
+setEdit(false)
+})    }
 
   return <div className='pd_notifications_main'>
 <div className='pd_notifications_mainBox'>
@@ -66,16 +100,7 @@ function Pilot_notifications() {
             <input type="checkbox" disabled = {!edit} checked = {notifications.hires_me} id = "hires_me" onChange = {changeHandler}/> <span className='pd_notifications_title'>Anyone hires me</span>
             </label>
         </div>
-        <hr className='pd_notifications_hr'/><div>
-            <label className='pd_notifications_label2'>
-            <input type="checkbox" disabled = {!edit} checked = {notifications.mensions_me} id = "mensions_me" onChange = {changeHandler}/> <span className='pd_notifications_title'>Someone mentions me</span>
-            </label>
-        </div>
-        <hr className='pd_notifications_hr'/><div>
-            <label className='pd_notifications_label2'>
-            <input type="checkbox" disabled = {!edit} checked = {notifications.accept_invitation} id = "accept_invitation" onChange = {changeHandler}/> <span className='pd_notifications_title'>Someone accepts my invitation</span>
-            </label>
-        </div>
+     
         <hr className='pd_notifications_hr'/><div>
             <label className='pd_notifications_label2'>
             <input type="checkbox" disabled = {!edit} checked = {notifications.follow_me} id = "follow_me" onChange={changeHandler}/> <span className='pd_notifications_title'>Anyone follows me</span>

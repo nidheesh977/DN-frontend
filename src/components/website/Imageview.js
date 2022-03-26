@@ -267,7 +267,7 @@ setUserId(res.data)      })
           )}
         </div>
         <div>
-          <img src={Share} className="shareImage" />
+          <img src={Share} className="shareImage"  />
         </div>
 
         <Row gutterWidth={45}>
