@@ -12,7 +12,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 import Favorite from "@material-ui/icons/Favorite";
 import { Link } from "react-router-dom";
-import $ from "jquery";
+import $, { data } from "jquery";
 import SearchResults from "react-filter-search";
 import nofoundresult from "../images/noresultfound.svg";
 // import Like from "../Like";
@@ -73,6 +73,8 @@ class GalleryFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      keywords: "",
+      dropdown:"all",
       userlogin: "",
       listing: [],
       visible: 10,
@@ -399,7 +401,30 @@ class GalleryFilter extends React.Component {
   mouseLeaveFilter = (id) => {
     document.getElementById("file_details_" + id).style.visibility = "hidden";
   };
+  dropdownChanged = async (e) =>{
+  await  this.setState({
+      dropdown: e.target.value
+    }) 
+    await axios.post(`http://localhost:9000/api/image/imageFilters`, {data : this.state.keywords, type: this.state.dropdown}, this.config ).then(res=>{
+      console.log(res)
+      this.setState({
+        listing: res.data
+      })
+    })    
+  }
 
+  keywordsClicked = async (e)=>{
+   await this.setState({
+      keywords: e.target.value
+    })
+   
+await axios.post(`http://localhost:9000/api/image/imageFilters`, {data : this.state.keywords, type: this.state.dropdown}, this.config ).then(res=>{
+  console.log(res)
+  this.setState({
+    listing: res.data
+  })
+})  
+  }
   render() {
     const { links, activeLink } = this.state;
     const { times } = this.state;
@@ -531,8 +556,22 @@ class GalleryFilter extends React.Component {
                     <Col lg = {3}><div className="g_f_filter" onClick = {() => dropdown(3)}>Select Industry <span className='g_f_dropdown_icon'><img src={DropDownPng} alt="" height={"14px"} id="g_f_dropdown_icon3" /></span></div></Col>
                     <Col ><button className="g_f_btn1" style = {{margin: "10px 0", borderRadius: "20px !important"}}>Search</button></Col>
                   </Row> */}
-                  <Row gutterWidth={20}>
-                    <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
+                  <Container>
+                  <Row gutterWidth={0} style={{margin:"auto", maxWidth:"80%"}}>
+                  <Col lg={2} xs={2}>
+                  <select className="g_f_searchBox1" style={{width:"100%"}} onChange={this.dropdownChanged}>
+                  <option value="all" >All Media</option>
+                  <option value= "image">Images</option>
+                  <option value = "video">Videos</option>
+                  <option value="3d">3D Videos</option>
+                  </select>
+                  
+                  </Col>
+                  <Col>
+                  <input className="g_f_searchBox2" type="text" style={{width:"100%"}} placeholder="Enter Keywords to match your search" onChange={this.keywordsClicked}/>
+                  </Col>
+                
+                    {/* <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
                       <select
                         className="g_f_filter"
                         id="g_f_filter1"
@@ -547,11 +586,7 @@ class GalleryFilter extends React.Component {
                         <option>China</option>
                         <option>Russia</option>
                       </select>
-                      {/* <select className="g_f_filter">
-                        <option>Hot Dog, Fries and a Soda</option>
-                        <option>Burger, Shake and a Smile</option>
-                        <option>Sugar, Spice and all things nice</option>
-                      </select> */}
+                   
                     </Col>
                     <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
                       <select
@@ -595,8 +630,9 @@ class GalleryFilter extends React.Component {
                       >
                         Search
                       </button>
-                    </Col>
+                    </Col> */}
                   </Row>
+                  </Container>
                 </div>
 
                 <div className="GalleryTitle">

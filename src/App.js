@@ -43,6 +43,7 @@ import Categories from "./components/website/Categories";
 import EmailVerification from "./components/website/EmailVerification";
 import VerifiedEmail from "./components/website/VerifiedEmail";
 import RecoverPassword from "./components/website/RecoverPassword";
+import Center_dashboard from "./components/website/center_dashboard/Center_dashboard";
 
 
 class App extends React.Component {
@@ -147,6 +148,7 @@ class App extends React.Component {
             <Route component = {CreateServiceCenter} path = "/createServiceCenter" />
             {/* yaseen */}
             <Route component={Pilot_dashboard} path="/pilot_dashboard" />
+            <Route component={Center_dashboard} path="/center_dashboard" />
             <Route component={ApplyJobLanding} path="/applyJobLanding/:id" />
             <Route component={Company_dashboard} path="/company_dashboard" />
             <Route component={Admin_dashboard} path="/Admin_dashboard" />

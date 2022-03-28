@@ -637,3 +637,34 @@ li.slide {
 
 
      }
+
+
+     .g_f_searchBox1{
+      height: 50px;
+      padding: 10px;
+      background: transparent linear-gradient(10deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;  
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+      font-family: muli-regular;
+      font-size: 18px;
+    
+    }
+    .g_f_searchBox2, .g_f_searchBox2:hover, .g_f_searchBox2:focus{
+      padding-left: 10px;
+      height: 45px;
+      border: 1px solid rgba(131, 129, 129, 0.5) !important;
+      outline: 1px solid rgba(131, 129, 129, 0.5) !important;
+      font-family: muli-regular;
+      font-size: 18px;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      background: url(/static/media/search2.036b2983.png), #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  background-position: calc(100% - 15px);
+      
+    }
+
+    
