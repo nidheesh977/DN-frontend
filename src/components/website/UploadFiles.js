@@ -167,6 +167,7 @@ class UploadFiles extends Component {
               draft_changed: false,
               industryOptions: this.state.industryOptions,
               upload_status: "selected",
+              id: res.data[i]._id
             };
             files.push(file);
           }
@@ -174,9 +175,11 @@ class UploadFiles extends Component {
           this.setState({
             selected_files_details: files,
           });
-          this.setState({
-            files_selected: true,
-          });
+          if (files.length>0){
+            this.setState({
+              files_selected: true,
+            });
+          }
         })
         .catch((err) => {
           console.log(err.data);
@@ -486,6 +489,7 @@ class UploadFiles extends Component {
             draft_changed: false,
             industryOptions: this.state.industryOptions,
             upload_status: "selected",
+            id: res.data[i]._id
           };
           files.push(file);
         }
@@ -598,7 +602,13 @@ class UploadFiles extends Component {
     document.getElementById("u_f_edit_icon_" + id).style.visibility = "visible";
   };
 
-  removeFile = (id) => {
+  removeFile = (id, fileId) => {
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+
     if (this.state.selected_files_details.length == 1) {
       this.setState({
         files_selected: false,
@@ -630,6 +640,18 @@ class UploadFiles extends Component {
         file_edit: 0,
         resolutionCheckCount: this.state.resolutionCheckCount - 1,
       });
+    }
+    if(this.state.selected_tab === 2){
+      axios.post(`${domain}/api/draft/deleteDraft`, {id: fileId}, config)
+      .then(res=>{
+        console.log(res)
+        this.setState({
+          draft_count: this.state.draft_count - 1
+        })
+      })
+      .catch(err=>{
+        console.log(err.response)
+      })
     }
   };
 
@@ -922,6 +944,20 @@ class UploadFiles extends Component {
             this.setState({
               selected_files_details: files,
             });
+
+            if (link === `${domain}/api/draft/uploadDraft`){
+              axios.post(`${domain}/api/draft/deleteDraft`, {id: files[i].id}, config)
+              .then(res=>{
+                console.log(res)
+                this.setState({
+                  draft_count: this.state.draft_count - 1
+                })
+              })
+              .catch(err=>{
+                console.log(err.response)
+              })
+            }
+            
           })
           .catch((err) => {
             files[i].upload_status = "upload_failed";
@@ -978,6 +1014,7 @@ class UploadFiles extends Component {
                   this.setState({
                     selected_files_details: files,
                   });
+
                 })
                 .catch((err) => {
                   files[i].upload_status = "upload_failed";
@@ -1436,7 +1473,7 @@ class UploadFiles extends Component {
                                                 <div
                                                   className="u_f_edit_content_title"
                                                   onClick={() =>
-                                                    this.removeFile(index)
+                                                    this.removeFile(index, file.id)
                                                   }
                                                 >
                                                   Remove
@@ -1787,12 +1824,21 @@ class UploadFiles extends Component {
                         </div>
                       )}
                       <div id="u_f_btn">
-                        <button
+                        {this.state.selected_tab === 1
+                        ?<button
                           id="u_f_save_draft"
                           onClick={() => this.saveFiles("draft")}
                         >
                           Save Draft
                         </button>
+                        :<button
+                        id="u_f_save_draft"
+                        style = {{opacity: "0.5"}}
+                      >
+                        Save Draft
+                      </button>
+                        }
+                        
                         <button
                           id="u_f_submit"
                           onClick={() => this.saveFiles("publish")}

@@ -14,7 +14,6 @@ import NoPageFound from "./components/website/NoPageFound.js";
 import "./components/website/All.module.css";
 // import Navbar from '../src/components/Navbar'
 import { UserContext } from "../src/hooks/UserContext";
-import PublicRoute from "../src/hooks/PublicRoute";
 import searchresult from "../src/components/website/Searchresult";
 // import Alert from "../src/components/alert/Alert.component";
 import Role from "../src/components/_helpers/role";
@@ -36,14 +35,13 @@ import Company_dashboard from "./components/website/company_dashboard/Company_da
 import ApplyJobLanding from "./components/website/ApplyJobLanding";
 import Admin_dashboard from "./components/adminDashboard/Admin_dashboard";
 import CreatePilot from "./components/website/CreatePilot";
-import Message from "./components/website/messages"
 import CreateCompany from "./components/website/CreateCompany";
 import CreateServiceCenter from "./components/website/CreateServiceCenter";
 import Categories from "./components/website/Categories";
 import EmailVerification from "./components/website/EmailVerification";
 import VerifiedEmail from "./components/website/VerifiedEmail";
 import RecoverPassword from "./components/website/RecoverPassword";
-
+import EditFile from "../src/components/website/EditFile"
 
 class App extends React.Component {
   constructor(props) {
@@ -138,6 +136,7 @@ class App extends React.Component {
             />
             <Route component = {searchresult} path = "/searchresult" exact />
             <Route component = {UploadFiles} path = "/UploadFile" exact />
+            <Route component = {EditFile} path = "/edit-file/:id" exact />
             <Route component = {ServiceCenters} path = "/service_centers" exact />
             <Route component = {CreateJob} path = "/create_job" exact />
             <Route component = {ServiceCenterDetails} path = "/service_center/:id" exact />
