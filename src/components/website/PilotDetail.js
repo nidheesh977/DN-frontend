@@ -311,6 +311,9 @@ export default function PilotDetails(props) {
       <section
         className={` ${All.Profile} ${All.EndUserProfile} s_c_d_container`}
       >
+
+
+
         {viewMessage && (
           <div className="p_d_message_container">
             <div className="p_d_message_user_details">
@@ -373,6 +376,26 @@ export default function PilotDetails(props) {
           </div>
         )}
         <Container className={All.Container}>
+          <div id="div1">
+            <div ><MuiThemeProvider >
+                {pilotData.profilePic
+                ?<img src={`${pilotData.coverPic}`} className="avatar_coverPic" />
+                :<Avatar src={`https://cdn-icons-png.flaticon.com/512/149/149071.png`} className={All.BackgroundcoverImg} size={100} />
+                }
+              </MuiThemeProvider></div>
+        <div id="div2">
+        <MuiThemeProvider >
+                  <div className={All.M_ProfileCenter}>
+                    {pilotData.profilePic
+                      ?<img src={`${pilotData.profilePic}`} className="avatar_profilePic"   />
+                      :<Avatar src={`https://cdn-icons-png.flaticon.com/512/149/149071.png`} size={100} />
+                    }
+                  </div>
+                </MuiThemeProvider> 
+        </div>
+        
+                </div>
+             
           {error && (
             <Snackbar
               open={error}
@@ -389,26 +412,12 @@ export default function PilotDetails(props) {
             </Snackbar>
           )}
           <Row>
+        
             <Col
               md={6}
               className={`${All.Order_xs_2} ${All.Order_sm_2} ${All.pr_xs_30} ${All.pl_xs_30} ${All.profileImg}`}
             >
-              <Box
-                py={1}
-                display="flex"
-                className={`${All.D_Block_sm} ${All.D_Block_xs}`}
-              >
-                <Box pr={5}>
-                <MuiThemeProvider >
-                  <div className={All.M_ProfileCenter}>
-                    {pilotData.profilePic
-                      ?<Avatar src={`${domain}/${pilotData.profilePic}`} size={100} />
-                      :<Avatar src={`https://cdn-icons-png.flaticon.com/512/149/149071.png`} size={100} />
-                    }
-                  </div>
-                </MuiThemeProvider> 
-                </Box>
-              </Box>
+              
 
               <Box py={1}>
                 <div className="p_d_name_container">
@@ -479,34 +488,23 @@ export default function PilotDetails(props) {
                   />{" "}
                   Hire me
                 </button>
-                {/* <button
-                  className="p_d_message_btn p_d_btn "
-                  onClick={openMessage}
-                >
-                  <img
-                    className="p_d_soc_icon3"
-                    src={messageIcon}
-                    alt=""
-                    height={"20px"}
-                  />{" "}
-                  Message
-                </button>
-                <button className="p_d_more_btn p_d_btn ">
-                  <img src={moreIcon} alt="" style={{ marginBottom: "5px" }} />
-                </button> */}
+        
               </div>
             </Col>
             <Col
               md={6}
               className={`${All.Order_xs_1} ${All.Order_sm_1}  ${All.coverImg} ${All.pr_xs_30} ${All.pl_xs_30}`}
             >
-              {/* <CoverImg id = {props.match.params.id} /> */}
-              <MuiThemeProvider >
+
+              {/* coverPic */}
+              {/* <MuiThemeProvider >
                 {pilotData.profilePic
-                ?<Avatar src={`${domain}/${pilotData.coverPic}`} className={All.BackgroundcoverImg} size={100} />
+                ?<Avatar src={`${pilotData.coverPic}`} className={All.BackgroundcoverImg} size={100} />
                 :<Avatar src={`https://cdn-icons-png.flaticon.com/512/149/149071.png`} className={All.BackgroundcoverImg} size={100} />
                 }
-              </MuiThemeProvider>
+              </MuiThemeProvider> */}
+
+              
             </Col>
           </Row>
           <div className="p_d_tabs">
@@ -854,7 +852,7 @@ export default function PilotDetails(props) {
                             <img
                               src={
                                 follow.profilePic
-                                  ? `${domain}/${follow.profilePic}`
+                                  ? `${follow.profilePic}`
                                   : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
                               }
                               alt=""
@@ -912,7 +910,7 @@ export default function PilotDetails(props) {
                             <img
                               src={
                                 follow.profilePic
-                                  ? `${domain}/${follow.profilePic}`
+                                  ? `${follow.profilePic}`
                                   : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
                               }
                               alt=""
@@ -981,7 +979,7 @@ export default function PilotDetails(props) {
                             <img
                               src={
                                 follow.profilePic
-                                  ? `${domain}/${follow.profilePic}`
+                                  ? `${follow.profilePic}`
                                   : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
                               }
                               alt=""
@@ -1039,7 +1037,7 @@ export default function PilotDetails(props) {
                             <img
                               src={
                                 follow.profilePic
-                                  ? `${domain}/${follow.profilePic}`
+                                  ? `${follow.profilePic}`
                                   : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
                               }
                               alt=""

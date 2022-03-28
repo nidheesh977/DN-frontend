@@ -382,6 +382,8 @@ export default function ServiceCenterDetails(props) {
         console.log(response.data)
 
         console.log(response);
+        setReviews(response.data);
+
         // setBrands(response.data.brandOfDrones)
       });
   }, []);

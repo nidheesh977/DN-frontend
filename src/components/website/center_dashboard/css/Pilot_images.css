@@ -1,0 +1,190 @@
+.pd_images_main{
+    padding: 10px 0px 5px 0px;
+    display: flex;
+}
+#pd_images_navItem{
+    padding: 4px 15px;
+    font-family: muli-light !important;
+    font-size: 12px !important;
+    line-height: 18px !important;
+    background-color: #F5F5F7;
+    border-radius: 15px;
+    margin-right: 10px;
+}
+#pd_images_navItem:hover{
+    color: black !important;
+}
+.pd_images_active{
+
+    background-color: #4FFEA3 !important;
+
+}
+.pd_images_content{
+    padding: 15px 0px 15px 0px !important;
+
+}
+
+.pd_images_image{
+    width: 100%;
+    height: 250px;
+    border-radius: 10px;
+}
+
+.pd_images_imageContainer{
+    position: relative;
+
+}
+.pd_moreBtn{
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    /* right: 10px; */
+    background-color: rgba(10, 10, 10, 0.7);
+    height: 25px;
+    width: 25px;
+    display: none;
+    border-radius: 5px;
+}
+.pd_person_details{
+    position: absolute;
+    bottom: 25px;
+    left: 15px;
+}
+
+.pd_specificLikes{
+    position: absolute;
+    bottom: 25px;
+    right: 15px;
+}
+.pd_image_more{
+    margin-left: 10.5px;
+    margin-top: 5px;
+}
+.pd_premiumBadge{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+   
+    background-color: black;
+    padding: 3.5px 7.5px;
+    border-radius: 3px;
+}
+.pd_video_icon{
+    position: absolute;
+    top: 35%;
+    left: 43%;
+}
+
+.pd_images_moreOptions{
+    background-color: rgba(10, 10, 10, 0.7);
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    padding: 5px;
+    border-radius: 5px;
+    display: none;
+}
+.pd_images_tags{
+    position: absolute;
+    bottom: 70px;
+    left: 20px;
+    display: flex;
+
+}
+.pd_images_moreOption{
+    text-align: right;
+    color: white;
+    cursor: pointer;
+    font-family: muli-regular;
+    font-size: 12px;
+    /* margin-bottom: 7px; */
+    line-height: 18px;
+    padding: 5px;
+}
+.pd_images_moreOption:hover{
+    color: #00e7fc !important;
+}
+.pd_premiumBadge_star{
+    height:12px; 
+    width: 12px;
+}
+.pd_likes_img{
+    padding-top: 5px;
+    margin-right: 3px;
+    margin-left: 15px;
+}
+
+.pd_likes_container{
+    float: right;
+    display: none;
+}
+
+
+.pd_images_imageHidden{
+    display: none;
+}
+
+.a_j_loadMore_btn {
+    padding: 6px 40px;
+      background: transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0%
+        0% no-repeat padding-box;
+        font-family: muli-bold;
+        font-size: 14px;
+        line-height: 25px;
+      border-radius: 23px;
+      border: 1px solid #00e7fc;
+      margin-right: 1rem;
+      width: 250px;
+    }
+  
+    .a_j_load_div{
+        display: flex;
+        /* margin-top: 2rem; */
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    .pd_images_tag1{
+        padding: 6px 27px; 
+        font-family: muli-regular;
+        font-size: 10px;
+        line-height: 15px;
+        background-color: white;
+        border-radius: 15px;
+        border: 1px solid lightgray;
+        margin-right: 10px;
+
+    }
+    .pd_images_tag2{
+        padding: 6px 27px; 
+        font-family: muli-regular;
+        font-size: 10px;
+        line-height: 15px;
+        background-color: #CEA800;
+        border-radius: 15px;
+    }
+    .pd_images_tagDanger{
+        padding: 6px 27px; 
+        font-family: muli-regular;
+        font-size: 10px;
+        line-height: 15px;
+        background-color: #FF0000;
+        border-radius: 15px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .pd_premiumBadge_star{
+            height:15px; 
+         /* margin-left: 1px;
+          */
+        }
+        .pd_premiumBadge{
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            height: 20px;
+            width: 20px;
+            background-color: black;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    }

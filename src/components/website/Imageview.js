@@ -398,7 +398,7 @@ function Imageview() {
               <Col lg={1.4} xs={3}>
                 {" "}
                 <img
-                  src={`${domain}/${image.profilePic}`}
+                  src={`${image.profilePic}`}
                   style={{
                     height: "75px",
                     width: "75px",
@@ -481,7 +481,7 @@ function Imageview() {
                       <Row>
                         <Col lg={1.25} xs={2}>
                           <img
-                            src={`${domain}/${item.profilePic}`}
+                            src={`${item.userId.profilePic}`}
                             style={{
                               height: "45px",
                               width: "45px",
