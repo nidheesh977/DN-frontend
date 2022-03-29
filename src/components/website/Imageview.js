@@ -124,6 +124,9 @@ function Imageview() {
       .then((res) => {
         console.log(res.data);
         setComments(res.data);
+        if(res.data.length === 0){
+          document.getElementById("commentToHide").style.display = "block"
+        }
       });
   }, []);
   let likeComment = (id) => {
@@ -328,6 +331,8 @@ function Imageview() {
             document.getElementById("hideComment").style.display = "none";
             formRef.current.value = "";
             setComment("")
+              document.getElementById("commentToHide").style.display = "none"
+            
           });
       });
     }
@@ -491,7 +496,7 @@ function Imageview() {
                     
                   </div>
                 </div>
-
+<div id="commentToHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", display:"none"}}>No Comments Yet</div>
                 {/* comments mapping */}
 
                 {comments.map((item, i) => {

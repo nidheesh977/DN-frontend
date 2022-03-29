@@ -26,7 +26,9 @@ function Pilot_followers() {
         console.log(res);
 
        setMyFollowers(res.data)
-
+       if(res.data.length === 0){
+        document.getElementById("toHide").style.display ="block"
+      }
 
 
 })
@@ -58,6 +60,8 @@ const removeFollow = (userId) =>{
     return (
         <div className="pd_followers_mainBox">
             <div className='pd_followers_headBox'>
+
+         
                 <Row>
                     <Col>
                         <div className='pd_followers_title'>Followers</div>
@@ -75,6 +79,9 @@ const removeFollow = (userId) =>{
                 </Row>
             </div>
             <hr className='pd_followers_hr' />
+
+
+            <div id="toHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", marginTop:"35px", display:"none"}}>No One follows you yet, Upload some files and get followed.</div>
             {
                 myFollowers.map((item, i) => {
                     return (

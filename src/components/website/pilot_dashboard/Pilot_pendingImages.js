@@ -37,6 +37,9 @@ function Pilot_pendingImages() {
       (response) => {
 console.log(response.data)       
   setValue(response.data)
+  if(response.data.length === 0){
+    document.getElementById("toHide").style.display ="block"
+  }
       }
     );
   }, []);
@@ -55,6 +58,7 @@ console.log(response.data)
 
   return (
     <div>
+           <div id="toHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", marginTop:"35px", display:"none"}}>No Pending Images Now, Upload and check back</div>
      <Row gutterWidth={12}>
           {value.map((item) => {
             return (
@@ -106,12 +110,12 @@ console.log(response.data)
             );
           })}
         </Row>
-      <div className="a_j_load_div" style={{ margin: "40px 0px" }}>
+      {/* <div className="a_j_load_div" style={{ margin: "40px 0px" }}>
         <button className="a_j_loadMore_btn">
           <img src={loadMore} className="a_j_location_logo" />
           <span className="a_j_location_text">Load More</span>
         </button>{" "}
-      </div>
+      </div> */}
     </div>
   );
 }

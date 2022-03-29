@@ -46,10 +46,14 @@ function Pilot_likedVideos() {
     axios.post(`${domain}/api/pilot/getLikedMedia`, config).then(res =>{
       console.log(res.data)
       setMedia(res.data)
+      if(res.data.length === 0){
+        document.getElementById("toHide").style.display ="block"
+      }
     })
   },[])
   return (
     <div>
+        <div id="toHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", marginTop:"35px", display:"none"}}>No Liked Videos, Like and check back</div>
         <Row gutterWidth={12}>
         {media.map((item, i) => {
             return (
@@ -92,12 +96,12 @@ function Pilot_likedVideos() {
             );
           })}
         </Row>
-      <div className="a_j_load_div" style={{margin: "40px 0px"}}>
+      {/* <div className="a_j_load_div" style={{margin: "40px 0px"}}>
         <button className="a_j_loadMore_btn">
           <img src={loadMore} className="a_j_location_logo" />
           <span className="a_j_location_text">Load More</span>
         </button>{" "}
-      </div>
+      </div> */}
     </div>
   );
 }
