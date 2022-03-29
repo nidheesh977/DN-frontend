@@ -908,6 +908,7 @@ class UploadFiles extends Component {
             }
 
             link = `${domain}/api/draft/uploadDraft`;
+            
           }
           else{
             data = new FormData();
@@ -940,6 +941,7 @@ class UploadFiles extends Component {
         axios
           .post(link, data, config)
           .then((res) => {
+
             files[i].upload_status = "uploaded";
             this.setState({
               selected_files_details: files,
@@ -957,7 +959,7 @@ class UploadFiles extends Component {
                 console.log(err.response)
               })
             }
-            
+
           })
           .catch((err) => {
             files[i].upload_status = "upload_failed";
@@ -1010,6 +1012,8 @@ class UploadFiles extends Component {
               axios
                 .post(link, data, config)
                 .then((res) => {
+                  console.log(files[i].row)
+
                   files[i].upload_status = "uploaded";
                   this.setState({
                     selected_files_details: files,
@@ -1033,7 +1037,7 @@ class UploadFiles extends Component {
     return (
       <>
         <Helmet>
-          <title>Post Edit</title>
+          <title>Upload file</title>
           <meta charSet="utf-8" />
           <meta name="description" content="Nested component" />
         </Helmet>

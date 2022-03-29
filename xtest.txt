@@ -1,15 +1,18 @@
-adult: false
-category: "segyerwhy"
-createdAt: "2022-03-21T19:37:37.722Z"
-downloads: ['6221c17dbf91fddfb38a1dc9']
-experience: "weywerhyrweyurewu"
-file: "uploads\\1647891457703big_buck_bunny_480p_1mb.mp4"
-fileType: "video"
-keywords: ['df,Areal View']
-likes: ['6221c17dbf91fddfb38a1dc9']
-name: "Yaseen Ahmed"
-postName: "big_buck_bunny_480p_1mb.mp4"
+adult: true
+category: "Test"
+createdAt: "2022-03-28T11:01:40.041Z"
+downloads: []
+experience: "svdrsbd"
+file: "pexels-ksenia-chernaya-5752254edf716cc9a938346458f2604677db8a507103be66085d5861583ec7ac205f71e (2)52a1d42057cf6dc8e5169d197512405e0f7e98e6b909c9dfd0dacd2f60095275.jpg"
+fileType: "image"
+keywords: ['bEACH']
+likes: []
+name: "Nimrit"
+postName: "pexels-ksenia-chernaya-5752254edf716cc9a938346458f2604677db8a507103be66085d5861583ec7ac205f71e (2).jpg"
+profilePic: "https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/pexels-ksenia-chernaya-5752254edf716cc9a938346458f2604677db8a507103be66085d5861583ec7ac205f71e%20%281%29b05b1ebcc1cc1b521b68a8fc7ca12eea29b714a3177395670f41c404e1c5e2ee.jpg"
 status: "active"
-updatedAt: "2022-03-23T07:25:36.489Z"
-userId: "6221c17dbf91fddfb38a1dc9"
+updatedAt: "2022-03-28T11:01:50.858Z"
+userId: {verify: false, savedPilots: Array(0), likedMedia: Array(0), likedComments: Array(0), downloadedMedia: Array(0), …}
 views: []
+__v: 0
+_id: "6241959477aaf5b00c0f80ba"
