@@ -11,6 +11,9 @@ import loadMore from "../../images/Group 71.svg";
 import { Item } from "semantic-ui-react";
 import videoIcon from '../../images/video-icon.svg'
 import axios from 'axios'
+import {Link} from "react-router-dom"
+
+
 const domain = process.env.REACT_APP_MY_API
 
 
@@ -99,10 +102,9 @@ console.log(response.data)
                     className="pd_images_moreOptions"
                     id={"pd_images_more/" + item._id}
                   >
-                    <div className="pd_images_moreOption">Edit</div>
+                    <Link to = {`/edit-file/${item._file}`}><div className="pd_images_moreOption">Edit</div></Link>
                     <div className="pd_images_moreOption" onClick={()=>deleteImage(item._id)}>Remove</div>
                   </div>
-
                   {/* tags */}
                   <div className="pd_images_tags">
                       <div className="pd_images_tag1">{item.category}</div>

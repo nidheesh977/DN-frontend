@@ -10,10 +10,9 @@ import moreIcon from "../../images/Path.svg";
 import loadMore from "../../images/Group 71.svg";
 import videoIcon from '../../images/video-icon.svg'
 import axios from 'axios'
+import {Link} from "react-router-dom"
+
 const domain = process.env.REACT_APP_MY_API
-
-
-
 
 function mouseGotIN(id) {
   document.getElementById("pd_likes/" + id).style.display = "block";
@@ -103,7 +102,7 @@ console.log(response.data)
                     <img src={moreIcon} className="pd_image_more" />
                   </div>
                   <div className="pd_images_moreOptions" id={"pd_images_more/" + item._id}>
-                      <div className="pd_images_moreOption">Edit</div>
+                      <Link to = {`/edit-file/${item._id}`}><div className="pd_images_moreOption">Edit</div></Link>
                       <div className="pd_images_moreOption" onClick={()=>deleteImage(item._id)}>Remove</div>
                       </div>
                 </div>

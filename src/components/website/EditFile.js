@@ -53,7 +53,7 @@ class EditFile extends Component {
         let file = {
           name: res.data[0].postName,
           custom_name: res.data[0].postName,
-          file: `https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${res.data[0].file}`,
+          file: `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${res.data[0].file}`,
           filePath: res.data[0].file,
           keywords: res.data[0].keywords,
           select_type: res.data[0].fileType,
@@ -213,7 +213,7 @@ class EditFile extends Component {
         if (reader.readyState === 2) {
           file.file = reader.result;
           file.size = selectedFile.size;
-          file.row = selectedFile
+          file.row = selectedFile;
           if (selectedFile.type[0] === "v") {
             file.select_type = "video";
             file.type = "video";
@@ -287,57 +287,60 @@ class EditFile extends Component {
     this.setState({
       file: file,
     });
-    if((file.type[0] === "v" && file.size / 1000000 <= 10) || (file.type[0] !== "v" && file.size / 1000000 <= 2)){
 
-      if (!file.error && file.resolution_satisfied) {
-        if (!this.state.fileChanged) {
-          file.upload_status = "uploading";
-          this.setState({
-            file: file,
-          });
-  
-          var fileDetails = {
-            postName: file.name,
-            file: file.filePath,
-            keywords: file.keywords,
-            fileType: file.type,
-            category: file.category,
-            experience: file.experience,
-            adult: file.adult_content,
-          };
-  
-          axios
-            .post(
-              `${domain}/api/image/editImage1/${this.props.match.params.id}`,
-              fileDetails,
-              config
-            )
-            .then((res) => {
-              console.log(res.data);
-              file.upload_status = "uploaded";
-              this.setState({
-                file: file,
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-              file.upload_status = "upload_failed";
-              this.setState({
-                file: file,
-              });
+    if (!file.error && file.resolution_satisfied) {
+      if (!this.state.fileChanged) {
+        file.upload_status = "uploading";
+        this.setState({
+          file: file,
+        });
+
+        var fileDetails = {
+          postName: file.name,
+          file: file.filePath,
+          keywords: file.keywords,
+          fileType: file.type,
+          category: file.category,
+          experience: file.experience,
+          adult: file.adult_content,
+        };
+
+        axios
+          .post(
+            `${domain}/api/image/editImage1/${this.props.match.params.id}`,
+            fileDetails,
+            config
+          )
+          .then((res) => {
+            console.log(res.data);
+            file.upload_status = "uploaded";
+            this.setState({
+              file: file,
             });
-        }
-        else{
-          var formData = new FormData()
-          formData.append("postName", file.name)
-          console.log(file.row)
-          formData.append("file", file.row)
-          formData.append("keywords", file.keywords)
-          formData.append("fileType", file.type)
-          formData.append("category", file.category)
-          formData.append("experience", file.experience)
-          formData.append("adult", file.adult_content)
-  
+            this.props.history.goBack()
+          })
+          .catch((err) => {
+            console.log(err);
+            file.upload_status = "upload_failed";
+            this.setState({
+              file: file,
+            });
+          });
+      } else {
+        if (
+          (file.type[0] === "v" && file.size / 1000000 <= 10) ||
+          (file.type[0] !== "v" && file.size / 1000000 <= 2)
+        ) {
+          var formData = new FormData();
+          formData.append("postName", file.name);
+          console.log(file.row);
+          formData.append("file", file.row);
+          formData.append("keywords", file.keywords);
+          formData.append("fileType", file.type);
+          formData.append("category", file.category);
+          formData.append("experience", file.experience);
+          formData.append("adult", file.adult_content);
+
           axios
             .post(
               `${domain}/api/image/editImage/${this.props.match.params.id}`,
@@ -350,6 +353,7 @@ class EditFile extends Component {
               this.setState({
                 file: file,
               });
+              this.props.history.goBack()
             })
             .catch((err) => {
               console.log(err);

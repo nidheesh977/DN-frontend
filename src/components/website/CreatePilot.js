@@ -36,20 +36,15 @@ const customStyles = {
 
 function CreatePilot() {
   let history = useHistory();
-  useEffect(()=>{
-    if(!localStorage.getItem("role")){
-      history.push("/login")
+  useEffect(() => {
+    if (!localStorage.getItem("role")) {
+      history.push("/login");
+    } else if (localStorage.getItem("email") !== "true") {
+      history.push("/verify-email");
+    } else if (localStorage.getItem("role") !== "undefined") {
+      history.push("/NoComponent");
     }
-    
-    else if(localStorage.getItem("email") !== "true"){
-      history.push("/verify-email")
-    }
-    
-    else if(localStorage.getItem("role") !== "undefined"){
-      history.push("/NoComponent")
-
-    }
-  })
+  });
   let [data, setData] = useState({
     full_name: "",
     email: "",
@@ -67,7 +62,7 @@ function CreatePilot() {
     work_type: "full_time",
     hourly_pay: "",
     monthly_pay: "",
-    industry: "",
+    industry: [],
     attachment_selected: false,
     attachment: "",
     training_center_name: "",
@@ -80,9 +75,9 @@ function CreatePilot() {
   let [edit, setEdit] = useState(true);
   let [accountCreateSuccess, setAccountCreateSuccess] = useState(false);
   const [serverError, setServerError] = useState(false);
-  let [industries, setIndustries] = useState([])
-  let [suggestedSkills, setSuggestedSkills] = useState([])
-  let [showSuggestedSkills, setShowSuggestedSkills] = useState("less")
+  let [industries, setIndustries] = useState([]);
+  let [suggestedSkills, setSuggestedSkills] = useState([]);
+  let [showSuggestedSkills, setShowSuggestedSkills] = useState("less");
 
   const changeHandler = (e) => {
     if (e.target.id === "bio") {
@@ -101,28 +96,28 @@ function CreatePilot() {
 
   const selectSkill = (id) => {
     var skill_list = data.skills;
-    var suggestedSkillsList = suggestedSkills
+    var suggestedSkillsList = suggestedSkills;
     skill_list.push(suggestedSkills[id]);
     suggestedSkillsList.splice(id, 1);
     setData({
       ...data,
       skills: skill_list,
     });
-    setSuggestedSkills(suggestedSkillsList)
+    setSuggestedSkills(suggestedSkillsList);
     document.getElementById("skills_error").style.visibility = "hidden";
-  }
+  };
 
   const removeSelectedSkill = (id) => {
     var skill_list = data.skills;
-    var suggestedSkillsList = suggestedSkills
+    var suggestedSkillsList = suggestedSkills;
     suggestedSkillsList.push(skill_list[id]);
     skill_list.splice(id, 1);
     setData({
       ...data,
       skills: skill_list,
     });
-    setSuggestedSkills(suggestedSkillsList)
-  }
+    setSuggestedSkills(suggestedSkillsList);
+  };
 
   const phoneChangeHandler = (e) => {
     document.getElementById(`phone_error`).style.visibility = "hidden";
@@ -146,7 +141,9 @@ function CreatePilot() {
     }
   };
 
-  const saveChanges = () => {
+  const saveChanges = () => { 
+    var year = new Date().getFullYear()
+    let month = new Date().getMonth();
     var fields = [
       "dob",
       "gender",
@@ -161,7 +158,7 @@ function CreatePilot() {
       "skills",
     ];
     var error = false;
-    var focusField = ""
+    var focusField = "";
     for (var i = 0; i < fields.length; i++) {
       if (
         data[fields[i]] === "" &&
@@ -172,10 +169,27 @@ function CreatePilot() {
         fields[i] !== "training_center_name" &&
         fields[i] !== "completed_year"
       ) {
-        document.getElementById(`${fields[i]}_error`).style.visibility = "visible";
+        document.getElementById(`${fields[i]}_error`).style.visibility =
+          "visible";
         error = true;
-        if (focusField === ""){
-          focusField = fields[i]
+        if (focusField === "") {  
+          focusField = fields[i];
+        }
+      }
+
+      if (fields[i] === "dob" && data[fields[i]].slice(0,4) > year - 10){
+        focusField = "dob";
+        document.getElementById("dob_error").innerText = "Age must be minimum 10 years."
+        document.getElementById("dob_error").style.visibility = "visible"
+      }
+
+      if (fields[i] === "completed_year" && data[fields[i]] !== ""){
+        if (Number(data.completed_year.slice(0,4)) > year || (Number(data.completed_year.slice(0,4)) === year && Number(data.completed_year.slice(5,7))> month + 1 )){
+          if (focusField === "") {
+            focusField = "completed_year";
+          }
+          document.getElementById("completed_year_error").innerText = "Invalid year"
+          document.getElementById("completed_year_error").style.visibility = "visible"
         }
       }
 
@@ -184,10 +198,11 @@ function CreatePilot() {
         fields[i] === "attachment" &&
         data.attachment === ""
       ) {
-        document.getElementById("attachment_error").style.visibility = "visible";
+        document.getElementById("attachment_error").style.visibility =
+          "visible";
         error = true;
-        if (focusField === ""){
-          focusField = "attachment"
+        if (focusField === "") {
+          focusField = "attachment";
         }
       }
 
@@ -198,8 +213,8 @@ function CreatePilot() {
       ) {
         document.getElementById("drone_id_error").style.visibility = "visible";
         error = true;
-        if (focusField === ""){
-          focusField = "drone_id"
+        if (focusField === "") {
+          focusField = "drone_id";
         }
       }
 
@@ -208,10 +223,11 @@ function CreatePilot() {
         fields[i] === "monthly_pay" &&
         data.monthly_pay === ""
       ) {
-        document.getElementById("monthly_pay_error").style.visibility = "visible";
+        document.getElementById("monthly_pay_error").style.visibility =
+          "visible";
         error = true;
-        if (focusField === ""){
-          focusField = "monthly_pay"
+        if (focusField === "") {
+          focusField = "monthly_pay";
         }
       }
 
@@ -220,10 +236,11 @@ function CreatePilot() {
         fields[i] === "hourly_pay" &&
         data.hourly_pay === ""
       ) {
-        document.getElementById("hourly_pay_error").style.visibility = "visible";
+        document.getElementById("hourly_pay_error").style.visibility =
+          "visible";
         error = true;
-        if (focusField === ""){
-          focusField = "hourly_pay"
+        if (focusField === "") {
+          focusField = "hourly_pay";
         }
       }
 
@@ -232,10 +249,11 @@ function CreatePilot() {
         fields[i] === "training_center_name" &&
         data.training_center_name === ""
       ) {
-        document.getElementById("training_center_name_error").style.visibility = "visible";
+        document.getElementById("training_center_name_error").style.visibility =
+          "visible";
         error = true;
-        if (focusField === ""){
-          focusField = "training_center_name"
+        if (focusField === "") {
+          focusField = "training_center_name";
         }
       }
 
@@ -244,89 +262,83 @@ function CreatePilot() {
         fields[i] === "completed_year" &&
         data.completed_year === ""
       ) {
-        document.getElementById("completed_year_error").style.visibility = "visible";
+        document.getElementById("completed_year_error").style.visibility =
+          "visible";
         error = true;
-        if (focusField === ""){
-          focusField = "completed_year"
+        if (focusField === "") {
+          focusField = "completed_year";
         }
       }
 
       if (fields[i] === "skills" && data.skills.length === 0) {
         document.getElementById("skills_error").style.visibility = "visible";
         error = true;
-        if (focusField === ""){
-          focusField = "skills"
+        if (focusField === "") {
+          focusField = "skills";
         }
       }
-      
     }
-    if(error){
-      if (focusField==="attachment"){
-        document.getElementById("pilot_type").scrollIntoView()
-      }else{
-        document.getElementById(focusField).focus()
+    if (error) {
+      if (focusField === "attachment") {
+        document.getElementById("pilot_type").scrollIntoView();
+      } else {
+        document.getElementById(focusField).focus();
       }
 
-      focusField = ""
-    }
-    else{
+      focusField = "";
+    } else {
       let config = {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       };
+      let formData = new FormData
+      formData.append("dob", data.dob)
+      formData.append("gender", data.gender,)
+      formData.append("city", data.city,)
+      formData.append("pilotType", data.pilot_type,)
+      // formData.append("certificates", data.attachment,)
+      formData.append("droneId", data.drone_id,)
+      formData.append("droneType", data.drone_type,)
+      formData.append("workType", data.work_type,)
+      formData.append("hourlyPayment", data.hourly_pay,)
+      formData.append("monthlyPayment", data.monthly_pay,)
+      formData.append("industry", data.industry,)
+      formData.append("drones", data.drones,)
+      formData.append("skills", data.skills,)
+      formData.append("trainingCenter", data.training_center_name,)
+      formData.append("completedYear", data.completed_year,)
+      formData.append("file", data.attachment,)
       Axios.post(
-        `${domain}/api/pilot/registerPilot`,
-        {
-          dob: data.dob,
-          gender: data.gender,
-          city: data.city,
-          pilotType: data.pilot_type,
-          certificates: data.attachment,
-          droneId: data.drone_id,
-          droneType: data.drone_type,
-          workType: data.work_type,
-          hourlyPayment: data.hourly_pay,
-          monthlyPayment: data.monthly_pay,
-          industry: data.industry,
-          drones: data.drones,
-          skills: data.skills,
-          trainingCenter: data.training_center_name,
-          completedYear: data.completed_year
-        },
+        `${domain}/api/pilot/registerPilot`,formData ,
         config
       )
         .then((res) => {
-          console.log(res.data)
+          console.log(res.data);
           setAccountCreateSuccess(true);
           localStorage.setItem("role", "pilot");
-
         })
         .catch((err) => {
-          try{
-            if(err.response.status !== 500){
-              setServerError(true)
+          try {
+            if (err.response.status !== 500) {
+              setServerError(true);
+            } else {
             }
-            else{
-            }
-          }catch{
-            setServerError(true)
+          } catch {
+            setServerError(true);
           }
         });
+      console.log(data)
     }
   };
 
-  useEffect(()=>{
-    Axios.get(`${domain}/api/skill/getSkills`)
-    .then((res) => {
-      if(res.data){
-        const skills = res.data.map((skill)=>(
-          skill.skill
-        ))
-        setSuggestedSkills(skills)
+  useEffect(() => {
+    Axios.get(`${domain}/api/skill/getSkills`).then((res) => {
+      if (res.data) {
+        const skills = res.data.map((skill) => skill.skill);
+        setSuggestedSkills(skills);
       }
-      
-    })
+    });
     Axios.get(`${domain}/api/industry/getIndustries`).then((res) => {
       const options = res.data.map((d) => ({
         value: d.industry,
@@ -334,15 +346,15 @@ function CreatePilot() {
       }));
       setIndustries(options);
     });
-  }, [])
+  }, []);
 
   const showMoreSuggestions = () => {
-    setShowSuggestedSkills("all")
-  }
+    setShowSuggestedSkills("all");
+  };
 
   const showLessSuggestions = () => {
-    setShowSuggestedSkills("less")
-  }
+    setShowSuggestedSkills("less");
+  };
 
   const closeSuccessPopup = () => {
     setAccountCreateSuccess(false);
@@ -363,23 +375,43 @@ function CreatePilot() {
   const addDrones = (e) => {
     if (e.key === "Enter" && e.target.value !== "") {
       var skill_list = data.drones;
-      skill_list.push(e.target.value);
-      setData({
-        ...data,
-        drones: skill_list,
-      });
-      document.getElementById(e.target.id).value = "";
+      if (!skill_list.includes(e.target.value)) {
+        skill_list.push(e.target.value);
+        setData({
+          ...data,
+          drones: skill_list,
+        });
+        document.getElementById(e.target.id).value = "";
+        document.getElementById("skills_error").style.visibility = "hidden";
+      }
     }
-    document.getElementById("skills_error").style.visibility = "hidden";
+  };
+
+  const removeDrones = (id) => {
+    var drones = data.drones;
+    drones.splice(id, 1);
+    setData({
+      ...data,
+      drones: drones,
+    });
   };
 
   const industryChange = (value) => {
+    var industries = []
+    for (var i = 0; i < value.length; i++){
+      if (!industries.includes(value[i].value)){
+        industries.push(value[i].value)
+      }
+    }
+
     setData({
-      ...data,
-      industry: value.value,
-    });
+        ...data,
+        industry: industries,
+      });
+
+    console.log(value)
     document.getElementById(`industry_error`).style.visibility = "hidden";
-  }
+  };
 
   const editHandler = () => {
     setEdit(true);
@@ -467,7 +499,14 @@ function CreatePilot() {
             <Row>
               <Col>
                 <div>
-                  <div className="pd_b_i_profile_head">DOB</div>
+                  <label htmlFor="dob">
+                    <div
+                      className="pd_b_i_profile_head"
+                      style={{ cursor: "pointer" }}
+                    >
+                      DOB
+                    </div>
+                  </label>
                   <input
                     type="date"
                     max={`2012-12-31`}
@@ -478,23 +517,27 @@ function CreatePilot() {
                     disabled={!edit}
                   />
                   <div className="input_error_msg" id="dob_error">
-                    DOB is required 
+                    DOB is required
                   </div>
                 </div>
               </Col>
               <Col>
                 <div>
-                  <div className="pd_b_i_profile_head">Gender</div>
+                  <label for="gender" className="pd_b_i_profile_head">
+                    Gender
+                  </label>
                   <select
                     name="gender"
                     className="pd_b_i_profile_input"
-                    // value={data.gender}
+                    value={data.gender}
                     onChange={changeHandler}
                     id="gender"
                     disabled={!edit}
-                    style = {{width: "100%"}}
+                    style={{ width: "100%" }}
                   >
-                  <option selected disabled>Select Gender</option>
+                    <option selected disabled>
+                      Select Gender
+                    </option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                     <option value="Others">Others</option>
@@ -507,7 +550,14 @@ function CreatePilot() {
             </Row>
 
             <div>
-              <div className="pd_b_i_profile_head">City</div>
+              <label htmlFor="city">
+                <div
+                  className="pd_b_i_profile_head"
+                  style={{ cursor: "pointer" }}
+                >
+                  City
+                </div>
+              </label>
               <input
                 type="text"
                 className="pd_b_i_profile_input"
@@ -522,7 +572,11 @@ function CreatePilot() {
             </div>
 
             <div>
-              <label htmlFor="skills" className="pd_b_i_profile_head">
+              <label
+                htmlFor="drones"
+                className="pd_b_i_profile_head"
+                style={{ cursor: "pointer" }}
+              >
                 Do you own a Drone? (if Yes, Specify the drone models)
               </label>
               <input
@@ -535,8 +589,12 @@ function CreatePilot() {
               />
               {data.drones.map((drone, index) => {
                 return (
-                  <div className="pd_i_skill" key={index}>
-                    {drone}
+                  <div
+                    className="pd_i_skill"
+                    key={index}
+                    onClick={removeDrones}
+                  >
+                    {drone} <i class="fa fa-times" aria-hidden="true"></i>
                   </div>
                 );
               })}
@@ -544,7 +602,13 @@ function CreatePilot() {
             </div>
 
             <div style={{ marginBottom: "30px" }}>
-              <div className="pd_b_i_profile_head" id = "pilot_type">Pilot type</div>
+              <div
+                className="pd_b_i_profile_head"
+                id="pilot_type"
+                style={{ cursor: "default" }}
+              >
+                Pilot type
+              </div>
               <div>
                 <input
                   type="radio"
@@ -581,14 +645,19 @@ function CreatePilot() {
             <div>
               {data.pilot_type === "licensed" ? (
                 <React.Fragment>
-                  <div className="pd_b_i_profile_head" id = "attachment">Certificate </div>
+                  <div className="pd_b_i_profile_head" id="attachment">
+                    Certificate{" "}
+                  </div>
                   <label
                     for="pd_p_i_hidden"
                     className="pd_p_i_attachnment_label"
                   >
                     <div>
                       <div className="pd_b_i_attachment">Attachments</div>
-                      <span className="pd_p_i_profile_text">
+                      <span
+                        className="pd_p_i_profile_text"
+                        style={{ cursor: "pointer" }}
+                      >
                         {data.attachment_selected
                           ? data.attachment.name
                           : "Attach your DGCA certificate"}
@@ -599,6 +668,7 @@ function CreatePilot() {
                     </div>
                     <input
                       type="file"
+                      accept = "image/png, image/jpg, image/jpeg, application/pdf"
                       id="pd_p_i_hidden"
                       onChange={chooseFile}
                       disabled={!edit}
@@ -607,7 +677,7 @@ function CreatePilot() {
                 </React.Fragment>
               ) : (
                 <div>
-                  <label className="pd_b_i_profile_head" htmlFor="drone_id">
+                  <label className="pd_b_i_profile_head" htmlFor="drone_id" style = {{cursor: "pointer"}}>
                     Drone ID
                   </label>
                   <input
@@ -688,7 +758,7 @@ function CreatePilot() {
               )}
               {data.work_type === "full_time" && (
                 <div>
-                  <label htmlFor="monthly_pay" className="pd_b_i_profile_head">
+                  <label htmlFor="monthly_pay" className="pd_b_i_profile_head" style = {{cursor: "pointer"}}>
                     Monthly Payment ($)
                   </label>
                   <input
@@ -720,14 +790,14 @@ function CreatePilot() {
                   options={industries}
                   onChange={industryChange}
                   styles={customStyles}
-                  className="u_f_category_dropdown"
+                  className="u_f_category_dropdown" isMulti
                 />
                 <div className="input_error_msg" id="industry_error">
                   Industry is required
                 </div>
               </div>
               <div>
-                <label htmlFor="years" className="pd_b_i_profile_head">
+                <label htmlFor="years" className="pd_b_i_profile_head" style = {{cursor: "pointer"}}>
                   Experience
                 </label>
                 <Row>
@@ -771,7 +841,8 @@ function CreatePilot() {
                   <div>
                     <label
                       htmlFor="training_center_name"
-                      className="pd_b_i_profile_head"
+                      className="pd_b_i_profile_head" 
+                      style = {{cursor: "pointer"}}
                     >
                       Training Center Name
                     </label>
@@ -780,7 +851,7 @@ function CreatePilot() {
                       value={data.training_center_name}
                       className="pd_b_i_profile_input"
                       id="training_center_name"
-                      name = "training_center_name"
+                      name="training_center_name"
                       onChange={handleChange}
                       disabled={!edit}
                     />
@@ -795,14 +866,16 @@ function CreatePilot() {
                     <label
                       htmlFor="completed_year"
                       className="pd_b_i_profile_head"
+                      style = {{cursor: "pointer"}}
                     >
-                      Completed Year
+                      Completed Term
                     </label>
                     <input
-                      type="number"
+                      type="month"
+                      max="2022-03"
                       className="pd_b_i_profile_input"
                       id="completed_year"
-                      name = "completed_year"
+                      name="completed_year"
                       onChange={handleChange}
                       value={data.completed_year}
                       disabled={!edit}
@@ -814,7 +887,7 @@ function CreatePilot() {
                 </React.Fragment>
               )}
               <div>
-                <label htmlFor="skills" className="pd_b_i_profile_head">
+                <label htmlFor="skills" className="pd_b_i_profile_head" style = {{cursor: "pointer"}}>
                   Add Your Skills
                 </label>
                 <input
@@ -827,7 +900,11 @@ function CreatePilot() {
                 />
                 {data.skills.map((skill, index) => {
                   return (
-                    <div className="pd_i_skill" key={index} onClick = {()=>removeSelectedSkill(index)}>
+                    <div
+                      className="pd_i_skill"
+                      key={index}
+                      onClick={() => removeSelectedSkill(index)}
+                    >
                       {skill} <i class="fa fa-times" aria-hidden="true"></i>
                     </div>
                   );
@@ -836,37 +913,48 @@ function CreatePilot() {
                   Add atleast one skill
                 </div>
               </div>
-              {suggestedSkills.length !== 0 &&
+              {suggestedSkills.length !== 0 && (
                 <div>
-                  <label htmlFor="skills" className="pd_b_i_profile_head">
+                  <div className="pd_b_i_profile_head" style = {{cursor: "default"}}>
                     Suggested Skills
-                  </label>
+                  </div>
                   {suggestedSkills.map((skill, index) => {
                     return (
                       <>
-                        {(showSuggestedSkills === "all" || index < 5) &&
-                          <div className="pd_i_skill" key={index} onClick = {() => selectSkill(index)}>
+                        {(showSuggestedSkills === "all" || index < 5) && (
+                          <div
+                            className="pd_i_skill"
+                            key={index}
+                            onClick={() => selectSkill(index)}
+                          >
                             {skill} <i class="fas fa-plus"></i>
                           </div>
-                        }
+                        )}
                       </>
                     );
                   })}
-                  {showSuggestedSkills === "all" && suggestedSkills.length > 5 &&
-                    <div className="pd_i_skill" onClick = {showLessSuggestions} style = {{fontFamily: "muli-bold"}}>
+                  {showSuggestedSkills === "all" && suggestedSkills.length > 5 && (
+                    <div
+                      className="pd_i_skill"
+                      onClick={showLessSuggestions}
+                      style={{ fontFamily: "muli-bold" }}
+                    >
                       Show less
                     </div>
-                  }
-                  {showSuggestedSkills === "less" && suggestedSkills.length > 5 &&
-                    <div className="pd_i_skill" onClick = {showMoreSuggestions} style = {{fontFamily: "muli-bold"}}>
-                      Show more
-                    </div>
-                  }
-                  <div className="input_error_msg">
-                    &nbsp;
-                  </div>
+                  )}
+                  {showSuggestedSkills === "less" &&
+                    suggestedSkills.length > 5 && (
+                      <div
+                        className="pd_i_skill"
+                        onClick={showMoreSuggestions}
+                        style={{ fontFamily: "muli-bold" }}
+                      >
+                        Show more
+                      </div>
+                    )}
+                  <div className="input_error_msg">&nbsp;</div>
                 </div>
-              }
+              )}
               <div className="pd_b_i_notifications_save">
                 <button className="common_backBtn" onClick={saveChanges}>
                   Back
