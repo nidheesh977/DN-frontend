@@ -414,17 +414,23 @@ class GalleryFilter extends React.Component {
   }
 
   keywordsClicked = async (e)=>{
-    e.preventDefault();
    await this.setState({
       keywords: e.target.value
     })
-   
-await axios.post(`http://localhost:9000/api/image/imageFilters`, {data : this.state.keywords, type: this.state.dropdown}, this.config ).then(res=>{
-  console.log(res)
-  this.setState({
-    listing: res.data
-  })
-})  
+
+
+  }
+
+  submitted = async (e) =>{
+console.log(this.state.keywords)
+    e.preventDefault();
+
+    await axios.post(`http://localhost:9000/api/image/imageFilters`, {data : this.state.keywords, type: this.state.dropdown}, this.config ).then(res=>{
+      console.log(res)
+      this.setState({
+        listing: res.data
+      })
+    })  
   }
   render() {
     const { links, activeLink } = this.state;
@@ -569,8 +575,8 @@ await axios.post(`http://localhost:9000/api/image/imageFilters`, {data : this.st
                   
                   </Col>
                   <Col>
-                  <form onSubmit={this.keywordsClicked}>
-                  <input className="g_f_searchBox2" type="text" style={{width:"100%"}} placeholder="Enter Keywords to match your search" />
+                  <form onSubmit={this.submitted}>
+                  <input className="g_f_searchBox2" type="text" style={{width:"100%"}} placeholder="Enter Keywords to match your search" onChange={this.keywordsClicked} /> 
                   </form>
                   </Col>
                 

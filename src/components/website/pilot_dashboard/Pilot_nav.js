@@ -1,28 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import "./css/Pilot_nav.css";
-import { NavLink, Link, useHistory } from "react-router-dom";
+import { NavLink, Link, useHistory, useParams } from "react-router-dom";
 import All from "../../website/All.module.css";
 
 function Pilot_nav() {
-  let [active, setActive] = useState({
-    link1: false,
-    link2: true,
-  });
+  let param = useParams();
+
+  useEffect(()=>{
+    if(window.location.href.includes("activities")){
+      document.getElementById("p_d_navitem1").classList.add("pd_nav_active")
+      document.getElementById("p_d_navitem2").classList.remove("pd_nav_active")
+    }
+  else if(window.location.href.includes("account")){
+      document.getElementById("p_d_navitem2").classList.add("pd_nav_active")
+      document.getElementById("p_d_navitem1").classList.remove("pd_nav_active")
+    }
+  })
+ 
   let history = useHistory();
 
-  function changeActive() {
-    setActive({
-      link1: true,
-      link2: false,
-    });
-  }
-  function changeActive1() {
-    setActive({
-      link1: false,
-      link2: true,
-    });
-  }
+ 
   function logout() {
     window.localStorage.clear();
     history.push("/");
@@ -34,18 +32,18 @@ function Pilot_nav() {
         <Container
           className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}
         >
+
+{/* "pd_nav_active" */}
           <Link
             to="/pilot_dashboard/activities/images"
-            onClick={changeActive}
-            className={active.link1 ? "pd_nav_active" : ""}
+            className=""
             id="p_d_navitem1"
           >
             Activities
           </Link>
           <Link
             to="/pilot_dashboard/account"
-            onClick={changeActive1}
-            className={active.link2 ? "pd_nav_active" : ""}
+            className=""
             id="p_d_navitem2"
           >
             My Account
