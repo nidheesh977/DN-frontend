@@ -102,6 +102,22 @@ function Navbar(props) {
 
   }
 
+
+
+  // localStorage.getItem("email") === "false" ? "/verify-email" :
+                      
+  //                     localStorage.getItem("role") === "pilot" ?"/pilot_dashboard/account":"/choose-categories"}
+let AccountButton = () =>{
+  if(localStorage.getItem("email")=== "false"){
+    history.push("/verify-email")
+  }else if(localStorage.getItem("role") === "undefined"){
+    history.push("/choose-categories")
+  }else{
+    history.push("/pilot_dashboard/account/")
+  }
+}
+
+
   // useEffect(() => {
     // userService.User().then((res) => {
     //   setLoading(false);
@@ -333,10 +349,12 @@ function Navbar(props) {
                   }}
                   id="myAccount"
                 >
-                  <Link
-                    to={localStorage.getItem("role") === "pilot" ?"/pilot_dashboard/account":"/choose-categories"}
+                  <div
+         
+                      
                     className="nav-links my_account_btn"
                     style={{ display: "flex", alignItems: "center" }}
+                    onClick={AccountButton}
                   >
                     <img
                       style={{
@@ -350,7 +368,7 @@ function Navbar(props) {
                     <span style={{ paddingLeft: "10px", fontSize: "16px" }}>
                       My account
                     </span>
-                  </Link>
+                  </div>
                 </li>
                 <li className="nav-item">
                   <div className="nav-links">

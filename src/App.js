@@ -43,36 +43,8 @@ import VerifiedEmail from "./components/website/VerifiedEmail";
 import RecoverPassword from "./components/website/RecoverPassword";
 import EditFile from "../src/components/website/EditFile"
 import Center_dashboard from "./components/website/center_dashboard/Center_dashboard";
-
-
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentUser: null,
-      isAdmin: false,
-      authState: false,
-      checked_auth: false,
-      checked_auth_user: false,
-      isAdmin: false,
-      user: null,
-      userState: "",
-      admin: "",
-      currentUser: "",
-    };
-  }
-
-  componentDidMount() {
-    authenticationService.currentUser.subscribe((x) =>{
-      this.setState({
-        currentUser: x,
-        isAdmin: x && x.role === Role.Admin,
-      })
-    });
-  }
-
-  render() {
-    const { currentUser, isAdmin } = this.state;
+import PilotRoute from "./PilotRoute";
+function App(){
     return (
       <BrowserRouter>
         <Header />
@@ -85,6 +57,9 @@ class App extends React.Component {
               component={Login}
               exact
             />
+
+<PilotRoute component={Pilot_dashboard} path="/pilot_dashboard" />
+
             <Route
               path="/sign_up"
               component={SignUp}
@@ -137,7 +112,7 @@ class App extends React.Component {
               component={PilotDetails}
             />
             <Route component = {searchresult} path = "/searchresult" exact />
-            <Route component = {UploadFiles} path = "/UploadFile" exact />
+            <PilotRoute component = {UploadFiles} path = "/UploadFile" exact />
             <Route component = {EditFile} path = "/edit-file/:id" exact />
             <Route component = {ServiceCenters} path = "/service_centers" exact />
             <Route component = {CreateJob} path = "/create_job" exact />
@@ -147,7 +122,7 @@ class App extends React.Component {
             <Route component = {CreateCompany} path = "/createCompany" />
             <Route component = {CreateServiceCenter} path = "/createServiceCenter" />
             {/* yaseen */}
-            <Route component={Pilot_dashboard} path="/pilot_dashboard" />
+            {/* <Route component={Pilot_dashboard} path="/pilot_dashboard" /> */}
             <Route component={Center_dashboard} path="/center_dashboard" />
             <Route component={ApplyJobLanding} path="/applyJobLanding/:id" />
             <Route component={Company_dashboard} path="/company_dashboard" />
@@ -157,6 +132,8 @@ class App extends React.Component {
             <Route component={EmailVerification} path="/verify-email" />
             <Route component={VerifiedEmail} path="/users/:id/verify/:token" />
             <Route component={RecoverPassword} path="/users/:id/forgetPassword/:token" />
+            <Route exact path="/NoComponent" component={NoPageFound} />
+
             {/* yaseen */}
             <Route exact path="*" component={NoPageFound} />
           </Switch>
@@ -164,7 +141,7 @@ class App extends React.Component {
         <Footer/>
       </BrowserRouter>
     );
-  }
+  
 }
 export default App;
 

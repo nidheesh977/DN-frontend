@@ -129,6 +129,7 @@ setCode(result[0].dial_code);
                 localStorage.setItem("access_token", res.data.token);
                 localStorage.setItem("token_type", "Bearer");
                 localStorage.setItem("role", res.data.role);
+                localStorage.setItem("email", res.data.verify);
                 console.log(localStorage.getItem("access_token"));
                 setLoading(false);
 
@@ -143,6 +144,8 @@ setCode(result[0].dial_code);
           console.log(err.response);
           try {
             if (err.response.data === "User already exists") {
+              setLoading(false);
+
               document.getElementById("email_error").innerText =
                 "Email ID already taken";
               document.getElementById("email_error").style.display = "contents";

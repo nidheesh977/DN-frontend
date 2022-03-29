@@ -307,6 +307,12 @@ function Imageview() {
 
   let addComment = () => {
     console.log(comment);
+    if(comment === ""){
+      document.getElementById("hideComment").style.display = "none";
+
+    }else{
+
+    
     axios
       .post(
         `http://localhost:9000/api/comments/createComment/${param.id}`,
@@ -321,8 +327,10 @@ function Imageview() {
             setComments(res.data);
             document.getElementById("hideComment").style.display = "none";
             formRef.current.value = "";
+            setComment("")
           });
       });
+    }
   };
   return (
     <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
@@ -463,13 +471,24 @@ function Imageview() {
                       }}
                       onChange={commentChangeHandler}
                     />
-                    <div
+
+                    {
+                      comment === "" ?  <div
                       className="i_v_addComment"
                       style={{ margin: "10px" }}
                       onClick={addComment}
                     >
-                      Submit
-                    </div>
+                      Close
+                    </div> :
+                    <div
+                    className="i_v_addComment"
+                    style={{ margin: "10px" }}
+                    onClick={addComment}
+                  >
+                    Submit
+                  </div>
+                    }
+                    
                   </div>
                 </div>
 
