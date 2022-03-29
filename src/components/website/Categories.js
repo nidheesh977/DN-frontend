@@ -28,8 +28,22 @@ class Categories extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    if(!localStorage.getItem("role")){
+      this.props.history.push("/login");
+    }
+else if(localStorage.getItem("email") === "false"){
+  this.props.history.push("/verify-email");
 
+}
+
+else if(localStorage.getItem("email") === "true" && localStorage.getItem("role") === "undefined"){
+      this.props.history.push("/choose-categories");
+    }
+ else{
+      this.props.history.push("/NoComponent");
+
+    }
   }
 
   userCategoryDivClick = (val) => {

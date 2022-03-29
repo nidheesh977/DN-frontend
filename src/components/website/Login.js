@@ -78,12 +78,21 @@ const Login = (props) => {
           password: password,
         })
         .then((res) => {
-          console.log(res)
+          console.log(res.data.verify)
           localStorage.setItem("access_token", res.data.token);
           localStorage.setItem("token_type", "Bearer");
-          localStorage.setItem("role", "pilot");
-          history.push("/");
-          window.location.reload();
+          localStorage.setItem("role", res.data.role);
+          localStorage.setItem("email", res.data.verify);
+if(res.data.verify === false){
+  history.push("/verify-email")
+} else if(res.data.role === undefined){
+  history.push("/choose-categories")
+}else{
+  history.push("/pilot_dashboard/account/")
+}
+
+          // history.push("/");
+          // window.location.reload();
           setLoading(false)
         })
         .catch((err) => {

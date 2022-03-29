@@ -462,7 +462,7 @@ class HirePilot extends Component {
                     <Row>
                       <Col>
                         <div className="h_p_listing_img_container">
-                          <img src={profileImg} alt="" className='h_p_listing_img' />
+                          <img src={pilot.profilePic} alt="" className='h_p_listing_img' style={{borderRadius: "50px"}} />
                         </div>
                         <div className="h_p_others_container">
                           <div className="h_p_listing_name" onClick={() => this.pilotDetailPage(pilot._id)}>{pilot.name}</div>

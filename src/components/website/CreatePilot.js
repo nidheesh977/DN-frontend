@@ -36,6 +36,20 @@ const customStyles = {
 
 function CreatePilot() {
   let history = useHistory();
+  useEffect(()=>{
+    if(!localStorage.getItem("role")){
+      history.push("/login")
+    }
+    
+    else if(localStorage.getItem("email") !== "true"){
+      history.push("/verify-email")
+    }
+    
+    else if(localStorage.getItem("role") !== "undefined"){
+      history.push("/NoComponent")
+
+    }
+  })
   let [data, setData] = useState({
     full_name: "",
     email: "",
@@ -282,7 +296,8 @@ function CreatePilot() {
         },
         config
       )
-        .then(() => {
+        .then((res) => {
+          console.log(res.data)
           setAccountCreateSuccess(true);
           localStorage.setItem("role", "pilot");
 
@@ -455,6 +470,7 @@ function CreatePilot() {
                   <div className="pd_b_i_profile_head">DOB</div>
                   <input
                     type="date"
+                    max={`2012-12-31`}
                     className="pd_b_i_profile_input"
                     value={data.dob}
                     id="dob"
@@ -478,6 +494,7 @@ function CreatePilot() {
                     disabled={!edit}
                     style = {{width: "100%"}}
                   >
+                  <option selected disabled>Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                     <option value="Others">Others</option>
