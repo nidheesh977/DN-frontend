@@ -27,6 +27,7 @@ import { withStyles } from "@material-ui/core/styles";
 import "../css/GaleryFilter.css";
 import DropDownPng from "../images/s_c_dropdown2.png";
 import { Dropdown } from "materialize-css";
+import Search from "../images/search123.png"
 
 function handleClick() {
   var v = document.getElementById("FilterDropdowns");
@@ -92,6 +93,7 @@ class GalleryFilter extends React.Component {
       categoriesVideo: "3",
       categories3DImage: "4",
       error: false,
+      followingDropdown: 0,
       links: [
         {
           id: "all",
@@ -121,8 +123,8 @@ class GalleryFilter extends React.Component {
       liked_list: [],
     };
     this.loadMore = this.loadMore.bind(this);
-    this.handleChanges = this.handleChanges.bind(this);
-    this.handleChangesTimeframe = this.handleChangesTimeframe.bind(this);
+    // this.handleChanges = this.handleChanges.bind(this);
+    // this.handleChangesTimeframe = this.handleChangesTimeframe.bind(this);
     // this.handleChangeTime = this.handleChangeTime.bind(this);
     // this.handleChangeshot = this.handleChangeshot.bind(this)
   }
@@ -335,7 +337,41 @@ class GalleryFilter extends React.Component {
       }
     })
   }
+  followingChanged = async (e) =>{
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+  await  this.setState({
+      followingDropdown: e.target.value
+    })
+  if(this.state.followingDropdown == 2){
+  await axios.post(`http://localhost:9000/api/image/getFollowersMedia`, config).then(res=>{
+    console.log(res)
+    this.setState({
 
+      listing: res.data
+    });
+  })
+}else{
+  axios
+  .get(`${domain}/api/image/getImages`, config)
+  .then((res) => {
+    console.log(res.data);
+    this.setState({
+      listing: res.data,
+      loading: false,
+    });
+  })
+  .catch((err) => {
+    this.setState({
+      loading: false,
+    });
+  });
+}
+
+}
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
     const token = localStorage.getItem("access_token");
@@ -432,6 +468,9 @@ console.log(this.state.keywords)
       })
     })  
   }
+
+
+
   render() {
     const { links, activeLink } = this.state;
     const { times } = this.state;
@@ -495,7 +534,7 @@ console.log(this.state.keywords)
                   <Col lg={2} xs={6} className="DropdownFilter views">
                     <select
                       className="dropdown dropdown__text"
-                      onChange={this.handleChanges}
+                    onChange={this.followingChanged}
                       id="type"
                       defaultValue={"1"}
                     >
@@ -576,8 +615,12 @@ console.log(this.state.keywords)
                   </Col>
                   <Col>
                   <form onSubmit={this.submitted}>
-                  <input className="g_f_searchBox2" type="text" style={{width:"100%"}} placeholder="Enter Keywords to match your search" onChange={this.keywordsClicked} /> 
+                  <input className="g_f_searchBox2" type="text" style={{width:"105%"}} 
+                  placeholder="Enter Keywords to match your search" onChange={this.keywordsClicked} /> 
                   </form>
+                  </Col>
+                  <Col lg={0.5}>
+                  <img src={Search} style={{cursor:"pointer"}} onClick={this.submitted}/>
                   </Col>
                 
                     {/* <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
