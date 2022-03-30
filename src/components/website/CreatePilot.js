@@ -309,6 +309,9 @@ function CreatePilot() {
       formData.append("trainingCenter", data.training_center_name,)
       formData.append("completedYear", data.completed_year,)
       formData.append("file", data.attachment,)
+
+      console.log(data)
+      
       Axios.post(
         `${domain}/api/pilot/registerPilot`,formData ,
         config

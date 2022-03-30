@@ -15,7 +15,7 @@ import Close from "../images/close.svg";
 import "reactjs-popup/dist/index.css";
 import { useState, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import whatsapp_icon from "../images/whatsapp_icon.png";
 import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import s_c_form_img from "../images/s_c_form_img.png";
@@ -86,6 +86,8 @@ const DialogActions = withStyles((theme) => ({
 export default function PilotDetails(props) {
   const domain = process.env.REACT_APP_MY_API;
 
+  const history = useHistory();
+
   const [newReview, setNewReview] = useState("");
 
   const [error, setError] = useState(false);
@@ -94,6 +96,14 @@ export default function PilotDetails(props) {
   const [category, setCategory] = useState(1);
 
   const [files, setFiles] = useState([]);
+
+  const [allFileCount, setAllFileCount] = useState(0);
+  const [imageFileCount, setImageFileCount] = useState(0);
+  const [videoFileCount, setVideoFileCount] = useState(0);
+  const [file3dCount, setFile3dCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
+  const [followersCount, setFollowersCount] = useState(0);
+  const [loginErrorPopup, setLoginErrorPopup] = useState(0);
 
   const [viewMessage, setViewMessage] = useState(false);
 
@@ -184,18 +194,53 @@ export default function PilotDetails(props) {
       .get(`${domain}/api/pilot/pilotDetails/${props.match.params.id}`)
       .then((response) => {
         setPilotData(response.data);
-        // pilotData.map((item, i)=>{
-        //   return(
-        //     fol.push()
-        //   )
-        // })
+        if (response.data.name === "CastError") {
+          history.push("/no-page-found");
+        }
         console.log(response);
+      })
+      .catch((err) => {
+        history.push("/no-page-found");
       });
     axios
       .get(`${domain}/api/pilot/getPilotMedia/${props.match.params.id}`)
       .then((res) => {
         console.log(res.data);
         setFiles(res.data);
+        setAllFileCount(res.data.length);
+        if (res.data.length === 0) {
+          setCategory(5);
+        }
+      });
+
+    axios
+      .get(`${domain}/api/image/getUserImagesOnly/${props.match.params.id}`)
+      .then((res) => {
+        console.log(res.data);
+        setImageFileCount(res.data.length);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    axios
+      .get(`${domain}/api/image/getUserVideosOnly/${props.match.params.id}`)
+      .then((res) => {
+        console.log(res.data);
+        setVideoFileCount(res.data.length);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    axios
+      .get(`${domain}/api/image/getUser3dOnly/${props.match.params.id}`)
+      .then((res) => {
+        console.log(res.data);
+        setFile3dCount(res.data.length);
+      })
+      .catch((err) => {
+        console.log(err);
       });
 
     axios
@@ -205,6 +250,7 @@ export default function PilotDetails(props) {
       .then((res) => {
         console.log(res.data);
         setFollowers(res.data);
+        setFollowersCount(res.data.length);
       });
 
     axios
@@ -214,6 +260,7 @@ export default function PilotDetails(props) {
       .then((res) => {
         console.log(res.data);
         setFollowing(res.data);
+        setFollowingCount(res.data.length);
       });
   }, []);
   let [myFollowing, setMyFollowing] = useState([]);
@@ -226,6 +273,7 @@ export default function PilotDetails(props) {
   }, []);
 
   let followMe = () => {
+    if (localStorage.getItem("access_token")){
     axios
       .post(
         `http://localhost:9000/api/follow/createFollow/${props.match.params.id}`,
@@ -242,6 +290,9 @@ export default function PilotDetails(props) {
         console.log(response);
         // setBrands(response.data.brandOfDrones)
       });
+    }else{
+      setLoginErrorPopup(true)
+    }
   };
   let unfollow = () => {
     axios
@@ -262,42 +313,46 @@ export default function PilotDetails(props) {
       });
   };
 
+  const loginErrorPopupClose = () => {
+    setLoginErrorPopup(false)
+  }
+
   let followMeId = (id) => {
-    axios.post(`${domain}/api/pilot/getPilotId`, {userId: id})
-    .then(res => {
-      axios
-      .post(`${domain}/api/follow/createFollow/${res.data[0]._id}`, config)
-      .then((response) => {
+    
+      axios.post(`${domain}/api/pilot/getPilotId`, { userId: id }).then((res) => {
         axios
-          .post(`${domain}/api/follow/getMyFollowing`, config)
-          .then((res) => {
-            const folowers = res.data;
-            console.log(folowers);
-            setMyFollowing(folowers);
+          .post(`${domain}/api/follow/createFollow/${res.data[0]._id}`, config)
+          .then((response) => {
+            axios
+              .post(`${domain}/api/follow/getMyFollowing`, config)
+              .then((res) => {
+                const folowers = res.data;
+                console.log(folowers);
+                setMyFollowing(folowers);
+              });
+            console.log(response);
+            // setBrands(response.data.brandOfDrones)
           });
-        console.log(response);
-        // setBrands(response.data.brandOfDrones)
       });
-    })
     
   };
 
   let unfollowId = (id) => {
-    axios.post(`${domain}/api/pilot/getPilotId`, {userId: id})
-    .then(res => {
-    axios.post(`${domain}/api/follow/removeFollow/${res.data[0]._id}`, config)
-      .then((response) => {
-        axios
-          .post(`${domain}/api/follow/getMyFollowing`, config)
-          .then((res) => {
-            const folowers = res.data;
-            console.log(folowers);
-            setMyFollowing(folowers);
-          });
-        console.log(response);
-        // setBrands(response.data.brandOfDrones)
-      })
-      });
+    axios.post(`${domain}/api/pilot/getPilotId`, { userId: id }).then((res) => {
+      axios
+        .post(`${domain}/api/follow/removeFollow/${res.data[0]._id}`, config)
+        .then((response) => {
+          axios
+            .post(`${domain}/api/follow/getMyFollowing`, config)
+            .then((res) => {
+              const folowers = res.data;
+              console.log(folowers);
+              setMyFollowing(folowers);
+            });
+          console.log(response);
+          // setBrands(response.data.brandOfDrones)
+        });
+    });
   };
   //yaseen
 
@@ -311,9 +366,6 @@ export default function PilotDetails(props) {
       <section
         className={` ${All.Profile} ${All.EndUserProfile} s_c_d_container`}
       >
-
-
-
         {viewMessage && (
           <div className="p_d_message_container">
             <div className="p_d_message_user_details">
@@ -377,25 +429,41 @@ export default function PilotDetails(props) {
         )}
         <Container className={All.Container}>
           <div id="div1">
-            <div ><MuiThemeProvider >
-                {pilotData.profilePic
-                ?<img src={`${pilotData.coverPic}`} className="avatar_coverPic" />
-                :<Avatar src={`https://cdn-icons-png.flaticon.com/512/149/149071.png`} className={All.BackgroundcoverImg} size={100} />
-                }
-              </MuiThemeProvider></div>
-        <div id="div2">
-        <MuiThemeProvider >
-                  <div className={All.M_ProfileCenter}>
-                    {pilotData.profilePic
-                      ?<img src={`${pilotData.profilePic}`} className="avatar_profilePic"   />
-                      :<Avatar src={`https://cdn-icons-png.flaticon.com/512/149/149071.png`} size={100} />
-                    }
-                  </div>
-                </MuiThemeProvider> 
-        </div>
-        
+            <div>
+              <MuiThemeProvider>
+                {pilotData.profilePic ? (
+                  <img
+                    src={`${pilotData.coverPic}`}
+                    className="avatar_coverPic"
+                  />
+                ) : (
+                  <Avatar
+                    src={`https://cdn-icons-png.flaticon.com/512/149/149071.png`}
+                    className={All.BackgroundcoverImg}
+                    size={100}
+                  />
+                )}
+              </MuiThemeProvider>
+            </div>
+            <div id="div2">
+              <MuiThemeProvider>
+                <div className={All.M_ProfileCenter}>
+                  {pilotData.profilePic ? (
+                    <img
+                      src={`${pilotData.profilePic}`}
+                      className="avatar_profilePic"
+                    />
+                  ) : (
+                    <Avatar
+                      src={`https://cdn-icons-png.flaticon.com/512/149/149071.png`}
+                      size={100}
+                    />
+                  )}
                 </div>
-             
+              </MuiThemeProvider>
+            </div>
+          </div>
+
           {error && (
             <Snackbar
               open={error}
@@ -412,13 +480,10 @@ export default function PilotDetails(props) {
             </Snackbar>
           )}
           <Row>
-        
             <Col
               md={6}
               className={`${All.Order_xs_2} ${All.Order_sm_2} ${All.pr_xs_30} ${All.pl_xs_30} ${All.profileImg}`}
             >
-              
-
               <Box py={1}>
                 <div className="p_d_name_container">
                   <div className="p_d_name">
@@ -488,14 +553,12 @@ export default function PilotDetails(props) {
                   />{" "}
                   Hire me
                 </button>
-        
               </div>
             </Col>
             <Col
               md={6}
               className={`${All.Order_xs_1} ${All.Order_sm_1}  ${All.coverImg} ${All.pr_xs_30} ${All.pl_xs_30}`}
             >
-
               {/* coverPic */}
               {/* <MuiThemeProvider >
                 {pilotData.profilePic
@@ -503,8 +566,6 @@ export default function PilotDetails(props) {
                 :<Avatar src={`https://cdn-icons-png.flaticon.com/512/149/149071.png`} className={All.BackgroundcoverImg} size={100} />
                 }
               </MuiThemeProvider> */}
-
-              
             </Col>
           </Row>
           <div className="p_d_tabs">
@@ -598,42 +659,61 @@ export default function PilotDetails(props) {
           <hr style={{ border: "1px solid #eee", marginBottom: "40px" }} />
           {category === 1 && (
             <Row gutterWidth={10}>
-              {files.map((file, index) => {
-                return (
-                  <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
-                    <div className="p_d_files_container">
-                      {file.fileType === "video" ? (
-                        <Link to = {`/Imageview/${file._id}/${file.userId}`}>
-                          <video
-                            className="p_d_files"
-                            src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
-                            alt=""
-                            width={"100%"}
-                            height={"250px"}
-                          />
-                          <img
-                            src={videoIcon}
-                            alt=""
-                            className="p_d_files_video_icon"
-                            style={{ top: "calc(50% - 30px)" }}
-                          />
-                        </Link>
-                      ) : (
-                        <Link to = {`/Imageview/${file._id}/${file.userId}`}>
-                          <img
-                            className="p_d_files"
-                            src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
-                            alt=""
-                            width={"100%"}
-                            height={"250px"}
-                          />
-                        </Link>
-                      )}
-                    </div>
-                  </Col>
-                );
-              })}
-              <div
+              {allFileCount > 0 ? (
+                <>
+                  {files.map((file, index) => {
+                    return (
+                      <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
+                        <div className="p_d_files_container">
+                          {file.fileType === "video" ? (
+                            <Link to={`/Imageview/${file._id}/${file.userId}`}>
+                              <video
+                                className="p_d_files"
+                                src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
+                                alt=""
+                                width={"100%"}
+                                height={"250px"}
+                              />
+                              <img
+                                src={videoIcon}
+                                alt=""
+                                className="p_d_files_video_icon"
+                                style={{ top: "calc(50% - 30px)" }}
+                              />
+                            </Link>
+                          ) : (
+                            <Link to={`/Imageview/${file._id}/${file.userId}`}>
+                              <img
+                                className="p_d_files"
+                                src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
+                                alt=""
+                                width={"100%"}
+                                height={"250px"}
+                              />
+                            </Link>
+                          )}
+                        </div>
+                      </Col>
+                    );
+                  })}
+                </>
+              ) : (
+                <div
+                  style={{
+                    fontSize: "22px",
+                    fontFamily: "muli-regular",
+                    textAlign: "center",
+                    marginTop: "35px",
+                    marginBottom: "35px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
+                  No files uploaded.
+                </div>
+              )}
+
+              {/* <div
                 className="a_j_load_div"
                 style={{ margin: "40px 0px", width: "100%" }}
               >
@@ -641,33 +721,51 @@ export default function PilotDetails(props) {
                   <img src={loadMore} className="a_j_location_logo" />
                   <span className="a_j_location_text">Load More</span>
                 </button>{" "}
-              </div>
+              </div> */}
             </Row>
           )}
           {category === 2 && (
             <Row gutterWidth={10}>
-              {files.map((file, index) => {
-                return (
-                  <>
-                    {file.fileType === "image" ? (
-                      <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
-                        <div className="p_d_files_container">
-                          <img
-                            className="p_d_files"
-                            src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
-                            alt=""
-                            width={"100%"}
-                            height={"250px"}
-                          />
-                        </div>
-                      </Col>
-                    ) : (
-                      ""
-                    )}
-                  </>
-                );
-              })}
-              <div
+              {imageFileCount > 0 ? (
+                <>
+                  {files.map((file, index) => {
+                    return (
+                      <>
+                        {file.fileType === "image" ? (
+                          <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
+                            <div className="p_d_files_container">
+                              <img
+                                className="p_d_files"
+                                src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
+                                alt=""
+                                width={"100%"}
+                                height={"250px"}
+                              />
+                            </div>
+                          </Col>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    );
+                  })}
+                </>
+              ) : (
+                <div
+                  style={{
+                    fontSize: "22px",
+                    fontFamily: "muli-regular",
+                    textAlign: "center",
+                    marginTop: "35px",
+                    marginBottom: "35px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
+                  No image files uploaded.
+                </div>
+              )}
+              {/* <div
                 className="a_j_load_div"
                 style={{ margin: "40px 0px", width: "100%" }}
               >
@@ -675,39 +773,57 @@ export default function PilotDetails(props) {
                   <img src={loadMore} className="a_j_location_logo" />
                   <span className="a_j_location_text">Load More</span>
                 </button>{" "}
-              </div>
+              </div> */}
             </Row>
           )}
           {category === 3 && (
             <Row gutterWidth={10}>
-              {files.map((file, index) => {
-                return (
-                  <>
-                    {file.fileType === "video" ? (
-                      <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
-                        <div className="p_d_files_container">
-                          <video
-                            className="p_d_files"
-                            src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
-                            alt=""
-                            width={"100%"}
-                            height={"250px"}
-                          />
-                          <img
-                            src={videoIcon}
-                            alt=""
-                            className="p_d_files_video_icon"
-                            style={{ top: "calc(50% - 30px)" }}
-                          />
-                        </div>
-                      </Col>
-                    ) : (
-                      ""
-                    )}
-                  </>
-                );
-              })}
-              <div
+              {videoFileCount > 0 ? (
+                <>
+                  {files.map((file, index) => {
+                    return (
+                      <>
+                        {file.fileType === "video" ? (
+                          <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
+                            <div className="p_d_files_container">
+                              <video
+                                className="p_d_files"
+                                src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
+                                alt=""
+                                width={"100%"}
+                                height={"250px"}
+                              />
+                              <img
+                                src={videoIcon}
+                                alt=""
+                                className="p_d_files_video_icon"
+                                style={{ top: "calc(50% - 30px)" }}
+                              />
+                            </div>
+                          </Col>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    );
+                  })}
+                </>
+              ) : (
+                <div
+                  style={{
+                    fontSize: "22px",
+                    fontFamily: "muli-regular",
+                    textAlign: "center",
+                    marginTop: "35px",
+                    marginBottom: "35px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
+                  No video files uploaded.
+                </div>
+              )}
+              {/* <div
                 className="a_j_load_div"
                 style={{ margin: "40px 0px", width: "100%" }}
               >
@@ -715,33 +831,52 @@ export default function PilotDetails(props) {
                   <img src={loadMore} className="a_j_location_logo" />
                   <span className="a_j_location_text">Load More</span>
                 </button>{" "}
-              </div>
+              </div> */}
             </Row>
           )}
           {category === 4 && (
             <Row gutterWidth={10}>
-              {files.map((file, index) => {
-                return (
-                  <>
-                    {file.fileType === "3d" ? (
-                      <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
-                        <div className="p_d_files_container">
-                          <img
-                            className="p_d_files"
-                            src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
-                            alt=""
-                            width={"100%"}
-                            height={"250px"}
-                          />
-                        </div>
-                      </Col>
-                    ) : (
-                      ""
-                    )}
-                  </>
-                );
-              })}
-              <div
+              {file3dCount > 0 ? (
+                <>
+                  {files.map((file, index) => {
+                    return (
+                      <>
+                        {file.fileType === "3d" ? (
+                          <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
+                            <div className="p_d_files_container">
+                              <img
+                                className="p_d_files"
+                                src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
+                                alt=""
+                                width={"100%"}
+                                height={"250px"}
+                              />
+                            </div>
+                          </Col>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    );
+                  })}
+                  )
+                </>
+              ) : (
+                <div
+                  style={{
+                    fontSize: "22px",
+                    fontFamily: "muli-regular",
+                    textAlign: "center",
+                    marginTop: "35px",
+                    marginBottom: "35px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
+                  No 3d image files uploaded.
+                </div>
+              )}
+              {/* <div
                 className="a_j_load_div"
                 style={{ margin: "40px 0px", width: "100%" }}
               >
@@ -749,7 +884,7 @@ export default function PilotDetails(props) {
                   <img src={loadMore} className="a_j_location_logo" />
                   <span className="a_j_location_text">Load More</span>
                 </button>{" "}
-              </div>
+              </div> */}
             </Row>
           )}
 
@@ -760,12 +895,12 @@ export default function PilotDetails(props) {
                   <div className="p_d_about_title">Name:</div>
                   <div className="p_d_about_name">{pilotData.name}</div>
                 </div>
-
-                <div className="p_d_about_description_container">
-                  <div className="p_d_about_title">Description</div>
-                  <div className="p_d_about_content">{pilotData.bio}</div>
-                </div>
-
+                {pilotData.bio && (
+                  <div className="p_d_about_description_container">
+                    <div className="p_d_about_title">Description</div>
+                    <div className="p_d_about_content">{pilotData.bio}</div>
+                  </div>
+                )}
                 <div className="p_d_about_skills_container">
                   <div className="p_d_about_title">Skills:</div>
                   <div className="p_d_about_skills_keyword_container">
@@ -799,28 +934,56 @@ export default function PilotDetails(props) {
                   </div>
                   <div className="p_d_about_details_title">Work type</div>
                   <div className="p_d_about_details_content">
-                    {pilotData.workType}
+                    {pilotData.workType === "full_time"
+                      ? "Full time"
+                      : "Part time"}
                   </div>
-                  <div className="p_d_about_details_title">
-                    Monthly payment ($)
-                  </div>
-                  <div className="p_d_about_details_content">
-                    {pilotData.monthlyPayment}
-                  </div>
+                  {pilotData.workType === "full_time" ? (
+                    <>
+                      <div className="p_d_about_details_title">
+                        Monthly payment ($)
+                      </div>
+                      <div className="p_d_about_details_content">
+                        {pilotData.monthlyPayment}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="p_d_about_details_title">
+                        Hourly payment ($)
+                      </div>
+                      <div className="p_d_about_details_content">
+                        {pilotData.hourlyPayment}
+                      </div>
+                    </>
+                  )}
                   <div className="p_d_about_details_title">Industry</div>
                   <div className="p_d_about_details_content">
-                    {pilotData.industry}
+                    {pilotData.industry.map((industry, index) => {
+                      return <>{industry}, </>;
+                    })}
                   </div>
-                  <div className="p_d_about_details_title">
-                    Training center name
-                  </div>
-                  <div className="p_d_about_details_content">
-                    {pilotData.trainingCenter}
-                  </div>
-                  <div className="p_d_about_details_title">Completed year</div>
-                  <div className="p_d_about_details_content">
-                    {pilotData.completedYear}
-                  </div>
+                  {pilotData.trainingCenter && (
+                    <>
+                      <div className="p_d_about_details_title">
+                        Training center name
+                      </div>
+                      <div className="p_d_about_details_content">
+                        {pilotData.trainingCenter}
+                      </div>
+                    </>
+                  )}
+
+                  {pilotData.completedYear && (
+                    <>
+                      <div className="p_d_about_details_title">
+                        Completed year
+                      </div>
+                      <div className="p_d_about_details_content">
+                        {pilotData.completedYear}
+                      </div>
+                    </>
+                  )}
                 </div>
                 <div className="p_d_hire_container">
                   <div className="p_d_hire_content">
@@ -842,7 +1005,174 @@ export default function PilotDetails(props) {
 
           {category === 6 && (
             <div className="p_d_followers_container">
-              {followers.map((follow, index) => {
+              {followersCount > 0 ? (
+                <>
+                  {followers.map((follow, index) => {
+                    return (
+                      <>
+                        <Visible xxl xl lg>
+                          <Container style={{ width: "80%" }}>
+                            <div className="p_d_follower_details_container">
+                              <div className="p_d_followers_img_container">
+                                <img
+                                  src={
+                                    follow.profilePic
+                                      ? `${follow.profilePic}`
+                                      : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
+                                  }
+                                  alt=""
+                                  height={"150px"}
+                                  width={"150px"}
+                                  style={{ borderRadius: "75px" }}
+                                />
+                              </div>
+                              <div className="p_d_followers_other_details_xxl">
+                                <div className="p_d_followers_name_username">
+                                  <div className="p_d_followers_name">
+                                    {follow.name}
+                                  </div>
+                                  <div
+                                    className="p_d_followers_username"
+                                    style={{
+                                      overflow: "hidden",
+                                      textOverflow: "ellipsis",
+                                      textTransform: "capitalize",
+                                    }}
+                                  >
+                                    {follow.role}
+                                  </div>
+                                </div>
+                                <div className="p_d_followers_btn_container">
+                                  {myFollowing.includes(follow._id) ? (
+                                    <button
+                                      className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
+                                      onClick={() => unfollowId(follow._id)}
+                                    >
+                                      Unfollow
+                                    </button>
+                                  ) : (
+                                    <button
+                                      className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
+                                      onClick={() => followMeId(follow._id)}
+                                    >
+                                      Follow
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            <hr
+                              style={{
+                                border: "1px solid rgba(112, 112, 112, 0.2)",
+                              }}
+                            />
+                          </Container>
+                        </Visible>
+                        <Visible md sm xs>
+                          <Container>
+                            <div className="p_d_follower_details_container">
+                              <div className="p_d_followers_img_container">
+                                <img
+                                  src={
+                                    follow.profilePic
+                                      ? `${follow.profilePic}`
+                                      : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
+                                  }
+                                  alt=""
+                                  height={"100px"}
+                                  width={"100px"}
+                                  style={{ borderRadius: "50px" }}
+                                />
+                              </div>
+                              <div className="p_d_followers_other_details_md">
+                                <div className="p_d_followers_name">
+                                  {follow.name}
+                                </div>
+                                <div
+                                  className="p_d_followers_username"
+                                  style={{ textTransform: "capitalize" }}
+                                >
+                                  {follow.role}
+                                </div>
+                                <div className="p_d_followers_btn_container">
+                                  {myFollowing.includes(follow._id) ? (
+                                    <button
+                                      className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
+                                      onClick={() => unfollowId(follow._id)}
+                                    >
+                                      Unfollow
+                                    </button>
+                                  ) : (
+                                    <button
+                                      className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
+                                      onClick={() => followMeId(follow._id)}
+                                    >
+                                      Follow
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            <hr
+                              style={{
+                                border: "1px solid rgba(112, 112, 112, 0.2)",
+                              }}
+                            />
+                          </Container>
+                        </Visible>
+                      </>
+                    );
+                  })}
+                </>
+              ) : (
+                <div
+                  style={{
+                    fontSize: "22px",
+                    fontFamily: "muli-regular",
+                    textAlign: "center",
+                    marginTop: "35px",
+                    marginBottom: "35px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
+                  No followers.
+                </div>
+              )}
+
+              {/* <div
+                className="a_j_load_div"
+                style={{ margin: "40px 0px", width: "100%" }}
+              >
+                <button className="a_j_loadMore_btn">
+                  <img src={loadMore} className="a_j_location_logo" />
+                  <span className="a_j_location_text">Load More</span>
+                </button>{" "}
+              </div> */}
+            </div>
+          )}
+
+          {category === 7 && (
+            <div className="p_d_followers_container">
+              {followingCount > 0 ? (
+                <></>
+              ) : (
+                <div
+                  style={{
+                    fontSize: "22px",
+                    fontFamily: "muli-regular",
+                    textAlign: "center",
+                    marginTop: "35px",
+                    marginBottom: "35px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
+                  No following.
+                </div>
+              )}
+
+              {following.map((follow, index) => {
                 return (
                   <>
                     <Visible xxl xl lg>
@@ -916,14 +1246,16 @@ export default function PilotDetails(props) {
                               alt=""
                               height={"100px"}
                               width={"100px"}
-                              style={{ borderRadius: "50px" }}
                             />
                           </div>
                           <div className="p_d_followers_other_details_md">
                             <div className="p_d_followers_name">
                               {follow.name}
                             </div>
-                            <div className="p_d_followers_username" style = {{textTransform: "capitalize"}}>
+                            <div
+                              className="p_d_followers_username"
+                              style={{ textTransform: "capitalize" }}
+                            >
                               {follow.role}
                             </div>
                             <div className="p_d_followers_btn_container">
@@ -955,7 +1287,7 @@ export default function PilotDetails(props) {
                   </>
                 );
               })}
-              <div
+              {/* <div
                 className="a_j_load_div"
                 style={{ margin: "40px 0px", width: "100%" }}
               >
@@ -963,133 +1295,7 @@ export default function PilotDetails(props) {
                   <img src={loadMore} className="a_j_location_logo" />
                   <span className="a_j_location_text">Load More</span>
                 </button>{" "}
-              </div>
-            </div>
-          )}
-
-          {category === 7 && (
-            <div className="p_d_followers_container">
-              {following.map((follow, index) => {
-                return (
-                  <>
-                    <Visible xxl xl lg>
-                      <Container style={{ width: "80%" }}>
-                        <div className="p_d_follower_details_container">
-                          <div className="p_d_followers_img_container">
-                            <img
-                              src={
-                                follow.profilePic
-                                  ? `${follow.profilePic}`
-                                  : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
-                              }
-                              alt=""
-                              height={"150px"}
-                              width={"150px"}
-                              style={{ borderRadius: "75px" }}
-                            />
-                          </div>
-                          <div className="p_d_followers_other_details_xxl">
-                            <div className="p_d_followers_name_username">
-                              <div className="p_d_followers_name">
-                                {follow.name}
-                              </div>
-                              <div
-                                className="p_d_followers_username"
-                                style={{
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  textTransform: "capitalize"
-                                }}
-                              >
-                                {follow.role}
-                              </div>
-                            </div>
-                            <div className="p_d_followers_btn_container">
-                            {myFollowing.includes(follow._id) ? (
-                                <button
-                                  className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
-                                  onClick={() => unfollowId(follow._id)}
-                                >
-                                  Unfollow
-                                </button>
-                              ) : (
-                                <button
-                                  className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
-                                  onClick={() => followMeId(follow._id)}
-                                >
-                                  Follow
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        <hr
-                          style={{
-                            border: "1px solid rgba(112, 112, 112, 0.2)",
-                          }}
-                        />
-                      </Container>
-                    </Visible>
-                    <Visible md sm xs>
-                      <Container>
-                        <div className="p_d_follower_details_container">
-                          <div className="p_d_followers_img_container">
-                            <img
-                              src={
-                                follow.profilePic
-                                  ? `${follow.profilePic}`
-                                  : "https://uybor.uz/borless/uybor/img/user-images/user_no_photo_600x600.png"
-                              }
-                              alt=""
-                              height={"100px"}
-                              width={"100px"}
-                            />
-                          </div>
-                          <div className="p_d_followers_other_details_md">
-                            <div className="p_d_followers_name">
-                              {follow.name}
-                            </div>
-                            <div className="p_d_followers_username" style = {{textTransform: "capitalize"}}>
-                              {follow.role}
-                            </div>
-                            <div className="p_d_followers_btn_container">
-                            {myFollowing.includes(follow._id) ? (
-                                <button
-                                  className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
-                                  onClick={() => unfollowId(follow._id)}
-                                >
-                                  Unfollow
-                                </button>
-                              ) : (
-                                <button
-                                  className="p_d_followers_follow_btn p_d_followers_follow_btn_xxl"
-                                  onClick={() => followMeId(follow._id)}
-                                >
-                                  Follow
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        <hr
-                          style={{
-                            border: "1px solid rgba(112, 112, 112, 0.2)",
-                          }}
-                        />
-                      </Container>
-                    </Visible>
-                  </>
-                );
-              })}
-              <div
-                className="a_j_load_div"
-                style={{ margin: "40px 0px", width: "100%" }}
-              >
-                <button className="a_j_loadMore_btn">
-                  <img src={loadMore} className="a_j_location_logo" />
-                  <span className="a_j_location_text">Load More</span>
-                </button>{" "}
-              </div>
+              </div> */}
             </div>
           )}
           <Dialog
@@ -1157,6 +1363,49 @@ export default function PilotDetails(props) {
                     >
                       Submit
                     </button>
+                  </div>
+                </div>
+              </Row>
+            </DialogContent>
+          </Dialog>
+          <Dialog
+            open={loginErrorPopup}
+            onClose={loginErrorPopupClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={loginErrorPopupClose}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div
+                  className="a_j_popup_title"
+                  style={{ padding: "0px 60px" }}
+                >
+                  You aren't logged into DroneZone. Please login to continue?
+                </div>
+                <div
+                  className="u_f_popup_btn_container"
+                  style={{ marginTop: "8px" }}
+                >
+                  <div
+                    className="j_l_applyJobLoginBtn"
+                    style={{ width: "fit-content" }}
+                    onClick={() => history.push("/login")}
+                  >
+                    Login / Sign Up
                   </div>
                 </div>
               </Row>

@@ -42,7 +42,7 @@ function Pilot_ProfessionalInfo() {
         training_center_name: data.trainingCenter,
         completed_year: data.completedYear,
         attachment_selected: false,
-        attachment: data.attachment,
+        attachment: data.certificates,
         profile: `${data.profilePic}`,
         cover: `${data.coverPic}`,
       });
@@ -185,6 +185,18 @@ function Pilot_ProfessionalInfo() {
       }
     };
   };
+
+  const removeSkills = (id) => {
+    if(edit){
+      var skill_list = data.skills;
+      skill_list.splice(id,1);
+      setData({
+        ...data,
+        skills: skill_list,
+      });
+      console.log(data.skills);
+    }
+  }
 
   const saveChanges = () => {
     if (data.name === "") {
@@ -333,8 +345,8 @@ function Pilot_ProfessionalInfo() {
               <div>
                 <div className="pd_b_i_attachment">Attachments</div>
                 <span className="pd_p_i_profile_text">
-                  {data.attachment_selected
-                    ? data.attachment.name
+                  {data.attachment[0]
+                    ? data.attachment[0].slice(0,50)
                     : "Attach your DGCA certificate"}
                 </span>
               </div>
@@ -475,6 +487,7 @@ function Pilot_ProfessionalInfo() {
             value={data.industry}
             disabled={!edit}
           />
+          {}
           <div className="input_error_msg" id="industry_error">
             Industry is required
           </div>
@@ -505,12 +518,13 @@ function Pilot_ProfessionalInfo() {
                 Completed Year
               </label>
               <input
-                type="number"
+                type="month"
                 className="pd_b_i_profile_input"
                 id="completed_year"
                 onChange={handleChange}
                 value={data.completed_year}
                 disabled={!edit}
+                
               />
               <div className="input_error_msg" id="completed_year_error">
                 Completed year is required
@@ -531,8 +545,8 @@ function Pilot_ProfessionalInfo() {
           />
           {data.skills.map((skill, index) => {
             return (
-              <div className="pd_i_skill" key={index}>
-                {skill}
+              <div className="pd_i_skill" key={index} onClick = {()=>removeSkills(index)}>
+                {skill} <i class="fas fa-times"></i>
               </div>
             );
           })}

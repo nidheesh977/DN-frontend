@@ -1030,6 +1030,12 @@ class UploadFiles extends Component {
                     selected_files_details: files,
                   });
 
+                  if (link === `${domain}/api/draft/createDraft`){
+                    this.setState({
+                      draft_count : this.state.draft_count + 1
+                    })
+                  }
+
                 })
                 .catch((err) => {
                   files[i].upload_status = "upload_failed";

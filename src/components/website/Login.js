@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useHistory } from "react-router-dom";
 import { Container, Row, Col, Hidden } from "react-grid-system";
@@ -48,6 +48,10 @@ const Login = (props) => {
     history.push("/");
     window.location.reload();
   };
+
+  useEffect(()=>{
+    window.scrollTo(0,0)
+  }, [])
 
   const handleClick = () => {
     const validateEmail = (email) => {
