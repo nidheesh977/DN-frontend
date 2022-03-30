@@ -861,7 +861,7 @@ button.swal-button.swal-button--confirm{
 
 .my_account_btn:hover {
   color: #000 !important;
-  background: #fff;
+  background: transparent linear-gradient(180deg, #4FFEA3 0%, #00E7FC 100%) 0% 0% no-repeat padding-box;
 }
 
 .nav_upload_img{

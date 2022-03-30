@@ -272,58 +272,63 @@ class UploadFiles extends Component {
   };
 
   chooseFiles = (e) => {
-    var row_files = this.state.row_files;
-    row_files.push(e.target.files);
-    this.setState({
-      row_files: row_files,
-      files_count: e.target.files.length,
-    });
-    for (var i = 0; i < e.target.files.length; i++) {
-      // let resolution_satisfied = true
-      // let img = new Image();
-      // img.src = window.URL.createObjectURL(e.target.files[0]);
-      // img.onload = () => {
-      //   alert(img.width + " " + img.height);
-      //   if (img.width < 1100 || img.height < 500){
-      //     resolution_satisfied = false
-      //   }
-      //   else{
-      //     resolution_satisfied = true
-      //   }
-      // };
-      var details = this.state.selected_files_details;
-      var keywords = [];
-      for (var j = 0; j < this.state.suggested_keywords.length; j++) {
-        keywords.push(this.state.suggested_keywords[j]);
-      }
-
-      details.push({
-        file: "",
-        name: e.target.files[i].name,
-        custom_name: e.target.files[i].name,
-        type: e.target.files[i].type,
-        size: e.target.files[i].size,
-        usage: "free",
-        price: "",
-        category: "",
-        experience: "",
-        suggested_keywords: keywords,
-        keywords: [],
-        adult_content: false,
-        select_type: e.target.files[i].type,
-        row: e.target.files[i],
-        upload_status: "selected",
-        resolution_satisfied: true,
-        draft: false,
-      });
-      this.setState({
-        selected_files_details: details,
-      });
+    if (this.state.selected_files_details.length + e.target.files.length > 20 ){
+      alert("File select limit is 20")
     }
-    this.setState({
-      files_selected: true,
-    });
-    this.createFileObject(e.target.files);
+    else{
+      var row_files = this.state.row_files;
+      row_files.push(e.target.files);
+      this.setState({
+        row_files: row_files,
+        files_count: e.target.files.length,
+      });
+      for (var i = 0; i < e.target.files.length; i++) {
+        // let resolution_satisfied = true
+        // let img = new Image();
+        // img.src = window.URL.createObjectURL(e.target.files[0]);
+        // img.onload = () => {
+        //   alert(img.width + " " + img.height);
+        //   if (img.width < 1100 || img.height < 500){
+        //     resolution_satisfied = false
+        //   }
+        //   else{
+        //     resolution_satisfied = true
+        //   }
+        // };
+        var details = this.state.selected_files_details;
+        var keywords = [];
+        for (var j = 0; j < this.state.suggested_keywords.length; j++) {
+          keywords.push(this.state.suggested_keywords[j]);
+        }
+  
+        details.push({
+          file: "",
+          name: e.target.files[i].name,
+          custom_name: "",
+          type: e.target.files[i].type,
+          size: e.target.files[i].size,
+          usage: "free",
+          price: "",
+          category: "",
+          experience: "",
+          suggested_keywords: keywords,
+          keywords: [],
+          adult_content: false,
+          select_type: e.target.files[i].type,
+          row: e.target.files[i],
+          upload_status: "selected",
+          resolution_satisfied: true,
+          draft: false,
+        });
+        this.setState({
+          selected_files_details: details,
+        });
+      }
+      this.setState({
+        files_selected: true,
+      });
+      this.createFileObject(e.target.files);
+    }
   };
 
   categoryChanged = (e) => {
@@ -960,6 +965,12 @@ class UploadFiles extends Component {
               })
             }
 
+            if (link === `${domain}/api/draft/createDraft`){
+              this.setState({
+                draft_count : this.state.draft_count + 1
+              })
+            }
+
           })
           .catch((err) => {
             files[i].upload_status = "upload_failed";
@@ -1084,17 +1095,19 @@ class UploadFiles extends Component {
                               onChange={this.chooseFiles}
                               ref="addFileRef"
                             />
-                            <label
-                              style={{
-                                display: "inline-block",
-                                marginBottom: "10px",
-                              }}
-                              for="add_files"
-                              id="u_f_add_more"
-                            >
-                              <i class="fas fa-plus u_f_add_more_icon"></i> Add
-                              more
-                            </label>
+                            {this.state.selected_files_details.length < 20 &&
+                              <label
+                                style={{
+                                  display: "inline-block",
+                                  marginBottom: "10px",
+                                }}
+                                for="add_files"
+                                id="u_f_add_more"
+                              >
+                                <i class="fas fa-plus u_f_add_more_icon"></i> Add
+                                more
+                              </label>
+                            }
                             <select
                               name=""
                               id="u_f_select_category"

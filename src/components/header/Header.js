@@ -9,7 +9,6 @@ class Header extends React.Component {
       this.state = {
         isDesktop: false,
       };
-
       this.updatePredicate = this.updatePredicate.bind(this);
     }
 
@@ -39,7 +38,7 @@ class Header extends React.Component {
       return (
         <div>
           {isDesktop ? (
-            <Navbar auth ={this.props.auth}/>
+            <Navbar auth ={this.props.auth} loginStatus = {this.props.loginStatus} updateLoginStatus = {this.props.updateLoginStatus}/>
           ) : (
             <Sidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
           )}

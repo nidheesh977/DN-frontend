@@ -17,7 +17,6 @@ import getSteps from "../website/getSteps";
 import axios from "axios";
 import { render } from "@testing-library/react";
 import $ from "jquery";
-import { logout, isLogin, login, getRefreshToken } from "../../middleware/auth";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Alert } from "@material-ui/lab";
 import PageLoader from "../Loader/pageloader";
@@ -41,7 +40,6 @@ function Navbar(props) {
   const [user, Setuser] = useState([]);
   const [loading, setLoading] = useState(false);
   const [userlogin, Setuserlogin] = useState(false);
-  useEffect(() => Setuserlogin(isLogin()), [props]);
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorEls, setAnchorEls] = React.useState(null);
@@ -51,14 +49,10 @@ function Navbar(props) {
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
+  const [showLogout, setShowLogout] = useState(false)
 
   const currentUser = useState(authenticationService.currentUserValue);
 
-  function refreshPagelogout() {
-    localStorage.clear();
-    logout();
-    Setuserlogin(false);
-  }
 
   const handleChange = (event) => {
     setAuth(event.target.checked);
@@ -76,10 +70,6 @@ function Navbar(props) {
     setAnchorEls(null);
   };
 
-  const handleLogout = () => {
-    logout();
-    Setuserlogin(false);
-  };
 
   const [instructions, setInstructions] = useState(false)
 
@@ -102,11 +92,12 @@ function Navbar(props) {
 
   }
 
+  const accountLogout = () => {
+    localStorage.clear()
+    props.updateLoginStatus()
+    history.push("/")
+  }
 
-
-  // localStorage.getItem("email") === "false" ? "/verify-email" :
-                      
-  //                     localStorage.getItem("role") === "pilot" ?"/pilot_dashboard/account":"/choose-categories"}
 let AccountButton = () =>{
   if(localStorage.getItem("email")=== "false"){
     history.push("/verify-email")
@@ -116,77 +107,6 @@ let AccountButton = () =>{
     history.push("/pilot_dashboard/account/")
   }
 }
-
-
-  // useEffect(() => {
-    // userService.User().then((res) => {
-    //   setLoading(false);
-    //   try {
-    //     if (res.data.id >= 0) {
-    //       Setuser(res.data);
-    //       Setuserlogin(true);
-    //     } else {
-          // try {
-          //   axios
-          //     .post(
-          //       "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
-          //       {
-          //         header: {
-          //           Refreshtoken: localStorage.getItem("refresh_token"),
-          //         },
-          //       }
-          //     )
-          //     .then((res) => {
-          //       if (res.data.token_type === "Bearer") {
-          //         localStorage.setItem("access_token", res.data.access_token);
-          //         localStorage.setItem("refresh_token", res.data.refresh_token);
-          //         Setuserlogin(true);
-          //         window.location.reload();
-          //       } else {
-          //         localStorage.clear();
-          //       }
-          //     });
-          // } catch {
-          //   localStorage.clear();
-          // }
-        // }
-      // } catch {
-        // try {
-        //   axios
-        //     .post(
-        //       "https://demo-nexevo.in/haj/auth-app/public/api/auth/refreshtoken",
-        //       {
-        //         header: { Refreshtoken: localStorage.getItem("refresh_token") },
-        //       }
-        //     )
-        //     .then((res) => {
-        //       if (res.data.token_type === "Bearer") {
-        //         localStorage.setItem("access_token", res.data.access_token);
-        //         localStorage.setItem("refresh_token", res.data.refresh_token);
-        //         window.location.reload();
-        //       } else {
-        //         localStorage.clear();
-        //       }
-        //     });
-        // } catch {
-        //   localStorage.clear();
-        // }
-    //   }
-    // });
-
-    // userService.Profile().then((res) => {
-    //   setLoading(false);
-    //   if (
-    //     res.data.profile !=
-    //     "https://demo-nexevo.in/haj/auth-app/public/uploads/profile"
-    //   ) {
-    //     setProfileImage(res.data.profile);
-    //   } else {
-    //     setProfileImage(ProfileIcon);
-    //   }
-    // });
-  // }, []
-  // );
 
   render();
   {
@@ -222,25 +142,7 @@ let AccountButton = () =>{
                 <Link className="nav-item"></Link>
               </span>
               <span className="menu">
-                <li className="nav-item SearchBoxIcon">
-                  {/* <Search /> */}
-                  {/* <i class="fa fa-search" aria-hidden="true"></i> */}
-                  <Link to="/Searchresult">
-                    <img
-                      className="fa fa-search"
-                      src={SearchIcon}
-                      style={{ marginRight: "15px" }}
-                    />
-                  </Link>
-                  {/* <div class="search-box">
-              <form action={`${process.env.PUBLIC_URL}/Search`}>
-                <input type="text" className="MenuSearchBox" placeholder=""/>
-                <input type="submit" value="Search" />
-                </form>
-              </div> */}
-                  {/* <input type="text" className="search-field" placeholder="Search …" value="" name="sad" /> */}
-                  {/* <SearchFilter /> */}
-                </li>
+              
                 <li className="nav-item">
                   <NavLink
                     to="/apply_job"
@@ -268,7 +170,7 @@ let AccountButton = () =>{
                     className="nav-item"
                     id="login"
                     style={{
-                      display: localStorage.getItem("access_token")
+                      display: props.loginStatus
                         ? "none"
                         : "block",
                       marginTop: "25px",
@@ -286,7 +188,7 @@ let AccountButton = () =>{
                     className="nav-item"
                     id="signup"
                     style={{
-                      display: localStorage.getItem("access_token")
+                      display: props.loginStatus
                         ? "none"
                         : "block",
                       marginTop: "25px",
@@ -342,33 +244,41 @@ let AccountButton = () =>{
                 <li
                   className="nav-item"
                   style={{
-                    display: localStorage.getItem("access_token")
+                    display: props.loginStatus
                       ? "block"
                       : "none",
                     marginTop: "15px",
                   }}
                   id="myAccount"
                 >
-                  <div
-         
-                      
-                    className="nav-links my_account_btn"
-                    style={{ display: "flex", alignItems: "center" }}
-                    onClick={AccountButton}
-                  >
-                    <img
-                      style={{
-                        width: "30px",
-                        height: "30px",
-                        borderRadius: "100%",
-                      }}
-                      src={ProfileIcon}
-                    />
+                  <span onMouseLeave = {() => setShowLogout(false)}>
 
-                    <span style={{ paddingLeft: "10px", fontSize: "16px" }}>
-                      My account
-                    </span>
-                  </div>
+                    <div
+                      className="nav-links my_account_btn"
+                      style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+                      onClick={AccountButton}
+                      onMouseOver = {() => setShowLogout(true)}
+                      
+                    >
+                      <img
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          borderRadius: "100%",
+                        }}
+                        src={ProfileIcon}
+                      />
+
+                      <span style={{ paddingLeft: "10px", fontSize: "16px" }}>
+                        My account
+                      </span>
+                    </div>
+                    {showLogout && 
+                      <div class="dropdown-content" onClick = {accountLogout}>
+                        <div className="logout_btn">Logout</div>
+                      </div>
+                    }
+                  </span>
                 </li>
                 <li className="nav-item">
                   <div className="nav-links">

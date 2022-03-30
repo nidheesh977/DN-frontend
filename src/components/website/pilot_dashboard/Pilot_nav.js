@@ -48,9 +48,6 @@ function Pilot_nav() {
           >
             My Account
           </Link>
-          <Link style={{ float: "right" }} onClick={logout}>
-            Logout
-          </Link>
         </Container>
       </div>
     </div>

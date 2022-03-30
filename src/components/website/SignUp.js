@@ -132,7 +132,7 @@ setCode(result[0].dial_code);
                 localStorage.setItem("email", res.data.verify);
                 console.log(localStorage.getItem("access_token"));
                 setLoading(false);
-
+                props.updateLoginStatus()
                 history.push("/verify-email")
               })
               .catch((err) => {

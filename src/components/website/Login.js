@@ -17,7 +17,7 @@ import Close from "../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
 
-const domain = process.env.REACT_APP_MY_API
+const domain = process.env.REACT_APP_MY_API;
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -42,7 +42,6 @@ const Login = (props) => {
   var [password, setPassword] = useState("");
   const [loginSuccess, setLoginSuccess] = useState();
   const [serverError, setServerError] = useState(false);
-  
 
   const closeLoginPopup = () => {
     setLoginSuccess(false);
@@ -71,46 +70,48 @@ const Login = (props) => {
       document.getElementById("password_error").style.display = "contents";
       document.getElementById("password").focus();
     } else {
-      setLoading(true)
+      setLoading(true);
       axios
         .post(`${domain}/api/user/login`, {
           email: email,
           password: password,
         })
         .then((res) => {
-          console.log(res.data.verify)
+          console.log(res.data.verify);
           localStorage.setItem("access_token", res.data.token);
           localStorage.setItem("token_type", "Bearer");
           localStorage.setItem("role", res.data.role);
           localStorage.setItem("email", res.data.verify);
-if(res.data.verify === false){
-  history.push("/verify-email")
-} else if(res.data.role === undefined){
-  history.push("/choose-categories")
-}else{
-  history.push("/pilot_dashboard/account/")
-}
+
+          props.updateLoginStatus()
+
+          if (res.data.verify === false) {
+            history.push("/verify-email");
+          } else if (res.data.role === undefined) {
+            history.push("/choose-categories");
+          } else {
+            history.push("/pilot_dashboard/account/");
+          }
 
           // history.push("/");
           // window.location.reload();
-          setLoading(false)
+          setLoading(false);
         })
         .catch((err) => {
           // console.log(err.response)
-          try{
-            if(err.response.status !== 500){
-              console.log(err.response)
-              document.getElementById("invalid_credentials").style.display = "contents";
-              setLoading(false)
+          try {
+            if (err.response.status !== 500) {
+              console.log(err.response);
+              document.getElementById("invalid_credentials").style.display =
+                "contents";
+              setLoading(false);
+            } else {
+              setServerError(true);
+              setLoading(false);
             }
-            else{
-              setServerError(true)
-              setLoading(false)
-            }
-          }
-          catch{
-            setServerError(true)
-            setLoading(false)
+          } catch {
+            setServerError(true);
+            setLoading(false);
           }
         });
     }
@@ -141,7 +142,7 @@ if(res.data.verify === false){
           <Row>
             <Col lg={6} className={All.DronePerson}>
               <Hidden xs sm md>
-                <img src={DronePerson} alt = "dronePerson"/>
+                <img src={DronePerson} alt="dronePerson" />
               </Hidden>
             </Col>
             <Col lg={6} className={All.Login}>
@@ -246,7 +247,7 @@ if(res.data.verify === false){
             </Col>
             <Col lg={6}>
               <Hidden lg xl xxl>
-                <img src={DronePerson} width={"80%"} alt = "dronePerson"/>
+                <img src={DronePerson} width={"80%"} alt="dronePerson" />
               </Hidden>
             </Col>
           </Row>
@@ -257,7 +258,7 @@ if(res.data.verify === false){
             aria-describedby="alert-dialog-description"
             maxWidth={"md"}
             fullWidth={true}
-            PaperProps={{style: { width: "820px", borderRadius: "10px" }   }}
+            PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
           >
             <DialogContent
               className={All.PopupBody}

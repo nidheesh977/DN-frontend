@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Header from "./components/header/Header";
 import Home from "./components/website/Home";
@@ -45,24 +45,45 @@ import EditFile from "../src/components/website/EditFile"
 import Center_dashboard from "./components/website/center_dashboard/Center_dashboard";
 import PilotRoute from "./PilotRoute";
 function App(){
+
+  useEffect(()=>{
+    let access_token = localStorage.getItem("access_token")
+    if (access_token){
+      setLoginStatus(true)
+    }else{
+      setLoginStatus(false)
+    }
+  }, [])
+
+  const [loginStatus, setLoginStatus] = useState(true)
+
+  const updateLoginStatus = () => {
+    let access_token = localStorage.getItem("access_token")
+    if (access_token){
+      setLoginStatus(true)
+    }else{
+      setLoginStatus(false)
+    }
+  }
+
     return (
       <BrowserRouter>
-        <Header />
+        <Header loginStatus = {loginStatus} updateLoginStatus = {updateLoginStatus}/>
         {/* <Message /> */}
         <UserContext.Provider>
           <ScrollToTop />
           <Switch>
             <Route
               path="/login"
-              component={Login}
+              component={routeProps => <Login  updateLoginStatus = {updateLoginStatus}/>}
               exact
             />
 
-<PilotRoute component={Pilot_dashboard} path="/pilot_dashboard" />
+            <PilotRoute component={Pilot_dashboard} path="/pilot_dashboard" />
 
             <Route
               path="/sign_up"
-              component={SignUp}
+              component={routeProps => <SignUp  updateLoginStatus = {updateLoginStatus}/>}
               exact
             />
             <Route
