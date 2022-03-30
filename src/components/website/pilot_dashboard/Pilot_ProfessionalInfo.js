@@ -544,12 +544,17 @@ function Pilot_ProfessionalInfo() {
           className="pd_b_i_notifications_save"
           style={{ marginTop: "20px" }}
         >
-          <button
+
+
+          {
+            edit ?    <button
             className="pd_b_i_notifications_saveBtn"
             onClick={saveChanges}
           >
             Save Changes
-          </button>
+          </button> : <></>
+          }
+       
         </div>
       </div>
       <Dialog

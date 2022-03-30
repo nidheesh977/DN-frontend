@@ -56,7 +56,14 @@ console.log(response.data)
 
   return (
     <div>
-          <div id="toHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", marginTop:"35px", display:"none"}}>No Pending 3D Images Now, Upload and check back</div>
+         <div id="toHide" style={{display:"none"}}>
+            <div  style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", marginTop:"35px"}}>No pending 3D Images Now, Upload and check back later</div>
+            <center>
+              <Link to="/uploadFile">
+            <button className="uploadNow_btn">Upload Now</button>
+            </Link>
+            </center>
+            </div>
      <Row gutterWidth={12}>
           {value.map((item) => {
             return (
@@ -80,7 +87,7 @@ console.log(response.data)
                   </div>
                   
                   <div
-                    className="pd_moreBtn"
+                    className="pd_moreBtn" style={{cursor:"pointer"}}
                     id={"pd_more/" + item._id}
                     onMouseOver={() => mouseGotIN(item._id)}
                     onMouseOut={() => mouseGotOut(item._id)}

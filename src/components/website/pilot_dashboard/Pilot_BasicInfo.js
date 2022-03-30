@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import Cover from "./images/cover.jpg";
 import "./css/Pilot_BasicInfo.css";
 import Pilot from "./images/pilot.jpg";
@@ -22,6 +23,13 @@ const DialogContent = withStyles((theme) => ({
 const domain = process.env.REACT_APP_MY_API;
 
 function Pilot_BasicInfo() {
+
+  useEffect(() => {
+      window.scrollTo(0, 0);
+   
+  }, []);
+
+
   let config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -483,9 +491,13 @@ function Pilot_BasicInfo() {
         </div>
       </div>
       <div className="pd_b_i_notifications_save">
-        <button className="pd_b_i_notifications_saveBtn" onClick={saveChanges}>
-          Save Changes
-        </button>
+{
+  edit ?  <button className="pd_b_i_notifications_saveBtn" onClick={saveChanges}>
+  Save Changes
+</button> : <></>
+}
+
+       
       </div>
       <Dialog
         open={profileSuccess}

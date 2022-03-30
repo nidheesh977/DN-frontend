@@ -5,7 +5,8 @@ import { Container, Row, Col, Visible, Hidden } from 'react-grid-system'
 import Activities_Sidebar from './Activities_Sidebar'
 import Account_Sidebar from './Account_Sidebar';
 import All from '../../website/All.module.css'
-import ScrollToTop from "react-scroll-to-top";
+import ScrollToTop from '../ScrollToTop';
+
 function Pilot_dashboard() {
     return (
         <>
@@ -14,6 +15,7 @@ function Pilot_dashboard() {
             <Pilot_nav />
             <Container  className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
                 <div style={{marginTop: "40px"}}>
+                <ScrollToTop />
 
                     <Switch>
                         <Route path="/pilot_dashboard/activities" component={Activities_Sidebar} />
