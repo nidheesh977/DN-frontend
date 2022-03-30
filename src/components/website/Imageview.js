@@ -88,6 +88,15 @@ function Imageview() {
 
   let param = useParams();
   let history = useHistory();
+// let [search, setSearch] = res
+  useEffect(()=>{
+axios.post(`http://localhost:9000/api/image/findImage`, {userId : param.user_id, imageId : param.id}).then(res=>{
+  console.log(res.data)
+  if(res.data === "No Image"){
+    history.push("/NoComponent")
+  }
+})
+  },[])
   let [image, setImage] = useState([]);
   let [otherImages, setOtherImages] = useState([]);
   let [likedData, setLikedData] = useState([]);
@@ -106,8 +115,14 @@ function Imageview() {
     axios
       .get(`${domain}/api/image/getUserImages/${param.user_id}`)
       .then((res) => {
-        console.log(res.data.slice(0, 5));
+        if(res.data.length > 5){
+
+        
         setOtherImages(res.data.slice(0, 6));
+        }else{
+          setOtherImages(res.data);
+
+        }
       });
   }, []);
   let [pilotData, setPilotData] = useState({});
@@ -337,6 +352,13 @@ function Imageview() {
       });
     }
   };
+
+  let redirectPilot = (userId) =>{
+    axios.post(`http://localhost:9000/api/pilot/getPilotId`, {userId : userId}).then(res=>{
+      console.log(res)
+      history.push(`/pilot_details/${res.data[0]._id}`)
+    })
+  }
   return (
     <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
       <Container>
@@ -411,18 +433,20 @@ function Imageview() {
               <Col lg={1.4} xs={3}>
                 {" "}
                 <img
+                onClick={()=>redirectPilot(image.userId)}
                   src={`${image.profilePic}`}
                   style={{
                     height: "75px",
                     width: "75px",
                     borderRadius: "37.5px",
+                    cursor:"pointer"
                   }}
                 />
               </Col>
               <Col>
                 {" "}
                 <div className="i_v_name">
-                  <div>{image.name}</div>
+                  <div style={{cursor: "pointer"}}  onClick={()=>redirectPilot(image.userId)}>{image.name}</div>
                   {myFollowing.includes(image.userId) ? (
                     <div
                       className="i_v_follow"
@@ -496,7 +520,7 @@ function Imageview() {
                     
                   </div>
                 </div>
-<div id="commentToHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", display:"none"}}>No Comments Yet</div>
+<div id="commentToHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", display:"none", marginBottom:"50px"}}>No Comments Yet</div>
                 {/* comments mapping */}
 
                 {comments.map((item, i) => {

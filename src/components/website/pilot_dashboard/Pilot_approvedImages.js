@@ -11,7 +11,7 @@ import loadMore from "../../images/Group 71.svg";
 import All from '../../website/All.module.css'
 import axios from 'axios'
 import {Link} from "react-router-dom"
-
+import "./css/Pilot_custom.css"
 const domain = process.env.REACT_APP_MY_API
 
 function mouseGotIN(_id) {
@@ -59,8 +59,14 @@ console.log(response.data)
 
   return (
     <div>
-            <div id="toHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", marginTop:"35px", display:"none"}}>No Approved Images Now, Upload and check back later</div>
-
+      <div id="toHide" style={{display:"none"}}>
+            <div  style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", marginTop:"35px"}}>No Approved Images Now, Upload and check back later</div>
+            <center>
+              <Link to="/uploadFile">
+            <button className="uploadNow_btn">Upload Now</button>
+            </Link>
+            </center>
+            </div>
         <Row gutterWidth={12}>
 
 
@@ -92,6 +98,8 @@ console.log(response.data)
                   <div
                     className="pd_moreBtn"
                     id={"pd_more/" + item._id}
+                    style={{cursor:"pointer"}}
+
                     onMouseOver={() => mouseGotIN(item._id)}
                     onMouseOut={() => mouseGotOut(item._id)}
                     onClick={()=>showMore(item._id)}

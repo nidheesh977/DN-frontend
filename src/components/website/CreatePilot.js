@@ -358,7 +358,8 @@ function CreatePilot() {
 
   const closeSuccessPopup = () => {
     setAccountCreateSuccess(false);
-    history.push("/pilot_dashboard/account");
+    window.scrollTo(0, 0);
+        history.push("/pilot_dashboard/account/");
   };
   const addSkill = (e) => {
     if (e.key === "Enter" && e.target.value !== "") {
@@ -991,7 +992,7 @@ function CreatePilot() {
               </div>
               <Row style={{ marginTop: "30px" }}>
                 <div className="u_f_popup_title">
-                  Account created successfully
+                  Your Pilot Profile Created successfully.
                 </div>
                 <div className="u_f_popup_btn_container">
                   <button

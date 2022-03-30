@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cover from "./company_dashboard/images/cover.jpg";
 import "./company_dashboard/css/Company_BasicInfo.css";
 import Pilot from "./company_dashboard/images/pilot.jpg";
@@ -10,9 +10,11 @@ import PhoneInput from "react-phone-number-input";
 import All from "./All.module.css";
 import "../css/Common.css"
 import DronePerson from "../images/drone_person_new.png";
-
+import axios from "axios";
+import {useHistory} from "react-router-dom"
 
 function CreateCompany() {
+  let history = useHistory();
   var [data, setData] = useState({
     company_name: "",
     email: "",
@@ -27,6 +29,27 @@ function CreateCompany() {
     description: "",
   });
   var [edit, setEdit] = useState(true);
+
+  useEffect(()=>{
+    if(localStorage.getItem("email") !== "false"){
+      history.push("/NoComponent");
+    }
+  },[])
+  let config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
+//mail resend
+let sendMail = () =>{
+  axios.post(`http://localhost:9000/api/user/emailResend`, config).then(res=>{
+    console.log(res)
+    if(res.data === "successfull"){
+      document.getElementById("p1").style.display = "none"
+      document.getElementById("p2").style.display = "block"
+    }
+  })
+}
 
   const clickEdit = () => {
     setEdit(true);
@@ -145,7 +168,9 @@ function CreateCompany() {
             <Col lg={5}>  
             <div style={{margin:"100px 0px"}}>
             <h2>We have sent you a verification link on your Mail Id. Please verify before Proceeding</h2>
-<p>Didn't get the mail? Click <span style={{color:"blue", textDecoration:"underline", cursor:"pointer",marginTop:"20px"}}>here</span> to resend it</p>
+<p id="p1">Didn't get the mail? Click <span onClick={sendMail} style={{color:"blue", textDecoration:"underline", cursor:"pointer",marginTop:"20px"}}>here</span> to resend it</p>
+
+<p id="p2" style={{display: "none"}}>Mail have been successfully sent to your mail, Verify</p>
 </div>  
       </Col>
       </Row>
