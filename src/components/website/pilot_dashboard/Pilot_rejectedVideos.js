@@ -95,7 +95,7 @@ console.log(response.data)
 
                   <div
                     className="pd_moreBtn"
-                    id={"pd_more/" + item._id}
+                    id={"pd_more/" + item._id} style={{cursor:"pointer"}}
                     onMouseOver={() => mouseGotIN(item._id)}
                     onMouseOut={() => mouseGotOut(item._id)}
                     onClick={() => showMore(item._id)}
