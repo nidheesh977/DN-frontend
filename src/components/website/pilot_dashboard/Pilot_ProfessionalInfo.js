@@ -340,8 +340,8 @@ function Pilot_ProfessionalInfo() {
       <div>
         {data.pilot_type === "licensed" ? (
           <React.Fragment>
-            <div className="pd_b_i_profile_head">Certificates </div>
             <label for="pd_p_i_hidden" className="pd_p_i_attachnment_label">
+            <div className="pd_b_i_profile_head" style = {{cursor: "pointer"}}>Certificates </div>
               <div>
                 <div className="pd_b_i_attachment">Attachments</div>
                 <span className="pd_p_i_profile_text">
@@ -666,7 +666,7 @@ function Pilot_ProfessionalInfo() {
           </div>
           <Row style={{ marginTop: "30px" }}>
             <div className="u_f_popup_title">
-              Personal informations updated successfully.
+              Professional informations updated successfully.
             </div>
             <div className="u_f_popup_btn_container">
               <button

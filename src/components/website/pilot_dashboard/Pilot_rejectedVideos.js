@@ -74,7 +74,7 @@ console.log(response.data)
                     onMouseOut={() => mouseGotOut(item._id)}
                   >
                       <video
-                    // src={`http://localhost:9000/${item.file}`}
+                    // src={`${domain}/${item.file}`}
                     className="pd_images_image" style={{backgroundColor:"black", objectFit:"cover"}} controls onPlay={()=>removeVideoIcon(item._id)}
                   >
                     <source src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`} type="video/mp4" />

@@ -25,10 +25,10 @@ import Dialog from "@material-ui/core/Dialog";
 import Close from "../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
-import Select from 'react-select'
-import countryList from 'react-select-country-list'
-import "../css/Signup.css"
-import Countries from "../../apis/country.json"
+import Select from "react-select";
+import countryList from "react-select-country-list";
+import "../css/Signup.css";
+import Countries from "../../apis/country.json";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -38,49 +38,44 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 function SignUp(props) {
-  let [test, setTest] = useState([])
+  let [test, setTest] = useState([]);
 
- 
+  const [value1, setValue1] = useState("");
+  // const options = useMemo(() => countryList().getData(), [])
+  const [codes, setCodes] = useState([]);
+  const [code, setCode] = useState("");
+  const changeHandler1 = (value) => {
+    setValue1(value);
+    console.log(value);
 
-  
-    const [value1, setValue1] = useState('')
-    // const options = useMemo(() => countryList().getData(), [])
-  const [codes, setCodes] = useState([])
-  const [code, setCode] = useState('')
-    const changeHandler1 = value => {
-      setValue1(value)
-      console.log(value)
+    setFormValues({
+      ...formValues,
+      ["country"]: value.label,
+    });
 
-      setFormValues({
-        ...formValues,
-        ["country"]: value.label,
-      });
+    console.log(formValues);
 
-      console.log(formValues)
-
-      var result= codes.filter(obj=> obj.code == value.value);
-console.log(result[0].dial_code);
-setCode(result[0].dial_code);
-    }
-    useEffect(() => {
-      console.log(Countries)
+    var result = codes.filter((obj) => obj.code == value.value);
+    console.log(result[0].dial_code);
+    setCode(result[0].dial_code);
+  };
+  useEffect(() => {
+    console.log(Countries);
     //   axios.get(`https://gist.githubusercontent.com/anubhavshrimal/75f6183458db8c453306f93521e93d37/raw/f77e7598a8503f1f70528ae1cbf9f66755698a16/CountryCodes.json`).then(
     //     (response) => {
-    // console.log(response.data)       
+    // console.log(response.data)
     // const data = response.data
-    
-    const options = Countries.map(d => ({
-      "value" : d.code,
-      "label" : d.name
-    
-    }))
-    setTest(options)
-    setCodes(Countries) 
+
+    const options = Countries.map((d) => ({
+      value: d.code,
+      label: d.name,
+    }));
+    setTest(options);
+    setCodes(Countries);
     // }
     //   );
-    }, []);
+  }, []);
 
-   
   const { register, handleSubmit, errors, watch, control } = useForm();
   const password = useRef({});
   password.current = watch("password", "");
@@ -92,6 +87,7 @@ setCode(result[0].dial_code);
   const [error_msg, setErrorMsg] = useState("");
   const [dob, setDob] = useState(new Date());
   const [serverError, setServerError] = useState(false);
+  const [accept_conditions, setAccept_conditions] = useState(false);
 
   const [formValues, setFormValues] = useState({
     name: "",
@@ -105,26 +101,23 @@ setCode(result[0].dial_code);
 
   const history = useHistory();
   const onSubmit = (event) => {
-    setLoading(true);
     if (value) {
-      setLoading(true);
+      if (accept_conditions) {
+        setLoading(true);
 
-      axios
-        .post(`${domain}/api/user/checkMail`, { email: formValues.email })
-        .then((res) => {
-          setLoading(true);
-          axios
-              .post(
-                `${domain}/api/user/register`,
-                {
-                  name: formValues.name,
-                  email: formValues.email,
-                  phoneNo: formValues.phone,
-                  password: formValues.password,
-                  country: formValues.country,
-                }              )
+        axios
+          .post(`${domain}/api/user/checkMail`, { email: formValues.email })
+          .then((res) => {
+            setLoading(true);
+            axios
+              .post(`${domain}/api/user/register`, {
+                name: formValues.name,
+                email: formValues.email,
+                phoneNo: formValues.phone,
+                password: formValues.password,
+                country: formValues.country,
+              })
               .then((res) => {
-               
                 console.log(res);
                 localStorage.setItem("access_token", res.data.token);
                 localStorage.setItem("token_type", "Bearer");
@@ -132,33 +125,37 @@ setCode(result[0].dial_code);
                 localStorage.setItem("email", res.data.verify);
                 console.log(localStorage.getItem("access_token"));
                 setLoading(false);
-                props.updateLoginStatus()
-                history.push("/verify-email")
+                props.updateLoginStatus();
+                history.push("/verify-email");
               })
               .catch((err) => {
-               console.log(err)
+                console.log(err);
+                setLoading(false);
               });
-            
-        })
-        .catch((err) => {
-          console.log(err.response);
-          try {
-            if (err.response.data === "User already exists") {
-              setLoading(false);
+          })
+          .catch((err) => {
+            console.log(err.response);
+            try {
+              if (err.response.data === "User already exists") {
+                setLoading(false);
 
-              document.getElementById("email_error").innerText =
-                "Email ID already taken";
-              document.getElementById("email_error").style.display = "contents";
-              document.getElementById("email").focus();
-            } else {
-              serverError(true);
+                document.getElementById("email_error").innerText =
+                  "Email ID already taken";
+                document.getElementById("email_error").style.display =
+                  "contents";
+                document.getElementById("email").focus();
+              } else {
+                serverError(true);
+                setLoading(false);
+              }
+            } catch {
+              setServerError(true);
               setLoading(false);
             }
-          } catch {
-            setServerError(true);
-            setLoading(false);
-          }
-        });
+          });
+      } else {
+        alert("Accept terms and conditions to sign up.");
+      }
     } else {
       setError(true);
       setErrorMsg("Phone number is required");
@@ -173,30 +170,41 @@ setCode(result[0].dial_code);
     } else {
       x.type = "password";
     }
-   
   };
   const customStyles = {
-    container: provided => ({
+    container: (provided) => ({
       ...provided,
-height: 50,
-})
+      height: 50,
+    }),
   };
   const [open, setOpen] = React.useState(false);
 
   const changeHandler = (e) => {
-    if (e.target.name!=="phone"){
+    if (e.target.name !== "phone") {
       setFormValues({
         ...formValues,
         [e.target.name]: e.target.value,
       });
       document.getElementById(e.target.name + "_error").style.display = "none";
-    }
-    else{
-      setFormValues({
-        ...formValues,
-        ["phone"]: e.target.value.slice(code.length+1,10+code.length+1),
-      });
-      document.getElementById(e.target.name + "_error").style.display = "none";
+    } else {
+      try {
+        if (
+          Number(e.target.value.slice(code.length + 1, 10 + code.length + 1)) ||
+          e.target.value.slice(code.length + 1, 10 + code.length + 1) === ""
+        ) {
+          setFormValues({
+            ...formValues,
+            ["phone"]: e.target.value.slice(
+              code.length + 1,
+              10 + code.length + 1
+            ),
+          });
+          document.getElementById(e.target.name + "_error").style.display =
+            "none";
+        }
+      } catch {
+        console.log("Not number");
+      }
     }
 
     if (e.target.name === "name") {
@@ -266,7 +274,7 @@ height: 50,
         raiseError("name", "Name should not exceed 100 characters");
       }
     }
-    
+
     if (formValues.email === "" || !validateEmail(formValues.email)) {
       if (formValues.email === "") {
         raiseError("email", "Email ID is required");
@@ -289,7 +297,6 @@ height: 50,
       }
     }
 
-
     if (formValues.password === "" || formValues.password.length < 8) {
       if (formValues.password === "") {
         raiseError("password", "Password is required");
@@ -297,8 +304,6 @@ height: 50,
         raiseError("password", "Password must have atleast 8 characters");
       }
     }
-
-   
 
     setOpen(true);
   };
@@ -387,12 +392,18 @@ height: 50,
                     Select Country{" "}
                   </label>
                   <div className="react-select-dropdown">
-                <Select  styles={customStyles}
-   options={test} value={value1} onChange={changeHandler1} />
+                    <Select
+                      styles={customStyles}
+                      options={test}
+                      value={value1}
+                      onChange={changeHandler1}
+                    />
+                  </div>
+                  <div className="login_input_error_msg" id="country_error">
+                    Country is required
+                  </div>
+                </div>
 
-                </div>
-                </div>
-             
                 <div className={All.FormGroup}>
                   <label className={All.Bold + " form_label"} for="phone">
                     Phone Number{" "}
@@ -410,7 +421,7 @@ height: 50,
                       // maxLength: 13,
                     })}
                     onChange={changeHandler}
-                    autoComplete = {false}
+                    autoComplete={false}
                   />
                   <div className="login_input_error_msg" id="phone_error">
                     Phone number is required
@@ -454,8 +465,14 @@ height: 50,
                     Password is required
                   </div>
                 </div>
-               
-                
+
+                <label style = {{}}>
+                  <input
+                    type="checkbox"
+                    onClick={() => setAccept_conditions(!accept_conditions)}
+                  />{" "}
+                  By clicking Create account, you’re okay with our Terms of Service, Privacy Policy, and our default Notification Settings
+                </label>
                 <div className={All.FormGroup}>
                   <Box pb={3} pt={6}>
                     {isLoading ? (

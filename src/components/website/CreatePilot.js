@@ -178,6 +178,7 @@ function CreatePilot() {
       }
 
       if (fields[i] === "dob" && data[fields[i]].slice(0,4) > year - 10){
+        error=true
         focusField = "dob";
         document.getElementById("dob_error").innerText = "Age must be minimum 10 years."
         document.getElementById("dob_error").style.visibility = "visible"
@@ -185,6 +186,7 @@ function CreatePilot() {
 
       if (fields[i] === "completed_year" && data[fields[i]] !== ""){
         if (Number(data.completed_year.slice(0,4)) > year || (Number(data.completed_year.slice(0,4)) === year && Number(data.completed_year.slice(5,7))> month + 1 )){
+          error = true
           if (focusField === "") {
             focusField = "completed_year";
           }

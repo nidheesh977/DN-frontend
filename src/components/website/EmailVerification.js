@@ -12,6 +12,7 @@ import "../css/Common.css"
 import DronePerson from "../images/drone_person_new.png";
 import axios from "axios";
 import {useHistory} from "react-router-dom"
+const domain = process.env.REACT_APP_MY_API
 
 function CreateCompany() {
   let history = useHistory();
@@ -42,7 +43,7 @@ function CreateCompany() {
   };
 //mail resend
 let sendMail = () =>{
-  axios.post(`http://localhost:9000/api/user/emailResend`, config).then(res=>{
+  axios.post(`${domain}/api/user/emailResend`, config).then(res=>{
     console.log(res)
     if(res.data === "successfull"){
       document.getElementById("p1").style.display = "none"

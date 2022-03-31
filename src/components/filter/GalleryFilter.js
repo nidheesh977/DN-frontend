@@ -27,7 +27,16 @@ import { withStyles } from "@material-ui/core/styles";
 import "../css/GaleryFilter.css";
 import DropDownPng from "../images/s_c_dropdown2.png";
 import { Dropdown } from "materialize-css";
-import Search from "../images/search123.png"
+import Search from "../images/search123.png";
+import Close from "../images/close.svg";
+import Dialog from "@material-ui/core/Dialog";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
 
 function handleClick() {
   var v = document.getElementById("FilterDropdowns");
@@ -75,7 +84,7 @@ class GalleryFilter extends React.Component {
     super(props);
     this.state = {
       keywords: "",
-      dropdown:"all",
+      dropdown: "all",
       userlogin: "",
       listing: [],
       visible: 10,
@@ -121,6 +130,7 @@ class GalleryFilter extends React.Component {
 
       activeLink: "all",
       liked_list: [],
+      loginError: false,
     };
     this.loadMore = this.loadMore.bind(this);
     // this.handleChanges = this.handleChanges.bind(this);
@@ -287,91 +297,101 @@ class GalleryFilter extends React.Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    if (this.state.liked_list.includes(id)) {
-      axios
-        .post(`${domain}/api/image/unlikeImage/${id}`, config)
-        .then(() => {
+    if (localStorage.getItem("access_token")) {
+      if (this.state.liked_list.includes(id)) {
+        axios.post(`${domain}/api/image/unlikeImage/${id}`, config).then(() => {
           axios
             .post(`${domain}/api/user/checkUser`, config)
             .then((res) => {
               console.log(res.data);
-              let filesList = this.state.listing
-              filesList[index].likes.splice(filesList[index].likes.indexOf(res.data._id), 1)
+              let filesList = this.state.listing;
+              filesList[index].likes.splice(
+                filesList[index].likes.indexOf(res.data._id),
+                1
+              );
               this.setState({
                 liked_list: res.data.likedMedia,
-                listing: filesList
+                listing: filesList,
               });
             })
             .catch((err) => {
               this.setState({});
             });
         });
+      } else {
+        axios.post(`${domain}/api/image/likeImage/${id}`, config).then(() => {
+          axios
+            .post(`${domain}/api/user/checkUser`, config)
+            .then((res) => {
+              console.log(res.data);
+              let filesList = this.state.listing;
+              filesList[index].likes.push(res.data._id);
+              this.setState({
+                liked_list: res.data.likedMedia,
+                listing: filesList,
+              });
+            })
+            .catch((err) => {
+              this.setState({});
+            });
+        });
+      }
     } else {
-      axios
-        .post(`${domain}/api/image/likeImage/${id}`, config)
-        .then(() => {
-          axios
-            .post(`${domain}/api/user/checkUser`, config)
-            .then((res) => {
-              console.log(res.data);
-              let filesList = this.state.listing
-              filesList[index].likes.push(res.data._id)
-              this.setState({
-                liked_list: res.data.likedMedia,
-                listing: filesList
-              });
-            })
-            .catch((err) => {
-              this.setState({});
-            });
-        });
+      this.setState({
+        loginError: true,
+      });
     }
   };
 
+  closeLoginError = () => {
+    this.setState({
+      loginError: false,
+    });
+  };
+
   redirectPilotLanding = (id) => {
-    console.log(id)
-    axios.post(`${domain}/api/pilot/getPilotId`, {userId: id})
-    .then(res => {
-      if (res.data[0]._id){
-        window.location.href = `/pilot_details/${res.data[0]._id}`
+    console.log(id);
+    axios.post(`${domain}/api/pilot/getPilotId`, { userId: id }).then((res) => {
+      if (res.data[0]._id) {
+        window.location.href = `/pilot_details/${res.data[0]._id}`;
       }
-    })
-  }
-  followingChanged = async (e) =>{
+    });
+  };
+  followingChanged = async (e) => {
     let config = {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-  await  this.setState({
-      followingDropdown: e.target.value
-    })
-  if(this.state.followingDropdown == 2){
-  await axios.post(`http://localhost:9000/api/image/getFollowersMedia`, config).then(res=>{
-    console.log(res)
-    this.setState({
-
-      listing: res.data
+    await this.setState({
+      followingDropdown: e.target.value,
     });
-  })
-}else{
-  axios
-  .get(`${domain}/api/image/getImages`, config)
-  .then((res) => {
-    console.log(res.data);
-    this.setState({
-      listing: res.data,
-      loading: false,
-    });
-  })
-  .catch((err) => {
-    this.setState({
-      loading: false,
-    });
-  });
-}
-
-}
+    if (this.state.followingDropdown == 2) {
+      await axios
+        .post(`${domain}/api/image/getFollowersMedia`, config)
+        .then((res) => {
+          console.log(res);
+          this.setState({
+            listing: res.data,
+          });
+        });
+    } else {
+      axios
+        .get(`${domain}/api/image/getImages`, config)
+        .then((res) => {
+          console.log(res.data);
+          this.setState({
+            listing: res.data,
+            loading: false,
+          });
+        })
+        .catch((err) => {
+          this.setState({
+            loading: false,
+          });
+        });
+    }
+  };
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
     const token = localStorage.getItem("access_token");
@@ -437,39 +457,47 @@ class GalleryFilter extends React.Component {
   mouseLeaveFilter = (id) => {
     document.getElementById("file_details_" + id).style.visibility = "hidden";
   };
-  dropdownChanged = async (e) =>{
-  await  this.setState({
-      dropdown: e.target.value
-    }) 
-    await axios.post(`http://localhost:9000/api/image/imageFilters`, {data : this.state.keywords, type: this.state.dropdown}, this.config ).then(res=>{
-      console.log(res)
-      this.setState({
-        listing: res.data
-      })
-    })    
-  }
+  dropdownChanged = async (e) => {
+    await this.setState({
+      dropdown: e.target.value,
+    });
+    await axios
+      .post(
+        `${domain}/api/image/imageFilters`,
+        { data: this.state.keywords, type: this.state.dropdown },
+        this.config
+      )
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          listing: res.data,
+        });
+      });
+  };
 
-  keywordsClicked = async (e)=>{
-   await this.setState({
-      keywords: e.target.value
-    })
+  keywordsClicked = async (e) => {
+    await this.setState({
+      keywords: e.target.value,
+    });
+  };
 
-
-  }
-
-  submitted = async (e) =>{
-console.log(this.state.keywords)
+  submitted = async (e) => {
+    console.log(this.state.keywords);
     e.preventDefault();
 
-    await axios.post(`http://localhost:9000/api/image/imageFilters`, {data : this.state.keywords, type: this.state.dropdown}, this.config ).then(res=>{
-      console.log(res)
-      this.setState({
-        listing: res.data
-      })
-    })  
-  }
-
-
+    await axios
+      .post(
+        `${domain}/api/image/imageFilters`,
+        { data: this.state.keywords, type: this.state.dropdown },
+        this.config
+      )
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          listing: res.data,
+        });
+      });
+  };
 
   render() {
     const { links, activeLink } = this.state;
@@ -532,17 +560,19 @@ console.log(this.state.keywords)
               <Col lg={12}>
                 <Row>
                   <Col lg={2} xs={6} className="DropdownFilter views">
-                    <select
-                      className="dropdown dropdown__text"
-                    onChange={this.followingChanged}
-                      id="type"
-                      defaultValue={"1"}
-                    >
-                      <option value="1">All</option>
-                      {this.state.userlogin && (
-                        <option value="2">Following</option>
-                      )}
-                    </select>
+                    {localStorage.getItem("access_token") && (
+                      <select
+                        className="dropdown dropdown__text"
+                        onChange={this.followingChanged}
+                        id="type"
+                        defaultValue={"1"}
+                      >
+                        <option value="1">All</option>
+                        {this.state.userlogin && (
+                          <option value="2">Following</option>
+                        )}
+                      </select>
+                    )}
                   </Col>
 
                   <Col lg={8} xs={12} className="categories">
@@ -603,27 +633,42 @@ console.log(this.state.keywords)
                     <Col ><button className="g_f_btn1" style = {{margin: "10px 0", borderRadius: "20px !important"}}>Search</button></Col>
                   </Row> */}
                   <Container>
-                  <Row gutterWidth={0} style={{margin:"auto", maxWidth:"80%"}}>
-                  <Col lg={2} xs={2}>
-                  <select className="g_f_searchBox1" style={{width:"100%"}} onChange={this.dropdownChanged}>
-                  <option value="all" >All Media</option>
-                  <option value= "image">Images</option>
-                  <option value = "video">Videos</option>
-                  <option value="3d">3D Videos</option>
-                  </select>
-                  
-                  </Col>
-                  <Col>
-                  <form onSubmit={this.submitted}>
-                  <input className="g_f_searchBox2" type="text" style={{width:"105%"}} 
-                  placeholder="Enter Keywords to match your search" onChange={this.keywordsClicked} /> 
-                  </form>
-                  </Col>
-                  <Col lg={0.5}>
-                  <img src={Search} style={{cursor:"pointer"}} onClick={this.submitted}/>
-                  </Col>
-                
-                    {/* <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
+                    <Row
+                      gutterWidth={0}
+                      style={{ margin: "auto", maxWidth: "80%" }}
+                    >
+                      <Col lg={2} xs={2}>
+                        <select
+                          className="g_f_searchBox1"
+                          style={{ width: "100%" }}
+                          onChange={this.dropdownChanged}
+                        >
+                          <option value="all">All Media</option>
+                          <option value="image">Images</option>
+                          <option value="video">Videos</option>
+                          <option value="3d">3D Videos</option>
+                        </select>
+                      </Col>
+                      <Col>
+                        <form onSubmit={this.submitted}>
+                          <input
+                            className="g_f_searchBox2"
+                            type="text"
+                            style={{ width: "105%" }}
+                            placeholder="Enter Keywords to match your search"
+                            onChange={this.keywordsClicked}
+                          />
+                        </form>
+                      </Col>
+                      <Col lg={0.5}>
+                        <img
+                          src={Search}
+                          style={{ cursor: "pointer" }}
+                          onClick={this.submitted}
+                        />
+                      </Col>
+
+                      {/* <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
                       <select
                         className="g_f_filter"
                         id="g_f_filter1"
@@ -683,7 +728,7 @@ console.log(this.state.keywords)
                         Search
                       </button>
                     </Col> */}
-                  </Row>
+                    </Row>
                   </Container>
                 </div>
 
@@ -745,199 +790,230 @@ console.log(this.state.keywords)
                                       .slice(0, this.state.visible)
                                       .map((user, index) => (
                                         <>
-                                        {this.state.activeLink === "all" || this.state.activeLink === user.fileType ? <>
-                                        <li
-                                            key={index}
-                                            onMouseOver={() =>
-                                              this.mouseOverFilter(index)
-                                            }
-                                            onMouseLeave={() =>
-                                              this.mouseLeaveFilter(index)
-                                            }
-                                          >
-                                            {user.fileType === "video" ? (
-                                              <div>
-                                                <figure>
-                                                  <Link
-                                                    to={{
-                                                      pathname: `Imageview/${user._id}/${user.userId}`,
-                                                      data: user,
-                                                      state: { foo: "bar" },
-                                                    }}
-                                                    onClick={this.clickMe.bind(
-                                                      this,
-                                                      user
-                                                    )}
-                                                  >
-                                                    <div className="content-overlay-video"></div>
-                                                    <video className="thumbnail GalleryImg">
-                                                      <source
-                                                        src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${user.file}`}
-                                                        type="video/mp4"
-                                                      />
-                                                    </video>
-                                                  </Link>
-                                                  <figcaption
-                                                    id={"file_details_" + index}
-                                                    className="file_figcaption"
-                                                  >
-                                                    <div
-                                                      className={All.White}
-                                                      // to={{
-                                                      //   pathname: `/pilot_details/${user.userId}`,
-                                                      // }}
-                                                      style = {{display: "inline-block", cursor: "pointer"}}
-                                                      onClick = {() => this.redirectPilotLanding(user.userId)}
-                                                    >
-                                                      <span className="FSize_14 Profile_icon">
-                                                        {user.name}{" "}
-                                                      </span>
-                                                    </div>
-                                                    <span className="LikeIcon MuliLight">
-                                                      {" "}
-                                                      <FormControlLabel
-                                                        onClick={() =>
-                                                          this.likeFile(
-                                                            user._id, index
-                                                          )
-                                                        }
-                                                        className="MuliLight"
-                                                        control={
-                                                          <Checkbox
-                                                            icon={
-                                                              <>
-                                                                {this.state.liked_list.includes(
-                                                                  user._id
-                                                                ) ? (
-                                                                  <Favorite />
-                                                                ) : (
-                                                                  <FavoriteBorder />
-                                                                )}
-                                                              </>
-                                                            }
-                                                            checkedIcon={
-                                                              <>
-                                                                {this.state.liked_list.includes(
-                                                                  user._id
-                                                                ) ? (
-                                                                  <Favorite />
-                                                                ) : (
-                                                                  <FavoriteBorder />
-                                                                )}
-                                                              </>
-                                                            }
-                                                            name="checkedH"
-                                                          />
-                                                        }
-                                                        label={
-                                                          user.likes.length
-                                                        }
-                                                      />
-                                                    </span>
-                                                  </figcaption>
-                                                </figure>
-                                              </div>
-                                            ) : user.fileType === "image" ||
-                                              user.fileType === "3d" ? (
-                                              <div>
-                                                <figure>
-                                                  <Link
-                                                    to={{
-                                                      pathname: `Imageview/${user._id}/${user.userId}`,
-                                                      data: user,
-                                                      state: { foo: "bar" },
-                                                    }}
-                                                    onClick={this.clickMe.bind(
-                                                      this,
-                                                      user
-                                                    )}
-                                                  >
-                                                    <div className="content-overlay"></div>
-                                                    <img
-                                                      className="thumbnail GalleryImg"
-                                                      src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${user.file}`}
-                                                    />
-                                                  </Link>
-                                                  <figcaption
-                                                    id={"file_details_" + index}
-                                                    className="file_figcaption"
-                                                  >
-                                                    {user.user_id ==
-                                                    this.state.usersid ? (
+                                          {this.state.activeLink === "all" ||
+                                          this.state.activeLink ===
+                                            user.fileType ? (
+                                            <>
+                                              <li
+                                                key={index}
+                                                onMouseOver={() =>
+                                                  this.mouseOverFilter(index)
+                                                }
+                                                onMouseLeave={() =>
+                                                  this.mouseLeaveFilter(index)
+                                                }
+                                              >
+                                                {user.fileType === "video" ? (
+                                                  <div>
+                                                    <figure>
                                                       <Link
-                                                        className={All.White}
-                                                        to="/Profile/"
+                                                        to={{
+                                                          pathname: `Imageview/${user._id}/${user.userId}`,
+                                                          data: user,
+                                                          state: { foo: "bar" },
+                                                        }}
+                                                        onClick={this.clickMe.bind(
+                                                          this,
+                                                          user
+                                                        )}
                                                       >
-                                                        <span className="FSize_14 Profile_icon">
-                                                          {user.author}{" "}
-                                                        </span>
-                                                      </Link>
-                                                    ) : (
-                                                      <div
-                                                        className={All.White}
-                                                        // to={{
-                                                        //   pathname: `/pilot_details/${user.userId}`,
-                                                        // }}
-                                                        style = {{display: "inline-block", cursor: "pointer"}}
-                                                        onClick = {() => this.redirectPilotLanding(user.userId)}
-                                                      >
-                                                        <span className="FSize_14 Profile_icon">
-                                                          {user.name}{" "}
-                                                        </span>
-                                                      </div>
-                                                    )}
-                                                    <span className="LikeIcon MuliLight">
-                                                      {" "}
-                                                      <FormControlLabel
-                                                        onClick={() =>
-                                                          this.likeFile(
-                                                            user._id, index
-                                                          )
-                                                        }
-                                                        className="MuliLight"
-                                                        control={
-                                                          <Checkbox
-                                                            icon={
-                                                              <>
-                                                                {this.state.liked_list.includes(
-                                                                  user._id
-                                                                ) ? (
-                                                                  <Favorite />
-                                                                ) : (
-                                                                  <FavoriteBorder />
-                                                                )}
-                                                              </>
-                                                            }
-                                                            checkedIcon={
-                                                              <>
-                                                                {this.state.liked_list.includes(
-                                                                  user._id
-                                                                ) ? (
-                                                                  <Favorite />
-                                                                ) : (
-                                                                  <FavoriteBorder />
-                                                                )}
-                                                              </>
-                                                            }
-                                                            name="checkedH"
+                                                        <div className="content-overlay-video"></div>
+                                                        <video className="thumbnail GalleryImg">
+                                                          <source
+                                                            src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${user.file}`}
+                                                            type="video/mp4"
                                                           />
+                                                        </video>
+                                                      </Link>
+                                                      <figcaption
+                                                        id={
+                                                          "file_details_" +
+                                                          index
                                                         }
-                                                        label={
-                                                          user.likes.length
+                                                        className="file_figcaption"
+                                                      >
+                                                        <div
+                                                          className={All.White}
+                                                          // to={{
+                                                          //   pathname: `/pilot_details/${user.userId}`,
+                                                          // }}
+                                                          style={{
+                                                            display:
+                                                              "inline-block",
+                                                            cursor: "pointer",
+                                                          }}
+                                                          onClick={() =>
+                                                            this.redirectPilotLanding(
+                                                              user.userId
+                                                            )
+                                                          }
+                                                        >
+                                                          <span className="FSize_14 Profile_icon">
+                                                            {user.name}{" "}
+                                                          </span>
+                                                        </div>
+                                                        <span className="LikeIcon MuliLight">
+                                                          {" "}
+                                                          <FormControlLabel
+                                                            onClick={() =>
+                                                              this.likeFile(
+                                                                user._id,
+                                                                index
+                                                              )
+                                                            }
+                                                            className="MuliLight"
+                                                            control={
+                                                              <Checkbox
+                                                                icon={
+                                                                  <>
+                                                                    {this.state.liked_list.includes(
+                                                                      user._id
+                                                                    ) ? (
+                                                                      <Favorite />
+                                                                    ) : (
+                                                                      <FavoriteBorder />
+                                                                    )}
+                                                                  </>
+                                                                }
+                                                                checkedIcon={
+                                                                  <>
+                                                                    {this.state.liked_list.includes(
+                                                                      user._id
+                                                                    ) ? (
+                                                                      <Favorite />
+                                                                    ) : (
+                                                                      <FavoriteBorder />
+                                                                    )}
+                                                                  </>
+                                                                }
+                                                                name="checkedH"
+                                                              />
+                                                            }
+                                                            label={
+                                                              user.likes.length
+                                                            }
+                                                          />
+                                                        </span>
+                                                      </figcaption>
+                                                    </figure>
+                                                  </div>
+                                                ) : user.fileType === "image" ||
+                                                  user.fileType === "3d" ? (
+                                                  <div>
+                                                    <figure>
+                                                      <Link
+                                                        to={{
+                                                          pathname: `Imageview/${user._id}/${user.userId}`,
+                                                          data: user,
+                                                          state: { foo: "bar" },
+                                                        }}
+                                                        onClick={this.clickMe.bind(
+                                                          this,
+                                                          user
+                                                        )}
+                                                      >
+                                                        <div className="content-overlay"></div>
+                                                        <img
+                                                          className="thumbnail GalleryImg"
+                                                          src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${user.file}`}
+                                                        />
+                                                      </Link>
+                                                      <figcaption
+                                                        id={
+                                                          "file_details_" +
+                                                          index
                                                         }
-                                                      />
-                                                    </span>
-                                                  </figcaption>
-                                                </figure>
-                                              </div>
-                                            ) : (
-                                              <></>
-                                            )}
-                                          </li>
-                                        </>
-                                        :<></>
-                                        }
-                                          
+                                                        className="file_figcaption"
+                                                      >
+                                                        {user.user_id ==
+                                                        this.state.usersid ? (
+                                                          <Link
+                                                            className={
+                                                              All.White
+                                                            }
+                                                            to="/Profile/"
+                                                          >
+                                                            <span className="FSize_14 Profile_icon">
+                                                              {user.author}{" "}
+                                                            </span>
+                                                          </Link>
+                                                        ) : (
+                                                          <div
+                                                            className={
+                                                              All.White
+                                                            }
+                                                            // to={{
+                                                            //   pathname: `/pilot_details/${user.userId}`,
+                                                            // }}
+                                                            style={{
+                                                              display:
+                                                                "inline-block",
+                                                              cursor: "pointer",
+                                                            }}
+                                                            onClick={() =>
+                                                              this.redirectPilotLanding(
+                                                                user.userId
+                                                              )
+                                                            }
+                                                          >
+                                                            <span className="FSize_14 Profile_icon">
+                                                              {user.name}{" "}
+                                                            </span>
+                                                          </div>
+                                                        )}
+                                                        <span className="LikeIcon MuliLight">
+                                                          {" "}
+                                                          <FormControlLabel
+                                                            onClick={() =>
+                                                              this.likeFile(
+                                                                user._id,
+                                                                index
+                                                              )
+                                                            }
+                                                            className="MuliLight"
+                                                            control={
+                                                              <Checkbox
+                                                                icon={
+                                                                  <>
+                                                                    {this.state.liked_list.includes(
+                                                                      user._id
+                                                                    ) ? (
+                                                                      <Favorite />
+                                                                    ) : (
+                                                                      <FavoriteBorder />
+                                                                    )}
+                                                                  </>
+                                                                }
+                                                                checkedIcon={
+                                                                  <>
+                                                                    {this.state.liked_list.includes(
+                                                                      user._id
+                                                                    ) ? (
+                                                                      <Favorite />
+                                                                    ) : (
+                                                                      <FavoriteBorder />
+                                                                    )}
+                                                                  </>
+                                                                }
+                                                                name="checkedH"
+                                                              />
+                                                            }
+                                                            label={
+                                                              user.likes.length
+                                                            }
+                                                          />
+                                                        </span>
+                                                      </figcaption>
+                                                    </figure>
+                                                  </div>
+                                                ) : (
+                                                  <></>
+                                                )}
+                                              </li>
+                                            </>
+                                          ) : (
+                                            <></>
+                                          )}
                                         </>
                                         // }
                                       ))}
@@ -953,6 +1029,51 @@ console.log(this.state.keywords)
                 )}
               </Col>
             </Row>
+            <Dialog
+              open={this.state.loginError}
+              onClose={this.closeLoginError}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+              PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
+            >
+              <DialogContent
+                className={All.PopupBody}
+                style={{ marginBottom: "50px" }}
+              >
+                <div
+                  style={{ position: "absolute", top: "20px", right: "20px" }}
+                >
+                  <img
+                    src={Close}
+                    alt=""
+                    onClick={this.closeLoginError}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div
+                    className="a_j_popup_title"
+                    style={{ padding: "0px 60px" }}
+                  >
+                    You aren't logged into DroneZone. Please login to continue?
+                  </div>
+                  <div
+                    className="u_f_popup_btn_container"
+                    style={{ marginTop: "8px" }}
+                  >
+                    <div
+                      className="j_l_applyJobLoginBtn"
+                      style={{ width: "fit-content" }}
+                      onClick={() => (window.location.href = "/login")}
+                    >
+                      Login / Sign Up
+                    </div>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
           </Container>
         </section>
       </>

@@ -37,7 +37,7 @@ function Pilot_followers() {
     const viewProfile = (userId, role) =>{
 if(role === "pilot"){
     console.log("i m a pilot")
-    axios.post(`http://localhost:9000/api/pilot/getPilotId`,{userId : userId}).then(res=>{
+    axios.post(`${domain}/api/pilot/getPilotId`,{userId : userId}).then(res=>{
         console.log(res.data[0]._id)
         history.push(`/pilot_details/${res.data[0]._id}`)
     }).catch(err=>
@@ -46,7 +46,7 @@ if(role === "pilot"){
 
 
 const removeFollow = (userId) =>{
-    axios.post(`http://localhost:9000/api/follow/unfollow/${userId}`, config).then(res=>{
+    axios.post(`${domain}/api/follow/unfollow/${userId}`, config).then(res=>{
         axios.post(`${domain}/api/follow/getMyFollowersPopulated`, config).then(
             (res) => {
               console.log(res);
