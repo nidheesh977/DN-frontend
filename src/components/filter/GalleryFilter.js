@@ -370,7 +370,7 @@ class GalleryFilter extends React.Component {
       followingDropdown: e.target.value
     })
   if(this.state.followingDropdown == 2){
-  await axios.post(`http://localhost:9000/api/image/getFollowersMedia`, config).then(res=>{
+  await axios.post(`${domain}/api/image/getFollowersMedia`, config).then(res=>{
     console.log(res)
     this.setState({
 
@@ -464,7 +464,7 @@ class GalleryFilter extends React.Component {
   await  this.setState({
       dropdown: e.target.value
     }) 
-    await axios.post(`http://localhost:9000/api/image/imageFilters`, {data : this.state.keywords, type: this.state.dropdown}, this.config ).then(res=>{
+    await axios.post(`${domain}/api/image/imageFilters`, {data : this.state.keywords, type: this.state.dropdown}, this.config ).then(res=>{
       console.log(res)
       this.setState({
         listing: res.data
@@ -484,7 +484,7 @@ class GalleryFilter extends React.Component {
 console.log(this.state.keywords)
     e.preventDefault();
 
-    await axios.post(`http://localhost:9000/api/image/imageFilters`, {data : this.state.keywords, type: this.state.dropdown}, this.config ).then(res=>{
+    await axios.post(`${domain}/api/image/imageFilters`, {data : this.state.keywords, type: this.state.dropdown}, this.config ).then(res=>{
       console.log(res)
       this.setState({
         listing: res.data

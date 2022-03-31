@@ -11,7 +11,7 @@ function Center_notifications() {
       };
     let [data, setData] = useState({})
 useEffect(()=>{
-    axios.get(`http://localhost:9000/api/user/getUserData`, config).then(res=>{
+    axios.get(`${domain}/api/user/getUserData`, config).then(res=>{
         console.log(res.data)
         setNotifications(
             {
@@ -47,9 +47,9 @@ useEffect(()=>{
     }
 
     const saveChanges = () => {
-axios.post(`http://localhost:9000/api/user/updateNotifications`, {droneNews: notifications.drone_zone_news, accountPrivacy: notifications.account_privacy,
+axios.post(`${domain}/api/user/updateNotifications`, {droneNews: notifications.drone_zone_news, accountPrivacy: notifications.account_privacy,
 hiresMe: notifications.hires_me, followsMe: notifications.follow_me, commentsMe: notifications.comments}, config).then(res=>{
-    axios.get(`http://localhost:9000/api/user/getUserData`, config).then(res=>{
+    axios.get(`${domain}/api/user/getUserData`, config).then(res=>{
         console.log(res.data)
         setNotifications(
             {

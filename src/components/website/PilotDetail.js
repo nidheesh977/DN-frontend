@@ -276,7 +276,7 @@ export default function PilotDetails(props) {
     if (localStorage.getItem("access_token")){
     axios
       .post(
-        `http://localhost:9000/api/follow/createFollow/${props.match.params.id}`,
+        `${domain}/api/follow/createFollow/${props.match.params.id}`,
         config
       )
       .then((response) => {
@@ -297,7 +297,7 @@ export default function PilotDetails(props) {
   let unfollow = () => {
     axios
       .post(
-        `http://localhost:9000/api/follow/removeFollow/${props.match.params.id}`,
+        `${domain}/api/follow/removeFollow/${props.match.params.id}`,
         config
       )
       .then((response) => {

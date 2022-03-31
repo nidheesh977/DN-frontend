@@ -42,7 +42,7 @@ function CreateCompany() {
   };
 //mail resend
 let sendMail = () =>{
-  axios.post(`http://localhost:9000/api/user/emailResend`, config).then(res=>{
+  axios.post(`${domain}/api/user/emailResend`, config).then(res=>{
     console.log(res)
     if(res.data === "successfull"){
       document.getElementById("p1").style.display = "none"

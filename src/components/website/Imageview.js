@@ -92,7 +92,7 @@ function Imageview() {
   // let [search, setSearch] = res
   useEffect(() => {
     axios
-      .post(`http://localhost:9000/api/image/findImage`, {
+      .post(`${domain}/api/image/findImage`, {
         userId: param.user_id,
         imageId: param.id,
       })
@@ -140,7 +140,7 @@ function Imageview() {
   }, []);
   useEffect(() => {
     axios
-      .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
+      .get(`${domain}/api/comments/getComments/${param.id}`)
       .then((res) => {
         console.log(res.data);
         setComments(res.data);
@@ -152,19 +152,19 @@ function Imageview() {
   let likeComment = (id) => {
     axios
       .post(
-        `http://localhost:9000/api/comments/likeComment`,
+        `${domain}/api/comments/likeComment`,
         { commentId: id },
         config
       )
       .then((res) => {
         axios
-          .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
+          .get(`${domain}/api/comments/getComments/${param.id}`)
           .then((res) => {
             console.log(res.data);
             setComments(res.data);
           });
         axios
-          .post(`http://localhost:9000/api/comments/getMyComments`, config)
+          .post(`${domain}/api/comments/getMyComments`, config)
           .then((res) => {
             console.log(res);
             setLikedComments(res.data);
@@ -179,19 +179,19 @@ function Imageview() {
   let unlikeComment = (id) => {
     axios
       .post(
-        `http://localhost:9000/api/comments/unlikeComment`,
+        `${domain}/api/comments/unlikeComment`,
         { commentId: id },
         config
       )
       .then((res) => {
         axios
-          .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
+          .get(`${domain}/api/comments/getComments/${param.id}`)
           .then((res) => {
             console.log(res.data);
             setComments(res.data);
           });
         axios
-          .post(`http://localhost:9000/api/comments/getMyComments`, config)
+          .post(`${domain}/api/comments/getMyComments`, config)
           .then((res) => {
             console.log(res);
             setLikedComments(res.data);
@@ -212,12 +212,12 @@ function Imageview() {
 
   let followMe = (userId) => {
     axios
-      .post(`http://localhost:9000/api/pilot/getPilotId`, { userId: userId })
+      .post(`${domain}/api/pilot/getPilotId`, { userId: userId })
       .then((res) => {
         console.log(res);
         axios
           .post(
-            `http://localhost:9000/api/follow/createFollow/${res.data[0]._id}`,
+            `${domain}/api/follow/createFollow/${res.data[0]._id}`,
             config
           )
           .then((response) => {
@@ -234,12 +234,12 @@ function Imageview() {
   };
   let unfollow = (userId) => {
     axios
-      .post(`http://localhost:9000/api/pilot/getPilotId`, { userId: userId })
+      .post(`${domain}/api/pilot/getPilotId`, { userId: userId })
       .then((res) => {
         console.log(res);
         axios
           .post(
-            `http://localhost:9000/api/follow/removeFollow/${res.data[0]._id}`,
+            `${domain}/api/follow/removeFollow/${res.data[0]._id}`,
             config
           )
           .then((response) => {
@@ -309,7 +309,7 @@ function Imageview() {
   let [likedComments, setLikedComments] = useState([]);
   useEffect(() => {
     axios
-      .post(`http://localhost:9000/api/comments/getMyComments`, config)
+      .post(`${domain}/api/comments/getMyComments`, config)
       .then((res) => {
         console.log(res);
         setLikedComments(res.data);
@@ -318,7 +318,7 @@ function Imageview() {
   let [userId, setUserId] = useState("");
   useEffect(() => {
     axios
-      .post(`http://localhost:9000/api/comments/getMyUserId`, config)
+      .post(`${domain}/api/comments/getMyUserId`, config)
       .then((res) => {
         console.log(res);
         setUserId(res.data);
@@ -335,13 +335,13 @@ function Imageview() {
     } else {
       axios
         .post(
-          `http://localhost:9000/api/comments/createComment/${param.id}`,
+          `${domain}/api/comments/createComment/${param.id}`,
           { comment },
           config
         )
         .then((res) => {
           axios
-            .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
+            .get(`${domain}/api/comments/getComments/${param.id}`)
             .then((res) => {
               console.log(res.data);
               setComments(res.data);
@@ -356,7 +356,7 @@ function Imageview() {
 
   let redirectPilot = (userId) => {
     axios
-      .post(`http://localhost:9000/api/pilot/getPilotId`, { userId: userId })
+      .post(`${domain}/api/pilot/getPilotId`, { userId: userId })
       .then((res) => {
         console.log(res);
         history.push(`/pilot_details/${res.data[0]._id}`);
