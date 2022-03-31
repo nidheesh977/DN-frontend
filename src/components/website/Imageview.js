@@ -145,7 +145,12 @@ function Imageview() {
         console.log(res.data);
         setComments(res.data);
         if (res.data.length === 0) {
-          document.getElementById("commentToHide").style.display = "block";
+          try{
+            document.getElementById("commentToHide").style.display = "block";
+          }
+          catch{
+
+          }
         }
       });
   }, []);
@@ -282,9 +287,9 @@ function Imageview() {
   };
 
   let clicked = (id, userId) => {
-    window.location.href = `/imageview/${id}/${userId}`;
+    window.location.href = `/#/imageview/${id}/${userId}`;
     // history.push(`/imageview/${id}/${userId}`);
-    // window.location.reload();
+    window.location.reload();
   };
   let likeImage = () => {
     axios
