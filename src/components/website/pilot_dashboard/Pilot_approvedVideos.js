@@ -97,7 +97,7 @@ console.log(response.data)
                     id={"pd_likes/" + item._id}
                   >
                     <img src={viewIcon} className="pd_likes_img" />{" "}
-                    <span>{item.views.length}</span>
+                    <span>{item.views}</span>
                     <img src={downloadIcon} className="pd_likes_img" />{" "}
                     <span>{item.downloads.length}</span>
                     <img src={productLike} className="pd_likes_img" />{" "}

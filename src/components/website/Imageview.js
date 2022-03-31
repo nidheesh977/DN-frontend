@@ -118,6 +118,7 @@ function Imageview() {
   let [share, setShare] = useState(false);
   let [shareLink, setShareLink] = useState("");
   let [loading, setLoading] = useState(true);
+  let [userDetails, setUserDetails] = useState({});
   useEffect(() => {
     axios.get(`${domain}/api/image/getImage/${param.id}`).then((res) => {
       console.log(res);
@@ -125,6 +126,17 @@ function Imageview() {
       setLoading(false);
     });
   }, []);
+  useEffect(()=>{
+    axios.post(`${domain}/api/image/viewImage/${param.id}`).then((res)=>{
+      console.log(res.data)
+    })
+  }, [])
+  useEffect(()=>{
+    axios.post(`${domain}/api/image/getUser/${param.id}`).then((res)=>{
+      console.log(res)
+      setUserDetails(res.data)
+    })
+  }, [])
   useEffect(() => {
     setShareLink(window.location.href);
     axios
@@ -461,7 +473,7 @@ function Imageview() {
                 {" "}
                 <img
                   onClick={() => redirectPilot(image.userId)}
-                  src={`${image.profilePic}`}
+                  src={`${userDetails.profilePic}`}
                   style={{
                     height: "75px",
                     width: "75px",
