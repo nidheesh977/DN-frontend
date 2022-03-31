@@ -63,7 +63,9 @@ function VerifiedEmail() {
                   >
                     Home Page
                   </div>
-                  <div
+
+                  {
+                    localStorage.getItem("role") == "undefined" ?     <div
                     className="u_f_popup_btn2"
                     style={{ display: "inline-block" }}
                     onClick={() => {
@@ -71,7 +73,9 @@ function VerifiedEmail() {
                     }}
                   >
                     Complete Profile
-                  </div>
+                  </div> : <></>
+                  }
+              
                 </div>
               </div>
             )}
