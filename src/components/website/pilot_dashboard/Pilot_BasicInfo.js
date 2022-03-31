@@ -38,6 +38,7 @@ function Pilot_BasicInfo() {
   useEffect(() => {
     axios.post(`${domain}/api/user/pilotDetails`, config).then((response) => {
       let data = response.data;
+      localStorage.setItem("oldEmail", response.data.emailId) 
       setData({
         full_name: data.name,
         email: data.emailId,
@@ -245,6 +246,11 @@ function Pilot_BasicInfo() {
         },
       };
       console.log(data);
+
+      if(data.email !== localStorage.getItem("oldEmail")){
+        console.log("Emails Differ")
+        localStorage.setItem("email", "false")
+      }
       axios
         .post(
           `${domain}/api/pilot/updateBasicInfo`,
@@ -262,6 +268,8 @@ function Pilot_BasicInfo() {
         )
         .then(() => {
           setInfoSuccess(true)
+          setEdit(false);
+
         })
         .catch((err) => {
           alert("not successful");
@@ -359,7 +367,11 @@ function Pilot_BasicInfo() {
             <div>
               <div style={{ marginBottom: "15px" }}>
                 <div className="pd_b_i_profile_head1">Email ID</div>
-                <div className="pd_b_i_profile_verify">Verify</div>
+{
+  localStorage.getItem("email") == "true" ? <></> :<div className="pd_b_i_profile_verify">Verify</div>
+}
+
+                
               </div>
             </div>
             <input
