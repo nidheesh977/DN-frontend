@@ -426,14 +426,14 @@ function Imageview() {
               />
             )}
 
-            <div>
+            <div style = {{cursor: "pointer"}}>
               {likedData.includes(image._id) ? (
                 <img src={Heart} className="likeImage" onClick={unlikeImage} />
               ) : (
                 <img src={Like} className="likeImage" onClick={likeImage} />
               )}
             </div>
-            <div>
+            <div style = {{cursor: "pointer"}}>
               <img
                 src={Share}
                 className="shareImage"
