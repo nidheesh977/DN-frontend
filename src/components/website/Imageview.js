@@ -364,7 +364,8 @@ function Imageview() {
       .post(`${domain}/api/pilot/getPilotId`, { userId: userId })
       .then((res) => {
         console.log(res);
-        history.push(`/pilot_details/${res.data[0]._id}`);
+        window.location.href = `/#/pilot_details/${res.data[0]._id}`;
+        window.location.reload();
       });
   };
   return (
