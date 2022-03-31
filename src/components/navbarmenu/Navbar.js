@@ -280,7 +280,8 @@ let AccountButton = () =>{
                     }
                   </span>
                 </li>
-                <li className="nav-item">
+                {props.loginStatus
+                &&<li className="nav-item">
                   <div className="nav-links">
                     <Button
                       variant="contained"
@@ -295,6 +296,7 @@ let AccountButton = () =>{
                     </Button>
                   </div>
                 </li>
+                }
                 {instructions && (
                   <UploadFileInstruction
                     button={

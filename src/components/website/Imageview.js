@@ -42,7 +42,8 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import close from "../images/close.svg";
 import Box from "@material-ui/core/Box";
-import Skeleton from 'react-loading-skeleton'
+import Skeleton from "react-loading-skeleton";
+import Close from "../images/close.svg";
 
 const styles = (theme) => ({
   root: {
@@ -90,6 +91,12 @@ function Imageview() {
   let param = useParams();
   let history = useHistory();
   // let [search, setSearch] = res
+  let [loginError, setLoginError] = useState(false)
+
+  const closeLoginError = () => {
+    setLoginError(false)
+  }
+
   useEffect(() => {
     axios
       .post(`${domain}/api/image/findImage`, {
@@ -139,42 +146,38 @@ function Imageview() {
     });
   }, []);
   useEffect(() => {
-    axios
-      .get(`${domain}/api/comments/getComments/${param.id}`)
-      .then((res) => {
-        console.log(res.data);
-        setComments(res.data);
-        if (res.data.length === 0) {
-          try{
-            document.getElementById("commentToHide").style.display = "block";
-          }
-          catch{
-
-          }
-        }
-      });
+    axios.get(`${domain}/api/comments/getComments/${param.id}`).then((res) => {
+      console.log(res.data);
+      setComments(res.data);
+      if (res.data.length === 0) {
+        try {
+          document.getElementById("commentToHide").style.display = "block";
+        } catch {}
+      }
+    });
   }, []);
   let likeComment = (id) => {
-    axios
-      .post(
-        `${domain}/api/comments/likeComment`,
-        { commentId: id },
-        config
-      )
-      .then((res) => {
-        axios
-          .get(`${domain}/api/comments/getComments/${param.id}`)
-          .then((res) => {
-            console.log(res.data);
-            setComments(res.data);
-          });
-        axios
-          .post(`${domain}/api/comments/getMyComments`, config)
-          .then((res) => {
-            console.log(res);
-            setLikedComments(res.data);
-          });
-      });
+    if(localStorage.getItem("access_token")){
+
+      axios
+        .post(`${domain}/api/comments/likeComment`, { commentId: id }, config)
+        .then((res) => {
+          axios
+            .get(`${domain}/api/comments/getComments/${param.id}`)
+            .then((res) => {
+              console.log(res.data);
+              setComments(res.data);
+            });
+          axios
+            .post(`${domain}/api/comments/getMyComments`, config)
+            .then((res) => {
+              console.log(res);
+              setLikedComments(res.data);
+            });
+        });
+    }else{
+      setLoginError(true)
+    }
   };
 
   const handleShareClose = () => {
@@ -183,11 +186,7 @@ function Imageview() {
 
   let unlikeComment = (id) => {
     axios
-      .post(
-        `${domain}/api/comments/unlikeComment`,
-        { commentId: id },
-        config
-      )
+      .post(`${domain}/api/comments/unlikeComment`, { commentId: id }, config)
       .then((res) => {
         axios
           .get(`${domain}/api/comments/getComments/${param.id}`)
@@ -216,26 +215,28 @@ function Imageview() {
   }, []);
 
   let followMe = (userId) => {
-    axios
-      .post(`${domain}/api/pilot/getPilotId`, { userId: userId })
-      .then((res) => {
-        console.log(res);
-        axios
-          .post(
-            `${domain}/api/follow/createFollow/${res.data[0]._id}`,
-            config
-          )
-          .then((response) => {
-            axios
-              .post(`${domain}/api/follow/getMyFollowing`, config)
-              .then((res) => {
-                const folowers = res.data;
-                console.log(folowers);
-                setMyFollowing(folowers);
-              });
-            console.log(response);
-          });
-      });
+    if(localStorage.getItem("access_token")){
+      axios
+        .post(`${domain}/api/pilot/getPilotId`, { userId: userId })
+        .then((res) => {
+          console.log(res);
+          axios
+            .post(`${domain}/api/follow/createFollow/${res.data[0]._id}`, config)
+            .then((response) => {
+              axios
+                .post(`${domain}/api/follow/getMyFollowing`, config)
+                .then((res) => {
+                  const folowers = res.data;
+                  console.log(folowers);
+                  setMyFollowing(folowers);
+                });
+              console.log(response);
+            });
+        });
+    }
+    else{
+      setLoginError(true)
+    }
   };
   let unfollow = (userId) => {
     axios
@@ -243,10 +244,7 @@ function Imageview() {
       .then((res) => {
         console.log(res);
         axios
-          .post(
-            `${domain}/api/follow/removeFollow/${res.data[0]._id}`,
-            config
-          )
+          .post(`${domain}/api/follow/removeFollow/${res.data[0]._id}`, config)
           .then((response) => {
             axios
               .post(`${domain}/api/follow/getMyFollowing`, config)
@@ -287,18 +285,24 @@ function Imageview() {
   };
 
   let clicked = (id, userId) => {
-    history.push = `/imageview/${id}/${userId}`;
-    window.location.reload();
+    window.location.href = `/imageview/${id}/${userId}`;
+    // history.push(`/imageview/${id}/${userId}`);
+    // window.location.reload();
   };
   let likeImage = () => {
-    axios
-      .post(`${domain}/api/image/likeImage/${image._id}`, config)
-      .then((res) => {
-        console.log(res.data);
-        axios.post(`${domain}/api/user/checkUser`, config).then((res) => {
-          setLikedData(res.data.likedMedia);
+    if(localStorage.getItem("access_token")){
+      axios
+        .post(`${domain}/api/image/likeImage/${image._id}`, config)
+        .then((res) => {
+          console.log(res.data);
+          axios.post(`${domain}/api/user/checkUser`, config).then((res) => {
+            setLikedData(res.data.likedMedia);
+          });
         });
-      });
+    }
+    else{
+      setLoginError(true)
+    }
   };
   let unlikeImage = () => {
     axios
@@ -312,50 +316,52 @@ function Imageview() {
   };
   let [likedComments, setLikedComments] = useState([]);
   useEffect(() => {
-    axios
-      .post(`${domain}/api/comments/getMyComments`, config)
-      .then((res) => {
-        console.log(res);
-        setLikedComments(res.data);
-      });
+    axios.post(`${domain}/api/comments/getMyComments`, config).then((res) => {
+      console.log(res);
+      setLikedComments(res.data);
+    });
   }, []);
   let [userId, setUserId] = useState("");
   useEffect(() => {
-    axios
-      .post(`${domain}/api/comments/getMyUserId`, config)
-      .then((res) => {
-        console.log(res);
-        setUserId(res.data);
-      });
+    axios.post(`${domain}/api/comments/getMyUserId`, config).then((res) => {
+      console.log(res);
+      setUserId(res.data);
+    });
   }, []);
   let commentsClicked = () => {
     document.getElementById("hideComment").style.display = "block";
   };
 
   let addComment = () => {
-    console.log(comment);
-    if (comment === "") {
-      document.getElementById("hideComment").style.display = "none";
-    } else {
-      axios
-        .post(
-          `${domain}/api/comments/createComment/${param.id}`,
-          { comment },
-          config
-        )
-        .then((res) => {
-          axios
-            .get(`${domain}/api/comments/getComments/${param.id}`)
-            .then((res) => {
-              console.log(res.data);
-              setComments(res.data);
-              document.getElementById("hideComment").style.display = "none";
-              formRef.current.value = "";
-              setComment("");
-              document.getElementById("commentToHide").style.display = "none";
-            });
-        });
-    }
+
+      console.log(comment);
+      if (comment === "" || !localStorage.getItem("access_token")) {
+        if(comment === ""){
+          document.getElementById("hideComment").style.display = "none";
+        }
+        else{
+          setLoginError(true)
+        }
+      } else {
+        axios
+          .post(
+            `${domain}/api/comments/createComment/${param.id}`,
+            { comment },
+            config
+          )
+          .then((res) => {
+            axios
+              .get(`${domain}/api/comments/getComments/${param.id}`)
+              .then((res) => {
+                console.log(res.data);
+                setComments(res.data);
+                document.getElementById("hideComment").style.display = "none";
+                formRef.current.value = "";
+                setComment("");
+                document.getElementById("commentToHide").style.display = "none";
+              });
+          });
+      }
   };
 
   let redirectPilot = (userId) => {
@@ -363,8 +369,7 @@ function Imageview() {
       .post(`${domain}/api/pilot/getPilotId`, { userId: userId })
       .then((res) => {
         console.log(res);
-        window.location.href = `/#/pilot_details/${res.data[0]._id}`;
-        window.location.reload();
+        history.push(`/pilot_details/${res.data[0]._id}`);
       });
   };
   return (
@@ -389,7 +394,7 @@ function Imageview() {
           </button>
         </div>
         {loading ? (
-          <Skeleton style = {{height: "500px", borderRadius: "10px"}}/>
+          <Skeleton style={{ height: "500px", borderRadius: "10px" }} />
         ) : (
           <>
             {image.fileType === "video" ? (
@@ -426,14 +431,14 @@ function Imageview() {
               />
             )}
 
-            <div style = {{cursor: "pointer"}}>
+            <div>
               {likedData.includes(image._id) ? (
                 <img src={Heart} className="likeImage" onClick={unlikeImage} />
               ) : (
                 <img src={Like} className="likeImage" onClick={likeImage} />
               )}
             </div>
-            <div style = {{cursor: "pointer"}}>
+            <div>
               <img
                 src={Share}
                 className="shareImage"
@@ -718,6 +723,46 @@ function Imageview() {
           <LineShareButton url={shareLink} style={{ margin: "10px" }}>
             <LineIcon size={52} round={true} />
           </LineShareButton>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={loginError}
+        onClose={closeLoginError}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+            <img
+              src={Close}
+              alt=""
+              onClick={closeLoginError}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <Row style={{ marginTop: "30px" }}>
+            <div className="a_j_popup_title" style={{ padding: "0px 60px" }}>
+              You aren't logged into DroneZone. Please login to continue?
+            </div>
+            <div
+              className="u_f_popup_btn_container"
+              style={{ marginTop: "8px" }}
+            >
+              <div
+                className="j_l_applyJobLoginBtn"
+                style={{ width: "fit-content" }}
+                onClick={() => history.push("/login")}
+              >
+                Login / Sign Up
+              </div>
+            </div>
+          </Row>
         </DialogContent>
       </Dialog>
     </Container>
