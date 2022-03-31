@@ -287,8 +287,7 @@ function Imageview() {
   };
 
   let clicked = (id, userId) => {
-    window.location.href = `/#/imageview/${id}/${userId}`;
-    // history.push(`/imageview/${id}/${userId}`);
+    history.push = `/imageview/${id}/${userId}`;
     window.location.reload();
   };
   let likeImage = () => {
