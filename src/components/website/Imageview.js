@@ -42,6 +42,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import close from "../images/close.svg";
 import Box from "@material-ui/core/Box";
+import Skeleton from 'react-loading-skeleton'
 
 const styles = (theme) => ({
   root: {
@@ -88,15 +89,20 @@ function Imageview() {
 
   let param = useParams();
   let history = useHistory();
-// let [search, setSearch] = res
-  useEffect(()=>{
-axios.post(`http://localhost:9000/api/image/findImage`, {userId : param.user_id, imageId : param.id}).then(res=>{
-  console.log(res.data)
-  if(res.data === "No Image"){
-    history.push("/NoComponent")
-  }
-})
-  },[])
+  // let [search, setSearch] = res
+  useEffect(() => {
+    axios
+      .post(`http://localhost:9000/api/image/findImage`, {
+        userId: param.user_id,
+        imageId: param.id,
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data === "No Image") {
+          history.push("/NoComponent");
+        }
+      });
+  }, []);
   let [image, setImage] = useState([]);
   let [otherImages, setOtherImages] = useState([]);
   let [likedData, setLikedData] = useState([]);
@@ -104,24 +110,23 @@ axios.post(`http://localhost:9000/api/image/findImage`, {userId : param.user_id,
   let [comments, setComments] = useState([]);
   let [share, setShare] = useState(false);
   let [shareLink, setShareLink] = useState("");
+  let [loading, setLoading] = useState(true);
   useEffect(() => {
     axios.get(`${domain}/api/image/getImage/${param.id}`).then((res) => {
       console.log(res);
       setImage(res.data[0]);
+      setLoading(false);
     });
   }, []);
   useEffect(() => {
-    setShareLink(window.location.href)
+    setShareLink(window.location.href);
     axios
       .get(`${domain}/api/image/getUserImages/${param.user_id}`)
       .then((res) => {
-        if(res.data.length > 5){
-
-        
-        setOtherImages(res.data.slice(0, 6));
-        }else{
+        if (res.data.length > 5) {
+          setOtherImages(res.data.slice(0, 6));
+        } else {
           setOtherImages(res.data);
-
         }
       });
   }, []);
@@ -139,8 +144,8 @@ axios.post(`http://localhost:9000/api/image/findImage`, {userId : param.user_id,
       .then((res) => {
         console.log(res.data);
         setComments(res.data);
-        if(res.data.length === 0){
-          document.getElementById("commentToHide").style.display = "block"
+        if (res.data.length === 0) {
+          document.getElementById("commentToHide").style.display = "block";
         }
       });
   }, []);
@@ -252,8 +257,8 @@ axios.post(`http://localhost:9000/api/image/findImage`, {userId : param.user_id,
   };
 
   const clickShareLink = () => {
-    setShare(true)
-  }
+    setShare(true);
+  };
 
   //yaseen
   const downloadImage = (id) => {
@@ -325,40 +330,38 @@ axios.post(`http://localhost:9000/api/image/findImage`, {userId : param.user_id,
 
   let addComment = () => {
     console.log(comment);
-    if(comment === ""){
+    if (comment === "") {
       document.getElementById("hideComment").style.display = "none";
-
-    }else{
-
-    
-    axios
-      .post(
-        `http://localhost:9000/api/comments/createComment/${param.id}`,
-        { comment },
-        config
-      )
-      .then((res) => {
-        axios
-          .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
-          .then((res) => {
-            console.log(res.data);
-            setComments(res.data);
-            document.getElementById("hideComment").style.display = "none";
-            formRef.current.value = "";
-            setComment("")
-              document.getElementById("commentToHide").style.display = "none"
-            
-          });
-      });
+    } else {
+      axios
+        .post(
+          `http://localhost:9000/api/comments/createComment/${param.id}`,
+          { comment },
+          config
+        )
+        .then((res) => {
+          axios
+            .get(`http://localhost:9000/api/comments/getComments/${param.id}`)
+            .then((res) => {
+              console.log(res.data);
+              setComments(res.data);
+              document.getElementById("hideComment").style.display = "none";
+              formRef.current.value = "";
+              setComment("");
+              document.getElementById("commentToHide").style.display = "none";
+            });
+        });
     }
   };
 
-  let redirectPilot = (userId) =>{
-    axios.post(`http://localhost:9000/api/pilot/getPilotId`, {userId : userId}).then(res=>{
-      console.log(res)
-      history.push(`/pilot_details/${res.data[0]._id}`)
-    })
-  }
+  let redirectPilot = (userId) => {
+    axios
+      .post(`http://localhost:9000/api/pilot/getPilotId`, { userId: userId })
+      .then((res) => {
+        console.log(res);
+        history.push(`/pilot_details/${res.data[0]._id}`);
+      });
+  };
   return (
     <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
       <Container>
@@ -372,7 +375,6 @@ axios.post(`http://localhost:9000/api/image/findImage`, {userId : param.user_id,
             }}
           >
             {image.postName && image.postName.substring(0, 20)}
-            
           </div>
           <button
             className="i_v_download"
@@ -381,50 +383,60 @@ axios.post(`http://localhost:9000/api/image/findImage`, {userId : param.user_id,
             Download
           </button>
         </div>
-        {image.fileType === "video" ? (
-          <video
-            className="mainImage"
-            style={{
-              backgroundColor: "black",
-              objectFit: "cover",
-              width: "100%",
-              margin: "32px 0px 45px 0px",
-              borderRadius: "10px",
-            }}
-            controls
-          >
-            <source
-              src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
-              type="video/mp4"
-            />
-            <source
-              src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
-              type="video/ogg"
-            />
-            Your browser does not support the video tag.
-          </video>
+        {loading ? (
+          <Skeleton style = {{height: "500px", borderRadius: "10px"}}/>
         ) : (
-          <img
-            style={{
-              width: "100%",
-              margin: "32px 0px 45px 0px",
-              borderRadius: "10px",
-            }}
-            className="mainImage"
-            src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
-          />
-        )}
+          <>
+            {image.fileType === "video" ? (
+              <video
+                className="mainImage"
+                style={{
+                  backgroundColor: "black",
+                  objectFit: "cover",
+                  width: "100%",
+                  margin: "32px 0px 45px 0px",
+                  borderRadius: "10px",
+                }}
+                controls
+              >
+                <source
+                  src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
+                  type="video/mp4"
+                />
+                <source
+                  src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
+                  type="video/ogg"
+                />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <img
+                style={{
+                  width: "100%",
+                  margin: "32px 0px 45px 0px",
+                  borderRadius: "10px",
+                }}
+                className="mainImage"
+                src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
+              />
+            )}
 
-        <div>
-          {likedData.includes(image._id) ? (
-            <img src={Heart} className="likeImage" onClick={unlikeImage} />
-          ) : (
-            <img src={Like} className="likeImage" onClick={likeImage} />
-          )}
-        </div>
-        <div>
-          <img src={Share} className="shareImage" onClick = {clickShareLink} />
-        </div>
+            <div>
+              {likedData.includes(image._id) ? (
+                <img src={Heart} className="likeImage" onClick={unlikeImage} />
+              ) : (
+                <img src={Like} className="likeImage" onClick={likeImage} />
+              )}
+            </div>
+            <div>
+              <img
+                src={Share}
+                className="shareImage"
+                onClick={clickShareLink}
+              />
+            </div>
+          </>
+        )}
 
         <Row gutterWidth={45}>
           {/* left */}
@@ -433,20 +445,25 @@ axios.post(`http://localhost:9000/api/image/findImage`, {userId : param.user_id,
               <Col lg={1.4} xs={3}>
                 {" "}
                 <img
-                onClick={()=>redirectPilot(image.userId)}
+                  onClick={() => redirectPilot(image.userId)}
                   src={`${image.profilePic}`}
                   style={{
                     height: "75px",
                     width: "75px",
                     borderRadius: "37.5px",
-                    cursor:"pointer"
+                    cursor: "pointer",
                   }}
                 />
               </Col>
               <Col>
                 {" "}
                 <div className="i_v_name">
-                  <div style={{cursor: "pointer"}}  onClick={()=>redirectPilot(image.userId)}>{image.name}</div>
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => redirectPilot(image.userId)}
+                  >
+                    {image.name}
+                  </div>
                   {myFollowing.includes(image.userId) ? (
                     <div
                       className="i_v_follow"
@@ -501,26 +518,37 @@ axios.post(`http://localhost:9000/api/image/findImage`, {userId : param.user_id,
                       onChange={commentChangeHandler}
                     />
 
-                    {
-                      comment === "" ?  <div
-                      className="i_v_addComment"
-                      style={{ margin: "10px" }}
-                      onClick={addComment}
-                    >
-                      Close
-                    </div> :
-                    <div
-                    className="i_v_addComment"
-                    style={{ margin: "10px" }}
-                    onClick={addComment}
-                  >
-                    Submit
-                  </div>
-                    }
-                    
+                    {comment === "" ? (
+                      <div
+                        className="i_v_addComment"
+                        style={{ margin: "10px" }}
+                        onClick={addComment}
+                      >
+                        Close
+                      </div>
+                    ) : (
+                      <div
+                        className="i_v_addComment"
+                        style={{ margin: "10px" }}
+                        onClick={addComment}
+                      >
+                        Submit
+                      </div>
+                    )}
                   </div>
                 </div>
-<div id="commentToHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", display:"none", marginBottom:"50px"}}>No Comments Yet</div>
+                <div
+                  id="commentToHide"
+                  style={{
+                    fontSize: "22px",
+                    fontFamily: "muli-regular",
+                    textAlign: "center",
+                    display: "none",
+                    marginBottom: "50px",
+                  }}
+                >
+                  No Comments Yet
+                </div>
                 {/* comments mapping */}
 
                 {comments.map((item, i) => {
@@ -652,39 +680,39 @@ axios.post(`http://localhost:9000/api/image/findImage`, {userId : param.user_id,
           className={All.PopupBody}
           style={{ marginBottom: "50px" }}
         >
-            <WhatsappShareButton url={shareLink} style={{ margin: "10px" }}>
-              <WhatsappIcon size={52} round={true} />
-            </WhatsappShareButton>
-            <FacebookShareButton url={shareLink} style={{ margin: "10px" }}>
-              <FacebookIcon size={52} round={true} />
-            </FacebookShareButton>
-            <EmailShareButton url={shareLink} style={{ margin: "10px" }}>
-              <EmailIcon size={52} round={true} />
-            </EmailShareButton>
-            <TwitterShareButton url={shareLink} style={{ margin: "10px" }}>
-              <TwitterIcon size={52} round={true} />
-            </TwitterShareButton>
-            <TelegramShareButton url={shareLink} style={{ margin: "10px" }}>
-              <TelegramIcon size={52} round={true} />
-            </TelegramShareButton>
-            <LinkedinShareButton url={shareLink} style={{ margin: "10px" }}>
-              <LinkedinIcon size={52} round={true} />
-            </LinkedinShareButton>
-            <PinterestShareButton url={shareLink} style={{ margin: "10px" }}>
-              <PinterestIcon size={52} round={true} />
-            </PinterestShareButton>
-            <VKShareButton url={shareLink} style={{ margin: "10px" }}>
-              <VKIcon size={52} round={true} />
-            </VKShareButton>
-            <ViberShareButton url={shareLink} style={{ margin: "10px" }}>
-              <ViberIcon size={52} round={true} />
-            </ViberShareButton>
-            <RedditShareButton url={shareLink} style={{ margin: "10px" }}>
-              <RedditIcon size={52} round={true} />
-            </RedditShareButton>
-            <LineShareButton url={shareLink} style={{ margin: "10px" }}>
-              <LineIcon size={52} round={true} />
-            </LineShareButton>
+          <WhatsappShareButton url={shareLink} style={{ margin: "10px" }}>
+            <WhatsappIcon size={52} round={true} />
+          </WhatsappShareButton>
+          <FacebookShareButton url={shareLink} style={{ margin: "10px" }}>
+            <FacebookIcon size={52} round={true} />
+          </FacebookShareButton>
+          <EmailShareButton url={shareLink} style={{ margin: "10px" }}>
+            <EmailIcon size={52} round={true} />
+          </EmailShareButton>
+          <TwitterShareButton url={shareLink} style={{ margin: "10px" }}>
+            <TwitterIcon size={52} round={true} />
+          </TwitterShareButton>
+          <TelegramShareButton url={shareLink} style={{ margin: "10px" }}>
+            <TelegramIcon size={52} round={true} />
+          </TelegramShareButton>
+          <LinkedinShareButton url={shareLink} style={{ margin: "10px" }}>
+            <LinkedinIcon size={52} round={true} />
+          </LinkedinShareButton>
+          <PinterestShareButton url={shareLink} style={{ margin: "10px" }}>
+            <PinterestIcon size={52} round={true} />
+          </PinterestShareButton>
+          <VKShareButton url={shareLink} style={{ margin: "10px" }}>
+            <VKIcon size={52} round={true} />
+          </VKShareButton>
+          <ViberShareButton url={shareLink} style={{ margin: "10px" }}>
+            <ViberIcon size={52} round={true} />
+          </ViberShareButton>
+          <RedditShareButton url={shareLink} style={{ margin: "10px" }}>
+            <RedditIcon size={52} round={true} />
+          </RedditShareButton>
+          <LineShareButton url={shareLink} style={{ margin: "10px" }}>
+            <LineIcon size={52} round={true} />
+          </LineShareButton>
         </DialogContent>
       </Dialog>
     </Container>

@@ -92,6 +92,7 @@ setCode(result[0].dial_code);
   const [error_msg, setErrorMsg] = useState("");
   const [dob, setDob] = useState(new Date());
   const [serverError, setServerError] = useState(false);
+  const [accept_conditions, setAccept_conditions] = useState(false)
 
   const [formValues, setFormValues] = useState({
     name: "",
@@ -105,60 +106,66 @@ setCode(result[0].dial_code);
 
   const history = useHistory();
   const onSubmit = (event) => {
-    setLoading(true);
     if (value) {
-      setLoading(true);
+      if(accept_conditions){
 
-      axios
-        .post(`${domain}/api/user/checkMail`, { email: formValues.email })
-        .then((res) => {
-          setLoading(true);
-          axios
-              .post(
-                `${domain}/api/user/register`,
-                {
-                  name: formValues.name,
-                  email: formValues.email,
-                  phoneNo: formValues.phone,
-                  password: formValues.password,
-                  country: formValues.country,
-                }              )
-              .then((res) => {
-               
-                console.log(res);
-                localStorage.setItem("access_token", res.data.token);
-                localStorage.setItem("token_type", "Bearer");
-                localStorage.setItem("role", res.data.role);
-                localStorage.setItem("email", res.data.verify);
-                console.log(localStorage.getItem("access_token"));
+        setLoading(true);
+  
+        axios
+          .post(`${domain}/api/user/checkMail`, { email: formValues.email })
+          .then((res) => {
+            setLoading(true);
+            axios
+                .post(
+                  `${domain}/api/user/register`,
+                  {
+                    name: formValues.name,
+                    email: formValues.email,
+                    phoneNo: formValues.phone,
+                    password: formValues.password,
+                    country: formValues.country,
+                  }              )
+                .then((res) => {
+                 
+                  console.log(res);
+                  localStorage.setItem("access_token", res.data.token);
+                  localStorage.setItem("token_type", "Bearer");
+                  localStorage.setItem("role", res.data.role);
+                  localStorage.setItem("email", res.data.verify);
+                  console.log(localStorage.getItem("access_token"));
+                  setLoading(false);
+                  props.updateLoginStatus()
+                  history.push("/verify-email")
+                })
+                .catch((err) => {
+                 console.log(err)
+                 setLoading(false);
+                });
+              
+          })
+          .catch((err) => {
+            console.log(err.response);
+            try {
+              if (err.response.data === "User already exists") {
                 setLoading(false);
-                props.updateLoginStatus()
-                history.push("/verify-email")
-              })
-              .catch((err) => {
-               console.log(err)
-              });
-            
-        })
-        .catch((err) => {
-          console.log(err.response);
-          try {
-            if (err.response.data === "User already exists") {
-              setLoading(false);
-
-              document.getElementById("email_error").innerText =
-                "Email ID already taken";
-              document.getElementById("email_error").style.display = "contents";
-              document.getElementById("email").focus();
-            } else {
-              serverError(true);
+  
+                document.getElementById("email_error").innerText =
+                  "Email ID already taken";
+                document.getElementById("email_error").style.display = "contents";
+                document.getElementById("email").focus();
+              } else {
+                serverError(true);
+                setLoading(false);
+              }
+            } catch {
+              setServerError(true);
               setLoading(false);
             }
-          } catch {
-            setServerError(true);
-            setLoading(false);
-          }
-        });
+          });
+      }
+      else{
+        alert("Accept terms and conditions to sign up.")
+      }
     } else {
       setError(true);
       setErrorMsg("Phone number is required");
@@ -192,11 +199,18 @@ height: 50,
       document.getElementById(e.target.name + "_error").style.display = "none";
     }
     else{
-      setFormValues({
-        ...formValues,
-        ["phone"]: e.target.value.slice(code.length+1,10+code.length+1),
-      });
-      document.getElementById(e.target.name + "_error").style.display = "none";
+      try{
+        if (Number(e.target.value.slice(code.length+1,10+code.length+1)) || e.target.value.slice(code.length+1,10+code.length+1) === ""){
+          setFormValues({
+            ...formValues,
+            ["phone"]: e.target.value.slice(code.length+1,10+code.length+1),
+          });
+          document.getElementById(e.target.name + "_error").style.display = "none";
+        }
+      }
+      catch{
+        console.log("Not number")
+      }
     }
 
     if (e.target.name === "name") {
@@ -455,7 +469,7 @@ height: 50,
                   </div>
                 </div>
                
-                
+                <label><input type = "checkbox" onClick = {()=>setAccept_conditions(!accept_conditions)}/> Accept terms and conditions</label>
                 <div className={All.FormGroup}>
                   <Box pb={3} pt={6}>
                     {isLoading ? (

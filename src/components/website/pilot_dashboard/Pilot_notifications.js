@@ -113,10 +113,12 @@ setEdit(false)
         </div>
         <hr className='pd_notifications_hr'/>
 
-        <div className='pd_notifications_save'>
-            <button className='pd_notifications_saveBtn' onClick = {saveChanges}>Save Changes</button>
+        {edit &&
+            <div className='pd_notifications_save'>
+                <button className='pd_notifications_saveBtn' onClick = {saveChanges}>Save Changes</button>
 
-        </div>
+            </div>
+        }
 
 
 </div>;

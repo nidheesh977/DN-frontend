@@ -28,6 +28,15 @@ import "../css/GaleryFilter.css";
 import DropDownPng from "../images/s_c_dropdown2.png";
 import { Dropdown } from "materialize-css";
 import Search from "../images/search123.png"
+import Close from "../images/close.svg";
+import Dialog from "@material-ui/core/Dialog";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
 
 function handleClick() {
   var v = document.getElementById("FilterDropdowns");
@@ -121,6 +130,7 @@ class GalleryFilter extends React.Component {
 
       activeLink: "all",
       liked_list: [],
+      loginError: false
     };
     this.loadMore = this.loadMore.bind(this);
     // this.handleChanges = this.handleChanges.bind(this);
@@ -287,46 +297,59 @@ class GalleryFilter extends React.Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    if (this.state.liked_list.includes(id)) {
-      axios
-        .post(`${domain}/api/image/unlikeImage/${id}`, config)
-        .then(() => {
-          axios
-            .post(`${domain}/api/user/checkUser`, config)
-            .then((res) => {
-              console.log(res.data);
-              let filesList = this.state.listing
-              filesList[index].likes.splice(filesList[index].likes.indexOf(res.data._id), 1)
-              this.setState({
-                liked_list: res.data.likedMedia,
-                listing: filesList
+    if(localStorage.getItem("access_token")){
+      if (this.state.liked_list.includes(id)) {
+        axios
+          .post(`${domain}/api/image/unlikeImage/${id}`, config)
+          .then(() => {
+            axios
+              .post(`${domain}/api/user/checkUser`, config)
+              .then((res) => {
+                console.log(res.data);
+                let filesList = this.state.listing
+                filesList[index].likes.splice(filesList[index].likes.indexOf(res.data._id), 1)
+                this.setState({
+                  liked_list: res.data.likedMedia,
+                  listing: filesList
+                });
+              })
+              .catch((err) => {
+                this.setState({});
               });
-            })
-            .catch((err) => {
-              this.setState({});
-            });
-        });
-    } else {
-      axios
-        .post(`${domain}/api/image/likeImage/${id}`, config)
-        .then(() => {
-          axios
-            .post(`${domain}/api/user/checkUser`, config)
-            .then((res) => {
-              console.log(res.data);
-              let filesList = this.state.listing
-              filesList[index].likes.push(res.data._id)
-              this.setState({
-                liked_list: res.data.likedMedia,
-                listing: filesList
+          });
+      } else {
+        axios
+          .post(`${domain}/api/image/likeImage/${id}`, config)
+          .then(() => {
+            axios
+              .post(`${domain}/api/user/checkUser`, config)
+              .then((res) => {
+                console.log(res.data);
+                let filesList = this.state.listing
+                filesList[index].likes.push(res.data._id)
+                this.setState({
+                  liked_list: res.data.likedMedia,
+                  listing: filesList
+                });
+              })
+              .catch((err) => {
+                this.setState({});
               });
-            })
-            .catch((err) => {
-              this.setState({});
-            });
-        });
+          });
+      }
+    }
+    else{
+      this.setState({
+        loginError: true
+      })
     }
   };
+
+  closeLoginError = () => {
+    this.setState({
+      loginError: false
+    })
+  }
 
   redirectPilotLanding = (id) => {
     console.log(id)
@@ -953,6 +976,51 @@ console.log(this.state.keywords)
                 )}
               </Col>
             </Row>
+            <Dialog
+              open={this.state.loginError}
+              onClose={this.closeLoginError}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+              PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
+            >
+              <DialogContent
+                className={All.PopupBody}
+                style={{ marginBottom: "50px" }}
+              >
+                <div
+                  style={{ position: "absolute", top: "20px", right: "20px" }}
+                >
+                  <img
+                    src={Close}
+                    alt=""
+                    onClick={this.closeLoginError}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div
+                    className="a_j_popup_title"
+                    style={{ padding: "0px 60px" }}
+                  >
+                    You aren't logged into DroneZone. Please login to continue?
+                  </div>
+                  <div
+                    className="u_f_popup_btn_container"
+                    style={{ marginTop: "8px" }}
+                  >
+                    <div
+                      className="j_l_applyJobLoginBtn"
+                      style={{ width: "fit-content" }}
+                      onClick={() => window.location.href = "/login"}
+                    >
+                      Login / Sign Up
+                    </div>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
           </Container>
         </section>
       </>
