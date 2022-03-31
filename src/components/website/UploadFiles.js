@@ -418,11 +418,20 @@ class UploadFiles extends Component {
   };
 
   selectImageType = (type) => {
-    var files_details = this.state.selected_files_details;
-    files_details[this.state.file_edit].select_type = type;
-    this.setState({
-      selected_files_details: files_details,
-    });
+    if(this.state.selected_files_details[this.state.file_edit].select_type[0] === "i" && (type === "image" || type === "3d" )){
+      var files_details = this.state.selected_files_details;
+      files_details[this.state.file_edit].select_type = type;
+      this.setState({
+        selected_files_details: files_details,
+      });
+    }
+    else if (this.state.selected_files_details[this.state.file_edit].select_type[0] === "3" && (type === "image" || type === "3d" )){
+      var files_details = this.state.selected_files_details;
+      files_details[this.state.file_edit].select_type = type;
+      this.setState({
+        selected_files_details: files_details,
+      });
+    }
   };
 
   changeAdultContent = () => {

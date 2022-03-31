@@ -10,6 +10,7 @@ import Dialog from "@material-ui/core/Dialog";
 import Close from "../../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
+import { saveAs } from "file-saver";
 
 
 const DialogContent = withStyles((theme) => ({
@@ -45,6 +46,7 @@ function Pilot_ProfessionalInfo() {
         attachment: data.certificates,
         profile: `${data.profilePic}`,
         cover: `${data.coverPic}`,
+        certificateChanged: false
       });
     });
   }, []);
@@ -54,9 +56,9 @@ function Pilot_ProfessionalInfo() {
     drone_id: "",
     drone_type: "",
     work_type: "",
-    hourly_pay: "",
-    monthly_pay: "",
-    industry: "",
+    hourly_pay: 0,
+    monthly_pay: 0,
+    industry: [],
     attachment_selected: null,
     attachment: "",
     training_center_name: "",
@@ -64,6 +66,7 @@ function Pilot_ProfessionalInfo() {
     skills: [],
     profile: Pilot,
     cover: Cover,
+    fileChanged: false
   });
 
   let [edit, setEdit] = useState(false);
@@ -101,15 +104,28 @@ function Pilot_ProfessionalInfo() {
   const chooseFile = (e) => {
     try {
       if (e.target.files[0]) {
-        setData({
-          ...data,
-          attachment: e.target.files[0],
-          attachment_selected: true,
-        });
+        if (e.target.files[0].size/1000000 <= 5){
+          setData({
+            ...data,
+            attachment: e.target.files[0],
+            attachment_selected: true,
+            fileChanged: true
+          });
+        }
+        else{
+          alert("File size should not exceed 5 MB")
+        }
       }
     } catch {}
     document.getElementById("certificate_error").style.visibility = "hidden";
   };
+
+  const downloadFile = () => {
+    saveAs(
+      `https://dn-nexevo-pilotcertificates.s3.ap-south-1.amazonaws.com/${data.attachment}`,
+      `PilotCertificate`
+    );
+  }
 
   const addSkill = (e) => {
     if (e.key === "Enter" && e.target.value !== "") {
@@ -123,6 +139,20 @@ function Pilot_ProfessionalInfo() {
       document.getElementById(e.target.id).value = "";
     }
     document.getElementById("skills_error").style.visibility = "hidden";
+  };
+
+  const addIndustry = (e) => {
+    if (e.key === "Enter" && e.target.value !== "") {
+      var industry_list = data.industry;
+      industry_list.push(e.target.value);
+      setData({
+        ...data,
+        industry: industry_list,
+      });
+      console.log(data.industry);
+      document.getElementById(e.target.id).value = "";
+    }
+    document.getElementById("industry_error").style.visibility = "hidden";
   };
 
   const showError = (field) => {
@@ -198,6 +228,18 @@ function Pilot_ProfessionalInfo() {
     }
   }
 
+  const removeIndustry = (id) => {
+    if(edit){
+      var industry_list = data.industry;
+      industry_list.splice(id,1);
+      setData({
+        ...data,
+        industry: industry_list,
+      });
+      console.log(data.skills);
+    }
+  }
+
   const saveChanges = () => {
     if (data.name === "") {
       showError("name");
@@ -212,7 +254,7 @@ function Pilot_ProfessionalInfo() {
       showError("monthly_pay");
     } else if (data.work_type === "part_time" && data.hourly_pay === "") {
       showError("hourly_pay");
-    } else if (data.industry === "") {
+    } else if (data.industry.length === 0) {
       showError("industry");
     } else if (
       data.pilot_type === "licensed" &&
@@ -224,29 +266,60 @@ function Pilot_ProfessionalInfo() {
     } else if (data.skills.length === 0) {
       showError("skills");
     } else {
-      axios
-        .post(
-          `${domain}/api/pilot/updateProfessionalInfo`,
-          {
-            name: data.name,
-            skills: data.skills,
-            pilotType: data.pilot_type,
-            droneId: data.drone_id,
-            workType: data.work_type,
-            hourlyPayment: data.hourly_pay,
-            monthlyPayment: data.monthly_pay,
-            industry: data.industry,
-            trainingCenter: data.training_center_name,
-            completedYear: data.completed_year,
-            attachment: data.attachment,
-            profile: `${domain}/${data.profilePic}`,
-            cover: `${domain}/${data.coverPic}`,
-          },
-          config
-        )
-        .then((res) => {
-          setInfoSuccess(true)
-        });
+      if (data.fileChanged){
+        console.log(data.industry)
+        let formData = new FormData()
+        formData.append("name", data.name)
+        formData.append("skills", data.skills,)
+        formData.append("pilotType", data.pilot_type,)
+        formData.append("droneId", data.drone_id,)
+        formData.append("workType", data.work_type,)
+        formData.append("hourlyPayment", data.hourly_pay,)
+        formData.append("monthlyPayment", data.monthly_pay,)
+        formData.append("industry", data.industry,)
+        formData.append("trainingCenter", data.training_center_name,)
+        formData.append("completedYear", data.completed_year,)
+        formData.append("file", data.attachment,)
+        formData.append("profile", `${domain}/${data.profilePic}`,)
+        formData.append("cover", `${domain}/${data.coverPic}`,)
+
+        axios
+          .post(`${domain}/api/pilot/updateProfessionalInfo1`,formData, config)
+          .then((res)=>{
+            console.log(res)
+            setInfoSuccess(true)
+          })
+          .catch((err)=> {
+            alert("Update failed")
+          })
+      }else{
+        axios
+          .post(
+            `${domain}/api/pilot/updateProfessionalInfo`,
+            {
+              name: data.name,
+              skills: data.skills,
+              pilotType: data.pilot_type,
+              droneId: data.drone_id,
+              workType: data.work_type,
+              hourlyPayment: data.hourly_pay,
+              monthlyPayment: data.monthly_pay,
+              industry: data.industry,
+              trainingCenter: data.training_center_name,
+              completedYear: data.completed_year,
+              attachment: data.attachment,
+              profile: `${domain}/${data.profilePic}`,
+              cover: `${domain}/${data.coverPic}`,
+            },
+            config
+          )
+          .then((res) => {
+            setInfoSuccess(true)
+          })
+          .catch((err)=> {
+            alert("Update failed")
+          })
+      }
     }
   };
 
@@ -347,8 +420,9 @@ function Pilot_ProfessionalInfo() {
                 <span className="pd_p_i_profile_text">
                   {data.attachment[0]
                     ? data.attachment[0].slice(0,50)
-                    : "Attach your DGCA certificate"}
+                    : data.fileChanged?data.attachment.name.slice(0,50):"Attach your DGCA certificate"}
                 </span>
+                <button style = {{backgroundColor: "", border: 0, paddingTop: "5px", paddingBottom: "5px", paddingRight: "10px", paddingLeft: "10px", borderRadius: "5px"}} onClick = {downloadFile}>Download</button>
               </div>
               <div className="input_error_msg" id="certificate_error">
                 Certificate is required
@@ -358,6 +432,7 @@ function Pilot_ProfessionalInfo() {
                 id="pd_p_i_hidden"
                 onChange={chooseFile}
                 disabled={!edit}
+                accept = "image/jpg, image/jpeg, application/pdf"
               />
             </label>
           </React.Fragment>
@@ -483,11 +558,16 @@ function Pilot_ProfessionalInfo() {
             type="text"
             className="pd_b_i_profile_input"
             id="industry"
-            onChange={handleChange}
-            value={data.industry}
+            onKeyUp={addIndustry}
             disabled={!edit}
           />
-          {}
+          {data.industry.map((industry, index) => {
+            return (
+              <div className="pd_i_skill" key={index} onClick = {()=>removeIndustry(index)}>
+                {industry} <i class="fas fa-times"></i>
+              </div>
+            );
+          })}
           <div className="input_error_msg" id="industry_error">
             Industry is required
           </div>

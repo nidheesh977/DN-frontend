@@ -60,8 +60,8 @@ function CreatePilot() {
     drone_id: "",
     drone_type: "",
     work_type: "full_time",
-    hourly_pay: "",
-    monthly_pay: "",
+    hourly_pay: 0,
+    monthly_pay: 0,
     industry: [],
     attachment_selected: false,
     attachment: "",
@@ -303,8 +303,11 @@ function CreatePilot() {
       formData.append("droneId", data.drone_id,)
       formData.append("droneType", data.drone_type,)
       formData.append("workType", data.work_type,)
-      formData.append("hourlyPayment", data.hourly_pay,)
-      formData.append("monthlyPayment", data.monthly_pay,)
+      if (data.hourly_pay != 0){
+        formData.append("hourlyPayment", data.hourly_pay,)
+      }else{
+        formData.append("monthlyPayment", data.monthly_pay,)
+      }
       formData.append("industry", data.industry,)
       formData.append("drones", data.drones,)
       formData.append("skills", data.skills,)
@@ -442,11 +445,16 @@ function CreatePilot() {
   const chooseFile = (e) => {
     try {
       if (e.target.files[0]) {
-        setData({
+        if(e.target.files[0].size/1000000 <= 5){
+          setData({
           ...data,
           attachment: e.target.files[0],
           attachment_selected: true,
         });
+        }else{
+          alert("File size should not exceed 5 MB")
+        }
+        
       }
     } catch {}
     document.getElementById("attachment_error").style.visibility = "hidden";
@@ -962,7 +970,7 @@ function CreatePilot() {
                 </div>
               )}
               <div className="pd_b_i_notifications_save">
-                <button className="common_backBtn" onClick={saveChanges}>
+                <button className="common_backBtn" onClick={()=>history.push("/choose-categories")}>
                   Back
                 </button>
                 <button

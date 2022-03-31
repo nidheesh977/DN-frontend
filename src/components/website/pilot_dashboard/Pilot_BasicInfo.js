@@ -12,7 +12,8 @@ import Dialog from "@material-ui/core/Dialog";
 import Close from "../../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
-
+import Countries from "../../../apis/country.json";
+import Select from "react-select";
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -20,15 +21,28 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
+const customStyles = {
+  container: (provided) => ({
+    ...provided,
+    height: 50,
+  }),
+};
+
 const domain = process.env.REACT_APP_MY_API;
 
 function Pilot_BasicInfo() {
+  let [test, setTest] = useState([]);
+  let [codes, setCodes] = useState([]);
+  let [code, setCode] = useState("");
 
   useEffect(() => {
-      window.scrollTo(0, 0);
-   
+    window.scrollTo(0, 0);
+    const options = Countries.map((d) => ({
+      value: d.code,
+      label: d.name,
+    }));
+    setTest(options);
   }, []);
-
 
   let config = {
     headers: {
@@ -37,8 +51,11 @@ function Pilot_BasicInfo() {
   };
   useEffect(() => {
     axios.post(`${domain}/api/user/pilotDetails`, config).then((response) => {
+      var result = Countries.filter((obj) => obj.name == response.data.country);
+      console.log(result[0].dial_code);
+      setCode(result[0].dial_code);
       let data = response.data;
-      localStorage.setItem("oldEmail", response.data.emailId) 
+      localStorage.setItem("oldEmail", response.data.emailId);
       setData({
         full_name: data.name,
         email: data.emailId,
@@ -70,9 +87,9 @@ function Pilot_BasicInfo() {
     cover: Cover,
   });
   let [edit, setEdit] = useState(false);
-  let [profileSuccess, setProfileSuccess] = useState(false)
-  let [coverSuccess, setCoverSuccess] = useState(false)
-  let [infoSuccess, setInfoSuccess] = useState(false)
+  let [profileSuccess, setProfileSuccess] = useState(false);
+  let [coverSuccess, setCoverSuccess] = useState(false);
+  let [infoSuccess, setInfoSuccess] = useState(false);
 
   const changeHandler = (e) => {
     if (e.target.id === "bio") {
@@ -90,27 +107,56 @@ function Pilot_BasicInfo() {
     console.log(data);
   };
 
+  const changeCountry = (value) => {
+    setData({
+      ...data,
+      country: value.label,
+    });
+    var result = Countries.filter((obj) => obj.name == value.label);
+    console.log(result[0].dial_code);
+    setCode(result[0].dial_code);
+  };
+
   const phoneChangeHandler = (e) => {
-    document.getElementById(`phone_error`).style.visibility = "hidden";
+    // document.getElementById(`phone_error`).style.visibility = "hidden";
+    // try {
+    //   if (e.length >= 1) {
+    //     setData({
+    //       ...data,
+    //       phone: e,
+    //     });
+    //   } else {
+    //     setData({
+    //       ...data,
+    //       phone: "",
+    //     });
+    //   }
+    // } catch {
+    //   setData({
+    //     ...data,
+    //     phone: "",
+    //   });
+    // }
+    // console.log(data);
     try {
-      if (e.length >= 1) {
+      if (
+        Number(e.target.value.slice(code.length + 1, 10 + code.length + 1)) ||
+        e.target.value.slice(code.length + 1, 10 + code.length + 1) === ""
+      ) {
         setData({
           ...data,
-          phone: e,
+          phone: e.target.value.slice(
+            code.length + 1,
+            10 + code.length + 1
+          ),
         });
-      } else {
-        setData({
-          ...data,
-          phone: "",
-        });
+        document.getElementById(e.target.name + "_error").style.display =
+          "none";
       }
     } catch {
-      setData({
-        ...data,
-        phone: "",
-      });
+      console.log("Not number");
     }
-    console.log(data);
+    console.log(data.phone)
   };
 
   const updateCoverImg = (e) => {
@@ -125,7 +171,7 @@ function Pilot_BasicInfo() {
           .post(`${domain}/api/user/updateCoverPic`, formData, config)
           .then((res) => {
             console.log(res.data);
-            setCoverSuccess(true)
+            setCoverSuccess(true);
             setData({
               ...data,
               cover: `${res.data.Location}`,
@@ -152,7 +198,7 @@ function Pilot_BasicInfo() {
           .post(`${domain}/api/user/updateProfilePic`, formData, config)
           .then((res) => {
             console.log(res.data);
-            setProfileSuccess(true)
+            setProfileSuccess(true);
             setData({
               ...data,
               profile: `${res.data.Location}`,
@@ -247,9 +293,9 @@ function Pilot_BasicInfo() {
       };
       console.log(data);
 
-      if(data.email !== localStorage.getItem("oldEmail")){
-        console.log("Emails Differ")
-        localStorage.setItem("email", "false")
+      if (data.email !== localStorage.getItem("oldEmail")) {
+        console.log("Emails Differ");
+        localStorage.setItem("email", "false");
       }
       axios
         .post(
@@ -267,9 +313,8 @@ function Pilot_BasicInfo() {
           config
         )
         .then(() => {
-          setInfoSuccess(true)
+          setInfoSuccess(true);
           setEdit(false);
-
         })
         .catch((err) => {
           alert("not successful");
@@ -348,7 +393,9 @@ function Pilot_BasicInfo() {
         </div>
       </div>
       <div>
-        <div className="pd_b_i_profile_head">Name</div>
+        <label htmlFor="full_name">
+          <div className="pd_b_i_profile_head">Name</div>
+        </label>
         <input
           type="text"
           className="pd_b_i_profile_input"
@@ -366,12 +413,14 @@ function Pilot_BasicInfo() {
           <div>
             <div>
               <div style={{ marginBottom: "15px" }}>
-                <div className="pd_b_i_profile_head1">Email ID</div>
-{
-  localStorage.getItem("email") == "true" ? <></> :<div className="pd_b_i_profile_verify">Verify</div>
-}
-
-                
+                <label htmlFor = "email">
+                  <div className="pd_b_i_profile_head1">Email ID</div>
+                </label>
+                {localStorage.getItem("email") == "true" ? (
+                  <></>
+                ) : (
+                  <div className="pd_b_i_profile_verify">Verify</div>
+                )}
               </div>
             </div>
             <input
@@ -391,17 +440,20 @@ function Pilot_BasicInfo() {
           <div>
             <div>
               <div style={{ marginBottom: "15px" }}>
-                <div className="pd_b_i_profile_head1">Phone Number</div>
+                <label htmlFor="phone">
+                  <div className="pd_b_i_profile_head1">Phone Number</div>
+                </label>
                 {/* <div className="pd_b_i_profile_verify">Verify</div> */}
               </div>
             </div>
-            <PhoneInput
-              defaultCountry="IN"
-              className={All.Phonenumber + " s_c_d_phone_input"}
+            <input
+              type="text"
               name="phone"
+              className={All.Phonenumber + " s_c_d_phone_input"}
               id="phone"
-              value={data.phone}
+              value={`${code} ${data.phone}`}
               onChange={phoneChangeHandler}
+              autoComplete={false}
               disabled={!edit}
             />
             <div className="input_error_msg" id="phone_error">
@@ -413,7 +465,9 @@ function Pilot_BasicInfo() {
       <Row>
         <Col>
           <div>
-            <div className="pd_b_i_profile_head">DOB</div>
+            <label htmlFor = "dob">
+              <div className="pd_b_i_profile_head">DOB</div>
+            </label>
             <input
               type="date"
               className="pd_b_i_profile_input"
@@ -421,6 +475,7 @@ function Pilot_BasicInfo() {
               id="dob"
               onChange={changeHandler}
               disabled={!edit}
+              max={`2012-12-31`}
             />
             <div className="input_error_msg" id="dob_error">
               DOB is required
@@ -429,7 +484,9 @@ function Pilot_BasicInfo() {
         </Col>
         <Col>
           <div>
+            <label htmlFor = "gender">
             <div className="pd_b_i_profile_head">Gender</div>
+            </label>
             <select
               name="gender"
               className="pd_b_i_profile_input"
@@ -449,11 +506,13 @@ function Pilot_BasicInfo() {
           </div>
         </Col>
       </Row>
-      
+
       <Row>
         <Col xl={6}>
           <div>
+            <label htmlFor = "city">
             <div className="pd_b_i_profile_head">City</div>
+            </label>
             <input
               type="text"
               className="pd_b_i_profile_input"
@@ -469,14 +528,16 @@ function Pilot_BasicInfo() {
         </Col>
         <Col xl={6}>
           <div>
+            <label htmlFor = "country">
             <div className="pd_b_i_profile_head">Country</div>
-            <input
-              type="text"
-              className="pd_b_i_profile_input"
-              value={data.country}
-              id="country"
-              onChange={changeHandler}
-              disabled={!edit}
+            </label>
+            <Select
+              styles={customStyles}
+              options={test}
+              value={{ label: data.country, value: data.country }}
+              onChange={changeCountry}
+              isDisabled={!edit}
+              id = "country"
             />
             <div className="input_error_msg" id="country_error">
               Country is required
@@ -485,7 +546,9 @@ function Pilot_BasicInfo() {
         </Col>
       </Row>
       <div>
+        <label htmlFor = "bio">
         <div className="pd_b_i_profile_head">Bio</div>
+        </label>
         <textarea
           type="text"
           className="pd_b_i_profile_inputDesc"
@@ -503,13 +566,16 @@ function Pilot_BasicInfo() {
         </div>
       </div>
       <div className="pd_b_i_notifications_save">
-{
-  edit ?  <button className="pd_b_i_notifications_saveBtn" onClick={saveChanges}>
-  Save Changes
-</button> : <></>
-}
-
-       
+        {edit ? (
+          <button
+            className="pd_b_i_notifications_saveBtn"
+            onClick={saveChanges}
+          >
+            Save Changes
+          </button>
+        ) : (
+          <></>
+        )}
       </div>
       <Dialog
         open={profileSuccess}
