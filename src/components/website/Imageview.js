@@ -265,15 +265,20 @@ function Imageview() {
 
   //yaseen
   const downloadImage = (id) => {
-    saveAs(
-      `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${image.file}`,
-      `${image.file}`
-    );
-    axios
-      .post(`${domain}/api/image/downloadImage/${id}`, config)
-      .then((res) => {
-        console.log(res.data);
-      });
+    if(localStorage.getItem("access_token")){
+      saveAs(
+        `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${image.file}`,
+        `${image.file}`
+      );
+      axios
+        .post(`${domain}/api/image/downloadImage/${id}`, config)
+        .then((res) => {
+          console.log(res.data);
+        });
+    }
+    else{
+      setLoginError(true)
+    }
   };
   let commentChangeHandler = (e) => {
     setComment(e.target.value);
@@ -431,14 +436,14 @@ function Imageview() {
               />
             )}
 
-            <div>
+            <div style = {{cursor: "pointer"}}>
               {likedData.includes(image._id) ? (
                 <img src={Heart} className="likeImage" onClick={unlikeImage} />
               ) : (
                 <img src={Like} className="likeImage" onClick={likeImage} />
               )}
             </div>
-            <div>
+            <div  style = {{cursor: "pointer"}}>
               <img
                 src={Share}
                 className="shareImage"

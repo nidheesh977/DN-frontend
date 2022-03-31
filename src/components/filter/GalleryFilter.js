@@ -87,7 +87,7 @@ class GalleryFilter extends React.Component {
       dropdown: "all",
       userlogin: "",
       listing: [],
-      visible: 10,
+      visible: 20,
       valuees: 0,
       users: "",
       usersid: "",
@@ -561,17 +561,20 @@ class GalleryFilter extends React.Component {
                 <Row>
                   <Col lg={2} xs={6} className="DropdownFilter views">
                     {localStorage.getItem("access_token") && (
-                      <select
-                        className="dropdown dropdown__text"
-                        onChange={this.followingChanged}
-                        id="type"
-                        defaultValue={"1"}
-                      >
-                        <option value="1">All</option>
-                        {this.state.userlogin && (
-                          <option value="2">Following</option>
-                        )}
-                      </select>
+                      <span>
+                        <select
+                          className="dropdown dropdown__text"
+                          onChange={this.followingChanged}
+                          id="type"
+                          defaultValue={"1"}
+                        >
+                          <option value="1">All</option>
+                          {this.state.userlogin && (
+                            <option value="2">Following</option>
+                          )}
+                        </select>
+                        <img src={DropDownPng} alt="" style = {{height: "15px", width: "15px", position: "absolute", top: "11px", right: "50px"}}/>
+                      </span>
                     )}
                   </Col>
 

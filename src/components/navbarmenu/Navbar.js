@@ -280,8 +280,7 @@ let AccountButton = () =>{
                     }
                   </span>
                 </li>
-                {props.loginStatus
-                &&<li className="nav-item">
+                {(!props.loginStatus || localStorage.getItem("role") === "pilot") && <li className="nav-item">
                   <div className="nav-links">
                     <Button
                       variant="contained"
