@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import "./css/Pilot_notifications.css"
 import Edit from "./images/edit (3).svg"
+const domain = process.env.REACT_APP_MY_API
 
 function Center_notifications() {
     let config = {

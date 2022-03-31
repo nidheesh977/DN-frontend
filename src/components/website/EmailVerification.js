@@ -12,6 +12,7 @@ import "../css/Common.css"
 import DronePerson from "../images/drone_person_new.png";
 import axios from "axios";
 import {useHistory} from "react-router-dom"
+const domain = process.env.REACT_APP_MY_API
 
 function CreateCompany() {
   let history = useHistory();
