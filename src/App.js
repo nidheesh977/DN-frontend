@@ -44,6 +44,8 @@ import RecoverPassword from "./components/website/RecoverPassword";
 import EditFile from "../src/components/website/EditFile"
 import Center_dashboard from "./components/website/center_dashboard/Center_dashboard";
 import PilotRoute from "./PilotRoute";
+import Booster_dashboard from "./components/website/booster_dashboard/Booster_dashboard";
+import BoosterRoute from "./BoosterRoute";
 function App(){
 
   useEffect(()=>{
@@ -153,6 +155,8 @@ function App(){
             <Route component={EmailVerification} path="/verify-email" />
             <Route component={VerifiedEmail} path="/users/:id/verify/:token" />
             <Route component={RecoverPassword} path="/users/:id/forgetPassword/:token" />
+            <BoosterRoute component={Booster_dashboard} path="/booster_dashboard" />
+
             <Route exact path="/NoComponent" component={NoPageFound} />
 
             {/* yaseen */}

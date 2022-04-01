@@ -103,8 +103,10 @@ let AccountButton = () =>{
     history.push("/verify-email")
   }else if(localStorage.getItem("role") === "undefined"){
     history.push("/choose-categories")
-  }else{
+  }else if(localStorage.getItem("role") === "pilot"){
     history.push("/pilot_dashboard/account/")
+  }else{
+    history.push("/booster_dashboard/account/")
   }
 }
 
