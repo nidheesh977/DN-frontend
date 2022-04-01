@@ -14,6 +14,13 @@ import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
 import Countries from "../../../apis/country.json";
 import Select from "react-select";
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -35,7 +42,10 @@ function Booster_BasicInfo() {
   let [test, setTest] = useState([]);
   let [codes, setCodes] = useState([]);
   let [code, setCode] = useState("");
-
+  let [OnReload, setOnReload] = useState(true)
+let closeReloadDialoge = () =>{
+setOnReload(false)
+}
   useEffect(() => {
     window.scrollTo(0, 0);
     const options = Countries.map((d) => ({
@@ -331,7 +341,12 @@ function Booster_BasicInfo() {
   };
 
   return (
-    <div className="pd_b_i_main">
+    <div className="pd_b_i_main" style={{marginTop: "10px !important"}}>
+<div style={{marginBottom: "20px"}}>
+
+</div>
+       
+        
       <div className="pd_b_i_images">
         <img src={data.cover} alt="" className="pd_b_i_cover" />
         <div className="pd_b_i_profile">
@@ -685,6 +700,72 @@ function Booster_BasicInfo() {
           </Row>
         </DialogContent>
       </Dialog>
+
+
+      {/* new dialog
+      
+      
+      */}
+
+<Dialog
+            open={OnReload}
+            onClose={() => closeReloadDialoge(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{ style: { width: "1000px", borderRadius: "10px" } }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px",overflow:"hidden" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={() => closeReloadDialoge(false)}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div className="u_f_popup_title">
+                <Row gutterWidth={30}>
+                <Col xl={12}>
+<Card style={{backgroundColor: "#4ffea380", marginBottom:"20px"}}>
+<CardContent>
+<div style={{fontSize: "22px"}}>Want to Show your talent by uploading Creatives?</div>
+</CardContent>
+<CardActions style={{display: "flex", justifyContent:"center"}}>
+<button>Upgrade to Pilot</button></CardActions>
+</Card>
+</Col>
+<Col xl={12}>
+<Card style={{backgroundColor: "#00e7fc80", marginBottom:"20px"}}>
+<CardContent>
+<div style={{fontSize: "22px"}}>Want to list your service center?</div>
+</CardContent>
+<CardActions style={{display: "flex", justifyContent:"center"}}>
+<Button variant="contained" color="success">Complete Center Profile</Button>
+</CardActions>
+</Card>
+</Col>
+<Col xl={12}>
+<Card style={{backgroundColor: "#4ffea380", marginBottom:"10px"}}>
+<CardContent>
+<div style={{fontSize: "22px"}}>Want to post jobs and hire Droners?</div>
+</CardContent>
+<CardActions style={{display: "flex", justifyContent:"center"}}>
+<Button variant="contained" color="success">Complete Profile</Button>
+</CardActions>
+</Card>
+</Col>
+</Row>
+                </div>
+              
+              </Row>
+            </DialogContent>
+          </Dialog>
     </div>
   );
 }
