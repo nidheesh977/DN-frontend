@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import Header from "./components/header/Header";
 import Home from "./components/website/Home";
 import SignUp from "./components/website/SignUp";
@@ -67,7 +67,7 @@ function App(){
   }
 
     return (
-      <BrowserRouter>
+      <Router>
         <Header loginStatus = {loginStatus} updateLoginStatus = {updateLoginStatus}/>
         {/* <Message /> */}
         <UserContext.Provider>
@@ -160,7 +160,7 @@ function App(){
           </Switch>
         </UserContext.Provider>
         <Footer/>
-      </BrowserRouter>
+      </Router>
     );
   
 }

@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import $, { data } from "jquery";
 import SearchResults from "react-filter-search";
 import nofoundresult from "../images/noresultfound.svg";
-// import Like from "../Like";
+// import Like from "../Like";  
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import LanguageIcon from "@material-ui/icons/Language";
@@ -353,7 +353,7 @@ class GalleryFilter extends React.Component {
     console.log(id);
     axios.post(`${domain}/api/pilot/getPilotId`, { userId: id }).then((res) => {
       if (res.data[0]._id) {
-        window.location.href = `/pilot_details/${res.data[0]._id}`;
+        window.location.href = `/#/pilot_details/${res.data[0]._id}`;
       }
     });
   };
@@ -573,7 +573,17 @@ class GalleryFilter extends React.Component {
                             <option value="2">Following</option>
                           )}
                         </select>
-                        <img src={DropDownPng} alt="" style = {{height: "15px", width: "15px", position: "absolute", top: "11px", right: "50px"}}/>
+                        <img
+                          src={DropDownPng}
+                          alt=""
+                          style={{
+                            height: "15px",
+                            width: "15px",
+                            position: "absolute",
+                            top: "11px",
+                            right: "50px",
+                          }}
+                        />
                       </span>
                     )}
                   </Col>
@@ -871,6 +881,9 @@ class GalleryFilter extends React.Component {
                                                                   <>
                                                                     {this.state.liked_list.includes(
                                                                       user._id
+                                                                    ) &&
+                                                                    localStorage.getItem(
+                                                                      "access_token"
                                                                     ) ? (
                                                                       <Favorite />
                                                                     ) : (
@@ -882,6 +895,9 @@ class GalleryFilter extends React.Component {
                                                                   <>
                                                                     {this.state.liked_list.includes(
                                                                       user._id
+                                                                    ) &&
+                                                                    localStorage.getItem(
+                                                                      "access_token"
                                                                     ) ? (
                                                                       <Favorite />
                                                                     ) : (
@@ -978,9 +994,9 @@ class GalleryFilter extends React.Component {
                                                               <Checkbox
                                                                 icon={
                                                                   <>
-                                                                    {this.state.liked_list.includes(
+                                                                    {(this.state.liked_list.includes(
                                                                       user._id
-                                                                    ) ? (
+                                                                    ) && localStorage.getItem("access_token")) ? (
                                                                       <Favorite />
                                                                     ) : (
                                                                       <FavoriteBorder />
@@ -989,9 +1005,9 @@ class GalleryFilter extends React.Component {
                                                                 }
                                                                 checkedIcon={
                                                                   <>
-                                                                    {this.state.liked_list.includes(
+                                                                    {(this.state.liked_list.includes(
                                                                       user._id
-                                                                    ) ? (
+                                                                    ) && localStorage.getItem("access_token")) ? (
                                                                       <Favorite />
                                                                     ) : (
                                                                       <FavoriteBorder />

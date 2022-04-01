@@ -318,7 +318,8 @@ export default function PilotDetails(props) {
   }
 
   let followMeId = (id) => {
-    
+    if(localStorage.getItem("access_token")){
+
       axios.post(`${domain}/api/pilot/getPilotId`, { userId: id }).then((res) => {
         axios
           .post(`${domain}/api/follow/createFollow/${res.data[0]._id}`, config)
@@ -334,6 +335,9 @@ export default function PilotDetails(props) {
             // setBrands(response.data.brandOfDrones)
           });
       });
+    }else{
+      setLoginErrorPopup(true)
+    }
     
   };
 

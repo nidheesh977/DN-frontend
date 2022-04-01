@@ -673,7 +673,7 @@ function CreatePilot() {
                         style={{ cursor: "pointer" }}
                       >
                         {data.attachment_selected
-                          ? data.attachment.name
+                          ? data.attachment.name.slice(0,50).replace(" ", "")
                           : "Attach your DGCA certificate"}
                       </span>
                     </div>
