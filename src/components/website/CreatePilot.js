@@ -78,6 +78,7 @@ function CreatePilot() {
   let [industries, setIndustries] = useState([]);
   let [suggestedSkills, setSuggestedSkills] = useState([]);
   let [showSuggestedSkills, setShowSuggestedSkills] = useState("less");
+  let [certificateSizeExceed, setCertificateSizeExceed] = useState(false);
 
   const changeHandler = (e) => {
     if (e.target.id === "bio") {
@@ -452,7 +453,7 @@ function CreatePilot() {
           attachment_selected: true,
         });
         }else{
-          alert("File size should not exceed 5 MB")
+          setCertificateSizeExceed(true)
         }
         
       }
@@ -1047,6 +1048,42 @@ function CreatePilot() {
                   <button
                     className="u_f_popup_btn2"
                     onClick={() => setServerError(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </Row>
+            </DialogContent>
+          </Dialog>
+          <Dialog
+            open={certificateSizeExceed}
+            onClose={() => setCertificateSizeExceed(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={() => setCertificateSizeExceed(false)}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div className="u_f_popup_title">
+                  File size should not exceed 5 MB.
+                </div>
+                <div className="u_f_popup_btn_container">
+                  <button
+                    className="u_f_popup_btn2"
+                    onClick={() => setCertificateSizeExceed(false)}
                   >
                     Close
                   </button>

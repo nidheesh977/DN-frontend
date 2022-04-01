@@ -44,7 +44,7 @@ import close from "../images/close.svg";
 import Box from "@material-ui/core/Box";
 import Skeleton from "react-loading-skeleton";
 import Close from "../images/close.svg";
-
+import { Redirect } from "react-router-dom";
 const styles = (theme) => ({
   root: {
     margin: 0,
@@ -682,6 +682,7 @@ function Imageview() {
           </Col>
         </Row>
       </Container>
+      
       <Dialog
         open={share}
         onClose={handleShareClose}

@@ -88,6 +88,7 @@ function SignUp(props) {
   const [dob, setDob] = useState(new Date());
   const [serverError, setServerError] = useState(false);
   const [accept_conditions, setAccept_conditions] = useState(false);
+  const [termsConditionsError, setTermsConditionsError] = useState(false);
 
   const [formValues, setFormValues] = useState({
     name: "",
@@ -154,7 +155,7 @@ function SignUp(props) {
             }
           });
       } else {
-        alert("Accept terms and conditions to sign up.");
+        setTermsConditionsError(true)
       }
     } else {
       setError(true);
@@ -533,6 +534,42 @@ function SignUp(props) {
                   <button
                     className="u_f_popup_btn2"
                     onClick={() => setServerError(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </Row>
+            </DialogContent>
+          </Dialog>
+          <Dialog
+            open={termsConditionsError}
+            onClose={() => setTermsConditionsError(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={() => setTermsConditionsError(false)}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div className="u_f_popup_title">
+                  Accept terms and conditions to proceed
+                </div>
+                <div className="u_f_popup_btn_container">
+                  <button
+                    className="u_f_popup_btn2"
+                    onClick={() => setTermsConditionsError(false)}
                   >
                     Close
                   </button>

@@ -42,6 +42,7 @@ class EditFile extends Component {
       loading: true,
       file: {},
       fileChanged: false,
+      editFilePopup: false
     };
   }
 
@@ -205,6 +206,7 @@ class EditFile extends Component {
   };
 
   changeFile = (e, id) => {
+    
     if (e.target.files[0]) {
       var file = this.state.file;
       var selectedFile = e.target.files[0];
@@ -594,19 +596,9 @@ class EditFile extends Component {
                                   )}
 
                                   <div className="u_f_edit_content">
-                                    <label>
-                                      <input
-                                        type="file"
-                                        name=""
-                                        id=""
-                                        accept="video/*,image/*"
-                                        style={{ display: "none" }}
-                                        onChange={(e) => this.changeFile(e)}
-                                      />
-                                      <div className="u_f_edit_content_title">
+                                      <div className="u_f_edit_content_title" onClick = {()=>this.setState({editFilePopup: true})}>
                                         Change
                                       </div>
-                                    </label>
                                   </div>
                                 </div>
                               </Col>
@@ -899,6 +891,68 @@ class EditFile extends Component {
                   </Col>
                 </Row>
               </Container>
+              <Dialog
+                open={this.state.editFilePopup}
+                onClose={() => this.setState({ editFilePopup: false })}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                  style={{ marginBottom: "50px" }}
+                >
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={() => this.setState({ editFilePopup: false })}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      Your Image views, downloads, likes and comments will be
+                      reseted
+                    </div>
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={()=>this.setState({
+                          editFilePopup: false
+                        })}
+                      >
+                        <label style = {{cursor: "pointer"}}>
+                        <input
+                          type="file"
+                          name=""
+                          id=""
+                          accept="video/*,image/*"
+                          style={{ display: "none" }}
+                          onChange={(e) => this.changeFile(e)}
+                        />
+                          Continue
+                        </label>
+                      </button>
+                      <button
+                        className="u_f_popup_btn2"
+                        onClick={() => this.setState({ editFilePopup: false })}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
             </section>
           </>
         </div>

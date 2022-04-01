@@ -353,7 +353,7 @@ class GalleryFilter extends React.Component {
     console.log(id);
     axios.post(`${domain}/api/pilot/getPilotId`, { userId: id }).then((res) => {
       if (res.data[0]._id) {
-        window.location.href = `/#/pilot_details/${res.data[0]._id}`;
+        window.location.href = `/pilot_details/${res.data[0]._id}`;
       }
     });
   };

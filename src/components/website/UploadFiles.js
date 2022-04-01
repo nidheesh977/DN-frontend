@@ -167,7 +167,7 @@ class UploadFiles extends Component {
               draft_changed: false,
               industryOptions: this.state.industryOptions,
               upload_status: "selected",
-              id: res.data[i]._id,
+              id: res.data[i]._id
             };
             files.push(file);
           }
@@ -175,7 +175,7 @@ class UploadFiles extends Component {
           this.setState({
             selected_files_details: files,
           });
-          if (files.length > 0) {
+          if (files.length>0){
             this.setState({
               files_selected: true,
             });
@@ -272,9 +272,10 @@ class UploadFiles extends Component {
   };
 
   chooseFiles = (e) => {
-    if (this.state.selected_files_details.length + e.target.files.length > 20) {
-      alert("File select limit is 20");
-    } else {
+    if (this.state.selected_files_details.length + e.target.files.length > 20 ){
+      alert("File select limit is 20")
+    }
+    else{
       var row_files = this.state.row_files;
       row_files.push(e.target.files);
       this.setState({
@@ -299,7 +300,7 @@ class UploadFiles extends Component {
         for (var j = 0; j < this.state.suggested_keywords.length; j++) {
           keywords.push(this.state.suggested_keywords[j]);
         }
-
+  
         details.push({
           file: "",
           name: e.target.files[i].name,
@@ -417,21 +418,14 @@ class UploadFiles extends Component {
   };
 
   selectImageType = (type) => {
-    if (
-      this.state.selected_files_details[this.state.file_edit].select_type[0] ===
-        "i" &&
-      (type === "image" || type === "3d")
-    ) {
+    if(this.state.selected_files_details[this.state.file_edit].select_type[0] === "i" && (type === "image" || type === "3d" )){
       var files_details = this.state.selected_files_details;
       files_details[this.state.file_edit].select_type = type;
       this.setState({
         selected_files_details: files_details,
       });
-    } else if (
-      this.state.selected_files_details[this.state.file_edit].select_type[0] ===
-        "3" &&
-      (type === "image" || type === "3d")
-    ) {
+    }
+    else if (this.state.selected_files_details[this.state.file_edit].select_type[0] === "3" && (type === "image" || type === "3d" )){
       var files_details = this.state.selected_files_details;
       files_details[this.state.file_edit].select_type = type;
       this.setState({
@@ -450,12 +444,9 @@ class UploadFiles extends Component {
   };
 
   continueEdit = () => {
-    document
-      .getElementById("u_f_nav_link1")
-      .classList.remove("u_f_nav_link_selected");
-    document
-      .getElementById("u_f_nav_link2")
-      .classList.add("u_f_nav_link_selected");
+
+    document.getElementById("u_f_nav_link1").classList.remove("u_f_nav_link_selected");
+    document.getElementById("u_f_nav_link2").classList.add("u_f_nav_link_selected");
 
     let config = {
       headers: {
@@ -479,6 +470,7 @@ class UploadFiles extends Component {
       error: false,
       resolutionCheckCount: 0,
       upload_choice: false,
+      
     });
     axios
       .post(`${domain}/api/draft/getDrafts`, config)
@@ -511,7 +503,7 @@ class UploadFiles extends Component {
             draft_changed: false,
             industryOptions: this.state.industryOptions,
             upload_status: "selected",
-            id: res.data[i]._id,
+            id: res.data[i]._id
           };
           files.push(file);
         }
@@ -663,18 +655,17 @@ class UploadFiles extends Component {
         resolutionCheckCount: this.state.resolutionCheckCount - 1,
       });
     }
-    if (this.state.selected_tab === 2) {
-      axios
-        .post(`${domain}/api/draft/deleteDraft`, { id: fileId }, config)
-        .then((res) => {
-          console.log(res);
-          this.setState({
-            draft_count: this.state.draft_count - 1,
-          });
+    if(this.state.selected_tab === 2){
+      axios.post(`${domain}/api/draft/deleteDraft`, {id: fileId}, config)
+      .then(res=>{
+        console.log(res)
+        this.setState({
+          draft_count: this.state.draft_count - 1
         })
-        .catch((err) => {
-          console.log(err.response);
-        });
+      })
+      .catch(err=>{
+        console.log(err.response)
+      })
     }
   };
 
@@ -691,14 +682,15 @@ class UploadFiles extends Component {
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
-        if (details[id].draft === true) {
-          details[id].draft_changed = true;
+        if (details[id].draft === true){
+          details[id].draft_changed = true
         }
         details[id].file = reader.result;
         this.setState({
           selected_files_details: details,
         });
       }
+      
     };
     reader.readAsDataURL(e.target.files[0]);
     if (e.target.files[0].type[0] !== "v") {
@@ -891,11 +883,12 @@ class UploadFiles extends Component {
       for (let i = 0; i < this.state.selected_files_details.length; i++) {
         let files = this.state.selected_files_details;
         let currentFile = files[i];
-        let data = {};
+        let data = {}
+        
 
         let link = `${domain}/api/draft/createDraft`;
         if (type === "draft") {
-          data = new FormData();
+           data = new FormData();
 
           data.append("file", currentFile.row);
           data.append("postName", currentFile.custom_name);
@@ -913,11 +906,11 @@ class UploadFiles extends Component {
 
           link = `${domain}/api/draft/createDraft`;
         } else {
-          let category = currentFile.category;
-          if (currentFile.category.value) {
-            category = currentFile.category.value;
+          let category = currentFile.category
+          if (currentFile.category.value){
+            category = currentFile.category.value
           }
-          if (!currentFile.draft_changed) {
+          if (!currentFile.draft_changed){
             data = {
               file: currentFile.filePath,
               postName: currentFile.custom_name,
@@ -926,10 +919,12 @@ class UploadFiles extends Component {
               keywords: currentFile.keywords,
               adult: currentFile.adult_content,
               category: category,
-            };
+            }
 
             link = `${domain}/api/draft/uploadDraft`;
-          } else {
+            
+          }
+          else{
             data = new FormData();
 
             data.append("file", currentFile.row);
@@ -944,47 +939,47 @@ class UploadFiles extends Component {
             data.append("experience", currentFile.experience);
             data.append("keywords", currentFile.keywords);
             data.append("adult", currentFile.adult_content);
-            if (currentFile.category.value) {
+            if (currentFile.category.value){
               data.append("category", currentFile.category.value);
-            } else {
+            }
+            else{
               data.append("category", currentFile.category);
             }
 
             link = `${domain}/api/image/createImage`;
           }
+
+          
         }
-        console.log(data);
+        console.log(data)
         axios
           .post(link, data, config)
           .then((res) => {
+
             files[i].upload_status = "uploaded";
             this.setState({
               selected_files_details: files,
             });
 
-            if (link === `${domain}/api/draft/uploadDraft`) {
-              axios
-                .post(
-                  `${domain}/api/draft/deleteDraft`,
-                  { id: files[i].id },
-                  config
-                )
-                .then((res) => {
-                  console.log(res);
-                  this.setState({
-                    draft_count: this.state.draft_count - 1,
-                  });
+            if (link === `${domain}/api/draft/uploadDraft`){
+              axios.post(`${domain}/api/draft/deleteDraft`, {id: files[i].id}, config)
+              .then(res=>{
+                console.log(res)
+                this.setState({
+                  draft_count: this.state.draft_count - 1
                 })
-                .catch((err) => {
-                  console.log(err.response);
-                });
+              })
+              .catch(err=>{
+                console.log(err.response)
+              })
             }
 
-            if (link === `${domain}/api/draft/createDraft`) {
+            if (link === `${domain}/api/draft/createDraft`){
               this.setState({
-                draft_count: this.state.draft_count + 1,
-              });
+                draft_count : this.state.draft_count + 1
+              })
             }
+
           })
           .catch((err) => {
             files[i].upload_status = "upload_failed";
@@ -1037,18 +1032,19 @@ class UploadFiles extends Component {
               axios
                 .post(link, data, config)
                 .then((res) => {
-                  console.log(files[i].row);
+                  console.log(files[i].row)
 
                   files[i].upload_status = "uploaded";
                   this.setState({
                     selected_files_details: files,
                   });
 
-                  if (link === `${domain}/api/draft/createDraft`) {
+                  if (link === `${domain}/api/draft/createDraft`){
                     this.setState({
-                      draft_count: this.state.draft_count + 1,
-                    });
+                      draft_count : this.state.draft_count + 1
+                    })
                   }
+
                 })
                 .catch((err) => {
                   files[i].upload_status = "upload_failed";
@@ -1114,7 +1110,7 @@ class UploadFiles extends Component {
                               onChange={this.chooseFiles}
                               ref="addFileRef"
                             />
-                            {this.state.selected_files_details.length < 20 && (
+                            {this.state.selected_files_details.length < 20 &&
                               <label
                                 style={{
                                   display: "inline-block",
@@ -1123,10 +1119,10 @@ class UploadFiles extends Component {
                                 for="add_files"
                                 id="u_f_add_more"
                               >
-                                <i class="fas fa-plus u_f_add_more_icon"></i>{" "}
-                                Add more
+                                <i class="fas fa-plus u_f_add_more_icon"></i> Add
+                                more
                               </label>
-                            )}
+                            }
                             <select
                               name=""
                               id="u_f_select_category"
@@ -1509,10 +1505,7 @@ class UploadFiles extends Component {
                                                 <div
                                                   className="u_f_edit_content_title"
                                                   onClick={() =>
-                                                    this.removeFile(
-                                                      index,
-                                                      file.id
-                                                    )
+                                                    this.removeFile(index, file.id)
                                                   }
                                                 >
                                                   Remove
@@ -1561,14 +1554,15 @@ class UploadFiles extends Component {
                           </div>
                           <span className="u_f_filename">
                             {this.state.selected_files_details[
-                              this.state.file_edit
-                            ].name.length > 50
-                              ? `${this.state.selected_files_details[
-                                  this.state.file_edit
-                                ].name.slice(0, 50)} ...`
-                              : this.state.selected_files_details[
-                                  this.state.file_edit
-                                ].name}
+                                this.state.file_edit
+                              ].name.length > 50?
+                              `${this.state.selected_files_details[
+                                this.state.file_edit
+                              ].name.slice(0,50)} ...`
+                              :this.state.selected_files_details[
+                                this.state.file_edit
+                              ].name
+                            }
                           </span>
                         </div>
                       ) : (
@@ -1867,22 +1861,21 @@ class UploadFiles extends Component {
                         </div>
                       )}
                       <div id="u_f_btn">
-                        {this.state.selected_tab === 1 ? (
-                          <button
-                            id="u_f_save_draft"
-                            onClick={() => this.saveFiles("draft")}
-                          >
-                            Save Draft
-                          </button>
-                        ) : (
-                          <button
-                            id="u_f_save_draft"
-                            style={{ opacity: "0.5" }}
-                          >
-                            Save Draft
-                          </button>
-                        )}
-
+                        {this.state.selected_tab === 1
+                        ?<button
+                          id="u_f_save_draft"
+                          onClick={() => this.saveFiles("draft")}
+                        >
+                          Save Draft
+                        </button>
+                        :<button
+                        id="u_f_save_draft"
+                        style = {{opacity: "0.5"}}
+                      >
+                        Save Draft
+                      </button>
+                        }
+                        
                         <button
                           id="u_f_submit"
                           onClick={() => this.saveFiles("publish")}
@@ -1939,55 +1932,6 @@ class UploadFiles extends Component {
                         onClick={this.uploadNew}
                       >
                         Upload new
-                      </button>
-                    </div>
-                  </Row>
-                </DialogContent>
-              </Dialog>
-              <Dialog
-                open={this.state.editDraft}
-                onClose={()=>this.setState({editDraftPopup: false})}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                maxWidth={"md"}
-                fullWidth={true}
-                PaperProps={{
-                  style: {
-                    maxWidth: "820px",
-                    borderRadius: "10px",
-                  },
-                }}
-              >
-                <DialogContent
-                  className={All.PopupBody}
-                  style={{ marginBottom: "50px" }}
-                >
-                  <div
-                    style={{ position: "absolute", top: "20px", right: "20px" }}
-                  >
-                    <img
-                      src={Close}
-                      alt=""
-                      onClick={()=>this.setState({editDraftPopup: false})}
-                      style={{ cursor: "pointer" }}
-                    />
-                  </div>
-                  <Row style={{ marginTop: "30px" }}>
-                    <div className="u_f_popup_title">
-                      Your Image views, downloads, likes and comments will be reseted
-                    </div>
-                    <div className="u_f_popup_btn_container">
-                      <button
-                        className="u_f_popup_btn1"
-                        onClick={this.continueDraftEdit}
-                      >
-                        Continue
-                      </button>
-                      <button
-                        className="u_f_popup_btn2"
-                        onClick={()=>this.setState({editDraftPopup: false})}
-                      >
-                        Cancel
                       </button>
                     </div>
                   </Row>
