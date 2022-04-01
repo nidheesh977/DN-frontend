@@ -74,10 +74,27 @@ else if(localStorage.getItem("email") === "true" && localStorage.getItem("role")
       signupFailure: false,
     });
   };
+   config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
 
-  goToHomepage = (success) => {
+  goToHomepage =  (success) => {
+    console.log(this.state.user_category)
+
     if (success){
-      if(this.state.user_category === "pilot" || this.state.user_category === "visitor" || this.state.user_category === "candidate"){
+      if(this.state.user_category == "visitor"){
+        console.log("Got in")
+        axios.post(`${domain}/api/user/updateBoosterRole`, this.config).then(res =>{
+          console.log(res)
+          localStorage.setItem("role", "booster");
+          this.props.history.push("/booster_dashboard/account/");
+        }).catch(err=>{
+          console.log(err)
+        })
+      }
+      if(this.state.user_category === "pilot" ){
         this.props.history.push("/createPilot");
       }
       else if (this.state.user_category === "service_center"){
@@ -90,6 +107,7 @@ else if(localStorage.getItem("email") === "true" && localStorage.getItem("role")
     else{
       this.props.history.push("/")
     }
+  
   }
 
   render() {

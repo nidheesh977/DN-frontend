@@ -52,8 +52,32 @@ function VerifiedEmail() {
               <div>
                 {" "}
                 <h2>Your Mail has been successfully Verified</h2>
-                <div>
-                  <p>Click below to complete your Profile or go to home Page</p>
+
+
+                {
+                    localStorage.getItem("role") == "undefined" ?   <div>
+                    <p>Click below to complete your Profile or go to home Page</p>
+                    <div
+                      className="u_f_popup_btn1"
+                      style={{ display: "inline-block" }}
+                      onClick={() => {
+                        history.push("/");
+                      }}
+                    >
+                      Home Page
+                    </div>
+  
+                <div
+                      className="u_f_popup_btn2"
+                      style={{ display: "inline-block" }}
+                      onClick={() => {
+                        history.push("/choose-categories");
+                      }}
+                    >
+                      Complete Profile
+                    </div>
+                  </div>   : <div>
+                  <p>Click below to go to home Page</p>
                   <div
                     className="u_f_popup_btn1"
                     style={{ display: "inline-block" }}
@@ -64,19 +88,13 @@ function VerifiedEmail() {
                     Home Page
                   </div>
 
-                  {
-                    localStorage.getItem("role") == "undefined" ?     <div
-                    className="u_f_popup_btn2"
-                    style={{ display: "inline-block" }}
-                    onClick={() => {
-                      history.push("/choose-categories");
-                    }}
-                  >
-                    Complete Profile
-                  </div> : <></>
-                  }
-              
+         
                 </div>
+                  }
+
+
+
+                
               </div>
             )}
           </div>
