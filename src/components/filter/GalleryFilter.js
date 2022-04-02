@@ -126,8 +126,6 @@ class GalleryFilter extends React.Component {
         },
       ],
 
-      times: ["Today", "Week", "Month", "Ever"],
-
       activeLink: "all",
       liked_list: [],
       loginError: false,
@@ -363,6 +361,10 @@ class GalleryFilter extends React.Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
+    this.setState({
+      loading: true,
+      listing: []
+    })
     await this.setState({
       followingDropdown: e.target.value,
     });
@@ -373,7 +375,13 @@ class GalleryFilter extends React.Component {
           console.log(res);
           this.setState({
             listing: res.data,
+            loading: false
           });
+        })
+        .catch(err=>{
+          this.setState({
+            loading: false
+          })
         });
     } else {
       axios
@@ -391,6 +399,7 @@ class GalleryFilter extends React.Component {
           });
         });
     }
+    
   };
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
@@ -423,9 +432,6 @@ class GalleryFilter extends React.Component {
           liked_list: res.data.likedMedia,
         });
       })
-      .catch((err) => {
-        this.setState({});
-      });
   }
 
   dropdown_open = (id) => {
@@ -458,6 +464,10 @@ class GalleryFilter extends React.Component {
     document.getElementById("file_details_" + id).style.visibility = "hidden";
   };
   dropdownChanged = async (e) => {
+    this.setState({
+      listing: [],
+      loading: true
+    })
     await this.setState({
       dropdown: e.target.value,
     });
@@ -471,7 +481,13 @@ class GalleryFilter extends React.Component {
         console.log(res);
         this.setState({
           listing: res.data,
+          loading: false
         });
+      })
+      .catch(err => {
+        this.setState({
+          loading: false
+        })
       });
   };
 
@@ -484,7 +500,10 @@ class GalleryFilter extends React.Component {
   submitted = async (e) => {
     console.log(this.state.keywords);
     e.preventDefault();
-
+    this.setState({
+      listing: [],
+      loading: true
+    })
     await axios
       .post(
         `${domain}/api/image/imageFilters`,
@@ -495,26 +514,21 @@ class GalleryFilter extends React.Component {
         console.log(res);
         this.setState({
           listing: res.data,
+          loading: false
         });
       });
+    this.setState({
+      loading: false
+    })
   };
 
   render() {
     const { links, activeLink } = this.state;
-    const { times } = this.state;
-    const { follow, valuesss } = this.state;
     const { listing, value } = this.state;
-    const { users, valuess } = this.state;
-    const { title, values } = this.state;
-    const { posttitle, posttitlevalues } = this.state;
-    const { valuees, pathMap } = this.state;
-    const { loading, data } = this.state;
+    const { valuees} = this.state;
+    const { loading} = this.state;
 
     const { classes } = this.props;
-    var listing_length = this.state.listing_length;
-    var dropdown_open = this.dropdown_open;
-    var dropdown_close = this.dropdown_close;
-    var dropdown_select = this.dropdown_select;
 
     return (
       <>
@@ -561,7 +575,7 @@ class GalleryFilter extends React.Component {
                 <Row>
                   <Col lg={2} xs={6} className="DropdownFilter views">
                     {localStorage.getItem("access_token") && (
-                      <span>
+                      <label>
                         <select
                           className="dropdown dropdown__text"
                           onChange={this.followingChanged}
@@ -584,7 +598,7 @@ class GalleryFilter extends React.Component {
                             right: "50px",
                           }}
                         />
-                      </span>
+                      </label>
                     )}
                   </Col>
 

@@ -42,7 +42,7 @@ class EditFile extends Component {
       loading: true,
       file: {},
       fileChanged: false,
-      editFilePopup: false
+      editFilePopup: false,
     };
   }
 
@@ -137,11 +137,13 @@ class EditFile extends Component {
   };
 
   selectImageType = (type) => {
-    var files_details = this.state.file;
-    files_details.select_type = type;
-    this.setState({
-      file: files_details,
-    });
+    if (this.state.file.select_type !== "video" && type !== "video"){
+      var files_details = this.state.file;
+      files_details.select_type = type;
+      this.setState({
+        file: files_details,
+      });
+    }
   };
 
   changeAdultContent = () => {
@@ -205,8 +207,7 @@ class EditFile extends Component {
     });
   };
 
-  changeFile = (e, id) => {
-    
+  changeFile = (e) => {
     if (e.target.files[0]) {
       var file = this.state.file;
       var selectedFile = e.target.files[0];
@@ -319,7 +320,7 @@ class EditFile extends Component {
             this.setState({
               file: file,
             });
-            this.props.history.goBack()
+            this.props.history.goBack();
           })
           .catch((err) => {
             console.log(err);
@@ -355,7 +356,7 @@ class EditFile extends Component {
               this.setState({
                 file: file,
               });
-              this.props.history.goBack()
+              this.props.history.goBack();
             })
             .catch((err) => {
               console.log(err);
@@ -596,9 +597,22 @@ class EditFile extends Component {
                                   )}
 
                                   <div className="u_f_edit_content">
-                                      <div className="u_f_edit_content_title" onClick = {()=>this.setState({editFilePopup: true})}>
-                                        Change
-                                      </div>
+                                    <div
+                                      className="u_f_edit_content_title"
+                                      onClick={() =>
+                                        this.setState({ editFilePopup: true })
+                                      }
+                                    >
+                                      Change
+                                    </div>
+                                    <input
+                                      type="file"
+                                      name="edit_file"
+                                      id="edit_file"
+                                      accept="video/*,image/*"
+                                      style={{ display: "none" }}
+                                      onChange={this.changeFile}
+                                    />
                                   </div>
                                 </div>
                               </Col>
@@ -927,21 +941,13 @@ class EditFile extends Component {
                     <div className="u_f_popup_btn_container">
                       <button
                         className="u_f_popup_btn1"
-                        onClick={()=>this.setState({
-                          editFilePopup: false
-                        })}
+                        onClick={() =>
+                          this.setState({
+                            editFilePopup: false,
+                          })
+                        }
                       >
-                        <label style = {{cursor: "pointer"}}>
-                        <input
-                          type="file"
-                          name=""
-                          id=""
-                          accept="video/*,image/*"
-                          style={{ display: "none" }}
-                          onChange={(e) => this.changeFile(e)}
-                        />
-                          Continue
-                        </label>
+                        <label style={{ cursor: "pointer" }} htmlFor = "edit_file">Continue</label>
                       </button>
                       <button
                         className="u_f_popup_btn2"

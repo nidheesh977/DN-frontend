@@ -48,6 +48,7 @@ class UploadFiles extends Component {
       industries: [],
       industryOptions: [],
       resolutionCheckCount: 0,
+      file_count_exceed: false
     };
   }
 
@@ -158,7 +159,7 @@ class UploadFiles extends Component {
               experience: res.data[i].experience,
               keywords: res.data[i].keywords,
               adult: res.data[i].adult,
-              category: res.data[i].category,
+              category: res.data[i].category !== "undefined" ? res.data[i].category : "",
               resolution_satisfied: true,
               suggested_keywords: keywords,
               select_type: res.data[i].fileType,
@@ -273,7 +274,7 @@ class UploadFiles extends Component {
 
   chooseFiles = (e) => {
     if (this.state.selected_files_details.length + e.target.files.length > 20 ){
-      alert("File select limit is 20")
+      this.setState({file_count_exceed: true})
     }
     else{
       var row_files = this.state.row_files;
@@ -494,7 +495,7 @@ class UploadFiles extends Component {
             keywords: res.data[i].keywords,
             adult: res.data[i].adult,
             adult_content: res.data[i].adult,
-            category: res.data[i].category,
+            category: res.data[i].category !== "undefined" ? res.data[i].category : "",
             resolution_satisfied: true,
             suggested_keywords: keywords,
             select_type: res.data[i].fileType,
@@ -733,7 +734,7 @@ class UploadFiles extends Component {
           selected_files[i].resolution_satisfied === true
         ) {
           let file_error = false;
-          if (selected_files[i].custom_name === "") {
+          if (selected_files[i].custom_name === "" && type === "publish") {
             error = true;
             file_error = true;
             selected_files[i].error = true;
@@ -748,7 +749,7 @@ class UploadFiles extends Component {
               -150;
             window.scrollTo({ top: y, behavior: "smooth" });
           }
-          if (selected_files[i].category === "") {
+          if (selected_files[i].category === "" && type === "publish") {
             error = true;
             file_error = true;
             selected_files[i].error = true;
@@ -763,7 +764,7 @@ class UploadFiles extends Component {
               -150;
             window.scrollTo({ top: y, behavior: "smooth" });
           }
-          if (selected_files[i].experience === "") {
+          if (selected_files[i].experience === "" && type === "publish") {
             error = true;
             file_error = true;
             selected_files[i].error = true;
@@ -778,7 +779,7 @@ class UploadFiles extends Component {
               -150;
             window.scrollTo({ top: y, behavior: "smooth" });
           }
-          if (selected_files[i].keywords.length === 0) {
+          if (selected_files[i].keywords.length === 0 && type === "publish") {
             error = true;
             file_error = true;
             selected_files[i].error = true;
@@ -803,7 +804,7 @@ class UploadFiles extends Component {
         }
       } else {
         let file_error = false;
-        if (selected_files[i].custom_name === "") {
+        if (selected_files[i].custom_name === "" && type === "publish") {
           error = true;
           file_error = true;
           selected_files[i].error = true;
@@ -818,7 +819,7 @@ class UploadFiles extends Component {
             -150;
           window.scrollTo({ top: y, behavior: "smooth" });
         }
-        if (selected_files[i].category === "") {
+        if (selected_files[i].category === "" && type === "publish") {
           error = true;
           file_error = true;
           selected_files[i].error = true;
@@ -833,7 +834,7 @@ class UploadFiles extends Component {
             -150;
           window.scrollTo({ top: y, behavior: "smooth" });
         }
-        if (selected_files[i].experience === "") {
+        if (selected_files[i].experience === "" && type === "publish") {
           error = true;
           file_error = true;
           selected_files[i].error = true;
@@ -848,7 +849,7 @@ class UploadFiles extends Component {
             -150;
           window.scrollTo({ top: y, behavior: "smooth" });
         }
-        if (selected_files[i].keywords.length === 0) {
+        if (selected_files[i].keywords.length === 0 && type === "publish") {
           error = true;
           file_error = true;
           selected_files[i].error = true;
@@ -879,7 +880,7 @@ class UploadFiles extends Component {
       },
     };
 
-    if (this.state.selected_tab === 2) {
+    if (this.state.selected_tab === 2 && !error) {
       for (let i = 0; i < this.state.selected_files_details.length; i++) {
         let files = this.state.selected_files_details;
         let currentFile = files[i];
@@ -955,7 +956,7 @@ class UploadFiles extends Component {
         axios
           .post(link, data, config)
           .then((res) => {
-
+            console.log(res.data)
             files[i].upload_status = "uploaded";
             this.setState({
               selected_files_details: files,
@@ -982,6 +983,7 @@ class UploadFiles extends Component {
 
           })
           .catch((err) => {
+            console.log(err.response)
             files[i].upload_status = "upload_failed";
             this.setState({
               selected_files_details: files,
@@ -1032,8 +1034,8 @@ class UploadFiles extends Component {
               axios
                 .post(link, data, config)
                 .then((res) => {
+                  console.log(res.data)
                   console.log(files[i].row)
-
                   files[i].upload_status = "uploaded";
                   this.setState({
                     selected_files_details: files,
@@ -1870,7 +1872,7 @@ class UploadFiles extends Component {
                         </button>
                         :<button
                         id="u_f_save_draft"
-                        style = {{opacity: "0.5"}}
+                        style = {{opacity: "0.5", cursor: "not-allowed"}}
                       >
                         Save Draft
                       </button>
@@ -1932,6 +1934,49 @@ class UploadFiles extends Component {
                         onClick={this.uploadNew}
                       >
                         Upload new
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
+              <Dialog
+                open={this.state.file_count_exceed}
+                onClose={()=>this.setState({file_count_exceed: false})}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                  style={{ marginBottom: "50px" }}
+                >
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>this.setState({file_count_exceed: false})}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      You cannot upload more than 20 files at a time.
+                    </div>
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={()=>this.setState({file_count_exceed: false})}
+                      >
+                        Close
                       </button>
                     </div>
                   </Row>
