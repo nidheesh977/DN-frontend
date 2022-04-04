@@ -398,6 +398,7 @@ function SignUp(props) {
                       options={test}
                       value={value1}
                       onChange={changeHandler1}
+                       
                     />
                   </div>
                   <div className="login_input_error_msg" id="country_error">

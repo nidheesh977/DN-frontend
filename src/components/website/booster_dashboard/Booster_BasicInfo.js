@@ -714,7 +714,7 @@ setOnReload(false)
             aria-describedby="alert-dialog-description"
             maxWidth={"md"}
             fullWidth={true}
-            PaperProps={{ style: { width: "1000px", borderRadius: "10px" } }}
+            PaperProps={{ style: { width: "950px", borderRadius: "10px" } }}
           >
             <DialogContent
               className={All.PopupBody}
@@ -737,7 +737,7 @@ setOnReload(false)
 <div style={{fontSize: "22px"}}>Want to Show your talent by uploading Creatives?</div>
 </CardContent>
 <CardActions style={{display: "flex", justifyContent:"center"}}>
-<button>Upgrade to Pilot</button></CardActions>
+<button style={{padding : "10px 20px", borderRadius: "20px", border:"none", backgroundColor :"#00e7fc", fontFamily:"muli-light"}}>Upgrade to Pilot</button></CardActions>
 </Card>
 </Col>
 <Col xl={12}>
@@ -746,8 +746,7 @@ setOnReload(false)
 <div style={{fontSize: "22px"}}>Want to list your service center?</div>
 </CardContent>
 <CardActions style={{display: "flex", justifyContent:"center"}}>
-<Button variant="contained" color="success">Complete Center Profile</Button>
-</CardActions>
+<button style={{padding : "10px 20px", borderRadius: "20px", border:"1px solid gray", backgroundColor :"#4ffea3", fontFamily:"muli-light"}}>Complete Profile</button></CardActions>
 </Card>
 </Col>
 <Col xl={12}>
@@ -756,8 +755,7 @@ setOnReload(false)
 <div style={{fontSize: "22px"}}>Want to post jobs and hire Droners?</div>
 </CardContent>
 <CardActions style={{display: "flex", justifyContent:"center"}}>
-<Button variant="contained" color="success">Complete Profile</Button>
-</CardActions>
+<button style={{padding : "10px 20px", borderRadius: "20px", border:"none", backgroundColor :"#00e7fc", fontFamily:"muli-light"}}>Complete Profile</button></CardActions>
 </Card>
 </Col>
 </Row>

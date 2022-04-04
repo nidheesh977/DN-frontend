@@ -137,11 +137,13 @@ class EditFile extends Component {
   };
 
   selectImageType = (type) => {
+    if (this.state.file.select_type !== "video" && type !== "video"){
     var files_details = this.state.file;
     files_details.select_type = type;
     this.setState({
       file: files_details,
     });
+  }
   };
 
   changeAdultContent = () => {
@@ -599,6 +601,14 @@ class EditFile extends Component {
                                       <div className="u_f_edit_content_title" onClick = {()=>this.setState({editFilePopup: true})}>
                                         Change
                                       </div>
+                                      <input
+                          type="file"
+                          name="edit_file"
+                          id="edit_file"
+                          accept="video/*,image/*"
+                          style={{ display: "none" }}
+                          onChange={(e) => this.changeFile(e)}
+                        />
                                   </div>
                                 </div>
                               </Col>
@@ -931,15 +941,8 @@ class EditFile extends Component {
                           editFilePopup: false
                         })}
                       >
-                        <label style = {{cursor: "pointer"}}>
-                        <input
-                          type="file"
-                          name=""
-                          id=""
-                          accept="video/*,image/*"
-                          style={{ display: "none" }}
-                          onChange={(e) => this.changeFile(e)}
-                        />
+                        <label style = {{cursor: "pointer"}} htmlFor="edit_file">
+                       
                           Continue
                         </label>
                       </button>

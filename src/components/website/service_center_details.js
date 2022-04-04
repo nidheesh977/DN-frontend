@@ -15,6 +15,8 @@ import IconButton from "@material-ui/core/IconButton";
 import ProfileImg from "../ProfileImg/Profile";
 import CoverImg from "../ProfileCoverImg/ProfileCoverImg";
 import Close from "../images/close.svg";
+import Loader from "../Loader/loader";
+
 import FollowBtn from "../tabs/FollowBtn";
 import "reactjs-popup/dist/index.css";
 import { useState, useEffect } from "react";
@@ -30,8 +32,10 @@ import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import s_c_form_img from "../images/s_c_form_img.png";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
-import { useParams } from "react-router-dom";
-
+import { useParams, useHistory } from "react-router-dom";
+import BookmarkOutlinedIcon from '@material-ui/icons/BookmarkOutlined';
+import BookmarkFilled from "../images/bookmarkFilled.png"
+import Bookmark from "../images/bookmark.png"
 import {
   ScrollingProvider,
   useScrollSection,
@@ -39,6 +43,7 @@ import {
 } from "react-scroll-section";
 
 import $ from "jquery";
+import { Item } from "semantic-ui-react";
 
 const styles = (theme) => ({
   root: {
@@ -88,6 +93,7 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 export default function ServiceCenterDetails(props) {
+  const history = useHistory()
   const [service_center, setServiceCenter] = useState({
     id: "1",
     name: "Nexevo Technologies1",
@@ -159,6 +165,7 @@ export default function ServiceCenterDetails(props) {
       likes: 10,
     },
   ]);
+  const [isLoading, setLoading] = useState(false);
 
   const [writeReview, setWriteReview] = useState(false);
 
@@ -172,6 +179,11 @@ export default function ServiceCenterDetails(props) {
     email: "",
     message: "",
   });
+  let [loginErrorPopup, setloginErrorPopup] = useState(false);
+
+  const loginErrorPopupClose = () =>{
+    setloginErrorPopup(false)
+  }
   const submitData = () => {
     axios
       .post(
@@ -192,7 +204,7 @@ export default function ServiceCenterDetails(props) {
             // setDetails(response.data);
             // setStatus(response.status);
             setReviews(response.data);
-
+            document.getElementById("toHide").style.display = "none"
             console.log(response);
             // setBrands(response.data.brandOfDrones)
           });
@@ -203,9 +215,31 @@ export default function ServiceCenterDetails(props) {
 
     closeRating();
   };
+let [centers, setCenters] = useState([])
+let [myData, setMyData] = useState({
+  name: "",
+  phoneNo: "",
+  emailId: "",
+})
+let [message, setMessage] = useState("")
+useEffect(()=>{
+  axios.get(`${domain}/api/user/getUserData`, config).then(res=>{
+    console.log(res)
+    setCenters(res.data.markedCenters)
+    setMyData({
+      name: res.data.name,
+      phoneNo: res.data.phoneNo,
+      emailId: res.data.email
+    })
+  })
+}, [])
+
 
   const likeReview = (id) => {
-    axios
+    if(!localStorage.getItem("access_token")){
+      setloginErrorPopup(true)
+    }else{
+      axios
       .post(
         `${domain}/api/review/likeReview`,
         {
@@ -238,6 +272,8 @@ export default function ServiceCenterDetails(props) {
       .catch((err) => {
         console.log(err);
       });
+    }
+   
   };
   
   const unlikeReview = (id) => {
@@ -275,6 +311,62 @@ export default function ServiceCenterDetails(props) {
         console.log(err);
       });
   };
+
+
+let bookmark = () =>{
+  if(localStorage.getItem("access_token")){
+    axios.post(`${domain}/api/center/saveCenter/${param.id}`, config).then(res=>{
+      console.log(res)
+      axios.get(`${domain}/api/user/getUserData`, config).then(res=>{
+        console.log(res)
+        setCenters(res.data.markedCenters)
+      })
+    })
+  }else{
+    setloginErrorPopup(true)
+  }
+ 
+}
+
+let unbookmark  = () =>{
+  axios.post(`${domain}/api/center/unsaveCenter/${param.id}`, config).then(res=>{
+    console.log(res)
+    axios.get(`${domain}/api/user/getUserData`, config).then(res=>{
+      console.log(res)
+      setCenters(res.data.markedCenters)
+    })
+  })
+}
+
+let enquiryChange = (e) =>{
+  setMyData({
+    ...myData,
+    [e.target.name]: e.target.value
+  })
+  console.log(myData)
+}
+
+let changeMessage = (e) =>{
+ 
+setMessage(e.target.value);
+
+}
+
+let captureEnquiry = () =>{
+  setLoading(true)
+  axios.post(`${domain}/api/enquiry/createEnquiry/${param.id}`, {emailId: myData.emailId, phoneNo: myData.phoneNo, name: myData.name, message: message}, config).then(res=>{
+    console.log(res)
+    setMessage("")
+    setEnquiry(false)
+    setLoading(false)
+
+  }).catch(err=>{
+    console.log(err)
+  })
+  console.log(myData, message)
+}
+
+
   const [rating, setRating] = useState(false);
 
   const [error, setError] = useState(false);
@@ -282,7 +374,12 @@ export default function ServiceCenterDetails(props) {
 
   const [likedReviews, setLikedReviews] = useState([])
   const enquireNow = () => {
-    setEnquiry(true);
+    if(localStorage.getItem("access_token")){
+      setEnquiry(true);
+    }
+    else{
+      setloginErrorPopup(true)
+    }
   };
 
   const whatsappChat = (whatsapp_number) => {
@@ -294,13 +391,19 @@ export default function ServiceCenterDetails(props) {
   };
 
   const submitReview = () => {
-    if (newReview != "") {
-      setRating(true);
-    } else {
-      document.getElementById("s_c_d_review").focus();
-      document.getElementById("s_c_d_review").style.backgroundColor =
-        "rgb(255, 219, 219)";
-    }
+    if(localStorage.getItem("access_token")){
+      if (newReview != "") {
+        setRating(true);
+      } else {
+        document.getElementById("s_c_d_review").focus();
+        document.getElementById("s_c_d_review").style.backgroundColor =
+          "rgb(255, 219, 219)";
+      }
+    }else{
+        setloginErrorPopup(true)
+      }
+    
+    
   };
 
   const closeRating = () => {
@@ -383,6 +486,8 @@ export default function ServiceCenterDetails(props) {
 
         console.log(response);
         setReviews(response.data);
+        if(response.data.length == 0 ){
+document.getElementById("toHide").style.display = "block"        }
 
         // setBrands(response.data.brandOfDrones)
       });
@@ -411,26 +516,31 @@ setLikedReviews(response.data.likedReviews);
       <section
         className={` ${All.Profile} ${All.EndUserProfile} s_c_d_container`}
       >
+
         <Container className={All.Container}>
+          <div style={{ position: "relative"}}>
+        <img src={details.coverPic} style={{width: "100%", height:"300px", borderRadius:"10px"}} />
+        <img src={details.profilePic} style={{width: "200px", height:"200px", borderRadius:"100px", position:"absolute", bottom: "-100px", right:"50px", border: "5px solid white", boxShadow: "5px 5px 5px #ccc"}}/>
+        </div>
+
           <Row>
             <Col
               md={6}
               className={`${All.Order_xs_2} ${All.Order_sm_2} ${All.pr_xs_30} ${All.pl_xs_30} ${All.profileImg}`}
             >
-              <Box
-                py={1}
-                display="flex"
-                className={`${All.D_Block_sm} ${All.D_Block_xs}`}
-              >
-                <Box pr={5}>
-                  <ProfileImg />
-                </Box>
-              </Box>
+              
 
-              <Box py={1}>
-                <h2 style={{ marginTop: "35px" }}>
-                  {details.centerName || <Skeleton />}{" "}
-                </h2>
+              <Box py={1} style={{display:"flex", alignItems:"flex-end"}}>
+                <h2 style={{ marginTop: "35px", textTransform: "capitalize" }}>
+                  {details.centerName || <Skeleton />}  
+                </h2> 
+
+
+                {
+                  centers.includes(param.id) ? <img src={BookmarkFilled} style={{width: "40px", marginLeft:"20px"}} onClick={unbookmark}/> : <img src={Bookmark} style={{width: "40px", marginLeft:"20px"}} onClick={bookmark}/>
+                }
+                
+               
               </Box>
               <Box py={1}>
                 <h4>
@@ -492,9 +602,20 @@ setLikedReviews(response.data.likedReviews);
                 <div className="s_c_d_other_details_content">
                   {details.workingHours}
                 </div>
+
+
+                {/* {
+
+                  details.holidays ? <> <div className="s_c_d_other_details_title">Holidays:</div>
+                  <div className="s_c_d_other_details_content">
+                    {details.holidays.map((item, i)=>{
+  return(<div style={{textTransform :"capitalize"}}>{item}</div>)                  })}
+                  </div> </> : <></>
+                }
+                 */}
                 <div className="s_c_d_other_details_title">Address:</div>
                 <div className="s_c_d_other_details_content">
-                  {details.address}
+                  {details.city} , {details.state}
                 </div>
                 <div className="s_c_d_other_details_title">
                   Brands we can service
@@ -524,17 +645,17 @@ setLikedReviews(response.data.likedReviews);
                 <button className="s_c_d_button1" onClick={enquireNow}>
                   Enquire Now
                 </button>
-                <Link onClick={() => whatsappChat(details.whatsappNumber)}>
+
+
+                {
+                  details.whatsappNo ?   <Link onClick={() => whatsappChat(details.whatsappNumber)}>
                   <img src={whatsapp_icon} alt="" height={"35px"} />
-                </Link>
+                </Link> : <></>
+                }
+              
               </div>
             </Col>
-            <Col
-              md={6}
-              className={`${All.Order_xs_1} ${All.Order_sm_1}  ${All.coverImg} ${All.pr_xs_30} ${All.pl_xs_30}`}
-            >
-              <CoverImg />
-            </Col>
+            
           </Row>
           <div className="s_c_d_tabs">
             <span className="s_c_d_tab s_c_d_tab_selected" id="s_c_d_about_tab">
@@ -614,6 +735,9 @@ setLikedReviews(response.data.likedReviews);
                   ""
                 )}
                 <div className="s_c_d_review_list">
+
+<div id="toHide" style={{fontSize: "22px", fontFamily:"muli-regular", textAlign: "center", marginTop: "50px", display: "none"}}>No Reviews Yet</div>
+
                   {/* yaseen                   */}
                   {reviews.map((review, index) => {
                     return (
@@ -621,8 +745,8 @@ setLikedReviews(response.data.likedReviews);
                         <div className="s_c_d_review">
                           <div className="s_c_d_review_img_name">
                             <img
-                              src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                              alt=""
+                              src={review.userId.profilePic}
+                              alt="" style={{width: "45px", height: "45px", borderRadius:"22.5px"}}
                               className="s_c_d_review_img"
                             />
                             <div className="s_c_d_review_name">
@@ -713,51 +837,79 @@ setLikedReviews(response.data.likedReviews);
               <Col xl={1}></Col>
             </Visible>
             <Col xl={4} lg={5} md={6} sm={12}>
-              <div id="s_c_d_contact_details">
-                <div className="s_c_d_contact_details_title">Chat:</div>
-                <div
-                  className="s_c_d_contact_details_whatsapp"
-                  onClick={() => whatsappChat(details.whatsappNumber)}
-                >
-                  <img src={whatsapp_icon} alt="" height={"35px"} />
-                  Chat on whatsapp
-                </div>
+            <div id="s_c_d_contact_details">
+{
+  details.whatsappNo ? <> <div className="s_c_d_contact_details_title">Chat:</div>
+  <div
+    className="s_c_d_contact_details_whatsapp"
+    onClick={() => whatsappChat(details.whatsappNumber)}
+  >
+    <img src={whatsapp_icon} alt="" height={"35px"} />
+    Chat on whatsapp
+  </div></> : <></>
+}
+
+              
+               
                 <div className="s_c_d_contact_details_title">
                   Phone Numbers:
                 </div>
                 <div className="s_c_d_contact_details_content">
                   <a href="tel:+91 9876543210">
-                    {details.phoneNo}, {details.secondaryNumber}
+                    {details.phoneNo} {details.secondaryNumber ? "," : ""}  {details.secondaryNumber ? details.secondaryNumber : <></> }
                   </a>
                 </div>
                 <div className="s_c_d_contact_details_title">Email ID:</div>
                 <div className="s_c_d_contact_details_content">
                   <Link>{details.email}</Link>
                 </div>
-                <div className="s_c_d_contact_details_title">Website:</div>
-                <div className="s_c_d_contact_details_content">
-                  <Link>{details.website}</Link>
-                </div>
+{
+  details.website ? <> <div className="s_c_d_contact_details_title">Website:</div>
+  <div className="s_c_d_contact_details_content">
+    <Link>{details.website}</Link>
+  </div> </> : <></>
+}
+
+               
                 <div className="s_c_d_contact_details_title">Working time</div>
                 <div className="s_c_d_contact_details_content">
                   {details.workingHours}
                 </div>
+{
+  details.holidays ? <><div className="s_c_d_contact_details_title">Holidays</div>
+  <div className="s_c_d_contact_details_content">
+    {details.holidays.map((item, i)=>{
+      return(<div style={{textTransform: "capitalize"}}>{item}</div>)
+    })}
+  </div></> : <></>
+}
+                
                 <div className="s_c_d_contact_details_title">Address</div>
                 <div className="s_c_d_contact_details_content">
-                  {details.address}
+                  {details.state}, {details.city}
                 </div>
+
+             
+
+
               </div>
               <div id="s_c_d_photos">
                 <div className="s_c_d_photos_title">Photos</div>
                 <div className="s_c_d_photos_list">
                   <Row gutterWidth={20}>
-                    {service_center.photos.map((photo, index) => {
+
+
+                    {details.images ? details.images.map((photo, index) => {
                       return (
                         <Col xs={4} style={{ marginBottom: "20px" }}>
-                          <img src={photo} alt="" width={"100%"} />
+                          <img src={`${photo}`} alt="" width={"100%"} style={{borderRadius :"5px"}} />
                         </Col>
                       );
-                    })}
+                    }) : <></>
+
+
+                    }
+                    
                   </Row>
                 </div>
               </div>
@@ -771,6 +923,7 @@ setLikedReviews(response.data.likedReviews);
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
           fullWidth={true}
+          PaperProps={{ style: { width: "620px", borderRadius: "10px" } }}
         >
           <DialogContent
             className={All.PopupBody}
@@ -784,55 +937,34 @@ setLikedReviews(response.data.likedReviews);
                 style={{ cursor: "pointer" }}
               />
             </div>
-            <Row style={{ marginTop: "30px" }}>
-              <Hidden xs sm>
-                <Col className="s_f_form_img_container">
-                  <img
-                    src={s_c_form_img}
-                    alt=""
-                    width={"100%"}
-                    className="s_f_form_img"
-                  />
-                </Col>
-              </Hidden>
-              <Col>
-                <h3 id="s_c_enquiry_heading">Request Quote</h3>
-                <label>
-                  <div className="s_c_enquiry_title">Name</div>
-                  <input
-                    type="text"
-                    name=""
-                    id=""
-                    className="s_c_enquiry_input"
-                  />
-                </label>
-                <label>
-                  <div className="s_c_enquiry_title">Phone Number</div>
-                  <input
-                    type="text"
-                    name=""
-                    id=""
-                    className="s_c_enquiry_input"
-                  />
-                </label>
-                <label>
-                  <div className="s_c_enquiry_title">Email ID</div>
-                  <input
-                    type="text"
-                    name=""
-                    id=""
-                    className="s_c_enquiry_input"
-                  />
-                </label>
-                <label>
-                  <div className="s_c_enquiry_title">Message</div>
-                  <textarea className="s_c_enquiry_textarea"></textarea>
-                </label>
-                <button className="s_c_button3" onClick={submitEnquiry}>
-                  Submit
-                </button>
-              </Col>
-            </Row>
+            <div style={{marginTop: "30px"}}>
+             <div className="sc_popup_head">Contact Service Center</div>
+             <div className="sc_popup_desc">Enter the below details to send a Enquiry </div>
+             <div className="sc_popup_input_label">Name</div>
+             <input type="text" className="sc_popup_input" name="name" onChange={enquiryChange} value={myData.name}/>
+             <div className="sc_popup_input_label">Phone No</div>
+             <input type="text" className="sc_popup_input" name="phoneNo" onChange={enquiryChange} value={myData.phoneNo}/>
+             <div className="sc_popup_input_label">Email Id</div>
+             <input type="text" className="sc_popup_input" name="emailId" onChange={enquiryChange} value={myData.emailId}/>
+             <div className="sc_popup_input_label">message</div>
+             <textarea type="text" className="sc_popup_input1"  value={message} name="message" onChange={changeMessage}/>
+             <div style={{width:"100%", textAlign:"center"}}>
+             {isLoading ? (
+                      <>
+                       <button className="sc_popup_submit1" onClick={captureEnquiry}> <Loader /> Sending</button>
+                      </>
+                    ) : (
+                      <>
+                        <button className="sc_popup_submit" onClick={captureEnquiry}>Submit</button>
+                      </>
+                    )}
+               
+               </div>
+               
+             
+             
+             </div>
+
           </DialogContent>
         </Dialog>
         <Dialog
@@ -920,6 +1052,54 @@ setLikedReviews(response.data.likedReviews);
             </div>
           </DialogContent>
         </Dialog>
+
+        {/* //error  */}
+
+        <Dialog
+              open={loginErrorPopup}
+              onClose={loginErrorPopupClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+              PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
+            >
+              <DialogContent
+                className={All.PopupBody}
+                style={{ marginBottom: "50px" }}
+              >
+                <div
+                  style={{ position: "absolute", top: "20px", right: "20px" }}
+                >
+                  <img
+                    src={Close}
+                    alt=""
+                    onClick={loginErrorPopupClose}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div
+                    className="a_j_popup_title"
+                    style={{ padding: "0px 60px" }}
+                  >
+                    You aren't logged into DroneZone. Please login to continue?
+                  </div>
+                  <div
+                    className="u_f_popup_btn_container"
+                    style={{ marginTop: "8px" }}
+                  >
+                    <div
+                      className="j_l_applyJobLoginBtn"
+                      style={{ width: "fit-content" }}
+                      onClick={() => history.push("/login")}
+                    >
+                      Login / Sign Up
+                    </div>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
       </section>
     </>
   );
