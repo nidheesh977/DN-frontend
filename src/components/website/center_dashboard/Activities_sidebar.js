@@ -20,6 +20,8 @@ import Center_downloads from "./Center_downloads";
 import Center_Likes from "./Center_Likes";
 import Center_followers from "./Center_followers";
 import Center_following from "./Center_following";
+import Center_bookmarks from "./Center_bookmarks";
+import Center_enquiries from "./Center_enquiries";
 // import Pilot_Likes from "./Pilot_Likes";
 
 class Activities_Sidebar extends React.Component {
@@ -28,6 +30,7 @@ class Activities_Sidebar extends React.Component {
     this.state = {
       view_store_filter: true,
       view_inspired_filter: false,
+      view_enquiries_filter: false,
     };
   }
 
@@ -41,24 +44,32 @@ class Activities_Sidebar extends React.Component {
     this.setState({
       view_store_filter: true,
       view_inspired_filter: false,
+      view_enquiries_filter: false,
+
     });
   };
   mediaBtn = () => {
     this.setState({
       view_store_filter: false,
       view_inspired_filter: false,
+      view_enquiries_filter: false,
+
     });
   };
-  jobsBtn = () => {
+  enquiriesBtn = () => {
     this.setState({
       view_store_filter: false,
       view_inspired_filter: false,
+      view_enquiries_filter: true,
+
     });
   };
   inspiredBtn = () => {
     this.setState({
       view_store_filter: false,
       view_inspired_filter: true,
+      view_enquiries_filter: false,
+
     });
   };
   render() {
@@ -119,6 +130,50 @@ class Activities_Sidebar extends React.Component {
                 </div>
               </div>
             </div>
+
+            <div className="media_box">
+              <div
+                onClick={() => this.enquiriesBtn()}
+                className="sidebar_filter1_title"
+              >
+                <div
+                  className="sidebar_filter1_title"
+                  onClick={() => this.dropdown("enquiries_filter")}
+                ></div>
+                Enquiries{" "}
+                <img
+                  src={dropdown}
+                  id="dropimg"
+                  alt="dropdown img"
+                  className={
+                    this.state.view_enquiries_filter
+                      ? "h_p_filter1_dropdown h_p_dropdown_selected"
+                      : "h_p_filter1_dropdown"
+                  }
+                />
+              </div>
+              <hr className="sidebar_hr" />
+              <div
+                className={
+                  this.state.view_enquiries_filter
+                    ? "h_p_filter1_content_container "
+                    : "h_p_filter1_content_container h_p_hide_filter"
+                }
+                id="h_p_pilot_type_filter"
+              >
+                <div id="pd_filter1_checkbox_label">
+                  {" "}
+                  <NavLink
+                    
+                    activeClassName="h_p_sidebar_active"
+                    to="/center_dashboard/activities/enquiries"
+                  >
+                   Center Enquiries
+                  </NavLink>
+                </div>
+               
+              </div>
+            </div>
            
             <div className="media_box">
               <div className="sidebar_filter1_title" onClick={()=>this.inspiredBtn()}>
@@ -153,9 +208,9 @@ class Activities_Sidebar extends React.Component {
                   <NavLink
                     exact
                     activeClassName="h_p_sidebar_active"
-                    to="/center_dashboard/activities/followers"
+                    to="/center_dashboard/activities/bookmarks"
                   >
-                    Followers
+                    Bookmarked Centers
                   </NavLink>
                 </div>{" "}
                 <div id="pd_filter1_checkbox_label">
@@ -221,9 +276,17 @@ class Activities_Sidebar extends React.Component {
               path="/center_dashboard/activities/following"
               component={Center_following}
             />
+             <Route
+              path="/center_dashboard/activities/enquiries"
+              component={Center_enquiries}
+            />
             <Route
               path="/center_dashboard/activities/followers"
               component={Center_followers}
+            />
+            <Route
+              path="/center_dashboard/activities/bookmarks"
+              component={Center_bookmarks}
             />
             <Route
               path="/center_dashboard/activities/likes"
