@@ -50,6 +50,16 @@ import IconButton from "@material-ui/core/IconButton";
 import s_c_form_img from "../images/s_c_form_img.png";
 import close from "../images/close.svg";
 import loadMore from "../images/Group 71.svg";
+// import usePlacesAutocomplete from "use-places-autocomplete";
+// import {
+//   Combobox,
+//   ComboboxInput,
+//   ComboboxPopover,
+//   ComboboxList,
+//   ComboboxOption
+// } from "@reach/combobox";
+
+// import "@reach/combobox/styles.css";
 
 const domain = process.env.REACT_APP_MY_API
 
@@ -415,7 +425,7 @@ class ServiceCenters extends Component {
           <Container
             className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}
           >
-            <div className="s_c_list_btn_container">
+            {/* <div className="s_c_list_btn_container">
               <button
                 className="s_c_list_btn"
                 onClick={() =>
@@ -424,10 +434,20 @@ class ServiceCenters extends Component {
               >
                 List your service center
               </button>
-            </div>
-            <div className="s_c_search_filter_container">
-              <div className="s_c_filter_container"></div>
-              <div className="s_c_Search_container"></div>
+            </div> */}
+            <div style = {{position: "relative"}}>
+              <div className="s_c_search_filter_container">
+                <div className="s_c_filter_container">
+                  Choose Brands
+                  <img src={DropDownPng} alt="" height={"20px"} width={"20px"} style = {{marginLeft: "auto"}}/>
+                </div>
+                <div className="s_c_Search_container">
+                  <input type="text" className="s_c_Search"/>
+                </div>
+              </div>
+              <div className="s_c_filters_list">
+                
+              </div>
             </div>
             <Row>
               <Col>
