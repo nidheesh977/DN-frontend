@@ -354,3 +354,10 @@
 .service_center_brand_list{
   display: inline-block;
 }
+
+.s_c_search_filter_container{
+  width: 100%;
+  background: rgb(170, 170, 170);
+  height: 50px;
+  margin-bottom: 35px;
+}

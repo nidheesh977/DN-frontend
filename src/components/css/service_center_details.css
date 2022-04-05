@@ -382,3 +382,25 @@
   font-family: muli-bold;
   border: 1px solid #00fcef;
 }
+
+.center_img_model_container{
+  text-align: center;
+  width: 100%;
+}
+
+.center_img_model{
+  position: relative;
+  width: 100%;
+}
+
+.center_previous_icon{
+  position: absolute;
+  top: calc(50% - 25px);
+  left: 0;
+}
+
+.center_next_icon{
+  position: absolute;
+  top: calc(50% - 25px);
+  right: 0;
+}

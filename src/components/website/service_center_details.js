@@ -33,9 +33,9 @@ import s_c_form_img from "../images/s_c_form_img.png";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import { useParams, useHistory } from "react-router-dom";
-import BookmarkOutlinedIcon from '@material-ui/icons/BookmarkOutlined';
-import BookmarkFilled from "../images/bookmarkFilled.png"
-import Bookmark from "../images/bookmark.png"
+import BookmarkOutlinedIcon from "@material-ui/icons/BookmarkOutlined";
+import BookmarkFilled from "../images/bookmarkFilled.png";
+import Bookmark from "../images/bookmark.png";
 import {
   ScrollingProvider,
   useScrollSection,
@@ -44,6 +44,9 @@ import {
 
 import $ from "jquery";
 import { Item } from "semantic-ui-react";
+import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
+import Countries from "../../apis/country.json";
 
 const styles = (theme) => ({
   root: {
@@ -58,7 +61,7 @@ const styles = (theme) => ({
   },
 });
 
-const domain = process.env.REACT_APP_MY_API
+const domain = process.env.REACT_APP_MY_API;
 
 const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
@@ -93,97 +96,28 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 export default function ServiceCenterDetails(props) {
-  const history = useHistory()
-  const [service_center, setServiceCenter] = useState({
-    id: "1",
-    name: "Nexevo Technologies1",
-    bio: "Nexevo Technologies is a professional drone service center1",
-    workingHours: "9.30AM to 7.00PM",
-    location: "Kasthui Nagar, Bangalore.",
-    rating: 1,
-    phone: "+91 9876543210, +91 9876543210",
-    brands: ["DJI", "UVify", "Hubsan", "Parrot", "Autel Robotics"],
-    whatsapp_number: "917305055356",
-    address:
-      "#2, HM-155, 1st Floor, 2nd H Main, Opp. Cuppa cafe, East of NGEF, Kasthuri Nagar, Bangalore - 560043",
-    email: "shopname@gmail.com",
-    website: "www.domain.com",
-    photos: [
-      "https://www.bayleafdigital.com/wp-content/uploads/2018/11/5-reasons-demo-software.jpg",
-      "https://www.bayleafdigital.com/wp-content/uploads/2018/11/5-reasons-demo-software.jpg",
-      "https://www.bayleafdigital.com/wp-content/uploads/2018/11/5-reasons-demo-software.jpg",
-      "https://www.bayleafdigital.com/wp-content/uploads/2018/11/5-reasons-demo-software.jpg",
-      "https://www.bayleafdigital.com/wp-content/uploads/2018/11/5-reasons-demo-software.jpg",
-      "https://www.bayleafdigital.com/wp-content/uploads/2018/11/5-reasons-demo-software.jpg",
-    ],
-  });
+  const history = useHistory();
 
-  const [service_center_review, setServiceCenterReview] = useState([
-    {
-      id: "1",
-      img: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-      name: "Stephen Raj",
-      rating: 5,
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab iste, praesentium ex vitae debitis quidem rem corrupti odio deserunt, aut facere fuga pariatur ducimus id laboriosam aliquid neque libero eveniet soluta, numquam quod.",
-      likes: 10,
-    },
-    {
-      id: "1",
-      img: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-      name: "Stephen Raj",
-      rating: 4,
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab iste, praesentium ex vitae debitis quidem rem corrupti odio deserunt, aut facere fuga pariatur ducimus id laboriosam aliquid neque libero eveniet soluta, numquam quod.",
-      likes: 10,
-    },
-    {
-      id: "1",
-      img: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-      name: "Stephen Raj",
-      rating: 3,
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab iste, praesentium ex vitae debitis quidem rem corrupti odio deserunt, aut facere fuga pariatur ducimus id laboriosam aliquid neque libero eveniet soluta, numquam quod.",
-      likes: 10,
-    },
-    {
-      id: "1",
-      img: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-      name: "Stephen Raj",
-      rating: 2,
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab iste, praesentium ex vitae debitis quidem rem corrupti odio deserunt, aut facere fuga pariatur ducimus id laboriosam aliquid neque libero eveniet soluta, numquam quod.",
-      likes: 10,
-    },
-    {
-      id: "1",
-      img: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-      name: "Stephen Raj",
-      rating: 1,
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab iste, praesentium ex vitae debitis quidem rem corrupti odio deserunt, aut facere fuga pariatur ducimus id laboriosam aliquid neque libero eveniet soluta, numquam quod.",
-      likes: 10,
-    },
-  ]);
   const [isLoading, setLoading] = useState(false);
 
   const [writeReview, setWriteReview] = useState(false);
 
   const [newReview, setNewReview] = useState("");
   const [newRating, setNewRating] = useState(3);
+  const [centerImgsPopup, setCenterImgsPopup] = useState(false);
+  const [modelImgId, setModelImgId] = useState(0);
 
   const [enquiry, setEnquiry] = useState(false);
-  const [enquiry_data, setEnquiryData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    message: "",
-  });
+
+  const [code, setCode] = useState("");
+
+  
+
   let [loginErrorPopup, setloginErrorPopup] = useState(false);
 
-  const loginErrorPopupClose = () =>{
-    setloginErrorPopup(false)
-  }
+  const loginErrorPopupClose = () => {
+    setloginErrorPopup(false);
+  };
   const submitData = () => {
     axios
       .post(
@@ -196,7 +130,7 @@ export default function ServiceCenterDetails(props) {
       )
       .then(() => {
         alert("successfull");
-        setWriteReview(false)
+        setWriteReview(false);
         axios
           .get(`${domain}/api/review/getReviews/${param.id}`)
           .then((response) => {
@@ -204,7 +138,7 @@ export default function ServiceCenterDetails(props) {
             // setDetails(response.data);
             // setStatus(response.status);
             setReviews(response.data);
-            document.getElementById("toHide").style.display = "none"
+            document.getElementById("toHide").style.display = "none";
             console.log(response);
             // setBrands(response.data.brandOfDrones)
           });
@@ -215,67 +149,68 @@ export default function ServiceCenterDetails(props) {
 
     closeRating();
   };
-let [centers, setCenters] = useState([])
-let [myData, setMyData] = useState({
-  name: "",
-  phoneNo: "",
-  emailId: "",
-})
-let [message, setMessage] = useState("")
-useEffect(()=>{
-  axios.get(`${domain}/api/user/getUserData`, config).then(res=>{
-    console.log(res)
-    setCenters(res.data.markedCenters)
-    setMyData({
-      name: res.data.name,
-      phoneNo: res.data.phoneNo,
-      emailId: res.data.email
-    })
-  })
-}, [])
-
+  let [centers, setCenters] = useState([]);
+  let [myData, setMyData] = useState({
+    name: "",
+    phoneNo: "",
+    emailId: "",
+  });
+  let [message, setMessage] = useState("");
+  useEffect(() => {
+    axios.get(`${domain}/api/user/getUserData`, config).then((res) => {
+      console.log(res);
+      setCenters(res.data.markedCenters);
+      setMyData({
+        name: res.data.name,
+        phoneNo: res.data.phoneNo,
+        emailId: res.data.email,
+      });
+      try{
+        var result = Countries.filter((obj) => obj.name == res.data.country);
+        console.log(result[0].dial_code);
+        setCode(result[0].dial_code);
+        console.log(res.data.country)
+      }
+      catch{
+        setCode("+91")
+      }
+    });
+  }, []);
 
   const likeReview = (id) => {
-    if(!localStorage.getItem("access_token")){
-      setloginErrorPopup(true)
-    }else{
+    if (!localStorage.getItem("access_token")) {
+      setloginErrorPopup(true);
+    } else {
       axios
-      .post(
-        `${domain}/api/review/likeReview`,
-        {
-          reviewId: id,
-        },
-        config
-      )
-      .then((response) => {
-        console.log(response)
-        axios
-        .get(`${domain}/api/review/getReviews/${param.id}`)
+        .post(
+          `${domain}/api/review/likeReview`,
+          {
+            reviewId: id,
+          },
+          config
+        )
         .then((response) => {
-        
-          setReviews(response.data);
+          console.log(response);
           axios
-          .post(`${domain}/api/pilot/getSinglePilot`, config)
-          .then((response) => {
-        
-    setLikedReviews(response.data.likedReviews);
-    
-            console.log(response);
-            // setBrands(response.data.brandOfDrones)
-          });
-          
+            .get(`${domain}/api/review/getReviews/${param.id}`)
+            .then((response) => {
+              setReviews(response.data);
+              axios
+                .post(`${domain}/api/pilot/getSinglePilot`, config)
+                .then((response) => {
+                  setLikedReviews(response.data.likedReviews);
 
-     
+                  console.log(response);
+                  // setBrands(response.data.brandOfDrones)
+                });
+            });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-       
-      })
-      .catch((err) => {
-        console.log(err);
-      });
     }
-   
   };
-  
+
   const unlikeReview = (id) => {
     axios
       .post(
@@ -286,99 +221,190 @@ useEffect(()=>{
         config
       )
       .then((response) => {
-        console.log(response)
+        console.log(response);
         axios
-        .get(`${domain}/api/review/getReviews/${param.id}`)
-        .then((response) => {
-        
-          setReviews(response.data);
-          axios
-          .post(`${domain}/api/pilot/getSinglePilot`, config)
+          .get(`${domain}/api/review/getReviews/${param.id}`)
           .then((response) => {
-        
-    setLikedReviews(response.data.likedReviews);
-    
-            console.log(response);
-            // setBrands(response.data.brandOfDrones)
-          });
-          
+            setReviews(response.data);
+            axios
+              .post(`${domain}/api/pilot/getSinglePilot`, config)
+              .then((response) => {
+                setLikedReviews(response.data.likedReviews);
 
-     
-        });
-       
+                console.log(response);
+                // setBrands(response.data.brandOfDrones)
+              });
+          });
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
+  let bookmark = () => {
+    if (localStorage.getItem("access_token")) {
+      axios
+        .post(`${domain}/api/center/saveCenter/${param.id}`, config)
+        .then((res) => {
+          console.log(res);
+          axios.get(`${domain}/api/user/getUserData`, config).then((res) => {
+            console.log(res);
+            setCenters(res.data.markedCenters);
+          });
+        });
+    } else {
+      setloginErrorPopup(true);
+    }
+  };
 
-let bookmark = () =>{
-  if(localStorage.getItem("access_token")){
-    axios.post(`${domain}/api/center/saveCenter/${param.id}`, config).then(res=>{
-      console.log(res)
-      axios.get(`${domain}/api/user/getUserData`, config).then(res=>{
-        console.log(res)
-        setCenters(res.data.markedCenters)
-      })
-    })
-  }else{
-    setloginErrorPopup(true)
-  }
- 
-}
+  let unbookmark = () => {
+    axios
+      .post(`${domain}/api/center/unsaveCenter/${param.id}`, config)
+      .then((res) => {
+        console.log(res);
+        axios.get(`${domain}/api/user/getUserData`, config).then((res) => {
+          console.log(res);
+          setCenters(res.data.markedCenters);
+        });
+      });
+  };
 
-let unbookmark  = () =>{
-  axios.post(`${domain}/api/center/unsaveCenter/${param.id}`, config).then(res=>{
-    console.log(res)
-    axios.get(`${domain}/api/user/getUserData`, config).then(res=>{
-      console.log(res)
-      setCenters(res.data.markedCenters)
-    })
-  })
-}
+  let enquiryChange = (e) => {
+    if(e.target.name !== "phoneNo"){
+      setMyData({
+        ...myData,
+        [e.target.name]: e.target.value,
+      });
+      document.getElementById(`${e.target.id}_error`).style.display = "none";
+      console.log(myData);
+    }
+    else{
+      try {
+        if (
+          Number(e.target.value.slice(code.length + 1, 10 + code.length + 1)) ||
+          e.target.value.slice(code.length + 1, 10 + code.length + 1) === ""
+        ) {
+          setMyData({
+            ...myData,
+            ["phoneNo"]: e.target.value.slice(
+              code.length + 1,
+              10 + code.length + 1
+            ),
+          });
+          document.getElementById("phone" + "_error").style.display =
+            "none";
+        }
+      } catch {
+        console.log("Not number");
+      }
+    }
+  };
 
-let enquiryChange = (e) =>{
-  setMyData({
-    ...myData,
-    [e.target.name]: e.target.value
-  })
-  console.log(myData)
-}
+  let changeMessage = (e) => {
+    setMessage(e.target.value);
+    document.getElementById("message_error").style.display = "none";
+  };
 
-let changeMessage = (e) =>{
- 
-setMessage(e.target.value);
+  let captureEnquiry = () => {
+    let error = false;
+    let focusField = "";
+    const validateEmail = (email) => {
+      return String(email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    };
 
-}
+    if (myData.name.length < 2) {
+      document.getElementById("name_error").innerText =
+        "Name must have minimum 2 characters";
+      document.getElementById("name_error").style.display = "contents";
+      error = true;
+      if (focusField === "") {
+        focusField = "name";
+      }
+    }
 
-let captureEnquiry = () =>{
-  setLoading(true)
-  axios.post(`${domain}/api/enquiry/createEnquiry/${param.id}`, {emailId: myData.emailId, phoneNo: myData.phoneNo, name: myData.name, message: message}, config).then(res=>{
-    console.log(res)
-    setMessage("")
-    setEnquiry(false)
-    setLoading(false)
+    if (myData.name.length > 100) {
+      document.getElementById("name_error").innerText =
+        "Name should not exceed 100 characters";
+      document.getElementById("name_error").style.display = "contents";
+      error = true;
+      if (focusField === "") {
+        focusField = "name";
+      }
+    }
 
-  }).catch(err=>{
-    console.log(err)
-  })
-  console.log(myData, message)
-}
+    if (myData.phoneNo.length !== 10) {
+      document.getElementById("phone_error").innerText =
+        "Phone number must be 10 digits";
+      document.getElementById("phone_error").style.display = "contents";
+      error = true;
+      if (focusField === "") {
+        focusField = "phone";
+      }
+    }
 
+    if (message.length > 200 || message.length === 0) {
+      document.getElementById("message_error").innerText =
+        "Message should be between 1 and 200 characters";
+      document.getElementById("message_error").style.display = "contents";
+      error = true;
+      if (focusField === "") {
+        focusField = "message";
+      }
+    }
+
+    if (!validateEmail(myData.emailId)) {
+      document.getElementById("email_error").innerText =
+        "Email ID is not valid";
+      document.getElementById("email_error").style.display = "contents";
+      error = true;
+      if (focusField === "") {
+        focusField = "email";
+      }
+    }
+
+    if (!error) {
+      setLoading(true);
+      axios
+        .post(
+          `${domain}/api/enquiry/createEnquiry/${param.id}`,
+          {
+            emailId: myData.emailId,
+            phoneNo: myData.phoneNo,
+            name: myData.name,
+            message: message,
+          },
+          config
+        )
+        .then((res) => {
+          console.log(res);
+          setMessage("");
+          setEnquiry(false);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log(myData, message);
+    } else {
+      document.getElementById(focusField).focus();
+    }
+  };
 
   const [rating, setRating] = useState(false);
 
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const [likedReviews, setLikedReviews] = useState([])
+  const [likedReviews, setLikedReviews] = useState([]);
   const enquireNow = () => {
-    if(localStorage.getItem("access_token")){
+    if (localStorage.getItem("access_token")) {
       setEnquiry(true);
-    }
-    else{
-      setloginErrorPopup(true)
+    } else {
+      setloginErrorPopup(true);
     }
   };
 
@@ -391,7 +417,7 @@ let captureEnquiry = () =>{
   };
 
   const submitReview = () => {
-    if(localStorage.getItem("access_token")){
+    if (localStorage.getItem("access_token")) {
       if (newReview != "") {
         setRating(true);
       } else {
@@ -399,11 +425,9 @@ let captureEnquiry = () =>{
         document.getElementById("s_c_d_review").style.backgroundColor =
           "rgb(255, 219, 219)";
       }
-    }else{
-        setloginErrorPopup(true)
-      }
-    
-    
+    } else {
+      setloginErrorPopup(true);
+    }
   };
 
   const closeRating = () => {
@@ -482,12 +506,13 @@ let captureEnquiry = () =>{
         // setDetails(response.data);
         // setStatus(response.status);
         // setReviews(response.data);
-        console.log(response.data)
+        console.log(response.data);
 
         console.log(response);
         setReviews(response.data);
-        if(response.data.length == 0 ){
-document.getElementById("toHide").style.display = "block"        }
+        if (response.data.length == 0) {
+          document.getElementById("toHide").style.display = "block";
+        }
 
         // setBrands(response.data.brandOfDrones)
       });
@@ -496,13 +521,33 @@ document.getElementById("toHide").style.display = "block"        }
     axios
       .post(`${domain}/api/pilot/getSinglePilot`, config)
       .then((response) => {
-    
-setLikedReviews(response.data.likedReviews);
+        setLikedReviews(response.data.likedReviews);
 
         console.log(response);
         // setBrands(response.data.brandOfDrones)
       });
   }, []);
+
+  const selectPreviousImg = () => {
+    if (modelImgId === 0) {
+      setModelImgId(details.images.length - 1);
+    } else {
+      setModelImgId(modelImgId - 1);
+    }
+  };
+
+  const selectNextImg = () => {
+    if (modelImgId >= details.images.length - 1) {
+      setModelImgId(0);
+    } else {
+      setModelImgId(modelImgId + 1);
+    }
+  };
+
+  const modelPopup = (id) => {
+    setModelImgId(id);
+    setCenterImgsPopup(true);
+  };
 
   //yaseen
   return (
@@ -516,31 +561,50 @@ setLikedReviews(response.data.likedReviews);
       <section
         className={` ${All.Profile} ${All.EndUserProfile} s_c_d_container`}
       >
-
         <Container className={All.Container}>
-          <div style={{ position: "relative"}}>
-        <img src={details.coverPic} style={{width: "100%", height:"300px", borderRadius:"10px"}} />
-        <img src={details.profilePic} style={{width: "200px", height:"200px", borderRadius:"100px", position:"absolute", bottom: "-100px", right:"50px", border: "5px solid white", boxShadow: "5px 5px 5px #ccc"}}/>
-        </div>
+          <div style={{ position: "relative" }}>
+            <img
+              src={details.coverPic}
+              style={{ width: "100%", height: "300px", borderRadius: "10px" }}
+            />
+            <img
+              src={details.profilePic}
+              style={{
+                width: "200px",
+                height: "200px",
+                borderRadius: "100px",
+                position: "absolute",
+                bottom: "-100px",
+                right: "50px",
+                border: "5px solid white",
+                boxShadow: "5px 5px 5px #ccc",
+              }}
+            />
+          </div>
 
           <Row>
             <Col
               md={6}
               className={`${All.Order_xs_2} ${All.Order_sm_2} ${All.pr_xs_30} ${All.pl_xs_30} ${All.profileImg}`}
             >
-              
-
-              <Box py={1} style={{display:"flex", alignItems:"flex-end"}}>
+              <Box py={1} style={{ display: "flex", alignItems: "flex-end" }}>
                 <h2 style={{ marginTop: "35px", textTransform: "capitalize" }}>
-                  {details.centerName || <Skeleton />}  
-                </h2> 
+                  {details.centerName || <Skeleton />}
+                </h2>
 
-
-                {
-                  centers.includes(param.id) ? <img src={BookmarkFilled} style={{width: "40px", marginLeft:"20px"}} onClick={unbookmark}/> : <img src={Bookmark} style={{width: "40px", marginLeft:"20px"}} onClick={bookmark}/>
-                }
-                
-               
+                {centers.includes(param.id) ? (
+                  <img
+                    src={BookmarkFilled}
+                    style={{ width: "40px", marginLeft: "20px" }}
+                    onClick={unbookmark}
+                  />
+                ) : (
+                  <img
+                    src={Bookmark}
+                    style={{ width: "40px", marginLeft: "20px" }}
+                    onClick={bookmark}
+                  />
+                )}
               </Box>
               <Box py={1}>
                 <h4>
@@ -603,7 +667,6 @@ setLikedReviews(response.data.likedReviews);
                   {details.workingHours}
                 </div>
 
-
                 {/* {
 
                   details.holidays ? <> <div className="s_c_d_other_details_title">Holidays:</div>
@@ -646,16 +709,15 @@ setLikedReviews(response.data.likedReviews);
                   Enquire Now
                 </button>
 
-
-                {
-                  details.whatsappNo ?   <Link onClick={() => whatsappChat(details.whatsappNumber)}>
-                  <img src={whatsapp_icon} alt="" height={"35px"} />
-                </Link> : <></>
-                }
-              
+                {details.whatsappNo ? (
+                  <Link onClick={() => whatsappChat(details.whatsappNumber)}>
+                    <img src={whatsapp_icon} alt="" height={"35px"} />
+                  </Link>
+                ) : (
+                  <></>
+                )}
               </div>
             </Col>
-            
           </Row>
           <div className="s_c_d_tabs">
             <span className="s_c_d_tab s_c_d_tab_selected" id="s_c_d_about_tab">
@@ -735,8 +797,18 @@ setLikedReviews(response.data.likedReviews);
                   ""
                 )}
                 <div className="s_c_d_review_list">
-
-<div id="toHide" style={{fontSize: "22px", fontFamily:"muli-regular", textAlign: "center", marginTop: "50px", display: "none"}}>No Reviews Yet</div>
+                  <div
+                    id="toHide"
+                    style={{
+                      fontSize: "22px",
+                      fontFamily: "muli-regular",
+                      textAlign: "center",
+                      marginTop: "50px",
+                      display: "none",
+                    }}
+                  >
+                    No Reviews Yet
+                  </div>
 
                   {/* yaseen                   */}
                   {reviews.map((review, index) => {
@@ -746,7 +818,12 @@ setLikedReviews(response.data.likedReviews);
                           <div className="s_c_d_review_img_name">
                             <img
                               src={review.userId.profilePic}
-                              alt="" style={{width: "45px", height: "45px", borderRadius:"22.5px"}}
+                              alt=""
+                              style={{
+                                width: "45px",
+                                height: "45px",
+                                borderRadius: "22.5px",
+                              }}
                               className="s_c_d_review_img"
                             />
                             <div className="s_c_d_review_name">
@@ -805,25 +882,27 @@ setLikedReviews(response.data.likedReviews);
                           </div>
 
                           <div className="s_c_d_review_like_share">
+                            {likedReviews.includes(review._id) ? (
+                              <div
+                                className="s_c_d_review_like"
+                                style={{
+                                  color: "#00e7fc",
+                                  fontFamily: "muli-bold",
+                                }}
+                                onClick={() => unlikeReview(review._id)}
+                              >
+                                Liked ({review.likes.length})
+                              </div>
+                            ) : (
+                              <div
+                                className="s_c_d_review_like"
+                                onClick={() => likeReview(review._id)}
+                              >
+                                Like ({review.likes.length})
+                              </div>
+                            )}
 
-                            {
-                              likedReviews.includes(review._id) ?   <div
-                              className="s_c_d_review_like"
-                              style={{color:"#00e7fc", fontFamily:"muli-bold"}}
-                              onClick={() => unlikeReview(review._id)}
-                            >
-                              Liked ({review.likes.length})
-                            </div>  :   <div
-                              className="s_c_d_review_like"
-                              onClick={() => likeReview(review._id)}
-                            >
-                              Like ({review.likes.length})
-                            </div>
-                            }
-                          
-                            <div className="s_c_d_review_share">
-                              Share
-                            </div>
+                            <div className="s_c_d_review_share">Share</div>
                           </div>
                         </div>
                         <hr style={{ border: "1px solid #eee" }} />
@@ -837,79 +916,95 @@ setLikedReviews(response.data.likedReviews);
               <Col xl={1}></Col>
             </Visible>
             <Col xl={4} lg={5} md={6} sm={12}>
-            <div id="s_c_d_contact_details">
-{
-  details.whatsappNo ? <> <div className="s_c_d_contact_details_title">Chat:</div>
-  <div
-    className="s_c_d_contact_details_whatsapp"
-    onClick={() => whatsappChat(details.whatsappNumber)}
-  >
-    <img src={whatsapp_icon} alt="" height={"35px"} />
-    Chat on whatsapp
-  </div></> : <></>
-}
+              <div id="s_c_d_contact_details">
+                {details.whatsappNo ? (
+                  <>
+                    {" "}
+                    <div className="s_c_d_contact_details_title">Chat:</div>
+                    <div
+                      className="s_c_d_contact_details_whatsapp"
+                      onClick={() => whatsappChat(details.whatsappNumber)}
+                    >
+                      <img src={whatsapp_icon} alt="" height={"35px"} />
+                      Chat on whatsapp
+                    </div>
+                  </>
+                ) : (
+                  <></>
+                )}
 
-              
-               
                 <div className="s_c_d_contact_details_title">
                   Phone Numbers:
                 </div>
                 <div className="s_c_d_contact_details_content">
                   <a href="tel:+91 9876543210">
-                    {details.phoneNo} {details.secondaryNumber ? "," : ""}  {details.secondaryNumber ? details.secondaryNumber : <></> }
+                    {details.phoneNo} {details.secondaryNumber ? "," : ""}{" "}
+                    {details.secondaryNumber ? details.secondaryNumber : <></>}
                   </a>
                 </div>
                 <div className="s_c_d_contact_details_title">Email ID:</div>
                 <div className="s_c_d_contact_details_content">
                   <Link>{details.email}</Link>
                 </div>
-{
-  details.website ? <> <div className="s_c_d_contact_details_title">Website:</div>
-  <div className="s_c_d_contact_details_content">
-    <Link>{details.website}</Link>
-  </div> </> : <></>
-}
+                {details.website ? (
+                  <>
+                    {" "}
+                    <div className="s_c_d_contact_details_title">Website:</div>
+                    <div className="s_c_d_contact_details_content">
+                      <Link>{details.website}</Link>
+                    </div>{" "}
+                  </>
+                ) : (
+                  <></>
+                )}
 
-               
                 <div className="s_c_d_contact_details_title">Working time</div>
                 <div className="s_c_d_contact_details_content">
                   {details.workingHours}
                 </div>
-{
-  details.holidays ? <><div className="s_c_d_contact_details_title">Holidays</div>
-  <div className="s_c_d_contact_details_content">
-    {details.holidays.map((item, i)=>{
-      return(<div style={{textTransform: "capitalize"}}>{item}</div>)
-    })}
-  </div></> : <></>
-}
-                
+                {details.holidays ? (
+                  <>
+                    <div className="s_c_d_contact_details_title">Holidays</div>
+                    <div className="s_c_d_contact_details_content">
+                      {details.holidays.map((item, i) => {
+                        return (
+                          <div style={{ textTransform: "capitalize" }}>
+                            {item}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                ) : (
+                  <></>
+                )}
+
                 <div className="s_c_d_contact_details_title">Address</div>
                 <div className="s_c_d_contact_details_content">
                   {details.state}, {details.city}
                 </div>
-
-             
-
-
               </div>
               <div id="s_c_d_photos">
                 <div className="s_c_d_photos_title">Photos</div>
                 <div className="s_c_d_photos_list">
                   <Row gutterWidth={20}>
-
-
-                    {details.images ? details.images.map((photo, index) => {
-                      return (
-                        <Col xs={4} style={{ marginBottom: "20px" }}>
-                          <img src={`${photo}`} alt="" width={"100%"} style={{borderRadius :"5px"}} />
-                        </Col>
-                      );
-                    }) : <></>
-
-
-                    }
-                    
+                    {details.images ? (
+                      details.images.map((photo, index) => {
+                        return (
+                          <Col xs={4} style={{ marginBottom: "20px" }}>
+                            <img
+                              src={`${photo}`}
+                              alt=""
+                              width={"100%"}
+                              style={{ borderRadius: "5px" }}
+                              onClick={() => modelPopup(index)}
+                            />
+                          </Col>
+                        );
+                      })
+                    ) : (
+                      <></>
+                    )}
                   </Row>
                 </div>
               </div>
@@ -937,34 +1032,71 @@ setLikedReviews(response.data.likedReviews);
                 style={{ cursor: "pointer" }}
               />
             </div>
-            <div style={{marginTop: "30px"}}>
-             <div className="sc_popup_head">Contact Service Center</div>
-             <div className="sc_popup_desc">Enter the below details to send a Enquiry </div>
-             <div className="sc_popup_input_label">Name</div>
-             <input type="text" className="sc_popup_input" name="name" onChange={enquiryChange} value={myData.name}/>
-             <div className="sc_popup_input_label">Phone No</div>
-             <input type="text" className="sc_popup_input" name="phoneNo" onChange={enquiryChange} value={myData.phoneNo}/>
-             <div className="sc_popup_input_label">Email Id</div>
-             <input type="text" className="sc_popup_input" name="emailId" onChange={enquiryChange} value={myData.emailId}/>
-             <div className="sc_popup_input_label">message</div>
-             <textarea type="text" className="sc_popup_input1"  value={message} name="message" onChange={changeMessage}/>
-             <div style={{width:"100%", textAlign:"center"}}>
-             {isLoading ? (
-                      <>
-                       <button className="sc_popup_submit1" onClick={captureEnquiry}> <Loader /> Sending</button>
-                      </>
-                    ) : (
-                      <>
-                        <button className="sc_popup_submit" onClick={captureEnquiry}>Submit</button>
-                      </>
-                    )}
-               
-               </div>
-               
-             
-             
-             </div>
-
+            <div style={{ marginTop: "30px" }}>
+              <div className="sc_popup_head">Contact Service Center</div>
+              <div className="sc_popup_desc">
+                Enter the below details to send a Enquiry{" "}
+              </div>
+              <div className="sc_popup_input_label">Name</div>
+              <input
+                type="text"
+                className="sc_popup_input"
+                name="name"
+                id="name"
+                onChange={enquiryChange}
+                value={myData.name}
+              />
+              <div className="login_input_error_msg" id="name_error"></div>
+              <div className="sc_popup_input_label">Phone No</div>
+              <input
+                type="text"
+                className="sc_popup_input"
+                name="phoneNo"
+                id="phone"
+                onChange={enquiryChange}
+                value={`${code} ${myData.phoneNo}`}
+              />
+              <div className="login_input_error_msg" id="phone_error"></div>
+              <div className="sc_popup_input_label">Email Id</div>
+              <input
+                type="text"
+                className="sc_popup_input"
+                name="emailId"
+                id="email"
+                onChange={enquiryChange}
+                value={myData.emailId}
+              />
+              <div className="login_input_error_msg" id="email_error"></div>
+              <div className="sc_popup_input_label">Message</div>
+              <textarea
+                type="text"
+                className="sc_popup_input1"
+                value={message}
+                name="message"
+                id="message"
+                onChange={changeMessage}
+              />
+              <div className="login_input_error_msg" id="message_error"></div>
+              <div style={{ width: "100%", textAlign: "center" }}>
+                {isLoading ? (
+                  <>
+                    <button className="sc_popup_submit1">
+                      {" "}
+                      <Loader /> Sending
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      className="sc_popup_submit"
+                      onClick={captureEnquiry}
+                    >
+                      Submit
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
           </DialogContent>
         </Dialog>
         <Dialog
@@ -1056,50 +1188,136 @@ setLikedReviews(response.data.likedReviews);
         {/* //error  */}
 
         <Dialog
-              open={loginErrorPopup}
-              onClose={loginErrorPopupClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              maxWidth={"md"}
-              fullWidth={true}
-              PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
-            >
-              <DialogContent
-                className={All.PopupBody}
-                style={{ marginBottom: "50px" }}
+          open={loginErrorPopup}
+          onClose={loginErrorPopupClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+          PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={loginErrorPopupClose}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="a_j_popup_title" style={{ padding: "0px 60px" }}>
+                You aren't logged into DroneZone. Please login to continue?
+              </div>
+              <div
+                className="u_f_popup_btn_container"
+                style={{ marginTop: "8px" }}
               >
                 <div
-                  style={{ position: "absolute", top: "20px", right: "20px" }}
+                  className="j_l_applyJobLoginBtn"
+                  style={{ width: "fit-content" }}
+                  onClick={() => history.push("/login")}
                 >
-                  <img
-                    src={Close}
-                    alt=""
-                    onClick={loginErrorPopupClose}
-                    style={{ cursor: "pointer" }}
-                  />
+                  Login / Sign Up
                 </div>
-                <Row style={{ marginTop: "30px" }}>
+              </div>
+            </Row>
+          </DialogContent>
+        </Dialog>
+        <Dialog
+          open={centerImgsPopup}
+          onClose={() => setCenterImgsPopup(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+          PaperProps={{
+            style: { borderRadius: 10, width: "950px", paddingBottom: "25px" },
+          }}
+        >
+          <DialogContent className={All.PopupBody}>
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={() => setCenterImgsPopup(false)}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              {details.images && (
+                <>
                   <div
-                    className="a_j_popup_title"
-                    style={{ padding: "0px 60px" }}
+                    style={{
+                      fontFamily: "muli-bold",
+                      fontSize: "20px",
+                      marginBottom: "20px",
+                    }}
                   >
-                    You aren't logged into DroneZone. Please login to continue?
+                    {details.centerName}
                   </div>
-                  <div
-                    className="u_f_popup_btn_container"
-                    style={{ marginTop: "8px" }}
-                  >
+                  <div className="center_img_model">
                     <div
-                      className="j_l_applyJobLoginBtn"
-                      style={{ width: "fit-content" }}
-                      onClick={() => history.push("/login")}
+                      className="center_previous_icon"
+                      onClick={selectPreviousImg}
                     >
-                      Login / Sign Up
+                      <i
+                        class="fas fa-angle-left"
+                        style={{ fontSize: "50px" }}
+                      ></i>
+                    </div>
+                    <div className="center_img_model_container">
+                      <img
+                        src={details.images[modelImgId]}
+                        alt=""
+                        height="400px"
+                      />
+                    </div>
+                    <div className="center_next_icon" onClick={selectNextImg}>
+                      <i
+                        class="fas fa-angle-right"
+                        style={{ fontSize: "50px" }}
+                      ></i>
                     </div>
                   </div>
-                </Row>
-              </DialogContent>
-            </Dialog>
+                  <div style={{ width: "100%", textAlign: "center" }}>
+                    {details.images.map((image, index) => {
+                      return (
+                        <div
+                          className="center_img_list_model"
+                          style={{
+                            width: "120px",
+                            display: "inline-block",
+                            border:
+                              modelImgId === index
+                                ? "2px solid #00e7fc"
+                                : "2px solid white",
+                            height: "fit-content",
+                            paddingTop: "3px",
+                            paddingRight: "3px",
+                            paddingLeft: "3px",
+                          }}
+                          onClick={() => setModelImgId(index)}
+                        >
+                          <img
+                            src={image}
+                            alt=""
+                            key={index}
+                            width="100%"
+                            height="100%"
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </Row>
+          </DialogContent>
+        </Dialog>
       </section>
     </>
   );
