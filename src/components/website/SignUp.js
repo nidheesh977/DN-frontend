@@ -85,9 +85,8 @@ function SignUp(props) {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [error_msg, setErrorMsg] = useState("");
-  const [dob, setDob] = useState(new Date());
   const [serverError, setServerError] = useState(false);
-  const [accept_conditions, setAccept_conditions] = useState(false);
+  const [accept_conditions, setAcceptConditions] = useState(false);
   const [termsConditionsError, setTermsConditionsError] = useState(false);
 
   const [formValues, setFormValues] = useState({
@@ -155,13 +154,18 @@ function SignUp(props) {
             }
           });
       } else {
-        setTermsConditionsError(true)
+        document.getElementById("terms_conditions_error").style.display = "contents";
       }
     } else {
       setError(true);
       setErrorMsg("Phone number is required");
     }
   };
+
+  const AcceptCondition = () => {
+    setAcceptConditions(!accept_conditions)
+    document.getElementById("terms_conditions_error").style.display = "none";
+  }
 
   const PasswordShow = () => {
     setViewPassword(!viewPassword);
@@ -467,13 +471,20 @@ function SignUp(props) {
                   </div>
                 </div>
 
-                <label style = {{}}>
+                <label style={{}} className = "signup_terms_conditions">
                   <input
                     type="checkbox"
-                    onClick={() => setAccept_conditions(!accept_conditions)}
+                    onClick={AcceptCondition}
                   />{" "}
-                  By clicking Create account, you’re okay with our Terms of Service, Privacy Policy, and our default Notification Settings
+                  By clicking Create account, you’re okay with our Terms of
+                  Service, Privacy Policy, and our default Notification Settings
                 </label>
+                <div
+                  className="login_input_error_msg"
+                  id="terms_conditions_error"
+                >
+                  Accept terms and conditions to proceed
+                </div>
                 <div className={All.FormGroup}>
                   <Box pb={3} pt={6}>
                     {isLoading ? (

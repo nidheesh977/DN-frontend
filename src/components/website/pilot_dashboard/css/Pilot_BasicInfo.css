@@ -110,7 +110,7 @@
 }
 
 .pd_b_i_profile_inputDesc {
-  width: 100%;
+  width: calc(100% - 40px);
   height: 120px;
   background-color: #f5f5f7;
   border: 1px solid #f5f5f7 !important;

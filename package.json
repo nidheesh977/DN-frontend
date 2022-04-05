@@ -78,6 +78,7 @@
     "react-grid-system": "^7.1.1",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^6.13.1",
+    "react-image-gallery": "^1.2.7",
     "react-image-video-lightbox": "^2.0.3",
     "react-images-upload": "^1.2.8",
     "react-images-uploader": "^1.2.0-rc1",
