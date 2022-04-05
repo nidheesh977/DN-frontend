@@ -324,3 +324,61 @@
   display: flex;
   justify-content: center;
 }
+
+.sc_popup_head{
+  font-family: muli-bold;
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+.sc_popup_desc{
+  font-family: muli-regular;
+  font-size: 16px;
+  margin-bottom: 20px;
+
+}
+.sc_popup_input_label{
+  font-family: muli-bold;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+.sc_popup_input{
+  font-family: muli-regular;
+  font-size: 16px;
+  margin-bottom: 20px;
+  height: 40px;
+  width: calc(100% - 40px);
+  border: 1px solid gray;
+  padding:0px 20px;
+  border-radius: 5px;
+}
+
+.sc_popup_input1{
+  font-family: muli-regular;
+  font-size: 16px;
+  margin-bottom: 20px;
+  height: 100px;
+  width: calc(100% - 40px);
+  border: 1px solid gray;
+  padding:10px 20px;
+  border-radius: 5px;
+}
+
+.sc_popup_submit{
+  margin: auto;
+  padding: 8px 45px;
+  color: #041D1F !important;
+  background: transparent linear-gradient(121deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
+  border-radius: 25px !important;
+  font-family: muli-bold;
+  border: 1px solid #00fcef;
+}
+
+.sc_popup_submit1{
+  margin: auto;
+  padding: 8px 60px;
+  color: #041D1F !important;
+  background: transparent linear-gradient(121deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
+  border-radius: 25px !important;
+  font-family: muli-bold;
+  border: 1px solid #00fcef;
+}
