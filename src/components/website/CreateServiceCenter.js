@@ -12,7 +12,11 @@ import Close from "../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
-
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-autocomplete-places";
+import Loader from "../Loader/loader";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -67,44 +71,45 @@ class CreateServiceCenter extends Component {
       suggestedBrands: ["Brand1", "Brand2", "Brand3"],
       imgCountErr: false,
       fileSizeExceed: false,
-      imgWidthHightError: false
+      imgWidthHightError: false,
+      saving: false
     };
   }
 
   addPhoto = (e) => {
     try {
       if (this.state.photo_row.length + e.target.files.length <= 6) {
-          if (e.target.files[0].size / 1000000 <= 2) {
-            let img = new Image();
-            var file = e.target.files[0];
-            var photos_row = this.state.photo_row;
-            img.src = window.URL.createObjectURL(e.target.files[0]);
-            img.onload = () => {
-              if (img.width < 550 || img.height < 450) {
-                this.setState({
-                  imgWidthHightError: true
-                })
-              }
-              else{
-                photos_row.push(file);
-                this.setState({
-                  photo_row: photos_row,
-                });
-                document.getElementById("photos_error").style.display = "none";
-              }
+        if (e.target.files[0].size / 1000000 <= 2) {
+          let img = new Image();
+          var file = e.target.files[0];
+          var photos_row = this.state.photo_row;
+          img.src = window.URL.createObjectURL(e.target.files[0]);
+          img.onload = () => {
+            if (img.width < 550 || img.height < 450) {
+              this.setState({
+                imgWidthHightError: true,
+              });
+              this.refs.add_photo.value = "";
+            } else {
+              photos_row.push(file);
+              this.setState({
+                photo_row: photos_row,
+              });
+              document.getElementById("photos_error").style.display = "none";
+              this.refs.add_photo.value = "";
             }
-            
-          }
-          else{
-            this.setState({
-              fileSizeExceed: true
-            })
-          }
-        
+          };
+        } else {
+          this.setState({
+            fileSizeExceed: true,
+          });
+          this.refs.add_photo.value = "";
+        }
       } else {
         this.setState({
           imgCountErr: true,
         });
+        this.refs.add_photo.value = "";
       }
     } catch {}
   };
@@ -131,6 +136,21 @@ class CreateServiceCenter extends Component {
       [field]: e.target.value,
     });
     console.log(this.state);
+  };
+  handleChange1 = (address) => {
+    this.setState({ address: address });
+    document.getElementById(`address_error`).style.display = "none";
+  };
+
+  handleSelect = (address) => {
+    console.log(address);
+    this.setState({ address: address });
+
+    geocodeByAddress(address)
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => console.log("Success", latLng))
+      .catch((error) => console.error("Error", error));
+      document.getElementById(`address_error`).style.display = "none";
   };
 
   phoneChangeHandler = (e) => {
@@ -239,12 +259,8 @@ class CreateServiceCenter extends Component {
           focusField = "service_center_name";
         }
       }
-      if (
-        fields[i] === "building_no" &&
-        this.state.building_no.length > 100
-      ) {
-        document.getElementById(`building_no_error`).style.display =
-          "contents";
+      if (fields[i] === "building_no" && this.state.building_no.length > 100) {
+        document.getElementById(`building_no_error`).style.display = "contents";
         document.getElementById(`building_no_error`).innerText =
           "Building No. / Street name maximum 100 characters";
         error = true;
@@ -265,9 +281,12 @@ class CreateServiceCenter extends Component {
           focusField = "established_year";
         }
       }
-      if (fields[i] === "description" && (this.state.description.length < 200 || this.state.description.length > 500)){
-        document.getElementById(`description_error`).style.display =
-          "contents";
+      if (
+        fields[i] === "description" &&
+        (this.state.description.length < 200 ||
+          this.state.description.length > 500)
+      ) {
+        document.getElementById(`description_error`).style.display = "contents";
         document.getElementById(`description_error`).innerText =
           "Description minimum 200 characters and maximum 500 characters";
         error = true;
@@ -469,12 +488,78 @@ class CreateServiceCenter extends Component {
                 <label htmlFor="address" className="pd_b_i_profile_head">
                   Address
                 </label>
-                <input
-                  type="text"
-                  className="pd_b_i_profile_input"
-                  id="address"
-                  onChange={(e) => this.handleChange(e, "address")}
-                />
+
+                <PlacesAutocomplete
+                  value={this.state.address}
+                  onChange={this.handleChange1}
+                  onSelect={this.handleSelect}
+                >
+                  {({
+                    getInputProps,
+                    suggestions,
+                    getSuggestionItemProps,
+                    loading,
+                  }) => (
+                    <div style = {{position: "relative"}}>
+                      <input
+                        {...getInputProps({
+                          placeholder: "Search Places ...",
+                          className:
+                            "location-search-input pd_b_i_profile_input",
+                        })}
+                        style={{
+                          height: "38px",
+                          backgroundColor: "#f5f5f7",
+                          borderRadius: "5px",
+                          border: "1px solid white",
+                          outline: "none",
+                          fontSize: "16px",
+                        }}
+                      />
+                      {suggestions.length > 0 &&
+                        <div
+                          className="autocomplete-dropdown-container"
+                          style={{
+                            width: "calc(100% - 40px)",
+                            
+                            position: "absolute",
+                            top: "calc(100% - 30px)",
+                            zIndex: 1000,
+                            fontFamily: "muli-light",
+                            fontSize: "16px",
+                            border:
+                              suggestions.length === 0 ? "" : "1px solid grey",
+                            overflow: "hidden",
+                            borderEndStartRadius: "10px",
+                            borderEndEndRadius: "10px",
+                            background: "white"
+                          }}
+                        >
+                          {loading && <div>Loading...</div>}
+                          {suggestions.map((suggestion) => {
+                            const className = suggestion.active
+                              ? "suggestion-item--active"
+                              : "suggestion-item";
+                            // inline style for demonstration purpose
+                            const style = suggestion.active
+                              ? { backgroundColor: "#e1e1e1", cursor: "pointer", padding: "10px 20px", }
+                              : { backgroundColor: "#ffffff", cursor: "pointer", padding: "10px 20px", };
+                            return (
+                              <div
+                                {...getSuggestionItemProps(suggestion, {
+                                  className,
+                                  style,
+                                })}
+                              >
+                                <span>{suggestion.description}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      }
+                    </div>
+                  )}
+                </PlacesAutocomplete>
                 <div className="login_input_error_msg" id="address_error">
                   Address is required
                 </div>
@@ -742,12 +827,22 @@ class CreateServiceCenter extends Component {
                 Photos is required
               </div>
               <div className="pd_b_i_notifications_save">
-                <button
-                  className="pd_b_i_notifications_saveBtn"
-                  onClick={this.saveChanges}
-                >
-                  Save Changes
-                </button>
+                {this.state.saving 
+                ?<button
+                className="pd_b_i_notifications_saveBtn"
+                onClick={this.saveChanges}
+                style = {{display: "flex"}}
+              >
+                <Loader /> Saving
+              </button>
+              :<button
+              className="pd_b_i_notifications_saveBtn"
+              onClick={this.saveChanges}
+            >
+              Create center
+            </button>
+              }
+                
               </div>
             </Col>
           </Row>
