@@ -210,7 +210,7 @@ class CreateServiceCenter extends Component {
             focusField = "brand";
           }
         }
-        if (fields[i] === "photos" && this.state.photos.length <= 0) {
+        if (fields[i] === "photos" && this.state.photo_row.length <= 0) {
           document.getElementById(`photos_error`).style.display = "contents";
           error = true;
         }
