@@ -46,6 +46,7 @@ import Center_dashboard from "./components/website/center_dashboard/Center_dashb
 import PilotRoute from "./PilotRoute";
 import Booster_dashboard from "./components/website/booster_dashboard/Booster_dashboard";
 import BoosterRoute from "./BoosterRoute";
+import CenterRoute from "./CenterRoute";
 function App(){
 
   useEffect(()=>{
@@ -146,7 +147,7 @@ function App(){
             <Route component = {CreateServiceCenter} path = "/createServiceCenter" />
             {/* yaseen */}
             {/* <Route component={Pilot_dashboard} path="/pilot_dashboard" /> */}
-            <Route component={Center_dashboard} path="/center_dashboard" />
+            <CenterRoute component={Center_dashboard} path="/center_dashboard" />
             <Route component={ApplyJobLanding} path="/applyJobLanding/:id" />
             <Route component={Company_dashboard} path="/company_dashboard" />
             <Route component={Admin_dashboard} path="/Admin_dashboard" />

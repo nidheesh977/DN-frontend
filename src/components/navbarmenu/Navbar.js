@@ -105,6 +105,9 @@ let AccountButton = () =>{
     history.push("/choose-categories")
   }else if(localStorage.getItem("role") === "pilot"){
     history.push("/pilot_dashboard/account/")
+  }
+  else if(localStorage.getItem("role") === "service_center"){
+    history.push("/center_dashboard/account/")
   }else{
     history.push("/booster_dashboard/account/")
   }
