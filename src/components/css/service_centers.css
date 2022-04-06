@@ -388,12 +388,11 @@
 
 .s_c_Search{
   height: 100%;
-  width: calc(100% - 40px);
+  width: calc(100% - 80px);
   border: 0;
-  padding: 0px 20px!important;
+  padding: 0px 60px 0px 20px!important;
   font-size: 18px;
   font-family: muli-regular;
-  color: grey;
 }
 
 .s_c_Search:hover{
@@ -406,12 +405,29 @@
 
 .s_c_filters_list{
   width: 400px;
-  height: 400px;
+  max-height: 400px;
   position: absolute;
-  top: 60px;
+  top: 52px;
   left: 12%;
   z-index: 1000;
   border: 1px solid grey;
   background-color: white;
   border-radius: 20px;
+  padding: 10px 20px;
+  overflow-y: auto;
+}
+
+.s_c_filter_brand{
+  border: 1px solid grey;
+  margin: 5px;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 17px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: muli-regular;
+}
+
+.s_c_filter_brand:hover{
+  opacity: 0.8;
 }

@@ -49,7 +49,12 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import s_c_form_img from "../images/s_c_form_img.png";
 import close from "../images/close.svg";
+import searchIcon from "../images/search123.png";
 import loadMore from "../images/Group 71.svg";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-autocomplete-places';
 // import usePlacesAutocomplete from "use-places-autocomplete";
 // import {
 //   Combobox,
@@ -127,6 +132,7 @@ class ServiceCenters extends Component {
         "DJI Inspire 1",
         "Parrot Bebop 2",
       ],
+      selected_brands: [],
       loading: true,
       after_data_fetch: false,
       share: false,
@@ -142,7 +148,9 @@ class ServiceCenters extends Component {
       phoneFormSuccessMsg: "Form submitted successfully",
       showNumber: false,
       after_data_fetch: false,
-      next_page: false
+      next_page: false,
+      showBrandFilter: false,
+      address: ""
     };
   }
 
@@ -233,6 +241,19 @@ class ServiceCenters extends Component {
       });
     }
   };
+
+  selectUnselectBrand = (brand) => {
+    var selected_brands = this.state.selected_brands
+    if (selected_brands.includes(brand)){
+      selected_brands.splice(selected_brands.indexOf(brand), 1)
+    }
+    else{
+      selected_brands.push(brand)
+    }
+    this.setState({
+      selected_brands: selected_brands
+    })
+  }
 
   selectCountry = (country) => {
     this.setState({
@@ -354,6 +375,22 @@ class ServiceCenters extends Component {
     });
   };
 
+  handleChange = address => {
+     
+    this.setState({ address: address });
+
+  };
+ 
+  handleSelect = address => {
+      console.log(address)
+      this.setState({ address: address });
+
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => console.log('Success', latLng))
+      .catch(error => console.error('Error', error));
+  };
+
   phoneFormChangeHandler = (e) => {
     document.getElementById(`${e.target.name}_error`).style.visibility =
       "hidden";
@@ -407,12 +444,6 @@ class ServiceCenters extends Component {
   };
 
   render() {
-    console.log(window.location.href);
-    const dropDown = this.dropDown;
-    const selectCountry = this.selectCountry;
-    const selectState = this.selectState;
-    const selectCity = this.selectCity;
-    const selectBrand = this.selectBrand;
     var loading = this.state.loading;
     return (
       <>
@@ -435,18 +466,62 @@ class ServiceCenters extends Component {
                 List your service center
               </button>
             </div> */}
-            <div style = {{position: "relative"}}>
+            <div style = {{position: "relative"}} onMouseLeave = {()=>this.setState({showBrandFilter: false})}>
               <div className="s_c_search_filter_container">
-                <div className="s_c_filter_container">
+                <div className="s_c_filter_container" onMouseOver={()=>this.setState({showBrandFilter: true})}>
                   Choose Brands
                   <img src={DropDownPng} alt="" height={"20px"} width={"20px"} style = {{marginLeft: "auto"}}/>
                 </div>
-                <div className="s_c_Search_container">
-                  <input type="text" className="s_c_Search"/>
-                </div>
+                    <div className="s_c_Search_container">
+                        {/* <input type="text" className="s_c_Search"/> */}
+                        <PlacesAutocomplete
+        value={this.state.address}
+        onChange={this.handleChange}
+        onSelect={this.handleSelect}
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div>
+            <input style = {{height: "50px"}}
+              {...getInputProps({
+                placeholder: 'Search Places ...',
+                className: 'location-search-input s_c_Search',
+              })}
+            />
+            <div className="autocomplete-dropdown-container" style = {{position: "absolute", zIndex: 1000, top: "100%", width:"52.5%", fontFamily: "muli-light", fontSize: "16px", border: suggestions.length === 0 ? "" : "1px solid grey", overflow: "hidden", borderEndStartRadius: "10px", borderEndEndRadius: "10px"}}>
+              {loading && <div>Loading...</div>}
+              {suggestions.map(suggestion => {
+                const className = suggestion.active
+                  ? 'suggestion-item--active'
+                  : 'suggestion-item';
+
+                // inline style for demonstration purpose
+                const style = suggestion.active
+                  ? { backgroundColor: '#e1e1e1', cursor: 'pointer', padding: "10px" }
+                  : { backgroundColor: '#ffffff', cursor: 'pointer', padding: "10px" };
+                return (
+                  <div
+                    {...getSuggestionItemProps(suggestion, {
+                      className,
+                      style,
+                    })}
+                  >
+                    <span style = {{padding: "20px 10px", marginBottom: "10px"}}>{suggestion.description}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </PlacesAutocomplete>
+                    </div>
+                <img src={searchIcon} alt="search bar" style = {{position: "absolute", left: "calc(85% - 20px)", height: "30px", width: "30px", top: "10px"}}/>
               </div>
-              <div className="s_c_filters_list">
-                
+              <div className="s_c_filters_list" style = {{visibility: this.state.showBrandFilter?"visible":"hidden"}}>
+                {this.state.brand_list.map((brand, index) => {
+                  return(
+                    <div className="s_c_filter_brand" style = {{background: this.state.selected_brands.includes(brand)?"#00e7fc": "#f1f1f1"}} onClick = {()=>this.selectUnselectBrand(brand)}>{brand}</div>
+                  )
+                })}
               </div>
             </div>
             <Row>

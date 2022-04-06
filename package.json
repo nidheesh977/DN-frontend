@@ -57,6 +57,7 @@
     "public-ip": "^5.0.0",
     "razorpay": "^2.0.6",
     "react": "^16.14.0",
+    "react-autocomplete-places": "^7.3.0",
     "react-autosuggest": "^10.1.0",
     "react-avatar-edit": "^1.0.0",
     "react-avatar-editor": "^11.1.0",
