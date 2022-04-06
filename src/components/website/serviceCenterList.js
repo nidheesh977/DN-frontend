@@ -58,7 +58,7 @@ import loadMore from "../images/Group 71.svg";
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
-} from 'react-autocomplete-places';
+} from "react-autocomplete-places";
 // import usePlacesAutocomplete from "use-places-autocomplete";
 // import {
 //   Combobox,
@@ -70,7 +70,7 @@ import PlacesAutocomplete, {
 
 // import "@reach/combobox/styles.css";
 
-const domain = process.env.REACT_APP_MY_API
+const domain = process.env.REACT_APP_MY_API;
 
 const styles = (theme) => ({
   root: {
@@ -127,7 +127,7 @@ class ServiceCenters extends Component {
       centerId: "",
       message: "",
       name: "",
-      emailId: "", 
+      emailId: "",
       phoneNo: "",
       code: "",
       isLoading: false,
@@ -148,7 +148,7 @@ class ServiceCenters extends Component {
       loading: true,
       after_data_fetch: false,
       share: false,
-      
+
       shareLink: "",
       phone_input: {
         name: "",
@@ -163,7 +163,7 @@ class ServiceCenters extends Component {
       next_page: false,
       showBrandFilter: false,
       address: "",
-      latLng: ""
+      latLng: "",
     };
   }
 
@@ -192,10 +192,10 @@ class ServiceCenters extends Component {
           loading: false,
           after_data_fetch: true,
         });
-        if (res.data.next){
+        if (res.data.next) {
           this.setState({
-            next_page: true
-          })
+            next_page: true,
+          });
         }
       })
       .catch((err) => {
@@ -204,35 +204,33 @@ class ServiceCenters extends Component {
           after_data_fetch: true,
         });
       });
-      let config = {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      };
-      axios.get(`${domain}/api/user/getUserData`,  config).then(res=>{
-        console.log(res)
-        this.setState({
-          name : res.data.name,
-          emailId: res.data.email,
-          phoneNo: res.data.phoneNo
-        })
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    axios.get(`${domain}/api/user/getUserData`, config).then((res) => {
+      console.log(res);
+      this.setState({
+        name: res.data.name,
+        emailId: res.data.email,
+        phoneNo: res.data.phoneNo,
+      });
 
-        try{
-          var result = Countries.filter((obj) => obj.name == res.data.country);
-          console.log(result[0].dial_code);
-      
-          this.setState({
-            code: result[0].dial_code
-          })
-          console.log(res.data.country)
-        }
-        catch{
-          this.setState({
-            code: "+91"
-          })
-        }
-      })
-    
+      try {
+        var result = Countries.filter((obj) => obj.name == res.data.country);
+        console.log(result[0].dial_code);
+
+        this.setState({
+          code: result[0].dial_code,
+        });
+        console.log(res.data.country);
+      } catch {
+        this.setState({
+          code: "+91",
+        });
+      }
+    });
   }
 
   closeDropDown = () => {
@@ -285,17 +283,16 @@ class ServiceCenters extends Component {
   };
 
   selectUnselectBrand = (brand) => {
-    var selected_brands = this.state.selected_brands
-    if (selected_brands.includes(brand)){
-      selected_brands.splice(selected_brands.indexOf(brand), 1)
-    }
-    else{
-      selected_brands.push(brand)
+    var selected_brands = this.state.selected_brands;
+    if (selected_brands.includes(brand)) {
+      selected_brands.splice(selected_brands.indexOf(brand), 1);
+    } else {
+      selected_brands.push(brand);
     }
     this.setState({
-      selected_brands: selected_brands
-    })
-  }
+      selected_brands: selected_brands,
+    });
+  };
 
   selectCountry = (country) => {
     this.setState({
@@ -363,37 +360,41 @@ class ServiceCenters extends Component {
   };
   changeMessage = (e) => {
     this.setState({
-      message: e.target.value
-    })
+      message: e.target.value,
+    });
     document.getElementById("message_error").style.display = "none";
   };
-   enquiryChange = (e) => {
-    if(e.target.name !== "phoneNo"){
-    this.setState({
-      [e.target.name]: e.target.value,
-    })
+  enquiryChange = (e) => {
+    if (e.target.name !== "phoneNo") {
+      this.setState({
+        [e.target.name]: e.target.value,
+      });
       // setMyData({
       //   ...myData,
       //   [e.target.name]: e.target.value,
       // });
       document.getElementById(`${e.target.id}_error`).style.display = "none";
-      
-    }
-    else{
+    } else {
       try {
         if (
-          Number(e.target.value.slice(this.state.code.length + 1, 10 + this.state.code.length + 1)) ||
-          e.target.value.slice(this.state.code.length + 1, 10 + this.state.code.length + 1) === ""
+          Number(
+            e.target.value.slice(
+              this.state.code.length + 1,
+              10 + this.state.code.length + 1
+            )
+          ) ||
+          e.target.value.slice(
+            this.state.code.length + 1,
+            10 + this.state.code.length + 1
+          ) === ""
         ) {
           this.setState({
-           
             ["phoneNo"]: e.target.value.slice(
               this.state.code.length + 1,
               10 + this.state.code.length + 1
             ),
           });
-          document.getElementById("phone" + "_error").style.display =
-            "none";
+          document.getElementById("phone" + "_error").style.display = "none";
         }
       } catch {
         console.log("Not number");
@@ -419,11 +420,10 @@ class ServiceCenters extends Component {
       share: true,
     });
   };
- closeEnquiry1 = () => {
+  closeEnquiry1 = () => {
     this.setState({
-      enquiry: false
-    }
-    )
+      enquiry: false,
+    });
   };
 
   whatsappChat = (whatsapp_number) => {
@@ -493,13 +493,13 @@ class ServiceCenters extends Component {
     if (!error) {
       this.setState({
         isLoading: true,
-      })
+      });
       let config = {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       };
-    
+
       axios
         .post(
           `${domain}/api/enquiry/createEnquiry/${this.state.centerId}`,
@@ -509,16 +509,15 @@ class ServiceCenters extends Component {
             name: this.state.name,
             message: this.state.message,
           },
-         config
+          config
         )
         .then((res) => {
           console.log(res);
           this.setState({
             message: "",
             enquiry: false,
-            isLoading: false
-          })
-         
+            isLoading: false,
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -530,7 +529,7 @@ class ServiceCenters extends Component {
   enquireNow = (id) => {
     this.setState({
       enquiry: true,
-centerId: id
+      centerId: id,
     });
   };
 
@@ -559,26 +558,25 @@ centerId: id
     });
   };
 
-  handleChange = address => {
-     
+  handleChange = (address) => {
+    this.setState({ address: address });
+  };
+
+  handleSelect = (address) => {
+    console.log(address);
     this.setState({ address: address });
 
-  };
- 
-  handleSelect = address => {
-      console.log(address)
-      this.setState({ address: address });
-
     geocodeByAddress(address)
-      .then(results => getLatLng(results[0]))
-      .then(latLng => {console.log('Success', latLng)
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => {
+        console.log("Success", latLng);
 
-    this.setState({
-      latLng : `${latLng.lat}, ${latLng.lng}`
-    })
-    console.log(this.state.latLng)
-    })
-      .catch(error => console.error('Error', error));
+        this.setState({
+          latLng: `${latLng.lat}, ${latLng.lng}`,
+        });
+        console.log(this.state.latLng);
+      })
+      .catch((error) => console.error("Error", error));
   };
 
   phoneFormChangeHandler = (e) => {
@@ -622,7 +620,7 @@ centerId: id
         phoneNumberForm: false,
         phone_input: phone_input,
         phoneFormSuccess: true,
-        showNumber: true
+        showNumber: true,
       });
     }
   };
@@ -633,11 +631,11 @@ centerId: id
     });
   };
 
-  searchFilters= () =>{
-    let data = `${this.state.latLng}, ${this.state.address} `
-    console.log(this.state.selected_brands)
-  console.log(data.split(","))  
-  }
+  searchFilters = () => {
+    let data = `${this.state.latLng}, ${this.state.address} `;
+    console.log(this.state.selected_brands);
+    console.log(data.split(","));
+  };
 
   render() {
     var loading = this.state.loading;
@@ -662,61 +660,135 @@ centerId: id
                 List your service center
               </button>
             </div> */}
-            <div style = {{position: "relative"}} onMouseLeave = {()=>this.setState({showBrandFilter: false})}>
+            <div
+              style={{ position: "relative" }}
+              onMouseLeave={() => this.setState({ showBrandFilter: false })}
+            >
               <div className="s_c_search_filter_container">
-                <div className="s_c_filter_container" onMouseOver={()=>this.setState({showBrandFilter: true})}>
+                <div
+                  className="s_c_filter_container"
+                  onMouseOver={() => this.setState({ showBrandFilter: true })}
+                >
                   Choose Brands
-                  <img src={DropDownPng} alt="" height={"20px"} width={"20px"} style = {{marginLeft: "auto"}}/>
+                  <img
+                    src={DropDownPng}
+                    alt=""
+                    height={"20px"}
+                    width={"20px"}
+                    style={{ marginLeft: "auto" }}
+                  />
                 </div>
-                    <div className="s_c_Search_container">
-                        {/* <input type="text" className="s_c_Search"/> */}
-                        <PlacesAutocomplete
-        value={this.state.address}
-        onChange={this.handleChange}
-        onSelect={this.handleSelect}
-      >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div>
-            <input style = {{height: "50px"}}
-              {...getInputProps({
-                placeholder: 'Search Places ...',
-                className: 'location-search-input s_c_Search',
-              })}
-            />
-            <div className="autocomplete-dropdown-container" style = {{position: "absolute", zIndex: 1000, top: "100%", width:"52.5%", fontFamily: "muli-light", fontSize: "16px", border: suggestions.length === 0 ? "" : "1px solid grey", overflow: "hidden", borderEndStartRadius: "10px", borderEndEndRadius: "10px"}}>
-              {loading && <div>Loading...</div>}
-              {suggestions.map(suggestion => {
-                const className = suggestion.active
-                  ? 'suggestion-item--active'
-                  : 'suggestion-item';
-
-                // inline style for demonstration purpose
-                const style = suggestion.active
-                  ? { backgroundColor: '#e1e1e1', cursor: 'pointer', padding: "10px" }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer', padding: "10px" };
-                return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style,
-                    })}
+                <div className="s_c_Search_container">
+                  {/* <input type="text" className="s_c_Search"/> */}
+                  <PlacesAutocomplete
+                    value={this.state.address}
+                    onChange={this.handleChange}
+                    onSelect={this.handleSelect}
                   >
-                    <span style = {{padding: "20px 10px", marginBottom: "10px"}}>{suggestion.description}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </PlacesAutocomplete>
-                    </div>
-                <img src={searchIcon} alt="search bar" style = {{position: "absolute", left: "calc(85% - 20px)", height: "30px", width: "30px", top: "10px"}} onClick={this.searchFilters}/>
+                    {({
+                      getInputProps,
+                      suggestions,
+                      getSuggestionItemProps,
+                      loading,
+                    }) => (
+                      <div>
+                        <input
+                          style={{ height: "50px" }}
+                          {...getInputProps({
+                            placeholder: "Search Places ...",
+                            className: "location-search-input s_c_Search",
+                          })}
+                        />
+                        <div
+                          className="autocomplete-dropdown-container"
+                          style={{
+                            position: "absolute",
+                            zIndex: 1000,
+                            top: "100%",
+                            width: "52.5%",
+                            fontFamily: "muli-light",
+                            fontSize: "16px",
+                            border:
+                              suggestions.length === 0 ? "" : "1px solid grey",
+                            overflow: "hidden",
+                            borderEndStartRadius: "10px",
+                            borderEndEndRadius: "10px",
+                          }}
+                        >
+                          {loading && <div>Loading...</div>}
+                          {suggestions.map((suggestion) => {
+                            const className = suggestion.active
+                              ? "suggestion-item--active"
+                              : "suggestion-item";
+
+                            // inline style for demonstration purpose
+                            const style = suggestion.active
+                              ? {
+                                  backgroundColor: "#e1e1e1",
+                                  cursor: "pointer",
+                                  padding: "10px",
+                                }
+                              : {
+                                  backgroundColor: "#ffffff",
+                                  cursor: "pointer",
+                                  padding: "10px",
+                                };
+                            return (
+                              <div
+                                {...getSuggestionItemProps(suggestion, {
+                                  className,
+                                  style,
+                                })}
+                              >
+                                <span
+                                  style={{
+                                    padding: "20px 10px",
+                                    marginBottom: "10px",
+                                  }}
+                                >
+                                  {suggestion.description}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </PlacesAutocomplete>
+                </div>
+                <img
+                  src={searchIcon}
+                  alt="search bar"
+                  style={{
+                    position: "absolute",
+                    left: "calc(85% - 20px)",
+                    height: "30px",
+                    width: "30px",
+                    top: "10px",
+                  }}
+                  onClick={this.searchFilters}
+                />
               </div>
-              <div className="s_c_filters_list" style = {{visibility: this.state.showBrandFilter?"visible":"hidden"}}>
+              <div
+                className="s_c_filters_list"
+                style={{
+                  visibility: this.state.showBrandFilter ? "visible" : "hidden",
+                }}
+              >
                 {this.state.brand_list.map((brand, index) => {
-                  return(
-                    <div className="s_c_filter_brand" style = {{background: this.state.selected_brands.includes(brand)?"#00e7fc": "#f1f1f1"}} onClick = {()=>this.selectUnselectBrand(brand)}>{brand}</div>
-                  )
+                  return (
+                    <div
+                      className="s_c_filter_brand"
+                      style={{
+                        background: this.state.selected_brands.includes(brand)
+                          ? "#00e7fc"
+                          : "#f1f1f1",
+                      }}
+                      onClick={() => this.selectUnselectBrand(brand)}
+                    >
+                      {brand}
+                    </div>
+                  );
                 })}
               </div>
             </div>
@@ -761,7 +833,10 @@ centerId: id
                       height={300}
                       width={"100%"}
                       count={1}
-                      style={{ marginBottom: "30px", backgroundColor: "#e9e9e9" }}
+                      style={{
+                        marginBottom: "30px",
+                        backgroundColor: "#e9e9e9",
+                      }}
                     />
                   </SkeletonTheme>
                 )}
@@ -781,7 +856,10 @@ centerId: id
                       height={300}
                       width={"100%"}
                       count={1}
-                      style={{ marginBottom: "30px", backgroundColor: "#e9e9e9" }}
+                      style={{
+                        marginBottom: "30px",
+                        backgroundColor: "#e9e9e9",
+                      }}
                     />
                   </SkeletonTheme>
                 )}
@@ -793,7 +871,10 @@ centerId: id
                       height={300}
                       width={"100%"}
                       count={1}
-                      style={{ marginBottom: "30px", backgroundColor: "#e9e9e9" }}
+                      style={{
+                        marginBottom: "30px",
+                        backgroundColor: "#e9e9e9",
+                      }}
                     />
                   </SkeletonTheme>
                 )}
@@ -805,7 +886,10 @@ centerId: id
                       height={300}
                       width={"100%"}
                       count={1}
-                      style={{ marginBottom: "30px", backgroundColor: "#e9e9e9" }}
+                      style={{
+                        marginBottom: "30px",
+                        backgroundColor: "#e9e9e9",
+                      }}
                     />
                   </SkeletonTheme>
                 )}
@@ -819,7 +903,12 @@ centerId: id
                       <Col lg={6} md={12}>
                         <div className="service_center_list">
                           <div className="s_c_profile_container">
-                            <img src={item.profilePic} alt="" width="35px" height = "35px" />
+                            <img
+                              src={item.profilePic}
+                              alt=""
+                              width="35px"
+                              height="35px"
+                            />
                           </div>
                           <span
                             className="service_center_name"
@@ -875,9 +964,7 @@ centerId: id
                                 &#9733;
                               </span>
                             </div>
-                            <div>
-                        
-                            </div>
+                            <div></div>
                           </div>
                           <div className="s_c_other_details">
                             <div className="s_c_other_details_title">
@@ -893,7 +980,9 @@ centerId: id
                               className="s_c_other_details_content s_c_other_details_phone"
                               onClick={this.openPhoneNumberForm}
                             >
-                              {this.state.showNumber?`${item.phoneNo}, ${item.secondaryNumber}`:"Show Phone Number"}
+                              {this.state.showNumber
+                                ? `${item.phoneNo}, ${item.secondaryNumber}`
+                                : "Show Phone Number"}
                             </div>
                             <div className="s_c_other_details_title">
                               Location:
@@ -905,32 +994,50 @@ centerId: id
                               Brands:
                             </div>
                             <div className="s_c_other_details_content">
-                              {item.brandOfDrones.slice(0,4).map((brand, index)=>{
-                                return(
-                                  <div className="service_center_brand_list" key = {index}>{brand}{index+1 !== item.brandOfDrones.slice(0,4).length&& ","} &nbsp; </div>
-                                )
-                              })} {`...`}
+                              {item.brandOfDrones
+                                .slice(0, 4)
+                                .map((brand, index) => {
+                                  return (
+                                    <div
+                                      className="service_center_brand_list"
+                                      key={index}
+                                    >
+                                      {brand}
+                                      {index + 1 !==
+                                        item.brandOfDrones.slice(0, 4).length &&
+                                        ","}{" "}
+                                      &nbsp;{" "}
+                                    </div>
+                                  );
+                                })}{" "}
+                              {`...`}
                             </div>
                           </div>
                           <hr style={{ border: "1px solid #efefef" }} />
                           <div style={{ display: "flex", height: "30px" }}>
                             <button
                               className="s_c_button2"
-                              onClick={()=>this.enquireNow(item._id)}
+                              onClick={() => this.enquireNow(item._id)}
                             >
                               Enquire Now
                             </button>
 
-                            {
-                              item.whatsappNo ?  <Link
-                              onClick={() =>
-                                this.whatsappChat(item.whatsappNumber)
-                              }
-                            >
-                              <img src={whatsapp_icon} alt="" height={"27px"} style = {{marginTop: "3px"}} />
-                            </Link> : <></>
-                            }
-                           
+                            {item.whatsappNo ? (
+                              <Link
+                                onClick={() =>
+                                  this.whatsappChat(item.whatsappNumber)
+                                }
+                              >
+                                <img
+                                  src={whatsapp_icon}
+                                  alt=""
+                                  height={"27px"}
+                                  style={{ marginTop: "3px" }}
+                                />
+                              </Link>
+                            ) : (
+                              <></>
+                            )}
 
                             <img
                               src={share2}
@@ -946,94 +1053,115 @@ centerId: id
                   })}
                 </Row>
                 <Dialog
-          open={this.state.enquiry}
-          onClose={this.closeEnquiry1}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          maxWidth={"md"}
-          fullWidth={true}
-          PaperProps={{ style: { width: "620px", borderRadius: "10px" } }}
-        >
-          <DialogContent
-            className={All.PopupBody}
-            style={{ marginBottom: "50px" }}
-          >
-            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
-              <img
-                src={Close}
-                alt=""
-                onClick={this.closeEnquiry1}
-                style={{ cursor: "pointer" }}
-              />
-            </div>
-            <div style={{ marginTop: "30px" }}>
-              <div className="sc_popup_head">Contact Service Center</div>
-              <div className="sc_popup_desc">
-                Enter the below details to send a Enquiry{" "}
-              </div>
-              <div className="sc_popup_input_label">Name</div>
-              <input
-                type="text"
-                className="sc_popup_input"
-                name="name"
-                id="name"
-                onChange={this.enquiryChange}
-                value={this.state.name}
-              />
-              <div className="login_input_error_msg" id="name_error"></div>
-              <div className="sc_popup_input_label">Phone No</div>
-              <input
-                type="text"
-                className="sc_popup_input"
-                name="phoneNo"
-                id="phone"
-                onChange={this.enquiryChange}
-                value={`${this.state.code} ${this.state.phoneNo}`}
-              />
-              <div className="login_input_error_msg" id="phone_error"></div>
-              <div className="sc_popup_input_label">Email Id</div>
-              <input
-                type="text"
-                className="sc_popup_input"
-                name="emailId"
-                id="email"
-                onChange={this.enquiryChange}
-                value={this.state.emailId}
-              />
-              <div className="login_input_error_msg" id="email_error"></div>
-              <div className="sc_popup_input_label">Message</div>
-              <textarea
-                type="text"
-                className="sc_popup_input1"
-                value={this.state.message}
-                name="message"
-                id="message"
-                onChange={this.changeMessage}
-              />
-              <div className="login_input_error_msg" id="message_error"></div>
-              <div style={{ width: "100%", textAlign: "center" }}>
-                {this.state.isLoading ? (
-                  <>
-                    <button className="sc_popup_submit1">
-                      {" "}
-                      <Loader /> Sending
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      className="sc_popup_submit"
-                      onClick={this.captureEnquiry}
+                  open={this.state.enquiry}
+                  onClose={this.closeEnquiry1}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                  maxWidth={"md"}
+                  fullWidth={true}
+                  PaperProps={{
+                    style: { width: "620px", borderRadius: "10px" },
+                  }}
+                >
+                  <DialogContent
+                    className={All.PopupBody}
+                    style={{ marginBottom: "50px" }}
+                  >
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "20px",
+                        right: "20px",
+                      }}
                     >
-                      Submit
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-                
+                      <img
+                        src={Close}
+                        alt=""
+                        onClick={this.closeEnquiry1}
+                        style={{ cursor: "pointer" }}
+                      />
+                    </div>
+                    <div style={{ marginTop: "30px" }}>
+                      <div className="sc_popup_head">
+                        Contact Service Center
+                      </div>
+                      <div className="sc_popup_desc">
+                        Enter the below details to send a Enquiry{" "}
+                      </div>
+                      <div className="sc_popup_input_label">Name</div>
+                      <input
+                        type="text"
+                        className="sc_popup_input"
+                        name="name"
+                        id="name"
+                        onChange={this.enquiryChange}
+                        value={this.state.name}
+                      />
+                      <div
+                        className="login_input_error_msg"
+                        id="name_error"
+                      ></div>
+                      <div className="sc_popup_input_label">Phone No</div>
+                      <input
+                        type="text"
+                        className="sc_popup_input"
+                        name="phoneNo"
+                        id="phone"
+                        onChange={this.enquiryChange}
+                        value={`${this.state.code} ${this.state.phoneNo}`}
+                      />
+                      <div
+                        className="login_input_error_msg"
+                        id="phone_error"
+                      ></div>
+                      <div className="sc_popup_input_label">Email Id</div>
+                      <input
+                        type="text"
+                        className="sc_popup_input"
+                        name="emailId"
+                        id="email"
+                        onChange={this.enquiryChange}
+                        value={this.state.emailId}
+                      />
+                      <div
+                        className="login_input_error_msg"
+                        id="email_error"
+                      ></div>
+                      <div className="sc_popup_input_label">Message</div>
+                      <textarea
+                        type="text"
+                        className="sc_popup_input1"
+                        value={this.state.message}
+                        name="message"
+                        id="message"
+                        onChange={this.changeMessage}
+                      />
+                      <div
+                        className="login_input_error_msg"
+                        id="message_error"
+                      ></div>
+                      <div style={{ width: "100%", textAlign: "center" }}>
+                        {this.state.isLoading ? (
+                          <>
+                            <button className="sc_popup_submit1">
+                              {" "}
+                              <Loader /> Sending
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              className="sc_popup_submit"
+                              onClick={this.captureEnquiry}
+                            >
+                              Submit
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
 
                 <Dialog
                   open={this.state.phoneNumberForm}
@@ -1279,7 +1407,7 @@ centerId: id
                 </Dialog>
               </>
             )}
-            {this.state.next_page&&(
+            {this.state.next_page && (
               <div className="a_j_load_div" style={{ margin: "40px 0px" }}>
                 <button className="a_j_loadMore_btn">
                   <img src={loadMore} className="a_j_location_logo" />
@@ -1289,7 +1417,7 @@ centerId: id
             )}
             {this.state.data.length === 0 &&
               !this.state.loading &&
-              this.state.after_data_fetch &&
+              this.state.after_data_fetch && (
                 <div style={{ margin: "0px auto", display: "block" }}>
                   <Box className={All.Text_center} pt={5}>
                     <img
@@ -1306,7 +1434,7 @@ centerId: id
                     </Box>
                   </Box>
                 </div>
-              }
+              )}
           </Container>
         </div>
       </>

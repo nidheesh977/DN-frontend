@@ -111,8 +111,6 @@ export default function ServiceCenterDetails(props) {
 
   const [code, setCode] = useState("");
 
-  
-
   let [loginErrorPopup, setloginErrorPopup] = useState(false);
 
   const loginErrorPopupClose = () => {
@@ -165,14 +163,13 @@ export default function ServiceCenterDetails(props) {
         phoneNo: res.data.phoneNo,
         emailId: res.data.email,
       });
-      try{
+      try {
         var result = Countries.filter((obj) => obj.name == res.data.country);
         console.log(result[0].dial_code);
         setCode(result[0].dial_code);
-        console.log(res.data.country)
-      }
-      catch{
-        setCode("+91")
+        console.log(res.data.country);
+      } catch {
+        setCode("+91");
       }
     });
   }, []);
@@ -270,15 +267,14 @@ export default function ServiceCenterDetails(props) {
   };
 
   let enquiryChange = (e) => {
-    if(e.target.name !== "phoneNo"){
+    if (e.target.name !== "phoneNo") {
       setMyData({
         ...myData,
         [e.target.name]: e.target.value,
       });
       document.getElementById(`${e.target.id}_error`).style.display = "none";
       console.log(myData);
-    }
-    else{
+    } else {
       try {
         if (
           Number(e.target.value.slice(code.length + 1, 10 + code.length + 1)) ||
@@ -291,8 +287,7 @@ export default function ServiceCenterDetails(props) {
               10 + code.length + 1
             ),
           });
-          document.getElementById("phone" + "_error").style.display =
-            "none";
+          document.getElementById("phone" + "_error").style.display = "none";
         }
       } catch {
         console.log("Not number");

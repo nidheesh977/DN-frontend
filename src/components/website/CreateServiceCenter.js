@@ -13,6 +13,7 @@ import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
 
+
 const domain = process.env.REACT_APP_MY_API;
 
 const customStyles = {
@@ -66,30 +67,40 @@ class CreateServiceCenter extends Component {
       suggestedBrands: ["Brand1", "Brand2", "Brand3"],
       imgCountErr: false,
       fileSizeExceed: false,
+      imgWidthHightError: false
     };
   }
 
   addPhoto = (e) => {
     try {
       if (this.state.photo_row.length + e.target.files.length <= 6) {
-        for (var i = 0; i < e.target.files.length; i++) {
-          console.log(i);
-          if (e.target.files[i].size / 1000000 <= 2) {
-            var file = e.target.files[i];
+          if (e.target.files[0].size / 1000000 <= 2) {
+            let img = new Image();
+            var file = e.target.files[0];
             var photos_row = this.state.photo_row;
-            photos_row.push(file);
-            this.setState({
-              photo_row: photos_row,
-            });
-            this.refs.add_photo.value = "";
-            document.getElementById("photos_error").style.display = "none";
+            img.src = window.URL.createObjectURL(e.target.files[0]);
+            img.onload = () => {
+              if (img.width < 550 || img.height < 450) {
+                this.setState({
+                  imgWidthHightError: true
+                })
+              }
+              else{
+                photos_row.push(file);
+                this.setState({
+                  photo_row: photos_row,
+                });
+                document.getElementById("photos_error").style.display = "none";
+              }
+            }
+            
           }
           else{
             this.setState({
               fileSizeExceed: true
             })
           }
-        }
+        
       } else {
         this.setState({
           imgCountErr: true,
@@ -107,7 +118,7 @@ class CreateServiceCenter extends Component {
   };
 
   removePhoto = (id) => {
-    var photos = this.state.photos;
+    var photos = this.state.photo_row;
     photos.splice(id, 1);
     this.setState({
       photos: photos,
@@ -805,6 +816,42 @@ class CreateServiceCenter extends Component {
                   <button
                     className="u_f_popup_btn2"
                     onClick={() => this.setState({ fileSizeExceed: false })}
+                  >
+                    Close
+                  </button>
+                </div>
+              </Row>
+            </DialogContent>
+          </Dialog>
+          <Dialog
+            open={this.state.imgWidthHightError}
+            onClose={() => this.setState({ imgWidthHightError: false })}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={() => this.setState({ imgWidthHightError: false })}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div className="u_f_popup_title">
+                  Image resolution must be minimum 550X450.
+                </div>
+                <div className="u_f_popup_btn_container">
+                  <button
+                    className="u_f_popup_btn2"
+                    onClick={() => this.setState({ imgWidthHightError: false })}
                   >
                     Close
                   </button>
