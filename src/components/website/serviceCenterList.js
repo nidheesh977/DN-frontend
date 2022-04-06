@@ -162,7 +162,8 @@ class ServiceCenters extends Component {
       after_data_fetch: false,
       next_page: false,
       showBrandFilter: false,
-      address: ""
+      address: "",
+      latLng: ""
     };
   }
 
@@ -570,7 +571,13 @@ centerId: id
 
     geocodeByAddress(address)
       .then(results => getLatLng(results[0]))
-      .then(latLng => console.log('Success', latLng))
+      .then(latLng => {console.log('Success', latLng)
+
+    this.setState({
+      latLng : `${latLng.lat}, ${latLng.lng}`
+    })
+    console.log(this.state.latLng)
+    })
       .catch(error => console.error('Error', error));
   };
 
@@ -625,6 +632,12 @@ centerId: id
       phoneFormSuccess: false,
     });
   };
+
+  searchFilters= () =>{
+    let data = `${this.state.latLng}, ${this.state.address} `
+    console.log(this.state.selected_brands)
+  console.log(data.split(","))  
+  }
 
   render() {
     var loading = this.state.loading;
@@ -697,7 +710,7 @@ centerId: id
         )}
       </PlacesAutocomplete>
                     </div>
-                <img src={searchIcon} alt="search bar" style = {{position: "absolute", left: "calc(85% - 20px)", height: "30px", width: "30px", top: "10px"}}/>
+                <img src={searchIcon} alt="search bar" style = {{position: "absolute", left: "calc(85% - 20px)", height: "30px", width: "30px", top: "10px"}} onClick={this.searchFilters}/>
               </div>
               <div className="s_c_filters_list" style = {{visibility: this.state.showBrandFilter?"visible":"hidden"}}>
                 {this.state.brand_list.map((brand, index) => {

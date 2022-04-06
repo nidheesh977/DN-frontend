@@ -712,7 +712,6 @@ class CreateServiceCenter extends Component {
                     onChange={this.addPhoto}
                     ref="add_photo"
                     accept="image/*"
-                    multiple
                   />
                   {this.state.photo_row.length < 6 && (
                     <label htmlFor="photo_input" className="s_c_a_photo_add">
