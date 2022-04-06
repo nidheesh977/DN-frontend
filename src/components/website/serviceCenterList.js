@@ -634,9 +634,15 @@ centerId: id
   };
 
   searchFilters= () =>{
-    let data = `${this.state.latLng}, ${this.state.address} `
-    console.log(this.state.selected_brands)
-  console.log(data.split(","))  
+    let data = `${this.state.address} `
+  
+  console.log(data)  
+  axios.post(`${domain}/api/center/filterCenter`,{address : this.state.address.split(",")[0], brands: this.state.selected_brands}).then(res=>{
+    console.log(res)
+    this.setState({
+      data: res.data
+    })
+  })
   }
 
   render() {
@@ -652,6 +658,30 @@ centerId: id
           <Container
             className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}
           >
+
+{
+  !localStorage.getItem("access_token") ? <div className="s_c_list_btn_container">
+  <button
+    className="s_c_list_btn"
+    onClick={() =>
+      this.props.history.push("/login")
+    }
+  >
+    List your service center
+  </button>
+</div> : localStorage.getItem("role") === "booster" ? <div className="s_c_list_btn_container">
+  <button
+    className="s_c_list_btn"
+    onClick={() =>
+      this.props.history.push("/createServiceCenter") 
+    }
+  >
+    List your service center
+  </button>
+</div> : <></>
+}
+
+
             {/* <div className="s_c_list_btn_container">
               <button
                 className="s_c_list_btn"
@@ -741,14 +771,17 @@ centerId: id
                       alt=""
                       style={{ paddingRight: "10px", float: "left" }}
                     />
-                    {this.state.selected_city
-                      ? this.state.selected_city.name
-                      : "Bangalore"}
-                    ,{" "}
-                    {this.state.selected_state
-                      ? this.state.selected_state.name
-                      : "Karnataka"}
-                    .
+{
+  this.state.address !== "" ?  this.state.address.split(",")[0]  : ""
+}
+{
+  this.state.address.split(",").length > 1 ? ","  : ""
+}
+{
+  this.state.address.split(",").length > 1 ? this.state.address.split(",")[1]  : ""
+}
+                   
+               
                   </li>
                 </ul>
               </Col>

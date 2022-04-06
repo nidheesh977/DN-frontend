@@ -160,6 +160,7 @@ export default function ServiceCenterDetails(props) {
     axios.get(`${domain}/api/user/getUserData`, config).then((res) => {
       console.log(res);
       setCenters(res.data.markedCenters);
+      setLikedReviews(res.data.likedReviews);
       setMyData({
         name: res.data.name,
         phoneNo: res.data.phoneNo,
@@ -198,10 +199,28 @@ export default function ServiceCenterDetails(props) {
               axios
                 .post(`${domain}/api/pilot/getSinglePilot`, config)
                 .then((response) => {
-                  setLikedReviews(response.data.likedReviews);
+                  
 
                   console.log(response);
-                  // setBrands(response.data.brandOfDrones)
+                  axios.get(`${domain}/api/user/getUserData`, config).then((res) => {
+                    console.log(res);
+                    setCenters(res.data.markedCenters);
+                    setLikedReviews(res.data.likedReviews);
+                    setMyData({
+                      name: res.data.name,
+                      phoneNo: res.data.phoneNo,
+                      emailId: res.data.email,
+                    });
+                    try{
+                      var result = Countries.filter((obj) => obj.name == res.data.country);
+                      console.log(result[0].dial_code);
+                      setCode(result[0].dial_code);
+                      console.log(res.data.country)
+                    }
+                    catch{
+                      setCode("+91")
+                    }
+                  });
                 });
             });
         })
@@ -229,9 +248,26 @@ export default function ServiceCenterDetails(props) {
             axios
               .post(`${domain}/api/pilot/getSinglePilot`, config)
               .then((response) => {
-                setLikedReviews(response.data.likedReviews);
 
-                console.log(response);
+                axios.get(`${domain}/api/user/getUserData`, config).then((res) => {
+                  console.log(res);
+                  setCenters(res.data.markedCenters);
+                  setLikedReviews(res.data.likedReviews);
+                  setMyData({
+                    name: res.data.name,
+                    phoneNo: res.data.phoneNo,
+                    emailId: res.data.email,
+                  });
+                  try{
+                    var result = Countries.filter((obj) => obj.name == res.data.country);
+                    console.log(result[0].dial_code);
+                    setCode(result[0].dial_code);
+                    console.log(res.data.country)
+                  }
+                  catch{
+                    setCode("+91")
+                  }
+                });
                 // setBrands(response.data.brandOfDrones)
               });
           });
@@ -521,7 +557,6 @@ export default function ServiceCenterDetails(props) {
     axios
       .post(`${domain}/api/pilot/getSinglePilot`, config)
       .then((response) => {
-        setLikedReviews(response.data.likedReviews);
 
         console.log(response);
         // setBrands(response.data.brandOfDrones)
