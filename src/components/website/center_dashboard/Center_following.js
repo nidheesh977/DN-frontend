@@ -23,7 +23,9 @@ function Center_following() {
         console.log(res);
 
        setMyFollowing(res.data)
-
+       if(res.data.length === 0){
+        document.getElementById("toHide").style.display ="block"
+      }
 
 
 })
@@ -62,17 +64,12 @@ const removeFollow = (userId) =>{
                         <div className='pd_followers_title'>Following</div>
                     </Col>
                     <Col>
-                    <select className='pd_followers_select'>
-                            <option disabled selected>All Profiles</option>
-                            <option>Droners</option>
-                            <option>Service Centers</option>
-                            <option>Companies</option>
-                            <option>DN User</option>
-                        </select>
+                    
                     </Col>
                 </Row>
             </div>
             <hr className='pd_followers_hr' />
+            <div id="toHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", marginTop:"35px", display:"none"}}>You don't follow anyone yet, follow someone and check back</div>
             {
                 myFollowing.map((item, i) => {
                     return (
@@ -113,12 +110,12 @@ const removeFollow = (userId) =>{
                     )
                 })
             }
-              <div className="a_j_load_div" style={{margin: "40px 0px"}}>
+              {/* <div className="a_j_load_div" style={{margin: "40px 0px"}}>
         <button className="a_j_loadMore_btn">
           <img src={loadMore} className="a_j_location_logo" />
           <span className="a_j_location_text">Load More</span>
         </button>{" "}
-      </div>
+      </div> */}
 
 
 

@@ -109,6 +109,7 @@
 }
 
 .s_c_d_tab_about_content{
+  word-break: break-word;
   line-height: 25px;
   color: #777;
   font-size: 13px;

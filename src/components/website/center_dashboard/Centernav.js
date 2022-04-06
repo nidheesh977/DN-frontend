@@ -1,28 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import "./css/Pilot_nav.css";
-import { NavLink, Link, useHistory } from "react-router-dom";
+import { NavLink, Link, useHistory, useParams } from "react-router-dom";
 import All from "../../website/All.module.css";
 
 function Center_nav() {
-  let [active, setActive] = useState({
-    link1: false,
-    link2: true,
-  });
+ 
   let history = useHistory();
+  let param = useParams();
 
-  function changeActive() {
-    setActive({
-      link1: true,
-      link2: false,
-    });
-  }
-  function changeActive1() {
-    setActive({
-      link1: false,
-      link2: true,
-    });
-  }
+  useEffect(()=>{
+    console.log("heyyy")
+
+    if(window.location.href.includes("activities")){
+      document.getElementById("p_d_navitem1").classList.add("pd_nav_active")
+      document.getElementById("p_d_navitem2").classList.remove("pd_nav_active")
+    }
+  else if(window.location.href.includes("account")){
+      document.getElementById("p_d_navitem2").classList.add("pd_nav_active")
+      document.getElementById("p_d_navitem1").classList.remove("pd_nav_active")
+    }
+  })
+ 
   function logout() {
     window.localStorage.clear();
     history.push("/");
@@ -35,17 +34,13 @@ function Center_nav() {
           className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}
         >
           <Link
-            to="/center_dashboard/activities"
-            onClick={changeActive}
-            className={active.link1 ? "pd_nav_active" : ""}
+            to="/center_dashboard/activities/downloads/"
             id="p_d_navitem1"
           >
             Activities
           </Link>
           <Link
-            to="/center_dashboard/"
-            onClick={changeActive1}
-            className={active.link2 ? "pd_nav_active" : ""}
+            to="/center_dashboard/account/"
             id="p_d_navitem2"
           >
             My Account
