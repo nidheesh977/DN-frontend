@@ -48,6 +48,10 @@ import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import s_c_form_img from "../images/s_c_form_img.png";
+import Close from "../images/close.svg";
+import Loader from "../Loader/loader";
+import Countries from "../../apis/country.json";
+
 import close from "../images/close.svg";
 import searchIcon from "../images/search123.png";
 import loadMore from "../images/Group 71.svg";
@@ -119,6 +123,14 @@ class ServiceCenters extends Component {
       selected_brand: null,
       country_list: [],
       state_list: [],
+      enquiry: false,
+      centerId: "",
+      message: "",
+      name: "",
+      emailId: "", 
+      phoneNo: "",
+      code: "",
+      isLoading: false,
       city_list: [],
       brand_list: [
         "DJI Mavic Air 2",
@@ -136,7 +148,7 @@ class ServiceCenters extends Component {
       loading: true,
       after_data_fetch: false,
       share: false,
-      enquire: false,
+      
       shareLink: "",
       phone_input: {
         name: "",
@@ -191,6 +203,35 @@ class ServiceCenters extends Component {
           after_data_fetch: true,
         });
       });
+      let config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      };
+      axios.get(`${domain}/api/user/getUserData`,  config).then(res=>{
+        console.log(res)
+        this.setState({
+          name : res.data.name,
+          emailId: res.data.email,
+          phoneNo: res.data.phoneNo
+        })
+
+        try{
+          var result = Countries.filter((obj) => obj.name == res.data.country);
+          console.log(result[0].dial_code);
+      
+          this.setState({
+            code: result[0].dial_code
+          })
+          console.log(res.data.country)
+        }
+        catch{
+          this.setState({
+            code: "+91"
+          })
+        }
+      })
+    
   }
 
   closeDropDown = () => {
@@ -319,7 +360,45 @@ class ServiceCenters extends Component {
     });
     this.closeDropDown();
   };
-
+  changeMessage = (e) => {
+    this.setState({
+      message: e.target.value
+    })
+    document.getElementById("message_error").style.display = "none";
+  };
+   enquiryChange = (e) => {
+    if(e.target.name !== "phoneNo"){
+    this.setState({
+      [e.target.name]: e.target.value,
+    })
+      // setMyData({
+      //   ...myData,
+      //   [e.target.name]: e.target.value,
+      // });
+      document.getElementById(`${e.target.id}_error`).style.display = "none";
+      
+    }
+    else{
+      try {
+        if (
+          Number(e.target.value.slice(this.state.code.length + 1, 10 + this.state.code.length + 1)) ||
+          e.target.value.slice(this.state.code.length + 1, 10 + this.state.code.length + 1) === ""
+        ) {
+          this.setState({
+           
+            ["phoneNo"]: e.target.value.slice(
+              this.state.code.length + 1,
+              10 + this.state.code.length + 1
+            ),
+          });
+          document.getElementById("phone" + "_error").style.display =
+            "none";
+        }
+      } catch {
+        console.log("Not number");
+      }
+    }
+  };
   selectBrand = (brand) => {
     this.setState({
       selected_brand: brand,
@@ -339,14 +418,118 @@ class ServiceCenters extends Component {
       share: true,
     });
   };
+ closeEnquiry1 = () => {
+    this.setState({
+      enquiry: false
+    }
+    )
+  };
 
   whatsappChat = (whatsapp_number) => {
     window.open("https://wa.me/" + whatsapp_number + "?text=Hello", "_blank");
   };
+  captureEnquiry = (id) => {
+    let error = false;
+    let focusField = "";
+    const validateEmail = (email) => {
+      return String(email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    };
 
-  enquireNow = () => {
+    if (this.state.name.length < 2) {
+      document.getElementById("name_error").innerText =
+        "Name must have minimum 2 characters";
+      document.getElementById("name_error").style.display = "contents";
+      error = true;
+      if (focusField === "") {
+        focusField = "name";
+      }
+    }
+
+    if (this.state.name.length > 100) {
+      document.getElementById("name_error").innerText =
+        "Name should not exceed 100 characters";
+      document.getElementById("name_error").style.display = "contents";
+      error = true;
+      if (focusField === "") {
+        focusField = "name";
+      }
+    }
+
+    if (this.state.phoneNo.length !== 10) {
+      document.getElementById("phone_error").innerText =
+        "Phone number must be 10 digits";
+      document.getElementById("phone_error").style.display = "contents";
+      error = true;
+      if (focusField === "") {
+        focusField = "phone";
+      }
+    }
+
+    if (this.state.message.length > 200 || this.state.message.length === 0) {
+      document.getElementById("message_error").innerText =
+        "Message should be between 1 and 200 characters";
+      document.getElementById("message_error").style.display = "contents";
+      error = true;
+      if (focusField === "") {
+        focusField = "message";
+      }
+    }
+
+    if (!validateEmail(this.state.emailId)) {
+      document.getElementById("email_error").innerText =
+        "Email ID is not valid";
+      document.getElementById("email_error").style.display = "contents";
+      error = true;
+      if (focusField === "") {
+        focusField = "email";
+      }
+    }
+
+    if (!error) {
+      this.setState({
+        isLoading: true,
+      })
+      let config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      };
+    
+      axios
+        .post(
+          `${domain}/api/enquiry/createEnquiry/${this.state.centerId}`,
+          {
+            emailId: this.state.emailId,
+            phoneNo: this.state.phoneNo,
+            name: this.state.name,
+            message: this.state.message,
+          },
+         config
+        )
+        .then((res) => {
+          console.log(res);
+          this.setState({
+            message: "",
+            enquiry: false,
+            isLoading: false
+          })
+         
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      document.getElementById(focusField).focus();
+    }
+  };
+  enquireNow = (id) => {
     this.setState({
-      enquire: true,
+      enquiry: true,
+centerId: id
     });
   };
 
@@ -623,7 +806,7 @@ class ServiceCenters extends Component {
                       <Col lg={6} md={12}>
                         <div className="service_center_list">
                           <div className="s_c_profile_container">
-                            <img src={nexevo_img} alt="" width="35px" height = "35px" />
+                            <img src={item.profilePic} alt="" width="35px" height = "35px" />
                           </div>
                           <span
                             className="service_center_name"
@@ -680,12 +863,7 @@ class ServiceCenters extends Component {
                               </span>
                             </div>
                             <div>
-                              <Link
-                                className="s_c_review_link"
-                                to={"/service_center/" + item._id}
-                              >
-                                Read Reviews
-                              </Link>
+                        
                             </div>
                           </div>
                           <div className="s_c_other_details">
@@ -714,28 +892,32 @@ class ServiceCenters extends Component {
                               Brands:
                             </div>
                             <div className="s_c_other_details_content">
-                              {item.brandOfDrones.map((brand, index)=>{
+                              {item.brandOfDrones.slice(0,4).map((brand, index)=>{
                                 return(
-                                  <div className="service_center_brand_list" key = {index}>{brand}{index+1 !== item.brandOfDrones.length !== 0 && ","}&nbsp;</div>
+                                  <div className="service_center_brand_list" key = {index}>{brand}{index+1 !== item.brandOfDrones.slice(0,4).length&& ","} &nbsp; </div>
                                 )
-                              })}
+                              })} {`...`}
                             </div>
                           </div>
                           <hr style={{ border: "1px solid #efefef" }} />
                           <div style={{ display: "flex", height: "30px" }}>
                             <button
                               className="s_c_button2"
-                              onClick={this.enquireNow}
+                              onClick={()=>this.enquireNow(item._id)}
                             >
                               Enquire Now
                             </button>
-                            <Link
+
+                            {
+                              item.whatsappNo ?  <Link
                               onClick={() =>
                                 this.whatsappChat(item.whatsappNumber)
                               }
                             >
                               <img src={whatsapp_icon} alt="" height={"27px"} style = {{marginTop: "3px"}} />
-                            </Link>
+                            </Link> : <></>
+                            }
+                           
 
                             <img
                               src={share2}
@@ -750,82 +932,95 @@ class ServiceCenters extends Component {
                     );
                   })}
                 </Row>
-
                 <Dialog
-                  open={this.state.enquire}
-                  onClose={this.closeEnquiry}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                  maxWidth={"md"}
-                  fullWidth={true}
-                >
-                  <DialogContent
-                    className={All.PopupBody}
-                    style={{ marginBottom: "50px" }}
-                  >
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "20px",
-                        right: "20px",
-                      }}
+          open={this.state.enquiry}
+          onClose={this.closeEnquiry1}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+          PaperProps={{ style: { width: "620px", borderRadius: "10px" } }}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={this.closeEnquiry1}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <div style={{ marginTop: "30px" }}>
+              <div className="sc_popup_head">Contact Service Center</div>
+              <div className="sc_popup_desc">
+                Enter the below details to send a Enquiry{" "}
+              </div>
+              <div className="sc_popup_input_label">Name</div>
+              <input
+                type="text"
+                className="sc_popup_input"
+                name="name"
+                id="name"
+                onChange={this.enquiryChange}
+                value={this.state.name}
+              />
+              <div className="login_input_error_msg" id="name_error"></div>
+              <div className="sc_popup_input_label">Phone No</div>
+              <input
+                type="text"
+                className="sc_popup_input"
+                name="phoneNo"
+                id="phone"
+                onChange={this.enquiryChange}
+                value={`${this.state.code} ${this.state.phoneNo}`}
+              />
+              <div className="login_input_error_msg" id="phone_error"></div>
+              <div className="sc_popup_input_label">Email Id</div>
+              <input
+                type="text"
+                className="sc_popup_input"
+                name="emailId"
+                id="email"
+                onChange={this.enquiryChange}
+                value={this.state.emailId}
+              />
+              <div className="login_input_error_msg" id="email_error"></div>
+              <div className="sc_popup_input_label">Message</div>
+              <textarea
+                type="text"
+                className="sc_popup_input1"
+                value={this.state.message}
+                name="message"
+                id="message"
+                onChange={this.changeMessage}
+              />
+              <div className="login_input_error_msg" id="message_error"></div>
+              <div style={{ width: "100%", textAlign: "center" }}>
+                {this.state.isLoading ? (
+                  <>
+                    <button className="sc_popup_submit1">
+                      {" "}
+                      <Loader /> Sending
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      className="sc_popup_submit"
+                      onClick={this.captureEnquiry}
                     >
-                      <img
-                        src={close}
-                        alt=""
-                        onClick={this.closeEnquiry}
-                        style={{ cursor: "pointer" }}
-                      />
-                    </div>
-                    <Row style={{ marginTop: "30px" }}>
-                      <Hidden xs sm>
-                        <Col className="s_f_form_img_container">
-                          <img
-                            src={s_c_form_img}
-                            alt=""
-                            width={"100%"}
-                            className="s_f_form_img"
-                          />
-                        </Col>
-                      </Hidden>
-                      <Col>
-                        <h3 id="s_c_enquiry_heading">Request Quote</h3>
-                        <label>
-                          <div className="s_c_enquiry_title">Name</div>
-                          <input
-                            type="text"
-                            name=""
-                            id=""
-                            className="s_c_enquiry_input"
-                          />
-                        </label>
-                        <label>
-                          <div className="s_c_enquiry_title">Phone Number</div>
-                          <input
-                            type="text"
-                            name=""
-                            id=""
-                            className="s_c_enquiry_input"
-                          />
-                        </label>
-                        <label>
-                          <div className="s_c_enquiry_title">Email ID</div>
-                          <input
-                            type="text"
-                            name=""
-                            id=""
-                            className="s_c_enquiry_input"
-                          />
-                        </label>
-                        <label>
-                          <div className="s_c_enquiry_title">Message</div>
-                          <textarea className="s_c_enquiry_textarea"></textarea>
-                        </label>
-                        <button className="s_c_button3">Submit</button>
-                      </Col>
-                    </Row>
-                  </DialogContent>
-                </Dialog>
+                      Submit
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+                
 
                 <Dialog
                   open={this.state.phoneNumberForm}
