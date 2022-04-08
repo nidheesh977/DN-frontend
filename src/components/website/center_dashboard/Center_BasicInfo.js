@@ -36,26 +36,31 @@ function Center_BasicInfo() {
   };
   useEffect(() => {
     axios
-      .post(`${domain}/api/user/pilotDetails`, config)
+      .post(`${domain}/api/center/getCenterData`, config)
       .then((response) => {
         let center_data = response.data;
-        console.log(data);
+        console.log(center_data);
+        localStorage.setItem("oldEmail", response.data.userEmail)
         setData({
-          full_name: center_data.name,
-          email: center_data.emailId,
-          centerEmail: center_data.emailId,
-          phone: center_data.phoneNo,
-          centerPhone: center_data.phoneNo,
+          full_name: center_data.userName,
+          email: center_data.userEmail,
+          centerEmail: center_data.centerData.email,
+          phone: center_data.userPhoneNo,
+          centerPhone: center_data.centerData.phoneNo,
+          secondaryPhoneNo: center_data.centerData.secondaryNumber
+            ? center_data.centerData.secondaryNumber
+            : "",
+          whatsappNo: center_data.centerData.whatsappNo
+            ? center_data.centerData.whatsappNo
+            : "",
+          website: center_data.centerData.website
+            ? center_data.centerData.website
+            : "",
           code: "+91",
-          dob: center_data.dob,
-          gender: center_data.gender,
-          address: "",
-          city: center_data.city,
-          country: center_data.country,
-          postal: center_data.postalAddress,
-          description: "",
-          profile: `${center_data.profilePic}`,
-          cover: `${center_data.coverPic}`,
+          address: center_data.centerData.address,
+          description: center_data.centerData.description,
+          profile: `${center_data.centerData.profilePic}`,
+          cover: `${center_data.centerData.coverPic}`,
           week_days: [
             "Sunday",
             "Monday",
@@ -65,15 +70,16 @@ function Center_BasicInfo() {
             "Friday",
             "Saturday",
           ],
-          holidays: ["Sunday"],
+          holidays: center_data.centerData.holidays,
           brand: "",
-          brands: [],
-          photo_row: [],
-          center_name: "",
-          streetName: "",
-          establishedYear: "",
-          workingFrom: "",
-          workingTill: "",
+          brands: center_data.centerData.brandOfDrones,
+          photo_row: center_data.centerData.images,
+          newPhotos: [],
+          center_name: center_data.centerData.centerName,
+          streetName: center_data.centerData.streetName,
+          establishedYear: center_data.centerData.establishedYear,
+          workingFrom: center_data.centerData.workingHours.slice(0, 5),
+          workingTill: center_data.centerData.workingHours.slice(8, 13),
         });
       })
       .then(() => {
@@ -94,15 +100,13 @@ function Center_BasicInfo() {
     phone: "",
     centerPhone: "",
     code: "+91 ",
-    dob: "",
-    gender: "",
     address: "",
-    city: "",
-    country: "",
-    postal: "",
     description: "",
     profile: Pilot,
     cover: Cover,
+    secondaryPhoneNo: "",
+    whatsappNo: "",
+    website: "",
     week_days: [
       "Sunday",
       "Monday",
@@ -117,6 +121,7 @@ function Center_BasicInfo() {
     brands: [],
     suggestedBrands: [],
     photo_row: [],
+    newPhotos: [],
     center_name: "",
     streetName: "",
     establishedYear: "",
@@ -131,6 +136,8 @@ function Center_BasicInfo() {
   let [imgCountErr, setImgCountErr] = useState(false);
   let [suggestedBrands, setSuggestedBrands] = useState([]);
   let [saving, setSaving] = useState(false);
+  let [updateSuccess, setUpdateSuccess] = useState(false);
+  let [updateFailed, setUpdateFailed] = useState(false);
 
   const changeHandler = (e) => {
     document.getElementById(`${e.target.id}_error`).style.display = "none";
@@ -184,6 +191,55 @@ function Center_BasicInfo() {
             10 + data.code.length + 1
           ),
         });
+        document.getElementById("centerPhone_error").style.display = "none"
+      }
+    } catch {
+      console.log("Not number");
+    }
+  };
+
+  const centerWhatsappNoChangeHandler = (e) => {
+    try {
+      if (
+        Number(
+          e.target.value.slice(data.code.length + 1, 10 + data.code.length + 1)
+        ) ||
+        e.target.value.slice(
+          data.code.length + 1,
+          10 + data.code.length + 1
+        ) === ""
+      ) {
+        setData({
+          ...data,
+          whatsappNo: e.target.value.slice(
+            data.code.length + 1,
+            10 + data.code.length + 1
+          ),
+        });
+      }
+    } catch {
+      console.log("Not number");
+    }
+  };
+
+  const centerSecondaryNoChangeHandler = (e) => {
+    try {
+      if (
+        Number(
+          e.target.value.slice(data.code.length + 1, 10 + data.code.length + 1)
+        ) ||
+        e.target.value.slice(
+          data.code.length + 1,
+          10 + data.code.length + 1
+        ) === ""
+      ) {
+        setData({
+          ...data,
+          secondaryPhoneNo: e.target.value.slice(
+            data.code.length + 1,
+            10 + data.code.length + 1
+          ),
+        });
         document.getElementById("centerPhone_error").style.display = "none";
       }
     } catch {
@@ -219,6 +275,45 @@ function Center_BasicInfo() {
       });
       setSuggestedBrands(newSuggestedBrands);
       document.getElementById("brand_error").style.display = "none";
+    }
+  };
+
+  const showRemoveIcon = (id) => {
+    document.getElementById(id).style.visibility = "visible";
+  };
+
+  const hideRemoveIcon = (id) => {
+    document.getElementById(id).style.visibility = "hidden";
+  };
+
+  const newShowRemoveIcon = (id) => {
+    document.getElementById(id).style.visibility = "visible";
+  };
+
+  const newHideRemoveIcon = (id) => {
+    document.getElementById(id).style.visibility = "hidden";
+  };
+
+  const removePhoto = (id) => {
+    if(edit){
+      var photos = data.photo_row;
+      photos.splice(id, 1);
+      setData({
+        ...data,
+        photo_row: photos,
+      });
+      console.log(data.photo_row);
+    }
+  };
+
+  const removeNewPhoto = (id) => {
+    if(edit){
+      var photos = data.newPhotos;
+      photos.splice(id, 1);
+      setData({
+        ...data,
+        newPhotos: photos,
+      });
     }
   };
 
@@ -260,7 +355,10 @@ function Center_BasicInfo() {
     // } catch {}
     try {
       var files = [];
-      if (e.target.files.length + data.photo_row.length <= 6) {
+      if (
+        e.target.files.length + data.photo_row.length + data.newPhotos.length <=
+        6
+      ) {
         for (var i = 0; i < e.target.files.length; i++) {
           if (e.target.files[i].size / 1000000 <= 2) {
             files.push(e.target.files[i]);
@@ -269,10 +367,10 @@ function Center_BasicInfo() {
           }
         }
         console.log(e.target.files);
-        if (data.photo_row.length + files.length <= 6) {
+        if (data.photo_row.length + files.length + data.newPhotos.length <= 6) {
           setData({
             ...data,
-            photo_row: [...data.photo_row, ...files],
+            newPhotos: [...data.newPhotos, ...files],
           });
           document.getElementById("photos_error").style.display = "none";
         } else {
@@ -293,7 +391,11 @@ function Center_BasicInfo() {
         let formData = new FormData();
         formData.append("file", file);
         axios
-          .post(`${domain}/api/user/updateCoverPic`, formData, config)
+          .post(
+            `${domain}/api/user/updateCoverPupdateCoverPicServiceCenteric`,
+            formData,
+            config
+          )
           .then((res) => {
             console.log(res.data);
             setCoverSuccess(true);
@@ -320,7 +422,11 @@ function Center_BasicInfo() {
         let formData = new FormData();
         formData.append("file", file);
         axios
-          .post(`${domain}/api/user/updateProfilePic`, formData, config)
+          .post(
+            `${domain}/api/user/updateProfilePicServiceCenter`,
+            formData,
+            config
+          )
           .then((res) => {
             console.log(res.data);
             setProfileSuccess(true);
@@ -396,6 +502,14 @@ function Center_BasicInfo() {
   };
 
   const saveChanges = () => {
+    const validateEmail = (email) => {
+      return String(email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    };
+
     var error = false;
     var focusField = "";
     var fields = [
@@ -421,31 +535,146 @@ function Center_BasicInfo() {
           error = true;
           document.getElementById(`${fields[i]}_error`).style.display =
             "contents";
-          console.log(focusField)
+          console.log(focusField);
           if (focusField === "") {
             focusField = fields[i];
           }
+        } else {
+          if ((fields[i] === "full_name" && data.full_name.length > 100) || (fields[i] === "center_name" && data.center_name.length > 100)) {
+            error = true;
+            document.getElementById(`${fields[i]}_error`).innerText = "Name must be between 2 and 100 characters"
+            document.getElementById(`${fields[i]}_error`).style.display = "contents";
+            console.log(focusField);
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+          }
+          if((fields[i] === "email" && !validateEmail(data.email)) || (fields[i] === "centerEmail" && !validateEmail(data.centerEmail))){
+            error = true;
+            document.getElementById(`${fields[i]}_error`).innerText = "Email ID is not valid"
+            document.getElementById(`${fields[i]}_error`).style.display = "contents";
+            console.log(focusField);
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+          }
+          if ((fields[i] === "phone" && data.phone.length !== 10) || (fields[i] === "centerPhone" && data.centerPhone.length !== 10)){
+            error = true;
+            document.getElementById(`${fields[i]}_error`).innerText = "Phone number must have 10 digits"
+            document.getElementById(`${fields[i]}_error`).style.display = "contents";
+            console.log(focusField);
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+          }
+          if ((fields[i] === "streetName" && data.streetName.length > 100) ) {
+            error = true;
+            document.getElementById(`${fields[i]}_error`).innerText = "Street name must be between 2 and 100 characters"
+            document.getElementById(`${fields[i]}_error`).style.display = "contents";
+            console.log(focusField);
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+          }
+          if ((fields[i] === "establishedYear" && data.establishedYear > 2022) || (fields[i] === "establishedYear" && data.establishedYear < 0)) {
+            error = true;
+            document.getElementById(`${fields[i]}_error`).innerText = "Invalid year"
+            document.getElementById(`${fields[i]}_error`).style.display = "contents";
+            console.log(focusField);
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+          }
+          if ((fields[i] === "description" && data.description.length > 500) || (fields[i] === "description" && data.description.length < 200) ) {
+            error = true;
+            document.getElementById(`${fields[i]}_error`).innerText = "Description must be between 200 and 500 characters"
+            document.getElementById(`${fields[i]}_error`).style.display = "contents";
+            console.log(focusField);
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+          }
         }
-      }
-      else{
-        if (fields[i] === "brands" && data.brands.length === 0){
-          error = true
+      } else {
+        if (fields[i] === "brands" && data.brands.length === 0) {
+          error = true;
           document.getElementById(`brand_error`).style.display = "contents";
-          if (focusField === ""){
+          if (focusField === "") {
             focusField = "brand";
           }
         }
-        if (fields[i] === "photo_row" && data.photo_row.length === 0){
-          error = true
+        if (
+          fields[i] === "photo_row" &&
+          data.photo_row.length + data.newPhotos.length === 0
+        ) {
+          error = true;
           document.getElementById(`photos_error`).style.display = "contents";
         }
       }
     }
+
+    if (data.website.length > 100){
+      error = true
+      document.getElementById("website_error").style.display = "contents"
+      if (focusField === ""){
+        focusField = "website"
+      }
+    }
     if (error) {
-      document.getElementById(focusField).focus();
+      if (focusField !== "") {
+        console.log(focusField);
+        document.getElementById(focusField).focus();
+      }
       focusField = "";
+    } else {
+      var formData = new FormData();
+      formData.append("userName", data.full_name);
+      formData.append("userEmail", data.email);
+      formData.append("email", data.centerEmail);
+      formData.append("userPhone", data.phone);
+      formData.append("phoneNo", data.centerPhone);
+      formData.append("secondaryNumber", data.secondaryPhoneNo);
+      formData.append("whatsappNo", data.whatsappNo);
+      formData.append("website", data.website);
+      formData.append("address", data.address);
+      formData.append("description", data.description);
+      formData.append("holidays", data.holidays);
+      formData.append("brandOfDrones", data.brands);
+      formData.append("oldImages", data.photo_row);
+      data.newPhotos.forEach((file) => {
+        formData.append("file", file);
+      });
+      formData.append("centerName", data.center_name);
+      formData.append("streetName", data.streetName);
+      // if (data.secondaryPhoneNo !== ""){
+      //   formData.append("secondaryNumber", data.secondaryPhoneNo);
+      // }
+      // if (data.whatsappNo !== ""){
+      //   formData.append("whatsappNo", data.whatsappNo);
+      // }
+      // if (data.website !== ""){
+      //   formData.append("website", data.website);
+      // }
+      formData.append("establishedYear", data.establishedYear);
+      formData.append(
+        "workingHours",
+        data.workingFrom + " - " + data.workingTill
+      );
+      setSaving(true)
+      axios
+        .post(`${domain}/api/center/updateData`, formData, config)
+        .then((res) => {
+          setUpdateSuccess(true)
+          setSaving(false)
+        })
+        .catch(err=>{
+          setSaving(false)
+          setUpdateFailed(true)
+        })
+        ;
     }
   };
+  
 
   return (
     <>
@@ -516,7 +745,11 @@ function Center_BasicInfo() {
           </div>
         </div>
         <div>
-          <label htmlFor = "full_name" className="pd_b_i_profile_head" style={{ cursor: "pointer" }}>
+          <label
+            htmlFor="full_name"
+            className="pd_b_i_profile_head"
+            style={{ cursor: "pointer" }}
+          >
             Name
           </label>
           <input
@@ -544,7 +777,10 @@ function Center_BasicInfo() {
                       Email ID
                     </div>
                   </label>
-                  <div className="pd_b_i_profile_verify">Verify</div>
+                  {data.userEmail === localStorage.getItem("oldEmail") ? (
+                    <div className="pd_b_i_profile_verify">Verify</div>
+                    ) : ( <></>
+                  )}
                 </div>
               </div>
               <input
@@ -600,8 +836,9 @@ function Center_BasicInfo() {
             className="pd_b_i_profile_input"
             id="center_name"
             onChange={(e) => {
-              setData({ ...data, center_name: e.target.value })
-              document.getElementById("center_name_error").style.display = "none"
+              setData({ ...data, center_name: e.target.value });
+              document.getElementById("center_name_error").style.display =
+                "none";
             }}
             value={data.center_name}
             disabled={!edit}
@@ -654,9 +891,10 @@ function Center_BasicInfo() {
                 className="pd_b_i_profile_input"
                 name="center_email"
                 id="centerEmail"
-                onChange={(e) =>{
-                  setData({ ...data, centerEmail: e.target.value })
-                  document.getElementById("centerEmail_error").style.display = "none"
+                onChange={(e) => {
+                  setData({ ...data, centerEmail: e.target.value });
+                  document.getElementById("centerEmail_error").style.display =
+                    "none";
                 }}
                 value={data.centerEmail}
                 disabled={!edit}
@@ -773,9 +1011,10 @@ function Center_BasicInfo() {
                 type="text"
                 className="pd_b_i_profile_input"
                 id="streetName"
-                onChange={(e) =>{
-                  setData({ ...data, streetName: e.target.value })
-                  document.getElementById("streetName_error").style.display = "none"
+                onChange={(e) => {
+                  setData({ ...data, streetName: e.target.value });
+                  document.getElementById("streetName_error").style.display =
+                    "none";
                 }}
                 value={data.streetName}
                 disabled={!edit}
@@ -798,9 +1037,11 @@ function Center_BasicInfo() {
                 type="number"
                 className="pd_b_i_profile_input"
                 id="establishedYear"
-                onChange={(e) =>{
-                  setData({ ...data, establishedYear: e.target.value })
-                  document.getElementById("establishedYear_error").style.display = "none"
+                onChange={(e) => {
+                  setData({ ...data, establishedYear: e.target.value });
+                  document.getElementById(
+                    "establishedYear_error"
+                  ).style.display = "none";
                 }}
                 value={data.establishedYear}
                 disabled={!edit}
@@ -826,9 +1067,10 @@ function Center_BasicInfo() {
                 className="pd_b_i_profile_input"
                 id="workingFrom"
                 name="workingFrom"
-                onChange={(e) =>{
-                  setData({ ...data, workingFrom: e.target.value })
-                  document.getElementById("workingFrom_error").style.display = "none"
+                onChange={(e) => {
+                  setData({ ...data, workingFrom: e.target.value });
+                  document.getElementById("workingFrom_error").style.display =
+                    "none";
                 }}
                 value={data.workingFrom}
                 disabled={!edit}
@@ -852,8 +1094,9 @@ function Center_BasicInfo() {
                 className="pd_b_i_profile_input"
                 id="workingTill"
                 onChange={(e) => {
-                  setData({ ...data, workingTill: e.target.value })
-                  document.getElementById("workingTill_error").style.display = "none"
+                  setData({ ...data, workingTill: e.target.value });
+                  document.getElementById("workingTill_error").style.display =
+                    "none";
                 }}
                 value={data.workingTill}
                 disabled={!edit}
@@ -966,8 +1209,9 @@ function Center_BasicInfo() {
             placeholder="Write description about your service center"
             style={{ marginBottom: "30px" }}
             onChange={(e) => {
-              setData({ ...data, description: e.target.value })
-              document.getElementById("description_error").style.display = "none"
+              setData({ ...data, description: e.target.value });
+              document.getElementById("description_error").style.display =
+                "none";
             }}
             value={data.description}
             disabled={!edit}
@@ -975,6 +1219,76 @@ function Center_BasicInfo() {
           <div className="login_input_error_msg" id="description_error">
             Description is required
           </div>
+        </div>
+        <Row>
+          <Col lg={6}>
+            <div className={All.FormGroup}>
+              <label
+                className="pd_b_i_profile_head"
+                for="secondaryPhone"
+                style={{ cursor: "pointer" }}
+              >
+                Secondary Phone Number <span>(Optional)</span>{" "}
+              </label>
+              <input
+                type="text"
+                name="center_phone"
+                className="pd_b_i_profile_input"
+                id="secondaryPhone"
+                value={`${data.code} ${data.secondaryPhoneNo}`}
+                onChange={centerSecondaryNoChangeHandler}
+                autoComplete={false}
+                disabled={!edit}
+              />
+            </div>
+          </Col>
+          <Col lg={6}>
+            <div className={All.FormGroup}>
+              <label
+                className="pd_b_i_profile_head"
+                for="whatsappNo"
+                style={{ cursor: "pointer" }}
+              >
+                Whatsapp Number <span>(Optional)</span>{" "}
+              </label>
+              <input
+                type="text"
+                name="center_phone"
+                className="pd_b_i_profile_input"
+                id="whatsappNo"
+                value={`${data.code} ${data.whatsappNo}`}
+                onChange={centerWhatsappNoChangeHandler}
+                autoComplete={false}
+                disabled={!edit}
+              />
+            </div>
+          </Col>
+        </Row>
+        <div>
+          <label
+            htmlFor="website"
+            className="pd_b_i_profile_head"
+            style={{ cursor: "pointer" }}
+          >
+            Website <span>(Optional)</span>
+          </label>
+          <input
+            type="text"
+            className="pd_b_i_profile_input"
+            value={data.website}
+            id="website"
+            onChange={(e) => {
+              setData({
+                ...data,
+                website: e.target.value,
+              });
+              document.getElementById("website_error").style.display = "none";
+            }}
+            disabled={!edit}
+          />
+        </div>
+        <div className="login_input_error_msg" id="website_error">
+          Website maximum 100 characters
         </div>
         <div className="s_c_a_photos">
           <label htmlFor="photo_input">
@@ -989,12 +1303,36 @@ function Center_BasicInfo() {
                 <div
                   className="s_c_a_photo"
                   key={index}
-                  // onMouseOver={() =>
-                  //   this.showRemoveIcon(`s_c_a_remove_img_${index}`)
-                  // }
-                  // onMouseLeave={() =>
-                  //   this.hideRemoveIcon(`s_c_a_remove_img_${index}`)
-                  // }
+                  onMouseOver={() =>
+                    showRemoveIcon(`s_c_a_remove_img_${index}`)
+                  }
+                  onMouseLeave={() =>
+                    hideRemoveIcon(`s_c_a_remove_img_${index}`)
+                  }
+                >
+                  <img src={photo} alt="" className="s_c_a_photo_img" />
+                  <img
+                    src={deleteIcon}
+                    alt=""
+                    className="s_c_a_remove_img"
+                    id={`s_c_a_remove_img_${index}`}
+                    onClick={() => removePhoto(index)}
+                  />
+                </div>
+              );
+            })}
+
+            {data.newPhotos.map((photo, index) => {
+              return (
+                <div
+                  className="s_c_a_photo"
+                  key={index}
+                  onMouseOver={() =>
+                    newShowRemoveIcon(`s_c_a_remove_new_img_${index}`)
+                  }
+                  onMouseLeave={() =>
+                    newHideRemoveIcon(`s_c_a_remove_new_img_${index}`)
+                  }
                 >
                   <img
                     src={URL.createObjectURL(photo)}
@@ -1005,8 +1343,8 @@ function Center_BasicInfo() {
                     src={deleteIcon}
                     alt=""
                     className="s_c_a_remove_img"
-                    id={`s_c_a_remove_img_${index}`}
-                    // onClick={() => this.removePhoto(index)}
+                    id={`s_c_a_remove_new_img_${index}`}
+                    onClick={() => removeNewPhoto(index)}
                   />
                 </div>
               );
@@ -1020,8 +1358,9 @@ function Center_BasicInfo() {
               onChange={addPhoto}
               accept="image/*"
               multiple
+              disabled={!edit}
             />
-            {data.photo_row.length < 6 && (
+            {data.photo_row.length + data.newPhotos.length < 6 && (
               <label htmlFor="photo_input" className="s_c_a_photo_add">
                 <div className="s_c_a_photo_add_symbol">
                   <img src={plusicon} alt="" className="s_c_a_plus_icon" />
@@ -1233,6 +1572,78 @@ function Center_BasicInfo() {
             </Row>
           </DialogContent>
         </Dialog>
+        <Dialog
+            open={updateFailed}
+            onClose={() => setUpdateFailed(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={() => setUpdateFailed(false)}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div className="u_f_popup_title">
+                  Something went wrong. Try again.
+                </div>
+                <div className="u_f_popup_btn_container">
+                  <button
+                    className="u_f_popup_btn2"
+                    onClick={() => setUpdateFailed(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </Row>
+            </DialogContent>
+          </Dialog>
+        <Dialog
+            open={updateSuccess}
+            onClose={() => setUpdateSuccess(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={() => setUpdateSuccess(false)}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div className="u_f_popup_title">
+                  Account updated successfully
+                </div>
+                <div className="u_f_popup_btn_container">
+                  <button
+                    className="u_f_popup_btn2"
+                    onClick={() => setUpdateSuccess(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </Row>
+            </DialogContent>
+          </Dialog>
       </div>
     </>
   );
