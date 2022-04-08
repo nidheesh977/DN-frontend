@@ -518,6 +518,7 @@ export default function ServiceCenterDetails(props) {
   let [details, setDetails] = useState({});
   let [brands, setBrands] = useState([]);
   let [reviews, setReviews] = useState([]);
+  let [address, setAddress] = useState([]);
 
   useEffect(() => {
     axios
@@ -526,8 +527,10 @@ export default function ServiceCenterDetails(props) {
         // setData({response})
         setDetails(response.data);
         // setStatus(response.status);
+        let  address1 = response.data.address.split(",");
+        setAddress(address1)
 
-        console.log(response.status);
+        console.log(response.data);
         setBrands(response.data.brandOfDrones);
       });
   }, []);
@@ -639,7 +642,7 @@ export default function ServiceCenterDetails(props) {
               </Box>
               <Box py={1}>
                 <h4>
-                  {details.city}, {details.country}.
+                  {address[0]}, {address[1]}.
                 </h4>
               </Box>
               <span className="s_c_rating">
@@ -709,7 +712,7 @@ export default function ServiceCenterDetails(props) {
                  */}
                 <div className="s_c_d_other_details_title">Address:</div>
                 <div className="s_c_d_other_details_content">
-                  {details.city} , {details.state}
+                  {details.address}
                 </div>
                 <div className="s_c_d_other_details_title">
                   Brands we can service
@@ -1041,8 +1044,16 @@ export default function ServiceCenterDetails(props) {
 
                 <div className="s_c_d_contact_details_title">Address</div>
                 <div className="s_c_d_contact_details_content">
-                  {details.state}, {details.city}
+               {details.streetName}, {details.address}
                 </div>
+
+                <div className="s_c_d_contact_details_title">Established Year</div>
+                <div className="s_c_d_contact_details_content">
+               {details.establishedYear}
+                </div>
+
+{/* 
+                <iframe src="https://maps.google.com/maps?q=11.5401325,76.4762961&hl=es&z=14&amp;output=embed" style={{width: "200px"}} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> */}
               </div>
               <div id="s_c_d_photos">
                 <div className="s_c_d_photos_title">Photos</div>

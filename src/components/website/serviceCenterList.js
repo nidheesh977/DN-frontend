@@ -580,6 +580,7 @@ class ServiceCenters extends Component {
 
   searchFilters= () =>{
     let data = `${this.state.address} `
+    console.log(this.state.selected_brands)
   
   console.log(data) 
   this.setState({
@@ -964,7 +965,13 @@ class ServiceCenters extends Component {
                               Location:
                             </div>
                             <div className="s_c_other_details_content">
-                              {item.city}, {item.state}
+                              {
+                                item.address ? item.address.split(",")[0]  : ""
+                              }
+                              {
+                                item.address ? item.address.split(",")[1] ? "," + item.address.split(",")[1] : "" : ""
+                              }
+                            
                             </div>
                             <div className="s_c_other_details_title">
                               Brands:

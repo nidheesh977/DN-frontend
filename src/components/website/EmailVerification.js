@@ -32,7 +32,10 @@ function CreateCompany() {
   var [edit, setEdit] = useState(true);
 
   useEffect(()=>{
-    if(localStorage.getItem("email") !== "false"){
+     if(localStorage.getItem("email") === "true" && localStorage.getItem("role") == "undefined" ){
+      history.push("/choose-categories");
+    }
+   else if(localStorage.getItem("email") !== "false"){
       history.push("/NoComponent");
     }
   },[])
