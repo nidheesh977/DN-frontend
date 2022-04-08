@@ -1003,7 +1003,13 @@ class ServiceCenters extends Component {
                               Location:
                             </div>
                             <div className="s_c_other_details_content">
-                              {item.city}, {item.state}
+                              {
+                                item.address ? item.address.split(",")[0]  : ""
+                              }
+                              {
+                                item.address ? item.address.split(",")[1] ? "," + item.address.split(",")[1] : "" : ""
+                              }
+                            
                             </div>
                             <div className="s_c_other_details_title">
                               Brands:
