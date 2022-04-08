@@ -68,50 +68,91 @@ class CreateServiceCenter extends Component {
         "Saturday",
       ],
       holidays: ["Sunday"],
-      suggestedBrands: ["Brand1", "Brand2", "Brand3"],
+      suggestedBrands: [],
       imgCountErr: false,
       fileSizeExceed: false,
       imgWidthHightError: false,
-      saving: false
+      saving: false,
+      saveError: false
     };
   }
 
-  addPhoto = (e) => {
+  componentDidMount(){
+    axios.get(`${domain}/api/brand/getBrands`)
+    .then(res =>{
+      var result = res.data.map(function(brand) {return brand.brand;});
+      this.setState({
+        suggestedBrands: result
+      })
+    })
+  }
+
+  addPhoto = async (e) => {
+    // try {
+    //   if (this.state.photo_row.length + e.target.files.length <= 6) {
+    //     if (e.target.files[0].size / 1000000 <= 2) {
+    //       let img = new Image();
+    //       var file = e.target.files[0];
+    //       var photos_row = this.state.photo_row;
+    //       img.src = window.URL.createObjectURL(e.target.files[0]);
+    //       img.onload = () => {
+    //         if (img.width < 550 || img.height < 450) {
+    //           this.setState({
+    //             imgWidthHightError: true,
+    //           });
+    //           this.refs.add_photo.value = "";
+    //         } else {
+    //           photos_row.push(file);
+    //           this.setState({
+    //             photo_row: photos_row,
+    //           });
+    //           document.getElementById("photos_error").style.display = "none";
+    //           this.refs.add_photo.value = "";
+    //         }
+    //       };
+    //     } else {
+    //       this.setState({
+    //         fileSizeExceed: true,
+    //       });
+    //       this.refs.add_photo.value = "";
+    //     }
+    //   } else {
+    //     this.setState({
+    //       imgCountErr: true,
+    //     });
+    //     this.refs.add_photo.value = "";
+    //   }
+    // } catch {}
     try {
-      if (this.state.photo_row.length + e.target.files.length <= 6) {
-        if (e.target.files[0].size / 1000000 <= 2) {
-          let img = new Image();
-          var file = e.target.files[0];
-          var photos_row = this.state.photo_row;
-          img.src = window.URL.createObjectURL(e.target.files[0]);
-          img.onload = () => {
-            if (img.width < 550 || img.height < 450) {
-              this.setState({
-                imgWidthHightError: true,
-              });
-              this.refs.add_photo.value = "";
-            } else {
-              photos_row.push(file);
-              this.setState({
-                photo_row: photos_row,
-              });
-              document.getElementById("photos_error").style.display = "none";
-              this.refs.add_photo.value = "";
-            }
-          };
-        } else {
+      var files = []
+      for (var i = 0; i < e.target.files.length; i++){
+        if (e.target.files[i].size / 1000000 <= 2){
+          files.push(e.target.files[i])
+        }else{
           this.setState({
-            fileSizeExceed: true,
-          });
-          this.refs.add_photo.value = "";
+            fileSizeExceed: true
+          })
         }
-      } else {
+        if(files.size >= 6){
+          this.setState({
+            imgCountErr: true
+          })
+          break
+        }
+      }
+      console.log(e.target.files)
+      if (this.state.photo_row.length + files.length <= 6) {
+        this.setState({ photo_row: [...this.state.photo_row, ...files] })
+        this.refs.add_photo.value = "";
+        document.getElementById("photos_error").style.display = "none"
+      }
+      else {
         this.setState({
           imgCountErr: true,
         });
         this.refs.add_photo.value = "";
       }
-    } catch {}
+    }catch{}
   };
 
   showRemoveIcon = (id) => {
@@ -350,13 +391,25 @@ class CreateServiceCenter extends Component {
       });
       // formData.append("file", this.state.photos);
       formData.append("holidays", this.state.holidays);
+      this.setState({
+        saving: true
+      })
       axios
         .post(`${domain}/api/center/createServiceCenter`, formData, config)
         .then((res) => {
           console.log(res.data);
+          this.setState({
+            saving: false
+          })
+          localStorage.setItem("role", "service_center")
+          this.props.history.push("/center_dashboard/account")
         })
         .catch((err) => {
           console.log(err.response);
+          this.setState({
+            saving: false,
+            saveError: true
+          })
         });
     }
   };
@@ -808,6 +861,7 @@ class CreateServiceCenter extends Component {
                     onChange={this.addPhoto}
                     ref="add_photo"
                     accept="image/*"
+                    multiple
                   />
                   {this.state.photo_row.length < 6 && (
                     <label htmlFor="photo_input" className="s_c_a_photo_add">
@@ -830,7 +884,6 @@ class CreateServiceCenter extends Component {
                 {this.state.saving 
                 ?<button
                 className="pd_b_i_notifications_saveBtn"
-                onClick={this.saveChanges}
                 style = {{display: "flex"}}
               >
                 <Loader /> Saving
@@ -869,7 +922,7 @@ class CreateServiceCenter extends Component {
               </div>
               <Row style={{ marginTop: "30px" }}>
                 <div className="u_f_popup_title">
-                  You cannot select more than 6 images
+                  You cannot Upload more than 6 images
                 </div>
                 <div className="u_f_popup_btn_container">
                   <button
@@ -905,7 +958,7 @@ class CreateServiceCenter extends Component {
               </div>
               <Row style={{ marginTop: "30px" }}>
                 <div className="u_f_popup_title">
-                  Image size should not exceed 2MB.
+                  We removed some files because those file size exceeds 2MB.
                 </div>
                 <div className="u_f_popup_btn_container">
                   <button
@@ -947,6 +1000,42 @@ class CreateServiceCenter extends Component {
                   <button
                     className="u_f_popup_btn2"
                     onClick={() => this.setState({ imgWidthHightError: false })}
+                  >
+                    Close
+                  </button>
+                </div>
+              </Row>
+            </DialogContent>
+          </Dialog>
+          <Dialog
+            open={this.state.saveError}
+            onClose={() => this.setState({ saveError: false })}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={() => this.setState({ saveError: false })}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div className="u_f_popup_title">
+                  Something went wrong. Try again.
+                </div>
+                <div className="u_f_popup_btn_container">
+                  <button
+                    className="u_f_popup_btn2"
+                    onClick={() => this.setState({ saveError: false })}
                   >
                     Close
                   </button>

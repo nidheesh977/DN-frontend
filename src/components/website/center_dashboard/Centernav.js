@@ -10,7 +10,6 @@ function Center_nav() {
   let param = useParams();
 
   useEffect(()=>{
-    console.log("heyyy")
 
     if(window.location.href.includes("activities")){
       document.getElementById("p_d_navitem1").classList.add("pd_nav_active")

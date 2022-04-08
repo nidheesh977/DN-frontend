@@ -20,7 +20,7 @@ function Center_dashboard() {
 
                     <Switch>
                         <Route path="/center_dashboard/activities" component={Activities_Sidebar} />
-                        <Route path="/center_dashboard/"  component={Account_Sidebar} />
+                        <Route path="/center_dashboard/" component={Account_Sidebar} />
 
                     </Switch>
 

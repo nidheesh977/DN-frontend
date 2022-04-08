@@ -196,28 +196,29 @@ export default function ServiceCenterDetails(props) {
               axios
                 .post(`${domain}/api/pilot/getSinglePilot`, config)
                 .then((response) => {
-                  
-
                   console.log(response);
-                  axios.get(`${domain}/api/user/getUserData`, config).then((res) => {
-                    console.log(res);
-                    setCenters(res.data.markedCenters);
-                    setLikedReviews(res.data.likedReviews);
-                    setMyData({
-                      name: res.data.name,
-                      phoneNo: res.data.phoneNo,
-                      emailId: res.data.email,
+                  axios
+                    .get(`${domain}/api/user/getUserData`, config)
+                    .then((res) => {
+                      console.log(res);
+                      setCenters(res.data.markedCenters);
+                      setLikedReviews(res.data.likedReviews);
+                      setMyData({
+                        name: res.data.name,
+                        phoneNo: res.data.phoneNo,
+                        emailId: res.data.email,
+                      });
+                      try {
+                        var result = Countries.filter(
+                          (obj) => obj.name == res.data.country
+                        );
+                        console.log(result[0].dial_code);
+                        setCode(result[0].dial_code);
+                        console.log(res.data.country);
+                      } catch {
+                        setCode("+91");
+                      }
                     });
-                    try{
-                      var result = Countries.filter((obj) => obj.name == res.data.country);
-                      console.log(result[0].dial_code);
-                      setCode(result[0].dial_code);
-                      console.log(res.data.country)
-                    }
-                    catch{
-                      setCode("+91")
-                    }
-                  });
                 });
             });
         })
@@ -245,26 +246,28 @@ export default function ServiceCenterDetails(props) {
             axios
               .post(`${domain}/api/pilot/getSinglePilot`, config)
               .then((response) => {
-
-                axios.get(`${domain}/api/user/getUserData`, config).then((res) => {
-                  console.log(res);
-                  setCenters(res.data.markedCenters);
-                  setLikedReviews(res.data.likedReviews);
-                  setMyData({
-                    name: res.data.name,
-                    phoneNo: res.data.phoneNo,
-                    emailId: res.data.email,
+                axios
+                  .get(`${domain}/api/user/getUserData`, config)
+                  .then((res) => {
+                    console.log(res);
+                    setCenters(res.data.markedCenters);
+                    setLikedReviews(res.data.likedReviews);
+                    setMyData({
+                      name: res.data.name,
+                      phoneNo: res.data.phoneNo,
+                      emailId: res.data.email,
+                    });
+                    try {
+                      var result = Countries.filter(
+                        (obj) => obj.name == res.data.country
+                      );
+                      console.log(result[0].dial_code);
+                      setCode(result[0].dial_code);
+                      console.log(res.data.country);
+                    } catch {
+                      setCode("+91");
+                    }
                   });
-                  try{
-                    var result = Countries.filter((obj) => obj.name == res.data.country);
-                    console.log(result[0].dial_code);
-                    setCode(result[0].dial_code);
-                    console.log(res.data.country)
-                  }
-                  catch{
-                    setCode("+91")
-                  }
-                });
                 // setBrands(response.data.brandOfDrones)
               });
           });
@@ -552,7 +555,6 @@ export default function ServiceCenterDetails(props) {
     axios
       .post(`${domain}/api/pilot/getSinglePilot`, config)
       .then((response) => {
-
         console.log(response);
         // setBrands(response.data.brandOfDrones)
       });
@@ -602,7 +604,7 @@ export default function ServiceCenterDetails(props) {
               style={{
                 width: "200px",
                 height: "200px",
-                borderRadius: "100px",
+                borderRadius: "110px",
                 position: "absolute",
                 bottom: "-100px",
                 right: "50px",
@@ -681,15 +683,15 @@ export default function ServiceCenterDetails(props) {
                 {/* </div> */}
               </span>
 
-              <span>
-                <Link
+              <span style = {{cursor: "pointer"}}>
+                <a
                   className="s_c_d_links"
                   onClick={() => {
                     selectTab("s_c_d_reviews_tab", "s_c_d_reviews_container");
                   }}
                 >
                   Read Reviews
-                </Link>
+                </a>
               </span>
               <div className="s_c_d_other_details">
                 <div className="s_c_d_other_details_title">Working time:</div>
@@ -721,14 +723,15 @@ export default function ServiceCenterDetails(props) {
                       </span>
                     );
                   })}
-                  <Link
+                  <a
+                  style = {{cursor: "pointer"}}
                     className="s_c_d_links"
                     onClick={() => {
                       selectTab("s_c_d_brands_tab", "s_c_d_brands_container");
                     }}
                   >
                     View All Brands
-                  </Link>
+                  </a>
                 </div>
               </div>
               <div
@@ -740,9 +743,16 @@ export default function ServiceCenterDetails(props) {
                 </button>
 
                 {details.whatsappNo ? (
-                  <Link onClick={() => whatsappChat(details.whatsappNumber)}>
+                  <a
+                    href={
+                      "https://api.whatsapp.com/send/?phone=+91 " +
+                      details.whatsappNo +
+                      "&text=Hello"
+                    }
+                    target="_blank"
+                  >
                     <img src={whatsapp_icon} alt="" height={"35px"} />
-                  </Link>
+                  </a>
                 ) : (
                   <></>
                 )}
@@ -751,31 +761,31 @@ export default function ServiceCenterDetails(props) {
           </Row>
           <div className="s_c_d_tabs">
             <span className="s_c_d_tab s_c_d_tab_selected" id="s_c_d_about_tab">
-              <Link
+              <a
                 onClick={() => {
                   selectTab("s_c_d_about_tab", "s_c_d_about_container");
                 }}
               >
                 About
-              </Link>
+              </a>
             </span>
             <span className="s_c_d_tab" id="s_c_d_brands_tab">
-              <Link
+              <a
                 onClick={() => {
                   selectTab("s_c_d_brands_tab", "s_c_d_brands_container");
                 }}
               >
                 Brands
-              </Link>
+              </a>
             </span>
             <span className="s_c_d_tab" id="s_c_d_reviews_tab">
-              <Link
+              <a
                 onClick={() => {
                   selectTab("s_c_d_reviews_tab", "s_c_d_reviews_container");
                 }}
               >
                 Reviews
-              </Link>
+              </a>
             </span>
           </div>
           <hr style={{ border: "1px solid #eee" }} />
@@ -951,13 +961,19 @@ export default function ServiceCenterDetails(props) {
                   <>
                     {" "}
                     <div className="s_c_d_contact_details_title">Chat:</div>
-                    <div
-                      className="s_c_d_contact_details_whatsapp"
-                      onClick={() => whatsappChat(details.whatsappNumber)}
+                    <a
+                      href={
+                        "https://api.whatsapp.com/send/?phone=+91 " +
+                        details.whatsappNo +
+                        "&text=Hello"
+                      }
+                      target="_blank"
                     >
-                      <img src={whatsapp_icon} alt="" height={"35px"} />
-                      Chat on whatsapp
-                    </div>
+                      <div className="s_c_d_contact_details_whatsapp">
+                        <img src={whatsapp_icon} alt="" height={"35px"} />
+                        Chat on whatsapp
+                      </div>
+                    </a>
                   </>
                 ) : (
                   <></>
@@ -967,21 +983,36 @@ export default function ServiceCenterDetails(props) {
                   Phone Numbers:
                 </div>
                 <div className="s_c_d_contact_details_content">
-                  <a href="tel:+91 9876543210">
-                    {details.phoneNo} {details.secondaryNumber ? "," : ""}{" "}
-                    {details.secondaryNumber ? details.secondaryNumber : <></>}
-                  </a>
+                  <a href={`tel:${details.phoneNo}`}>
+                    {" "}
+                    <div
+                      className="s_c_other_details_phone"
+                      style={{ fontSize: "14px", display: "inline-block" }}
+                    >
+                      {details.phoneNo}{" "}
+                    </div>
+                  </a>{" "}
+                  {details.secondaryNumber ? "," : ""}{" "}
+                  {details.secondaryNumber ? <a href={`tel:${details.secondaryNumber}`}>
+                    {" "}
+                    <div
+                      className="s_c_other_details_phone"
+                      style={{ fontSize: "14px", display: "inline-block" }}
+                    >
+                      {details.secondaryNumber}{" "}
+                    </div>
+                  </a> : <></>}
                 </div>
                 <div className="s_c_d_contact_details_title">Email ID:</div>
                 <div className="s_c_d_contact_details_content">
-                  <Link>{details.email}</Link>
+                  <a href = {`mailto:${details.email}`} target = "_blank">{details.email}</a>
                 </div>
                 {details.website ? (
                   <>
                     {" "}
                     <div className="s_c_d_contact_details_title">Website:</div>
                     <div className="s_c_d_contact_details_content">
-                      <Link>{details.website}</Link>
+                      <a href = {`https://${details.website}`} target = "_blank">{details.website}</a>
                     </div>{" "}
                   </>
                 ) : (

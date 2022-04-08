@@ -59,6 +59,8 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-autocomplete-places";
+import { fontSize } from "@mui/system";
+import { black } from "material-ui/styles/colors";
 // import usePlacesAutocomplete from "use-places-autocomplete";
 // import {
 //   Combobox,
@@ -132,18 +134,7 @@ class ServiceCenters extends Component {
       code: "",
       isLoading: false,
       city_list: [],
-      brand_list: [
-        "DJI Mavic Air 2",
-        "DJI Mavic 2 Pro",
-        "DJI Mavic Mini",
-        "DJI Mavic 2 Zoom",
-        "DJI Phanton 4",
-        "Parrot Anafi",
-        "DJI Mavic Pro",
-        "DJI Inspire 2",
-        "DJI Inspire 1",
-        "Parrot Bebop 2",
-      ],
+      brand_list: [],
       selected_brands: [],
       loading: true,
       after_data_fetch: false,
@@ -155,9 +146,6 @@ class ServiceCenters extends Component {
         email: "",
         phone: "",
       },
-      phoneNumberForm: false,
-      phoneFormSuccess: false,
-      phoneFormSuccessMsg: "Form submitted successfully",
       showNumber: false,
       after_data_fetch: false,
       next_page: false,
@@ -168,6 +156,16 @@ class ServiceCenters extends Component {
   }
 
   componentDidMount() {
+    axios.get(`${domain}/api/brand/getBrands`)
+    .then(res =>{
+      console.log(res.data)
+      this.setState({
+        brand_list: res.data
+      })
+    })
+    .catch(err => {
+      console.log(err.response)
+    })
     axios
       .get("https://api.countrystatecity.in/v1/countries", {
         headers: {
@@ -426,9 +424,6 @@ class ServiceCenters extends Component {
     });
   };
 
-  whatsappChat = (whatsapp_number) => {
-    window.open("https://wa.me/" + whatsapp_number + "?text=Hello", "_blank");
-  };
   captureEnquiry = (id) => {
     let error = false;
     let focusField = "";
@@ -543,21 +538,6 @@ class ServiceCenters extends Component {
     this.props.history.push("/service_center/" + id);
   };
 
-  openPhoneNumberForm = () => {
-    this.setState({
-      phoneNumberForm: true,
-    });
-  };
-
-  closePhoneNumberForm = () => {
-    let phone_input = this.state.phone_input;
-    phone_input.phone = "";
-    this.setState({
-      phoneNumberForm: false,
-      phone_input: phone_input,
-    });
-  };
-
   handleChange = (address) => {
     this.setState({ address: address });
   };
@@ -598,47 +578,24 @@ class ServiceCenters extends Component {
     });
   };
 
-  submitPhoneForm = () => {
-    let error = false;
-    if (this.state.phone_input.name === "") {
-      document.getElementById("name_error").style.visibility = "visible";
-      error = true;
-    }
-    if (this.state.phone_input.phone === "") {
-      document.getElementById("phone_error").style.visibility = "visible";
-      error = true;
-    }
-    if (this.state.phone_input.email === "") {
-      document.getElementById("email_error").style.visibility = "visible";
-      error = true;
-    }
-
-    if (!error) {
-      let phone_input = this.state.phone_input;
-      phone_input.phone = "";
-      this.setState({
-        phoneNumberForm: false,
-        phone_input: phone_input,
-        phoneFormSuccess: true,
-        showNumber: true,
-      });
-    }
-  };
-
-  closePhoneFormSuccess = () => {
-    this.setState({
-      phoneFormSuccess: false,
-    });
-  };
-
   searchFilters= () =>{
     let data = `${this.state.address} `
   
-  console.log(data)  
+  console.log(data) 
+  this.setState({
+    data: [],
+    loading: true
+  }) 
   axios.post(`${domain}/api/center/filterCenter`,{address : this.state.address.split(",")[0], brands: this.state.selected_brands}).then(res=>{
     console.log(res)
     this.setState({
-      data: res.data
+      data: res.data,
+      loading: false
+    })
+  })
+  .catch(err=>{
+    this.setState({
+      loading: false
     })
   })
   }
@@ -805,21 +762,29 @@ class ServiceCenters extends Component {
                   visibility: this.state.showBrandFilter ? "visible" : "hidden",
                 }}
               >
-                {this.state.brand_list.map((brand, index) => {
-                  return (
-                    <div
-                      className="s_c_filter_brand"
-                      style={{
-                        background: this.state.selected_brands.includes(brand)
-                          ? "#00e7fc"
-                          : "#f1f1f1",
-                      }}
-                      onClick={() => this.selectUnselectBrand(brand)}
-                    >
-                      {brand}
-                    </div>
-                  );
-                })}
+                {this.state.brand_list.length > 0 
+                ?<>
+                  {this.state.brand_list.map((brand, index) => {
+                    return (
+                      <div
+                        className="s_c_filter_brand"
+                        style={{
+                          background: this.state.selected_brands.includes(brand)
+                            ? "#00e7fc"
+                            : "#f1f1f1",
+                        }}
+                        onClick={() => this.selectUnselectBrand(brand)}
+                      >
+                        {brand.brand}
+                      </div>
+                    );
+                  })}
+                </>
+                :<>
+                <div style = {{textAlign: "center", fontFamily: "muli-bold", fontSize: "16px", padding: "30px 0px"}}>Something went wrong. Please reload the page or try after sometimes.</div>
+                </>
+              }
+                
               </div>
             </div>
             <Row>
@@ -827,36 +792,12 @@ class ServiceCenters extends Component {
                 <div>
                   <ul>
                     <li className="s_c_list_title">
-                      Service centers{" "}
-                      {this.state.selected_city
-                        ? "in " + this.state.selected_city.name
-                        : "near you"}
+                      Service centers
                     </li>
                   </ul>
                 </div>
               </Col>
-              <Col>
-                <ul>
-                  <li className="s_c_location">
-                    <img
-                      src={locationIcon}
-                      alt=""
-                      style={{ paddingRight: "10px", float: "left" }}
-                    />
-{
-  this.state.address !== "" ?  this.state.address.split(",")[0]  : ""
-}
-{
-  this.state.address.split(",").length > 1 ? ","  : ""
-}
-{
-  this.state.address.split(",").length > 1 ? this.state.address.split(",")[1]  : ""
-}
-                   
-               
-                  </li>
-                </ul>
-              </Col>
+              
             </Row>
             <Row>
               <Col md={6} sm={12}>
@@ -1011,11 +952,13 @@ class ServiceCenters extends Component {
                             </div>
                             <div
                               className="s_c_other_details_content s_c_other_details_phone"
-                              onClick={this.openPhoneNumberForm}
                             >
-                              {this.state.showNumber
-                                ? `${item.phoneNo}, ${item.secondaryNumber}`
-                                : "Show Phone Number"}
+                              <a href={`tel:${item.phoneNo}`}> <div className="s_c_other_details_phone" style = {{fontSize: "14px", display: "inline-block"}}>{item.phoneNo} </div></a>
+                              {item.secondaryNumber && ", "}
+                              {
+                                item.secondaryNumber ? <a href={`tel:${item.secondaryNumber}`} > <div className="s_c_other_details_phone" style = {{fontSize: "14px", display: "inline-block"}}>{item.secondaryNumber}</div></a>: ""
+                              }
+                              
                             </div>
                             <div className="s_c_other_details_title">
                               Location:
@@ -1028,7 +971,7 @@ class ServiceCenters extends Component {
                             </div>
                             <div className="s_c_other_details_content">
                               {item.brandOfDrones
-                                .slice(0, 4)
+                                .slice(0, 3)
                                 .map((brand, index) => {
                                   return (
                                     <div
@@ -1036,14 +979,14 @@ class ServiceCenters extends Component {
                                       key={index}
                                     >
                                       {brand}
-                                      {index + 1 !==
+                                      {index + 1 <
                                         item.brandOfDrones.slice(0, 4).length &&
                                         ","}{" "}
                                       &nbsp;{" "}
                                     </div>
                                   );
                                 })}{" "}
-                              {`...`}
+                                {item.brandOfDrones.length > 4 && `. . .`}
                             </div>
                           </div>
                           <hr style={{ border: "1px solid #efefef" }} />
@@ -1056,10 +999,9 @@ class ServiceCenters extends Component {
                             </button>
 
                             {item.whatsappNo ? (
-                              <Link
-                                onClick={() =>
-                                  this.whatsappChat(item.whatsappNumber)
-                                }
+                              <a
+                              href={"https://api.whatsapp.com/send/?phone=+91 " + item.whatsappNo + "&text=Hello"}
+                              target = "_blank"
                               >
                                 <img
                                   src={whatsapp_icon}
@@ -1067,7 +1009,7 @@ class ServiceCenters extends Component {
                                   height={"27px"}
                                   style={{ marginTop: "3px" }}
                                 />
-                              </Link>
+                              </a>
                             ) : (
                               <></>
                             )}
@@ -1197,109 +1139,6 @@ class ServiceCenters extends Component {
                 </Dialog>
 
                 <Dialog
-                  open={this.state.phoneNumberForm}
-                  onClose={this.closePhoneNumberForm}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                  maxWidth={"md"}
-                  fullWidth={true}
-                  PaperProps={{
-                    style: { maxWidth: "720px", borderRadius: "10px" },
-                  }}
-                >
-                  <DialogContent
-                    className={All.PopupBody}
-                    style={{ marginBottom: "45px" }}
-                  >
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "20px",
-                        right: "20px",
-                      }}
-                    >
-                      <img
-                        src={close}
-                        alt=""
-                        onClick={this.closePhoneNumberForm}
-                        style={{ cursor: "pointer" }}
-                      />
-                    </div>
-                    <Row style={{ marginTop: "30px", padding: "0px 15px" }}>
-                      <div className="phone_form_title">
-                        Contact Service Center
-                      </div>
-                      <div className="phone_form_desc">
-                        Enter the below details to view Phone Numbers
-                      </div>
-                      <label
-                        htmlFor="phone_form_name"
-                        className="phone_form_label"
-                      >
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        id="phone_form_name"
-                        className="phone_form_input"
-                        name="name"
-                        onChange={this.phoneFormChangeHandler}
-                      />
-                      <div
-                        className="phone_form_input_error_msg"
-                        id="name_error"
-                      >
-                        Name is required
-                      </div>
-                      <label htmlFor="phone" className="phone_form_label">
-                        Phone Number
-                      </label>
-                      <PhoneInput
-                        defaultCountry="IN"
-                        className={"phone_form_input phone_form_phone"}
-                        name="phone"
-                        id="phone"
-                        value={this.state.phone_input.phone}
-                        onChange={this.phoneFormPhoneChangeHandler}
-                      />
-                      <div
-                        className="phone_form_input_error_msg"
-                        id="phone_error"
-                      >
-                        Phone number is required
-                      </div>
-                      <label
-                        htmlFor="phone_form_email"
-                        className="phone_form_label"
-                      >
-                        Email ID
-                      </label>
-                      <input
-                        type="text"
-                        id="phone_form_email"
-                        className="phone_form_input"
-                        name="email"
-                        onChange={this.phoneFormChangeHandler}
-                      />
-                      <div
-                        className="phone_form_input_error_msg"
-                        id="email_error"
-                      >
-                        Email ID is required
-                      </div>
-                      <div className="phone_form_btn_container">
-                        <button
-                          className="phone_form_btn"
-                          onClick={this.submitPhoneForm}
-                        >
-                          Submit
-                        </button>
-                      </div>
-                    </Row>
-                  </DialogContent>
-                </Dialog>
-
-                <Dialog
                   open={this.state.share}
                   onClose={this.handleShareClose}
                   aria-labelledby="alert-dialog-title"
@@ -1388,56 +1227,10 @@ class ServiceCenters extends Component {
                       >
                         <RedditIcon size={52} round={true} />
                       </RedditShareButton>
-                      <LineShareButton
-                        url={this.state.shareLink}
-                        style={{ margin: "10px" }}
-                      >
-                        <LineIcon size={52} round={true} />
-                      </LineShareButton>
                     </Row>
                   </DialogContent>
                 </Dialog>
-                <Dialog
-                  open={this.state.phoneFormSuccess}
-                  onClose={this.closePhoneFormSuccess}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                  maxWidth={"md"}
-                  fullWidth={true}
-                >
-                  <DialogContent
-                    className={All.PopupBody}
-                    style={{ marginBottom: "50px" }}
-                  >
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "20px",
-                        right: "20px",
-                      }}
-                    >
-                      <img
-                        src={close}
-                        alt=""
-                        onClick={this.closePhoneFormSuccess}
-                        style={{ cursor: "pointer" }}
-                      />
-                    </div>
-                    <Row style={{ marginTop: "30px" }}>
-                      <div className="u_f_popup_title">
-                        {this.state.phoneFormSuccessMsg}
-                      </div>
-                      <div className="u_f_popup_btn_container">
-                        <button
-                          className="u_f_popup_btn2"
-                          onClick={this.closePhoneFormSuccess}
-                        >
-                          Close
-                        </button>
-                      </div>
-                    </Row>
-                  </DialogContent>
-                </Dialog>
+                
               </>
             )}
             {this.state.next_page && (
