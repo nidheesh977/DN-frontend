@@ -156,16 +156,17 @@ class ServiceCenters extends Component {
   }
 
   componentDidMount() {
-    axios.get(`${domain}/api/brand/getBrands`)
-    .then(res =>{
-      console.log(res.data)
-      this.setState({
-        brand_list: res.data
+    axios
+      .get(`${domain}/api/brand/getBrands`)
+      .then((res) => {
+        console.log(res.data);
+        this.setState({
+          brand_list: res.data,
+        });
       })
-    })
-    .catch(err => {
-      console.log(err.response)
-    })
+      .catch((err) => {
+        console.log(err.response);
+      });
     axios
       .get("https://api.countrystatecity.in/v1/countries", {
         headers: {
@@ -281,6 +282,7 @@ class ServiceCenters extends Component {
   };
 
   selectUnselectBrand = (brand) => {
+    console.log(brand);
     var selected_brands = this.state.selected_brands;
     if (selected_brands.includes(brand)) {
       selected_brands.splice(selected_brands.indexOf(brand), 1);
@@ -578,27 +580,34 @@ class ServiceCenters extends Component {
     });
   };
 
-  searchFilters= () =>{
-    let data = `${this.state.address} `
-  
-  console.log(data) 
-  this.setState({
-    data: [],
-    loading: true
-  }) 
-  axios.post(`${domain}/api/center/filterCenter`,{address : this.state.address.split(",")[0], brands: this.state.selected_brands}).then(res=>{
-    console.log(res)
+  searchFilters = () => {
+    let data = `${this.state.address} `;
+    
+    var brands = this.state.selected_brands.map(x => x.brand)
+
+    console.log(brands);
     this.setState({
-      data: res.data,
-      loading: false
-    })
-  })
-  .catch(err=>{
-    this.setState({
-      loading: false
-    })
-  })
-  }
+      data: [],
+      loading: true,
+    });
+    axios
+      .post(`${domain}/api/center/filterCenter`, {
+        address: this.state.address.split(",")[0],
+        brands: brands,
+      })
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          data: res.data,
+          loading: false,
+        });
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false,
+        });
+      });
+  };
 
   render() {
     var loading = this.state.loading;
@@ -613,29 +622,29 @@ class ServiceCenters extends Component {
           <Container
             className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}
           >
-
-{
-  !localStorage.getItem("access_token") ? <div className="s_c_list_btn_container">
-  <button
-    className="s_c_list_btn"
-    onClick={() =>
-      this.props.history.push("/login")
-    }
-  >
-    List your service center
-  </button>
-</div> : localStorage.getItem("role") === "booster" ? <div className="s_c_list_btn_container">
-  <button
-    className="s_c_list_btn"
-    onClick={() =>
-      this.props.history.push("/createServiceCenter") 
-    }
-  >
-    List your service center
-  </button>
-</div> : <></>
-}
-
+            {!localStorage.getItem("access_token") ? (
+              <div className="s_c_list_btn_container">
+                <button
+                  className="s_c_list_btn"
+                  onClick={() => this.props.history.push("/login")}
+                >
+                  List your service center
+                </button>
+              </div>
+            ) : localStorage.getItem("role") === "booster" ? (
+              <div className="s_c_list_btn_container">
+                <button
+                  className="s_c_list_btn"
+                  onClick={() =>
+                    this.props.history.push("/createServiceCenter")
+                  }
+                >
+                  List your service center
+                </button>
+              </div>
+            ) : (
+              <></>
+            )}
 
             {/* <div className="s_c_list_btn_container">
               <button
@@ -762,42 +771,51 @@ class ServiceCenters extends Component {
                   visibility: this.state.showBrandFilter ? "visible" : "hidden",
                 }}
               >
-                {this.state.brand_list.length > 0 
-                ?<>
-                  {this.state.brand_list.map((brand, index) => {
-                    return (
-                      <div
-                        className="s_c_filter_brand"
-                        style={{
-                          background: this.state.selected_brands.includes(brand)
-                            ? "#00e7fc"
-                            : "#f1f1f1",
-                        }}
-                        onClick={() => this.selectUnselectBrand(brand)}
-                      >
-                        {brand.brand}
-                      </div>
-                    );
-                  })}
-                </>
-                :<>
-                <div style = {{textAlign: "center", fontFamily: "muli-bold", fontSize: "16px", padding: "30px 0px"}}>Something went wrong. Please reload the page or try after sometimes.</div>
-                </>
-              }
-                
+                {this.state.brand_list.length > 0 ? (
+                  <>
+                    {this.state.brand_list.map((brand, index) => {
+                      return (
+                        <div
+                          className="s_c_filter_brand"
+                          style={{
+                            background: this.state.selected_brands.includes(
+                              brand
+                            )
+                              ? "#00e7fc"
+                              : "#f1f1f1",
+                          }}
+                          onClick={() => this.selectUnselectBrand(brand)}
+                        >
+                          {brand.brand}
+                        </div>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <>
+                    <div
+                      style={{
+                        textAlign: "center",
+                        fontFamily: "muli-bold",
+                        fontSize: "16px",
+                        padding: "30px 0px",
+                      }}
+                    >
+                      Something went wrong. Please reload the page or try after
+                      sometimes.
+                    </div>
+                  </>
+                )}
               </div>
             </div>
             <Row>
               <Col>
                 <div>
                   <ul>
-                    <li className="s_c_list_title">
-                      Service centers
-                    </li>
+                    <li className="s_c_list_title">Service centers</li>
                   </ul>
                 </div>
               </Col>
-              
             </Row>
             <Row>
               <Col md={6} sm={12}>
@@ -950,15 +968,36 @@ class ServiceCenters extends Component {
                             <div className="s_c_other_details_title">
                               Phone Number:
                             </div>
-                            <div
-                              className="s_c_other_details_content s_c_other_details_phone"
-                            >
-                              <a href={`tel:${item.phoneNo}`}> <div className="s_c_other_details_phone" style = {{fontSize: "14px", display: "inline-block"}}>{item.phoneNo} </div></a>
+                            <div className="s_c_other_details_content s_c_other_details_phone">
+                              <a href={`tel:${item.phoneNo}`}>
+                                {" "}
+                                <div
+                                  className="s_c_other_details_phone"
+                                  style={{
+                                    fontSize: "14px",
+                                    display: "inline-block",
+                                  }}
+                                >
+                                  {item.phoneNo}{" "}
+                                </div>
+                              </a>
                               {item.secondaryNumber && ", "}
-                              {
-                                item.secondaryNumber ? <a href={`tel:${item.secondaryNumber}`} > <div className="s_c_other_details_phone" style = {{fontSize: "14px", display: "inline-block"}}>{item.secondaryNumber}</div></a>: ""
-                              }
-                              
+                              {item.secondaryNumber ? (
+                                <a href={`tel:${item.secondaryNumber}`}>
+                                  {" "}
+                                  <div
+                                    className="s_c_other_details_phone"
+                                    style={{
+                                      fontSize: "14px",
+                                      display: "inline-block",
+                                    }}
+                                  >
+                                    {item.secondaryNumber}
+                                  </div>
+                                </a>
+                              ) : (
+                                ""
+                              )}
                             </div>
                             <div className="s_c_other_details_title">
                               Location:
@@ -986,7 +1025,7 @@ class ServiceCenters extends Component {
                                     </div>
                                   );
                                 })}{" "}
-                                {item.brandOfDrones.length > 4 && `. . .`}
+                              {item.brandOfDrones.length > 4 && `. . .`}
                             </div>
                           </div>
                           <hr style={{ border: "1px solid #efefef" }} />
@@ -1000,8 +1039,12 @@ class ServiceCenters extends Component {
 
                             {item.whatsappNo ? (
                               <a
-                              href={"https://api.whatsapp.com/send/?phone=+91 " + item.whatsappNo + "&text=Hello"}
-                              target = "_blank"
+                                href={
+                                  "https://api.whatsapp.com/send/?phone=+91 " +
+                                  item.whatsappNo +
+                                  "&text=Hello"
+                                }
+                                target="_blank"
                               >
                                 <img
                                   src={whatsapp_icon}
@@ -1230,7 +1273,6 @@ class ServiceCenters extends Component {
                     </Row>
                   </DialogContent>
                 </Dialog>
-                
               </>
             )}
             {this.state.next_page && (

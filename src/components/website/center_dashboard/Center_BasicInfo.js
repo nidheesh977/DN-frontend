@@ -49,7 +49,7 @@ function Center_BasicInfo() {
           code: "+91",
           dob: center_data.dob,
           gender: center_data.gender,
-          address: center_data.address,
+          address: "",
           city: center_data.city,
           country: center_data.country,
           postal: center_data.postalAddress,
@@ -130,7 +130,7 @@ function Center_BasicInfo() {
   let [fileExcluded, setFileExcluded] = useState(false);
   let [imgCountErr, setImgCountErr] = useState(false);
   let [suggestedBrands, setSuggestedBrands] = useState([]);
-  let [saving, setSaving] = useState(true);
+  let [saving, setSaving] = useState(false);
 
   const changeHandler = (e) => {
     document.getElementById(`${e.target.id}_error`).style.display = "none";
@@ -217,7 +217,7 @@ function Center_BasicInfo() {
         ...data,
         brands: brands,
       });
-      setSuggestedBrands(newSuggestedBrands)
+      setSuggestedBrands(newSuggestedBrands);
       document.getElementById("brand_error").style.display = "none";
     }
   };
@@ -384,7 +384,7 @@ function Center_BasicInfo() {
         ...data,
         brands: brands,
       });
-      setSuggestedBrands(newSuggestedBrands)
+      setSuggestedBrands(newSuggestedBrands);
     }
   };
 
@@ -396,24 +396,41 @@ function Center_BasicInfo() {
   };
 
   const saveChanges = () => {
-    var error = false
-    var focusField = ""
+    var error = false;
+    var focusField = "";
     var fields = [
       "full_name",
       "email",
-      "centerEmail",
       "phone",
+      "center_name",
       "centerPhone",
+      "centerEmail",
       "address",
       "description",
       "brands",
       "photo_row",
-      "center_name",
       "streetName",
       "establishedYear",
       "workingFrom",
-      "workingTill"
-    ]
+      "workingTill",
+    ];
+
+    for (var i = 0; i < fields.length; i++) {
+      if (fields[i] !== "brands" && fields[i] !== "photo_row") {
+        if (data[fields[i]] === "") {
+          error = true;
+          document.getElementById(`${fields[i]}_error`).style.display =
+            "contents";
+          if (focusField === "") {
+            focusField = fields[i];
+          }
+        }
+      }
+    }
+    if (error) {
+      document.getElementById(focusField).focus();
+      focusField = "";
+    }
   };
 
   return (
@@ -544,6 +561,7 @@ function Center_BasicInfo() {
                   onChange={phoneChangeHandler}
                   autoComplete={false}
                   disabled={!edit}
+                  style={{ marginTop: "5px" }}
                 />
                 <div className="login_input_error_msg" id="phone_error">
                   Phone number is required
@@ -557,7 +575,7 @@ function Center_BasicInfo() {
         </div>
         <div>
           <label
-            htmlFor="service_center_name"
+            htmlFor="center_name"
             className="pd_b_i_profile_head"
             style={{ cursor: "pointer" }}
           >
@@ -566,12 +584,12 @@ function Center_BasicInfo() {
           <input
             type="text"
             className="pd_b_i_profile_input"
-            id="service_center_name"
+            id="center_name"
             onChange={(e) => setData({ ...data, center_name: e.target.value })}
             value={data.center_name}
             disabled={!edit}
           />
-          <div className="login_input_error_msg" id="service_center_name_error">
+          <div className="login_input_error_msg" id="center_name_error">
             Service center name is required
           </div>
         </div>
@@ -589,13 +607,13 @@ function Center_BasicInfo() {
                 type="text"
                 name="center_phone"
                 className="pd_b_i_profile_input"
-                id="center_phone"
+                id="centerPhone"
                 value={`${data.code} ${data.centerPhone}`}
                 onChange={centerPhoneChangeHandler}
                 autoComplete={false}
                 disabled={!edit}
               />
-              <div className="login_input_error_msg" id="center_phone_error">
+              <div className="login_input_error_msg" id="centerPhone_error">
                 Center phone number is required
               </div>
             </div>
@@ -618,14 +636,14 @@ function Center_BasicInfo() {
                 type="email"
                 className="pd_b_i_profile_input"
                 name="center_email"
-                id="center_email"
+                id="centerEmail"
                 onChange={(e) =>
                   setData({ ...data, centerEmail: e.target.value })
                 }
                 value={data.centerEmail}
                 disabled={!edit}
               />
-              <div className="login_input_error_msg" id="center_email_error">
+              <div className="login_input_error_msg" id="centerEmail_error">
                 Email ID is required
               </div>
             </div>
@@ -736,14 +754,14 @@ function Center_BasicInfo() {
               <input
                 type="text"
                 className="pd_b_i_profile_input"
-                id="building_no"
+                id="streetName"
                 onChange={(e) =>
                   setData({ ...data, streetName: e.target.value })
                 }
                 value={data.streetName}
                 disabled={!edit}
               />
-              <div className="login_input_error_msg" id="building_no_error">
+              <div className="login_input_error_msg" id="streetName_error">
                 Building No. / Street name is required
               </div>
             </div>
@@ -760,17 +778,14 @@ function Center_BasicInfo() {
               <input
                 type="number"
                 className="pd_b_i_profile_input"
-                id="established_year"
+                id="establishedYear"
                 onChange={(e) =>
                   setData({ ...data, establishedYear: e.target.value })
                 }
                 value={data.establishedYear}
                 disabled={!edit}
               />
-              <div
-                className="login_input_error_msg"
-                id="established_year_error"
-              >
+              <div className="login_input_error_msg" id="establishedYear_error">
                 Established year is required
               </div>
             </div>
@@ -789,13 +804,15 @@ function Center_BasicInfo() {
               <input
                 type="time"
                 className="pd_b_i_profile_input"
-                id="working_from"
-                name="working_from"
-                onChange={(e) => setData({ workingFrom: e.target.value })}
+                id="workingFrom"
+                name="workingFrom"
+                onChange={(e) =>
+                  setData({ ...data, workingFrom: e.target.value })
+                }
                 value={data.workingFrom}
                 disabled={!edit}
               />
-              <div className="login_input_error_msg" id="working_from_error">
+              <div className="login_input_error_msg" id="workingFrom_error">
                 Working from is required
               </div>
             </div>
@@ -812,12 +829,14 @@ function Center_BasicInfo() {
               <input
                 type="time"
                 className="pd_b_i_profile_input"
-                id="working_till"
-                onChange={(e) => setData({ workingTill: e.target.value })}
+                id="workingTill"
+                onChange={(e) =>
+                  setData({ ...data, workingTill: e.target.value })
+                }
                 value={data.workingTill}
                 disabled={!edit}
               />
-              <div className="login_input_error_msg" id="working_till_error">
+              <div className="login_input_error_msg" id="workingTill_error">
                 Working till is required
               </div>
             </div>
@@ -990,23 +1009,25 @@ function Center_BasicInfo() {
         <div className="login_input_error_msg" id="photos_error">
           Photos is required
         </div>
-        <div className="pd_b_i_notifications_save">
-          {saving ? (
-            <button
-              className="pd_b_i_notifications_saveBtn"
-              style={{ display: "flex" }}
-            >
-              <Loader /> Saving
-            </button>
-          ) : (
-            <button
-              className="pd_b_i_notifications_saveBtn"
-              onClick={saveChanges}
-            >
-              Save Changes
-            </button>
-          )}
-        </div>
+        {edit && (
+          <div className="pd_b_i_notifications_save">
+            {saving ? (
+              <button
+                className="pd_b_i_notifications_saveBtn"
+                style={{ display: "flex" }}
+              >
+                <Loader /> Saving
+              </button>
+            ) : (
+              <button
+                className="pd_b_i_notifications_saveBtn"
+                onClick={saveChanges}
+              >
+                Save Changes
+              </button>
+            )}
+          </div>
+        )}
         <Dialog
           open={profileSuccess}
           onClose={() => setProfileSuccess(false)}
