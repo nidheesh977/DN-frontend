@@ -139,7 +139,7 @@ class ServiceCenters extends Component {
       loading: true,
       after_data_fetch: false,
       share: false,
-
+      loginErrorPopup : false,
       shareLink: "",
       phone_input: {
         name: "",
@@ -420,6 +420,11 @@ class ServiceCenters extends Component {
       share: true,
     });
   };
+  loginErrorPopupClose = () =>{
+    this.setState({
+      loginErrorPopup : false
+    })
+  }
   closeEnquiry1 = () => {
     this.setState({
       enquiry: false,
@@ -524,10 +529,17 @@ class ServiceCenters extends Component {
     }
   };
   enquireNow = (id) => {
-    this.setState({
-      enquiry: true,
-      centerId: id,
-    });
+    if(!localStorage.getItem("access_token")){
+      this.setState({
+        loginErrorPopup: true
+      })
+    }else{
+      this.setState({
+        enquiry: true,
+        centerId: id,
+      });
+    }
+   
   };
 
   closeEnquiry = () => {
@@ -1186,6 +1198,49 @@ class ServiceCenters extends Component {
                     </div>
                   </DialogContent>
                 </Dialog>
+
+                {/* //error */}
+                <Dialog
+          open={this.state.loginErrorPopup}
+          onClose={this.loginErrorPopupClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+          PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={this.loginErrorPopupClose}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="a_j_popup_title" style={{ padding: "0px 60px" }}>
+                You aren't logged into DroneZone. Please login to continue?
+              </div>
+              <div
+                className="u_f_popup_btn_container"
+                style={{ marginTop: "8px" }}
+              >
+                <div
+                  className="j_l_applyJobLoginBtn"
+                  style={{ width: "fit-content" }}
+                  onClick={() => this.props.history.push("/login")}
+                >
+                  Login / Sign Up
+                </div>
+              </div>
+            </Row>
+          </DialogContent>
+        </Dialog>
+                {/* error */}
 
                 <Dialog
                   open={this.state.share}

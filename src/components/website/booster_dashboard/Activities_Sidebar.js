@@ -10,6 +10,7 @@ import All from "../../website/All.module.css";
 import Booster_downloads from "./Booster_downloads";
 import Booster_Likes from "./Booster_Likes";
 import Booster_following from "./Booster_following";
+import Booster_bookmarks from "./Booster_bookmarks";
 
 class Activities_Sidebar extends React.Component {
   constructor(props) {
@@ -137,6 +138,16 @@ class Activities_Sidebar extends React.Component {
                 }
                 id="h_p_pilot_type_filter"
               >
+                 <div id="pd_filter1_checkbox_label">
+                  {" "}
+                  <NavLink
+                    exact
+                    activeClassName="h_p_sidebar_active"
+                    to="/booster_dashboard/activities/bookmarks"
+                  >
+                    Bookmarked Centers
+                  </NavLink>
+                </div>
               
                 <div id="pd_filter1_checkbox_label">
                   {" "}
@@ -200,6 +211,10 @@ class Activities_Sidebar extends React.Component {
             <Route
               path="/booster_dashboard/activities/following"
               component={Booster_following}
+            />
+             <Route
+              path="/booster_dashboard/activities/bookmarks"
+              component={Booster_bookmarks}
             />
             <Route
               path="/booster_dashboard/activities/likes"
