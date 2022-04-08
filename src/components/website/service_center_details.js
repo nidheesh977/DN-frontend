@@ -127,7 +127,6 @@ export default function ServiceCenterDetails(props) {
         config
       )
       .then(() => {
-        alert("successfull");
         setWriteReview(false);
         axios
           .get(`${domain}/api/review/getReviews/${param.id}`)
