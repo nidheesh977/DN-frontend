@@ -184,7 +184,7 @@ function Center_BasicInfo() {
             10 + data.code.length + 1
           ),
         });
-        document.getElementById("center_phone_error").style.display = "none";
+        document.getElementById("centerPhone_error").style.display = "none";
       }
     } catch {
       console.log("Not number");
@@ -203,7 +203,7 @@ function Center_BasicInfo() {
           brands: [...data.brands, data.brand],
           brand: "",
         });
-        document.getElementById(`brand_error`).style.visibility = "hidden";
+        document.getElementById(`brand_error`).style.display = "none";
       }
     }
   };
@@ -406,13 +406,13 @@ function Center_BasicInfo() {
       "centerPhone",
       "centerEmail",
       "address",
-      "description",
-      "brands",
-      "photo_row",
       "streetName",
       "establishedYear",
       "workingFrom",
       "workingTill",
+      "description",
+      "brands",
+      "photo_row",
     ];
 
     for (var i = 0; i < fields.length; i++) {
@@ -421,9 +421,23 @@ function Center_BasicInfo() {
           error = true;
           document.getElementById(`${fields[i]}_error`).style.display =
             "contents";
+          console.log(focusField)
           if (focusField === "") {
             focusField = fields[i];
           }
+        }
+      }
+      else{
+        if (fields[i] === "brands" && data.brands.length === 0){
+          error = true
+          document.getElementById(`brand_error`).style.display = "contents";
+          if (focusField === ""){
+            focusField = "brand";
+          }
+        }
+        if (fields[i] === "photo_row" && data.photo_row.length === 0){
+          error = true
+          document.getElementById(`photos_error`).style.display = "contents";
         }
       }
     }
@@ -502,9 +516,9 @@ function Center_BasicInfo() {
           </div>
         </div>
         <div>
-          <div className="pd_b_i_profile_head" style={{ cursor: "pointer" }}>
+          <label htmlFor = "full_name" className="pd_b_i_profile_head" style={{ cursor: "pointer" }}>
             Name
-          </div>
+          </label>
           <input
             type="text"
             className="pd_b_i_profile_input"
@@ -514,7 +528,7 @@ function Center_BasicInfo() {
             disabled={!edit}
           />
           <div className="login_input_error_msg" id="full_name_error">
-            Full name is required
+            Name is required
           </div>
         </div>
         <Row>
@@ -585,7 +599,10 @@ function Center_BasicInfo() {
             type="text"
             className="pd_b_i_profile_input"
             id="center_name"
-            onChange={(e) => setData({ ...data, center_name: e.target.value })}
+            onChange={(e) => {
+              setData({ ...data, center_name: e.target.value })
+              document.getElementById("center_name_error").style.display = "none"
+            }}
             value={data.center_name}
             disabled={!edit}
           />
@@ -598,7 +615,7 @@ function Center_BasicInfo() {
             <div className={All.FormGroup}>
               <label
                 className="pd_b_i_profile_head"
-                for="center_phone"
+                for="centerPhone"
                 style={{ cursor: "pointer" }}
               >
                 Center Phone Number{" "}
@@ -624,7 +641,7 @@ function Center_BasicInfo() {
               <div>
                 <div style={{ marginBottom: "15px" }}>
                   <label
-                    htmlFor="center_email"
+                    htmlFor="centerEmail"
                     className="pd_b_i_profile_head1"
                     style={{ cursor: "pointer" }}
                   >
@@ -637,9 +654,10 @@ function Center_BasicInfo() {
                 className="pd_b_i_profile_input"
                 name="center_email"
                 id="centerEmail"
-                onChange={(e) =>
+                onChange={(e) =>{
                   setData({ ...data, centerEmail: e.target.value })
-                }
+                  document.getElementById("centerEmail_error").style.display = "none"
+                }}
                 value={data.centerEmail}
                 disabled={!edit}
               />
@@ -745,7 +763,7 @@ function Center_BasicInfo() {
           <Col xl={6}>
             <div>
               <label
-                htmlFor="building_no"
+                htmlFor="streetName"
                 className="pd_b_i_profile_head"
                 style={{ cursor: "pointer" }}
               >
@@ -755,9 +773,10 @@ function Center_BasicInfo() {
                 type="text"
                 className="pd_b_i_profile_input"
                 id="streetName"
-                onChange={(e) =>
+                onChange={(e) =>{
                   setData({ ...data, streetName: e.target.value })
-                }
+                  document.getElementById("streetName_error").style.display = "none"
+                }}
                 value={data.streetName}
                 disabled={!edit}
               />
@@ -769,7 +788,7 @@ function Center_BasicInfo() {
           <Col xl={6}>
             <div>
               <label
-                htmlFor="established_year"
+                htmlFor="establishedYear"
                 className="pd_b_i_profile_head"
                 style={{ cursor: "pointer" }}
               >
@@ -779,9 +798,10 @@ function Center_BasicInfo() {
                 type="number"
                 className="pd_b_i_profile_input"
                 id="establishedYear"
-                onChange={(e) =>
+                onChange={(e) =>{
                   setData({ ...data, establishedYear: e.target.value })
-                }
+                  document.getElementById("establishedYear_error").style.display = "none"
+                }}
                 value={data.establishedYear}
                 disabled={!edit}
               />
@@ -795,7 +815,7 @@ function Center_BasicInfo() {
           <Col xs={6}>
             <div>
               <label
-                htmlFor="working_from"
+                htmlFor="workingFrom"
                 className="pd_b_i_profile_head"
                 style={{ cursor: "pointer" }}
               >
@@ -806,9 +826,10 @@ function Center_BasicInfo() {
                 className="pd_b_i_profile_input"
                 id="workingFrom"
                 name="workingFrom"
-                onChange={(e) =>
+                onChange={(e) =>{
                   setData({ ...data, workingFrom: e.target.value })
-                }
+                  document.getElementById("workingFrom_error").style.display = "none"
+                }}
                 value={data.workingFrom}
                 disabled={!edit}
               />
@@ -820,7 +841,7 @@ function Center_BasicInfo() {
           <Col xs={6}>
             <div>
               <label
-                htmlFor="working_till"
+                htmlFor="workingTill"
                 className="pd_b_i_profile_head"
                 style={{ cursor: "pointer" }}
               >
@@ -830,9 +851,10 @@ function Center_BasicInfo() {
                 type="time"
                 className="pd_b_i_profile_input"
                 id="workingTill"
-                onChange={(e) =>
+                onChange={(e) => {
                   setData({ ...data, workingTill: e.target.value })
-                }
+                  document.getElementById("workingTill_error").style.display = "none"
+                }}
                 value={data.workingTill}
                 disabled={!edit}
               />
@@ -885,7 +907,7 @@ function Center_BasicInfo() {
             disabled={!edit}
           />
           <div className="login_input_error_msg" id="brand_error">
-            Brand of Drones is required
+            Select atleast one brand
           </div>
         </div>
 
@@ -943,7 +965,10 @@ function Center_BasicInfo() {
             id="description"
             placeholder="Write description about your service center"
             style={{ marginBottom: "30px" }}
-            onChange={(e) => setData({ ...data, description: e.target.value })}
+            onChange={(e) => {
+              setData({ ...data, description: e.target.value })
+              document.getElementById("description_error").style.display = "none"
+            }}
             value={data.description}
             disabled={!edit}
           ></textarea>
