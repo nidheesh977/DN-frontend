@@ -5,13 +5,13 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import BookmarkFilled from "../../images/bookmarkFilled.png"
 import Bookmark from "../../images/bookmark.png"
-import "./css/Bookmarks.css"
+// import "./css/Bookmarks.css"
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 const domain = process.env.REACT_APP_MY_API
 
 
-function Center_bookmarks() {
+function Booster_bookmarks() {
     let config = {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -124,4 +124,4 @@ return(
   )
 }
 
-export default Center_bookmarks
+export default Booster_bookmarks

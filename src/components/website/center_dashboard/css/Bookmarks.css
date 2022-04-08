@@ -49,3 +49,11 @@
     text-align: center;
     margin-bottom: 25px;
 }
+
+.toHideText{
+    font-size: 22px;
+    font-family: muli-regular;
+    margin: 15px 0px;
+    text-align: center;
+    display: none;
+}

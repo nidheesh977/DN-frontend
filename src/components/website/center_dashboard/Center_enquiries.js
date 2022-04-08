@@ -47,6 +47,9 @@ export default function BasicTable() {
         axios.get(`${domain}/api/enquiry/getEnquiries`, config).then(res=>{
             console.log(res)
             setData(res.data)
+            if(res.data.length === 0){
+              document.getElementById("toHide").style.display = "block"
+            }
         })
     }, [])
     let showPopupwithData = (name, email, phoneNo, message) =>{
@@ -103,6 +106,7 @@ export default function BasicTable() {
 
 
       </Table>
+      <div className='toHideText' id='toHide'>No Enquiries Yet</div>
     </TableContainer>
 
 

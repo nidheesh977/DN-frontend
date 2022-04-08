@@ -17,6 +17,7 @@ import Pilot_360 from "./Pilot_360";
 import Pilot_downloads from "./Pilot_downloads";
 import All from "../../website/All.module.css";
 import Pilot_Likes from "./Pilot_Likes";
+import Pilot_bookmarks from "./Pilot_Bookmarks";
 
 class Activities_Sidebar extends React.Component {
   constructor(props) {
@@ -291,6 +292,16 @@ class Activities_Sidebar extends React.Component {
                     Following
                   </NavLink>
                 </div>
+                <div id="pd_filter1_checkbox_label">
+                  {" "}
+                  <NavLink
+                    exact
+                    activeClassName="h_p_sidebar_active"
+                    to="/pilot_dashboard/activities/bookmarks"
+                  >
+                    Bookmarked Centers
+                  </NavLink>
+                </div>
               </div>
             </div>
           </div>
@@ -334,6 +345,10 @@ class Activities_Sidebar extends React.Component {
             <Route
               path="/pilot_dashboard/activities/downloads"
               component={Pilot_downloads}
+            />
+             <Route
+              path="/pilot_dashboard/activities/bookmarks"
+              component={Pilot_bookmarks}
             />
             <Route
               path="/pilot_dashboard/activities/likes"
