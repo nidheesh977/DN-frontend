@@ -16,7 +16,7 @@ function Pilot_nav() {
       document.getElementById("p_d_navitem2").classList.add("pd_nav_active")
       document.getElementById("p_d_navitem1").classList.remove("pd_nav_active")
     }
-  }, [])
+  })
  
   let history = useHistory();
 
