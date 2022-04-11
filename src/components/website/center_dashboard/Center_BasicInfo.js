@@ -666,6 +666,7 @@ function Center_BasicInfo() {
         .then((res) => {
           setUpdateSuccess(true)
           setSaving(false)
+          setEdit(false)
         })
         .catch(err=>{
           setSaving(false)
