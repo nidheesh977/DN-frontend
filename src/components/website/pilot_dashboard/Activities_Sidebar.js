@@ -18,6 +18,7 @@ import Pilot_downloads from "./Pilot_downloads";
 import All from "../../website/All.module.css";
 import Pilot_Likes from "./Pilot_Likes";
 import Pilot_bookmarks from "./Pilot_Bookmarks";
+import HireProposals from "./HireProposals";
 
 class Activities_Sidebar extends React.Component {
   constructor(props) {
@@ -222,16 +223,7 @@ class Activities_Sidebar extends React.Component {
                     Applied Jobs
                   </NavLink>
                 </div>{" "}
-                <div id="pd_filter1_checkbox_label">
-                  {" "}
-                  <NavLink
-                    exact
-                    activeClassName="h_p_sidebar_active"
-                    to="/pilot_dashboard/activities/hiredJobs"
-                  >
-                    Hired Jobs
-                  </NavLink>
-                </div>{" "}
+               
                 <div id="pd_filter1_checkbox_label">
                   {" "}
                   <NavLink
@@ -242,6 +234,16 @@ class Activities_Sidebar extends React.Component {
                     Saved Jobs
                   </NavLink>
                 </div>
+                <div id="pd_filter1_checkbox_label">
+                  {" "}
+                  <NavLink
+                    exact
+                    activeClassName="h_p_sidebar_active"
+                    to="/pilot_dashboard/activities/hireProposals"
+                  >
+                    Hire Proposals
+                  </NavLink>
+                </div>{" "}
               </div>
             </div>
             <div className="media_box">
@@ -349,6 +351,10 @@ class Activities_Sidebar extends React.Component {
              <Route
               path="/pilot_dashboard/activities/bookmarks"
               component={Pilot_bookmarks}
+            />
+            <Route
+              path="/pilot_dashboard/activities/hireProposals"
+              component={HireProposals}
             />
             <Route
               path="/pilot_dashboard/activities/likes"

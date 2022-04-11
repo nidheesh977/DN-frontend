@@ -1,5 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet";
+
 import All from "../website/All.module.css";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
@@ -87,6 +88,7 @@ export default function PilotDetails(props) {
   const domain = process.env.REACT_APP_MY_API;
 
   const history = useHistory();
+  const param = useParams();
 
   const [newReview, setNewReview] = useState("");
 
@@ -163,8 +165,20 @@ export default function PilotDetails(props) {
     setStartProcess(true);
   };
   const submitProcess = () => {
-    if (hireForm.description !== "") {
-      setStartProcess(false);
+    if (hireForm.description !== "" && hireForm.description.length <= 200) {
+      axios.post(`${domain}/api/hireProposal/createProposal`, {pilotId: param.id, message: hireForm.description}, config).then(res=>{
+        console.log(res)
+        setStartProcess(false);
+        setHireForm({
+          ...hireForm,
+          description: ""
+        })
+
+      })
+    }
+    else if(hireForm.description.length >= 200){
+      document.getElementById("hire_description").style.backgroundColor = "#FFCCCB"
+
     } else {
       document.getElementById("description_error").style.display = "contents";
       document.getElementById("hire_description").style.marginBottom = "10px";
@@ -172,6 +186,8 @@ export default function PilotDetails(props) {
   };
 
   const hireDescChangeHandler = (e) => {
+    document.getElementById("hire_description").style.backgroundColor = "white"
+
     document.getElementById("description_error").style.display = "none";
     document.getElementById("hire_description").style.marginBottom = "30px";
     setHireForm({
@@ -1340,32 +1356,13 @@ export default function PilotDetails(props) {
                   <div className="login_input_error_msg" id="description_error">
                     Description is required
                   </div>
-                  <div className="h_p_start_process_form_label">
-                    Job Catalog (optional)
-                  </div>
-                  <label>
-                    <input
-                      type="file"
-                      name=""
-                      id=""
-                      className="h_p_start_process_form_file"
-                      onChange={handleProcessFileChange}
-                    />
-                    <div className="h_p_start_process_form_file_label">
-                      Choose file to attach
-                    </div>
-                    <div className="h_p_start_process_form_file_label_text">
-                      {hireForm.attached_file.name
-                        ? hireForm.attached_file.name
-                        : "The file type should be in PDF, Docs"}
-                    </div>
-                  </label>
+                 
                   <div className="h_p_start_process_form_btn_container">
                     <button
                       onClick={submitProcess}
                       className="h_p_start_process_form_btn"
                     >
-                      Submit
+                      Send Mail
                     </button>
                   </div>
                 </div>

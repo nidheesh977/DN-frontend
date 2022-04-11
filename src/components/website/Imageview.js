@@ -137,6 +137,17 @@ function Imageview() {
       setUserDetails(res.data)
     })
   }, [])
+  let [pilotId, setPilotId] = useState([])
+  useEffect(()=>{
+    console.log(param.user_id)
+    axios.post(`${domain}/api/hireProposal/sampleData`, {userId: param.user_id}).then((res)=>{
+      
+      console.log(res)
+      setPilotId(res.data[0])
+    }).catch(err=>{
+      console.log(err)
+    })
+  }, [])
   useEffect(() => {
     setShareLink(window.location.href);
     axios
@@ -168,6 +179,50 @@ function Imageview() {
       }
     });
   }, []);
+  const [startProcess, setStartProcess] = useState(false);
+  const [hireForm, setHireForm] = useState({
+    description: "",
+    attached_file: "",
+  });
+  const closeProcess = () => {
+    setStartProcess(false);
+  };
+
+  const clickHire = () => {
+    console.log("Hire me clicked");
+    setStartProcess(true);
+  };
+  const submitProcess = () => {
+    if (hireForm.description !== "" && hireForm.description.length <= 200) {
+      axios.post(`${domain}/api/hireProposal/createProposal`, {pilotId: pilotId, message: hireForm.description}, config).then(res=>{
+        console.log(res)
+        setStartProcess(false);
+        setHireForm({
+          ...hireForm,
+          description: ""
+        })
+
+      })
+    }
+    else if(hireForm.description.length >= 200){
+      document.getElementById("hire_description").style.backgroundColor = "#FFCCCB"
+
+    } else {
+      document.getElementById("description_error").style.display = "contents";
+      document.getElementById("hire_description").style.marginBottom = "10px";
+    }
+  };
+
+  const hireDescChangeHandler = (e) => {
+    document.getElementById("hire_description").style.backgroundColor = "white"
+
+    document.getElementById("description_error").style.display = "none";
+    document.getElementById("hire_description").style.marginBottom = "30px";
+    setHireForm({
+      ...hireForm,
+      description: e.target.value,
+    });
+  };
   let likeComment = (id) => {
     if(localStorage.getItem("access_token")){
 
@@ -632,7 +687,7 @@ function Imageview() {
           <Col lg={4}>
             <div className="i_v_text1">Like what you see?</div>
             <div className="i_v_text2">This Droner is available for work</div>
-            <button className="hire_btn">Hire This Droner</button>
+            <button className="hire_btn" onClick={clickHire}>Hire This Droner</button>
 
             <div className="i_v_moreShots">More Shots from {image.name}</div>
             <Row>
@@ -783,6 +838,57 @@ function Imageview() {
           </Row>
         </DialogContent>
       </Dialog>
+      <Dialog
+            open={startProcess}
+            onClose={closeProcess}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{ style: { borderRadius: 20 } }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={closeProcess}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div className="h_p_start_process_form">
+                  <div className="h_p_start_process_form_title">Hire Pilot</div>
+                  <label
+                    htmlFor="hire_description"
+                    className="h_p_start_process_form_label"
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    className="h_p_start_process_form_description"
+                    id="hire_description"
+                    onChange={hireDescChangeHandler}
+                  ></textarea>
+                  <div className="login_input_error_msg" id="description_error">
+                    Description is required
+                  </div>
+                 
+                  <div className="h_p_start_process_form_btn_container">
+                    <button
+                      onClick={submitProcess}
+                      className="h_p_start_process_form_btn"
+                    >
+                      Send Mail
+                    </button>
+                  </div>
+                </div>
+              </Row>
+            </DialogContent>
+          </Dialog>
     </Container>
   );
 }
