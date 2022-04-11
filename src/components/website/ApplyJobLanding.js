@@ -10,6 +10,7 @@ import MuiDialogContent from "@material-ui/core/DialogContent";
 import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
+
 import heartLike from "../images/heart-blue.svg";
 
 const domain = process.env.REACT_APP_MY_API
@@ -32,13 +33,7 @@ function ApplyJobLanding(props) {
   let [liked, setLiked] = useState([]);
   let [applied, setapplied] = useState([]);
   let [authourised, setAuthourised] = useState(false);
-  let [applySuccess, setApplySuccess] = useState(false 
-    
-    
-    
-    
-    
-    )
+  let [applySuccess, setApplySuccess] = useState(false)
   let [applyFailure, setApplyFailure] = useState(false)
 
   let config = {
@@ -47,7 +42,6 @@ function ApplyJobLanding(props) {
     },
   };
 
-  console.log(param.id);
   const goToPreviousPath = () => {
     history.goBack();
   };
@@ -66,7 +60,11 @@ function ApplyJobLanding(props) {
   const closeApplyFailure = () => {
     setApplyFailure(false)
   }
+let [startProcess , setStartProcess] = useState(false)
 
+let closeProcess = () =>{
+  setStartProcess(false)
+}
   useEffect(() => {
     axios.get(`${domain}/api/jobs/jobLanding/${param.id}`).then(
       (response) => {
@@ -99,33 +97,20 @@ function ApplyJobLanding(props) {
       )
     );
   }, []);
-
+  let [myAppliedJobs, setMyAppliedJobs] = useState([])
+useEffect(()=>{
+  axios.get(`${domain}/api/jobApplications/getMyAppliedJobs`, config).then(res=>{
+    console.log(res.data)
+    setMyAppliedJobs(res.data)
+  })
+}, [])
   function applyNow(id) {
     if(!localStorage.getItem("access_token")){
       setApplyFailure(true)
     }else{
 
 
-    console.log(config);
-applied.push(id)
-    axios
-      .post(`${domain}/api/jobs/applyJob/${param.id}`, config)
-
-      .then((response) => {
-        setApplySuccess(true)
-        console.log(response.status);
-
-        if (response.data === "please Login") {
-          history.push("/pilot_dashboard/account");
-        }
-        else{
-
-        }
-      })
-      .catch(() => {});
-    if (status === 200) {
-      setDialog(true);
-    }
+   setStartProcess(true)
   }
 
 
@@ -175,6 +160,35 @@ applied.push(id)
   let showApplied = () => {
     history.push("/pilot_dashboard/activities/appliedJobs");
   };
+ 
+  let [message, setMessage] = useState("")
+
+  let messageChangeHandler = (e) =>{
+    document.getElementById("toMakeRed").style.backgroundColor = "white"
+
+    setMessage(e.target.value)
+  }
+
+let submitApplication = () =>{
+  if(message === "" || message.length >= 500){
+document.getElementById("toMakeRed").style.backgroundColor = "#ffcccb"
+document.getElementById("toMakeRed").focus()
+  }else{
+    if(!localStorage.getItem("access_token")){
+      setApplyFailure(true)
+    }else{
+    axios.post(`${domain}/api/jobApplications/createApplication` , {jobId : param.id , message: message}, config).then(res=>{
+      console.log(res)
+      setMessage("")
+      axios.get(`${domain}/api/jobApplications/getMyAppliedJobs`, config).then(res=>{
+        console.log(res.data)
+        setMyAppliedJobs(res.data)
+      })
+      setStartProcess(false)
+    })
+  }
+}
+}
   return (
     <div className="j_l_containerMain" style={{ overflowX: "hidden" }}>
       <Container className={All.Container}>
@@ -191,7 +205,7 @@ applied.push(id)
             </Col>
             <Col>
               <div className="j_l_right">
-                {applied.includes(list._id) ? (
+                {myAppliedJobs.includes(list._id) ? (
                   <div className="j_l_applyJobBtn" style = {{opacity: "0.5", pointerEvents: "none"}}>Already Applied </div>
                 ) : (
                   <div className="j_l_applyJobBtn" onClick={()=>applyNow(list._id)}>
@@ -411,6 +425,37 @@ applied.push(id)
             </Row>
           </DialogContent>
         </Dialog>
+{/* //apply Now */}
+
+<Dialog
+              open={startProcess}
+              onClose={closeProcess}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+              PaperProps={{style: { borderRadius: 10 }   }}
+            >
+
+              <DialogContent className={All.PopupBody} style={{ marginBottom: "50px"}}>
+                <div style={{ position: "absolute", top: '20px', right: '20px' }}>
+                  <img src={Close} alt="" onClick={closeProcess} style={{ cursor: "pointer" }} />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div className="h_p_start_process_form">
+                    <div className="h_p_start_process_form_title">Apply for this Job</div>
+                    <div className="h_p_start_process_form_label">Type a Message</div>
+                    <textarea className='h_p_start_process_form_description' id="toMakeRed" value={message} onChange={messageChangeHandler}></textarea>
+               
+                    <div className="h_p_start_process_form_btn_container">
+                      <button className='h_p_start_process_form_btn' onClick={submitApplication}>Submit</button>
+                    </div>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
+
+
       </Container>
     </div>
   );

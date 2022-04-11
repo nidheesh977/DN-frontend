@@ -114,6 +114,8 @@ class HirePilot extends Component {
       nextPage: false,
       loading: true,
       after_response: false,
+      message: "",
+      id2:""
     }
   }
 
@@ -198,16 +200,39 @@ class HirePilot extends Component {
     }
   }
 
-  clickStartProcess = () => {
+  clickStartProcess = (id1) => {
     this.setState({
-      startProcess: true
+      startProcess: true,
+      id2: id1
     })
   }
-
+closeProcess1 = () =>{
+  this.setState({
+    startProcess: false,
+    message: ""
+  })
+}
   closeProcess = () => {
-    this.setState({
-      startProcess: false
-    })
+    if(this.state.message === "" || this.state.message.length >= 200){
+      document.getElementById("tomakered").style.backgroundColor = "#ffcccb"
+
+    }else{
+      let config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      };
+      axios.post(`${domain}/api/hireProposal/createProposal`, {pilotId: this.state.id2, message: this.state.message}, config).then(res=>{
+        console.log(res)
+        
+        this.setState({
+          startProcess: false,
+          message: ""
+        })
+
+      })
+    }
+  
   }
 
   pilotDetailPage = (id) => {
@@ -236,6 +261,13 @@ class HirePilot extends Component {
     })
 
 
+  }
+  messageHandler = (e) =>{
+    document.getElementById("tomakered").style.backgroundColor = "white"
+
+    this.setState({
+      message: e.target.value
+    })
   }
 
   render() {
@@ -495,7 +527,7 @@ class HirePilot extends Component {
                             <div className={pilot.rating >= 5 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
                           </div>
                           <div className="h_p_listing_btn_container">
-                            <button className="h_p_start_process_btn" onClick={this.clickStartProcess}>Start Process</button>
+                            <button className="h_p_start_process_btn" onClick={()=>this.clickStartProcess(pilot._id)}>HirePilot</button>
                             <button className="h_p_save_pilot_btn" onClick = {this.showJobSave}><i class="fa fa-heart"></i></button>
                           </div>
                           <div className="h_p_listing_send_msg_link" onClick = {() => this.sendMessage(1)}>Send Message</div>
@@ -567,7 +599,7 @@ class HirePilot extends Component {
             </Row>
             <Dialog
               open={this.state.startProcess}
-              onClose={this.closeProcess}
+              onClose={this.closeProcess1}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
               maxWidth={"md"}
@@ -577,21 +609,16 @@ class HirePilot extends Component {
 
               <DialogContent className={All.PopupBody} style={{ marginBottom: "50px"}}>
                 <div style={{ position: "absolute", top: '20px', right: '20px' }}>
-                  <img src={close} alt="" onClick={this.closeProcess} style={{ cursor: "pointer" }} />
+                  <img src={close} alt="" onClick={this.closeProcess1} style={{ cursor: "pointer" }} />
                 </div>
                 <Row style={{ marginTop: "30px" }}>
                   <div className="h_p_start_process_form">
                     <div className="h_p_start_process_form_title">Hire Pilot</div>
                     <div className="h_p_start_process_form_label">Description</div>
-                    <textarea className='h_p_start_process_form_description'></textarea>
-                    <div className="h_p_start_process_form_label">Job Catalog (optional)</div>
-                    <label>
-                      <input type="file" name="" id="" className="h_p_start_process_form_file" onChange = {this.handleProcessFileChange}/>
-                      <div className="h_p_start_process_form_file_label">Choose file to attach</div>
-                      <div className="h_p_start_process_form_file_label_text">{this.state.selected_file.name?this.state.selected_file.name:"The file type should be in PDF, Docs"}</div>
-                    </label>
+                    <textarea className='h_p_start_process_form_description' id="tomakered" value={this.state.message} onChange={this.messageHandler}></textarea>
+                   
                     <div className="h_p_start_process_form_btn_container">
-                      <button onClick={this.closeProcess} className='h_p_start_process_form_btn'>Submit</button>
+                      <button onClick={this.closeProcess} className='h_p_start_process_form_btn'>Send Mail</button>
                     </div>
                   </div>
                 </Row>
