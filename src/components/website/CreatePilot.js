@@ -3,8 +3,6 @@ import Cover from "./pilot_dashboard/images/cover.jpg";
 import "./pilot_dashboard/css/Pilot_BasicInfo.css";
 import Pilot from "./pilot_dashboard/images/pilot.jpg";
 import { Row, Col, Container, Hidden } from "react-grid-system";
-import Edit from "./pilot_dashboard/images/edit-1.svg";
-import PhoneInput from "react-phone-number-input";
 import All from "./All.module.css";
 import Axios from "axios";
 import { useHistory } from "react-router-dom";

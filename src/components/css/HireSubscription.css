@@ -66,6 +66,10 @@
   cursor: pointer;
 }
 
+.subscription_plan_btn1:hover{
+  opacity: 0.7;
+}
+
 .subscription_plan_btn2{
   width: 215px;
   text-align: center;
@@ -79,6 +83,12 @@
   border-radius: 10px;
   cursor: pointer;
 }
+
+
+.subscription_plan_btn2:hover{
+  opacity: 0.7;
+}
+
 
 .subscription_plan_feature{
   font-family: muli-light;

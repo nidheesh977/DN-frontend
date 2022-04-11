@@ -1,0 +1,15 @@
+.c_c_profile_radio{
+    padding: 10px 20px;
+    border: 1px solid #ced4dd;
+    background: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.c_c_profile_radio_active{
+    background: #edf5fb;
+    color: #00E7FC;
+    border-color: #00E7FC;
+    font-family: muli-bold;
+}

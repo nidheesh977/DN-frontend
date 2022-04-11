@@ -109,7 +109,7 @@ class HireSubscription extends Component {
           </div>
           <Row gutterWidth={19}>
             <Col>
-              <div className="subscription_plan_container">
+              <div className="subscription_plan_container" style = {{border: "1px solid #c6c6c6", borderRadius: "20px"}}>
                 <div className="subscription_circle1">
                   <div className="subscription_inner_circle1"></div>
                 </div>
@@ -147,7 +147,7 @@ class HireSubscription extends Component {
               </div>
             </Col>
             <Col>
-              <div className="subscription_plan_container">
+              <div className="subscription_plan_container" style = {{border: "1px solid #c6c6c6", borderRadius: "20px"}}>
                 <div className="subscription_circle1">
                   <div className="subscription_inner_circle1"></div>
                 </div>
@@ -188,7 +188,7 @@ class HireSubscription extends Component {
             </Row>
           </DialogContent>
         </Dialog>
-        <Dialog
+        {/* <Dialog
           open={this.state.msg_sent_success}
           onClose={this.closeMsgSentSuccess}
           aria-labelledby="alert-dialog-title"
@@ -208,7 +208,7 @@ class HireSubscription extends Component {
               </div>
             </Row>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
       </section>
 
     )
