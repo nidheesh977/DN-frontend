@@ -92,15 +92,15 @@ function CreateCompany() {
         if (data.email === "") {
           document.getElementById(`${fields[i]}_error`).innerHTML =
             "Email number is required";
-          document.getElementById(`${fields[i]}_error`).style.visibility =
-            "visible";
+          document.getElementById(`${fields[i]}_error`).style.display =
+            "contents";
           document.getElementById(fields[i]).focus();
           error = true;
         } else if (!validateEmail(data.email)) {
           document.getElementById(`${fields[i]}_error`).innerHTML =
             "Email number is not valid";
-          document.getElementById(`${fields[i]}_error`).style.visibility =
-            "visible";
+          document.getElementById(`${fields[i]}_error`).style.display =
+          "contents";
           document.getElementById(fields[i]).focus();
           error = true;
         }
@@ -109,21 +109,21 @@ function CreateCompany() {
         if (data.phone === "") {
           document.getElementById(`${fields[i]}_error`).innerHTML =
             "Phone number is required";
-          document.getElementById(`${fields[i]}_error`).style.visibility =
-            "visible";
+          document.getElementById(`${fields[i]}_error`).style.display =
+          "contents";
           document.getElementById(fields[i]).focus();
           error = true;
         } else if (data.phone.length <= 7) {
           document.getElementById(`${fields[i]}_error`).innerHTML =
             "Phone number is not valid";
-          document.getElementById(`${fields[i]}_error`).style.visibility =
-            "visible";
+          document.getElementById(`${fields[i]}_error`).style.display =
+          "contents";
           document.getElementById(fields[i]).focus();
           error = true;
         }
       } else if (data[fields[i]] === "") {
-        document.getElementById(`${fields[i]}_error`).style.visibility =
-          "visible";
+        document.getElementById(`${fields[i]}_error`).style.display =
+        "contents";
         document.getElementById(fields[i]).focus();
         error = true;
       }
@@ -160,7 +160,7 @@ function CreateCompany() {
             value={data.company_name}
             onChange={changeHandler}
           />
-          <div className="input_error_msg" id="company_name_error">
+          <div className="login_input_error_msg" id="company_name_error">
             Company name is required
           </div>
         </div>
@@ -176,7 +176,7 @@ function CreateCompany() {
                 onChange={changeHandler}
                 disabled={!edit}
               />
-              <div className="input_error_msg" id="dob_error">
+              <div className="login_input_error_msg" id="dob_error">
                 Contact Number is required
               </div>
             </div>
@@ -193,7 +193,7 @@ function CreateCompany() {
                 id="gender"
                 disabled={!edit}
               />
-              <div className="input_error_msg" id="gender_error">
+              <div className="login_input_error_msg" id="gender_error">
                 Official Email is required
               </div>
             </div>
@@ -211,7 +211,7 @@ function CreateCompany() {
                 id="gender"
                 disabled={!edit}
               />
-              <div className="input_error_msg" id="gender_error">
+              <div className="login_input_error_msg" id="gender_error">
                 Name is required
               </div>
             </div>
@@ -226,7 +226,7 @@ function CreateCompany() {
             id="industry"
             onChange={changeHandler}
           />
-          <div className="input_error_msg" id="industry_error">
+          <div className="login_input_error_msg" id="industry_error">
             Industry is required
           </div>
         </div>
@@ -245,7 +245,7 @@ function CreateCompany() {
             id="gstin_no"
             disabled={!edit}
           />
-          <div className="input_error_msg" id="gstin_no_error">
+          <div className="login_input_error_msg" id="gstin_no_error">
             GSTIN No is required
           </div>
         </div>
@@ -262,7 +262,7 @@ function CreateCompany() {
             placeholder="Ex: 2019"
             disabled={!edit}
           />
-          <div className="input_error_msg" id="experience_error">
+          <div className="login_input_error_msg" id="experience_error">
             Experience is required
           </div>
         </div>

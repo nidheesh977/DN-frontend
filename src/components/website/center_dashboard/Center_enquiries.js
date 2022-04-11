@@ -72,6 +72,7 @@ export default function BasicTable() {
             <TableCell  style={{fontFamily: "muli-bold"}}>Name</TableCell>
             <TableCell  style={{fontFamily: "muli-bold"}}>Email Id</TableCell>
             <TableCell  style={{fontFamily: "muli-bold"}}>PhoneNo</TableCell>
+            <TableCell  style={{fontFamily: "muli-bold"}}>Created At</TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TableHead>
@@ -89,6 +90,10 @@ export default function BasicTable() {
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.emailId}</TableCell>
                     <TableCell>{item.phoneNo}</TableCell>
+                    {
+                      item.createdAt ? <TableCell>{item.createdAt.slice(0,10)}</TableCell> : <></>
+                    }
+                    
                     <TableCell><img src={View} style={{height:"30px"}} onClick={()=>showPopupwithData(item.name, item.emailId, item.phoneNo, item.message)}/></TableCell>
                     
       

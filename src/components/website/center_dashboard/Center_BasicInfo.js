@@ -585,9 +585,9 @@ function Center_BasicInfo() {
               focusField = fields[i];
             }
           }
-          if ((fields[i] === "description" && data.description.length > 500) || (fields[i] === "description" && data.description.length < 200) ) {
+          if ((fields[i] === "description" && data.description.length > 1500) || (fields[i] === "description" && data.description.length < 200) ) {
             error = true;
-            document.getElementById(`${fields[i]}_error`).innerText = "Description must be between 200 and 500 characters"
+            document.getElementById(`${fields[i]}_error`).innerText = "Description must be between 200 and 1500 characters"
             document.getElementById(`${fields[i]}_error`).style.display = "contents";
             console.log(focusField);
             if (focusField === "") {
@@ -777,10 +777,9 @@ function Center_BasicInfo() {
                       Email ID
                     </div>
                   </label>
-                  {data.userEmail === localStorage.getItem("oldEmail") ? (
+                  {/* {data.email !== localStorage.getItem("oldEmail") ? (
                     <div className="pd_b_i_profile_verify">Verify</div>
-                    ) : ( <></>
-                  )}
+                    ) : ( <></> )} */}
                 </div>
               </div>
               <input

@@ -13,6 +13,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@mui/material": "^5.3.1",
+    "@splidejs/react-splide": "^0.7.3",
     "@stripe/react-stripe-js": "^1.4.0",
     "@stripe/stripe-js": "^1.13.1",
     "@syncfusion/ej2-react-navigations": "^18.4.33",

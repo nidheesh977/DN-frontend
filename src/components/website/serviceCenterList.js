@@ -677,7 +677,7 @@ class ServiceCenters extends Component {
                   className="s_c_filter_container"
                   onMouseOver={() => this.setState({ showBrandFilter: true })}
                 >
-                  Choose Brands
+                  Choose Models
                   <img
                     src={DropDownPng}
                     alt=""

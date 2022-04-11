@@ -73,18 +73,19 @@ class CreateServiceCenter extends Component {
       fileSizeExceed: false,
       imgWidthHightError: false,
       saving: false,
-      saveError: false
+      saveError: false,
     };
   }
 
-  componentDidMount(){
-    axios.get(`${domain}/api/brand/getBrands`)
-    .then(res =>{
-      var result = res.data.map(function(brand) {return brand.brand;});
+  componentDidMount() {
+    axios.get(`${domain}/api/brand/getBrands`).then((res) => {
+      var result = res.data.map(function (brand) {
+        return brand.brand;
+      });
       this.setState({
-        suggestedBrands: result
-      })
-    })
+        suggestedBrands: result,
+      });
+    });
   }
 
   addPhoto = async (e) => {
@@ -124,35 +125,34 @@ class CreateServiceCenter extends Component {
     //   }
     // } catch {}
     try {
-      var files = []
-      for (var i = 0; i < e.target.files.length; i++){
-        if (e.target.files[i].size / 1000000 <= 2){
-          files.push(e.target.files[i])
-        }else{
+      var files = [];
+      for (var i = 0; i < e.target.files.length; i++) {
+        if (e.target.files[i].size / 1000000 <= 2) {
+          files.push(e.target.files[i]);
+        } else {
           this.setState({
-            fileSizeExceed: true
-          })
+            fileSizeExceed: true,
+          });
         }
-        if(files.size >= 6){
+        if (files.size >= 6) {
           this.setState({
-            imgCountErr: true
-          })
-          break
+            imgCountErr: true,
+          });
+          break;
         }
       }
-      console.log(e.target.files)
+      console.log(e.target.files);
       if (this.state.photo_row.length + files.length <= 6) {
-        this.setState({ photo_row: [...this.state.photo_row, ...files] })
+        this.setState({ photo_row: [...this.state.photo_row, ...files] });
         this.refs.add_photo.value = "";
-        document.getElementById("photos_error").style.display = "none"
-      }
-      else {
+        document.getElementById("photos_error").style.display = "none";
+      } else {
         this.setState({
           imgCountErr: true,
         });
         this.refs.add_photo.value = "";
       }
-    }catch{}
+    } catch {}
   };
 
   showRemoveIcon = (id) => {
@@ -172,12 +172,15 @@ class CreateServiceCenter extends Component {
   };
 
   handleChange = (e, field) => {
-    document.getElementById(`${field}_error`).style.display = "none";
+    if (field !== "brand") {
+      document.getElementById(`${field}_error`).style.display = "none";
+    }
     this.setState({
       [field]: e.target.value,
     });
     console.log(this.state);
   };
+
   handleChange1 = (address) => {
     this.setState({ address: address });
     document.getElementById(`address_error`).style.display = "none";
@@ -191,7 +194,7 @@ class CreateServiceCenter extends Component {
       .then((results) => getLatLng(results[0]))
       .then((latLng) => console.log("Success", latLng))
       .catch((error) => console.error("Error", error));
-      document.getElementById(`address_error`).style.display = "none";
+    document.getElementById(`address_error`).style.display = "none";
   };
 
   phoneChangeHandler = (e) => {
@@ -281,6 +284,7 @@ class CreateServiceCenter extends Component {
           if (focusField === "") {
             focusField = "brand";
           }
+          console.log(this.state.brands);
         }
         if (fields[i] === "photos" && this.state.photo_row.length <= 0) {
           document.getElementById(`photos_error`).style.display = "contents";
@@ -322,14 +326,22 @@ class CreateServiceCenter extends Component {
           focusField = "established_year";
         }
       }
+      if (fields[i] === "working_till" && this.state.working_till <= this.state.working_from && this.state.working_till !== ""){
+        document.getElementById(`working_till_error`).style.display = "contents";
+        document.getElementById(`working_till_error`).innerText = "Invalid time";
+        error = true;
+        if (focusField === "") {
+          focusField = "working_till";
+        }
+      }
       if (
         fields[i] === "description" &&
         (this.state.description.length < 200 ||
-          this.state.description.length > 500)
+          this.state.description.length > 1500)
       ) {
         document.getElementById(`description_error`).style.display = "contents";
         document.getElementById(`description_error`).innerText =
-          "Description minimum 200 characters and maximum 500 characters";
+          "Description minimum 200 characters and maximum 1500 characters";
         error = true;
         if (focusField === "") {
           focusField = "description";
@@ -392,25 +404,27 @@ class CreateServiceCenter extends Component {
       // formData.append("file", this.state.photos);
       formData.append("holidays", this.state.holidays);
       this.setState({
-        saving: true
-      })
-      axios
-        .post(`${domain}/api/center/createServiceCenter`, formData, config)
-        .then((res) => {
-          console.log(res.data);
-          this.setState({
-            saving: false
-          })
-          localStorage.setItem("role", "service_center")
-          this.props.history.push("/center_dashboard/account")
-        })
-        .catch((err) => {
-          console.log(err.response);
-          this.setState({
-            saving: false,
-            saveError: true
-          })
-        });
+        saving: true,
+      });
+
+      console.log(this.state.working_till)
+      // axios
+      //   .post(`${domain}/api/center/createServiceCenter`, formData, config)
+      //   .then((res) => {
+      //     console.log(res.data);
+      //     this.setState({
+      //       saving: false,
+      //     });
+      //     localStorage.setItem("role", "service_center");
+      //     this.props.history.push("/center_dashboard/account");
+      //   })
+      //   .catch((err) => {
+      //     console.log(err.response);
+      //     this.setState({
+      //       saving: false,
+      //       saveError: true,
+      //     });
+      //   });
     }
   };
 
@@ -425,7 +439,7 @@ class CreateServiceCenter extends Component {
           brands: [...prevState.brands, prevState.brand],
           brand: "",
         }));
-        document.getElementById(`brand_error`).style.visibility = "hidden";
+        document.getElementById(`brand_error`).style.display = "none";
       }
     }
   };
@@ -553,7 +567,7 @@ class CreateServiceCenter extends Component {
                     getSuggestionItemProps,
                     loading,
                   }) => (
-                    <div style = {{position: "relative"}}>
+                    <div style={{ position: "relative" }}>
                       <input
                         {...getInputProps({
                           placeholder: "Search Places ...",
@@ -569,12 +583,12 @@ class CreateServiceCenter extends Component {
                           fontSize: "16px",
                         }}
                       />
-                      {suggestions.length > 0 &&
+                      {suggestions.length > 0 && (
                         <div
                           className="autocomplete-dropdown-container"
                           style={{
                             width: "calc(100% - 40px)",
-                            
+
                             position: "absolute",
                             top: "calc(100% - 30px)",
                             zIndex: 1000,
@@ -585,7 +599,7 @@ class CreateServiceCenter extends Component {
                             overflow: "hidden",
                             borderEndStartRadius: "10px",
                             borderEndEndRadius: "10px",
-                            background: "white"
+                            background: "white",
                           }}
                         >
                           {loading && <div>Loading...</div>}
@@ -595,8 +609,16 @@ class CreateServiceCenter extends Component {
                               : "suggestion-item";
                             // inline style for demonstration purpose
                             const style = suggestion.active
-                              ? { backgroundColor: "#e1e1e1", cursor: "pointer", padding: "10px 20px", }
-                              : { backgroundColor: "#ffffff", cursor: "pointer", padding: "10px 20px", };
+                              ? {
+                                  backgroundColor: "#e1e1e1",
+                                  cursor: "pointer",
+                                  padding: "10px 20px",
+                                }
+                              : {
+                                  backgroundColor: "#ffffff",
+                                  cursor: "pointer",
+                                  padding: "10px 20px",
+                                };
                             return (
                               <div
                                 {...getSuggestionItemProps(suggestion, {
@@ -609,7 +631,7 @@ class CreateServiceCenter extends Component {
                             );
                           })}
                         </div>
-                      }
+                      )}
                     </div>
                   )}
                 </PlacesAutocomplete>
@@ -881,21 +903,21 @@ class CreateServiceCenter extends Component {
                 Photos is required
               </div>
               <div className="pd_b_i_notifications_save">
-                {this.state.saving 
-                ?<button
-                className="pd_b_i_notifications_saveBtn"
-                style = {{display: "flex"}}
-              >
-                <Loader /> Saving
-              </button>
-              :<button
-              className="pd_b_i_notifications_saveBtn"
-              onClick={this.saveChanges}
-            >
-              Create center
-            </button>
-              }
-                
+                {this.state.saving ? (
+                  <button
+                    className="pd_b_i_notifications_saveBtn"
+                    style={{ display: "flex" }}
+                  >
+                    <Loader /> Saving
+                  </button>
+                ) : (
+                  <button
+                    className="pd_b_i_notifications_saveBtn"
+                    onClick={this.saveChanges}
+                  >
+                    Create center
+                  </button>
+                )}
               </div>
             </Col>
           </Row>

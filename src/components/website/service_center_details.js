@@ -47,6 +47,8 @@ import { Item } from "semantic-ui-react";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import Countries from "../../apis/country.json";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/react-splide/dist/css/splide.min.css";
 
 const styles = (theme) => ({
   root: {
@@ -527,8 +529,11 @@ export default function ServiceCenterDetails(props) {
         // setData({response})
         setDetails(response.data);
         // setStatus(response.status);
-        let  address1 = response.data.address.split(",");
-        setAddress(address1)
+        let address1 = "";
+        try {
+          address1 = response.data.address.split(",");
+        } catch {}
+        setAddress(address1);
 
         console.log(response.data);
         setBrands(response.data.brandOfDrones);
@@ -629,13 +634,21 @@ export default function ServiceCenterDetails(props) {
                 {centers.includes(param.id) ? (
                   <img
                     src={BookmarkFilled}
-                    style={{ width: "40px", marginLeft: "20px" }}
+                    style={{
+                      width: "40px",
+                      marginLeft: "20px",
+                      cursor: "pointer",
+                    }}
                     onClick={unbookmark}
                   />
                 ) : (
                   <img
                     src={Bookmark}
-                    style={{ width: "40px", marginLeft: "20px" }}
+                    style={{
+                      width: "40px",
+                      marginLeft: "20px",
+                      cursor: "pointer",
+                    }}
                     onClick={bookmark}
                   />
                 )}
@@ -685,7 +698,7 @@ export default function ServiceCenterDetails(props) {
                 {/* </div> */}
               </span>
 
-              <span style = {{cursor: "pointer"}}>
+              <span style={{ cursor: "pointer" }}>
                 <a
                   className="s_c_d_links"
                   onClick={() => {
@@ -726,7 +739,7 @@ export default function ServiceCenterDetails(props) {
                     );
                   })}
                   <a
-                  style = {{cursor: "pointer"}}
+                    style={{ cursor: "pointer" }}
                     className="s_c_d_links"
                     onClick={() => {
                       selectTab("s_c_d_brands_tab", "s_c_d_brands_container");
@@ -995,26 +1008,34 @@ export default function ServiceCenterDetails(props) {
                     </div>
                   </a>{" "}
                   {details.secondaryNumber ? "," : ""}{" "}
-                  {details.secondaryNumber ? <a href={`tel:${details.secondaryNumber}`}>
-                    {" "}
-                    <div
-                      className="s_c_other_details_phone"
-                      style={{ fontSize: "14px", display: "inline-block" }}
-                    >
-                      {details.secondaryNumber}{" "}
-                    </div>
-                  </a> : <></>}
+                  {details.secondaryNumber ? (
+                    <a href={`tel:${details.secondaryNumber}`}>
+                      {" "}
+                      <div
+                        className="s_c_other_details_phone"
+                        style={{ fontSize: "14px", display: "inline-block" }}
+                      >
+                        {details.secondaryNumber}{" "}
+                      </div>
+                    </a>
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 <div className="s_c_d_contact_details_title">Email ID:</div>
                 <div className="s_c_d_contact_details_content">
-                  <a href = {`mailto:${details.email}`} target = "_blank">{details.email}</a>
+                  <a href={`mailto:${details.email}`} target="_blank">
+                    {details.email}
+                  </a>
                 </div>
                 {details.website ? (
                   <>
                     {" "}
                     <div className="s_c_d_contact_details_title">Website:</div>
                     <div className="s_c_d_contact_details_content">
-                      <a href = {`https://${details.website}`} target = "_blank">{details.website}</a>
+                      <a href={`https://${details.website}`} target="_blank">
+                        {details.website}
+                      </a>
                     </div>{" "}
                   </>
                 ) : (
@@ -1044,40 +1065,53 @@ export default function ServiceCenterDetails(props) {
 
                 <div className="s_c_d_contact_details_title">Address</div>
                 <div className="s_c_d_contact_details_content">
-               {details.streetName}, {details.address}
+                  {details.streetName}, {details.address}
                 </div>
 
-                <div className="s_c_d_contact_details_title">Established Year</div>
+                <div className="s_c_d_contact_details_title">
+                  Established Year
+                </div>
                 <div className="s_c_d_contact_details_content">
-               {details.establishedYear}
+                  {details.establishedYear}
                 </div>
 
-{/* 
+                {/* 
                 <iframe src="https://maps.google.com/maps?q=11.5401325,76.4762961&hl=es&z=14&amp;output=embed" style={{width: "200px"}} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> */}
               </div>
               <div id="s_c_d_photos">
-                <div className="s_c_d_photos_title">Photos</div>
-                <div className="s_c_d_photos_list">
-                  <Row gutterWidth={20}>
-                    {details.images ? (
-                      details.images.map((photo, index) => {
-                        return (
-                          <Col xs={4} style={{ marginBottom: "20px" }}>
-                            <img
-                              src={`${photo}`}
-                              alt=""
-                              width={"100%"}
-                              style={{ borderRadius: "5px" }}
-                              onClick={() => modelPopup(index)}
-                            />
-                          </Col>
-                        );
-                      })
+                {details.images ? (
+                  <>
+                    {details.images.length ? (
+                      <div className="s_c_d_photos_title">Photos</div>
                     ) : (
-                      <></>
+                      ""
                     )}
-                  </Row>
-                </div>
+
+                    <div className="s_c_d_photos_list">
+                      <Row gutterWidth={20}>
+                        {details.images ? (
+                          details.images.map((photo, index) => {
+                            return (
+                              <Col xs={4} style={{ marginBottom: "20px" }}>
+                                <img
+                                  src={`${photo}`}
+                                  alt=""
+                                  width={"100%"}
+                                  style={{ borderRadius: "5px" }}
+                                  onClick={() => modelPopup(index)}
+                                />
+                              </Col>
+                            );
+                          })
+                        ) : (
+                          <></>
+                        )}
+                      </Row>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
               </div>
             </Col>
           </Row>
@@ -1265,11 +1299,11 @@ export default function ServiceCenterDetails(props) {
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
           fullWidth={true}
-          PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
+          PaperProps={{ style: { borderRadius: 10, width: "820px"} }}
         >
           <DialogContent
             className={All.PopupBody}
-            style={{ marginBottom: "50px" }}
+            style={{ marginBottom: "50px"}}
           >
             <div style={{ position: "absolute", top: "20px", right: "20px" }}>
               <img
@@ -1330,10 +1364,11 @@ export default function ServiceCenterDetails(props) {
                   >
                     {details.centerName}
                   </div>
-                  <div className="center_img_model">
+                  {/* <div className="center_img_model">
                     <div
                       className="center_previous_icon"
                       onClick={selectPreviousImg}
+                      style = {{cursor: "pointer"}}
                     >
                       <i
                         class="fas fa-angle-left"
@@ -1347,14 +1382,29 @@ export default function ServiceCenterDetails(props) {
                         height="400px"
                       />
                     </div>
-                    <div className="center_next_icon" onClick={selectNextImg}>
+                    <div className="center_next_icon" onClick={selectNextImg} style = {{cursor: "pointer"}}>
                       <i
                         class="fas fa-angle-right"
                         style={{ fontSize: "50px" }}
                       ></i>
                     </div>
+                  </div> */}
+                  <div className="center_img_model">
+                  <Splide aria-label="My Favorite Images"
+                    options={{
+                      type: "loop"
+                    }}
+                  >
+                    {details.images.map((image, index) => {
+                      return (
+                        <SplideSlide style = {{textAlign: "center"}}>
+                          <img src={image} alt="" height="500px" />
+                        </SplideSlide>
+                      );
+                    })}
+                  </Splide>
                   </div>
-                  <div style={{ width: "100%", textAlign: "center" }}>
+                  {/* <div style={{ width: "100%", textAlign: "center" }}>
                     {details.images.map((image, index) => {
                       return (
                         <div
@@ -1370,6 +1420,7 @@ export default function ServiceCenterDetails(props) {
                             paddingTop: "3px",
                             paddingRight: "3px",
                             paddingLeft: "3px",
+                            cursor: "pointer",
                           }}
                           onClick={() => setModelImgId(index)}
                         >
@@ -1383,7 +1434,7 @@ export default function ServiceCenterDetails(props) {
                         </div>
                       );
                     })}
-                  </div>
+                  </div> */}
                 </>
               )}
             </Row>
