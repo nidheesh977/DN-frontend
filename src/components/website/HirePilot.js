@@ -355,8 +355,9 @@ closeProcess1 = () =>{
       console.log(res)
       this.setState({
         myFolders: res.data,
-        selectedFolder: res.data[0]._id
+        selectedFolder: res.data.length > 0 ? res.data[0]._id :""
       })
+      
       // document.getElementById(`folder/${this.state.selectedFolder}`).style.border = "1px solid red"
     })
 

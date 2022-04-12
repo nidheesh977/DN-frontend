@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Card from "@material-ui/core/Card";
 import { Row, Col } from "react-grid-system";
+import { useHistory } from "react-router-dom";
 import CardContent from "@material-ui/core/CardContent";
 import All from "../../website/All.module.css";
 import "./css/SavedFolders.css";
@@ -26,6 +27,7 @@ const customStyles = {
 const domain = process.env.REACT_APP_MY_API;
 
 function Company_savedPilots() {
+  let history = useHistory();
   let config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -54,7 +56,9 @@ function Company_savedPilots() {
   let closeAddFolder = () => {
     setAddFolder(false);
   };
-
+let moveToFolder = (id) =>{
+  history.push(`/company_dashboard/activities/savedPilots/${id}`)
+}
   let submitCreateFolder = () => {
     if (foldername == "" || foldername.length >= 100) {
       document.getElementById("name").style.backgroundColor = "#ffcccb";
@@ -85,7 +89,7 @@ function Company_savedPilots() {
           return (
             <>
               <Col xl={4} xs={6}>
-                <Card style={{ cursor: "pointer", marginBottom: "15px" }}>
+                <Card style={{ cursor: "pointer", marginBottom: "15px" }} onClick={()=>moveToFolder(item._id)}>
                   <CardContent>
                     <div className="folderTitle">
                       {item.folderName.length < 15
