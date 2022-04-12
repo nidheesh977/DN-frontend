@@ -66,7 +66,7 @@ function Company_pendingJobs() {
                         ${items.minSalary}.00 - ${items.maxSalary}.00
                       </div>
                     </div>
-                    <div className="a_j_listing_text">{items.jobDesc}</div>
+                    <div className="a_j_listing_text">{items.jobDesc.slice(0,150)} {items.jobDesc.length > 150 && "..."}</div>
                   </div>
                   <div
                     className="a_j_listing_btns"

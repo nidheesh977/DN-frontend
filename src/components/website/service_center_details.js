@@ -15,6 +15,11 @@ import IconButton from "@material-ui/core/IconButton";
 import ProfileImg from "../ProfileImg/Profile";
 import CoverImg from "../ProfileCoverImg/ProfileCoverImg";
 import Close from "../images/close.svg";
+import onestar from "../images/rating1.jpg";
+import twostar from "../images/rating2.jpg";
+import threestar from "../images/rating3.jpg";
+import fourstar from "../images/rating4.jpg";
+import fivestar from "../images/rating5.jpg";
 import Loader from "../Loader/loader";
 
 import FollowBtn from "../tabs/FollowBtn";
@@ -1226,7 +1231,7 @@ export default function ServiceCenterDetails(props) {
                   <div
                     className="s_c_d_rating_form_emoji_pic"
                     onClick={() => setNewRating(1)}
-                  ></div>
+                  ><img src={onestar} alt="" height={"100%"}/></div>
                   <div
                     className={
                       newRating == 1 && "s_c_d_rating_form_emoji_selector1"
@@ -1237,7 +1242,7 @@ export default function ServiceCenterDetails(props) {
                   <div
                     className="s_c_d_rating_form_emoji_pic"
                     onClick={() => setNewRating(2)}
-                  ></div>
+                  ><img src={twostar} alt="" height={"100%"}/></div>
                   <div
                     className={
                       newRating == 2 && "s_c_d_rating_form_emoji_selector2"
@@ -1248,7 +1253,7 @@ export default function ServiceCenterDetails(props) {
                   <div
                     className="s_c_d_rating_form_emoji_pic"
                     onClick={() => setNewRating(3)}
-                  ></div>
+                  ><img src={threestar} alt="" height={"100%"}/></div>
                   <div
                     className={
                       newRating == 3 && "s_c_d_rating_form_emoji_selector3"
@@ -1259,7 +1264,7 @@ export default function ServiceCenterDetails(props) {
                   <div
                     className="s_c_d_rating_form_emoji_pic"
                     onClick={() => setNewRating(4)}
-                  ></div>
+                  ><img src={fourstar} alt="" height={"100%"}/></div>
                   <div
                     className={
                       newRating == 4 && "s_c_d_rating_form_emoji_selector4"
@@ -1270,7 +1275,7 @@ export default function ServiceCenterDetails(props) {
                   <div
                     className="s_c_d_rating_form_emoji_pic"
                     onClick={() => setNewRating(5)}
-                  ></div>
+                  ><img src={fivestar} alt="" height={"100%"}/></div>
                   <div
                     className={
                       newRating == 5 && "s_c_d_rating_form_emoji_selector5"

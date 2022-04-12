@@ -276,7 +276,7 @@
   width: 20px;
   border-radius: 10px;
   margin-top: 10px;
-  background-color: red;
+  background-color: #eb3a3b;
   margin-left: auto;
   margin-right: auto;
 }
@@ -286,7 +286,7 @@
   width: 20px;
   border-radius: 10px;
   margin-top: 10px;
-  background-color: rgb(255, 94, 0);
+  background-color: #f07100;
   margin-left: auto;
   margin-right: auto;
 }
@@ -296,7 +296,7 @@
   width: 20px;
   border-radius: 10px;
   margin-top: 10px;
-  background-color: rgb(255, 196, 0);
+  background-color: #ffbc09;
   margin-left: auto;
   margin-right: auto;
 }
@@ -306,7 +306,7 @@
   width: 20px;
   border-radius: 10px;
   margin-top: 10px;
-  background-color: rgb(217, 255, 0);
+  background-color: #d3dd30;
   margin-left: auto;
   margin-right: auto;
 }
@@ -316,7 +316,7 @@
   width: 20px;
   border-radius: 10px;
   margin-top: 10px;
-  background-color: rgb(115, 255, 0);
+  background-color: #87c149;
   margin-left: auto;
   margin-right: auto;
 }
