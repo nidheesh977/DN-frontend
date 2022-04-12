@@ -94,7 +94,7 @@ export default function BasicTable() {
                       item.createdAt ? <TableCell>{item.createdAt.slice(0,10)}</TableCell> : <></>
                     }
                     
-                    <TableCell><img src={View} style={{height:"30px"}} onClick={()=>showPopupwithData(item.name, item.emailId, item.phoneNo, item.message)}/></TableCell>
+                    <TableCell><img src={View} style={{height:"30px", cursor: "pointer"}} onClick={()=>showPopupwithData(item.name, item.emailId, item.phoneNo, item.message)}/></TableCell>
                     
       
                     

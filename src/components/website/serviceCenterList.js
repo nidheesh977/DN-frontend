@@ -773,6 +773,7 @@ class ServiceCenters extends Component {
                     height: "30px",
                     width: "30px",
                     top: "10px",
+                    cursor: "pointer"
                   }}
                   onClick={this.searchFilters}
                 />
