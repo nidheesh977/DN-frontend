@@ -14,6 +14,7 @@ import All from '../../website/All.module.css'
 import Company_applications from "./Company_applications";
 import SentProposals from "./SentProposals";
 import Company_Likes from "./Company_Likes";
+import Company_Folders from "./Company_Folders"
 import Company_following from "./Company_following";
 import Company_bookmarks from "./Company_Bookmarks";
 
@@ -118,7 +119,7 @@ class Activities_Sidebar extends React.Component {
                   {" "}
                   <NavLink
                     activeClassName="h_p_sidebar_active"
-                    to="/company_dashboard/activities/savedPilots"
+                    to="/company_dashboard/activities/savedPilots/"
                   >
                     Saved Pilots
                   </NavLink>
@@ -239,10 +240,7 @@ class Activities_Sidebar extends React.Component {
 
         <Col>
           <Switch>
-            <Route
-              path="/company_dashboard/activities/savedPilots"
-              component={Company_savedPilots}
-            />
+            
             <Route
               path="/company_dashboard/activities/received"
               component={Company_received}
@@ -264,6 +262,11 @@ class Activities_Sidebar extends React.Component {
               component={Company_hired}
             />
             <Route
+              path="/company_dashboard/activities/savedPilots/:id"
+              component={Company_Folders}
+            />
+            
+            <Route
               path="/company_dashboard/activities/following"
               component={Company_following}
             />
@@ -279,7 +282,10 @@ class Activities_Sidebar extends React.Component {
               path="/company_dashboard/activities/downloads"
               component={Company_downloads}
             />
-          
+          <Route
+              path="/company_dashboard/activities/savedPilots/"
+              component={Company_savedPilots}
+            />
           </Switch>
         </Col>
       </Row>

@@ -4,14 +4,33 @@ import locationIcon from "../../images/s_c_location.svg";
 import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import "./css/Company_savedPilots.css";
 import loadMore from "../../images/Group 71.svg";
+import axios from "axios";
 
+const domain = process.env.REACT_APP_MY_API
 
 export class Company_savedPilots extends Component {
+  componentDidMount(){
+    axios.post(`${domain}/api/savePilot/getSavedPilots`,{folderId: this.props.match.params.id}).then(res=>{
+      console.log(res)
+      this.setState({
+        pilots: res.data
+      })
+    })
+
+    axios.post(`${domain}/api/folder/getFolderData`,{folderId: this.props.match.params.id}).then(res=>{
+      console.log(res)
+      this.setState({
+        folderData: res.data
+      })
+    })
+  }
   constructor(props) {
     super(props);
     this.state = {
       data: [
         {
+          pilots: [],
+          folderData: {},
           keywords: [
             "Areal View",
             "Agriculture",
@@ -146,7 +165,14 @@ export class Company_savedPilots extends Component {
   }
   render() {
     return (
-      <div>
+      <div>{
+        <>
+        <div style={{fontFamily: "muli-bold", fontSize: "24px"}}>{this.state.folderData ? this.state.folderData.folderName : ""}</div>
+        <div style={{fontFamily: "muli-regular", fontSize: "18px", margin: "15px 0px"}}>{this.state.folderData ? this.state.folderData.description : ""}</div>
+        </>
+        }
+        
+
         {this.state.data.map((item, i) => {
           return (
             <div key={i}>
@@ -424,81 +450,7 @@ export class Company_savedPilots extends Component {
         </button>{" "}
       </div>
 
-      <Dialog
-                  open={addFolder}
-                  onClose={this.closeEnquiry1}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                  maxWidth={"md"}
-                  fullWidth={true}
-                  PaperProps={{
-                    style: { width: "620px", borderRadius: "10px" },
-                  }}
-                >
-                  <DialogContent
-                    className={All.PopupBody}
-                    style={{ marginBottom: "50px" }}
-                  >
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "20px",
-                        right: "20px",
-                      }}
-                    >
-                      <img
-                        src={Close}
-                        alt=""
-                        onClick={this.closeEnquiry1}
-                        style={{ cursor: "pointer" }}
-                      />
-                    </div>
-                    <div style={{ marginTop: "30px" }}>
-                      <div className="sc_popup_head">
-                        Create an Folder
-                      </div>
-                      <div className="sc_popup_desc">
-                        Enter the below details to create a folder{" "}
-                      </div>
-                      <div className="sc_popup_input_label">Folder Name</div>
-                      <input
-                        type="text"
-                        className="sc_popup_input"
-                        name="name"
-                        id="name"
-                        
-                      />
-                      <div
-                        className="login_input_error_msg"
-                        id="name_error"
-                      ></div>
-                      <div className="sc_popup_input_label">Description</div>
-                      <input
-                        type="text"
-                        className="sc_popup_input"
-                        name="description"
-                        id="description"
-                    
-                      />
-                      <div
-                        className="login_input_error_msg"
-                        id="phone_error"
-                      ></div>
-                      <div style={{ width: "100%", textAlign: "center" }}>
-                      <div>
-
-                            <button
-                              className="sc_popup_submit"
-                              onClick={this.captureEnquiry}
-                            >
-                              Submit
-                            </button>
-                         
-                      </div>
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+     
 
       </div>
     );

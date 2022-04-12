@@ -408,23 +408,23 @@ class CreateServiceCenter extends Component {
       });
 
       console.log(this.state.working_till)
-      // axios
-      //   .post(`${domain}/api/center/createServiceCenter`, formData, config)
-      //   .then((res) => {
-      //     console.log(res.data);
-      //     this.setState({
-      //       saving: false,
-      //     });
-      //     localStorage.setItem("role", "service_center");
-      //     this.props.history.push("/center_dashboard/account");
-      //   })
-      //   .catch((err) => {
-      //     console.log(err.response);
-      //     this.setState({
-      //       saving: false,
-      //       saveError: true,
-      //     });
-      //   });
+      axios
+        .post(`${domain}/api/center/createServiceCenter`, formData, config)
+        .then((res) => {
+          console.log(res.data);
+          this.setState({
+            saving: false,
+          });
+          localStorage.setItem("role", "service_center");
+          this.props.history.push("/center_dashboard/account");
+        })
+        .catch((err) => {
+          console.log(err.response);
+          this.setState({
+            saving: false,
+            saveError: true,
+          });
+        });
     }
   };
 
