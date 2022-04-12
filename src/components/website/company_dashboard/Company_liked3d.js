@@ -14,8 +14,8 @@ import person from "../../images/profile.svg"
 import Heart from "./images/heart-green.png"
 import axios from "axios";
 
-const domain = process.env.REACT_APP_MY_API
 
+const domain = process.env.REACT_APP_MY_API
 
 
 function mouseGotIN(id) {
@@ -32,7 +32,7 @@ function mouseGotOut(id) {
 }
 
 
-function Company_downloadsImages() {
+function Company_likes3d() {
   let config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -40,7 +40,7 @@ function Company_downloadsImages() {
   };
 let [media, setMedia] = useState([])
   useEffect(()=>{
-    axios.post(`${domain}/api/pilot/getDownloadedMedia`, config).then(res =>{
+    axios.post(`${domain}/api/pilot/getLikedMedia`, config).then(res =>{
       console.log(res.data)
       setMedia(res.data)
       if(res.data.length === 0){
@@ -51,12 +51,12 @@ let [media, setMedia] = useState([])
  
   return (
     <div>
-      <div id="toHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", marginTop:"35px", display:"none"}}>No Downloaded Images, Download and check back</div>
+      <div id="toHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", marginTop:"35px", display:"none"}}>No Liked 3D Images, Like and check back</div>
         <Row gutterWidth={12}>
           {media.map((item, i) => {
             return (
               <>
-              { item.fileType === "image" ?
+              { item.fileType === "3d" ?
               
               <Col  xl={4} lg={6} md={4} sm={6} xs={12}>
 
@@ -99,4 +99,4 @@ let [media, setMedia] = useState([])
   );
 }
 
-export default Company_downloadsImages;
+export default Company_likes3d;

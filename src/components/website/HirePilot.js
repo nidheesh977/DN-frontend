@@ -19,6 +19,7 @@ import { Helmet } from "react-helmet";
 import Close from "../images/close.svg";
 import axios from 'axios';
 import Skeleton from "react-loading-skeleton";
+import AddFolder from "../images/addFolder1.png"
 
 const domain = process.env.REACT_APP_MY_API
 
@@ -115,10 +116,21 @@ class HirePilot extends Component {
       loading: true,
       after_response: false,
       message: "",
-      id2:""
+      id2:"",
+      savePilot: false,
+      myFolders: [],
+      selectedFolder: "",
+      addFolder: false,
+      name: "",
+      description:"",
+      selectedPilot: ""
     }
   }
-
+  folderChangeHandler = (e) =>{
+    this.setState({
+      [e.target.name] : e.target.value
+    })
+  }
   showJobSave = () => {
     this.setState({
       jobSaved: true
@@ -144,6 +156,11 @@ class HirePilot extends Component {
       pilot_list: pilot_list
     })
     console.log(pilot_list)
+  }
+  closeSavePilot = () =>{
+    this.setState({
+      savePilot : false
+    })
   }
 
   dropdown = (tab) => {
@@ -206,6 +223,13 @@ class HirePilot extends Component {
       id2: id1
     })
   }
+
+  clickStartProcess1 = (id1) => {
+    this.setState({
+      savePilot: true,
+      selectedPilot: id1
+    })
+  }
 closeProcess1 = () =>{
   this.setState({
     startProcess: false,
@@ -228,13 +252,70 @@ closeProcess1 = () =>{
         this.setState({
           startProcess: false,
           message: ""
+
         })
 
       })
     }
   
   }
-
+  savePilotToFolder = () =>{
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    axios.post(`${domain}/api/savePilot/savePilot`, {pilotId: this.state.selectedPilot, folderId: this.state.selectedFolder}, config).then(res=>{
+      console.log(res)
+      this.setState({
+        savePilot: false
+      })
+    })
+  }
+  addFolderNew = () =>{
+    this.setState({
+      savePilot: false,
+      addFolder: true
+    })
+  }
+  createFolderSavePilot = () =>{
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    if (this.state.name == "" || this.state.name.length >= 100) {
+      document.getElementById("name").style.backgroundColor = "#ffcccb";
+    } else if (this.state.description == "" || this.state.description.length >= 200) {
+      document.getElementById("description").style.backgroundColor = "#ffcccb";
+    } else {
+      axios
+        .post(
+          `${domain}/api/folder/createFolder`,
+          { folderName: this.state.name, description: this.state.description },
+          config
+        )
+        .then((res) => {
+         console.log(res)
+         this.setState({
+           name: "",
+           description: ""
+           
+         })
+         axios.get(`${domain}/api/folder/getMyFolders`, config).then(res=>{
+          console.log(res)
+          this.setState({
+            myFolders: res.data,
+            selectedFolder: res.data[0]._id,
+            addFolder: false
+          })
+          this.setState({
+            savePilot: true
+          })
+        })
+        });
+    }
+  }
   pilotDetailPage = (id) => {
     this.props.history.push("/pilot_details/" + id)
   }
@@ -244,12 +325,22 @@ closeProcess1 = () =>{
       selected_file: e.target.files[0]
     })
   }
+  closeAddFolder = () =>{
+    this.setState({
+      addFolder: false
+    })
+  }
 
   sendMessage = (id) => {
     this.props.history.push("/pilot_details/" + id)
   }
 
   componentDidMount(){
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
     axios.get(`${domain}/api/pilot/hirePilots?${this.state.page}`)
     .then((res)=>{
       this.setState({
@@ -260,6 +351,16 @@ closeProcess1 = () =>{
       console.log(res)
     })
 
+    axios.get(`${domain}/api/folder/getMyFolders`, config).then(res=>{
+      console.log(res)
+      this.setState({
+        myFolders: res.data,
+        selectedFolder: res.data.length > 0 ? res.data[0]._id :""
+      })
+      
+      // document.getElementById(`folder/${this.state.selectedFolder}`).style.border = "1px solid red"
+    })
+
 
   }
   messageHandler = (e) =>{
@@ -268,6 +369,14 @@ closeProcess1 = () =>{
     this.setState({
       message: e.target.value
     })
+  }
+
+  selectFolder = async (id) =>{
+
+   this.setState({
+      selectedFolder : id
+    });
+   
   }
 
   render() {
@@ -528,7 +637,7 @@ closeProcess1 = () =>{
                           </div>
                           <div className="h_p_listing_btn_container">
                             <button className="h_p_start_process_btn" onClick={()=>this.clickStartProcess(pilot._id)}>HirePilot</button>
-                            <button className="h_p_save_pilot_btn" onClick = {this.showJobSave}><i class="fa fa-heart"></i></button>
+                            <button className="h_p_save_pilot_btn" onClick = {()=>this.clickStartProcess1(pilot._id)}><i class="fa fa-heart"></i></button>
                           </div>
                           <div className="h_p_listing_send_msg_link" onClick = {() => this.sendMessage(1)}>Send Message</div>
                         </div>
@@ -645,6 +754,125 @@ closeProcess1 = () =>{
                   </Row>
                 </DialogContent>
               </Dialog>
+
+
+              <Dialog
+                open={this.state.savePilot}
+                onClose={this.closeSavePilot}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+              >
+
+                <DialogContent  style={{ marginBottom: "50px" }}>
+                  <div style={{ position: "absolute", top: '20px', right: '20px' }} onClick={this.closeSavePilot}>
+                    <img src={Close} alt="" onClick={this.closeChoicePopup} style={{ cursor: "pointer" }} />
+                  </div>
+                  <div style={{ position: "absolute", bottom: '10px', right: '20px' }} onClick={this.savePilotToFolder}>
+                    <div className='sc_popup_submit' style={{cursor: "pointer"}}>Save</div>
+                  </div>
+                  <div>
+                    <div className='selectCollection'>Select a collection to Save</div>
+                  <Row style={{ marginTop: "10px", padding:"0px 25px" }}>
+
+{
+  this.state.myFolders.map((item, i)=>{
+    return(
+      <>
+      <Col xl={4}>
+                    <div className="something" style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px", padding:"20px 15px", marginBottom:"15px", cursor:"pointer", border: this.state.selectedFolder == item._id ? '2px solid #00E7FC ': '2px solid white'}} id={`folder/${item._id}`} onClick={()=>this.selectFolder(item._id)} >
+                    <div className="folderTitle">
+                      {item.folderName.length < 15
+                        ? item.folderName
+                        : item.folderName.slice(0, 15) + "..."}
+                    </div>
+                    <div className="folderDesc">
+                      {item.description.length < 40
+                        ? item.description
+                        : item.description.slice(0, 38) + "..."}
+                    </div>
+
+                    </div>
+                    </Col>
+      </>
+    )
+  })
+}
+
+
+                  <Col xl={4}>
+                    <div style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px", padding:"20px 15px"}} className="addFolderBox" >
+                              <img src={AddFolder} onClick={this.addFolderNew}/>
+
+                    </div>
+                    </Col>
+                  </Row>
+                  </div>
+                </DialogContent>
+              </Dialog>
+              <Dialog
+        open={this.state.addFolder}
+        onClose={this.closeAddFolder}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{
+          style: { width: "620px", borderRadius: "10px" },
+        }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: "20px",
+              right: "20px",
+            }}
+          >
+            <img
+              src={Close}
+              alt=""
+              onClick={this.closeAddFolder}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <div style={{ marginTop: "30px" }}>
+            <div className="sc_popup_head">Create Folder</div>
+            <div className="sc_popup_desc">
+              Enter the below details to create a folder{" "}
+            </div>
+            <div className="sc_popup_input_label">Folder Name</div>
+            <input
+              type="text"
+              className="sc_popup_input"
+              name="name"
+              id="name"
+             value={this.state.name}
+             onChange={this.folderChangeHandler}
+            />
+            <div className="login_input_error_msg" id="name_error"></div>
+            <div className="sc_popup_input_label">Description</div>
+            <input
+              type="text"
+              className="sc_popup_input"
+              name="description"
+              id="description"
+              value={this.state.description}
+              onChange={this.folderChangeHandler}
+            />
+            <div className="login_input_error_msg" id="description_error"></div>
+            <div style={{ width: "100%", textAlign: "center" }}>
+              <button className="sc_popup_submit" onClick={this.createFolderSavePilot}>
+                Submit
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
           </Container>
         </div>
       </>

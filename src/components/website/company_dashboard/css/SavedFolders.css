@@ -1,0 +1,11 @@
+.folderTitle{
+    font-family: muli-regular;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.folderDesc{
+    font-family: muli-light;
+    font-size: 18px;
+    height: 50px;
+}
