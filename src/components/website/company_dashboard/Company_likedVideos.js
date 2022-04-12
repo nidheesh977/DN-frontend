@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-grid-system";
 import Picture from "./images/drone_img.jpg";
 import Premium from "./images/goldenStar.svg";
@@ -12,10 +12,10 @@ import All from '../../website/All.module.css'
 import person from "../../images/profile.svg"
 // import "./css/Pilot_downloads.css"
 import Heart from "./images/heart-green.png"
+import videoIcon from '../../images/video-icon.svg'
 import axios from "axios";
 
 const domain = process.env.REACT_APP_MY_API
-
 
 
 function mouseGotIN(id) {
@@ -32,15 +32,18 @@ function mouseGotOut(id) {
 }
 
 
-function Company_downloadsImages() {
+function Company_likedVideos() {
+  let removeVideoIcon = (id) =>{
+    document.getElementById(`videoIcon-${id}`).style.display = "none"
+  }
   let config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
     },
   };
-let [media, setMedia] = useState([])
+  let [media, setMedia] = useState([])
   useEffect(()=>{
-    axios.post(`${domain}/api/pilot/getDownloadedMedia`, config).then(res =>{
+    axios.post(`${domain}/api/pilot/getLikedMedia`, config).then(res =>{
       console.log(res.data)
       setMedia(res.data)
       if(res.data.length === 0){
@@ -48,42 +51,46 @@ let [media, setMedia] = useState([])
       }
     })
   },[])
- 
   return (
     <div>
-      <div id="toHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", marginTop:"35px", display:"none"}}>No Downloaded Images, Download and check back</div>
+        <div id="toHide" style={{fontSize: "22px", fontFamily: "muli-regular", textAlign:"center", marginTop:"35px", display:"none"}}>No Liked Videos, Like and check back</div>
         <Row gutterWidth={12}>
-          {media.map((item, i) => {
+        {media.map((item, i) => {
             return (
               <>
-              { item.fileType === "image" ?
+              { item.fileType === "video" ?
               
               <Col  xl={4} lg={6} md={4} sm={6} xs={12}>
-
-               <div style={{ height: "270px" }}>
+                <div style={{ height: "270px" }}>
                   <div
                     className="pd_images_imageContainer"
-                    onMouseOver={() => mouseGotIN(i)}
-                    onMouseOut={() => mouseGotOut(i)}
+                    onMouseOver={() => mouseGotIN(item._id)}
+                    onMouseOut={() => mouseGotOut(item._id)}
                   >
-                    <img src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`} className="pd_images_image" />
-                    <div className={item.premium ? "pd_premiumBadge" : "pd_images_imageHidden"}>
+ <video
+                    className="pd_images_image" style={{backgroundColor:"black", objectFit:"cover"}} controls onPlay={()=>removeVideoIcon(item._id)}
+                  >
+                    <source src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`} type="video/mp4" />
+                    <source src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`} type="video/ogg" />
+                    Your browser does not support the video tag.
+                  </video>                    <div className={item.premium ? "pd_premiumBadge" : "pd_images_imageHidden"}>
                       <img src={premiumIcon} className="pd_premiumBadge_star" />
                     </div>
                   </div>
-                  <div id={"pd_toshowDetails/" + i} style={{display: "none"}}>
+                  <div className="pd_video_icon"  id={`videoIcon-${item._id}`}><img src={videoIcon}/></div>
+
+                  <div id={"pd_toshowDetails/" + item._id} style={{display: "none"}}>
                   <div className="pd_person_details">
                     <img src={person} /> <span className="pd_personName">{item.name}</span>
                   </div>
-                 
+
                  <div className="pd_specificLikes">
                      <img src={Heart} /> <span className="pd_personName">{item.likes.length}</span>
                  </div>
                  </div>
                 
-                </div> 
-                
-              </Col>
+                </div>
+                </Col>
               : null}
               </>
             );
@@ -99,4 +106,4 @@ let [media, setMedia] = useState([])
   );
 }
 
-export default Company_downloadsImages;
+export default Company_likedVideos;
