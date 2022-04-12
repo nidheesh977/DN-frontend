@@ -99,10 +99,13 @@ let closeProcess = () =>{
   }, []);
   let [myAppliedJobs, setMyAppliedJobs] = useState([])
 useEffect(()=>{
-  axios.get(`${domain}/api/jobApplications/getMyAppliedJobs`, config).then(res=>{
-    console.log(res.data)
-    setMyAppliedJobs(res.data)
-  })
+  if(localStorage.getItem("role") === "pilot"){
+    axios.get(`${domain}/api/jobApplications/getMyAppliedJobs`, config).then(res=>{
+      console.log(res.data)
+      setMyAppliedJobs(res.data)
+    })
+  }
+ 
 }, [])
   function applyNow(id) {
     if(!localStorage.getItem("access_token")){
