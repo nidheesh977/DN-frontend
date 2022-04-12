@@ -179,6 +179,7 @@ function CreateCompany() {
 
       Axios.post(`${domain}/api/company/registerCompany`, postData, config)
       .then((res) => {
+        localStorage.setItem("role", "company")
         history.push("/HireSubscription")
       })
       .catch((err) => {

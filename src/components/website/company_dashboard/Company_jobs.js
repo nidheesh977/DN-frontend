@@ -29,15 +29,6 @@ function Company_jobs() {
             Pending
           </NavLink>
         </div>
-        <div>
-          <NavLink
-            activeClassName="pd_images_active"
-            to="/company_dashboard/activities/jobs/closed"
-            id="pd_images_navItem"
-          >
-            Position Closed
-          </NavLink>
-        </div>
       </div>
       <div className="pd_images_content">
         <Switch>
@@ -46,10 +37,6 @@ function Company_jobs() {
           <Route
             path="/company_dashboard/activities/jobs/pending"
             component={Company_pendingJobs}
-          />
-          <Route
-            path="/company_dashboard/activities/jobs/closed"
-            component={Company_closedJobs}
           />
           <Route
             path="/company_dashboard/activities/jobs/"

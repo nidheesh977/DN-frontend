@@ -18,6 +18,11 @@ import c_j_bin from "../images/c_j_bin.png";
 import locationIcon from "../images/location.svg";
 import workIcon from "../images/work.svg";
 import Axios from "axios";
+import Select from "react-select";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-autocomplete-places";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -26,6 +31,16 @@ const DialogContent = withStyles((theme) => ({
     padding: theme.spacing(2),
   },
 }))(MuiDialogContent);
+
+const customStyles = {
+  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+    return {
+      ...styles,
+      backgroundColor: isFocused ? "#999999" : null,
+      color: "#333333",
+    };
+  },
+};
 
 class CreateJob extends Component {
   constructor(props) {
@@ -37,25 +52,36 @@ class CreateJob extends Component {
       create_job_step: 1,
       company_name: "",
       job_title: "",
-      job_type: "Part-Time",
+      job_type: "Full-Time",
       employee_type: "Licensed Pilot",
       industry: "",
       address: "",
       city: "",
       state: "",
       country: "",
-      min_salery: "",
-      max_salery: "",
+      min_salary: "",
+      max_salary: "",
       rate: "month",
       date: "",
       location: "",
       description: "",
+      industries: [],
+      openings: "",
     };
   }
 
   componentDidMount() {
     console.log("Helo");
     $("html,body").scrollTop(0);
+    Axios.get(`${domain}/api/industry/getIndustries`).then((res) => {
+      const options = res.data.map((d) => ({
+        value: d.industry,
+        label: d.industry,
+      }));
+      this.setState({
+        industries: options,
+      });
+    });
   }
 
   selectMainTab = (tab) => {
@@ -77,69 +103,142 @@ class CreateJob extends Component {
   };
   clearForm = () => {
     this.setState({
-      company_name: "",
       job_title: "",
-      industry: "",
-      address: "",
-      city: "",
-      state: "",
-      country: "",
-      create_job_step: 1,
       job_type: "Full-Time",
       employee_type: "Licensed Pilot",
-      min_salery: "",
-      max_salery: "",
+      industry: "",
+      min_salary: "",
+      max_salary: "",
       rate: "month",
-      date: "",
       location: "",
       description: "",
+      openings: "",
     });
+    document.getElementById("job_title").focus();
+    document.getElementById("job_title_error").style.display = "none";
+    document.getElementById("industry_error").style.display = "none";
+    document.getElementById("min_salary_error").style.display = "none";
+    document.getElementById("max_salary_error").style.display = "none";
+    document.getElementById("location_error").style.display = "none";
+    document.getElementById("description_error").style.display = "none";
+    document.getElementById("openings_error").style.display = "none";
   };
-
-  continueProcess = () => {
-    var fields = [
-      "company_name",
-      "job_title",
-      "industry",
-      "address",
-      "city",
-      "state",
-      "country",
-    ];
-    var error = false;
-    for (var i = 0; i < fields.length; i++) {
-      if (this.state[fields[i]] == "") {
-        this.refs[fields[i]].focus();
-        document.getElementById(`${fields[i]}_error`).style.display =
-          "contents";
-        error = true;
-        break;
-      }
-    }
-    if (!error) {
-      this.setState({
-        create_job_step: 2,
-      });
-      $("html,body").scrollTop(0);
-    }
-  };
-
-  saveDraft = () => {};
 
   PostJob = () => {
-    console.log(this.state);
-    if (this.state.min_salery == "") {
-      this.refs.min_salery.focus();
-      document.getElementById(`min_salery_error`).style.display = "contents";
-    } else if (this.state.max_salery == "") {
-      this.refs.max_salery.focus();
-      document.getElementById(`max_salery_error`).style.display = "contents";
-    } else if (this.state.location == "") {
-      this.refs.location.focus();
-      document.getElementById(`location_error`).style.display = "contents";
-    } else if (this.state.description == "") {
-      this.refs.description.focus();
-      document.getElementById(`description_error`).style.display = "contents";
+    var fields = [
+      "job_title",
+      "industry",
+      "min_salary",
+      "max_salary",
+      "openings",
+      "location",
+      "description",
+    ];
+
+    var error = false;
+    var focusField = "";
+
+    for (var i = 0; i < fields.length; i++) {
+      if (
+        fields[i] !== "min_salary" &&
+        fields[i] !== "max_salary" &&
+        fields[i] !== "openings"
+      ) {
+        if (this.state[fields[i]] === "") {
+          error = true;
+          document.getElementById(fields[i] + "_error").style.display =
+            "contents";
+          if (focusField === "") {
+            focusField = fields[i];
+          }
+        }
+        if (
+          fields[i] === "job_title" &&
+          this.state.job_title !== "" &&
+          (this.state.job_title.length > 100 || this.state.job_title.length < 2)
+        ) {
+          error = true;
+          if (focusField === "") {
+            focusField = fields[i];
+          }
+          document.getElementById("job_title_error").innerText =
+            "Job title must be between 2 and 100 characters";
+          document.getElementById("job_title_error").style.display = "contents";
+        }
+        if (
+          fields[i] === "description" &&
+          this.state.description !== "" &&
+          (this.state.description.length > 1500 ||
+            this.state.description.length < 200)
+        ) {
+          error = true;
+          if (focusField === "") {
+            focusField = fields[i];
+          }
+          document.getElementById("description_error").innerText =
+            "Description must be between 200 and 1500 characters";
+          document.getElementById("description_error").style.display =
+            "contents";
+        }
+      } else {
+        if (
+          fields[i] === "min_salary" &&
+          this.state.max_salary !== "" &&
+          this.state.min_salary === ""
+        ) {
+          error = true;
+          if (focusField === "") {
+            focusField = fields[i];
+          }
+          document.getElementById("min_salary_error").innerText =
+            "Mention minimum salary";
+          document.getElementById("min_salary_error").style.display =
+            "contents";
+        }
+        if (
+          fields[i] === "max_salary" &&
+          this.state.min_salary !== "" &&
+          this.state.max_salary === ""
+        ) {
+          error = true;
+          if (focusField === "") {
+            focusField = fields[i];
+          }
+          document.getElementById("max_salary_error").innerText =
+            "Mention maximum salary";
+          document.getElementById("max_salary_error").style.display =
+            "contents";
+        }
+        if (
+          fields[i] === "max_salary" &&
+          Number(this.state.min_salary) > Number(this.state.max_salary)
+        ) {
+          error = true;
+          if (focusField === "") {
+            focusField = fields[i];
+          }
+          document.getElementById("max_salary_error").innerText =
+            "Maximum salary should not be less than minimum salary";
+          document.getElementById("max_salary_error").style.display =
+            "contents";
+        }
+        if (fields[i] === "openings" && Number(this.state.openings) > 1000) {
+          error = true;
+          if (focusField === "") {
+            focusField = fields[i];
+          }
+          document.getElementById("openings_error").innerText =
+            "Maximum openings is 1000";
+          document.getElementById("openings_error").style.display = "contents";
+        }
+      }
+    }
+
+    if (error) {
+      if (focusField !== "") {
+        document.getElementById(focusField).focus();
+      }
+      console.log(focusField);
     } else {
       const config = {
         headers: {
@@ -151,21 +250,16 @@ class CreateJob extends Component {
       Axios.post(
         `${domain}/api/jobs/createJob`,
         {
-          companyName: this.state.company_name,
           jobTitle: this.state.job_title,
           industry: this.state.industry,
-          address: this.state.address,
-          city: this.state.city,
-          state: this.state.state,
-          country: this.state.country,
           jobType: this.state.job_type,
           employeeType: this.state.employee_type,
-          minSalary: this.state.min_salery,
-          maxSalary: this.state.max_salery,
+          minSalary: this.state.min_salary,
+          maxSalary: this.state.max_salary,
           salaryType: this.state.rate,
-          postingDate: this.state.date,
           workLocation: this.state.location,
           jobDesc: this.state.description,
+          noOfOpenings: this.state.openings,
         },
         config
       )
@@ -189,23 +283,48 @@ class CreateJob extends Component {
     //   });
   };
 
+  handleChange1 = (address) => {
+    this.setState({ location: address });
+    document.getElementById(`location_error`).style.display = "none";
+  };
+
+  handleSelect = (address) => {
+    console.log(address);
+    this.setState({ location: address });
+
+    geocodeByAddress(address)
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => console.log("Success", latLng))
+      .catch((error) => console.error("Error", error));
+    document.getElementById(`location_error`).style.display = "none";
+  };
+
   minSaleryChange = (e) => {
     this.setState({
-      min_salery: e.target.value,
+      min_salary: e.target.value,
     });
-    document.getElementById(`min_salery_error`).style.display = "none";
+    document.getElementById(`min_salary_error`).style.display = "none";
+    document.getElementById(`max_salary_error`).style.display = "none";
   };
 
   maxSalaryChange = (e) => {
     this.setState({
-      max_salery: e.target.value,
+      max_salary: e.target.value,
     });
-    document.getElementById(`max_salery_error`).style.display = "none";
+    document.getElementById(`max_salary_error`).style.display = "none";
+    document.getElementById(`min_salary_error`).style.display = "none";
   };
 
   rateChange = (e) => {
+    var job_type;
+    if (e.target.value === "month") {
+      job_type = "Full-Time";
+    } else {
+      job_type = "Part-Time";
+    }
     this.setState({
       rate: e.target.value,
+      job_type: job_type,
     });
   };
 
@@ -249,6 +368,15 @@ class CreateJob extends Component {
       main_tab: 1,
     });
     $("html,body").scrollTop(0);
+  };
+
+  industryChange = (value) => {
+    this.setState({
+      industry: value.value,
+    });
+
+    console.log(value.value);
+    document.getElementById(`industry_error`).style.visibility = "hidden";
   };
 
   render() {
@@ -307,11 +435,11 @@ class CreateJob extends Component {
                 <div className="c_j_form_container">
                   <div className="c_j_form_title">Basic Information</div>
                   <label className="c_j_input_label">
-                    <div className="c_j_form_input_title">Job Title</div>
+                    <div className="c_j_form_input_title" style = {{cursor: "pointer"}}>Job Title</div>
                     <input
                       type="text"
                       name="job_title"
-                      id="c_j_job_title"
+                      id="job_title"
                       className="c_j_form_input"
                       ref="job_title"
                       value={this.state.job_title}
@@ -322,15 +450,18 @@ class CreateJob extends Component {
                     </div>
                   </label>
                   <label className="c_j_input_label">
-                    <div className="c_j_form_input_title">Industry</div>
-                    <input
-                      type="text"
-                      name="industry"
-                      id="c_j_industry"
-                      className="c_j_form_input"
-                      ref="industry"
-                      value={this.state.industry}
-                      onChange={(e) => this.inputChangeHandler(e, "industry")}
+                    <div className="c_j_form_input_title" style = {{cursor: "pointer"}}>Industry</div>
+                    <Select
+                      options={this.state.industries}
+                      onChange={this.industryChange}
+                      styles={customStyles}
+                      className="u_f_category_dropdown"
+                      value={
+                        this.state.industry && {
+                          label: this.state.industry,
+                          value: this.state.industry,
+                        }
+                      }
                     />
                     <div className="login_input_error_msg" id="industry_error">
                       Industry is required
@@ -344,7 +475,12 @@ class CreateJob extends Component {
                         name="job_type"
                         id=""
                         className="c_j_input_radio"
-                        onClick={() => this.setState({ job_type: "Full-Time" })}
+                        onClick={() =>
+                          this.setState({
+                            job_type: "Full-Time",
+                            rate: "month",
+                          })
+                        }
                         checked={this.state.job_type === "Full-Time"}
                       />
                       <div className="c_j_input_sub_label">Full time</div>
@@ -355,7 +491,9 @@ class CreateJob extends Component {
                         name="job_type"
                         id=""
                         className="c_j_input_radio"
-                        onClick={() => this.setState({ job_type: "Part-Time" })}
+                        onClick={() =>
+                          this.setState({ job_type: "Part-Time", rate: "hour" })
+                        }
                         checked={this.state.job_type === "Part-Time"}
                       />
                       <div className="c_j_input_sub_label">Part time</div>
@@ -393,23 +531,25 @@ class CreateJob extends Component {
                   </div>
                   <div className="c_j_form_input_title">Salary range</div>
 
-                  <div className="c_j_salery_input_container">
+                  <div>
                     <Row>
                       <Col>
                         <label className="c_j_input_label">
-                          <div className="c_j_salery_input_label_title">
+                          <div className="c_j_salery_input_label_title" style = {{cursor: "pointer"}}>
                             Minimum
                           </div>
                           <input
                             type="number"
                             className="c_j_form_input"
                             onChange={this.minSaleryChange}
-                            ref="min_salery"
+                            ref="min_salary"
+                            id="min_salary"
+                            value={this.state.min_salary}
                           />
                           <br />
                           <div
                             className="login_input_error_msg"
-                            id="min_salery_error"
+                            id="min_salary_error"
                           >
                             Minimum salary is required
                           </div>
@@ -428,19 +568,22 @@ class CreateJob extends Component {
                           <div
                             className="c_j_salery_input_label_title"
                             onChange={this.maxSalaryChange}
+                            style = {{cursor: "pointer"}}
                           >
                             Maximum
                           </div>
                           <input
                             type="number"
                             className="c_j_form_input"
-                            ref="max_salery"
+                            ref="max_salary"
                             onChange={this.maxSalaryChange}
+                            id="max_salary"
+                            value={this.state.max_salary}
                           />
                           <br />
                           <div
                             className="login_input_error_msg"
-                            id="max_salery_error"
+                            id="max_salary_error"
                           >
                             Maximum salary is required
                           </div>
@@ -452,7 +595,7 @@ class CreateJob extends Component {
                             Rate
                           </div>
                           <select
-                            className="c_j_salery_rate_input"
+                            className="c_j_form_input"
                             onChange={this.rateChange}
                           >
                             <option
@@ -473,18 +616,18 @@ class CreateJob extends Component {
                     </Row>
                   </div>
                   <label className="c_j_input_label">
-                    <div className="c_j_form_input_title">No of openings</div>
+                    <div className="c_j_form_input_title" style = {{cursor: "pointer"}}>No of openings</div>
                     <input
-                      type="text"
+                      type="number"
                       name="job_title"
-                      id="c_j_job_title"
+                      id="openings"
                       className="c_j_form_input"
                       ref="job_title"
-                      value={this.state.job_title}
-                      onChange={(e) => this.inputChangeHandler(e, "job_title")}
+                      value={this.state.openings}
+                      onChange={(e) => this.inputChangeHandler(e, "openings")}
                     />
-                    <div className="login_input_error_msg" id="job_title_error">
-                      Job title is required
+                    <div className="login_input_error_msg" id="openings_error">
+                      Maximum 1000 openings
                     </div>
                   </label>
                   {/* <div className="c_j_input_label">
@@ -493,28 +636,101 @@ class CreateJob extends Component {
                       <div className="c_j_input_text">If you want to post the job later, here you can mention the date.</div>
                     </div> */}
                   <label className="c_j_input_label">
-                    <div className="c_j_form_input_title">Work location</div>
-                    <input
-                      type="text"
-                      name=""
-                      id=""
-                      className="c_j_form_input"
-                      placeholder="E.g Bangalore"
-                      onChange={this.locationChange}
-                      ref="location"
-                    />
+                    <div className="c_j_form_input_title" style = {{cursor: "pointer"}}>Work location</div>
+                    <PlacesAutocomplete
+                      value={this.state.location}
+                      onChange={this.handleChange1}
+                      onSelect={this.handleSelect}
+                    >
+                      {({
+                        getInputProps,
+                        suggestions,
+                        getSuggestionItemProps,
+                        loading,
+                      }) => (
+                        <div style={{ position: "relative" }}>
+                          <input
+                            {...getInputProps({
+                              placeholder: "Search Places ...",
+                              className:
+                                "location-search-input c_j_form_input ",
+                            })}
+                            style={{
+                              backgroundColor: "#f5f5f7",
+                              borderRadius: "5px",
+                              border: "1px solid white",
+                              outline: "none",
+                              fontSize: "16px",
+                            }}
+                          />
+                          {suggestions.length > 0 && (
+                            <div
+                              className="autocomplete-dropdown-container"
+                              style={{
+                                width: "calc(100%)",
+
+                                position: "absolute",
+                                top: "calc(100%)",
+                                zIndex: 1000,
+                                fontFamily: "muli-light",
+                                fontSize: "16px",
+                                border:
+                                  suggestions.length === 0
+                                    ? ""
+                                    : "1px solid grey",
+                                overflow: "hidden",
+                                borderEndStartRadius: "10px",
+                                borderEndEndRadius: "10px",
+                                background: "white",
+                              }}
+                            >
+                              {loading && <div>Loading...</div>}
+                              {suggestions.map((suggestion) => {
+                                const className = suggestion.active
+                                  ? "suggestion-item--active"
+                                  : "suggestion-item";
+                                // inline style for demonstration purpose
+                                const style = suggestion.active
+                                  ? {
+                                      backgroundColor: "#e1e1e1",
+                                      cursor: "pointer",
+                                      padding: "10px 20px",
+                                    }
+                                  : {
+                                      backgroundColor: "#ffffff",
+                                      cursor: "pointer",
+                                      padding: "10px 20px",
+                                    };
+                                return (
+                                  <div
+                                    {...getSuggestionItemProps(suggestion, {
+                                      className,
+                                      style,
+                                    })}
+                                  >
+                                    <span>{suggestion.description}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </PlacesAutocomplete>
                     <div className="login_input_error_msg" id="location_error">
                       Work location is required
                     </div>
                   </label>
                   <label className="c_j_input_label">
-                    <div className="c_j_form_input_title">Job description</div>
+                    <div className="c_j_form_input_title" style = {{cursor: "pointer"}}>Job description</div>
                     <textarea
-                      id=""
+                      id="description"
                       className="c_j_form_textarea"
                       onChange={this.descriptionChange}
                       ref="description"
+                      value={this.state.description}
                     ></textarea>
+                    
                     <div
                       className="login_input_error_msg"
                       id="description_error"
