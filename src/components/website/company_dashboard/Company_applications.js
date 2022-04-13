@@ -220,7 +220,7 @@ function Company_applications() {
                 marginBottom: "10px",
                 fontSize: "19px",
                 color: "black",
-              }}>Email ID : <Link>{personalData.email} </Link></div>
+              }}>Email ID : <a href={`mailto:${personalData.email}`}>{personalData.email} </a></div>
               <div
                 style={{
                   fontFamily: "muli-regular",
@@ -229,7 +229,7 @@ function Company_applications() {
                   color: "black",
                 }}
               >
-                Phone Number : <Link>{personalData.phoneNo}</Link>
+                Phone Number : <a href = {`tel:${personalData.phoneNo}`}>{personalData.phoneNo}</a>
               </div>
             </div>
             <div

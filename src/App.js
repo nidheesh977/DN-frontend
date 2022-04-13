@@ -31,6 +31,7 @@ import ScrollToTop from "./components/website/ScrollToTop";
 import PilotDetails from './components/website/PilotDetail'
 import ServiceCenterDashboard from "./components/website/ServiceCenterDashboard/ServiceCenterDashboard";
 import CreateJob from './components/website/CreateJob'
+import JobEdit from './components/website/jobEdit'
 import Company_dashboard from "./components/website/company_dashboard/Company_dashboard";
 import ApplyJobLanding from "./components/website/ApplyJobLanding";
 import Admin_dashboard from "./components/adminDashboard/Admin_dashboard";
@@ -140,6 +141,7 @@ function App(){
             <Route component = {EditFile} path = "/edit-file/:id" exact />
             <Route component = {ServiceCenters} path = "/service_centers" exact />
             <Route component = {CreateJob} path = "/create_job" exact />
+            <Route component = {JobEdit} path = "/job_edit/:id" exact />
             <Route component = {ServiceCenterDetails} path = "/service_center/:id" exact />
             <Route component = {ServiceCenterDashboard} path = "/service_center_dashboard"/>
             <Route component = {ApplyJob} path = "/apply_job" exact />

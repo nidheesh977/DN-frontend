@@ -80,7 +80,9 @@ function Company_approvedJobs() {
                 <Link to={`/company_dashboard/activities/jobs/applications/${items._id}`} id="a_j_job_btn">
                   View Applications
                 </Link>{" "}
-                <img src={edit} className="company_jobs_edit" />
+                <Link to = {`/job_edit/${items._id}`}>
+                  <img src={edit} className="company_jobs_edit" />
+                </Link>
                 <img src={bin} className="company_jobs_edit" />
               </div>
             </div>
