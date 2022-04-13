@@ -851,7 +851,7 @@ closeProcess1 = () =>{
 
                   <Col xl={4}>
                     <div style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px", padding:"20px 15px"}} className="addFolderBox" >
-                              <img src={AddFolder} onClick={this.addFolderNew}/>
+                              <img src={AddFolder} onClick={this.addFolderNew} style={{cursor: "pointer"}}/>
 
                     </div>
                     </Col>

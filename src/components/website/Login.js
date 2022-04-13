@@ -97,6 +97,8 @@ const Login = (props) => {
             history.push("/pilot_dashboard/account/");
           }else if(localStorage.getItem("role") === "service_center"){
             history.push("/center_dashboard/account/");
+          }else if(localStorage.getItem("role") === "company"){
+            history.push("/company_dashboard/account/");
           }
           else{
             history.push("/booster_dashboard/account/");
