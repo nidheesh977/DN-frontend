@@ -2,16 +2,26 @@ import React, { useEffect, useState } from "react";
 import "../pilot_dashboard/css/Pilot_appliedJobs.css";
 import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import profileUser from "../../images/profile-user.svg";
+import All from "../../website/All.module.css";
 import money from "../../images/money.svg";
 import location from "../../images/location.svg";
 import work from "../../images/work.svg";
+import Dialog from "@material-ui/core/Dialog";
+import Close from "../../images/close.svg";
+import MuiDialogContent from "@material-ui/core/DialogContent";
 import heart from "../../images/heart (3).svg";
 import heartLike from "../../images/heart-blue.svg";
 import { Link } from "react-router-dom";
 import loadMore from "../../images/Group 71.svg";
 import bin from "./images/c_j_bin.png";
+import { withStyles } from "@material-ui/core/styles";
 import edit from "./images/c_j_edit.png";
 import axios from "axios";
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -31,7 +41,27 @@ function Company_approvedJobs() {
       console.log(res);
     });
   }, []);
-
+  let [expireId, setExpireId] = useState("")
+let expireJob = (id) =>{
+  setExpireId(id)
+  setExpirePopup(true)
+}
+let [expirePopup, setExpirePopup] = useState(false);
+let confirmExpire = () =>{
+  axios.post(`${domain}/api/jobs/expireJob`,{jobId: expireId}).then(res=>{
+    console.log(res)
+    axios.post(`${domain}/api/jobs/approvedJobs`, config).then((res) => {
+      if (res.data !== "") {
+        setData(res.data);
+      }
+      console.log(res);
+      setExpirePopup(false)
+    });
+  })
+}
+let expirePopupHandler = () =>{
+  setExpirePopup(false)
+}
   return (
     <div>
       {data.length > 0
@@ -83,7 +113,7 @@ function Company_approvedJobs() {
                 <Link to = {`/job_edit/${items._id}`}>
                   <img src={edit} className="company_jobs_edit" />
                 </Link>
-                <img src={bin} className="company_jobs_edit" />
+                <img src={bin} className="company_jobs_edit" onClick={()=>expireJob(items._id)} />
               </div>
             </div>
             <hr className="a_j_listing_hr" style={{ marginBottom: "40px" }} />
@@ -96,6 +126,54 @@ function Company_approvedJobs() {
       <Link to = "/create_job"><button className="cd_error_btn" style = {{padding: "10px 30px"}}>Create a job</button></Link>
     </div>
       }
+
+
+<Dialog
+        open={expirePopup}
+        onClose={expirePopupHandler}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{
+          style: { width: "620px", borderRadius: "10px" },
+        }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: "20px",
+              right: "20px",
+            }}
+          >
+            <img
+              src={Close}
+              alt=""
+              onClick={expirePopupHandler}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <div style={{ marginTop: "30px" }}>
+            <div className="sc_popup_head" style={{marginBottom: "15px"}}>Confirm Expire?</div>
+            <div className="sc_popup_desc">
+              On confirming the job will be expired{" "}
+            </div>
+           
+            <div style={{ width: "100%", textAlign: "center"}}>
+            <button className="sc_popup_submit" style={{marginRight: "20px", background: "#00E7FC "}} onClick={expirePopupHandler}>
+                Close
+              </button>
+              <button className="sc_popup_submit" onClick={confirmExpire}>
+                Expire
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
