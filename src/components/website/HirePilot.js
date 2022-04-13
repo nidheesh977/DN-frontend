@@ -123,7 +123,8 @@ class HirePilot extends Component {
       addFolder: false,
       name: "",
       description:"",
-      selectedPilot: ""
+      selectedPilot: "",
+      mySavedPilots :[]
     }
   }
   folderChangeHandler = (e) =>{
@@ -259,7 +260,7 @@ closeProcess1 = () =>{
     }
   
   }
-  savePilotToFolder = () =>{
+  savePilotToFolder =  () =>{
     let config = {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -269,6 +270,12 @@ closeProcess1 = () =>{
       console.log(res)
       this.setState({
         savePilot: false
+      })
+      axios.post(`${domain}/api/savePilot/getMySavedPilots`, config).then(res=>{
+        console.log(res)
+        this.setState({
+          mySavedPilots: res.data
+        })
       })
     })
   }
@@ -360,6 +367,12 @@ closeProcess1 = () =>{
       
       // document.getElementById(`folder/${this.state.selectedFolder}`).style.border = "1px solid red"
     })
+    axios.post(`${domain}/api/savePilot/getMySavedPilots`, config).then(res=>{
+      console.log(res)
+      this.setState({
+        mySavedPilots: res.data
+      })
+    })
 
 
   }
@@ -377,6 +390,24 @@ closeProcess1 = () =>{
       selectedFolder : id
     });
    
+  }
+
+  unsavePilot = (id) =>{
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+
+    axios.post(`${domain}/api/savePilot/unsavePilot`, {pilotId: id}, config).then(res=>{
+      console.log(res.data)
+      axios.post(`${domain}/api/savePilot/getMySavedPilots`, config).then(res=>{
+        console.log(res)
+        this.setState({
+          mySavedPilots: res.data
+        })
+      })
+    })
   }
 
   render() {
@@ -637,7 +668,24 @@ closeProcess1 = () =>{
                           </div>
                           <div className="h_p_listing_btn_container">
                             <button className="h_p_start_process_btn" onClick={()=>this.clickStartProcess(pilot._id)}>HirePilot</button>
-                            <button className="h_p_save_pilot_btn" onClick = {()=>this.clickStartProcess1(pilot._id)}><i class="fa fa-heart"></i></button>
+                         
+                              
+                              {
+                                this.state.mySavedPilots.includes(pilot._id) ? 
+                                
+                                <button className="h_p_save_pilot_btn" onClick={()=>this.unsavePilot(pilot._id)}>
+                                
+                                <i class="fa fa-heart" style={{color: "black"}}></i>
+                                
+                                </button>
+                                 : <button className="h_p_save_pilot_btn" onClick = {()=>this.clickStartProcess1(pilot._id)}>
+                                
+                                 <i class="fa fa-heart"></i>
+                                 
+                                 </button>
+                              }
+                              
+                              
                           </div>
                           <div className="h_p_listing_send_msg_link" onClick = {() => this.sendMessage(1)}>Send Message</div>
                         </div>
