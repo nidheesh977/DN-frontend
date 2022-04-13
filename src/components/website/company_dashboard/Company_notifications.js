@@ -1,17 +1,35 @@
-import React from 'react';
-import "../pilot_dashboard/css/Pilot_notifications.css"
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import "./css/Pilot_notifications.css"
 import Edit from "./images/edit (3).svg"
-import { useState } from 'react';
+const domain = process.env.REACT_APP_MY_API
 
 function Company_notifications() {
+    let config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      };
+    let [data, setData] = useState({})
+useEffect(()=>{
+    axios.get(`${domain}/api/user/getUserData`, config).then(res=>{
+        console.log(res.data)
+        setNotifications(
+            {
+                drone_zone_news: res.data.droneNews,
+                account_privacy: res.data.accountPrivacy,
+                hires_me: res.data.appliesMe,
+               
+            }
+        )
+    })
+}, [])
     let [notifications, setNotifications] = useState({
-        drone_zone_news: false,
+        drone_zone_news: true,
         account_privacy: false,
         hires_me: false,
-        mensions_me: false,
-        accept_invitation: false,
-        follow_me: false,
-        comments: false
+       
+    
     })
     let [edit, setEdit] = useState(false)
 
@@ -28,8 +46,24 @@ function Company_notifications() {
     }
 
     const saveChanges = () => {
-        alert("Ready to submit")
-    }
+        console.log(notifications)
+axios.post(`${domain}/api/user/updateNotifications`, {droneNews: notifications.drone_zone_news, accountPrivacy: notifications.account_privacy,
+appliesMe: notifications.hires_me,}, config).then(res=>{
+    axios.get(`${domain}/api/user/getUserData`, config).then(res=>{
+        console.log(res.data)
+        
+        setNotifications(
+            {
+                drone_zone_news: res.data.droneNews,
+                account_privacy: res.data.accountPrivacy,
+                hires_me: res.data.appliesMe,
+                
+            }
+        )
+    })
+
+setEdit(false)
+})    }
 
   return <div className='pd_notifications_main'>
 <div className='pd_notifications_mainBox'>
@@ -63,34 +97,18 @@ function Company_notifications() {
         <hr className='pd_notifications_hr'/>
         <div>
             <label className='pd_notifications_label2'>
-            <input type="checkbox" disabled = {!edit} checked = {notifications.hires_me} id = "hires_me" onChange = {changeHandler}/> <span className='pd_notifications_title'>Anyone hires me</span>
+            <input type="checkbox" disabled = {!edit} checked = {notifications.hires_me} id = "hires_me" onChange = {changeHandler}/> <span className='pd_notifications_title'>Anyone Applies for my Job</span>
             </label>
         </div>
-        <hr className='pd_notifications_hr'/><div>
-            <label className='pd_notifications_label2'>
-            <input type="checkbox" disabled = {!edit} checked = {notifications.mensions_me} id = "mensions_me" onChange = {changeHandler}/> <span className='pd_notifications_title'>Someone mentions me</span>
-            </label>
-        </div>
-        <hr className='pd_notifications_hr'/><div>
-            <label className='pd_notifications_label2'>
-            <input type="checkbox" disabled = {!edit} checked = {notifications.accept_invitation} id = "accept_invitation" onChange = {changeHandler}/> <span className='pd_notifications_title'>Someone accepts my invitation</span>
-            </label>
-        </div>
-        <hr className='pd_notifications_hr'/><div>
-            <label className='pd_notifications_label2'>
-            <input type="checkbox" disabled = {!edit} checked = {notifications.follow_me} id = "follow_me" onChange={changeHandler}/> <span className='pd_notifications_title'>Anyone follows me</span>
-            </label>
-        </div>
-        <hr className='pd_notifications_hr'/><div>
-            <label className='pd_notifications_label2'>
-            <input type="checkbox" disabled = {!edit} checked = {notifications.comments} id = "comments" onChange={changeHandler}/> <span className='pd_notifications_title'>Someone comments on one of my shots</span>
-            </label>
-        </div>
+     
         <hr className='pd_notifications_hr'/>
 
         <div className='pd_notifications_save'>
-            <button className='pd_notifications_saveBtn' onClick = {saveChanges}>Save Changes</button>
+            {
+                !edit ? <></> : <button className='pd_notifications_saveBtn' onClick = {saveChanges}>Save Changes</button>
 
+            }
+            
         </div>
 
 

@@ -164,6 +164,24 @@ export class Company_savedPilots extends Component {
   pilotDetailPage = (id) => {
     this.props.history.push("/pilot_details/" + id)
   }
+
+  unsavePilot = (id) =>{
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+
+    axios.post(`${domain}/api/savePilot/unsavePilot`, {pilotId: id}, config).then(res=>{
+      console.log(res.data)
+      axios.post(`${domain}/api/savePilot/getSavedPilots`,{folderId: this.props.match.params.id}).then(res=>{
+        console.log(res)
+        this.setState({
+          pilots: res.data
+        })
+      })
+    })
+  }
   render() {
     return (
       <div>{
@@ -210,7 +228,7 @@ export class Company_savedPilots extends Component {
                         
                           <div className="h_p_listing_btn_container">
                             <button className="h_p_start_process_btn" onClick={() => this.pilotDetailPage(pilot.pilotId._id)}>View Profile</button>
-                            <button className="h_p_save_pilot_btn" ><i class="fa fa-heart"></i></button>
+                            <button className="h_p_save_pilot_btn" onClick={()=>this.unsavePilot(pilot.pilotId._id)}><i class="fa fa-heart" style={{color: "black"}}></i></button>
                           </div>
                          
                         </div>
