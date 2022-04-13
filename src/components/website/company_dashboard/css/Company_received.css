@@ -20,6 +20,10 @@
     line-height: 20px;
     display: inline-block;
 }
+
+.c_r_startProcessBtn:hover{
+    opacity: 0.8;
+}
 .c_r_Remove{
     text-decoration: underline;
     /* float: right; */

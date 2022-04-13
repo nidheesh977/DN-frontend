@@ -21,11 +21,6 @@ function Company_received() {
   return (
    
     <div>
-       <Switch>
-       <Route component={Company_applications} path="/company_dashboard/activities/received/applications"/>
-
-       <Route component={Company_receivedListing} path="/company_dashboard/activities/received/"/>
-    </Switch>
       
     </div>
   );

@@ -44,9 +44,9 @@ function Company_approvedJobs() {
               <div style={{ marginBottom: "10px" }}>
                 <div className="pd_a_j_dataDateHead">
                   Posted on:
-                  <span className="pd_a_j_dataDate">{items.postingDate}</span>
+                  <span className="pd_a_j_dataDate">{items.postingDate.slice(0,10)}</span>
                 </div>
-                <div className="pd_a_j_dataTitle">{items.jobTitle}</div>
+                <Link to = {`/applyJobLanding/${items._id}`}><div className="pd_a_j_dataTitle">{items.jobTitle}</div></Link>
               </div>
               <div className="pd_a_j_data_subTitle">{items.companyName}</div>
               <div>
@@ -67,18 +67,18 @@ function Company_approvedJobs() {
                 <div className="a_j_listing_text">{items.jobDesc.slice(0,150)} {items.jobDesc.length > 150 && "..."}</div>
               </div>
               <div className="a_j_listing_btns" style={{ marginTop: "20px" }}>
-                <button className="a_j_location_btn">
+                <button className="a_j_location_btn" style = {{cursor: "default"}}>
                   <img src={location} className="a_j_location_logo" />
                   <span className="a_j_location_text">
                     {items.workLocation.split(",")[0]}
                   </span>
                 </button>{" "}
-                <button className="a_j_location_btn">
+                <button className="a_j_location_btn" style = {{cursor: "default"}}>
                   <img src={work} className="a_j_location_logo" />
                   <span className="a_j_location_text">{items.jobType}</span>
                 </button>
-                <Link to={`/applyJobLanding/${items._id}`} id="a_j_job_btn">
-                  View Job
+                <Link to={`/company_dashboard/activities/jobs/applications/${items._id}`} id="a_j_job_btn">
+                  View Applications
                 </Link>{" "}
                 <img src={edit} className="company_jobs_edit" />
                 <img src={bin} className="company_jobs_edit" />

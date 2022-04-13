@@ -105,15 +105,6 @@ class Activities_Sidebar extends React.Component {
                     Uploaded Jobs
                   </NavLink>
                 </div>
-                <div id="pd_filter1_checkbox_label">
-                  {" "}
-                  <NavLink
-                    activeClassName="h_p_sidebar_active"
-                    to="/company_dashboard/activities/received"
-                  >
-                    Received Applications
-                  </NavLink>
-                </div>{" "}
                
                 <div id="pd_filter1_checkbox_label">
                   {" "}
