@@ -10,6 +10,10 @@ import PhoneInput from "react-phone-number-input";
 import All from "../../website/All.module.css";
 import Select from "react-select";
 import Axios from "axios";
+import Dialog from "@material-ui/core/Dialog";
+import Close from "../../images/close.svg";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import { withStyles } from "@material-ui/core/styles";
 
 const customStyles = {
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
@@ -20,6 +24,12 @@ const customStyles = {
     };
   },
 };
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -36,9 +46,13 @@ function Company_BasicInfo() {
     gstNo: "",
     industry: "",
     code: "+91",
+    profilePic: logo,
+    coverPic: logoCover,
   });
   var [edit, setEdit] = useState(false);
   var [industries, setIndustries] = useState(true);
+  var [profileSuccess, setProfileSuccess] = useState(false);
+  let [coverSuccess, setCoverSuccess] = useState(false);
 
   let config = {
     headers: {
@@ -56,7 +70,7 @@ function Company_BasicInfo() {
     });
 
     Axios.get(`${domain}/api/company/companyData`, config)
-      .then( res => {
+      .then((res) => {
         setData({
           ...data,
           company_name: res.data.userName,
@@ -67,13 +81,15 @@ function Company_BasicInfo() {
           contact_no: res.data.company[0].phoneNo,
           official_email: res.data.company[0].emailId,
           contact_name: res.data.company[0].contactPersonName,
-          gstNo: res.data.company[0].gstNo?res.data.company[0].gstNo:"",
+          gstNo: res.data.company[0].gstNo ? res.data.company[0].gstNo : "",
           industry: res.data.company[0].industry,
-        })
+          profilePic: res.data.profilePic,
+          coverPic: res.data.coverPic,
+        });
       })
-      .catch( err => {
-        console.log(err)
-      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const clickEdit = () => {
@@ -128,7 +144,7 @@ function Company_BasicInfo() {
       "official_email",
       "contact_name",
       "gstNo",
-      "industry"
+      "industry",
     ];
     var error = false;
     var focusField = "";
@@ -141,87 +157,108 @@ function Company_BasicInfo() {
           focusField = fields[i];
         }
       } else {
-        if (fields[i] === "company_name" && (data.company_name.length < 2 || data.company_name.length > 100)) {
-          document.getElementById(`${fields[i]}_error`).style.display = "contents"
-          document.getElementById(`${fields[i]}_error`).innerText = "Name should be between 2 and 100 characters"
+        if (
+          fields[i] === "company_name" &&
+          (data.company_name.length < 2 || data.company_name.length > 100)
+        ) {
+          document.getElementById(`${fields[i]}_error`).style.display =
+            "contents";
+          document.getElementById(`${fields[i]}_error`).innerText =
+            "Name should be between 2 and 100 characters";
           error = true;
           if (focusField === "") {
             focusField = fields[i];
           }
         }
-        if (fields[i] === "contact_name" && (data.contact_name.length < 2 || data.contact_name.length > 100)) {
-          document.getElementById(`${fields[i]}_error`).style.display = "contents"
-          document.getElementById(`${fields[i]}_error`).innerText = "Contact person name should be between 2 and 100 characters"
+        if (
+          fields[i] === "contact_name" &&
+          (data.contact_name.length < 2 || data.contact_name.length > 100)
+        ) {
+          document.getElementById(`${fields[i]}_error`).style.display =
+            "contents";
+          document.getElementById(`${fields[i]}_error`).innerText =
+            "Contact person name should be between 2 and 100 characters";
           error = true;
           if (focusField === "") {
             focusField = fields[i];
           }
         }
-        if (fields[i] === "name" && (data.name.length < 2 || data.name.length > 100)){
-          document.getElementById(`${fields[i]}_error`).style.display = "contents"
-          document.getElementById(`${fields[i]}_error`).innerText = "Organization name should be between 2 and 100 characters"
+        if (
+          fields[i] === "name" &&
+          (data.name.length < 2 || data.name.length > 100)
+        ) {
+          document.getElementById(`${fields[i]}_error`).style.display =
+            "contents";
+          document.getElementById(`${fields[i]}_error`).innerText =
+            "Organization name should be between 2 and 100 characters";
           error = true;
           if (focusField === "") {
             focusField = fields[i];
           }
         }
-        if (fields[i] === "email" && !validateEmail(data.email)){
-          document.getElementById(`${fields[i]}_error`).style.display = "contents"
-          document.getElementById(`${fields[i]}_error`).innerText = "Invalid email id"
+        if (fields[i] === "email" && !validateEmail(data.email)) {
+          document.getElementById(`${fields[i]}_error`).style.display =
+            "contents";
+          document.getElementById(`${fields[i]}_error`).innerText =
+            "Invalid email id";
           error = true;
           if (focusField === "") {
             focusField = fields[i];
           }
         }
-        if(fields[i] === "phone" && data.phone.length !== 10){
-          document.getElementById(`${fields[i]}_error`).style.display = "contents"
-          document.getElementById(`${fields[i]}_error`).innerText = "Phone number must have 10 characters"
+        if (fields[i] === "phone" && data.phone.length !== 10) {
+          document.getElementById(`${fields[i]}_error`).style.display =
+            "contents";
+          document.getElementById(`${fields[i]}_error`).innerText =
+            "Phone number must have 10 characters";
           error = true;
           if (focusField === "") {
-            focusField = fields[i]
+            focusField = fields[i];
           }
         }
-        if(fields[i] === "contact_no" && data.contact_no.length !== 10){
-          document.getElementById(`${fields[i]}_error`).style.display = "contents"
-          document.getElementById(`${fields[i]}_error`).innerText = "Official contact number must have 10 characters"
+        if (fields[i] === "contact_no" && data.contact_no.length !== 10) {
+          document.getElementById(`${fields[i]}_error`).style.display =
+            "contents";
+          document.getElementById(`${fields[i]}_error`).innerText =
+            "Official contact number must have 10 characters";
           error = true;
           if (focusField === "") {
-            focusField = fields[i]
+            focusField = fields[i];
           }
         }
 
-        if (fields[i] === "gstNo" && (data.gstNo.length > 15 )){
-          document.getElementById(`${fields[i]}_error`).style.display = "contents"
+        if (fields[i] === "gstNo" && data.gstNo.length > 15) {
+          document.getElementById(`${fields[i]}_error`).style.display =
+            "contents";
           error = true;
           if (focusField === "") {
-            focusField = fields[i]
+            focusField = fields[i];
           }
         }
-
       }
     }
     if (!error) {
       let formData = {
-       userName : data.company_name,
-       userEmail : data.email,
-       userPhoneNo : data.phone,
-       organizationType : data.company_type,
-       companyName : data.name,
-       officialPhoneNo : data.contact_no,
-       officialEmail : data.official_email,
-       contactPerson : data.contact_name,
-       gstNo : data.gstNo,
-       industry : data.industry,
-      }
-      Axios.post(`${domain}/api/company/editCompanyData`, {formData}, config)
-      .then(res => {
-        console.log(res.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+        userName: data.company_name,
+        userEmail: data.email,
+        userPhoneNo: data.phone,
+        organizationType: data.company_type,
+        companyName: data.name,
+        officialPhoneNo: data.contact_no,
+        officialEmail: data.official_email,
+        contactPerson: data.contact_name,
+        gstNo: data.gstNo,
+        industry: data.industry,
+      };
+      Axios.post(`${domain}/api/company/editCompanyData`, { formData }, config)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
-      if (focusField !== "industry"){
+      if (focusField !== "industry") {
         document.getElementById(focusField).focus();
       }
     }
@@ -256,20 +293,128 @@ function Company_BasicInfo() {
     document.getElementById(`industry_error`).style.visibility = "hidden";
   };
 
+  const updateProfileImg = (e) => {
+    let file = e.target.files[0];
+    let img = new Image();
+    img.src = window.URL.createObjectURL(file);
+    img.onload = () => {
+      if (img.width >= 150 && img.height >= 150) {
+        let formData = new FormData();
+        formData.append("file", file);
+        Axios.post(
+          `${domain}/api/user/updateProfilePicCompany`,
+          formData,
+          config
+        )
+          .then((res) => {
+            console.log(res.data);
+            setProfileSuccess(true);
+            Axios.get(`${domain}/api/company/companyData`, config)
+              .then((res) => {
+                setData({
+                  ...data,
+                  profilePic: res.data.profilePic,
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err.response);
+          });
+      } else {
+        alert("Profile Image size must be minimum 150x150");
+      }
+    };
+  };
+
+  const updateCoverImg = (e) => {
+    let file = e.target.files[0];
+    let img = new Image();
+    img.src = window.URL.createObjectURL(file);
+    img.onload = () => {
+      if (img.width >= 800 && img.height >= 300) {
+        let formData = new FormData();
+        formData.append("file", file);
+        Axios.post(`${domain}/api/user/updateCoverPicCompany`, formData, config)
+          .then((res) => {
+            console.log(res.data);
+            setCoverSuccess(true);
+            Axios.get(`${domain}/api/company/companyData`, config)
+              .then((res) => {
+                setData({
+                  ...data,
+                  coverPic: res.data.coverPic,
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err.response);
+          });
+      } else {
+        alert("Cover Image size must be minimum 800x300");
+      }
+    };
+  };
+
   return (
     <div className="pd_b_i_main">
       <div className="pd_b_i_images">
-        <img src={logoCover} alt="" className="pd_b_i_cover" />
+        <img src={data.coverPic} alt="" className="pd_b_i_cover" />
         <div className="pd_b_i_profile">
           <div className="pd_b_i_profile_container">
-            <img src={logo} alt="" className="pd_b_i_pilot" />
+            <img src={data.profilePic} alt="" className="pd_b_i_pilot" />
             <div>
-              <img src={Edit} alt="" className="pd_b_i_edit" />
+              <label>
+                <input
+                  type="file"
+                  src=""
+                  alt="profile-img"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={updateProfileImg}
+                  disabled={!edit}
+                />
+                {edit ? (
+                  <img src={Edit} alt="" className="pd_b_i_edit" />
+                ) : (
+                  <img
+                    src={Edit}
+                    alt=""
+                    className="pd_b_i_edit"
+                    style={{ opacity: "0.5" }}
+                  />
+                )}
+              </label>
             </div>
           </div>
         </div>
         <div>
-          <img src={Edit} alt="" className="pd_b_i_edit1" />
+          <label>
+            <input
+              type="file"
+              src=""
+              alt="profile-img"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={updateCoverImg}
+              disabled={!edit}
+            />
+            {edit ? (
+              <img src={Edit} alt="" className="pd_b_i_edit1" />
+            ) : (
+              <img
+                src={Edit}
+                alt=""
+                className="pd_b_i_edit1"
+                style={{ opacity: "0.5" }}
+              />
+            )}
+          </label>
         </div>
       </div>
       <div className="pd_b_i_profile_titleBox">
@@ -517,8 +662,7 @@ function Company_BasicInfo() {
             onChange={industryChange}
             styles={customStyles}
             className="u_f_category_dropdown"
-            value={{label: data.industry,
-            value: data.industry}}
+            value={{ label: data.industry, value: data.industry }}
           />
         </div>
         <div className="login_input_error_msg" id="industry_error">
@@ -536,6 +680,78 @@ function Company_BasicInfo() {
           </button>
         )}
       </div>
+      <Dialog
+        open={profileSuccess}
+        onClose={() => setProfileSuccess(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+            <img
+              src={Close}
+              alt=""
+              onClick={() => setProfileSuccess(false)}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <Row style={{ marginTop: "30px" }}>
+            <div className="u_f_popup_title">
+              Profile image updated successfully.
+            </div>
+            <div className="u_f_popup_btn_container">
+              <button
+                className="u_f_popup_btn2"
+                onClick={() => setProfileSuccess(false)}
+              >
+                Close
+              </button>
+            </div>
+          </Row>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={coverSuccess}
+        onClose={() => setCoverSuccess(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+            <img
+              src={Close}
+              alt=""
+              onClick={() => setCoverSuccess(false)}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <Row style={{ marginTop: "30px" }}>
+            <div className="u_f_popup_title">
+              Cover image updated successfully.
+            </div>
+            <div className="u_f_popup_btn_container">
+              <button
+                className="u_f_popup_btn2"
+                onClick={() => setCoverSuccess(false)}
+              >
+                Close
+              </button>
+            </div>
+          </Row>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

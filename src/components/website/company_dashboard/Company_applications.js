@@ -80,8 +80,9 @@ function Company_applications() {
                       <span className="pd_a_j_dataDate">06 Jan 2022</span>
                     </div>
                   </div>
-
-                  <div className="pd_a_j_dataTitle">{job.jobTitle}</div>
+                  <Link to = {"/applyJobLanding/"+job._id}>
+                    <div className="pd_a_j_dataTitle">{job.jobTitle}</div>
+                  </Link>
                 </div>
                 <div className="pd_a_j_data_subTitle1">{job.industry}</div>
                 <div>
@@ -106,11 +107,11 @@ function Company_applications() {
                   </div>
                 </div>
                 <div className="a_j_listing_btns" style={{ marginTop: "20px" }}>
-                  <button className="a_j_location_btn">
+                  <button className="a_j_location_btn" style = {{cursor: "default"}}>
                     <img src={location} className="a_j_location_logo" />
                     <span className="a_j_location_text">Bangalore</span>
                   </button>{" "}
-                  <button className="a_j_location_btn">
+                  <button className="a_j_location_btn" style = {{cursor: "default"}}>
                     <img src={work} className="a_j_location_logo" />
                     <span className="a_j_location_text">Full Time</span>
                   </button>
@@ -184,11 +185,11 @@ function Company_applications() {
               })}
             </>
           ) : (
-            <h3 style={{ textAlign: "center" }}>No applications yet</h3>
+            <div style={{ textAlign: "center", fontFamily: "muli-regular", fontSize: "25px", margin: "30px" }}>No applications yet</div>
           )}
         </>
       ) : (
-        <h3 style={{ textAlign: "center" }}>Loading . . .</h3>
+        <div style={{ textAlign: "center", fontFamily: "muli-regular", fontSize: "25px", margin: "30px" }}>Loading . . .</div>
       )}
       <Dialog
         open={viewDetails}

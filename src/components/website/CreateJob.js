@@ -281,7 +281,7 @@ class CreateJob extends Component {
         .then((res) => {
           console.log(res);
           this.clearForm();
-          this.state.dialog = true;
+          this.props.history.push("/company_dashboard/activities/jobs")
         })
         .catch((err) => {
           console.log(err);
