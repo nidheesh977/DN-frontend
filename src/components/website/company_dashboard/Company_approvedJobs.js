@@ -11,7 +11,7 @@ import Close from "../../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import heart from "../../images/heart (3).svg";
 import heartLike from "../../images/heart-blue.svg";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import loadMore from "../../images/Group 71.svg";
 import bin from "./images/c_j_bin.png";
 import { withStyles } from "@material-ui/core/styles";
@@ -33,6 +33,8 @@ function Company_approvedJobs() {
     },
   };
 
+  const history = useHistory()
+
   useEffect(() => {
     axios.post(`${domain}/api/jobs/approvedJobs`, config).then((res) => {
       if (res.data !== "") {
@@ -47,6 +49,8 @@ let expireJob = (id) =>{
   setExpirePopup(true)
 }
 let [expirePopup, setExpirePopup] = useState(false);
+let [editPopup, setEditPopup] = useState(false);
+let [editId, setEditId] = useState("");
 let confirmExpire = () =>{
   axios.post(`${domain}/api/jobs/expireJob`,{jobId: expireId}).then(res=>{
     console.log(res)
@@ -62,6 +66,24 @@ let confirmExpire = () =>{
 let expirePopupHandler = () =>{
   setExpirePopup(false)
 }
+
+let continueEdit = () => {
+  history.push(`/job_edit/${editId}`)
+}
+
+let editJob = (id) => {
+  setEditId(id)
+  axios.post(`${domain}/api/jobApplications/getApplications`, {jobId: id}).then((res) => {
+    console.log(res.data)
+    if (res.data.length !== 0){
+      setEditPopup(true)
+    }
+    else{
+      history.push(`/job_edit/${id}`)
+    }
+  })
+}
+
   return (
     <div>
       {data.length > 0
@@ -110,9 +132,7 @@ let expirePopupHandler = () =>{
                 <Link to={`/company_dashboard/activities/jobs/applications/${items._id}`} id="a_j_job_btn">
                   View Applications
                 </Link>{" "}
-                <Link to = {`/job_edit/${items._id}`}>
-                  <img src={edit} className="company_jobs_edit" />
-                </Link>
+                <img src={edit} className="company_jobs_edit" onClick = {()=>editJob(items._id)}/>
                 <img src={bin} className="company_jobs_edit" onClick={()=>expireJob(items._id)} />
               </div>
             </div>
@@ -169,6 +189,52 @@ let expirePopupHandler = () =>{
               </button>
               <button className="sc_popup_submit" onClick={confirmExpire}>
                 Expire
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+<Dialog
+        open={editPopup}
+        onClose={()=>setEditPopup(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{
+          style: { width: "620px", borderRadius: "10px" },
+        }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: "20px",
+              right: "20px",
+            }}
+          >
+            <img
+              src={Close}
+              alt=""
+              onClick={()=>setEditPopup(false)}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <div style={{ marginTop: "30px" }}>
+            <div className="sc_popup_head" style={{marginBottom: "15px"}}>Confirm Edit?</div>
+            <div className="sc_popup_desc">
+              On editing you may loose previous job data{" "}
+            </div>
+           
+            <div style={{ width: "100%", textAlign: "center"}}>
+            <button className="sc_popup_submit" style={{marginRight: "20px", background: "#00E7FC "}} onClick={()=>setEditPopup(false)}>
+                Close
+              </button>
+              <button className="sc_popup_submit" onClick={continueEdit}>
+                Continue edit
               </button>
             </div>
           </div>

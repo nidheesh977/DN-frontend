@@ -283,12 +283,13 @@ class JobEdit extends Component {
       )
         .then((res) => {
           console.log(res);
+          this.state.dialog = true;
         })
         .catch((err) => {
-          console.log(err);
+            console.log(err)
+            this.props.history.push("/")
         });
-      this.clearForm();
-      this.state.dialog = true;
+      
     }
   };
 

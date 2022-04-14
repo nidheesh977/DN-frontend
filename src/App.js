@@ -48,6 +48,7 @@ import PilotRoute from "./PilotRoute";
 import Booster_dashboard from "./components/website/booster_dashboard/Booster_dashboard";
 import BoosterRoute from "./BoosterRoute";
 import CenterRoute from "./CenterRoute";
+import CompleteDraft from "./components/website/completeDraft";
 function App(){
 
   useEffect(()=>{
@@ -142,6 +143,7 @@ function App(){
             <Route component = {ServiceCenters} path = "/service_centers" exact />
             <Route component = {CreateJob} path = "/create_job" exact />
             <Route component = {JobEdit} path = "/job_edit/:id" exact />
+            <Route component = {CompleteDraft} path = "/complete_draft/:id" exact />
             <Route component = {ServiceCenterDetails} path = "/service_center/:id" exact />
             <Route component = {ServiceCenterDashboard} path = "/service_center_dashboard"/>
             <Route component = {ApplyJob} path = "/apply_job" exact />

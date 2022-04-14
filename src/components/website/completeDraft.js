@@ -42,7 +42,7 @@ const customStyles = {
   },
 };
 
-class CreateJob extends Component {
+class CompleteDraft extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,7 +70,7 @@ class CreateJob extends Component {
       draftJobs: [],
       deleteDraftId: "",
       deleteDraftIndex: "",
-      deleteDraftPopup: false,
+      deleteDraftPopup: false
     };
   }
 
@@ -91,11 +91,19 @@ class CreateJob extends Component {
         industries: options,
       });
     });
-    Axios.post(`${domain}/api/draftJob/getMyDrafts`, config).then((res) => {
-      console.log(res);
+    Axios.post(`${domain}/api/draftJob/getDetails`, {draftId: this.props.match.params.id}).then((res) => {
       this.setState({
-        draftJobs: res.data,
-      });
+        job_title: res.data.jobTitle,
+        job_type: res.data.jobType,
+        employee_type: res.data.employeeType,
+        industry: res.data.industry,
+        min_salary: res.data.minSalary,
+        max_salary: res.data.maxSalary,
+        rate: res.data.salaryType,
+        location: res.data.workLocation,
+        description: res.data.jobDesc,
+        openings: res.data.noOfOpenings,
+      })
     });
   }
 
@@ -263,7 +271,7 @@ class CreateJob extends Component {
 
       $("html,body").scrollTop(0);
       Axios.post(
-        `${domain}/api/jobs/createJob`,
+        `${domain}/api/draftJob/submitDraft`,
         {
           jobTitle: this.state.job_title,
           industry: this.state.industry,
@@ -275,13 +283,15 @@ class CreateJob extends Component {
           workLocation: this.state.location,
           jobDesc: this.state.description,
           noOfOpenings: this.state.openings,
+          draftId: this.props.match.params.id
         },
         config
       )
         .then((res) => {
           console.log(res);
           this.clearForm();
-          this.state.dialog = true;
+        //   this.state.dialog = true;
+          this.props.history.push("/company_dashboard/activities/jobs")
         })
         .catch((err) => {
           console.log(err);
@@ -386,173 +396,16 @@ class CreateJob extends Component {
     document.getElementById(`industry_error`).style.visibility = "hidden";
   };
 
-  saveDraft = () => {
-    var fields = [
-      "job_title",
-      "industry",
-      "min_salary",
-      "max_salary",
-      "openings",
-      "location",
-      "description",
-    ];
-
-    var error = false;
-    var focusField = "";
-
-    for (var i = 0; i < fields.length; i++) {
-      if (
-        fields[i] !== "min_salary" &&
-        fields[i] !== "max_salary" &&
-        fields[i] !== "openings"
-      ) {
-        if (fields[i] === "job_title" && this.state.job_title === "") {
-          error = true;
-          document.getElementById("job_title_error").style.display = "contents";
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-        }
-        if (
-          fields[i] === "job_title" &&
-          this.state.job_title !== "" &&
-          (this.state.job_title.length > 100 || this.state.job_title.length < 2)
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("job_title_error").innerText =
-            "Job title must be between 2 and 100 characters";
-          document.getElementById("job_title_error").style.display = "contents";
-        }
-        if (
-          fields[i] === "description" &&
-          this.state.description !== "" &&
-          (this.state.description.length > 1500 ||
-            this.state.description.length < 200)
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("description_error").innerText =
-            "Description must be between 200 and 1500 characters";
-          document.getElementById("description_error").style.display =
-            "contents";
-        }
-      } else {
-        if (
-          fields[i] === "min_salary" &&
-          this.state.max_salary !== "" &&
-          this.state.min_salary === ""
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("min_salary_error").innerText =
-            "Mention minimum salary";
-          document.getElementById("min_salary_error").style.display =
-            "contents";
-        }
-        if (
-          fields[i] === "max_salary" &&
-          this.state.min_salary !== "" &&
-          this.state.max_salary === ""
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("max_salary_error").innerText =
-            "Mention maximum salary";
-          document.getElementById("max_salary_error").style.display =
-            "contents";
-        }
-        if (
-          fields[i] === "max_salary" &&
-          Number(this.state.min_salary) > Number(this.state.max_salary)
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("max_salary_error").innerText =
-            "Maximum salary should not be less than minimum salary";
-          document.getElementById("max_salary_error").style.display =
-            "contents";
-        }
-        if (fields[i] === "openings" && Number(this.state.openings) > 1000) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("openings_error").innerText =
-            "Maximum openings is 1000";
-          document.getElementById("openings_error").style.display = "contents";
-        }
-      }
-    }
-
-    if (error) {
-      if (focusField !== "") {
-        document.getElementById(focusField).focus();
-      }
-      console.log(focusField);
-    } else {
-      const config = {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      };
-
-      Axios.post(
-        `${domain}/api/draftJob/createDraft`,
-        {
-          jobTitle: this.state.job_title,
-          industry: this.state.industry,
-          jobType: this.state.job_type,
-          employeeType: this.state.employee_type,
-          minSalary: this.state.min_salary,
-          maxSalary: this.state.max_salary,
-          salaryType: this.state.rate,
-          workLocation: this.state.location,
-          jobDesc: this.state.description,
-          noOfOpenings: this.state.openings,
-        },
-        config
-      )
-        .then((res) => {
-          console.log(res);
-          this.state.dialog = true;
-          this.clearForm();
-          $("html,body").scrollTop(0);
-          Axios.post(`${domain}/api/draftJob/getMyDrafts`, config).then(
-            (res) => {
-              console.log(res);
-              this.setState({
-                draftJobs: res.data,
-              });
-            }
-          );
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-
   deleteDraft = (id, index) => {
     this.setState({
-      deleteDraftIndex: index,
-    });
-
+      deleteDraftIndex: index
+    })
+    
     this.setState({
       deleteDraftId: id,
-      deleteDraftPopup: true,
-    });
-  };
+      deleteDraftPopup: true
+    })
+  }
 
   confirmDelete = () => {
     const config = {
@@ -560,30 +413,26 @@ class CreateJob extends Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    console.log(this.state.deleteDraftId);
-    Axios.post(
-      `${domain}/api/draftJob/deleteDraft`,
-      { jobId: this.state.deleteDraftId },
-      config
-    )
-      .then((res) => {
-        console.log(res);
-        this.setState({
-          deleteDraftPopup: false,
-        });
-        let draftJobs = this.state.draftJobs;
-        draftJobs.splice(this.state.deleteDraftIndex, 1);
-        this.setState({
-          draftJobs: draftJobs,
-        });
+    console.log(this.state.deleteDraftId)
+    Axios.post(`${domain}/api/draftJob/deleteDraft`, {jobId: this.state.deleteDraftId}, config)
+    .then(res => {
+      console.log(res)
+      this.setState({
+        deleteDraftPopup: false
       })
-      .catch((err) => {
-        console.log(err);
-        this.setState({
-          deleteDraftPopup: false,
-        });
-      });
-  };
+      let draftJobs = this.state.draftJobs
+      draftJobs.splice(this.state.deleteDraftIndex, 1)
+      this.setState({
+        draftJobs: draftJobs
+      })
+    })
+    .catch(err => {
+      console.log(err)
+      this.setState({
+        deleteDraftPopup: false
+      })
+    })
+  }
 
   render() {
     return (
@@ -598,35 +447,10 @@ class CreateJob extends Component {
           <Visible xs>
             <div style={{ marginTop: "25px" }}></div>
           </Visible>
-          <Container className={`${All.Container}`}>
-            <div style={{ display: "flex" }}>
-              <div
-                className={
-                  this.state.main_tab === 1
-                    ? "s_c_db_main_tab s_c_db_main_tab_selected"
-                    : "s_c_db_main_tab"
-                }
-                onClick={() => this.selectMainTab(1)}
-              >
-                Create New Job
-              </div>
-              <div
-                className={
-                  this.state.main_tab === 2
-                    ? "s_c_db_main_tab s_c_db_main_tab_selected"
-                    : "s_c_db_main_tab"
-                }
-                onClick={() => this.selectMainTab(2)}
-              >
-                Draft Jobs
-              </div>
-            </div>
-          </Container>
         </div>
         <Container
           className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}
         >
-          {this.state.main_tab === 1 && (
             <>
               <Row>
                 <div className="c_j_title_container">
@@ -985,13 +809,6 @@ class CreateJob extends Component {
                   </button>
                   <button
                     className="c_j_btn"
-                    id="c_j_btn_save_draft"
-                    onClick={this.saveDraft}
-                  >
-                    Save as draft
-                  </button>
-                  <button
-                    className="c_j_btn"
                     id="c_j_btn_continue"
                     onClick={this.PostJob}
                   >
@@ -1000,199 +817,9 @@ class CreateJob extends Component {
                 </div>
               </Row>
             </>
-          )}
-
-          {this.state.main_tab === 2 && (
-            <>
-              <Row>
-                <div
-                  className="c_j_title_container"
-                  style={{ marginBottom: "40px" }}
-                >
-                  <div className="c_j_title">Draft Jobs</div>
-                  <div className="c_j_description">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </div>
-                </div>
-              </Row>
-              {this.state.draftJobs.map((draftJob, index) => {
-                return (
-                  <Row>
-                    <div className="c_j_draft_item_container">
-                      <div className="c_j_drafts_container">
-                        <div className="pd_a_j_dataTitle">
-                          {draftJob.jobTitle}
-                        </div>
-                        <div className="pd_a_j_data_subTitle">
-                          {draftJob.industry ? draftJob.industry : "- - - "}
-                        </div>
-                        <div className="a_j_container1">
-                          <div className="a_j_listing_img1">
-                            <img src={profileUser} />
-                          </div>
-                          <div className="a_j_listing_profileName">
-                            {draftJob.employeeType
-                              ? draftJob.employeeType
-                              : "- - - "}
-                          </div>
-                          <div className="a_j_listing_img2">
-                            <img src={money} />
-                          </div>
-                          <div className="a_j_listing_money">
-                            {draftJob.minSalary
-                              ? `$${draftJob.minSalary} - $${draftJob.maxSalary}`
-                              : "Not mentioned"}
-                          </div>
-                        </div>
-                        <div className="a_j_listing_text">
-                          {draftJob.jobDesc
-                            ? draftJob.jobDesc.slice(0, 120)
-                            : "- - - "}
-                        </div>
-                      </div>
-                      <button
-                        className="c_j_listing_btn c_j_location_btn"
-                        style={{ cursor: "default" }}
-                      >
-                        <img
-                          src={locationIcon}
-                          alt=""
-                          className="c_j_listing_icon1"
-                        />{" "}
-                        {draftJob.workLocation
-                          ? draftJob.workLocation.split(",")[0]
-                          : "- - - "}
-                      </button>
-                      <button
-                        className="c_j_listing_btn c_j_job_type_btn"
-                        style={{ cursor: "default" }}
-                      >
-                        <img
-                          src={workIcon}
-                          alt=""
-                          className="c_j_listing_icon1"
-                        />{" "}
-                        {draftJob.jobType ? draftJob.jobType : "- - - "}
-                      </button>
-                      <Link to = {`/complete_draft/${draftJob._id}`}>
-                        <button className="c_j_listing_btn c_j_post_job_btn">
-                          Complete draft
-                        </button>
-                      </Link>
-                      <img
-                        src={c_j_bin}
-                        alt=""
-                        className="c_j_listing_icon2"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => this.deleteDraft(draftJob._id, index)}
-                      />
-                    </div>
-                  </Row>
-                );
-              })}
-            </>
-          )}
+          
         </Container>
 
-        <Dialog
-          open={this.state.show_popup}
-          onClose={this.closePopup}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          maxWidth={"md"}
-          fullWidth={true}
-          PaperProps={{ style: { borderRadius: 10, maxWidth: "820px" } }}
-        >
-          <DialogContent
-            className={All.PopupBody}
-            style={{ marginBottom: "50px" }}
-          >
-            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
-              <img
-                src={Close}
-                alt=""
-                onClick={this.closePopup}
-                style={{ cursor: "pointer" }}
-              />
-            </div>
-            <Row style={{ marginTop: "30px" }}>
-              <div className="u_f_popup_title">
-                You have draft job in your account. do you want to continue
-                post?
-              </div>
-              <div className="u_f_popup_btn_container">
-                <button className="u_f_popup_btn1" onClick={this.openDraft}>
-                  Open Draft
-                </button>
-                <button className="u_f_popup_btn2" onClick={this.uploadNew}>
-                  Create New Job
-                </button>
-              </div>
-            </Row>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog
-          open={this.state.job_created_popup}
-          onClose={this.closePopup}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          maxWidth={"md"}
-          fullWidth={true}
-        >
-          <DialogContent
-            className={All.PopupBody}
-            style={{ marginBottom: "50px" }}
-          >
-            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
-              <img
-                src={Close}
-                alt=""
-                onClick={this.closePopup}
-                style={{ cursor: "pointer" }}
-              />
-            </div>
-            <Row style={{ marginTop: "30px" }}>
-              <div className="u_f_popup_title">Success</div>
-            </Row>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog
-          open={this.state.job_created_popup}
-          onClose={this.closePopup}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          maxWidth={"md"}
-          fullWidth={true}
-          PaperProps={{ style: { borderRadius: 10 } }}
-        >
-          <DialogContent
-            className={All.PopupBody}
-            style={{ marginBottom: "50px" }}
-          >
-            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
-              <img
-                src={Close}
-                alt=""
-                onClick={this.closePopup}
-                style={{ cursor: "pointer" }}
-              />
-            </div>
-            <Row style={{ marginTop: "30px" }}>
-              <div className="u_f_popup_title">Success</div>
-              <div className="u_f_popup_btn_container">
-                <button className="u_f_popup_btn1" onClick={this.openDraft}>
-                  Open Draft
-                </button>
-                <button className="u_f_popup_btn2" onClick={this.uploadNew}>
-                  Create New Job
-                </button>
-              </div>
-            </Row>
-          </DialogContent>
-        </Dialog>
         <Dialog
           open={this.state.dialog}
           onClose={this.closeChoicePopup}
@@ -1228,62 +855,9 @@ class CreateJob extends Component {
             </Row>
           </DialogContent>
         </Dialog>
-        <Dialog
-          open={this.state.deleteDraftPopup}
-          onClose={() => this.setState({ deleteDraftPopup: false })}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          maxWidth={"md"}
-          fullWidth={true}
-          PaperProps={{ style: { borderRadius: 20, width: "700px" } }}
-        >
-          <DialogContent
-            className={All.PopupBody}
-            style={{ marginBottom: "50px" }}
-          >
-            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
-              <img
-                src={Close}
-                alt=""
-                onClick={() => this.setState({ deleteDraftPopup: false })}
-                style={{ cursor: "pointer" }}
-              />
-            </div>
-            <Row style={{ marginTop: "30px" }}>
-              <div className="u_f_popup_title" style={{ marginBottom: "20px" }}>
-                Delete
-              </div>
-              <div
-                style={{
-                  textAlign: "center",
-                  fontFamily: "muli-regular",
-                  fontSize: "18px",
-                  width: "100%",
-                  marginBottom: "30px",
-                }}
-              >
-                Do you want to delete this draft
-              </div>
-              <div
-                className="u_f_popup_btn_container"
-                style={{ display: "inline-block" }}
-              >
-                <button
-                  className="u_f_popup_btn1"
-                  onClick={() => this.setState({ deleteDraftPopup: false })}
-                >
-                  Close
-                </button>
-                <button className="u_f_popup_btn2" onClick={this.confirmDelete}>
-                  Delete
-                </button>
-              </div>
-            </Row>
-          </DialogContent>
-        </Dialog>
       </section>
     );
   }
 }
 
-export default CreateJob;
+export default CompleteDraft;

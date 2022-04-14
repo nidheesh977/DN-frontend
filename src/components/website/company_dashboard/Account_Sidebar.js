@@ -68,19 +68,19 @@ class Account_Sidebar extends React.Component {
                       activeClassName="h_p_sidebar_active"
                       className="h_p_filter1_checkbox_label"
                     >
-                      Basic Information
+                      My Profile
                     </NavLink>
                   </div>
-                  <div id="pd_filter1_checkbox_label">
+                  {/* <div id="pd_filter1_checkbox_label">
                     {" "}
                     <NavLink
                       to="/company_dashboard/account/professionalInformation"
                       activeClassName="h_p_sidebar_active"
                       className="h_p_filter1_checkbox_label"
                     >
-                      Professional Information
+                       Information
                     </NavLink>{" "}
-                  </div>
+                  </div> */}
                   <div id="pd_filter1_checkbox_label">
                     {" "}
                     <NavLink
