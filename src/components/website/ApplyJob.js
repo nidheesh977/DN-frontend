@@ -843,7 +843,10 @@ class ApplyJob extends Component {
                               <img src={money} />
                             </div>
                             <div className="a_j_listing_money">
-                              $ {item.minSalary}.00 - ${item.maxSalary}.00
+                              {
+                                item.minSalary ? `${item.minSalary}.00 - ${item.maxSalary}.00` : "Not Mentioned"
+                              }
+                              
                             </div>
                           </div>
                           <div className="a_j_listing_text">
@@ -856,7 +859,7 @@ class ApplyJob extends Component {
                           <button className="a_j_location_btn">
                             <img src={location} className="a_j_location_logo" />
                             <span className="a_j_location_text">
-                              {item.city}
+                              {item.workLocation.split(",")[0]}
                             </span>
                           </button>{" "}
                           <button className="a_j_location_btn">

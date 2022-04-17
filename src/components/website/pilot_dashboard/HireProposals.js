@@ -69,10 +69,10 @@ function HireProposals() {
             <Col xl={3} xs={3}>
               <div>{item.companyId.companyName}</div>
             </Col>
-            <Col xl={3} xs={3}>
+            <Col xl={2} xs={3}>
               <div>{item.companyId.phoneNo}</div>
             </Col>
-            <Col xl={3.5} xs={3}>
+            <Col xl={4.5} xs={3}>
               <div>{item.companyId.emailId}</div>
             </Col>
             <Col xl={2.5} xs={3}>

@@ -49,6 +49,7 @@ import Booster_dashboard from "./components/website/booster_dashboard/Booster_da
 import BoosterRoute from "./BoosterRoute";
 import CenterRoute from "./CenterRoute";
 import CompleteDraft from "./components/website/completeDraft";
+import "./App.css"
 function App(){
 
   useEffect(()=>{
@@ -72,6 +73,7 @@ function App(){
   }
 
     return (
+      <div className="selectColor">
       <Router>
         <Header loginStatus = {loginStatus} updateLoginStatus = {updateLoginStatus}/>
         {/* <Message /> */}
@@ -170,6 +172,7 @@ function App(){
         </UserContext.Provider>
         <Footer/>
       </Router>
+      </div>
     );
   
 }

@@ -136,7 +136,7 @@ if(response.data === "please Login"){
   useEffect(() => {
     console.log(config);
     axios
-      .post(`${domain}/api/pilot/getAppliedJobs`, config)
+      .get(`${domain}/api/pilot/appliedJobsMine`, config)
       .then((response) => {
         // setData({response})
         setList(response.data);
@@ -212,7 +212,7 @@ if(response.data === "please Login"){
               <div className="a_j_listing_btns">
                 <button className="a_j_location_btn">
                   <img src={location} className="a_j_location_logo" />
-                  <span className="a_j_location_text">{item.city}</span>
+                  <span className="a_j_location_text">{item.workLocation ? item.workLocation.split(",")[0] : ""}</span>
                 </button>{" "}
                 <button className="a_j_location_btn">
                   <img src={work} className="a_j_location_logo" />
