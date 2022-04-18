@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Row, Col } from "react-grid-system";
+import { Link } from "react-router-dom";
 // import "./css/HireProposal.css";
 const domain = process.env.REACT_APP_MY_API
 
@@ -16,6 +17,9 @@ function SentProposals() {
         axios.post(`${domain}/api/hireProposal/companyProposals`, config).then(res=>{
             console.log(res)
             setData(res.data)
+            if(res.data.length === 0){
+              document.getElementById("toHideHere").style.display = "block"
+            }
         })
     }, [])
     let showMessage = (id) =>{
@@ -58,6 +62,10 @@ function SentProposals() {
           </Col>
         </Row>
       </div>
+      <div style = {{textAlign: "center", display: "none", marginTop:"20px"}} id="toHideHere">
+      <div className="cd_error_msg">No Proposals Sent, You can hire pilots through Hire Me Button always!!!</div>
+      <Link to = "/hire_pilots"><button className="cd_error_btn" style = {{padding: "10px 30px"}}>Check Pilots</button></Link>
+    </div>
 
       {
           data.map((item, i)=>{

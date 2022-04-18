@@ -50,6 +50,7 @@ import BoosterRoute from "./BoosterRoute";
 import CenterRoute from "./CenterRoute";
 import CompleteDraft from "./components/website/completeDraft";
 import "./App.css"
+import CompanyRoute from "./companyRoute";
 function App(){
 
   useEffect(()=>{
@@ -155,7 +156,7 @@ function App(){
             {/* <Route component={Pilot_dashboard} path="/pilot_dashboard" /> */}
             <CenterRoute component={Center_dashboard} path="/center_dashboard" />
             <Route component={ApplyJobLanding} path="/applyJobLanding/:id" />
-            <Route component={Company_dashboard} path="/company_dashboard" />
+            <CompanyRoute component={Company_dashboard} path="/company_dashboard" />
             <Route component={Admin_dashboard} path="/Admin_dashboard" />
             <Route component={CreatePilot} path="/createPilot" />
             <Route component={Categories} path="/choose-categories" />

@@ -24,6 +24,10 @@ import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import nofoundresult from "../images/noresultfound.svg";
 import env from "dotenv";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-autocomplete-places";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -93,8 +97,32 @@ class ApplyJob extends Component {
       dislikeSuccess: false,
       dislikeID: 0,
       loginErrorPopup: false,
+      priceCheck: true,
+      address: "",
+      latLng: ""
     };
   }
+  handleChange = (address) => {
+    this.setState({ address: address });
+  };
+
+  handleSelect = (address) => {
+    console.log(address);
+    this.setState({ address: address });
+
+    geocodeByAddress(address)
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => {
+        console.log("Success", latLng);
+
+        this.setState({
+          latLng: `${latLng.lat}, ${latLng.lng}`,
+        });
+        console.log(this.state.latLng);
+      })
+      .catch((error) => console.error("Error", error));
+  };
+
   dropdown = (id) => {
     this.setState({
       view_pilot_type_filter: false,
@@ -244,7 +272,7 @@ class ApplyJob extends Component {
       liked.push(id);
       this.setState({
         liked: liked,
-        likeSuccess: true
+
       });
 
       axios
@@ -337,6 +365,7 @@ class ApplyJob extends Component {
     setTimeout(() => {
       console.log(this.state.pilot_type);
     }, 100);
+
   };
 
   filterWorkTypeChangeHandler = (type) => {
@@ -389,7 +418,35 @@ class ApplyJob extends Component {
       loginErrorPopup: false,
     });
   };
+  searchFilter = () =>{
+    // filter_keyword: "",
+    // filter_country: "",
+    // filter_city: "",
+    // pilot_type: [],
+    // work_type: [],
+    // price_range: [20, 40],
+    this.setState({ loading: true });
+    const data = {
+      keywords : this.state.filter_keyword,
+      employeeType: this.state.pilot_type,
+      jobType : this.state.work_type,
+      
+      
+      address: this.state.address
+    }
+    if(document.getElementById("priceChecker").checked === true ){
+      data.price = this.state.price_range
+    }
+    axios.post(`${domain}/api/jobs/filterJobs`, data).then(res=>{
+      console.log(res)
+     console.log(res)
+      this.setState({
+        data : res.data
+      })
+      this.setState({ loading: false });
 
+    })
+  }
   render() {
     return (
       <>
@@ -423,7 +480,8 @@ class ApplyJob extends Component {
                     placeholder="Search Keywords"
                     onChange={this.filterKeywordChangeHandler}
                   />
-                  <div className="h_p_filter1_title1">Country</div>
+                  <div className="h_p_filter1_title1">Location</div>
+                  <div style={{display: "none"}}>
                   <select
                     className="a_j_select_dropdown"
                     onChange={this.filterCountryChangeHandler}
@@ -446,6 +504,74 @@ class ApplyJob extends Component {
                     <option value="Mumbai">Mumbai</option>
                     <option value="Delhi">Delhi</option>
                   </select>
+                  </div>
+                  <div className="">
+                  {/* <input type="text" className="s_c_Search"/> */}
+                  <PlacesAutocomplete
+                    value={this.state.address}
+                    onChange={this.handleChange}
+                    onSelect={this.handleSelect}
+                  >
+                    {({
+                      getInputProps,
+                      suggestions,
+                      getSuggestionItemProps,
+                      loading,
+                    }) => (
+                      <div>
+                        <input
+                          style={{ height: "40px" }}
+                          {...getInputProps({
+                            placeholder: "Search Places ...",
+                            className: "a_j_filter_address",
+                          })}
+                        />
+                        <div
+                          className="autocomplete-dropdown-container"
+                 
+                        >
+                          {loading && <div>Loading...</div>}
+                          {suggestions.map((suggestion) => {
+                            const className = suggestion.active
+                              ? "suggestion-item--active"
+                              : "suggestion-item";
+
+                            // inline style for demonstration purpose
+                            const style = suggestion.active
+                              ? {
+                                  backgroundColor: "#e1e1e1",
+                                  cursor: "pointer",
+                                  padding: "10px",
+                                }
+                              : {
+                                  backgroundColor: "#ffffff",
+                                  cursor: "pointer",
+                                  padding: "10px",
+                                };
+                            return (
+                              <div
+                                {...getSuggestionItemProps(suggestion, {
+                                  className,
+                                  style,
+                                })}
+                              >
+                                <span
+                                  style={{
+                                    padding: "20px 10px",
+                                    marginBottom: "10px",
+                                  }}
+                                >
+                                  {suggestion.description}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </PlacesAutocomplete>
+                </div>
+                <br />
 
                   <div
                     className="h_p_filter1_title"
@@ -475,7 +601,7 @@ class ApplyJob extends Component {
                         type="checkbox"
                         className="h_p_filter1_checkbox"
                         onClick={() =>
-                          this.filterPilotTypeChangeHandler("licensed")
+                          this.filterPilotTypeChangeHandler("Licensed Pilot")
                         }
                       />
                       <div className="h_p_filter1_checkbox_label">
@@ -487,7 +613,7 @@ class ApplyJob extends Component {
                         type="checkbox"
                         className="h_p_filter1_checkbox"
                         onClick={() =>
-                          this.filterPilotTypeChangeHandler("unlicensed")
+                          this.filterPilotTypeChangeHandler("Unlicensed Pilot")
                         }
                       />
 
@@ -524,7 +650,7 @@ class ApplyJob extends Component {
                         type="checkbox"
                         className="h_p_filter1_checkbox"
                         onClick={() =>
-                          this.filterWorkTypeChangeHandler("FullTime")
+                          this.filterWorkTypeChangeHandler("Full-Time")
                         }
                       />
                       <div className="h_p_filter1_checkbox_label">
@@ -536,7 +662,7 @@ class ApplyJob extends Component {
                         type="checkbox"
                         className="h_p_filter1_checkbox"
                         onClick={() =>
-                          this.filterWorkTypeChangeHandler("PartTime")
+                          this.filterWorkTypeChangeHandler("Part-Time")
                         }
                       />
                       <div className="h_p_filter1_checkbox_label">
@@ -544,7 +670,14 @@ class ApplyJob extends Component {
                       </div>
                     </label>
                   </div>
-                  <div className="h_p_filter1_title">Monthly Salary</div>
+                  <div style={{marginBottom :"30px"}}>
+                  <input
+                            type="checkbox"
+                            className="h_p_filter1_checkbox" style={{display: "inline"}}
+                            id="priceChecker"
+                          />
+                  <div className="h_p_filter1_title" style={{display: "inline", marginBottom:"10px"}}>Salary</div>
+                  </div>
                   <div
                     className={
                       this.state.view_hourly_rate_filter
@@ -570,6 +703,7 @@ class ApplyJob extends Component {
                       />
                     </Box>
                   </div>
+                  <div className="a_j_filter_search" onClick={this.searchFilter}>Search</div>
                 </Col>
               </Visible>
               <Hidden xxl xl>
@@ -746,6 +880,10 @@ class ApplyJob extends Component {
                           </div>
                         </label>
                       </div>
+                      <input
+                            type="checkbox"
+                            className="h_p_filter1_checkbox"
+                          />
                       <div className="h_p_filter1_title">Monthly Salary</div>
                       <div
                         className={
@@ -774,6 +912,7 @@ class ApplyJob extends Component {
                       </div>
                     </div>
                   )}
+                  <div className="a_j_filter_search">Search</div>
                 </Col>
               </Hidden>
               <Col>
@@ -878,7 +1017,7 @@ class ApplyJob extends Component {
                             <img
                               src={heartLike}
                               className="a_j_like"
-                              onClick={() => this.dislikeSuccessPopup(item._id)}
+                              onClick={() => this.unlikePost(item._id)}
                             />
                           ) : (
                             <img

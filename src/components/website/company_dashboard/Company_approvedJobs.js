@@ -112,9 +112,12 @@ let editJob = (id) => {
                   <div className="a_j_listing_img2">
                     <img src={money} />
                   </div>
-                  <div className="a_j_listing_money">
+                  {
+                    items.minSalary ? <div className="a_j_listing_money">
                     ${items.minSalary}.00 - ${items.maxSalary}.00
-                  </div>
+                  </div> : "Not Mentioned"
+                  }
+                  
                 </div>
                 <div className="a_j_listing_text">{items.jobDesc.slice(0,150)} {items.jobDesc.length > 150 && "..."}</div>
               </div>

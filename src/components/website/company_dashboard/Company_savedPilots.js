@@ -84,10 +84,12 @@ let moveToFolder = (id) =>{
   };
   return (
     <div>
+      <div className="savedPilotsDesc">Select a folder to see Saved Pilots or Create new</div>
       <Row gutterWidth={25}>
         {data.map((item, i) => {
           return (
             <>
+            
               <Col xl={4} xs={6}>
                 <Card style={{ cursor: "pointer", marginBottom: "15px" }} onClick={()=>moveToFolder(item._id)}>
                   <CardContent>

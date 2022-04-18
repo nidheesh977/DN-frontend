@@ -120,7 +120,19 @@
   cursor: pointer;
   margin-right: 20px;
 }
-
+.a_j_filter_search{
+  padding: 9px 0px;
+  font-family: muli-bold;
+  font-size: 14px;
+  line-height: 20px;
+  background: #00e7fc;
+  border-radius: 5px;
+  border: 1px solid #00e7fc;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 100%;
+  text-align: center;
+}
 .j_l_applyJobLoginBtn {
   padding: 7px 15px;
   font-family: muli-bold;
@@ -233,4 +245,14 @@ textarea{
   margin-bottom: 33px;
   width: 100%;
   text-align: center;
+}
+.a_j_filter_address{
+  /* margin-right: 35px; */
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  font-size: 14px;
+    font-family: muli-light;
+    line-height: 20px;
+    padding: 0px 20px;
+     width:  calc(99% - 40px);
 }

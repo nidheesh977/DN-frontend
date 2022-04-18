@@ -123,7 +123,7 @@ useEffect(()=>{
     if(!localStorage.getItem("access_token")){
       setApplyFailure(true)
     }else{
-    setDialog1(true);
+   
     liked.push(id);
 
     axios
@@ -134,6 +134,36 @@ useEffect(()=>{
           // history.push("/pilot_dashboard/account")
           alert("loginFirst");
         }
+        axios.get(`${domain}/api/jobs/jobLanding/${param.id}`).then(
+          (response) => {
+            // setData({response})
+            setList(response.data);
+            setStatus(response.status);
+    
+            console.log(response.status);
+            console.log(response);
+          },
+    
+          axios.post(`${domain}/api/pilot/getLikedJobs`, config).then(
+            (res) => {
+              setAuthourised(true);
+              const persons = res.data;
+              console.log(persons);
+              setLiked(persons);
+            },
+    
+            axios
+              .post(`${domain}/api/pilot/getAppliedJobs1`, config)
+              .then((res) => {
+    
+                const jobs = res.data.appliedJobs;
+                console.log(jobs);
+                if (jobs){
+                  setapplied(jobs);
+                }
+              })
+          )
+        );
       })
       .catch(() => {});
     }
@@ -141,7 +171,7 @@ useEffect(()=>{
   };
   let unlikePost = (id) => {
     console.log(config);
-    setDialog2(true);
+
     let index = liked.indexOf(id);
     liked.splice(index, 1);
 
@@ -153,6 +183,36 @@ useEffect(()=>{
           // history.push("/pilot_dashboard/account")
           alert("loginFirst");
         }
+        axios.get(`${domain}/api/jobs/jobLanding/${param.id}`).then(
+          (response) => {
+            // setData({response})
+            setList(response.data);
+            setStatus(response.status);
+    
+            console.log(response.status);
+            console.log(response);
+          },
+    
+          axios.post(`${domain}/api/pilot/getLikedJobs`, config).then(
+            (res) => {
+              setAuthourised(true);
+              const persons = res.data;
+              console.log(persons);
+              setLiked(persons);
+            },
+    
+            axios
+              .post(`${domain}/api/pilot/getAppliedJobs1`, config)
+              .then((res) => {
+    
+                const jobs = res.data.appliedJobs;
+                console.log(jobs);
+                if (jobs){
+                  setapplied(jobs);
+                }
+              })
+          )
+        );
       })
       .catch(() => {});
   };
@@ -245,11 +305,20 @@ document.getElementById("toMakeRed").focus()
                 <div className="h_p_filterTitle">Pilot Type</div>
                 <div className="h_p_filterText">{list.employeeType}</div>
                 <div className="h_p_filterTitle">Work Type</div>
-                <div className="h_p_filterText">{list.JobType}</div>
+                <div className="h_p_filterText">{list.jobType}</div>
                 <div className="h_p_filterTitle">Salary</div>
-                <div className="h_p_filterText">
-                  ${list.minSalary}.00 - ${list.maxSalary}.00 / Month
+                {
+                  list.minSalary ? <div className="h_p_filterText">
+                  ${list.minSalary}.00 - ${list.maxSalary}.00 
+                    
+                  
+                </div> : <div className="h_p_filterText">
+                  Not Mentioned
                 </div>
+                } 
+                 <div className="h_p_filterTitle">No of Openings</div>
+                <div className="h_p_filterText">{list.noOfOpenings}</div>
+                
                 <div className="h_p_filterTitle">Posted Date</div>
                 <div className="h_p_filterText">{list.postingDate}</div>
                 <div className="h_p_filterTitle">Work location</div>

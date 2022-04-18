@@ -655,18 +655,20 @@ closeProcess1 = () =>{
                           </div>
                         </div>
                         <div className="h_p_listing_pricing_rating">
-                          <div className="h_p_listing_price_container">
-                            <div className="h_p_listing_price">$20</div>
-                            <div className="h_p_listing_price_per">/hr</div>
+                          <div className="h_p_listing_price_container" style={{marginBottom: "15px"}}>
+                            {
+                              pilot.hourlyPayment ?  <><div className="h_p_listing_price">${pilot.hourlyPayment}</div>
+                              <div className="h_p_listing_price_per">/hour</div>
+                              </> : <><div className="h_p_listing_price">${pilot.monthlyPayment}</div>
+                              <div className="h_p_listing_price_per">/month</div>
+                              </>
+                            }
+                           
                           </div>
-                          <div className="h_p_rating_container">
-                            <div className={pilot.rating >= 1 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
-                            <div className={pilot.rating >= 2 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
-                            <div className={pilot.rating >= 3 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
-                            <div className={pilot.rating >= 4 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
-                            <div className={pilot.rating >= 5 ? "h_p_rating h_p_rating_selected" : "h_p_rating h_p_rating_unselected"}>&#9733;</div>
-                          </div>
-                          <div className="h_p_listing_btn_container">
+                          {
+                            localStorage.getItem("role") === "company" ? 
+                            <div className="h_p_listing_btn_container">
+                           
                             <button className="h_p_start_process_btn" onClick={()=>this.clickStartProcess(pilot._id)}>HirePilot</button>
                          
                               
@@ -686,8 +688,19 @@ closeProcess1 = () =>{
                               }
                               
                               
-                          </div>
-                          <div className="h_p_listing_send_msg_link" onClick = {() => this.sendMessage(1)}>Send Message</div>
+                          </div> : 
+                          <div className="h_p_listing_btn_container">
+                           
+                          <button className="h_p_start_process_btn" onClick={() => this.pilotDetailPage(pilot._id)}>View Profile</button>
+                       
+                            
+                           
+                            
+                        </div>
+                          }
+                        
+                         
+                         
                         </div>
                       </Col>
                     </Row>

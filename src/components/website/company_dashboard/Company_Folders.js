@@ -5,6 +5,7 @@ import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import "./css/Company_savedPilots.css";
 import loadMore from "../../images/Group 71.svg";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const domain = process.env.REACT_APP_MY_API
 
@@ -15,6 +16,9 @@ export class Company_savedPilots extends Component {
       this.setState({
         pilots: res.data
       })
+      if(res.data.length === 0){
+        document.getElementById("toHideHere").style.display = "block"
+      }
     })
 
     axios.post(`${domain}/api/folder/getFolderData`,{folderId: this.props.match.params.id}).then(res=>{
@@ -184,13 +188,19 @@ export class Company_savedPilots extends Component {
   }
   render() {
     return (
-      <div>{
+      <div>
+        
+     
+        {
         <>
         <div style={{fontFamily: "muli-bold", fontSize: "24px"}}>{this.state.folderData ? this.state.folderData.folderName : ""}</div>
         <div style={{fontFamily: "muli-regular", fontSize: "18px", margin: "15px 0px"}}>{this.state.folderData ? this.state.folderData.description : ""}</div>
         </>
         }
-        
+           <div style = {{textAlign: "center", display: "none"}} id="toHideHere">
+      <div className="cd_error_msg">No Saved Pilots yet, check them and save</div>
+      <Link to = "/hire_pilots"><button className="cd_error_btn" style = {{padding: "10px 30px"}}>Check Pilots</button></Link>
+    </div>
         {this.state.pilots.map((pilot, index)=>{
                         
                         return(
