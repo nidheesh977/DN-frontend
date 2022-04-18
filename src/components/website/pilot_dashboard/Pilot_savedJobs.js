@@ -251,9 +251,6 @@ if(response.data === "please Login"){
                     ${item.minSalary}.00 - ${item.maxSalary}.00
                   </div>
                 </div>
-                <div className="a_j_listing_text">
-                  {item.jobDesc.slice(0, 148)}
-                </div>
                 <hr className="a_j_listing_hr" />
               </div>
               <div className="a_j_listing_btns">
