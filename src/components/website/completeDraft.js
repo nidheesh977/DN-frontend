@@ -259,7 +259,12 @@ class CompleteDraft extends Component {
 
     if (error) {
       if (focusField !== "") {
-        document.getElementById(focusField).focus();
+        console.log(focusField)
+        if (focusField === "industry"){
+          document.getElementById("job_title").scrollIntoView()
+        }else{
+          document.getElementById(focusField).focus();
+        }
       }
       console.log(focusField);
     } else {
@@ -496,6 +501,7 @@ class CompleteDraft extends Component {
                       onChange={this.industryChange}
                       styles={customStyles}
                       className="u_f_category_dropdown"
+                      id = {"industry"}
                       value={
                         this.state.industry && {
                           label: this.state.industry,
@@ -715,6 +721,7 @@ class CompleteDraft extends Component {
                               outline: "none",
                               fontSize: "16px",
                             }}
+                            id = "location"
                           />
                           {suggestions.length > 0 && (
                             <div

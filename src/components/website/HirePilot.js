@@ -249,12 +249,25 @@ closeProcess1 = () =>{
       };
       axios.post(`${domain}/api/hireProposal/createProposal`, {pilotId: this.state.id2, message: this.state.message}, config).then(res=>{
         console.log(res)
-        
-        this.setState({
-          startProcess: false,
-          message: ""
+        if(res.status === 200){
+          document.getElementById("btn1").style.display ="none"
+          document.getElementById("btn2").style.display ="block"
+          document.querySelector(".h_p_start_process_form_description").style.backgroundColor = "#f5f5f7"
+        }
+        setTimeout(()=>{
+          return(
 
-        })
+        
+          this.setState({
+            startProcess: false,
+            message: ""
+  
+          }),
+          document.getElementById("btn1").style.display ="block",
+          document.getElementById("btn2").style.display ="none",
+          document.querySelector(".h_p_start_process_form_description").style.backgroundColor = "#f5f5f7")}
+          , 1500);
+       
 
       })
     }
@@ -787,8 +800,9 @@ closeProcess1 = () =>{
                     <div className="h_p_start_process_form_label">Description</div>
                     <textarea className='h_p_start_process_form_description' id="tomakered" value={this.state.message} onChange={this.messageHandler}></textarea>
                    
-                    <div className="h_p_start_process_form_btn_container">
-                      <button onClick={this.closeProcess} className='h_p_start_process_form_btn'>Send Mail</button>
+                    <div className="h_p_start_process_form_btn_container" style={{display : "flex", justifyContent: "center"}}>
+                      <button onClick={this.closeProcess} className='h_p_start_process_form_btn' id='btn1'>Send Mail</button>
+                      <button className='h_p_start_process_form_btn' id="btn2" style={{display: "none", textAlign: "center"}}>Mail Sent</button>
                     </div>
                   </div>
                 </Row>
