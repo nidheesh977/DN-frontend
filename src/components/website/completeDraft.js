@@ -23,6 +23,8 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-autocomplete-places";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -70,7 +72,7 @@ class CompleteDraft extends Component {
       draftJobs: [],
       deleteDraftId: "",
       deleteDraftIndex: "",
-      deleteDraftPopup: false
+      deleteDraftPopup: false,
     };
   }
 
@@ -91,7 +93,9 @@ class CompleteDraft extends Component {
         industries: options,
       });
     });
-    Axios.post(`${domain}/api/draftJob/getDetails`, {draftId: this.props.match.params.id}).then((res) => {
+    Axios.post(`${domain}/api/draftJob/getDetails`, {
+      draftId: this.props.match.params.id,
+    }).then((res) => {
       this.setState({
         job_title: res.data.jobTitle,
         job_type: res.data.jobType,
@@ -103,7 +107,7 @@ class CompleteDraft extends Component {
         location: res.data.workLocation,
         description: res.data.jobDesc,
         openings: res.data.noOfOpenings,
-      })
+      });
     });
   }
 
@@ -259,10 +263,10 @@ class CompleteDraft extends Component {
 
     if (error) {
       if (focusField !== "") {
-        console.log(focusField)
-        if (focusField === "industry"){
-          document.getElementById("job_title").scrollIntoView()
-        }else{
+        console.log(focusField);
+        if (focusField === "industry") {
+          document.getElementById("job_title").scrollIntoView();
+        } else {
           document.getElementById(focusField).focus();
         }
       }
@@ -288,20 +292,19 @@ class CompleteDraft extends Component {
           workLocation: this.state.location,
           jobDesc: this.state.description,
           noOfOpenings: this.state.openings,
-          draftId: this.props.match.params.id
+          draftId: this.props.match.params.id,
         },
         config
       )
         .then((res) => {
           console.log(res);
           this.clearForm();
-        //   this.state.dialog = true;
-          this.props.history.push("/company_dashboard/activities/jobs")
+          //   this.state.dialog = true;
+          this.props.history.push("/company_dashboard/activities/jobs");
         })
         .catch((err) => {
           console.log(err);
         });
-      
     }
   };
 
@@ -363,9 +366,9 @@ class CompleteDraft extends Component {
     document.getElementById(`location_error`).style.display = "none";
   };
 
-  descriptionChange = (e) => {
+  descriptionChange = (data) => {
     this.setState({
-      description: e.target.value,
+      description: data,
     });
     document.getElementById(`description_error`).style.display = "none";
   };
@@ -403,14 +406,14 @@ class CompleteDraft extends Component {
 
   deleteDraft = (id, index) => {
     this.setState({
-      deleteDraftIndex: index
-    })
-    
+      deleteDraftIndex: index,
+    });
+
     this.setState({
       deleteDraftId: id,
-      deleteDraftPopup: true
-    })
-  }
+      deleteDraftPopup: true,
+    });
+  };
 
   confirmDelete = () => {
     const config = {
@@ -418,26 +421,30 @@ class CompleteDraft extends Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    console.log(this.state.deleteDraftId)
-    Axios.post(`${domain}/api/draftJob/deleteDraft`, {jobId: this.state.deleteDraftId}, config)
-    .then(res => {
-      console.log(res)
-      this.setState({
-        deleteDraftPopup: false
+    console.log(this.state.deleteDraftId);
+    Axios.post(
+      `${domain}/api/draftJob/deleteDraft`,
+      { jobId: this.state.deleteDraftId },
+      config
+    )
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          deleteDraftPopup: false,
+        });
+        let draftJobs = this.state.draftJobs;
+        draftJobs.splice(this.state.deleteDraftIndex, 1);
+        this.setState({
+          draftJobs: draftJobs,
+        });
       })
-      let draftJobs = this.state.draftJobs
-      draftJobs.splice(this.state.deleteDraftIndex, 1)
-      this.setState({
-        draftJobs: draftJobs
-      })
-    })
-    .catch(err => {
-      console.log(err)
-      this.setState({
-        deleteDraftPopup: false
-      })
-    })
-  }
+      .catch((err) => {
+        console.log(err);
+        this.setState({
+          deleteDraftPopup: false,
+        });
+      });
+  };
 
   render() {
     return (
@@ -456,155 +463,153 @@ class CompleteDraft extends Component {
         <Container
           className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}
         >
-            <>
-              <Row>
-                <div className="c_j_title_container">
-                  <div className="c_j_title">Job Application</div>
-                  <div className="c_j_description">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </div>
+          <>
+            <Row>
+              <div className="c_j_title_container">
+                <div className="c_j_title">Job Application</div>
+                <div className="c_j_description">
+                  Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry.
                 </div>
-              </Row>
-              <Row>
-                <div className="c_j_form_container">
-                  <div className="c_j_form_title">Basic Information</div>
-                  <label className="c_j_input_label">
-                    <div
-                      className="c_j_form_input_title"
-                      style={{ cursor: "pointer" }}
-                    >
-                      Job Title
-                    </div>
+              </div>
+            </Row>
+            <Row>
+              <div className="c_j_form_container">
+                <div className="c_j_form_title">Basic Information</div>
+                <label className="c_j_input_label">
+                  <div
+                    className="c_j_form_input_title"
+                    style={{ cursor: "pointer" }}
+                  >
+                    Job Title
+                  </div>
+                  <input
+                    type="text"
+                    name="job_title"
+                    id="job_title"
+                    className="c_j_form_input"
+                    ref="job_title"
+                    value={this.state.job_title}
+                    onChange={(e) => this.inputChangeHandler(e, "job_title")}
+                  />
+                  <div className="login_input_error_msg" id="job_title_error">
+                    Job title is required
+                  </div>
+                </label>
+                <label className="c_j_input_label">
+                  <div
+                    className="c_j_form_input_title"
+                    style={{ cursor: "pointer" }}
+                  >
+                    Industry
+                  </div>
+                  <Select
+                    options={this.state.industries}
+                    onChange={this.industryChange}
+                    styles={customStyles}
+                    className="u_f_category_dropdown"
+                    id={"industry"}
+                    value={
+                      this.state.industry && {
+                        label: this.state.industry,
+                        value: this.state.industry,
+                      }
+                    }
+                  />
+                  <div className="login_input_error_msg" id="industry_error">
+                    Industry is required
+                  </div>
+                </label>
+                <div className="c_j_form_input_title">Job type?</div>
+                <div className="c_j_radio_input_container">
+                  <label className="c_j_radio_input_label">
                     <input
-                      type="text"
-                      name="job_title"
-                      id="job_title"
-                      className="c_j_form_input"
-                      ref="job_title"
-                      value={this.state.job_title}
-                      onChange={(e) => this.inputChangeHandler(e, "job_title")}
+                      type="radio"
+                      name="job_type"
+                      id=""
+                      className="c_j_input_radio"
+                      onClick={() =>
+                        this.setState({
+                          job_type: "Full-Time",
+                          rate: "month",
+                        })
+                      }
+                      checked={this.state.job_type === "Full-Time"}
                     />
-                    <div className="login_input_error_msg" id="job_title_error">
-                      Job title is required
-                    </div>
+                    <div className="c_j_input_sub_label">Full time</div>
                   </label>
-                  <label className="c_j_input_label">
-                    <div
-                      className="c_j_form_input_title"
-                      style={{ cursor: "pointer" }}
-                    >
-                      Industry
-                    </div>
-                    <Select
-                      options={this.state.industries}
-                      onChange={this.industryChange}
-                      styles={customStyles}
-                      className="u_f_category_dropdown"
-                      id = {"industry"}
-                      value={
-                        this.state.industry && {
-                          label: this.state.industry,
-                          value: this.state.industry,
-                        }
+                  <label className="c_j_radio_input_label">
+                    <input
+                      type="radio"
+                      name="job_type"
+                      id=""
+                      className="c_j_input_radio"
+                      onClick={() =>
+                        this.setState({ job_type: "Part-Time", rate: "hour" })
+                      }
+                      checked={this.state.job_type === "Part-Time"}
+                    />
+                    <div className="c_j_input_sub_label">Part time</div>
+                  </label>
+                </div>
+                <div className="c_j_form_input_title">Employee type</div>
+                <div className="c_j_radio_input_container">
+                  <label className="c_j_radio_input_label">
+                    <input
+                      type="radio"
+                      name="employee_type"
+                      id=""
+                      className="c_j_input_radio"
+                      defaultChecked
+                      onClick={() =>
+                        this.setState({ employee_type: "Licensed Pilot" })
                       }
                     />
-                    <div className="login_input_error_msg" id="industry_error">
-                      Industry is required
-                    </div>
+                    <div className="c_j_input_sub_label">Licensed Pilot</div>
                   </label>
-                  <div className="c_j_form_input_title">Job type?</div>
-                  <div className="c_j_radio_input_container">
-                    <label className="c_j_radio_input_label">
-                      <input
-                        type="radio"
-                        name="job_type"
-                        id=""
-                        className="c_j_input_radio"
-                        onClick={() =>
-                          this.setState({
-                            job_type: "Full-Time",
-                            rate: "month",
-                          })
-                        }
-                        checked={this.state.job_type === "Full-Time"}
-                      />
-                      <div className="c_j_input_sub_label">Full time</div>
-                    </label>
-                    <label className="c_j_radio_input_label">
-                      <input
-                        type="radio"
-                        name="job_type"
-                        id=""
-                        className="c_j_input_radio"
-                        onClick={() =>
-                          this.setState({ job_type: "Part-Time", rate: "hour" })
-                        }
-                        checked={this.state.job_type === "Part-Time"}
-                      />
-                      <div className="c_j_input_sub_label">Part time</div>
-                    </label>
-                  </div>
-                  <div className="c_j_form_input_title">Employee type</div>
-                  <div className="c_j_radio_input_container">
-                    <label className="c_j_radio_input_label">
-                      <input
-                        type="radio"
-                        name="employee_type"
-                        id=""
-                        className="c_j_input_radio"
-                        defaultChecked
-                        onClick={() =>
-                          this.setState({ employee_type: "Licensed Pilot" })
-                        }
-                      />
-                      <div className="c_j_input_sub_label">Licensed Pilot</div>
-                    </label>
-                    <label className="c_j_radio_input_label">
-                      <input
-                        type="radio"
-                        name="employee_type"
-                        id=""
-                        className="c_j_input_radio"
-                        onClick={() =>
-                          this.setState({ employee_type: "Unlicensed Pilot" })
-                        }
-                      />
-                      <div className="c_j_input_sub_label">
-                        Unlicensed Pilot
-                      </div>
-                    </label>
-                  </div>
-                  <div className="c_j_form_input_title">Salary range</div>
+                  <label className="c_j_radio_input_label">
+                    <input
+                      type="radio"
+                      name="employee_type"
+                      id=""
+                      className="c_j_input_radio"
+                      onClick={() =>
+                        this.setState({ employee_type: "Unlicensed Pilot" })
+                      }
+                    />
+                    <div className="c_j_input_sub_label">Unlicensed Pilot</div>
+                  </label>
+                </div>
+                <div className="c_j_form_input_title">Salary range</div>
 
-                  <div>
-                    <Row>
-                      <Col>
-                        <label className="c_j_input_label">
-                          <div
-                            className="c_j_salery_input_label_title"
-                            style={{ cursor: "pointer" }}
-                          >
-                            Minimum
-                          </div>
-                          <input
-                            type="number"
-                            className="c_j_form_input"
-                            onChange={this.minSaleryChange}
-                            ref="min_salary"
-                            id="min_salary"
-                            value={this.state.min_salary}
-                          />
-                          <br />
-                          <div
-                            className="login_input_error_msg"
-                            id="min_salary_error"
-                          >
-                            Minimum salary is required
-                          </div>
-                        </label>
-                      </Col>
-                      {/* <Hidden xs sm>
+                <div>
+                  <Row>
+                    <Col>
+                      <label className="c_j_input_label">
+                        <div
+                          className="c_j_salery_input_label_title"
+                          style={{ cursor: "pointer" }}
+                        >
+                          Minimum
+                        </div>
+                        <input
+                          type="number"
+                          className="c_j_form_input"
+                          onChange={this.minSaleryChange}
+                          ref="min_salary"
+                          id="min_salary"
+                          value={this.state.min_salary}
+                        />
+                        <br />
+                        <div
+                          className="login_input_error_msg"
+                          id="min_salary_error"
+                        >
+                          Minimum salary is required
+                        </div>
+                      </label>
+                    </Col>
+                    {/* <Hidden xs sm>
                         <div>to</div>
                       </Hidden>
                       <Visible xs sm>
@@ -612,219 +617,226 @@ class CompleteDraft extends Component {
                           to
                         </div>
                       </Visible> */}
-                      <Col>
-                        <label className="c_j_input_label">
-                          <div
-                            className="c_j_salery_input_label_title"
-                            onChange={this.maxSalaryChange}
-                            style={{ cursor: "pointer" }}
+                    <Col>
+                      <label className="c_j_input_label">
+                        <div
+                          className="c_j_salery_input_label_title"
+                          onChange={this.maxSalaryChange}
+                          style={{ cursor: "pointer" }}
+                        >
+                          Maximum
+                        </div>
+                        <input
+                          type="number"
+                          className="c_j_form_input"
+                          ref="max_salary"
+                          onChange={this.maxSalaryChange}
+                          id="max_salary"
+                          value={this.state.max_salary}
+                        />
+                        <br />
+                        <div
+                          className="login_input_error_msg"
+                          id="max_salary_error"
+                        >
+                          Maximum salary is required
+                        </div>
+                      </label>
+                    </Col>
+                    <Col>
+                      <label className="c_j_input_label">
+                        <div className="c_j_salery_input_label_title">Rate</div>
+                        <select
+                          className="c_j_form_input"
+                          onChange={this.rateChange}
+                        >
+                          <option
+                            value="month"
+                            selected={this.state.rate === "month"}
                           >
-                            Maximum
-                          </div>
-                          <input
-                            type="number"
-                            className="c_j_form_input"
-                            ref="max_salary"
-                            onChange={this.maxSalaryChange}
-                            id="max_salary"
-                            value={this.state.max_salary}
-                          />
-                          <br />
-                          <div
-                            className="login_input_error_msg"
-                            id="max_salary_error"
+                            Per month
+                          </option>
+                          <option
+                            value="hour"
+                            selected={this.state.rate === "hour"}
                           >
-                            Maximum salary is required
-                          </div>
-                        </label>
-                      </Col>
-                      <Col>
-                        <label className="c_j_input_label">
-                          <div className="c_j_salery_input_label_title">
-                            Rate
-                          </div>
-                          <select
-                            className="c_j_form_input"
-                            onChange={this.rateChange}
-                          >
-                            <option
-                              value="month"
-                              selected={this.state.rate === "month"}
-                            >
-                              Per month
-                            </option>
-                            <option
-                              value="hour"
-                              selected={this.state.rate === "hour"}
-                            >
-                              Per hour
-                            </option>
-                          </select>
-                        </label>
-                      </Col>
-                    </Row>
+                            Per hour
+                          </option>
+                        </select>
+                      </label>
+                    </Col>
+                  </Row>
+                </div>
+                <label className="c_j_input_label">
+                  <div
+                    className="c_j_form_input_title"
+                    style={{ cursor: "pointer" }}
+                  >
+                    No of openings
                   </div>
-                  <label className="c_j_input_label">
-                    <div
-                      className="c_j_form_input_title"
-                      style={{ cursor: "pointer" }}
-                    >
-                      No of openings
-                    </div>
-                    <input
-                      type="number"
-                      name="job_title"
-                      id="openings"
-                      className="c_j_form_input"
-                      ref="job_title"
-                      value={this.state.openings}
-                      onChange={(e) => this.inputChangeHandler(e, "openings")}
-                    />
-                    <div className="login_input_error_msg" id="openings_error">
-                      Maximum 1000 openings
-                    </div>
-                  </label>
-                  {/* <div className="c_j_input_label">
+                  <input
+                    type="number"
+                    name="job_title"
+                    id="openings"
+                    className="c_j_form_input"
+                    ref="job_title"
+                    value={this.state.openings}
+                    onChange={(e) => this.inputChangeHandler(e, "openings")}
+                  />
+                  <div className="login_input_error_msg" id="openings_error">
+                    Maximum 1000 openings
+                  </div>
+                </label>
+                {/* <div className="c_j_input_label">
                       <div className="c_j_form_input_title">Job posting date</div>
                       <input type="date" name="" id="" className='c_j_date_input' onChange={this.dateChange} />
                       <div className="c_j_input_text">If you want to post the job later, here you can mention the date.</div>
                     </div> */}
-                  <label className="c_j_input_label">
-                    <div
-                      className="c_j_form_input_title"
-                      style={{ cursor: "pointer" }}
-                    >
-                      Work location
-                    </div>
-                    <PlacesAutocomplete
-                      value={this.state.location}
-                      onChange={this.handleChange1}
-                      onSelect={this.handleSelect}
-                    >
-                      {({
-                        getInputProps,
-                        suggestions,
-                        getSuggestionItemProps,
-                        loading,
-                      }) => (
-                        <div style={{ position: "relative" }}>
-                          <input
-                            {...getInputProps({
-                              placeholder: "Search Places ...",
-                              className:
-                                "location-search-input c_j_form_input ",
-                            })}
+                <label className="c_j_input_label">
+                  <div
+                    className="c_j_form_input_title"
+                    style={{ cursor: "pointer" }}
+                  >
+                    Work location
+                  </div>
+                  <PlacesAutocomplete
+                    value={this.state.location}
+                    onChange={this.handleChange1}
+                    onSelect={this.handleSelect}
+                  >
+                    {({
+                      getInputProps,
+                      suggestions,
+                      getSuggestionItemProps,
+                      loading,
+                    }) => (
+                      <div style={{ position: "relative" }}>
+                        <input
+                          {...getInputProps({
+                            placeholder: "Search Places ...",
+                            className: "location-search-input c_j_form_input ",
+                          })}
+                          style={{
+                            backgroundColor: "#f5f5f7",
+                            borderRadius: "5px",
+                            border: "1px solid white",
+                            outline: "none",
+                            fontSize: "16px",
+                          }}
+                          id="location"
+                        />
+                        {suggestions.length > 0 && (
+                          <div
+                            className="autocomplete-dropdown-container"
                             style={{
-                              backgroundColor: "#f5f5f7",
-                              borderRadius: "5px",
-                              border: "1px solid white",
-                              outline: "none",
+                              width: "calc(100%)",
+
+                              position: "absolute",
+                              top: "calc(100%)",
+                              zIndex: 1000,
+                              fontFamily: "muli-light",
                               fontSize: "16px",
+                              border:
+                                suggestions.length === 0
+                                  ? ""
+                                  : "1px solid grey",
+                              overflow: "hidden",
+                              borderEndStartRadius: "10px",
+                              borderEndEndRadius: "10px",
+                              background: "white",
                             }}
-                            id = "location"
-                          />
-                          {suggestions.length > 0 && (
-                            <div
-                              className="autocomplete-dropdown-container"
-                              style={{
-                                width: "calc(100%)",
-
-                                position: "absolute",
-                                top: "calc(100%)",
-                                zIndex: 1000,
-                                fontFamily: "muli-light",
-                                fontSize: "16px",
-                                border:
-                                  suggestions.length === 0
-                                    ? ""
-                                    : "1px solid grey",
-                                overflow: "hidden",
-                                borderEndStartRadius: "10px",
-                                borderEndEndRadius: "10px",
-                                background: "white",
-                              }}
-                            >
-                              {loading && <div>Loading...</div>}
-                              {suggestions.map((suggestion) => {
-                                const className = suggestion.active
-                                  ? "suggestion-item--active"
-                                  : "suggestion-item";
-                                // inline style for demonstration purpose
-                                const style = suggestion.active
-                                  ? {
-                                      backgroundColor: "#e1e1e1",
-                                      cursor: "pointer",
-                                      padding: "10px 20px",
-                                    }
-                                  : {
-                                      backgroundColor: "#ffffff",
-                                      cursor: "pointer",
-                                      padding: "10px 20px",
-                                    };
-                                return (
-                                  <div
-                                    {...getSuggestionItemProps(suggestion, {
-                                      className,
-                                      style,
-                                    })}
-                                  >
-                                    <span>{suggestion.description}</span>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </PlacesAutocomplete>
-                    <div className="login_input_error_msg" id="location_error">
-                      Work location is required
-                    </div>
-                  </label>
-                  <label className="c_j_input_label">
-                    <div
-                      className="c_j_form_input_title"
-                      style={{ cursor: "pointer" }}
-                    >
-                      Job description
-                    </div>
-                    <textarea
-                      id="description"
-                      className="c_j_form_textarea"
-                      onChange={this.descriptionChange}
-                      ref="description"
-                      value={this.state.description}
-                    ></textarea>
-
-                    <div
-                      className="login_input_error_msg"
-                      id="description_error"
-                    >
-                      Job description is required
-                    </div>
-                  </label>
+                          >
+                            {loading && <div>Loading...</div>}
+                            {suggestions.map((suggestion) => {
+                              const className = suggestion.active
+                                ? "suggestion-item--active"
+                                : "suggestion-item";
+                              // inline style for demonstration purpose
+                              const style = suggestion.active
+                                ? {
+                                    backgroundColor: "#e1e1e1",
+                                    cursor: "pointer",
+                                    padding: "10px 20px",
+                                  }
+                                : {
+                                    backgroundColor: "#ffffff",
+                                    cursor: "pointer",
+                                    padding: "10px 20px",
+                                  };
+                              return (
+                                <div
+                                  {...getSuggestionItemProps(suggestion, {
+                                    className,
+                                    style,
+                                  })}
+                                >
+                                  <span>{suggestion.description}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </PlacesAutocomplete>
+                  <div className="login_input_error_msg" id="location_error">
+                    Work location is required
+                  </div>
+                </label>
+                <div
+                  className="c_j_form_input_title"
+                  style={{ cursor: "pointer" }}
+                >
+                  Job description
                 </div>
-              </Row>
-              <Row>
-                <div className="c_j_btn_container">
-                  <button
-                    className="c_j_btn"
-                    id="c_j_btn_cancel"
-                    onClick={this.clearForm}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="c_j_btn"
-                    id="c_j_btn_continue"
-                    onClick={this.PostJob}
-                  >
-                    Post Now
-                  </button>
+                <CKEditor
+                  className="c_j_form_textarea"
+                  editor={ClassicEditor}
+                  config={{
+                    toolbar: [
+                      "heading",
+                      "bold",
+                      "italic",
+                      "bulletedList",
+                      "numberedList",
+                      "undo",
+                      "redo",
+                    ],
+                  }}
+                  data={this.state.description}
+                  onReady={(editor) => {
+                    console.log("Editor is ready to use!", editor);
+                  }}
+                  id="description"
+                  onChange={(event, editor) => {
+                    const data = editor.getData();
+                    this.descriptionChange(data);
+                  }}
+                />
+                <div className="login_input_error_msg" id="description_error">
+                  Job description is required
                 </div>
-              </Row>
-            </>
-          
+              </div>
+            </Row>
+            <Row>
+              <div className="c_j_btn_container">
+                <button
+                  className="c_j_btn"
+                  id="c_j_btn_cancel"
+                  onClick={this.clearForm}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="c_j_btn"
+                  id="c_j_btn_continue"
+                  onClick={this.PostJob}
+                >
+                  Post Now
+                </button>
+              </div>
+            </Row>
+          </>
         </Container>
 
         <Dialog

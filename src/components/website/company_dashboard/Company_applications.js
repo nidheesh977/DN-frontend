@@ -100,11 +100,6 @@ function Company_applications() {
                       {job.minSalary && `$${job.minSalary} - $${job.maxSalary}`}
                     </div>
                   </div>
-                  <div className="a_j_listing_text1">
-                    {" "}
-                    {job.jobDesc.slice(0, 200)}{" "}
-                    {job.jobDesc.length > 200 && ". . ."}
-                  </div>
                 </div>
                 <div className="a_j_listing_btns" style={{ marginTop: "20px" }}>
                   <button className="a_j_location_btn" style = {{cursor: "default"}}>

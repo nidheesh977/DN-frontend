@@ -23,6 +23,8 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-autocomplete-places";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -251,9 +253,9 @@ class CreateJob extends Component {
 
     if (error) {
       if (focusField !== "") {
-        if (focusField === "industry"){
-          document.getElementById("job_title").scrollIntoView()
-        }else{
+        if (focusField === "industry") {
+          document.getElementById("job_title").scrollIntoView();
+        } else {
           document.getElementById(focusField).focus();
         }
       }
@@ -285,12 +287,11 @@ class CreateJob extends Component {
         .then((res) => {
           console.log(res);
           this.clearForm();
-          this.props.history.push("/company_dashboard/activities/jobs")
+          this.props.history.push("/company_dashboard/activities/jobs");
         })
         .catch((err) => {
           console.log(err);
         });
-      
     }
   };
 
@@ -352,9 +353,9 @@ class CreateJob extends Component {
     document.getElementById(`location_error`).style.display = "none";
   };
 
-  descriptionChange = (e) => {
+  descriptionChange = (data) => {
     this.setState({
-      description: e.target.value,
+      description: data,
     });
     document.getElementById(`description_error`).style.display = "none";
   };
@@ -537,7 +538,7 @@ class CreateJob extends Component {
               console.log(res);
               this.setState({
                 draftJobs: res.data,
-                main_tab: 2
+                main_tab: 2,
               });
             }
           );
@@ -677,7 +678,7 @@ class CreateJob extends Component {
                       onChange={this.industryChange}
                       styles={customStyles}
                       className="u_f_category_dropdown"
-                      id = "industry"
+                      id="industry"
                       value={
                         this.state.industry && {
                           label: this.state.industry,
@@ -897,7 +898,7 @@ class CreateJob extends Component {
                               outline: "none",
                               fontSize: "16px",
                             }}
-                            id = "location"
+                            id="location"
                           />
                           {suggestions.length > 0 && (
                             <div
@@ -957,20 +958,31 @@ class CreateJob extends Component {
                       Work location is required
                     </div>
                   </label>
-                  <label className="c_j_input_label">
+                  {/* <label className="c_j_input_label"> */}
                     <div
                       className="c_j_form_input_title"
                       style={{ cursor: "pointer" }}
                     >
                       Job description
                     </div>
-                    <textarea
-                      id="description"
+                    
+                    <CKEditor
                       className="c_j_form_textarea"
-                      onChange={this.descriptionChange}
-                      ref="description"
-                      value={this.state.description}
-                    ></textarea>
+                      editor={ClassicEditor}
+                      config={ {
+                        toolbar: [ 'heading', 'bold', 'italic', "bulletedList", "numberedList", "undo", "redo" ]
+                    } }
+                      data={this.state.description}
+                      onReady={(editor) => {
+                        console.log("Editor is ready to use!", editor);
+                      }}
+                      id="description"
+                      onChange={(event, editor) => {
+                        const data = editor.getData();
+                        this.descriptionChange(data)
+                      }}
+                      
+                    />
 
                     <div
                       className="login_input_error_msg"
@@ -978,7 +990,7 @@ class CreateJob extends Component {
                     >
                       Job description is required
                     </div>
-                  </label>
+                  {/* </label> */}
                 </div>
               </Row>
               <Row>
@@ -1052,11 +1064,6 @@ class CreateJob extends Component {
                               : "Not mentioned"}
                           </div>
                         </div>
-                        <div className="a_j_listing_text">
-                          {draftJob.jobDesc
-                            ? draftJob.jobDesc.slice(0, 120)
-                            : "- - - "}
-                        </div>
                       </div>
                       <button
                         className="c_j_listing_btn c_j_location_btn"
@@ -1082,7 +1089,7 @@ class CreateJob extends Component {
                         />{" "}
                         {draftJob.jobType ? draftJob.jobType : "- - - "}
                       </button>
-                      <Link to = {`/complete_draft/${draftJob._id}`}>
+                      <Link to={`/complete_draft/${draftJob._id}`}>
                         <button className="c_j_listing_btn c_j_post_job_btn">
                           Complete draft
                         </button>

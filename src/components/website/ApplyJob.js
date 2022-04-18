@@ -28,6 +28,8 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-autocomplete-places";
+import parse from 'html-react-parser';
+
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -987,10 +989,6 @@ class ApplyJob extends Component {
                               }
                               
                             </div>
-                          </div>
-                          <div className="a_j_listing_text" style = {{wordBreak: "break-word"}}>
-                            {" "}
-                            {item.jobDesc.slice(0, 148)}...
                           </div>
                           <hr className="a_j_listing_hr" />
                         </div>

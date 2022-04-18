@@ -12,6 +12,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 
 import heartLike from "../images/heart-blue.svg";
+import parse from 'html-react-parser';
 
 const domain = process.env.REACT_APP_MY_API
 
@@ -296,8 +297,7 @@ document.getElementById("toMakeRed").focus()
         <Row gutterWidth={40}>
           <Col>
             <div className="j_l_titleHead"> Job Description</div>
-            <div className="j_l_desc">{list.jobDesc}</div>
-            <div className="j_l_desc">{list.jobDesc}</div>
+            <div className="j_l_desc">{parse(String(list.jobDesc))}</div>
           </Col>
           <Visible xxl xl>
             <Col xxl={3.5} xl={3.3} lg={4.15} md={5.4}>

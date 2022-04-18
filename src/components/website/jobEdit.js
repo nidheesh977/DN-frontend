@@ -23,6 +23,8 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-autocomplete-places";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -67,30 +69,29 @@ class JobEdit extends Component {
       description: "",
       industries: [],
       openings: "",
-      applicants: false
+      applicants: false,
     };
   }
 
   componentDidMount() {
     $("html,body").scrollTop(0);
-    Axios.get(`${domain}/api/jobs/jobLanding/${this.props.match.params.id}`)
-    .then((res) => {
-        console.log(res)
-        this.setState({
-            job_title: res.data.jobTitle,
-            industry: res.data.industry,
-            job_type: res.data.jobType,
-            employee_type: res.data.employeeType,
-            min_salary: res.data.minSalary,
-            max_salary: res.data.maxSalary,
-            rate: res.data.salaryType,
-            openings: res.data.noOfOpenings,
-            location: res.data.workLocation,
-            description: res.data.jobDesc,
-
-        })
-
-    })
+    Axios.get(
+      `${domain}/api/jobs/jobLanding/${this.props.match.params.id}`
+    ).then((res) => {
+      console.log(res);
+      this.setState({
+        job_title: res.data.jobTitle,
+        industry: res.data.industry,
+        job_type: res.data.jobType,
+        employee_type: res.data.employeeType,
+        min_salary: res.data.minSalary,
+        max_salary: res.data.maxSalary,
+        rate: res.data.salaryType,
+        openings: res.data.noOfOpenings,
+        location: res.data.workLocation,
+        description: res.data.jobDesc,
+      });
+    });
     Axios.get(`${domain}/api/industry/getIndustries`).then((res) => {
       const options = res.data.map((d) => ({
         value: d.industry,
@@ -143,8 +144,8 @@ class JobEdit extends Component {
   };
 
   redirectToDashboard = () => {
-    this.props.history.push("/company_dashboard/activities/jobs")
-  }
+    this.props.history.push("/company_dashboard/activities/jobs");
+  };
 
   PostJob = () => {
     var fields = [
@@ -288,13 +289,12 @@ class JobEdit extends Component {
         .then((res) => {
           console.log(res);
           this.state.dialog = true;
-          this.redirectToDashboard()
+          this.redirectToDashboard();
         })
         .catch((err) => {
-            console.log(err)
-            this.props.history.push("/")
+          console.log(err);
+          this.props.history.push("/");
         });
-      
     }
   };
 
@@ -356,9 +356,9 @@ class JobEdit extends Component {
     document.getElementById(`location_error`).style.display = "none";
   };
 
-  descriptionChange = (e) => {
+  descriptionChange = (data) => {
     this.setState({
-      description: e.target.value,
+      description: data,
     });
     document.getElementById(`description_error`).style.display = "none";
   };
@@ -495,7 +495,7 @@ class JobEdit extends Component {
                     name="employee_type"
                     id=""
                     className="c_j_input_radio"
-                    checked = {this.state.employee_type === "Licensed Pilot"}
+                    checked={this.state.employee_type === "Licensed Pilot"}
                     onClick={() =>
                       this.setState({ employee_type: "Licensed Pilot" })
                     }
@@ -508,7 +508,7 @@ class JobEdit extends Component {
                     name="employee_type"
                     id=""
                     className="c_j_input_radio"
-                    checked = {this.state.employee_type === "Unlicensed Pilot"}
+                    checked={this.state.employee_type === "Unlicensed Pilot"}
                     onClick={() =>
                       this.setState({ employee_type: "Unlicensed Pilot" })
                     }
@@ -716,41 +716,56 @@ class JobEdit extends Component {
                   Work location is required
                 </div>
               </label>
-              <label className="c_j_input_label">
                 <div
                   className="c_j_form_input_title"
                   style={{ cursor: "pointer" }}
                 >
                   Job description
                 </div>
-                <textarea
-                  id="description"
+                <CKEditor
                   className="c_j_form_textarea"
-                  onChange={this.descriptionChange}
-                  ref="description"
-                  value={this.state.description}
-                ></textarea>
+                  editor={ClassicEditor}
+                  config={{
+                    toolbar: [
+                      "heading",
+                      "bold",
+                      "italic",
+                      "bulletedList",
+                      "numberedList",
+                      "undo",
+                      "redo",
+                    ],
+                  }}
+                  data={this.state.description}
+                  onReady={(editor) => {
+                    console.log("Editor is ready to use!", editor);
+                  }}
+                  id="description"
+                  onChange={(event, editor) => {
+                    const data = editor.getData();
+                    this.descriptionChange(data);
+                  }}
+                />
 
                 <div className="login_input_error_msg" id="description_error">
                   Job description is required
                 </div>
-              </label>
             </div>
           </Row>
           <Row>
             <div className="c_j_btn_container">
-            <button
-                    className="c_j_btn"
-                    id="c_j_btn_cancel"
-                    onClick={this.redirectToDashboard}
-                  >
-                    Cancel
-                  </button>
+              <button
+                className="c_j_btn"
+                id="c_j_btn_cancel"
+                onClick={this.redirectToDashboard}
+              >
+                Cancel
+              </button>
               <button
                 className="c_j_btn"
                 id="c_j_btn_continue"
                 onClick={this.PostJob}
-                style = {{fontFamily: "muli-regular"}}
+                style={{ fontFamily: "muli-regular" }}
               >
                 Save changes
               </button>
@@ -784,7 +799,6 @@ class JobEdit extends Component {
           </DialogContent>
         </Dialog>
 
-        
         <Dialog
           open={this.state.dialog}
           onClose={this.closeChoicePopup}

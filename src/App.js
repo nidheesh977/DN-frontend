@@ -51,6 +51,7 @@ import CenterRoute from "./CenterRoute";
 import CompleteDraft from "./components/website/completeDraft";
 import "./App.css"
 import CompanyRoute from "./companyRoute";
+import TextEditor from "./components/website/textEditor";
 function App(){
 
   useEffect(()=>{
@@ -164,6 +165,7 @@ function App(){
             <Route component={VerifiedEmail} path="/users/:id/verify/:token" />
             <Route component={RecoverPassword} path="/users/:id/forgetPassword/:token" />
             <BoosterRoute component={Booster_dashboard} path="/booster_dashboard" />
+            <Route exact path="/textEditor" component={TextEditor} />
 
             <Route exact path="/NoComponent" component={NoPageFound} />
 

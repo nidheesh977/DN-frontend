@@ -119,7 +119,6 @@ let editJob = (id) => {
                   }
                   
                 </div>
-                <div className="a_j_listing_text">{items.jobDesc.slice(0,150)} {items.jobDesc.length > 150 && "..."}</div>
               </div>
               <div className="a_j_listing_btns" style={{ marginTop: "20px" }}>
                 <button className="a_j_location_btn" style = {{cursor: "default"}}>
