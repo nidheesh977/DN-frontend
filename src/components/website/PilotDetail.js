@@ -168,12 +168,31 @@ export default function PilotDetails(props) {
     if (hireForm.description !== "" && hireForm.description.length <= 200) {
       axios.post(`${domain}/api/hireProposal/createProposal`, {pilotId: param.id, message: hireForm.description}, config).then(res=>{
         console.log(res)
-        setStartProcess(false);
-        setHireForm({
-          ...hireForm,
-          description: ""
-        })
+//test
+if(res.status === 200){
+  document.getElementById("btn1").style.display ="none"
+  document.getElementById("btn2").style.display ="block"
+  document.querySelector(".h_p_start_process_form_description").style.backgroundColor = "#f5f5f7"
+}
+setTimeout(()=>{
+  return(
 
+
+    setStartProcess(false),
+    setHireForm({
+      ...hireForm,
+      description: ""
+    })
+,
+  document.getElementById("btn1").style.display ="block",
+  document.getElementById("btn2").style.display ="none",
+  document.querySelector(".h_p_start_process_form_description").style.backgroundColor = "#f5f5f7")}
+  , 1500);
+
+
+
+      
+      
       })
     }
     else if(hireForm.description.length >= 200){
@@ -1357,14 +1376,10 @@ export default function PilotDetails(props) {
                     Description is required
                   </div>
                  
-                  <div className="h_p_start_process_form_btn_container">
-                    <button
-                      onClick={submitProcess}
-                      className="h_p_start_process_form_btn"
-                    >
-                      Send Mail
-                    </button>
-                  </div>
+                  <div className="h_p_start_process_form_btn_container" style={{display : "flex", justifyContent: "center"}}>
+                      <button onClick={submitProcess} className='h_p_start_process_form_btn' id='btn1'>Send Mail</button>
+                      <button className='h_p_start_process_form_btn' id="btn2" style={{display: "none", textAlign: "center"}}>Mail Sent</button>
+                    </div>
                 </div>
               </Row>
             </DialogContent>

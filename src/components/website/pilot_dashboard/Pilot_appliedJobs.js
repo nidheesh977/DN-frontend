@@ -86,14 +86,36 @@ function Pilot_appliedJobs() {
   };
   const domain = process.env.REACT_APP_MY_API
   let likePost = (id) =>{
-    setDialog1(true)
     liked.push(id)
 
     axios.post(`${domain}/api/jobs/likeJob/${id}`, config)
 
       .then((response) => {
         
-
+        axios
+        .get(`${domain}/api/pilot/appliedJobsMine`, config)
+        .then((response) => {
+          // setData({response})
+          setList(response.data);
+          if(response.data.length == 0){
+            document.getElementById("tohide").style.display = "block"      }
+  
+          // console.log(list.postingDate)
+          console.log(response);
+        })
+        .then(() => {
+          setLoading(false)
+        })
+        .catch((err) => {
+          setLoading(false)
+        })
+  
+        axios.post(`${domain}/api/pilot/getLikedJobs`, config)
+  .then(res => {
+    const persons = res.data;
+    console.log(persons)
+    setLiked(persons);
+  })
 
 if(response.data === "please Login"){
   // history.push("/pilot_dashboard/account")
@@ -108,14 +130,36 @@ if(response.data === "please Login"){
   }
 let unlikePost = (id) =>{
     console.log(config);
-    setDialog2(true)
     let index = liked.indexOf(id);
     liked.splice(index, 1);
    
     axios.post(`${domain}/api/jobs/unlikeJob/${id}`, config)
 
       .then((response) => {
-
+        axios
+        .get(`${domain}/api/pilot/appliedJobsMine`, config)
+        .then((response) => {
+          // setData({response})
+          setList(response.data);
+          if(response.data.length == 0){
+            document.getElementById("tohide").style.display = "block"      }
+  
+          // console.log(list.postingDate)
+          console.log(response);
+        })
+        .then(() => {
+          setLoading(false)
+        })
+        .catch((err) => {
+          setLoading(false)
+        })
+  
+        axios.post(`${domain}/api/pilot/getLikedJobs`, config)
+  .then(res => {
+    const persons = res.data;
+    console.log(persons)
+    setLiked(persons);
+  })
 
 if(response.data === "please Login"){
   // history.push("/pilot_dashboard/account")
