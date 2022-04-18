@@ -102,6 +102,7 @@ const customStyles = {
       ...styles,
       backgroundColor: isFocused ? "#999999" : null,
       color: "#333333",
+      zIndex: 1000
     };
   },
 };
@@ -492,19 +493,23 @@ class HirePilot extends Component {
   };
 
   searchFilter = () => {
+    this.setState({
+      loading: true,
+      pilot_list: []
+    })
     var work_type = []
     if(this.state.lisenced){
-      work_type.push("Licensed Pilot")
+      work_type.push("licensed")
     }
     if(this.state.unlisenced){
-      work_type.push("Unlicensed Pilot")
+      work_type.push("unlicensed")
     }
     var employee_type = []
     if(this.state.full_time){
-      employee_type.push("Full-Time")
+      employee_type.push("full_time")
     }
     if(this.state.part_time){
-      employee_type.push("Part-Time")
+      employee_type.push("part_time")
     }    console.log(work_type)
     console.log(employee_type)
     console.log(this.state.filter_salary);
@@ -512,6 +517,23 @@ class HirePilot extends Component {
     console.log(this.state.keyword);
     console.log(this.state.location);
     console.log(this.state.price_range);
+    let data = {
+      keywords: this.state.keyword,
+      address: this.state.location,
+      workType: work_type,
+      employeeType: employee_type,
+      drones: this.state.selected_drones
+    }
+    if(this.state.filter_salary){
+      data.price = this.state.price_range
+    }
+    axios.post(`${domain}/api/pilot/pilotFilters`, data).then(res=>{
+      console.log(res)
+      this.setState({
+        pilot_list: res.data
+      })
+    })
+    
   };
 
   render() {
