@@ -492,10 +492,21 @@ class HirePilot extends Component {
   };
 
   searchFilter = () => {
-    console.log(this.state.lisenced);
-    console.log(this.state.unlisenced);
-    console.log(this.state.full_time);
-    console.log(this.state.part_time);
+    var work_type = []
+    if(this.state.lisenced){
+      work_type.push("Licensed Pilot")
+    }
+    if(this.state.unlisenced){
+      work_type.push("Unlicensed Pilot")
+    }
+    var employee_type = []
+    if(this.state.full_time){
+      employee_type.push("Full-Time")
+    }
+    if(this.state.part_time){
+      employee_type.push("Part-Time")
+    }    console.log(work_type)
+    console.log(employee_type)
     console.log(this.state.filter_salary);
     console.log(this.state.selected_drones);
     console.log(this.state.keyword);
@@ -940,7 +951,7 @@ class HirePilot extends Component {
                           type="text"
                           className="c_j_form_input"
                           onChange={this.industryChange}
-                          style={{ border: "1px solid #c1c1c1" }}
+                          style={{ border: "1px solid #c1c1c1", backgroundColor: "white" }}
                           placeholder="Search Keywords"
                         />
                       </div>
@@ -972,7 +983,7 @@ class HirePilot extends Component {
                                   "location-search-input c_j_form_input ",
                               })}
                               style={{
-                                backgroundColor: "#f5f5f7",
+                                backgroundColor: "#fff",
                                 borderRadius: "5px",
                                 border: "1px solid #c1c1c1",
                                 outline: "none",
