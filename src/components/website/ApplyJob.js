@@ -988,7 +988,7 @@ class ApplyJob extends Component {
                               
                             </div>
                           </div>
-                          <div className="a_j_listing_text">
+                          <div className="a_j_listing_text" style = {{wordBreak: "break-word"}}>
                             {" "}
                             {item.jobDesc.slice(0, 148)}...
                           </div>

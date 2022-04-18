@@ -142,6 +142,10 @@ class JobEdit extends Component {
     document.getElementById("openings_error").style.display = "none";
   };
 
+  redirectToDashboard = () => {
+    this.props.history.push("/company_dashboard/activities/jobs")
+  }
+
   PostJob = () => {
     var fields = [
       "job_title",
@@ -284,6 +288,7 @@ class JobEdit extends Component {
         .then((res) => {
           console.log(res);
           this.state.dialog = true;
+          this.redirectToDashboard()
         })
         .catch((err) => {
             console.log(err)
@@ -734,6 +739,13 @@ class JobEdit extends Component {
           </Row>
           <Row>
             <div className="c_j_btn_container">
+            <button
+                    className="c_j_btn"
+                    id="c_j_btn_cancel"
+                    onClick={this.redirectToDashboard}
+                  >
+                    Cancel
+                  </button>
               <button
                 className="c_j_btn"
                 id="c_j_btn_continue"

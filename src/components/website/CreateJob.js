@@ -537,6 +537,7 @@ class CreateJob extends Component {
               console.log(res);
               this.setState({
                 draftJobs: res.data,
+                main_tab: 2
               });
             }
           );
@@ -1199,7 +1200,7 @@ class CreateJob extends Component {
             </Row>
           </DialogContent>
         </Dialog>
-        <Dialog
+        {/* <Dialog
           open={this.state.dialog}
           onClose={this.closeChoicePopup}
           aria-labelledby="alert-dialog-title"
@@ -1233,7 +1234,7 @@ class CreateJob extends Component {
               </div>
             </Row>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
         <Dialog
           open={this.state.deleteDraftPopup}
           onClose={() => this.setState({ deleteDraftPopup: false })}
