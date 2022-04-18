@@ -995,13 +995,13 @@ class ApplyJob extends Component {
                           <hr className="a_j_listing_hr" />
                         </div>
                         <div className="a_j_listing_btns">
-                          <button className="a_j_location_btn">
+                          <button className="a_j_location_btn" style = {{cursor: "default"}}>
                             <img src={location} className="a_j_location_logo" />
                             <span className="a_j_location_text">
                               {item.workLocation.split(",")[0]}
                             </span>
                           </button>{" "}
-                          <button className="a_j_location_btn">
+                          <button className="a_j_location_btn" style = {{cursor: "default"}}>
                             <img src={work} className="a_j_location_logo" />
                             <span className="a_j_location_text">
                               {item.jobType}
