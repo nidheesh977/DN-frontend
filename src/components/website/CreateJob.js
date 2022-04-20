@@ -159,13 +159,14 @@ class CreateJob extends Component {
       if (
         fields[i] !== "min_salary" &&
         fields[i] !== "max_salary" &&
-        fields[i] !== "openings"
+        fields[i] !== "openings"&&
+        fields[i] !== "description"
       ) {
         if (this.state[fields[i]] === "") {
           error = true;
           document.getElementById(fields[i] + "_error").style.display =
             "contents";
-          if (focusField === "") {
+          if (focusField === "" && fields[i] !== "location") {
             focusField = fields[i];
           }
         }
@@ -182,21 +183,7 @@ class CreateJob extends Component {
             "Job title must be between 2 and 100 characters";
           document.getElementById("job_title_error").style.display = "contents";
         }
-        if (
-          fields[i] === "description" &&
-          this.state.description !== "" &&
-          (this.state.description.length > 1500 ||
-            this.state.description.length < 200)
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("description_error").innerText =
-            "Description must be between 200 and 1500 characters";
-          document.getElementById("description_error").style.display =
-            "contents";
-        }
+        
       } else {
         if (
           fields[i] === "min_salary" &&
@@ -248,6 +235,28 @@ class CreateJob extends Component {
             "Maximum openings is 1000";
           document.getElementById("openings_error").style.display = "contents";
         }
+        if (
+          fields[i] === "description" &&
+          this.state.description === ""
+        ) {
+          error = true;
+          document.getElementById("description_error").innerText =
+            "Description is required";
+          document.getElementById("description_error").style.display =
+            "contents";
+        }
+        if (
+          fields[i] === "description" &&
+          this.state.description !== "" &&
+          (this.state.description.length > 1500 ||
+            this.state.description.length < 200)
+        ) {
+          error = true;
+          document.getElementById("description_error").innerText =
+            "Description must be between 200 and 1500 characters";
+          document.getElementById("description_error").style.display =
+            "contents";
+        }
       }
     }
 
@@ -286,8 +295,10 @@ class CreateJob extends Component {
       )
         .then((res) => {
           console.log(res);
+          localStorage.setItem("job_created", "true")
           this.clearForm();
           this.props.history.push("/company_dashboard/activities/jobs");
+          
         })
         .catch((err) => {
           console.log(err);
@@ -438,9 +449,7 @@ class CreateJob extends Component {
             this.state.description.length < 200)
         ) {
           error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
+          
           document.getElementById("description_error").innerText =
             "Description must be between 200 and 1500 characters";
           document.getElementById("description_error").style.display =
@@ -970,7 +979,7 @@ class CreateJob extends Component {
                       className="c_j_form_textarea"
                       editor={ClassicEditor}
                       config={ {
-                        toolbar: [ 'heading', 'bold', 'italic', "bulletedList", "numberedList", "undo", "redo" ]
+                        toolbar: [ 'bold', 'italic', "bulletedList", "numberedList", "undo", "redo" ]
                     } }
                       data={this.state.description}
                       onReady={(editor) => {

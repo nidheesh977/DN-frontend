@@ -169,13 +169,14 @@ class CompleteDraft extends Component {
       if (
         fields[i] !== "min_salary" &&
         fields[i] !== "max_salary" &&
-        fields[i] !== "openings"
+        fields[i] !== "openings" &&
+        fields[i] !== "description"
       ) {
         if (this.state[fields[i]] === "") {
           error = true;
           document.getElementById(fields[i] + "_error").style.display =
             "contents";
-          if (focusField === "") {
+          if (focusField === "" && fields[i] !== "location") {
             focusField = fields[i];
           }
         }
@@ -191,21 +192,6 @@ class CompleteDraft extends Component {
           document.getElementById("job_title_error").innerText =
             "Job title must be between 2 and 100 characters";
           document.getElementById("job_title_error").style.display = "contents";
-        }
-        if (
-          fields[i] === "description" &&
-          this.state.description !== "" &&
-          (this.state.description.length > 1500 ||
-            this.state.description.length < 200)
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("description_error").innerText =
-            "Description must be between 200 and 1500 characters";
-          document.getElementById("description_error").style.display =
-            "contents";
         }
       } else {
         if (
@@ -257,6 +243,28 @@ class CompleteDraft extends Component {
           document.getElementById("openings_error").innerText =
             "Maximum openings is 1000";
           document.getElementById("openings_error").style.display = "contents";
+        }
+        if (
+          fields[i] === "description" &&
+          this.state.description === ""
+        ) {
+          error = true;
+          document.getElementById("description_error").innerText =
+            "Description is required";
+          document.getElementById("description_error").style.display =
+            "contents";
+        }
+        if (
+          fields[i] === "description" &&
+          this.state.description !== "" &&
+          (this.state.description.length > 1500 ||
+            this.state.description.length < 200)
+        ) {
+          error = true;
+          document.getElementById("description_error").innerText =
+            "Description must be between 200 and 1500 characters";
+          document.getElementById("description_error").style.display =
+            "contents";
         }
       }
     }
@@ -794,7 +802,7 @@ class CompleteDraft extends Component {
                   editor={ClassicEditor}
                   config={{
                     toolbar: [
-                      "heading",
+            
                       "bold",
                       "italic",
                       "bulletedList",

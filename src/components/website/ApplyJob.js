@@ -28,8 +28,7 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-autocomplete-places";
-import parse from 'html-react-parser';
-
+import parse from "html-react-parser";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -101,7 +100,7 @@ class ApplyJob extends Component {
       loginErrorPopup: false,
       priceCheck: true,
       address: "",
-      latLng: ""
+      latLng: "",
     };
   }
   handleChange = (address) => {
@@ -174,13 +173,13 @@ class ApplyJob extends Component {
       .then((res) => {
         const persons = res.data;
         console.log(persons);
-        if (persons !== "please Login"){
+        if (persons !== "please Login") {
           this.setState({ liked: persons });
         }
       })
       .catch((err) => {
         this.setState({
-          authourised: false
+          authourised: false,
         });
       });
   }
@@ -274,7 +273,6 @@ class ApplyJob extends Component {
       liked.push(id);
       this.setState({
         liked: liked,
-
       });
 
       axios
@@ -299,12 +297,12 @@ class ApplyJob extends Component {
     };
     console.log(config);
     let index = this.state.liked.indexOf(id);
-    let liked_list = this.state.liked
+    let liked_list = this.state.liked;
     liked_list.splice(index, 1);
     this.setState({
-      liked: liked_list
-    })
-    console.log(liked_list)
+      liked: liked_list,
+    });
+    console.log(liked_list);
 
     axios
       .post(`${domain}/api/jobs/unlikeJob/${id}`, config)
@@ -313,8 +311,8 @@ class ApplyJob extends Component {
         if (response.data === "please Login") {
           // history.push("/pilot_dashboard/account")
           this.setState({
-            loginErrorPopup: true
-          })
+            loginErrorPopup: true,
+          });
         }
       })
       .catch(() => {});
@@ -367,7 +365,6 @@ class ApplyJob extends Component {
     setTimeout(() => {
       console.log(this.state.pilot_type);
     }, 100);
-
   };
 
   filterWorkTypeChangeHandler = (type) => {
@@ -398,7 +395,7 @@ class ApplyJob extends Component {
   dislikeSuccessPopup = (id) => {
     this.setState({
       dislikeSuccess: true,
-      dislikeID: id
+      dislikeID: id,
     });
   };
 
@@ -420,7 +417,7 @@ class ApplyJob extends Component {
       loginErrorPopup: false,
     });
   };
-  searchFilter = () =>{
+  searchFilter = () => {
     // filter_keyword: "",
     // filter_country: "",
     // filter_city: "",
@@ -429,26 +426,35 @@ class ApplyJob extends Component {
     // price_range: [20, 40],
     this.setState({ loading: true });
     const data = {
-      keywords : this.state.filter_keyword,
+      keywords: this.state.filter_keyword,
       employeeType: this.state.pilot_type,
-      jobType : this.state.work_type,
-      
-      
-      address: this.state.address
-    }
-    if(document.getElementById("priceChecker").checked === true ){
-      data.price = this.state.price_range
-    }
-    axios.post(`${domain}/api/jobs/filterJobs`, data).then(res=>{
-      console.log(res)
-     console.log(res)
-      this.setState({
-        data : res.data
-      })
-      this.setState({ loading: false });
+      jobType: this.state.work_type,
 
-    })
-  }
+      address: this.state.address,
+    };
+    if (document.getElementById("priceChecker").checked === true) {
+      data.price = this.state.price_range;
+    }
+    axios.post(`${domain}/api/jobs/filterJobs`, data).then((res) => {
+      console.log(res);
+      console.log(res);
+      this.setState({
+        data: res.data,
+      });
+      this.setState({ loading: false });
+    });
+  };
+
+  clearFilter = () => {
+    this.setState({
+      filter_keyword: "",
+      pilot_type: [],
+      work_type: [],
+      address: "",
+    });
+    document.getElementById("priceChecker").checked = false;
+  };
+
   render() {
     return (
       <>
@@ -475,105 +481,118 @@ class ApplyJob extends Component {
                     </button>
                   </div>
 
-                  <div className="h_p_filter1_title1">Keywords</div>
+                  <div className="h_p_filter1_title1">
+                    Keywords
+                    <div
+                      style={{
+                        fontSize: "16px",
+                        fontFamily: "muli-light",
+                        textDecoration: "underline",
+                        display: "inline-block",
+                        float: "right",
+                        cursor: "pointer",
+                      }}
+                      onClick={this.clearFilter}
+                    >
+                      Clear
+                    </div>
+                  </div>
                   <input
                     type="text"
                     className="a_j_keywords"
                     placeholder="Search Keywords"
                     onChange={this.filterKeywordChangeHandler}
+                    value={this.state.filter_keyword}
                   />
                   <div className="h_p_filter1_title1">Location</div>
-                  <div style={{display: "none"}}>
-                  <select
-                    className="a_j_select_dropdown"
-                    onChange={this.filterCountryChangeHandler}
-                  >
-                    <option>Select Country</option>
-                    <option value="India">India</option>
-                    <option value="China">China</option>
-                    <option value="Pakistan">Pakistan</option>
-                    <option value="Russia">Russia</option>
-                  </select>
-                  <div className="h_p_filter1_title1">City</div>
-                  <select
-                    className="a_j_select_dropdown"
-                    id="a_j_select_dropdown1"
-                    onChange={this.filterCityChangeHandler}
-                  >
-                    <option>Select City</option>
-                    <option value="Chennai">Chennai</option>
-                    <option value="Bangalore">Bangalore</option>
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="Delhi">Delhi</option>
-                  </select>
+                  <div style={{ display: "none" }}>
+                    <select
+                      className="a_j_select_dropdown"
+                      onChange={this.filterCountryChangeHandler}
+                    >
+                      <option>Select Country</option>
+                      <option value="India">India</option>
+                      <option value="China">China</option>
+                      <option value="Pakistan">Pakistan</option>
+                      <option value="Russia">Russia</option>
+                    </select>
+                    <div className="h_p_filter1_title1">City</div>
+                    <select
+                      className="a_j_select_dropdown"
+                      id="a_j_select_dropdown1"
+                      onChange={this.filterCityChangeHandler}
+                    >
+                      <option>Select City</option>
+                      <option value="Chennai">Chennai</option>
+                      <option value="Bangalore">Bangalore</option>
+                      <option value="Mumbai">Mumbai</option>
+                      <option value="Delhi">Delhi</option>
+                    </select>
                   </div>
                   <div className="">
-                  {/* <input type="text" className="s_c_Search"/> */}
-                  <PlacesAutocomplete
-                    value={this.state.address}
-                    onChange={this.handleChange}
-                    onSelect={this.handleSelect}
-                  >
-                    {({
-                      getInputProps,
-                      suggestions,
-                      getSuggestionItemProps,
-                      loading,
-                    }) => (
-                      <div>
-                        <input
-                          style={{ height: "40px" }}
-                          {...getInputProps({
-                            placeholder: "Search Places ...",
-                            className: "a_j_filter_address",
-                          })}
-                        />
-                        <div
-                          className="autocomplete-dropdown-container"
-                 
-                        >
-                          {loading && <div>Loading...</div>}
-                          {suggestions.map((suggestion) => {
-                            const className = suggestion.active
-                              ? "suggestion-item--active"
-                              : "suggestion-item";
+                    {/* <input type="text" className="s_c_Search"/> */}
+                    <PlacesAutocomplete
+                      value={this.state.address}
+                      onChange={this.handleChange}
+                      onSelect={this.handleSelect}
+                    >
+                      {({
+                        getInputProps,
+                        suggestions,
+                        getSuggestionItemProps,
+                        loading,
+                      }) => (
+                        <div>
+                          <input
+                            style={{ height: "40px" }}
+                            {...getInputProps({
+                              placeholder: "Search Places ...",
+                              className: "a_j_filter_address",
+                            })}
+                          />
+                          <div className="autocomplete-dropdown-container">
+                            {loading && <div>Loading...</div>}
+                            {suggestions.map((suggestion) => {
+                              const className = suggestion.active
+                                ? "suggestion-item--active"
+                                : "suggestion-item";
 
-                            // inline style for demonstration purpose
-                            const style = suggestion.active
-                              ? {
-                                  backgroundColor: "#e1e1e1",
-                                  cursor: "pointer",
-                                  padding: "10px",
-                                }
-                              : {
-                                  backgroundColor: "#ffffff",
-                                  cursor: "pointer",
-                                  padding: "10px",
-                                };
-                            return (
-                              <div
-                                {...getSuggestionItemProps(suggestion, {
-                                  className,
-                                  style,
-                                })}
-                              >
-                                <span
-                                  style={{
-                                    padding: "20px 10px",
-                                    marginBottom: "10px",
-                                  }}
+                              // inline style for demonstration purpose
+                              const style = suggestion.active
+                                ? {
+                                    backgroundColor: "#e1e1e1",
+                                    cursor: "pointer",
+                                    padding: "10px",
+                                  }
+                                : {
+                                    backgroundColor: "#ffffff",
+                                    cursor: "pointer",
+                                    padding: "10px",
+                                  };
+                              return (
+                                <div
+                                  {...getSuggestionItemProps(suggestion, {
+                                    className,
+                                    style,
+                                  })}
                                 >
-                                  {suggestion.description}
-                                </span>
-                              </div>
-                            );
-                          })}
+                                  <span
+                                    style={{
+                                      padding: "20px 10px",
+                                      marginBottom: "10px",
+                                    }}
+                                  >
+                                    {suggestion.description}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </PlacesAutocomplete>
-                </div>
-                <br />
+                      )}
+                    </PlacesAutocomplete>
+                  </div>
+                  <br />
 
                   <div
                     className="h_p_filter1_title"
@@ -605,6 +624,9 @@ class ApplyJob extends Component {
                         onClick={() =>
                           this.filterPilotTypeChangeHandler("Licensed Pilot")
                         }
+                        checked={this.state.pilot_type.includes(
+                          "Licensed Pilot"
+                        )}
                       />
                       <div className="h_p_filter1_checkbox_label">
                         Licensed Pilots
@@ -617,6 +639,9 @@ class ApplyJob extends Component {
                         onClick={() =>
                           this.filterPilotTypeChangeHandler("Unlicensed Pilot")
                         }
+                        checked={this.state.pilot_type.includes(
+                          "Unlicensed Pilot"
+                        )}
                       />
 
                       <div className="h_p_filter1_checkbox_label">
@@ -654,6 +679,7 @@ class ApplyJob extends Component {
                         onClick={() =>
                           this.filterWorkTypeChangeHandler("Full-Time")
                         }
+                        checked={this.state.work_type.includes("Full-Time")}
                       />
                       <div className="h_p_filter1_checkbox_label">
                         Full Time
@@ -666,19 +692,26 @@ class ApplyJob extends Component {
                         onClick={() =>
                           this.filterWorkTypeChangeHandler("Part-Time")
                         }
+                        checked={this.state.work_type.includes("Part-Time")}
                       />
                       <div className="h_p_filter1_checkbox_label">
                         Part Time
                       </div>
                     </label>
                   </div>
-                  <div style={{marginBottom :"30px"}}>
-                  <input
-                            type="checkbox"
-                            className="h_p_filter1_checkbox" style={{display: "inline"}}
-                            id="priceChecker"
-                          />
-                  <div className="h_p_filter1_title" style={{display: "inline", marginBottom:"10px"}}>Salary</div>
+                  <div style={{ marginBottom: "30px" }}>
+                    <input
+                      type="checkbox"
+                      className="h_p_filter1_checkbox"
+                      style={{ display: "inline" }}
+                      id="priceChecker"
+                    />
+                    <div
+                      className="h_p_filter1_title"
+                      style={{ display: "inline", marginBottom: "10px" }}
+                    >
+                      Salary
+                    </div>
                   </div>
                   <div
                     className={
@@ -705,7 +738,12 @@ class ApplyJob extends Component {
                       />
                     </Box>
                   </div>
-                  <div className="a_j_filter_search" onClick={this.searchFilter}>Search</div>
+                  <div
+                    className="a_j_filter_search"
+                    onClick={this.searchFilter}
+                  >
+                    Search
+                  </div>
                 </Col>
               </Visible>
               <Hidden xxl xl>
@@ -882,10 +920,7 @@ class ApplyJob extends Component {
                           </div>
                         </label>
                       </div>
-                      <input
-                            type="checkbox"
-                            className="h_p_filter1_checkbox"
-                          />
+                      <input type="checkbox" className="h_p_filter1_checkbox" />
                       <div className="h_p_filter1_title">Monthly Salary</div>
                       <div
                         className={
@@ -984,22 +1019,27 @@ class ApplyJob extends Component {
                               <img src={money} />
                             </div>
                             <div className="a_j_listing_money">
-                              {
-                                item.minSalary ? `${item.minSalary}.00 - ${item.maxSalary}.00` : "Not Mentioned"
-                              }
-                              
+                              {item.minSalary
+                                ? `${item.minSalary}.00 - ${item.maxSalary}.00`
+                                : "Not Mentioned"}
                             </div>
                           </div>
                           <hr className="a_j_listing_hr" />
                         </div>
                         <div className="a_j_listing_btns">
-                          <button className="a_j_location_btn" style = {{cursor: "default"}}>
+                          <button
+                            className="a_j_location_btn"
+                            style={{ cursor: "default" }}
+                          >
                             <img src={location} className="a_j_location_logo" />
                             <span className="a_j_location_text">
                               {item.workLocation.split(",")[0]}
                             </span>
                           </button>{" "}
-                          <button className="a_j_location_btn" style = {{cursor: "default"}}>
+                          <button
+                            className="a_j_location_btn"
+                            style={{ cursor: "default" }}
+                          >
                             <img src={work} className="a_j_location_logo" />
                             <span className="a_j_location_text">
                               {item.jobType}

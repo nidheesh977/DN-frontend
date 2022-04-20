@@ -17,6 +17,8 @@ import bin from "./images/c_j_bin.png";
 import { withStyles } from "@material-ui/core/styles";
 import edit from "./images/c_j_edit.png";
 import axios from "axios";
+
+
 const DialogContent = withStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -92,6 +94,7 @@ let editJob = (id) => {
       {data.map((items, i) => {
         return (
           <div>
+            
             <div style={{ margin: "0px 0px 40px 0px" }}>
               <div style={{ marginBottom: "10px" }}>
                 <div className="pd_a_j_dataDateHead">

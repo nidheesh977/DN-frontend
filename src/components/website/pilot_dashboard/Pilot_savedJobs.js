@@ -278,12 +278,12 @@ if(response.data === "please Login"){
             </div>
           );
         })}{" "}
-      <div className="a_j_load_div">
+      {/* <div className="a_j_load_div">
         <button className="a_j_loadMore_btn">
           <img src={loadMore} className="a_j_location_logo" />
           <span className="a_j_location_text">Load More</span>
         </button>{" "}
-      </div>
+      </div> */}
       <Dialog
                 open={dialog1}
                 onClose={closeChoicePopup1}

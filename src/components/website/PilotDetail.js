@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
+import Alert from '@mui/material/Alert';
+
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
@@ -21,7 +23,6 @@ import whatsapp_icon from "../images/whatsapp_icon.png";
 import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import s_c_form_img from "../images/s_c_form_img.png";
 import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
 import "../css/PilotDetail.css";
 import addIcon from "../images/add.png";
 import hireBtnIcon from "../images/hirebtn.svg";
@@ -168,10 +169,16 @@ export default function PilotDetails(props) {
     if (hireForm.description !== "" && hireForm.description.length <= 200) {
       axios.post(`${domain}/api/hireProposal/createProposal`, {pilotId: param.id, message: hireForm.description}, config).then(res=>{
         console.log(res)
+        setHireForm({
+          ...hireForm,
+          description: ""
+        })
 //test
 if(res.status === 200){
-  document.getElementById("btn1").style.display ="none"
-  document.getElementById("btn2").style.display ="block"
+
+  document.getElementById("alertBox").style.display = "block"
+
+  
   document.querySelector(".h_p_start_process_form_description").style.backgroundColor = "#f5f5f7"
 }
 setTimeout(()=>{
@@ -179,14 +186,9 @@ setTimeout(()=>{
 
 
     setStartProcess(false),
-    setHireForm({
-      ...hireForm,
-      description: ""
-    })
-,
-  document.getElementById("btn1").style.display ="block",
-  document.getElementById("btn2").style.display ="none",
-  document.querySelector(".h_p_start_process_form_description").style.backgroundColor = "#f5f5f7")}
+    document.getElementById("alertBox").style.display = "none"
+   
+)}
   , 1500);
 
 
@@ -1378,8 +1380,11 @@ setTimeout(()=>{
                  
                   <div className="h_p_start_process_form_btn_container" style={{display : "flex", justifyContent: "center"}}>
                       <button onClick={submitProcess} className='h_p_start_process_form_btn' id='btn1'>Send Mail</button>
-                      <button className='h_p_start_process_form_btn' id="btn2" style={{display: "none", textAlign: "center"}}>Mail Sent</button>
+                     
                     </div>
+                    <div id="alertBox" style={{display: "none"}}>
+                      <Alert severity="success" style={{marginTop: "20px"}}>Mail Sent Successfully</Alert>
+                      </div>
                 </div>
               </Row>
             </DialogContent>

@@ -58,6 +58,12 @@ function HireProposals() {
           </Col>
         </Row>
       </div>
+      {
+        data.length == 0 ? <div id="tohide" >
+        <div>No Proposals yet please Check Later</div>
+      </div> : <></>
+      }
+      
 
       {
           data.map((item, i)=>{
