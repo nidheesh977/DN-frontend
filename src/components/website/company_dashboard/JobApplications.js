@@ -7,7 +7,7 @@ import location from "../../images/location.svg";
 import work from "../../images/work.svg";
 import heart from "../../images/heart (3).svg";
 import heartLike from "../../images/heart-blue.svg";
-import { Link, useHistory, Switch, Route } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import loadMore from "../../images/Group 71.svg";
 import bin from "./images/c_j_bin.png";
 import edit from "./images/c_j_edit.png";
@@ -19,9 +19,6 @@ import Close from "../../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import All from "../All.module.css";
-import JobApplications from "./JobApplications";
-import JobSuggestions from "./JobSuggestions";
-
 const DialogContent = withStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -30,7 +27,7 @@ const DialogContent = withStyles((theme) => ({
 
 const domain = process.env.REACT_APP_MY_API;
 
-function Company_applications() {
+function JobApplications() {
   let history = useHistory();
   let param = useParams();
   let goToPreviousPath = () => {
@@ -59,80 +56,101 @@ function Company_applications() {
   }, []);
   let [personalData, setPersonalData] = useState({
     email: "",
-    phoneNo: ""
-  })
-  let showPersonalData = (phNo, email) =>{
+    phoneNo: "",
+  });
+  let showPersonalData = (phNo, email) => {
     setPersonalData({
       email: email,
-      phoneNo: phNo
-    })
-    setViewDetails(true)
-  }
+      phoneNo: phNo,
+    });
+    setViewDetails(true);
+  };
   return (
     <div>
-      {!loading ? (
-        <>
-          <div>
-            <div className="c_r_applications_box">
-              <div style={{ margin: "0px 0px 40px 0px" }}>
-                <div style={{ marginBottom: "10px" }}>
-                  <div>
-                    <div className="pd_a_j_dataDateHead">
-                      Posted on:
-                      <span className="pd_a_j_dataDate">06 Jan 2022</span>
-                    </div>
-                  </div>
-                  <Link to = {"/applyJobLanding/"+job._id}>
-                    <div className="pd_a_j_dataTitle">{job.jobTitle}</div>
-                  </Link>
-                </div>
-                <div className="pd_a_j_data_subTitle1">{job.industry}</div>
-                <div>
-                  <div className="a_j_container1">
-                    <div className="a_j_listing_img1">
-                      <img src={profileUser} />
-                    </div>
-                    <div className="a_j_listing_profileName">
-                      {job.employeeType}
-                    </div>
-                    <div className="a_j_listing_img2">
-                      <img src={money} />
-                    </div>
-                    <div className="a_j_listing_money">
-                      {job.minSalary && `$${job.minSalary} - $${job.maxSalary}`}
-                    </div>
-                  </div>
-                </div>
-                <div className="a_j_listing_btns" style={{ marginTop: "20px" }}>
-                  <button className="a_j_location_btn" style = {{cursor: "default"}}>
-                    <img src={location} className="a_j_location_logo" />
-                    <span className="a_j_location_text">Bangalore</span>
-                  </button>{" "}
-                  <button className="a_j_location_btn" style = {{cursor: "default"}}>
-                    <img src={work} className="a_j_location_logo" />
-                    <span className="a_j_location_text">Full Time</span>
-                  </button>
-                  <div onClick={goToPreviousPath} id="a_j_job_btn1">
-                    Close Candidates
-                  </div>{" "}
-                </div>
-              </div>
+      <div style={{ padding: "30px 20px 10px 20px" }}>
+        <Row gutterWidth={15}>
+          <Col xl={2}>
+            <div className="c_r_applicationsHead">Name</div>
+          </Col>
+          <Col xl={2.25}>
+            <div className="c_r_applicationsHead">Pilot Type</div>
+          </Col>
+          <Col xl={2.25}>
+            <div className="c_r_applicationsHead">location</div>
+          </Col>
+          <Col xl={3}></Col>
+          <Col xl={2.5}>
+              <Link to={`/company_dashboard/activities/jobs/applications/${param.id}/suggestions`}>
+            <div className="c_r_startProcessBtn" style={{ color: "black", padding: "5px 10px" }}>
+              Show Suggested
             </div>
-          </div>
-          <Switch>
-          <Route
-              path="/company_dashboard/activities/jobs/applications/:id/suggestions"
-              component={JobSuggestions}
-            />
-          <Route
-              path="/company_dashboard/activities/jobs/applications/:id/"
-              component={JobApplications}
-            />
-          </Switch>
-          {/* <JobApplications /> */}
+            </Link>
+          </Col>
+        </Row>
+      </div>
+      {applications.length > 0 ? (
+        <>
+          {applications.map((application, index) => {
+            return (
+              <div className="c_r_applications_box1" key={index}>
+                <Row gutterWidth={15}>
+                  <Col xl={2}>
+                    <div className="c_r_applications_text">
+                      {application.pilotId.name}
+                    </div>
+                  </Col>
+                  <Col xl={2.25}>
+                    <div
+                      className="c_r_applications_text"
+                      style={{ textTransform: "capitalize" }}
+                    >
+                      {application.pilotId.pilotType} Pilot
+                    </div>
+                  </Col>
+                  <Col xl={2.25}>
+                    <div className="c_r_applications_text">
+                      {application.pilotId.city}
+                    </div>
+                  </Col>
+                  <Col xl={3}>
+                    <Link to={`/pilot_details/${application.pilotId._id}`}>
+                      <div
+                        className="c_r_startProcessBtn"
+                        style={{ color: "black" }}
+                      >
+                        View profile
+                      </div>
+                    </Link>
+                  </Col>
+                  <Col xl={2.5}>
+                    <div
+                      className="c_r_Remove"
+                      onClick={() =>
+                        showPersonalData(
+                          application.pilotId.userId.phoneNo,
+                          application.pilotId.userId.email
+                        )
+                      }
+                    >
+                      View details
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+            );
+          })}
         </>
       ) : (
-        <div style={{ textAlign: "center", fontFamily: "muli-regular", fontSize: "25px", margin: "30px" }}>Loading . . .</div>
+        <div
+          style={{
+            textAlign: "center",
+            fontFamily: "muli-regular",
+            fontSize: "25px",
+            margin: "30px",
+          }}
+        >
+          No applications yet
+        </div>
       )}
       <Dialog
         open={viewDetails}
@@ -159,12 +177,18 @@ function Company_applications() {
             <div className="a_j_popup_title">Pilot Personal Data</div>
             <div>
               <div
-              style={{
-                fontFamily: "muli-regular",
-                marginBottom: "10px",
-                fontSize: "19px",
-                color: "black",
-              }}>Email ID : <a href={`mailto:${personalData.email}`}>{personalData.email} </a></div>
+                style={{
+                  fontFamily: "muli-regular",
+                  marginBottom: "10px",
+                  fontSize: "19px",
+                  color: "black",
+                }}
+              >
+                Email ID :{" "}
+                <a href={`mailto:${personalData.email}`}>
+                  {personalData.email}{" "}
+                </a>
+              </div>
               <div
                 style={{
                   fontFamily: "muli-regular",
@@ -173,7 +197,10 @@ function Company_applications() {
                   color: "black",
                 }}
               >
-                Phone Number : <a href = {`tel:${personalData.phoneNo}`}>{personalData.phoneNo}</a>
+                Phone Number :{" "}
+                <a href={`tel:${personalData.phoneNo}`}>
+                  {personalData.phoneNo}
+                </a>
               </div>
             </div>
             <div
@@ -182,7 +209,11 @@ function Company_applications() {
             >
               <div
                 className="j_l_applyJobLoginBtn"
-                style={{ width: "fit-content", padding: "7px 50px", marginTop: "25px" }}
+                style={{
+                  width: "fit-content",
+                  padding: "7px 50px",
+                  marginTop: "25px",
+                }}
                 onClick={() => setViewDetails(false)}
               >
                 Close
@@ -195,4 +226,4 @@ function Company_applications() {
   );
 }
 
-export default Company_applications;
+export default JobApplications;
