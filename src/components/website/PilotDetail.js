@@ -40,6 +40,7 @@ import userCross from "../images/userCross.svg";
 import axios from "axios";
 import Avatar from "material-ui/Avatar";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import ProImg from "../images/proIcon.png"
 
 const styles = (theme) => ({
   root: {
@@ -526,17 +527,11 @@ setTimeout(()=>{
               className={`${All.Order_xs_2} ${All.Order_sm_2} ${All.pr_xs_30} ${All.pl_xs_30} ${All.profileImg}`}
             >
               <Box py={1}>
-                <div className="p_d_name_container">
+                <div className="p_d_name_container" style = {{display: "flex", alignItems: "center"}}>
                   <div className="p_d_name">
                     {pilotData.name || <Skeleton />}
                   </div>
-                  <span className="s_c_rating">
-                    <span className="star_checked">&#9733;</span>
-                    <span className="star_checked">&#9733;</span>
-                    <span className="star_checked">&#9733;</span>
-                    <span className="star_checked">&#9733;</span>
-                    <span className="star_checked">&#9733;</span>
-                  </span>
+                  { pilotData.pilotPro && <img src={ProImg} alt="Pro Img" height = "30px" style = {{marginRight: "20px"}}/>}
                 </div>
               </Box>
               <Box py={1}>

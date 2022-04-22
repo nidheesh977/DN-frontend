@@ -28,6 +28,7 @@ import PlacesAutocomplete, {
   getLatLng,
 } from "react-autocomplete-places";
 import { data } from "jquery";
+import ProImg from "../images/proIcon.png"
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -1151,8 +1152,9 @@ class HirePilot extends Component {
                               <div
                                 className="h_p_listing_name"
                                 onClick={() => this.pilotDetailPage(pilot._id)}
+                                style = {{display: "flex", alignItem: "center"}}
                               >
-                                {pilot.name}
+                                {pilot.name} { pilot.pilotPro && <img src={ProImg} alt="Pro Img" height = "24px" style = {{marginLeft: "10px"}}/>}
                               </div>
                               <div className="h_p_listing_job">
                                 {pilot.pilotType === "unlicensed"
@@ -1294,7 +1296,7 @@ class HirePilot extends Component {
                           <Col>
                             <div className="h_p_listing_img_container_sm">
                               <img
-                                src={profileImg}
+                                src={pilot.profilePic}
                                 alt=""
                                 className="h_p_listing_img"
                               />
@@ -1303,8 +1305,9 @@ class HirePilot extends Component {
                               <div
                                 className="h_p_listing_name"
                                 onClick={() => this.pilotDetailPage(1)}
+                                style = {{display: "flex", alignItem: "center"}}
                               >
-                                {pilot.name}
+                                {pilot.name} { pilot.pilotPro && <img src={ProImg} alt="Pro Img" height = "24px" style = {{marginLeft: "10px"}}/>}
                               </div>
                               <div className="h_p_listing_job">
                                 {pilot.pilotType === "unlicensed"
@@ -1367,75 +1370,18 @@ class HirePilot extends Component {
                                     <span className="h_p_hour_time">/hr</span>{" "}
                                   </div>
                                 </div>
-                                <div class="h_p_star_section">
-                                  <div
-                                    className={
-                                      pilot.rating >= 1
-                                        ? "h_p_rating h_p_rating_selected  star-review-box  "
-                                        : "h_p_rating h_p_rating_unselected   star-review-box"
-                                    }
-                                  >
-                                    &#9733;
-                                  </div>
-                                  <div
-                                    className={
-                                      pilot.rating >= 2
-                                        ? "h_p_rating h_p_rating_selected  star-review-box"
-                                        : "h_p_rating h_p_rating_unselected   star-review-box"
-                                    }
-                                  >
-                                    &#9733;
-                                  </div>
-                                  <div
-                                    className={
-                                      pilot.rating >= 3
-                                        ? "h_p_rating h_p_rating_selected  star-review-box "
-                                        : "h_p_rating h_p_rating_unselected   star-review-box "
-                                    }
-                                  >
-                                    &#9733;
-                                  </div>
-                                  <div
-                                    className={
-                                      pilot.rating >= 4
-                                        ? "h_p_rating h_p_rating_selected star-review-box "
-                                        : "h_p_rating h_p_rating_unselected   star-review-box"
-                                    }
-                                  >
-                                    &#9733;
-                                  </div>
-                                  <div
-                                    className={
-                                      pilot.rating >= 5
-                                        ? "h_p_rating h_p_rating_selected star-review-box "
-                                        : "h_p_rating h_p_rating_unselected   star-review-box"
-                                    }
-                                  >
-                                    &#9733;
-                                  </div>
-                                </div>
+                                
                               </div>
                               <div className="h_p_listing_btn-container">
-                                <button
-                                  className="h_p_start_process_btn"
-                                  onClick={this.clickStartProcess}
-                                >
-                                  Start Process
-                                </button>
-                                <button
-                                  className="h_p_save_pilot_btn"
-                                  onClick={this.showJobSave}
-                                >
-                                  <i class="fa fa-heart"></i>
-                                </button>
-                                <div
-                                  className="h_p_listing_send_msg_link "
-                                  style={{ textAlign: "center" }}
-                                  onClick={() => this.sendMessage(1)}
-                                >
-                                  Send Message
+                                  <button
+                                    className="h_p_start_process_btn"
+                                    onClick={() =>
+                                      this.pilotDetailPage(pilot._id)
+                                    }
+                                  >
+                                    View Profile
+                                  </button>
                                 </div>
-                              </div>
                             </div>
                           </Col>
                         </Row>

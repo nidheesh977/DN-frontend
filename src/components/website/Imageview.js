@@ -685,9 +685,14 @@ function Imageview() {
 
           {/* //right */}
           <Col lg={4}>
-            <div className="i_v_text1">Like what you see?</div>
-            <div className="i_v_text2">This Droner is available for work</div>
-            <button className="hire_btn" onClick={clickHire}>Hire This Droner</button>
+
+            {userDetails.pilotPro
+            &&<>
+              <div className="i_v_text1">Like what you see?</div>
+              <div className="i_v_text2">This Droner is available for work</div>
+              <button className="hire_btn" onClick={clickHire}>Hire This Droner</button>
+            </>
+            }
 
             <div className="i_v_moreShots">More Shots from {image.name}</div>
             <Row>
