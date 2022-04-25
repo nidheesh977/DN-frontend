@@ -232,6 +232,7 @@ setTimeout(()=>{
       .get(`${domain}/api/pilot/pilotDetails/${props.match.params.id}`)
       .then((response) => {
         setPilotData(response.data);
+        console.log(response)
         if (response.data.name === "CastError") {
           history.push("/no-page-found");
         }

@@ -53,6 +53,7 @@ import "./App.css"
 import CompanyRoute from "./companyRoute";
 import TextEditor from "./components/website/textEditor";
 import RearrangeFiles from "./components/website/pilot_dashboard/RearrangeFiles";
+import Checkout from "./components/website/Checkout";
 
 function App(){
 
@@ -173,6 +174,7 @@ function App(){
             <Route component={RecoverPassword} path="/users/:id/forgetPassword/:token" />
             <BoosterRoute component={Booster_dashboard} path="/booster_dashboard" />
             <Route exact path="/textEditor" component={TextEditor} />
+            <Route exact path="/checkout/:id" component={Checkout} />
 
             <Route exact path="/NoComponent" component={NoPageFound} />
 
