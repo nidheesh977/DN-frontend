@@ -52,7 +52,6 @@ import CompleteDraft from "./components/website/completeDraft";
 import "./App.css"
 import CompanyRoute from "./companyRoute";
 import TextEditor from "./components/website/textEditor";
-import RearrangeFiles from "./components/website/pilot_dashboard/RearrangeFiles";
 
 function App(){
 
@@ -142,11 +141,6 @@ function App(){
               exact
               path="/pilot_details/:id"
               component={PilotDetails}
-            />
-            <Route
-              exact
-              path="/rearrange-files"
-              component={RearrangeFiles}
             />
             <Route component = {searchresult} path = "/searchresult" exact />
             <PilotRoute component = {UploadFiles} path = "/UploadFile" exact />

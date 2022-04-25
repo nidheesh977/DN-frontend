@@ -1,30 +1,27 @@
-#mydiv {
-  position: absolute;
-  z-index: 9;
-  background-color: #f1f1f1;
-  text-align: center;
-  border: 1px solid #d3d3d3;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.r_f_save_btn{
+  font-family: muli-regular;
+  font-size: 16px;
+  padding: 10px 50px;
+  background: transparent linear-gradient(197deg, #00E7FC 0%, #4FFEA3 100%) 0% 0% no-repeat padding-box;
+  border-radius: 30px;
+  border: 1px solid #4ffea3;
+  margin: 5px;
 }
 
-#mydivheader {
-  padding: 10px;
-  cursor: move;
-  z-index: 10;
-  background-color: #2196f3;
-  color: #fff;
+.r_f_save_btn:hover{
+  background: white;
 }
 
-.dropable_div {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.r_f_cancel_btn{
+  font-family: muli-regular;
+  font-size: 16px;
+  padding: 10px 50px;
+  background: #dfdfdf;
+  border-radius: 30px;
+  border: 1px solid grey;
+  margin: 5px;
+}
+
+.r_f_cancel_btn:hover{
+  background: white;
 }

@@ -817,17 +817,18 @@ class UploadFiles extends Component {
         }
       }
 
-      if (imageCount > this.state.imageLimit) {
+      if (imageCount > this.state.imageLimit && imageCount !==0) {
+        // if ()
         this.setState({
           subscription_popup: true,
           subscription_msg: "Images limit exceeded. Upgrade to continue",
         });
-      } else if (videoCount > this.state.videoLimit) {
+      } else if (videoCount > this.state.videoLimit && videoCount !== 0) {
         this.setState({
           subscription_popup: true,
           subscription_msg: "Videos limit exceeded. Upgrade to continue",
         });
-      } else if (img3dCount > this.state.img3dLimit) {
+      } else if (img3dCount > this.state.img3dLimit && img3dCount !== 0) {
         this.setState({
           subscription_popup: true,
           subscription_msg: "3D images limit exceeded. Upgrade to continue",

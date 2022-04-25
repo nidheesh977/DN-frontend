@@ -40,10 +40,13 @@ const DialogContent = withStyles((theme) => ({
 
 function handleClick() {
   var v = document.getElementById("FilterDropdowns");
+  var y = document.getElementById("mainFilter");
   if (v.style.display === "none") {
     v.style.display = "block";
+    y.style.display = "none";
   } else {
     v.style.display = "none";
+    y.style.display = "block";
   }
 }
 
@@ -603,7 +606,7 @@ class GalleryFilter extends React.Component {
                   </Col>
 
                   <Col lg={8} xs={12} className="categories">
-                    <div className="Filters">
+                    <div className="Filters" id = "mainFilter">
                       <form className="GalleryForm">
                         <ul>
                           {links.map((link, index) => {
@@ -662,7 +665,7 @@ class GalleryFilter extends React.Component {
                   <Container>
                     <Row
                       gutterWidth={0}
-                      style={{ margin: "auto", maxWidth: "80%" }}
+                      style={{ margin: "auto", maxWidth: "80%", marginTop: "35px" }}
                     >
                       <Col lg={2} xs={2}>
                         <select

@@ -80,7 +80,7 @@ const deleteImage = (id) =>{
                 >
                   <video
                     // src={`${domain}/${item.file}`}
-                    className="pd_images_image" style={{backgroundColor:"black", objectFit:"cover"}} controls onPlay={()=>removeVideoIcon(item._id)}
+                    className="pd_images_image" style={{backgroundColor:"black", objectFit:"cover"}} onPlay={()=>removeVideoIcon(item._id)}
                   >
                     <source src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`} type="video/mp4" />
                     <source src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`} type="video/ogg" />

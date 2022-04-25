@@ -45,6 +45,8 @@ import Box from "@material-ui/core/Box";
 import Skeleton from "react-loading-skeleton";
 import Close from "../images/close.svg";
 import { Redirect } from "react-router-dom";
+import ProImg from "../images/proIcon.png"
+
 const styles = (theme) => ({
   root: {
     margin: 0,
@@ -492,15 +494,16 @@ function Imageview() {
                 Your browser does not support the video tag.
               </video>
             ) : (
-              <img
-                style={{
-                  width: "100%",
-                  margin: "32px 0px 45px 0px",
-                  borderRadius: "10px",
-                }}
-                className="mainImage"
-                src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
-              />
+                <img
+                  style={{
+                    width: "100%",
+                    margin: "32px 0px 45px 0px",
+                    borderRadius: "10px",
+                    boxShadow: "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+                  }}
+                  className="mainImage"
+                  src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
+                />
             )}
 
             <div style = {{cursor: "pointer"}}>
@@ -541,10 +544,10 @@ function Imageview() {
                 {" "}
                 <div className="i_v_name">
                   <div
-                    style={{ cursor: "pointer" }}
                     onClick={() => redirectPilot(image.userId)}
+                    style = {{display: "flex", alignItems: "center", cursor: "pointer" }}
                   >
-                    {image.name}
+                    {image.name} {userDetails.pilotPro && <img src={ProImg} alt="Pro Img" height = "24px" style = {{marginLeft: "10px"}}/>}
                   </div>
                   {myFollowing.includes(image.userId) ? (
                     <div
@@ -571,7 +574,7 @@ function Imageview() {
             <div className="i_v_create">Wanna create something great?</div>
             <div className="i_v_contact">
               Feel Free to contact us{" "}
-              <span className="i_v_email"> info@nexevo.in</span>
+              <a href="mailto: info@nexevo.in"><span className="i_v_email">info@nexevo.in</span></a>
             </div>
             <Row>
               <Col lg={9}>
@@ -648,8 +651,8 @@ function Imageview() {
                           />
                         </Col>
                         <Col>
-                          <div className="i_v_comment_pilotName">
-                            {item.name}
+                          <div className="i_v_comment_pilotName" style = {{display: "flex", alignItems: "center"}}>
+                            {item.name} {item.userId.pilotPro && <img src={ProImg} alt="Pro Img" height = "20px" style = {{marginLeft: "10px"}}/>}
                           </div>
                           <div style={{ float: "right" }}>
                             <Row gutterWidth={10}>
@@ -658,11 +661,13 @@ function Imageview() {
                                   <img
                                     src={Heart}
                                     onClick={() => unlikeComment(item._id)}
+                                    style = {{cursor: "pointer"}}
                                   />
                                 ) : (
                                   <img
                                     src={Like}
                                     onClick={() => likeComment(item._id)}
+                                    style = {{cursor: "pointer"}}
                                   />
                                 )}{" "}
                               </Col>
@@ -709,6 +714,7 @@ function Imageview() {
                           height: "115px",
                           margin: "0px 0px 10px 0px",
                           borderRadius: "5px",
+                          cursor: "pointer"
                         }}
                         controls
                         onClick={() => clicked(item._id, item.userId)}
@@ -730,6 +736,7 @@ function Imageview() {
                           margin: "0px 0px 10px 0px",
                           borderRadius: "5px",
                           objectFit: "cover",
+                          cursor: "pointer"
                         }}
                         src={`https://dn-nexevo-thumbnail.s3.ap-south-1.amazonaws.com/${item.file}`}
                         onClick={() => clicked(item._id, item.userId)}

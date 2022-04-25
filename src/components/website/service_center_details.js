@@ -54,6 +54,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import Countries from "../../apis/country.json";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/dist/css/splide.min.css";
+import ProImg from "../images/proIcon.png"
 
 const styles = (theme) => ({
   root: {
@@ -886,8 +887,8 @@ export default function ServiceCenterDetails(props) {
                               }}
                               className="s_c_d_review_img"
                             />
-                            <div className="s_c_d_review_name">
-                              {review.pilotName}
+                            <div className="s_c_d_review_name" style = {{display: "flex", alignItems: "center"}}>
+                              {review.pilotName} {review.userId.pilotPro && <img src={ProImg} alt="Pro Img" height = "20px" style = {{marginLeft: "10px"}}/>}
                             </div>
                             <span className="s_c_rating">
                               <span

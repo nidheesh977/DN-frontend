@@ -392,6 +392,10 @@ max-height: 80px;
     font-family: Muli-Light;
 } 
 
+.Profile_icon:hover{  
+    color: #00E7FC
+} 
+
 
 
 #toggleElement {
