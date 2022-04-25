@@ -7,6 +7,7 @@ import Pilot_notifications from "./Pilot_notifications";
 import Pilot_BasicInfo from "./Pilot_BasicInfo";
 import Pilot_ProfessionalInfo from "./Pilot_ProfessionalInfo";
 import { Route, Switch, NavLink } from "react-router-dom";
+import Pilot_Payments from "./Pilot_Payments";
 
 class Account_Sidebar extends React.Component {
   constructor(props) {
@@ -82,6 +83,16 @@ class Account_Sidebar extends React.Component {
                   <div id="pd_filter1_checkbox_label">
                     {" "}
                     <NavLink
+                      to="/pilot_dashboard/account/payments"
+                      activeClassName="h_p_sidebar_active"
+                      className="h_p_filter1_checkbox_label"
+                    >
+                      My Payments
+                    </NavLink>
+                  </div>
+                  <div id="pd_filter1_checkbox_label">
+                    {" "}
+                    <NavLink
                       to="/pilot_dashboard/account/notifications"
                       activeClassName="h_p_sidebar_active"
                       className="h_p_filter1_checkbox_label"
@@ -102,6 +113,10 @@ class Account_Sidebar extends React.Component {
               <Route
                 path="/pilot_dashboard/account/professionalInformation"
                 component={Pilot_ProfessionalInfo}
+              />
+              <Route
+                path="/pilot_dashboard/account/payments"
+                component={Pilot_Payments}
               />
 
               <Route

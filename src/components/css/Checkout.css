@@ -1,0 +1,77 @@
+.c_title{
+    color: #444;
+    font-family: muli-bold;
+    font-weight: 700;
+    font-size: 32px;
+}
+.c_sideTitle{
+    font-family: muli-bold;
+    font-weight: 600;
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+.c_sideFeaturesDiv{
+    margin-bottom: 25px;
+}
+.c_sideSpan{
+    margin-left: 10px;
+    
+    font-family: muli-regular;
+    font-size: 16px;
+}
+.c_payment{
+    margin: 15px 0px;
+    
+    font-family: muli-bold;
+    font-size: 20px;
+    text-align: center;
+}
+.c_input{
+    background-color: #ffffff;
+    border: 1px solid #d1c7c7 !important;
+    width: 98%;
+    margin-bottom: 15px !important;
+}
+.c_costingTitle{
+    font-family: muli-bold;
+    font-size: 18px;
+    margin-top: 15px;
+    display: inline;
+    margin-bottom: 15px;
+}
+.c_costingCost{
+    font-family: muli-bold;
+    font-size: 18px;
+    display: inline;
+
+float: right;}
+.c_costingDiv{
+    margin: 15px 0px;
+}
+.c_disclaimer{
+    font-family: muli-light;
+    font-size: 16px;
+}
+.c_cBtn{
+    padding: 13px 60px;
+    font-family: muli-bold;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 30px;
+    border: none;
+    background: transparent linear-gradient(290deg, #4ffea3 0%, #00e7fc 100%) 0% 0%;
+    cursor: pointer;
+    margin: 30px 0px;
+}
+.c_cBtn1{
+    padding: 13px 60px;
+    font-family: muli-bold;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    margin: 30px 15px;
+    display: inline;
+
+}
