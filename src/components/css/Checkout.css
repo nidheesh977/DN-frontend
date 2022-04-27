@@ -45,13 +45,17 @@
     display: inline;
 
 float: right;}
+
 .c_costingDiv{
     margin: 15px 0px;
 }
+
 .c_disclaimer{
     font-family: muli-light;
     font-size: 16px;
+    margin-bottom: 30px;
 }
+
 .c_cBtn{
     padding: 13px 60px;
     font-family: muli-bold;
@@ -74,4 +78,26 @@ float: right;}
     margin: 30px 15px;
     display: inline;
 
+}
+
+#checkout_page_country .css-1s2u09g-control{
+    background: white !important;
+    border: 1px solid #d1c7c7 !important;
+    width: 98% !important;
+}
+
+@media only screen and (min-width: 992px) {
+    #checkout_page_country .css-1s2u09g-control{
+        background: white !important;
+        border: 1px solid #d1c7c7 !important;
+        width: 102% !important;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    #checkout_page_country .css-1s2u09g-control{
+        background: white !important;
+        border: 1px solid #d1c7c7 !important;
+        width: 105% !important;
+    }
 }

@@ -49,12 +49,14 @@ class UploadFiles extends Component {
       industryOptions: [],
       resolutionCheckCount: 0,
       file_count_exceed: false,
+      subscription: "basic",
       subscribed: false,
       subscription_popup: false,
       subscription_msg: "",
       imageLimit: 0,
       videoLimit: 0,
       img3dLimit: 0,
+      subscription_platinum_popup: false,
     };
   }
 
@@ -68,21 +70,34 @@ class UploadFiles extends Component {
     axios
       .get(`${domain}/api/pilotSubscription/getMySubscription`, config)
       .then((res) => {
-        if(typeof(res.data.images)=== "number"){
-          console.log("ImagesThere")
-          this.setState({
-            imageLimit: res.data.subscription.images - res.data.images,
-            videoLimit: res.data.subscription.videos - res.data.videos,
-            img3dLimit: res.data.subscription.images3d - res.data.images3d,
-          });
+        console.log(res.data);
+        this.setState({
+          subscription: "platinum",
+        });
+        if (typeof res.data.images === "number") {
+          console.log("ImagesThere");
+          if (res.data.subscription){
+            this.setState({
+              imageLimit: res.data.subscription.images - res.data.images,
+              videoLimit: res.data.subscription.videos - res.data.videos,
+              img3dLimit: res.data.subscription.images3d - res.data.images3d,
+            });
+          }else{
+            this.setState({
+              imageLimit: 5 - res.data.images,
+              videoLimit: 0 - res.data.videos,
+              img3dLimit: 0 - res.data.images3d
+            });
+          }
         }
-      
-        console.log(res)
+
+        console.log(res);
         // console.log(res.data.subscription.videos)
         // console.log(res.data.subscription.)
-      }).catch(err=>{
-        console.log(err)
       })
+      .catch((err) => {
+        console.log(err);
+      });
 
     axios
       .get(`${domain}/api/user/getUserData`, config)
@@ -787,7 +802,7 @@ class UploadFiles extends Component {
   };
 
   saveFiles = (type) => {
-    console.log(this.state)
+    console.log(this.state);
     if (!this.state.subscribed && type === "draft") {
       this.setState({
         subscription_popup: true,
@@ -817,22 +832,39 @@ class UploadFiles extends Component {
         }
       }
 
-      if (imageCount > this.state.imageLimit && imageCount !==0) {
-        // if ()
-        this.setState({
-          subscription_popup: true,
-          subscription_msg: "Images limit exceeded. Upgrade to continue",
-        });
+      if (imageCount > this.state.imageLimit && imageCount !== 0) {
+        if (this.state.subscription === "platinum") {
+          this.setState({
+            subscription_platinum_popup: true,
+          });
+        } else {
+          this.setState({
+            subscription_popup: true,
+            subscription_msg: "Images limit exceeded. Upgrade to continue",
+          });
+        }
       } else if (videoCount > this.state.videoLimit && videoCount !== 0) {
-        this.setState({
-          subscription_popup: true,
-          subscription_msg: "Videos limit exceeded. Upgrade to continue",
-        });
+        if (this.state.subscription === "platinum") {
+          this.setState({
+            subscription_platinum_popup: true,
+          });
+        } else {
+          this.setState({
+            subscription_popup: true,
+            subscription_msg: "Videos limit exceeded. Upgrade to continue",
+          });
+        }
       } else if (img3dCount > this.state.img3dLimit && img3dCount !== 0) {
-        this.setState({
-          subscription_popup: true,
-          subscription_msg: "3D images limit exceeded. Upgrade to continue",
-        });
+        if (this.state.subscription === "platinum") {
+          this.setState({
+            subscription_platinum_popup: true,
+          });
+        } else {
+          this.setState({
+            subscription_popup: true,
+            subscription_msg: "3D images limit exceeded. Upgrade to continue",
+          });
+        }
       } else {
         let error = false;
         for (let i = selected_files.length - 1; i >= 0; i--) {
@@ -1070,28 +1102,42 @@ class UploadFiles extends Component {
               .then((res) => {
                 let config = {
                   headers: {
-                    Authorization: "Bearer " + localStorage.getItem("access_token"),
+                    Authorization:
+                      "Bearer " + localStorage.getItem("access_token"),
                   },
                 };
             
                 axios
                   .get(`${domain}/api/pilotSubscription/getMySubscription`, config)
                   .then((res) => {
-                    if(typeof(res.data.images)=== "number"){
-                      console.log("ImagesThere")
-                      this.setState({
-                        imageLimit: res.data.subscription.images - res.data.images,
-                        videoLimit: res.data.subscription.videos - res.data.videos,
-                        img3dLimit: res.data.subscription.images3d - res.data.images3d,
-                      });
+                    console.log(res.data);
+                    this.setState({
+                      subscription: "platinum",
+                    });
+                    if (typeof res.data.images === "number") {
+                      console.log("ImagesThere");
+                      if (res.data.subscription){
+                        this.setState({
+                          imageLimit: res.data.subscription.images - res.data.images,
+                          videoLimit: res.data.subscription.videos - res.data.videos,
+                          img3dLimit: res.data.subscription.images3d - res.data.images3d,
+                        });
+                      }else{
+                        this.setState({
+                          imageLimit: 5 - res.data.images,
+                          videoLimit: 0 - res.data.videos,
+                          img3dLimit: 0 - res.data.images3d
+                        });
+                      }
                     }
-                  
-                    console.log(res)
+            
+                    console.log(res);
                     // console.log(res.data.subscription.videos)
                     // console.log(res.data.subscription.)
-                  }).catch(err=>{
-                    console.log(err)
                   })
+                  .catch((err) => {
+                    console.log(err);
+                  });
                 console.log(res.data);
                 files[i].upload_status = "uploaded";
                 this.setState({
@@ -1108,28 +1154,42 @@ class UploadFiles extends Component {
                     .then((res) => {
                       let config = {
                         headers: {
-                          Authorization: "Bearer " + localStorage.getItem("access_token"),
+                          Authorization:
+                            "Bearer " + localStorage.getItem("access_token"),
                         },
                       };
                   
                       axios
                         .get(`${domain}/api/pilotSubscription/getMySubscription`, config)
                         .then((res) => {
-                          if(typeof(res.data.images)=== "number"){
-                            console.log("ImagesThere")
-                            this.setState({
-                              imageLimit: res.data.subscription.images - res.data.images,
-                              videoLimit: res.data.subscription.videos - res.data.videos,
-                              img3dLimit: res.data.subscription.images3d - res.data.images3d,
-                            });
+                          console.log(res.data);
+                          this.setState({
+                            subscription: "platinum",
+                          });
+                          if (typeof res.data.images === "number") {
+                            console.log("ImagesThere");
+                            if (res.data.subscription){
+                              this.setState({
+                                imageLimit: res.data.subscription.images - res.data.images,
+                                videoLimit: res.data.subscription.videos - res.data.videos,
+                                img3dLimit: res.data.subscription.images3d - res.data.images3d,
+                              });
+                            }else{
+                              this.setState({
+                                imageLimit: 5 - res.data.images,
+                                videoLimit: 0 - res.data.videos,
+                                img3dLimit: 0 - res.data.images3d
+                              });
+                            }
                           }
-                        
-                          console.log(res)
+                  
+                          console.log(res);
                           // console.log(res.data.subscription.videos)
                           // console.log(res.data.subscription.)
-                        }).catch(err=>{
-                          console.log(err)
                         })
+                        .catch((err) => {
+                          console.log(err);
+                        });
                       console.log(res);
                       this.setState({
                         draft_count: this.state.draft_count - 1,
@@ -1200,28 +1260,43 @@ class UploadFiles extends Component {
                     .then((res) => {
                       let config = {
                         headers: {
-                          Authorization: "Bearer " + localStorage.getItem("access_token"),
+                          Authorization:
+                            "Bearer " + localStorage.getItem("access_token"),
                         },
                       };
                   
                       axios
                         .get(`${domain}/api/pilotSubscription/getMySubscription`, config)
                         .then((res) => {
-                          if(typeof(res.data.images)=== "number"){
-                            console.log("ImagesThere")
-                            this.setState({
-                              imageLimit: res.data.subscription.images - res.data.images,
-                              videoLimit: res.data.subscription.videos - res.data.videos,
-                              img3dLimit: res.data.subscription.images3d - res.data.images3d,
-                            });
+                          console.log(res.data);
+                          this.setState({
+                            subscription: "platinum",
+                          });
+                          if (typeof res.data.images === "number") {
+                            console.log("ImagesThere");
+                            if (res.data.subscription){
+                              this.setState({
+                                imageLimit: res.data.subscription.images - res.data.images,
+                                videoLimit: res.data.subscription.videos - res.data.videos,
+                                img3dLimit: res.data.subscription.images3d - res.data.images3d,
+                              });
+                            }else{
+                              this.setState({
+                                imageLimit: 5 - res.data.images,
+                                videoLimit: 0 - res.data.videos,
+                                img3dLimit: 0 - res.data.images3d
+                              });
+                            }
                           }
-                        
-                          console.log(res)
+                  
+                          console.log(res);
                           // console.log(res.data.subscription.videos)
                           // console.log(res.data.subscription.)
-                        }).catch(err=>{
-                          console.log(err)
                         })
+                        .catch((err) => {
+                          console.log(err);
+                        });
+
                       console.log(res.data);
                       console.log(files[i].row);
                       files[i].upload_status = "uploaded";
@@ -2212,6 +2287,59 @@ class UploadFiles extends Component {
                     <div className="u_f_popup_title">
                       {this.state.subscription_msg}
                     </div>
+                    {this.state.imageLimit > 0 ||
+                    this.state.videoLimit > 0 ||
+                    this.state.img3dLimit > 0 ? (
+                      <div style={{ width: "100%", marginBottom: "30px" }}>
+                        <div
+                          style={{
+                            textAlign: "center",
+                            fontFamily: "muli-bold",
+                            fontSize: "20px",
+                          }}
+                        >
+                          You can upload :
+                        </div>
+                        <div
+                          style={{
+                            textAlign: "center",
+                            fontFamily: "muli-regular",
+                            fontSize: "18px",
+                          }}
+                        >
+                          Images :{" "}
+                          {this.state.imageLimit < 0
+                            ? 0
+                            : this.state.imageLimit}
+                        </div>
+                        <div
+                          style={{
+                            textAlign: "center",
+                            fontFamily: "muli-regular",
+                            fontSize: "18px",
+                          }}
+                        >
+                          Videos :{" "}
+                          {this.state.videoLimit < 0
+                            ? 0
+                            : this.state.videoLimit}
+                        </div>
+                        <div
+                          style={{
+                            textAlign: "center",
+                            fontFamily: "muli-regular",
+                            fontSize: "18px",
+                          }}
+                        >
+                          3dImages :{" "}
+                          {this.state.img3dLimit < 0
+                            ? 0
+                            : this.state.img3dLimit}
+                        </div>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                     <div className="u_f_popup_btn_container">
                       <button
                         className="u_f_popup_btn1"
@@ -2228,6 +2356,108 @@ class UploadFiles extends Component {
                         }
                       >
                         Upgrade
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
+              <Dialog
+                open={this.state.subscription_platinum_popup}
+                onClose={() =>
+                  this.setState({ subscription_platinum_popup: false })
+                }
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                  style={{ marginBottom: "50px" }}
+                >
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={() =>
+                        this.setState({ subscription_platinum_popup: false })
+                      }
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      You have exceeded the limit
+                    </div>
+                    {this.state.imageLimit > 0 ||
+                    this.state.videoLimit > 0 ||
+                    this.state.img3dLimit > 0 ? (
+                      <div style={{ width: "100%", marginBottom: "30px" }}>
+                        <div
+                          style={{
+                            textAlign: "center",
+                            fontFamily: "muli-bold",
+                            fontSize: "20px",
+                          }}
+                        >
+                          You can upload :
+                        </div>
+                        <div
+                          style={{
+                            textAlign: "center",
+                            fontFamily: "muli-regular",
+                            fontSize: "18px",
+                          }}
+                        >
+                          Images :{" "}
+                          {this.state.imageLimit < 0
+                            ? 0
+                            : this.state.imageLimit}
+                        </div>
+                        <div
+                          style={{
+                            textAlign: "center",
+                            fontFamily: "muli-regular",
+                            fontSize: "18px",
+                          }}
+                        >
+                          Videos :{" "}
+                          {this.state.videoLimit < 0
+                            ? 0
+                            : this.state.videoLimit}
+                        </div>
+                        <div
+                          style={{
+                            textAlign: "center",
+                            fontFamily: "muli-regular",
+                            fontSize: "18px",
+                          }}
+                        >
+                          3dImages :{" "}
+                          {this.state.img3dLimit < 0
+                            ? 0
+                            : this.state.img3dLimit}
+                        </div>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={() =>
+                          this.setState({ subscription_platinum_popup: false })
+                        }
+                      >
+                        Cancel
                       </button>
                     </div>
                   </Row>

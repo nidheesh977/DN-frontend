@@ -1,327 +1,924 @@
-// import React, { useEffect } from 'react'
+// import React, { Component } from 'react'
+// import { Container, Row, Col } from 'react-grid-system'
+// import '../css/DownloadSubscription.css'
+// import All from './All.module.css'
+// import Dialog from "@material-ui/core/Dialog";
+// import MuiDialogContent from "@material-ui/core/DialogContent";
+// import Close from "../images/close.svg";
+// import { withStyles } from "@material-ui/core/styles";
+// import payment_success from '../images/payment_success.png';
 // import { Helmet } from "react-helmet";
-// import All from '../website/All.module.css'
-// import { Container, Row, Col } from 'react-grid-system';
-// import Box from '@material-ui/core/Box';
-// import Image from '../images/proversion/colour/image.svg'
-// import RotateImage from '../images/proversion/colour/RotateImage.svg'
-// import ThreeDImage from '../images/proversion/colour/ThreeDImage.svg'
-// import Video from '../images/proversion/colour/Video.svg'
-// import ImageBlack from '../images/proversion/black/Image.svg'
-// import RotateImageBlack from '../images/proversion/black/RotateImage.svg'
-// import ThreeDImageBlack from '../images/proversion/black/ThreeDImage.svg'
-// import VideoBlack from '../images/proversion/black/Video.svg'
-// import { Link } from 'react-router-dom';
-// import Button from '@material-ui/core/Button';
-// import axios from 'axios'
-// import { useState } from 'react';
 
+// const DialogContent = withStyles((theme) => ({
+//     root: {
+//         padding: theme.spacing(2),
+//     },
+// }))(MuiDialogContent);
 
-// export default function UpgradeProVersion() {
-
-//     const [role_id, setRoleId] = useState()
-//     useEffect(() => {
-//         const config = {
-//             headers: {
-//                 Authorization: 'Bearer ' + localStorage.getItem('access_token')
-//             }
+// class DownloadSubscription extends Component {
+//     constructor(props) {
+//         super(props)
+//         this.state = {
+//             payment_success: false,
 //         }
+//     }
 
-//         axios.get('https://demo-nexevo.in/haj/auth-app/public/api/auth/user', config)
-//         .then(res => {
-//             setRoleId(res.data.role_id)
+//     loadScript = (src) => {
+//         return new Promise((resolve) => {
+//             const script = document.createElement("script");
+//             script.src = src;
+//             script.onload = () => {
+//                 resolve(true);
+//             };
+//             script.onerror = () => {
+//                 resolve(false);
+//             };
+//             document.body.appendChild(script);
+//         });
+//     }
+
+//     subscribe = (amount, id) => {
+//         this.setState({
+//             payment_success: true
 //         })
+//     }
 
-//     })
-//     return (
-//         <>
-//             <Helmet>
-//                 <title>Upgrade to Pro Version</title>
-//                 <meta charSet="utf-8" />
-//                 <meta name="description" content="Nested component" />
-//             </Helmet>
+//     closePaymentPopup = () => {
+//         this.setState({
+//             payment_success: false
+//         })
+//     }
 
-//             <section className={All.UpgradeProVersion}>
-//                 <Box p={4} textAlign={'center'}>
-//                     <h2>Upgrade Pro Version</h2>
-//                     <p className={All.FSize_16}>Choose your price plans</p>
-//                     {role_id == "2"
-//                         ?<p className={All.FSize_16}>If you want Hire droners <Link to='/GoPremium'><span className={`${All.LightBlue} ${All.FSize_16}`}>Go Premium</span></Link></p>
-//                         :""
-//                     }
-//                 </Box>
-//                 <Container className={`${All.ContainerPackages} ${All.horizontalScrollable} ${All.max_sm_width}`}>
-//                     <Box >
-//                         <h2 className={All.Text_center}>Our Best Packages</h2>
-//                     </Box>
-//                     <Row className={`${All.Scrollablrow} ${All.White_space_break}`}>
-//                         <Col lg={4} className={All.Scrollablecol}>
-//                             <div className={All.NormalUser}>
-//                                 <Box pt={6} textAlign={'center'}>
-//                                     <label className={` ${All.padding} ${All.Regular}`}>For Normal User</label>
-//                                     <h1 className={All.padding}><span className={All.Dollar}>$</span>0.0</h1>
-//                                     <label className={All.LightBrown}>Upload Limited File Size</label>
-//                                 </Box>
-//                                 <Box pb={2} textAlign={'left'} className={All.Features_div}>
-//                                     <ul class='fa-ul'>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={Image} /><span className={All.FSize_13}>10 MB for Image</span></li>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={RotateImage} /><span className={All.FSize_13}>15 MB for 360° Image</span></li>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={ThreeDImage} /><span className={All.FSize_13}>25 MB for 3D Image</span></li>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={Video} /><span className={All.FSize_13}>50 MB for Video file</span></li>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={RotateImage} /><span className={All.FSize_13}>15 MB for 360° Image</span></li>
-//                                     </ul>
-//                                 </Box>
-//                                 <Box pb={8} textAlign={'center'}>
-//                                     <Button variant="contained" color="default" className={All.BtnStyle_5}>You Are Here</Button>
-//                                 </Box>
+//     render() {
+//         return (
+//             <section>
+//                 <Helmet>
+//                     <title>Download Subscription</title>
+//                     <meta charSet="utf-8" />
+//                     <meta name="description" content="Nested component" />
+//                 </Helmet>
+//                 <Container className={All.Container + " u_p_v_container"}>
+//                     <div className="u_p_v_heading">Simple plans for everyone</div>
+//                     <Row gutterWidth={34}>
+//                         <Col xl={4} lg={4} md={6} sm={12} xs={12}>
+//                             <div className="u_p_v_plan_container u_p_v_plan_selected">
+//                                 <div className="u_p_v_title">Single Image</div>
+//                                 <div className="u_p_v_price">$5.00</div>
+//                                 <button className="u_p_v_button1" onClick={() => this.subscribe(5, 1)}>Subscribe Now</button>
+//                                 <div className="u_p_v_plan_features">
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                 </div>
 //                             </div>
 //                         </Col>
-//                         <Col lg={4} className={All.Scrollablecol}>
-//                             <div className={All.ProUserMonth}>
-//                                 <Box pt={6} textAlign={'center'}>
-//                                     <label className={` ${All.padding} ${All.Regular}`}>For Pro User</label>
-//                                     <h1 className={All.padding}><span className={All.Dollar}>$</span>50.0<span className={All.Month}>/Month</span></h1>
-//                                     <label className={All.LightBrown}>Upload Limited File Size</label>
-//                                 </Box>
-//                                 <Box pb={2} textAlign={'left'} className={All.Features_div}>
-//                                     <ul class='fa-ul'>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={ImageBlack} /><span className={All.FSize_13}>More than 10 MB for Image</span></li>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={RotateImageBlack} /><span className={All.FSize_13}>More than 15 MB for 360° Image</span></li>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={ThreeDImageBlack} /><span className={All.FSize_13}>More than 25 MB for 3D Image</span></li>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={VideoBlack} /><span className={All.FSize_13}>More than 50 MB for Video file</span></li>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={RotateImageBlack} /><span className={All.FSize_13}>More than 15 MB for 360° Image</span></li>
-//                                     </ul>
-//                                 </Box>
-//                                 <Box pb={8} textAlign={'center'}>
-//                                     <Button variant="contained" color="default" className={All.BtnStyle_6}>Purchase Now</Button>
-//                                 </Box>
+//                         <Col xl={4} lg={4} md={6} sm={12} xs={12}>
+//                             <div className="u_p_v_plan_container">
+//                                 <div className="u_p_v_title">Five Images</div>
+//                                 <div className="u_p_v_price">$20.00</div>
+//                                 <button className="u_p_v_button2" onClick={() => this.subscribe(20, 2)}>Subscribe Now</button>
+//                                 <div className="u_p_v_plan_features">
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                 </div>
 //                             </div>
 //                         </Col>
-//                         <Col lg={4} className={All.Scrollablecol}>
-//                             <div className={All.ProUserYear}>
-//                                 <Box pt={6} textAlign={'center'}>
-//                                     <label className={` ${All.padding} ${All.Regular}`}>For Pro User</label>
-//                                     <h1 className={All.padding}><span className={All.Dollar}>$</span>500.0<span className={All.Month}>/Year</span></h1>
-//                                     <label className={All.LightBrown}>Upload Limited File Size</label>
-//                                 </Box>
-//                                 <Box pb={2} textAlign={'left'} className={All.Features_div}>
-//                                     <ul class='fa-ul'>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={Image} /><span className={All.FSize_13}>10 MB for Image</span></li>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={RotateImage} /><span className={All.FSize_13}>15 MB for 360° Image</span></li>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={ThreeDImage} /><span className={All.FSize_13}>25 MB for 3D Image</span></li>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={Video} /><span className={All.FSize_13}>50 MB for Video file</span></li>
-//                                         <li className={All.dept}><img style={{ paddingRight: 10 }} src={RotateImage} /><span className={All.FSize_13}>15 MB for 360° Image</span></li>
-//                                     </ul>
-//                                 </Box>
-//                                 <Box pb={8} textAlign={'center'}>
-//                                     <Button variant="contained" color="default" className={All.BtnStyle_5}>Purchase Now</Button>
-//                                 </Box>
+//                         <Col xl={4} lg={4} md={6} sm={12} xs={12}>
+//                             <div className="u_p_v_plan_container">
+//                                 <div className="u_p_v_title">Ten Images</div>
+//                                 <div className="u_p_v_price">$30.00</div>
+//                                 <button className="u_p_v_button2" onClick={() => this.subscribe(30, 3)}>Subscribe Now</button>
+//                                 <div className="u_p_v_plan_features">
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                     <div className="u_p_v_plan_feature">
+//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
+//                                     </div>
+//                                 </div>
 //                             </div>
 //                         </Col>
 //                     </Row>
 //                 </Container>
+//                 <Dialog
+//                     open={this.state.payment_success}
+//                     onClose={this.closePaymentPopup}
+//                     aria-labelledby="alert-dialog-title"
+//                     aria-describedby="alert-dialog-description"
+//                     maxWidth={"md"}
+//                     fullWidth={true}
+//                 >
+
+//                     <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+//                         <div style={{ position: "absolute", top: '20px', right: '20px' }}>
+//                             <img src={Close} alt="" onClick={this.closePaymentPopup} style={{ cursor: "pointer" }} />
+//                         </div>
+//                         <Row style={{ marginTop: "30px" }}>
+//                             <img src={payment_success} alt="" style={{ margin: "auto" }} />
+//                             <div className="u_p_v_popup_title">Thank you</div>
+//                             <div className="u_p_v_popup_content">We have recieved your payment</div>
+//                             <button className="u_p_v_popup_close_btn" onClick={this.closePaymentPopup}>Close</button>
+//                         </Row>
+//                     </DialogContent>
+//                 </Dialog>
 //             </section>
-//         </>
-//     )
+//         )
+//     }
 // }
 
+// export default DownloadSubscription
 
-import React, { Component } from 'react'
-import { Container, Row, Col } from 'react-grid-system'
-import '../css/DownloadSubscription.css'
-import All from './All.module.css'
+import React, { Component } from "react";
+import { Container, Row, Col } from "react-grid-system";
+import { Helmet } from "react-helmet";
+import All from "./All.module.css";
+import "../css/HireSubscription.css";
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
-import payment_success from '../images/payment_success.png';
-import { Helmet } from "react-helmet";
+import payment_success from "../images/payment_success.png";
+import Cross from "../images/crossSub.png";
+import Tick from "../images/tickSub.png";
+import axios from "axios";
+import { Link } from "react-router-dom";
+const domain = process.env.REACT_APP_MY_API;
 
 const DialogContent = withStyles((theme) => ({
-    root: {
-        padding: theme.spacing(2),
-    },
+  root: {
+    padding: theme.spacing(2),
+  },
 }))(MuiDialogContent);
 
 class DownloadSubscription extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            payment_success: false,
+  constructor(props) {
+    super(props);
+    this.state = {
+      payment_success: false,
+      msg_sent_success: false,
+      data: [],
+      myPlan: "",
+      subYearly: false,
+    };
+  }
+
+  loadScript = (src) => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+
+  subscribe = (amount, id) => {
+    this.setState({
+      payment_success: true,
+    });
+  };
+
+  closePaymentPopup = () => {
+    this.setState({
+      payment_success: false,
+      msg_sent_success: true,
+    });
+  };
+
+  closeMsgSentSuccess = () => {
+    this.setState({
+      msg_sent_success: false,
+    });
+  };
+  config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
+  componentDidMount() {
+    axios.get(`${domain}/api/subscription/getSubscriptions`).then((res) => {
+      console.log(res);
+      this.setState({
+        data: res.data,
+      });
+    });
+    axios
+      .get(
+        `${domain}/api/pilotSubscription/getMySubscription
+  `,
+        this.config
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data.subscription !== null) {
+          this.setState({
+            myPlan: res.data.subscription.plan,
+          });
         }
-    }
+      });
+  }
 
-    loadScript = (src) => {
-        return new Promise((resolve) => {
-            const script = document.createElement("script");
-            script.src = src;
-            script.onload = () => {
-                resolve(true);
-            };
-            script.onerror = () => {
-                resolve(false);
-            };
-            document.body.appendChild(script);
-        });
-    }
+  changeSubscription = () => {
+      this.setState({
+          subYearly: !this.state.subYearly
+      })
+  }
 
-    // async subscribe(amount, id) {
-    //     const res = await this.loadScript(
-    //         "https://checkout.razorpay.com/v1/checkout.js"
-    //     );
-
-    //     if (!res) {
-    //         alert("Razorpay SDK failed to load. Are you online?");
-    //         return;
-    //     }
-
-    //     const options = {
-    //         key: "rzp_test_tzURXA4gSDw99d", // Enter the Key ID generated from the Dashboard
-    //         amount: amount * 100,
-    //         currency: "USD",
-    //         name: "User name",
-    //         description: "Test Transaction",
-    //         // image: { logo }, 
-    //         id: id,
-    //         prefill: {
-    //             name: "User name",
-    //             email: "email@gmail.com",
-    //             contact: "9876543210",
-    //         },
-    //         notes: {
-    //             address: "Bangalore, Karnataka",
-    //         },
-    //         theme: {
-    //             color: "#61dafb",
-    //         },
-    //     };
-
-    //     const paymentObject = new window.Razorpay(options);
-    //     paymentObject.open();
-
-    // }
-
-    subscribe = (amount, id) => {
-        this.setState({
-            payment_success: true
-        })
-    }
-
-    closePaymentPopup = () => {
-        this.setState({
-            payment_success: false
-        })
-    }
-
-    render() {
-        return (
-            <section>
-                <Helmet>
-                    <title>Download Subscription</title>
-                    <meta charSet="utf-8" />
-                    <meta name="description" content="Nested component" />
-                </Helmet>
-                <Container className={All.Container + " u_p_v_container"}>
-                    <div className="u_p_v_heading">Simple plans for everyone</div>
-                    <Row gutterWidth={34}>
-                        <Col xl={4} lg={4} md={6} sm={12} xs={12}>
-                            <div className="u_p_v_plan_container u_p_v_plan_selected">
-                                <div className="u_p_v_title">Single Image</div>
-                                <div className="u_p_v_price">$5.00</div>
-                                <button className="u_p_v_button1" onClick={() => this.subscribe(5, 1)}>Subscribe Now</button>
-                                <div className="u_p_v_plan_features">
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col xl={4} lg={4} md={6} sm={12} xs={12}>
-                            <div className="u_p_v_plan_container">
-                                <div className="u_p_v_title">Five Images</div>
-                                <div className="u_p_v_price">$20.00</div>
-                                <button className="u_p_v_button2" onClick={() => this.subscribe(20, 2)}>Subscribe Now</button>
-                                <div className="u_p_v_plan_features">
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col xl={4} lg={4} md={6} sm={12} xs={12}>
-                            <div className="u_p_v_plan_container">
-                                <div className="u_p_v_title">Ten Images</div>
-                                <div className="u_p_v_price">$30.00</div>
-                                <button className="u_p_v_button2" onClick={() => this.subscribe(30, 3)}>Subscribe Now</button>
-                                <div className="u_p_v_plan_features">
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                    <div className="u_p_v_plan_feature">
-                                        <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-                                    </div>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-                </Container>
-                <Dialog
-                    open={this.state.payment_success}
-                    onClose={this.closePaymentPopup}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                    maxWidth={"md"}
-                    fullWidth={true}
+  render() {
+    return (
+      <section>
+        <Helmet>
+          <title>Hire Subscription</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
+        <Container className={All.Container}>
+          <div className="hire_subscription_container">
+            <div className="hire_subscription_heading">Pricing & Planning</div>
+            <div className="hire_subscription_description">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex rerum,
+              et fugit officiis soluta aut voluptatibus. Quis dignissimos
+              exercitationem perspiciatis, architecto, tenetur voluptate aut
+              dolore esse optio ea quaerat adipisci.
+            </div>
+          </div>
+          <div style = {{display: "flex", marginBottom: "20px", justifyContent: "center", alignItems: "center"}}>
+            <div className="subs_plan">Monthly</div>
+            <label class="switch">
+              <input type="checkbox" checked = {this.state.subYearly} onChange = {this.changeSubscription} id = "test"/>
+              <span class="slider round"></span>
+            </label>
+            <div className="subs_plan">Yearly</div>
+          </div>
+          {this.state.data.length > 0 ? (
+            <Row gutterWidth={19}>
+              <Col>
+                <div
+                  className="subscription_plan_container"
+                  style={{ border: "1px solid #c6c6c6", borderRadius: "20px" }}
                 >
+                  <div className="subscription_circle1">
+                    <div className="subscription_inner_circle1"></div>
+                  </div>
+                  <div className="subscription_plan_title">
+                    {this.state.data[0].name}
+                  </div>
+                  <div className="subscription_plan_description">
+                    {this.state.data[0].description}
+                  </div>
+                  <div className="subscription_plan_price">
+                    ${this.state.data[0].price}.00
+                  </div>
 
-                    <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
-                        <div style={{ position: "absolute", top: '20px', right: '20px' }}>
-                            <img src={Close} alt="" onClick={this.closePaymentPopup} style={{ cursor: "pointer" }} />
-                        </div>
-                        <Row style={{ marginTop: "30px" }}>
-                            <img src={payment_success} alt="" style={{ margin: "auto" }} />
-                            <div className="u_p_v_popup_title">Thank you</div>
-                            <div className="u_p_v_popup_content">We have recieved your payment</div>
-                            <button className="u_p_v_popup_close_btn" onClick={this.closePaymentPopup}>Close</button>
-                        </Row>
-                    </DialogContent>
-                </Dialog>
-            </section>
-        )
-    }
+                  <div className="subscription_plan_btn_container">
+                    <button className="subscription_plan_btn1">
+                      Basic Plan
+                    </button>
+                  </div>
+                  <div className="subscription_plan_features">
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <img src={Tick} />{" "}
+                      <span>
+                        Total Image Uploads : {this.state.data[0].images}
+                      </span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <img src={Tick} />{" "}
+                      <span>
+                        Total Videos Uploads : {this.state.data[0].videos}
+                      </span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <img src={Tick} />{" "}
+                      <span>
+                        Total 3Dimages Uploads : {this.state.data[0].images3d}
+                      </span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[0].draft === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Save as Draft Feature</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[0].multiple === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Multiple Image Upload Feature</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[0].approval === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Immediate Approval of Images</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[0].jobNotifications === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Daily Job Notifications</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[0].suggestions === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Profile in suggestions of Top Jobs</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[0].proLabel === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Pro Label on your Profile</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[0].rearrange === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Access to rearrange your images to display</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[0].hireButton === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Chances to get hired from your shoot pages</span>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+              <Col>
+                <div className="subscription_plan_container subscription_plan_container_selected">
+                  <div className="subscription_circle2">
+                    <div className="subscription_inner_circle2"></div>
+                  </div>
+                  <div className="subscription_plan_title">
+                    {this.state.data[1].name}
+                  </div>
+                  <div className="subscription_plan_description">
+                    {this.state.subYearly
+                    ?this.state.data[3].description
+                    :this.state.data[1].description}
+                  </div>
+                  <div className="subscription_plan_price">
+                  {this.state.subYearly
+                    ?`$${this.state.data[3].price}.00`
+                    :`$${this.state.data[1].price}.00`}
+                  </div>
+
+                  <div className="subscription_plan_btn_container">
+                    {this.state.myPlan === "gold" ? (
+                      <button className="subscription_plan_btn2">
+                        Current Plan
+                      </button>
+                    ) : (
+                      <Link to={`checkout/${this.state.data[1]._id}`}>
+                        <button className="subscription_plan_btn2">
+                          Upgrade plan
+                        </button>
+                      </Link>
+                    )}
+                  </div>
+                  <div className="subscription_plan_features">
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <img src={Tick} />{" "}
+                      <span>
+                        Total Image Uploads : {this.state.data[1].images}
+                      </span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <img src={Tick} />{" "}
+                      <span>
+                        Total Videos Uploads : {this.state.data[1].videos}
+                      </span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <img src={Tick} />{" "}
+                      <span>
+                        Total 3Dimages Uploads : {this.state.data[1].images3d}
+                      </span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[1].draft === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Save as Draft Feature</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[1].multiple === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Multiple Image Upload Feature</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[1].approval === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Immediate Approval of Images</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[1].jobNotifications === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Daily Job Notifications</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[1].suggestions === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Profile in suggestions of Top Jobs</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[1].proLabel === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Pro Label on your Profile</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[1].rearrange === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Access to rearrange your images to display</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[1].hireButton === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Chances to get hired from your shoot pages</span>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+              <Col>
+                <div
+                  className="subscription_plan_container"
+                  style={{ border: "1px solid #c6c6c6", borderRadius: "20px" }}
+                >
+                  <div className="subscription_circle1">
+                    <div className="subscription_inner_circle1"></div>
+                  </div>
+                  <div className="subscription_plan_title">
+                    {this.state.data[2].name}
+                  </div>
+                  <div className="subscription_plan_description">
+                  {this.state.subYearly
+                    ?this.state.data[4].description
+                    :this.state.data[2].description}
+                  </div>
+                  <div className="subscription_plan_price">
+                  {this.state.subYearly
+                    ?`$${this.state.data[4].price}.00`
+                    :`$${this.state.data[2].price}.00`}
+                  </div>
+
+                  <div className="subscription_plan_btn_container">
+                    {this.state.myPlan === "platinum" ? (
+                      <button className="subscription_plan_btn1">
+                        Current Plan
+                      </button>
+                    ) : (
+                      <Link to={`checkout/${this.state.data[2]._id}`}>
+                        <button className="subscription_plan_btn1">
+                          Upgrade plan
+                        </button>
+                      </Link>
+                    )}
+                  </div>
+                  <div className="subscription_plan_features">
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <img src={Tick} />{" "}
+                      <span>
+                        Total Image Uploads : {this.state.data[2].images}
+                      </span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <img src={Tick} />{" "}
+                      <span>
+                        Total Videos Uploads : {this.state.data[2].videos}
+                      </span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <img src={Tick} />{" "}
+                      <span>
+                        Total 3Dimages Uploads : {this.state.data[2].images3d}
+                      </span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[2].draft === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Save as Draft Feature</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[2].multiple === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Multiple Image Upload Feature</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[2].approval === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Immediate Approval of Images</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[2].jobNotifications === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Daily Job Notifications</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[2].suggestions === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Profile in suggestions of Top Jobs</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[2].proLabel === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Pro Label on your Profile</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[2].rearrange === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Access to rearrange your images to display</span>
+                    </div>
+                    <div
+                      className="subscription_plan_feature"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      {this.state.data[2].hireButton === true ? (
+                        <img src={Tick} />
+                      ) : (
+                        <img src={Cross} />
+                      )}{" "}
+                      <span>Chances to get hired from your shoot pages</span>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          ) : (
+            <Row gutterWidth={19}>
+              <Col>
+                <div
+                  className="subscription_plan_container"
+                  style={{ border: "1px solid #c6c6c6", borderRadius: "20px" }}
+                >
+                  <div className="subscription_circle1">
+                    <div className="subscription_inner_circle1"></div>
+                  </div>
+                  <div className="subscription_plan_title">Plan name</div>
+                  <div className="subscription_plan_description">
+                    This plan for free to every users
+                  </div>
+                  <div className="subscription_plan_price">$9.99</div>
+                  <div className="subscription_plan_price_description">
+                    This plan for free to every users
+                  </div>
+                  <div className="subscription_plan_btn_container">
+                    <button
+                      className="subscription_plan_btn1"
+                      onClick={() => this.subscribe(9.99, 1)}
+                    >
+                      Upgrade plan
+                    </button>
+                  </div>
+                  <div className="subscription_plan_features">
+                    <div className="subscription_plan_feature">
+                      <i class="fa fa-check" aria-hidden="true"></i> This plan
+                      for free to every users
+                    </div>
+                    <div className="subscription_plan_feature">
+                      <i class="fa fa-check" aria-hidden="true"></i> This plan
+                      for free to every users
+                    </div>
+                    <div className="subscription_plan_feature">
+                      <i class="fa fa-check" aria-hidden="true"></i> This plan
+                      for free to every users
+                    </div>
+                  </div>
+                </div>
+              </Col>
+              <Col>
+                <div className="subscription_plan_container subscription_plan_container_selected">
+                  <div className="subscription_circle2">
+                    <div className="subscription_inner_circle2"></div>
+                  </div>
+                  <div className="subscription_plan_title">Silver</div>
+                  <div className="subscription_plan_description">
+                    This plan for free to every users
+                  </div>
+                  <div className="subscription_plan_price">$99.99</div>
+                  <div className="subscription_plan_price_description">
+                    This plan for free to every users
+                  </div>
+                  <div className="subscription_plan_btn_container">
+                    <button
+                      className="subscription_plan_btn2"
+                      onClick={() => this.subscribe(99.99, 2)}
+                    >
+                      Upgrade plan
+                    </button>
+                  </div>
+                  <div className="subscription_plan_features">
+                    <div className="subscription_plan_feature">
+                      <i class="fa fa-check" aria-hidden="true"></i> This plan
+                      for free to every users
+                    </div>
+                    <div className="subscription_plan_feature">
+                      <i class="fa fa-check" aria-hidden="true"></i> This plan
+                      for free to every users
+                    </div>
+                    <div className="subscription_plan_feature">
+                      <i class="fa fa-check" aria-hidden="true"></i> This plan
+                      for free to every users
+                    </div>
+                  </div>
+                </div>
+              </Col>
+              <Col>
+                <div
+                  className="subscription_plan_container"
+                  style={{ border: "1px solid #c6c6c6", borderRadius: "20px" }}
+                >
+                  <div className="subscription_circle1">
+                    <div className="subscription_inner_circle1"></div>
+                  </div>
+                  <div className="subscription_plan_title">Silver</div>
+                  <div className="subscription_plan_description">
+                    This plan for free to every users
+                  </div>
+                  <div className="subscription_plan_price">$499.99</div>
+                  <div className="subscription_plan_price_description">
+                    This plan for free to every users
+                  </div>
+                  <div className="subscription_plan_btn_container">
+                    <button
+                      className="subscription_plan_btn1"
+                      onClick={() => this.subscribe(499.99, 3)}
+                    >
+                      Upgrade plan
+                    </button>
+                  </div>
+                  <div className="subscription_plan_features">
+                    <div className="subscription_plan_feature">
+                      <i class="fa fa-check" aria-hidden="true"></i> This plan
+                      for free to every users
+                    </div>
+                    <div className="subscription_plan_feature">
+                      <i class="fa fa-check" aria-hidden="true"></i> This plan
+                      for free to every users
+                    </div>
+                    <div className="subscription_plan_feature">
+                      <i class="fa fa-check" aria-hidden="true"></i> This plan
+                      for free to every users
+                    </div>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          )}
+        </Container>
+        <Dialog
+          open={this.state.payment_success}
+          onClose={this.closePaymentPopup}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={this.closePaymentPopup}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <img src={payment_success} alt="" style={{ margin: "auto" }} />
+              <div className="u_p_v_popup_title">Thank you</div>
+              <div className="u_p_v_popup_content">
+                We have recieved your payment
+              </div>
+              <button
+                className="u_p_v_popup_close_btn"
+                onClick={this.closePaymentPopup}
+              >
+                Close
+              </button>
+            </Row>
+          </DialogContent>
+        </Dialog>
+        {/* <Dialog
+          open={this.state.msg_sent_success}
+          onClose={this.closeMsgSentSuccess}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+        >
+
+          <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
+            <div style={{ position: "absolute", top: '20px', right: '20px' }}>
+              <img src={Close} alt="" onClick={this.closeMsgSentSuccess} style={{ cursor: "pointer" }} />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="u_p_v_msg_popup_title">Your message has been sent to pilot Successfully</div>
+              <div className="u_p_v_msg_popup_close_btn_container">
+                <button className="u_p_v_msg_popup_close_btn" onClick={this.closeMsgSentSuccess}>Open Dashboard</button>
+              </div>
+            </Row>
+          </DialogContent>
+        </Dialog> */}
+      </section>
+    );
+  }
 }
 
-export default DownloadSubscription
+export default DownloadSubscription;

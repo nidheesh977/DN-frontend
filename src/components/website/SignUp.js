@@ -26,7 +26,6 @@ import Close from "../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
 import Select from "react-select";
-import countryList from "react-select-country-list";
 import "../css/Signup.css";
 import Countries from "../../apis/country.json";
 

@@ -952,7 +952,7 @@ class ApplyJob extends Component {
                   <div className="a_j_filter_search">Search</div>
                 </Col>
               </Hidden>
-              <Col xxl={8.5} xl={8.7} lg={4.15} md={5.4}>
+              <Col xxl={8.5} xl={8.7} lg={12} md={12}>
                 <div className="h_p_title_container">
                   <div className="h_p_title">Apply jobs and get hired</div>
                   <div className="h_p_title_desc">
