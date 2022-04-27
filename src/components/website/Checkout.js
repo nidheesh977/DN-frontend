@@ -40,11 +40,9 @@ function Checkout() {
   const [years, setYears] = useState([
     2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033,
   ]);
-  const [secret, setSecret] = useState(
-    ""
-  );
+  const [secret, setSecret] = useState("");
 
-  const history = useHistory()
+  const history = useHistory();
 
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -71,6 +69,43 @@ function Checkout() {
   let [payment_success, setPayment_success] = useState(false);
 
   useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    axios
+      .post(`${domain}/api/pilot/sendBillingAddress`, config)
+      .then((res) => {
+        console.log(res.data);
+        const options = Countries.map((d) => ({
+          value: d.code,
+          label: d.name,
+        }));
+        var country = {};
+        for (var i = 0; i < Countries.length; i++) {
+          if (Countries[i].name === res.data.country) {
+            country = { value: Countries[i].code, label: Countries[i].name };
+            break;
+          }
+        }
+        setFormData({
+          ...formData,
+          name: res.data.name,
+          email: res.data.email,
+          line1: res.data.line1,
+          line2: res.data.line2,
+          pin_code: res.data.postalAddress,
+          city: res.data.city,
+          state: res.data.state,
+          country: country.label,
+          country_code: country.value,
+          country_object: country,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     axios
       .post(`${domain}/api/subscription/getSubscription`, { id: param.id })
       .then((res) => {
@@ -135,7 +170,7 @@ function Checkout() {
             }
           }
           if (fields[i] === "email") {
-            console.log(formData.email)
+            console.log(formData.email);
             if (formData.email.length > 100) {
               error = true;
               document.getElementById(`${fields[i]}_error`).innerText =
@@ -211,13 +246,13 @@ function Checkout() {
       }
     }
     if (!error) {
-
+      setLoading(true)
       const config = {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       };
-      
+
       let submitData = {
         name: formData.name,
         email: formData.email,
@@ -228,14 +263,19 @@ function Checkout() {
         state: formData.state,
         country: formData.country_code,
       };
-      console.log(formData.country_code)
-      axios.post(`${domain}/api/payment/startPaymentProcess`, submitData, config)
-      .then(res=>{
-        console.log(res.data)
-        setSecret(res.data.clientSecret)
-        setStep(2);
-        window.scrollTo(0, 150);
-      });
+      console.log(formData.country_code);
+      axios
+        .post(`${domain}/api/payment/startPaymentProcess`, submitData, config)
+        .then((res) => {
+          setLoading(false)
+          console.log(res.data);
+          setSecret(res.data.clientSecret);
+          setStep(2);
+          window.scrollTo(0, 150);
+        })
+        .catch(err => {
+          setLoading(false)
+        })
     } else {
       document.getElementById(focusField).focus();
     }
@@ -257,8 +297,8 @@ function Checkout() {
   };
 
   const closePaymentPopup = () => {
-    history.push("/pilot_dashboard")
-  }
+    history.push("/pilot_dashboard/activities/images");
+  };
 
   const countryChangeHandler = (country) => {
     console.log(country);
@@ -275,9 +315,11 @@ function Checkout() {
     const stripe = useStripe();
     const elements = useElements();
 
+    const [checkoutLoading, setCheckoutLoading] = useState(false)
+
     const handleSubmit = async (event) => {
       event.preventDefault();
-
+      setCheckoutLoading(true)
       if (!stripe || !elements) {
         console.log("Loading");
         return;
@@ -294,22 +336,26 @@ function Checkout() {
       });
 
       if (result.error) {
-        // Show error to your customer (for example, payment details incomplete)
-        console.log(result.error.message);
+        console.log(result);
+        setCheckoutLoading(false)
+        alert("Payment failed")
       } else {
-        setPayment_success(true)
+        console.log(result)
+        setPayment_success(true);
+        setCheckoutLoading(false)
       }
     };
 
     return (
       <form onSubmit={handleSubmit}>
         <PaymentElement />
-        <div style={{ textAlign: "right" }}>
+        <div>
           <button
             disabled={!stripe}
             className="c_cBtn"
-            style={{ display: "inline-block" }}
+            style={{ display: "flex", marginLeft: "auto" }}
           >
+            {checkoutLoading?<Loader />:""}
             Submit
           </button>
         </div>
@@ -461,7 +507,8 @@ function Checkout() {
                         </label>
                         <input
                           type="text"
-                          className="pd_b_i_profile_input c_input"
+                          className="a_j_filter_address"
+                          style = {{height: "40px"}}
                           id="name"
                           name="name"
                           value={formData.name}
@@ -479,7 +526,8 @@ function Checkout() {
                         </label>
                         <input
                           type="email"
-                          className="pd_b_i_profile_input c_input"
+                          className="a_j_filter_address"
+                          style = {{height: "40px"}}
                           id="email"
                           name="email"
                           value={formData.email}
@@ -499,7 +547,8 @@ function Checkout() {
                         </label>
                         <input
                           type="text"
-                          className="pd_b_i_profile_input c_input"
+                          className="a_j_filter_address"
+                          style = {{height: "40px"}}
                           id="line1"
                           name="line1"
                           value={formData.line1}
@@ -519,7 +568,8 @@ function Checkout() {
                         </label>
                         <input
                           type="text"
-                          className="pd_b_i_profile_input c_input"
+                          className="a_j_filter_address"
+                          style = {{height: "40px"}}
                           id="line2"
                           name="line2"
                           value={formData.line2}
@@ -537,14 +587,18 @@ function Checkout() {
                         </label>
                         <input
                           type="number"
-                          className="pd_b_i_profile_input c_input"
+                          className="a_j_filter_address"
+                          style = {{height: "40px"}}
                           id="pin_code"
                           name="pin_code"
                           value={formData.pin_code}
                           onChange={formChangeHandler}
                         />
                       </div>
-                      <div className="login_input_error_msg" id="pin_code_error"></div>
+                      <div
+                        className="login_input_error_msg"
+                        id="pin_code_error"
+                      ></div>
                     </Col>
                     <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
                       <div style={{ marginBottom: "10px" }}>
@@ -553,7 +607,8 @@ function Checkout() {
                         </label>
                         <input
                           type="text"
-                          className="pd_b_i_profile_input c_input"
+                          className="a_j_filter_address"
+                          style = {{height: "40px"}}
                           id="city"
                           name="city"
                           value={formData.city}
@@ -571,14 +626,18 @@ function Checkout() {
                         </label>
                         <input
                           type="text"
-                          className="pd_b_i_profile_input c_input"
+                          className="a_j_filter_address"
+                          style = {{height: "40px"}}
                           id="state"
                           name="state"
                           value={formData.state}
                           onChange={formChangeHandler}
                         />
                       </div>
-                      <div className="login_input_error_msg" id="state_error"></div>
+                      <div
+                        className="login_input_error_msg"
+                        id="state_error"
+                      ></div>
                     </Col>
                     <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
                       <div style={{ marginBottom: "10px" }}>
@@ -606,9 +665,10 @@ function Checkout() {
                   <div style={{ textAlign: "right", marginBottom: "250px" }}>
                     <button
                       className="c_cBtn"
-                      style={{ display: "inline-block" }}
+                      style={{ display: "flex", marginLeft: "auto" }}
                       onClick={submitStep1}
                     >
+                      {loading? <Loader />:""}
                       Continue
                     </button>
                   </div>

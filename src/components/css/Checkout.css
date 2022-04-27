@@ -28,7 +28,7 @@
 }
 .c_input{
     background-color: #ffffff;
-    border: 1px solid #d1c7c7 !important;
+    border: 1px solid #e8e8e8 !important;
     width: 98%;
     margin-bottom: 15px !important;
 }
@@ -82,22 +82,22 @@ float: right;}
 
 #checkout_page_country .css-1s2u09g-control{
     background: white !important;
-    border: 1px solid #d1c7c7 !important;
-    width: 98% !important;
+    border: 1px solid #e8e8e8 !important;
+    width: 90% !important;
 }
 
 @media only screen and (min-width: 992px) {
     #checkout_page_country .css-1s2u09g-control{
         background: white !important;
-        border: 1px solid #d1c7c7 !important;
-        width: 102% !important;
+        border: 1px solid #e8e8e8 !important;
+        width: 100% !important;
     }
 }
 
 @media only screen and (min-width: 1200px) {
     #checkout_page_country .css-1s2u09g-control{
         background: white !important;
-        border: 1px solid #d1c7c7 !important;
-        width: 105% !important;
+        border: 1px solid #e8e8e8 !important;
+        width: 100% !important;
     }
 }
