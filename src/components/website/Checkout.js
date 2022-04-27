@@ -295,9 +295,10 @@ function Checkout() {
 
       if (result.error) {
         // Show error to your customer (for example, payment details incomplete)
-        console.log(result.error.message);
+        console.log(result);
       } else {
         setPayment_success(true)
+        console.log(result)
       }
     };
 
