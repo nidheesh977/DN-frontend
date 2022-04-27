@@ -6,6 +6,8 @@ import { Link, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+
 const domain = process.env.REACT_APP_MY_API
 
 function Checkout() {
@@ -247,10 +249,12 @@ function Checkout() {
                 </div>
                 <div className="c_disclaimer">All sales are charged in USD and all sales are final. You will be charged ${Number(data.price) + Number(data.gst)}.00 USD immediately. You will be charged every 30 days thereafter while the subscription is active. Cancel any time. Exchange rates are estimated based on our most recent conversion data and may not reflect the full charge value.</div>
                 <Link to="/HireSubscription">
+                    
                 <button className="c_cBtn1" style={{display:"inline-block"}}>
                     Choose Other
                 </button>
                 </Link>
+                
                 
                 <button className="c_cBtn" style={{display:"inline-block"}}>
                     Buy Plan

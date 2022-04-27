@@ -25,7 +25,7 @@ class HireSubscription extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      payment_success: false,
+      payment_success: true,
       msg_sent_success: false,
       data: [],
       myPlan: ""
