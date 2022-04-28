@@ -28,11 +28,9 @@ function PilotPaymentAddress() {
   const [years, setYears] = useState([
     2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033,
   ]);
-  const [secret, setSecret] = useState(
-    ""
-  );
+  const [secret, setSecret] = useState("");
 
-  const history = useHistory()
+  const history = useHistory();
 
   const [addressSaved, setAddressSaved] = useState(false);
   const [addressFailed, setAddressFailed] = useState(false);
@@ -46,6 +44,9 @@ function PilotPaymentAddress() {
     country_code: "",
     country_object: "",
   });
+  const [profilePic, setProfilePic] = useState(
+    "https://iconape.com/wp-content/png_logo_vector/user-circle.png"
+  );
 
   const customStyles = {
     container: (provided) => ({
@@ -58,40 +59,53 @@ function PilotPaymentAddress() {
 
   useEffect(() => {
     const config = {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      };
-    axios.post(`${domain}/api/pilot/sendBillingAddress`, config)
-    .then(res => {
-        console.log(res.data)
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    axios
+      .post(`${domain}/api/pilot/sendBillingAddress`, config)
+      .then((res) => {
+        console.log(res.data);
         const options = Countries.map((d) => ({
-            value: d.code,
-            label: d.name,
+          value: d.code,
+          label: d.name,
         }));
-        var country = {}
-        for (var i = 0; i < Countries.length; i++){
-            if (Countries[i].name === res.data.country || Countries[i].code === res.data.country){
-                country = {value: Countries[i].code, label: Countries[i].name}
-                break
-            }
+        var country = {};
+        for (var i = 0; i < Countries.length; i++) {
+          if (
+            Countries[i].name === res.data.country ||
+            Countries[i].code === res.data.country
+          ) {
+            country = { value: Countries[i].code, label: Countries[i].name };
+            break;
+          }
         }
-        console.log(res.data)
+        console.log(res.data);
         setFormData({
-            ...formData,
-            line1: res.data.line1?res.data.line1:"",
-            line2: res.data.line2?res.data.line2:"",
-            pin_code: res.data.postal_code?Number(res.data.postal_code):"",
-            city: res.data.city?res.data.city:"",
-            state: res.data.state?res.data.state:"",
-            country: country.label?country.label:"",
-            country_code: country.value?country.value:"",
-            country_object: country?country:""
-        })
-    })
-    .catch(err => {
-        console.log(err)
-    })
+          ...formData,
+          line1: res.data.line1 ? res.data.line1 : "",
+          line2: res.data.line2 ? res.data.line2 : "",
+          pin_code: res.data.postal_code ? Number(res.data.postal_code) : "",
+          city: res.data.city ? res.data.city : "",
+          state: res.data.state ? res.data.state : "",
+          country: country.label ? country.label : "",
+          country_code: country.value ? country.value : "",
+          country_object: country ? country : "",
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // axios
+    //   .post(`${domain}/api/user/pilotDetails`, config)
+    //   .then((res) => {
+    //     console.log(res);
+    //     setProfilePic(res.data.profilePic);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
     axios
       .post(`${domain}/api/subscription/getSubscription`, { id: param.id })
       .then((res) => {
@@ -120,13 +134,7 @@ function PilotPaymentAddress() {
         );
     };
 
-    var fields = [
-      "line1",
-      "line2",
-      "city",
-      "state",
-      "country",
-    ];
+    var fields = ["line1", "line2", "city", "state", "country"];
 
     let error = false;
     let focusField = "";
@@ -154,7 +162,7 @@ function PilotPaymentAddress() {
             }
           }
           if (fields[i] === "email") {
-            console.log(formData.email)
+            console.log(formData.email);
             if (formData.email.length > 100) {
               error = true;
               document.getElementById(`${fields[i]}_error`).innerText =
@@ -230,13 +238,12 @@ function PilotPaymentAddress() {
       }
     }
     if (!error) {
-
       const config = {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       };
-      
+
       let submitData = {
         line1: formData.line1,
         line2: formData.line2,
@@ -245,18 +252,18 @@ function PilotPaymentAddress() {
         state: formData.state,
         country: formData.country_code,
       };
-      
-      axios.post(`${domain}/api/pilot/updateBillingAddress`, submitData, config)
-      .then(res => {
-          console.log(res.data)
-          setAddressSaved(true)
-          window.scrollTo(0,0)
-      })
-      .catch(err => {
-          console.log(err)
-          setAddressFailed(true)
-      })
-      
+
+      axios
+        .post(`${domain}/api/pilot/updateBillingAddress`, submitData, config)
+        .then((res) => {
+          console.log(res.data);
+          setAddressSaved(true);
+          window.scrollTo(0, 0);
+        })
+        .catch((err) => {
+          console.log(err);
+          setAddressFailed(true);
+        });
     } else {
       document.getElementById(focusField).focus();
     }
@@ -288,217 +295,287 @@ function PilotPaymentAddress() {
     document.getElementById("country_error").style.display = "none";
   };
 
-  
   return (
     <div>
       <div style={{ overflowX: "hidden" }}>
         <Container className={All.Container}>
+          <Row className="sub_det_container">
+            <Col xxl={12} className="sub_det_col1">
+              <div className="sub_det_plan">Gold Monthly</div>
+            </Col>
+            <Col className="sub_det_col2">
+              {/* <div style={{ textAlign: "center" }}>
+                <img
+                  src={profilePic}
+                  alt="profile pic"
+                  style={{ borderRadius: "200px" }}
+                />
+              </div> */}
+              <div>
+                <div className="sub_det_title">Price :</div>
+                <div className="sub_det_content" id="sub_det_price">
+                  $10.00
+                </div>
+              </div>
+              <div>
+                <div className="sub_det_title">Status :</div>
+                <div className="sub_det_content" id="sub_det_status">
+                  Active
+                </div>
+              </div>
+              <div>
+                <div className="sub_det_title">Start date :</div>
+                <div className="sub_det_content" id="sub_det_start_date">
+                  28/4/2022
+                </div>
+              </div>
+              <div>
+                <div className="sub_det_title">End date :</div>
+                <div className="sub_det_content" id="sub_det_end_date">
+                  28/5/2022
+                </div>
+              </div>
+              <div>
+                <div className="sub_det_title">Image Limit :</div>
+                <div className="sub_det_content" id="sub_det_start_date">
+                  15 Images
+                </div>
+              </div>
+            </Col>
+            <Col className="sub_det_col3">
+              <div>
+                <div className="sub_det_title">Uploaded images :</div>
+                <div className="sub_det_content" id="sub_det_start_date">
+                  15 Images
+                </div>
+              </div>
+              <div>
+                <div className="sub_det_title">Video Limit :</div>
+                <div className="sub_det_content" id="sub_det_start_date">
+                  3 Videos
+                </div>
+              </div>
+              <div>
+                <div className="sub_det_title">Uploaded videos :</div>
+                <div className="sub_det_content" id="sub_det_start_date">
+                  3 Videos
+                </div>
+              </div>
+              <div>
+                <div className="sub_det_title">3dimages Limit :</div>
+                <div className="sub_det_content" id="sub_det_start_date">
+                  3 3dimages
+                </div>
+              </div>
+              <div>
+                <div className="sub_det_title">Uploaded 3dimages :</div>
+                <div className="sub_det_content" id="sub_det_start_date">
+                  3 3dimages
+                </div>
+              </div>
+            </Col>
+          </Row>
           <Row gutterWidth={40}>
             <Col>
-              <div className="c_title" style = {{marginBottom: "20px"}}>
+              <div className="c_title" style={{ marginBottom: "20px" }}>
                 Payment address{" "}
               </div>
-              
-                  <Row>
-                    <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
-                      <div style={{ marginBottom: "10px" }}>
-                        <label htmlFor="line1">
-                          <div className="pd_b_i_profile_head">
-                            Address Line1
-                          </div>
-                        </label>
-                        <input
-                          type="text"
-                          className="pd_b_i_profile_input c_input"
-                          id="line1"
-                          name="line1"
-                          value={formData.line1}
-                          onChange={formChangeHandler}
-                        />
-                      </div>
-                      <div className="login_input_error_msg" id="line1_error">
-                        Address Line1 is required
-                      </div>
-                    </Col>
-                    <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
-                      <div style={{ marginBottom: "10px" }}>
-                        <label htmlFor="line2">
-                          <div className="pd_b_i_profile_head">
-                            Address Line2
-                          </div>
-                        </label>
-                        <input
-                          type="text"
-                          className="pd_b_i_profile_input c_input"
-                          id="line2"
-                          name="line2"
-                          value={formData.line2}
-                          onChange={formChangeHandler}
-                        />
-                      </div>
-                      <div className="login_input_error_msg" id="line2_error">
-                        Address Line2 length should not exceed 100
-                      </div>
-                    </Col>
-                    <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
-                      <div style={{ marginBottom: "10px" }}>
-                        <label htmlFor="pin_code">
-                          <div className="pd_b_i_profile_head">Postal code</div>
-                        </label>
-                        <input
-                          type="number"
-                          className="pd_b_i_profile_input c_input"
-                          id="pin_code"
-                          name="pin_code"
-                          value={formData.pin_code}
-                          onChange={formChangeHandler}
-                        />
-                      </div>
-                      <div className="login_input_error_msg" id="pin_code_error"></div>
-                    </Col>
-                    <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
-                      <div style={{ marginBottom: "10px" }}>
-                        <label htmlFor="city">
-                          <div className="pd_b_i_profile_head">City</div>
-                        </label>
-                        <input
-                          type="text"
-                          className="pd_b_i_profile_input c_input"
-                          id="city"
-                          name="city"
-                          value={formData.city}
-                          onChange={formChangeHandler}
-                        />
-                      </div>
-                      <div className="login_input_error_msg" id="city_error">
-                        City is required
-                      </div>
-                    </Col>
-                    <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
-                      <div style={{ marginBottom: "10px" }}>
-                        <label htmlFor="state">
-                          <div className="pd_b_i_profile_head">State</div>
-                        </label>
-                        <input
-                          type="text"
-                          className="pd_b_i_profile_input c_input"
-                          id="state"
-                          name="state"
-                          value={formData.state}
-                          onChange={formChangeHandler}
-                        />
-                      </div>
-                      <div className="login_input_error_msg" id="state_error"></div>
-                    </Col>
-                    <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
-                      <div style={{ marginBottom: "10px" }}>
-                        <label htmlFor="country">
-                          <div className="pd_b_i_profile_head">Country</div>
-                        </label>
 
-                        <div id="address_page_country">
-                          <Select
-                            styles={{
-                              ...customStyles,
-                              border: "1px solid grey",
-                            }}
-                            options={country_list}
-                            value={formData.country_object}
-                            onChange={countryChangeHandler}
-                          />
-                        </div>
-                      </div>
-                      <div className="login_input_error_msg" id="country_error">
-                        Country is required
-                      </div>
-                    </Col>
-                  </Row>
-                  <div style={{marginBottom: "250px" }}>
-                    <button
-                      className="c_cBtn"
-                      style={{ display: "inline-block" }}
-                      onClick={submitStep1}
-                    >
-                      Save Changes
-                    </button>
+              <Row>
+                <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
+                  <div style={{ marginBottom: "10px" }}>
+                    <label htmlFor="line1">
+                      <div className="pd_b_i_profile_head">Address Line1</div>
+                    </label>
+                    <input
+                      type="text"
+                      className="pd_b_i_profile_input c_input"
+                      id="line1"
+                      name="line1"
+                      value={formData.line1}
+                      onChange={formChangeHandler}
+                    />
                   </div>
+                  <div className="login_input_error_msg" id="line1_error">
+                    Address Line1 is required
+                  </div>
+                </Col>
+                <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
+                  <div style={{ marginBottom: "10px" }}>
+                    <label htmlFor="line2">
+                      <div className="pd_b_i_profile_head">Address Line2</div>
+                    </label>
+                    <input
+                      type="text"
+                      className="pd_b_i_profile_input c_input"
+                      id="line2"
+                      name="line2"
+                      value={formData.line2}
+                      onChange={formChangeHandler}
+                    />
+                  </div>
+                  <div className="login_input_error_msg" id="line2_error">
+                    Address Line2 length should not exceed 100
+                  </div>
+                </Col>
+                <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
+                  <div style={{ marginBottom: "10px" }}>
+                    <label htmlFor="pin_code">
+                      <div className="pd_b_i_profile_head">Postal code</div>
+                    </label>
+                    <input
+                      type="number"
+                      className="pd_b_i_profile_input c_input"
+                      id="pin_code"
+                      name="pin_code"
+                      value={formData.pin_code}
+                      onChange={formChangeHandler}
+                    />
+                  </div>
+                  <div
+                    className="login_input_error_msg"
+                    id="pin_code_error"
+                  ></div>
+                </Col>
+                <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
+                  <div style={{ marginBottom: "10px" }}>
+                    <label htmlFor="city">
+                      <div className="pd_b_i_profile_head">City</div>
+                    </label>
+                    <input
+                      type="text"
+                      className="pd_b_i_profile_input c_input"
+                      id="city"
+                      name="city"
+                      value={formData.city}
+                      onChange={formChangeHandler}
+                    />
+                  </div>
+                  <div className="login_input_error_msg" id="city_error">
+                    City is required
+                  </div>
+                </Col>
+                <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
+                  <div style={{ marginBottom: "10px" }}>
+                    <label htmlFor="state">
+                      <div className="pd_b_i_profile_head">State</div>
+                    </label>
+                    <input
+                      type="text"
+                      className="pd_b_i_profile_input c_input"
+                      id="state"
+                      name="state"
+                      value={formData.state}
+                      onChange={formChangeHandler}
+                    />
+                  </div>
+                  <div className="login_input_error_msg" id="state_error"></div>
+                </Col>
+                <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
+                  <div style={{ marginBottom: "10px" }}>
+                    <label htmlFor="country">
+                      <div className="pd_b_i_profile_head">Country</div>
+                    </label>
+
+                    <div id="address_page_country">
+                      <Select
+                        styles={{
+                          ...customStyles,
+                          border: "1px solid grey",
+                        }}
+                        options={country_list}
+                        value={formData.country_object}
+                        onChange={countryChangeHandler}
+                      />
+                    </div>
+                  </div>
+                  <div className="login_input_error_msg" id="country_error">
+                    Country is required
+                  </div>
+                </Col>
+              </Row>
+              <div style={{ marginBottom: "250px" }}>
+                <button
+                  className="c_cBtn"
+                  style={{ display: "inline-block" }}
+                  onClick={submitStep1}
+                >
+                  Save Changes
+                </button>
+              </div>
             </Col>
           </Row>
         </Container>
         <Dialog
-              open={addressSaved}
-              onClose={()=>setAddressSaved(false)}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              maxWidth={"md"}
-              fullWidth={true}
-            >
-              <DialogContent
-                className={All.PopupBody}
-                style={{ marginBottom: "50px" }}
-              >
-                <div
-                  style={{ position: "absolute", top: "20px", right: "20px" }}
+          open={addressSaved}
+          onClose={() => setAddressSaved(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={() => setAddressSaved(false)}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="u_f_popup_title" style={{ width: "100%" }}>
+                Changes saved successfully
+              </div>
+              <div className="u_f_popup_btn_container">
+                <button
+                  className="u_f_popup_btn2"
+                  onClick={() => setAddressSaved(false)}
                 >
-                  <img
-                    src={Close}
-                    alt=""
-                    onClick={()=>setAddressSaved(false)}
-                    style={{ cursor: "pointer" }}
-                  />
-                </div>
-                <Row style={{ marginTop: "30px" }}>
-                  <div className="u_f_popup_title" style={{ width: "100%" }}>
-                    Changes saved successfully
-                  </div>
-                  <div className="u_f_popup_btn_container">
-                    <button
-                      className="u_f_popup_btn2"
-                      onClick={()=>setAddressSaved(false)}
-                    >
-                      Close
-                    </button>
-                  </div>
-                </Row>
-              </DialogContent>
-            </Dialog>
+                  Close
+                </button>
+              </div>
+            </Row>
+          </DialogContent>
+        </Dialog>
         <Dialog
-              open={addressFailed}
-              onClose={()=>setAddressFailed(false)}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              maxWidth={"md"}
-              fullWidth={true}
-            >
-              <DialogContent
-                className={All.PopupBody}
-                style={{ marginBottom: "50px" }}
-              >
-                <div
-                  style={{ position: "absolute", top: "20px", right: "20px" }}
+          open={addressFailed}
+          onClose={() => setAddressFailed(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={() => setAddressFailed(false)}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="u_f_popup_title" style={{ width: "100%" }}>
+                Address change failed
+              </div>
+              <div className="u_f_popup_btn_container">
+                <button
+                  className="u_f_popup_btn2"
+                  onClick={() => setAddressFailed(false)}
                 >
-                  <img
-                    src={Close}
-                    alt=""
-                    onClick={()=>setAddressFailed(false)}
-                    style={{ cursor: "pointer" }}
-                  />
-                </div>
-                <Row style={{ marginTop: "30px" }}>
-                  <div className="u_f_popup_title" style={{ width: "100%" }}>
-                    Address change failed
-                  </div>
-                  <div className="u_f_popup_btn_container">
-                    <button
-                      className="u_f_popup_btn2"
-                      onClick={()=>setAddressFailed(false)}
-                    >
-                      Close
-                    </button>
-                  </div>
-                </Row>
-              </DialogContent>
-            </Dialog>
+                  Close
+                </button>
+              </div>
+            </Row>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
