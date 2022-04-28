@@ -34,7 +34,8 @@ function PilotPaymentAddress() {
 
   const history = useHistory()
 
-  const [step, setStep] = useState(1);
+  const [addressSaved, setAddressSaved] = useState(false);
+  const [addressFailed, setAddressFailed] = useState(false);
   const [formData, setFormData] = useState({
     line1: "",
     line2: "",
@@ -70,16 +71,17 @@ function PilotPaymentAddress() {
         }));
         var country = {}
         for (var i = 0; i < Countries.length; i++){
-            if (Countries[i].name === res.data.country){
+            if (Countries[i].name === res.data.country || Countries[i].code === res.data.country){
                 country = {value: Countries[i].code, label: Countries[i].name}
                 break
             }
         }
+        console.log(res.data)
         setFormData({
             ...formData,
             line1: res.data.line1?res.data.line1:"",
             line2: res.data.line2?res.data.line2:"",
-            pin_code: res.data.postalAddress?res.data.postalAddress:"",
+            pin_code: res.data.postal_code?Number(res.data.postal_code):"",
             city: res.data.city?res.data.city:"",
             state: res.data.state?res.data.state:"",
             country: country.label?country.label:"",
@@ -243,7 +245,17 @@ function PilotPaymentAddress() {
         state: formData.state,
         country: formData.country_code,
       };
-      console.log(formData.country_code)
+      
+      axios.post(`${domain}/api/pilot/updateBillingAddress`, submitData, config)
+      .then(res => {
+          console.log(res.data)
+          setAddressSaved(true)
+          window.scrollTo(0,0)
+      })
+      .catch(err => {
+          console.log(err)
+          setAddressFailed(true)
+      })
       
     } else {
       document.getElementById(focusField).focus();
@@ -413,6 +425,80 @@ function PilotPaymentAddress() {
             </Col>
           </Row>
         </Container>
+        <Dialog
+              open={addressSaved}
+              onClose={()=>setAddressSaved(false)}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+            >
+              <DialogContent
+                className={All.PopupBody}
+                style={{ marginBottom: "50px" }}
+              >
+                <div
+                  style={{ position: "absolute", top: "20px", right: "20px" }}
+                >
+                  <img
+                    src={Close}
+                    alt=""
+                    onClick={()=>setAddressSaved(false)}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div className="u_f_popup_title" style={{ width: "100%" }}>
+                    Changes saved successfully
+                  </div>
+                  <div className="u_f_popup_btn_container">
+                    <button
+                      className="u_f_popup_btn2"
+                      onClick={()=>setAddressSaved(false)}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
+        <Dialog
+              open={addressFailed}
+              onClose={()=>setAddressFailed(false)}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+            >
+              <DialogContent
+                className={All.PopupBody}
+                style={{ marginBottom: "50px" }}
+              >
+                <div
+                  style={{ position: "absolute", top: "20px", right: "20px" }}
+                >
+                  <img
+                    src={Close}
+                    alt=""
+                    onClick={()=>setAddressFailed(false)}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div className="u_f_popup_title" style={{ width: "100%" }}>
+                    Address change failed
+                  </div>
+                  <div className="u_f_popup_btn_container">
+                    <button
+                      className="u_f_popup_btn2"
+                      onClick={()=>setAddressFailed(false)}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
       </div>
     </div>
   );

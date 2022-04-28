@@ -262,8 +262,9 @@ function Checkout() {
         city: formData.city,
         state: formData.state,
         country: formData.country_code,
+        planName: data.name
       };
-      console.log(formData.country_code);
+      console.log(submitData);
       axios
         .post(`${domain}/api/payment/startPaymentProcess`, submitData, config)
         .then((res) => {

@@ -1,167 +1,3 @@
-// import React, { Component } from 'react'
-// import { Container, Row, Col } from 'react-grid-system'
-// import '../css/DownloadSubscription.css'
-// import All from './All.module.css'
-// import Dialog from "@material-ui/core/Dialog";
-// import MuiDialogContent from "@material-ui/core/DialogContent";
-// import Close from "../images/close.svg";
-// import { withStyles } from "@material-ui/core/styles";
-// import payment_success from '../images/payment_success.png';
-// import { Helmet } from "react-helmet";
-
-// const DialogContent = withStyles((theme) => ({
-//     root: {
-//         padding: theme.spacing(2),
-//     },
-// }))(MuiDialogContent);
-
-// class DownloadSubscription extends Component {
-//     constructor(props) {
-//         super(props)
-//         this.state = {
-//             payment_success: false,
-//         }
-//     }
-
-//     loadScript = (src) => {
-//         return new Promise((resolve) => {
-//             const script = document.createElement("script");
-//             script.src = src;
-//             script.onload = () => {
-//                 resolve(true);
-//             };
-//             script.onerror = () => {
-//                 resolve(false);
-//             };
-//             document.body.appendChild(script);
-//         });
-//     }
-
-//     subscribe = (amount, id) => {
-//         this.setState({
-//             payment_success: true
-//         })
-//     }
-
-//     closePaymentPopup = () => {
-//         this.setState({
-//             payment_success: false
-//         })
-//     }
-
-//     render() {
-//         return (
-//             <section>
-//                 <Helmet>
-//                     <title>Download Subscription</title>
-//                     <meta charSet="utf-8" />
-//                     <meta name="description" content="Nested component" />
-//                 </Helmet>
-//                 <Container className={All.Container + " u_p_v_container"}>
-//                     <div className="u_p_v_heading">Simple plans for everyone</div>
-//                     <Row gutterWidth={34}>
-//                         <Col xl={4} lg={4} md={6} sm={12} xs={12}>
-//                             <div className="u_p_v_plan_container u_p_v_plan_selected">
-//                                 <div className="u_p_v_title">Single Image</div>
-//                                 <div className="u_p_v_price">$5.00</div>
-//                                 <button className="u_p_v_button1" onClick={() => this.subscribe(5, 1)}>Subscribe Now</button>
-//                                 <div className="u_p_v_plan_features">
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                 </div>
-//                             </div>
-//                         </Col>
-//                         <Col xl={4} lg={4} md={6} sm={12} xs={12}>
-//                             <div className="u_p_v_plan_container">
-//                                 <div className="u_p_v_title">Five Images</div>
-//                                 <div className="u_p_v_price">$20.00</div>
-//                                 <button className="u_p_v_button2" onClick={() => this.subscribe(20, 2)}>Subscribe Now</button>
-//                                 <div className="u_p_v_plan_features">
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                 </div>
-//                             </div>
-//                         </Col>
-//                         <Col xl={4} lg={4} md={6} sm={12} xs={12}>
-//                             <div className="u_p_v_plan_container">
-//                                 <div className="u_p_v_title">Ten Images</div>
-//                                 <div className="u_p_v_price">$30.00</div>
-//                                 <button className="u_p_v_button2" onClick={() => this.subscribe(30, 3)}>Subscribe Now</button>
-//                                 <div className="u_p_v_plan_features">
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                     <div className="u_p_v_plan_feature">
-//                                         <i class="fa fa-check" aria-hidden="true"></i> This plan for free to every users
-//                                     </div>
-//                                 </div>
-//                             </div>
-//                         </Col>
-//                     </Row>
-//                 </Container>
-//                 <Dialog
-//                     open={this.state.payment_success}
-//                     onClose={this.closePaymentPopup}
-//                     aria-labelledby="alert-dialog-title"
-//                     aria-describedby="alert-dialog-description"
-//                     maxWidth={"md"}
-//                     fullWidth={true}
-//                 >
-
-//                     <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
-//                         <div style={{ position: "absolute", top: '20px', right: '20px' }}>
-//                             <img src={Close} alt="" onClick={this.closePaymentPopup} style={{ cursor: "pointer" }} />
-//                         </div>
-//                         <Row style={{ marginTop: "30px" }}>
-//                             <img src={payment_success} alt="" style={{ margin: "auto" }} />
-//                             <div className="u_p_v_popup_title">Thank you</div>
-//                             <div className="u_p_v_popup_content">We have recieved your payment</div>
-//                             <button className="u_p_v_popup_close_btn" onClick={this.closePaymentPopup}>Close</button>
-//                         </Row>
-//                     </DialogContent>
-//                 </Dialog>
-//             </section>
-//         )
-//     }
-// }
-
-// export default DownloadSubscription
-
 import React, { Component } from "react";
 import { Container, Row, Col } from "react-grid-system";
 import { Helmet } from "react-helmet";
@@ -457,7 +293,7 @@ class DownloadSubscription extends Component {
                         Current Plan
                       </button>
                     ) : (
-                      <Link to={`checkout/${this.state.data[1]._id}`}>
+                      <Link to={`checkout/${this.state.data[this.state.subYearly?3:1]._id}`}>
                         <button className="subscription_plan_btn2">
                           Upgrade plan
                         </button>
@@ -611,7 +447,7 @@ class DownloadSubscription extends Component {
                         Current Plan
                       </button>
                     ) : (
-                      <Link to={`checkout/${this.state.data[2]._id}`}>
+                      <Link to={`checkout/${this.state.data[this.state.subYearly?4:2]._id}`}>
                         <button className="subscription_plan_btn1">
                           Upgrade plan
                         </button>
