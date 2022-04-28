@@ -33,3 +33,46 @@ padding: 10px;
     cursor: pointer;
     text-decoration: underline;
 }
+.pdf_mainDiv{
+    margin-top: 50px;
+    max-width: 555px;
+    font-size: 12px;
+    padding: 20px 20px;
+
+}
+.pdf_imageDiv{
+    padding: 15px;
+    border: 1px solid gray
+}
+.pdf_iconImg{
+    height: 30px;
+}
+.pdf_client{
+    text-decoration: underline;
+    text-underline-offset : 5px;   
+    padding-bottom: 15px;
+    font-weight: bold;
+    line-height: 10px;
+}
+.pdf_invoiceDiv{
+    border-right: 1px solid gray;
+    border-left: 1px solid gray;
+    padding: 15px
+}
+.colForDate{
+    padding: 15px;
+    border: 1px solid gray;
+    border-top: none;
+    margin-left: 15px;
+}
+.pdf_statusdiv{
+    padding: 15px;
+    border: 1px solid gray;
+}
+.pdf_table{
+    padding: 15px;
+    border: 1px solid gray;
+}
+.pdfHeadRow{
+    font-weight: bold;
+}
