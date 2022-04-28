@@ -33,7 +33,7 @@ class Footer extends Component{
                   <Link className="footer_link">Post Freelancer Requirement</Link>
                 </li>
                 <li>
-                  <Link className="footer_link">Search Droners</Link>
+                  <Link className="footer_link" to="/help-center">Help Center</Link>
                 </li>
               </ul>
             </Col>

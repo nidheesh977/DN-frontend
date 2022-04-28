@@ -79,13 +79,13 @@ function Pilot_Payments() {
             <div>{item.createdAt.slice(0,10)}</div>
           </Col>
           <Col>
-            <div style={{textTransform: "capitalize"}}>{item.plan} Package</div>
+            <div style={{textTransform: "capitalize"}}>{item.plan}</div>
           </Col>
           <Col>
             <div style={{textTransform: "capitalize"}}>{item.status}</div>
           </Col>
           <Col>
-            <div>${Number(item.price) + Number(item.gst)}.00</div>
+            <div>${item.price}.00</div>
           </Col>
           <Col>
             <div style={{textDecoration: "underline", cursor: "pointer"}}>Download Receipt</div>

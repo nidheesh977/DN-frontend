@@ -256,3 +256,16 @@ textarea{
     padding: 0px 20px;
      width:  calc(99% - 40px);
 }
+.hc_searchtitle{
+  font-size: 20px;
+  font-family: muli-regular;
+  margin-bottom: 10px;
+}
+.focusRemoving:focus{
+  outline: none !important;
+  border: none !important;
+}
+.MuiInputBase-input:focus, .MuiInputBase-input:hover{
+  outline: none !important;
+  border: none !important;
+}

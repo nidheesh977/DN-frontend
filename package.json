@@ -63,7 +63,7 @@
     "node-jquery": "^0.1.0",
     "node-sass": "^5.0.0",
     "notistack": "^1.0.3",
-    "npm": "^8.3.0",
+    "npm": "^8.8.0",
     "pannellum-react": "^1.2.4",
     "prop-types": "^15.8.1",
     "public-ip": "^5.0.0",

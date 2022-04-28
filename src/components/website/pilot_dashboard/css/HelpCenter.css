@@ -35,3 +35,14 @@ width: 230px;
     margin-left: 8px;
     text-transform: capitalize;
 }
+.hc_showMore{
+    text-align: center;
+    background-color: #F5F5F7;
+    width: 200px;
+    padding: 10px 0px;
+    border-radius: 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-family: muli-light;
+    border: 1px solid lightgray;
+}

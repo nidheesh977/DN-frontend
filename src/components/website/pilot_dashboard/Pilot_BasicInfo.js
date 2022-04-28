@@ -52,8 +52,8 @@ function Pilot_BasicInfo() {
   useEffect(() => {
     axios.post(`${domain}/api/user/pilotDetails`, config).then((response) => {
       var result = Countries.filter((obj) => obj.name == response.data.country);
-      console.log(result[0].dial_code);
-      setCode(result[0].dial_code);
+      // console.log(result[0].dial_code);
+      // setCode(result[0].dial_code);
       let data = response.data;
       localStorage.setItem("oldEmail", response.data.emailId);
       setData({

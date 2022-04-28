@@ -337,10 +337,38 @@ function Checkout() {
 
       if (result.error) {
         console.log(result);
+        const config = {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        };
+        axios.post(`${domain}/api/payment/createPayment`, {
+          userRole: "pilot",
+          plan:"Gold Monthly",
+          transactionId: result.error.payment_intent.id,
+          price: result.error.payment_intent.amount/100,
+          status: result.error.payment_intent.last_payment_error.decline_code
+        },config).then(res=>{
+          console.log(res)
+        })
         setCheckoutLoading(false)
         alert("Payment failed")
       } else {
         console.log(result)
+        const config = {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        };
+        axios.post(`${domain}/api/payment/createPayment`, {
+          userRole: "pilot",
+          plan:"Gold Monthly",
+          transactionId: result.paymentIntent.id,
+          price: result.paymentIntent.amount/100,
+          status: result.paymentIntent.status
+        },config).then(res=>{
+          console.log(res)
+        })
         setPayment_success(true);
         setCheckoutLoading(false)
       }
