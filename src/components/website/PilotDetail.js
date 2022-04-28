@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
@@ -40,7 +40,7 @@ import userCross from "../images/userCross.svg";
 import axios from "axios";
 import Avatar from "material-ui/Avatar";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import ProImg from "../images/proIcon.png"
+import ProImg from "../images/proIcon.png";
 
 const styles = (theme) => ({
   root: {
@@ -99,7 +99,13 @@ export default function PilotDetails(props) {
 
   const [category, setCategory] = useState(1);
 
+  const [allFiles, setAllFiles] = useState([]);
   const [files, setFiles] = useState([]);
+  let [pilotData, setPilotData] = useState({});
+  let [fol, setFol] = useState([]);
+  let [rearrangedImages, setRearrangedImages] = useState([])
+  let [rearrangedVideos, setRearrangedVideos] = useState([])
+  let [rearranged3d, setRearranged3d] = useState([])
 
   const [allFileCount, setAllFileCount] = useState(0);
   const [imageFileCount, setImageFileCount] = useState(0);
@@ -114,6 +120,7 @@ export default function PilotDetails(props) {
   const messages = [1, 2, 3, 4, 5, 6];
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
+  
 
   const handleErrorClose = () => {
     setErrorMsg("");
@@ -122,10 +129,38 @@ export default function PilotDetails(props) {
 
   const selectCategory = (new_category) => {
     setCategory(new_category);
+    if (new_category === 2){
+      console.log(rearrangedImages)
+      if (rearrangedImages.length){
+        setFiles(rearrangedImages)
+      }
+    }else if (new_category === 3){
+      if (rearrangedVideos.length !== 0){
+        setFiles(rearrangedVideos)
+      }
+    }else if (new_category === 4){
+      if (rearranged3d.length !== 0){
+        setFiles(rearranged3d)
+      }
+    }
   };
 
   const selectCategoryDropdown = (e) => {
     setCategory(Number(e.target.value));
+    if (e.target.value === "2"){
+      console.log(rearrangedImages)
+      if (rearrangedImages.length){
+        setFiles(rearrangedImages)
+      }
+    }else if (e.target.value === "3"){
+      if (rearrangedVideos.length !== 0){
+        setFiles(rearrangedVideos)
+      }
+    }else if (e.target.value === "4"){
+      if (rearranged3d.length !== 0){
+        setFiles(rearranged3d)
+      }
+    }
   };
 
   const showFileDetails = (id) => {
@@ -168,39 +203,36 @@ export default function PilotDetails(props) {
   };
   const submitProcess = () => {
     if (hireForm.description !== "" && hireForm.description.length <= 200) {
-      axios.post(`${domain}/api/hireProposal/createProposal`, {pilotId: param.id, message: hireForm.description}, config).then(res=>{
-        console.log(res)
-        setHireForm({
-          ...hireForm,
-          description: ""
-        })
-//test
-if(res.status === 200){
+      axios
+        .post(
+          `${domain}/api/hireProposal/createProposal`,
+          { pilotId: param.id, message: hireForm.description },
+          config
+        )
+        .then((res) => {
+          console.log(res);
+          setHireForm({
+            ...hireForm,
+            description: "",
+          });
+          //test
+          if (res.status === 200) {
+            document.getElementById("alertBox").style.display = "block";
 
-  document.getElementById("alertBox").style.display = "block"
-
-  
-  document.querySelector(".h_p_start_process_form_description").style.backgroundColor = "#f5f5f7"
-}
-setTimeout(()=>{
-  return(
-
-
-    setStartProcess(false),
-    document.getElementById("alertBox").style.display = "none"
-   
-)}
-  , 1500);
-
-
-
-      
-      
-      })
-    }
-    else if(hireForm.description.length >= 200){
-      document.getElementById("hire_description").style.backgroundColor = "#FFCCCB"
-
+            document.querySelector(
+              ".h_p_start_process_form_description"
+            ).style.backgroundColor = "#f5f5f7";
+          }
+          setTimeout(() => {
+            return (
+              setStartProcess(false),
+              (document.getElementById("alertBox").style.display = "none")
+            );
+          }, 1500);
+        });
+    } else if (hireForm.description.length >= 200) {
+      document.getElementById("hire_description").style.backgroundColor =
+        "#FFCCCB";
     } else {
       document.getElementById("description_error").style.display = "contents";
       document.getElementById("hire_description").style.marginBottom = "10px";
@@ -208,7 +240,7 @@ setTimeout(()=>{
   };
 
   const hireDescChangeHandler = (e) => {
-    document.getElementById("hire_description").style.backgroundColor = "white"
+    document.getElementById("hire_description").style.backgroundColor = "white";
 
     document.getElementById("description_error").style.display = "none";
     document.getElementById("hire_description").style.marginBottom = "30px";
@@ -225,18 +257,19 @@ setTimeout(()=>{
       Authorization: "Bearer " + localStorage.getItem("access_token"),
     },
   };
-  let [pilotData, setPilotData] = useState({});
-  let [fol, setFol] = useState([]);
+  
   useEffect(() => {
     axios
       .get(`${domain}/api/pilot/pilotDetails/${props.match.params.id}`)
       .then((response) => {
         setPilotData(response.data);
-        console.log(response)
+        console.log(response);
         if (response.data.name === "CastError") {
           history.push("/no-page-found");
         }
-        console.log(response);
+        setRearrangedImages(response.data.rearrangedImages)
+        setRearrangedVideos(response.data.rearrangedVideos)
+        setRearranged3d(response.data.rearranged3d)
       })
       .catch((err) => {
         history.push("/no-page-found");
@@ -245,22 +278,25 @@ setTimeout(()=>{
       .get(`${domain}/api/pilot/getPilotMedia/${props.match.params.id}`)
       .then((res) => {
         console.log(res.data);
+        setAllFiles(res.data);
         setFiles(res.data);
         setAllFileCount(res.data.length);
         if (res.data.length === 0) {
           setCategory(5);
         }
       });
-
-    axios
-      .get(`${domain}/api/image/getUserImagesOnly/${props.match.params.id}`)
-      .then((res) => {
-        console.log(res.data);
-        setImageFileCount(res.data.length);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    
+      axios
+            .get(
+              `${domain}/api/image/getUserImagesOnly/${props.match.params.id}`
+            )
+            .then((res) => {
+              console.log(res.data);
+              setImageFileCount(res.data.length);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
 
     axios
       .get(`${domain}/api/image/getUserVideosOnly/${props.match.params.id}`)
@@ -312,25 +348,25 @@ setTimeout(()=>{
   }, []);
 
   let followMe = () => {
-    if (localStorage.getItem("access_token")){
-    axios
-      .post(
-        `${domain}/api/follow/createFollow/${props.match.params.id}`,
-        config
-      )
-      .then((response) => {
-        axios
-          .post(`${domain}/api/follow/getMyFollowing`, config)
-          .then((res) => {
-            const folowers = res.data;
-            console.log(folowers);
-            setMyFollowing(folowers);
-          });
-        console.log(response);
-        // setBrands(response.data.brandOfDrones)
-      });
-    }else{
-      setLoginErrorPopup(true)
+    if (localStorage.getItem("access_token")) {
+      axios
+        .post(
+          `${domain}/api/follow/createFollow/${props.match.params.id}`,
+          config
+        )
+        .then((response) => {
+          axios
+            .post(`${domain}/api/follow/getMyFollowing`, config)
+            .then((res) => {
+              const folowers = res.data;
+              console.log(folowers);
+              setMyFollowing(folowers);
+            });
+          console.log(response);
+          // setBrands(response.data.brandOfDrones)
+        });
+    } else {
+      setLoginErrorPopup(true);
     }
   };
   let unfollow = () => {
@@ -353,31 +389,34 @@ setTimeout(()=>{
   };
 
   const loginErrorPopupClose = () => {
-    setLoginErrorPopup(false)
-  }
+    setLoginErrorPopup(false);
+  };
 
   let followMeId = (id) => {
-    if(localStorage.getItem("access_token")){
-
-      axios.post(`${domain}/api/pilot/getPilotId`, { userId: id }).then((res) => {
-        axios
-          .post(`${domain}/api/follow/createFollow/${res.data[0]._id}`, config)
-          .then((response) => {
-            axios
-              .post(`${domain}/api/follow/getMyFollowing`, config)
-              .then((res) => {
-                const folowers = res.data;
-                console.log(folowers);
-                setMyFollowing(folowers);
-              });
-            console.log(response);
-            // setBrands(response.data.brandOfDrones)
-          });
-      });
-    }else{
-      setLoginErrorPopup(true)
+    if (localStorage.getItem("access_token")) {
+      axios
+        .post(`${domain}/api/pilot/getPilotId`, { userId: id })
+        .then((res) => {
+          axios
+            .post(
+              `${domain}/api/follow/createFollow/${res.data[0]._id}`,
+              config
+            )
+            .then((response) => {
+              axios
+                .post(`${domain}/api/follow/getMyFollowing`, config)
+                .then((res) => {
+                  const folowers = res.data;
+                  console.log(folowers);
+                  setMyFollowing(folowers);
+                });
+              console.log(response);
+              // setBrands(response.data.brandOfDrones)
+            });
+        });
+    } else {
+      setLoginErrorPopup(true);
     }
-    
   };
 
   let unfollowId = (id) => {
@@ -528,11 +567,21 @@ setTimeout(()=>{
               className={`${All.Order_xs_2} ${All.Order_sm_2} ${All.pr_xs_30} ${All.pl_xs_30} ${All.profileImg}`}
             >
               <Box py={1}>
-                <div className="p_d_name_container" style = {{display: "flex", alignItems: "center"}}>
+                <div
+                  className="p_d_name_container"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
                   <div className="p_d_name">
                     {pilotData.name || <Skeleton />}
                   </div>
-                  { pilotData.pilotPro && <img src={ProImg} alt="Pro Img" height = "30px" style = {{marginRight: "20px"}}/>}
+                  {pilotData.pilotPro && (
+                    <img
+                      src={ProImg}
+                      alt="Pro Img"
+                      height="30px"
+                      style={{ marginRight: "20px" }}
+                    />
+                  )}
                 </div>
               </Box>
               <Box py={1}>
@@ -896,7 +945,6 @@ setTimeout(()=>{
                       </>
                     );
                   })}
-                  )
                 </>
               ) : (
                 <div
@@ -1373,14 +1421,24 @@ setTimeout(()=>{
                   <div className="login_input_error_msg" id="description_error">
                     Description is required
                   </div>
-                 
-                  <div className="h_p_start_process_form_btn_container" style={{display : "flex", justifyContent: "center"}}>
-                      <button onClick={submitProcess} className='h_p_start_process_form_btn' id='btn1'>Send Mail</button>
-                     
-                    </div>
-                    <div id="alertBox" style={{display: "none"}}>
-                      <Alert severity="success" style={{marginTop: "20px"}}>Mail Sent Successfully</Alert>
-                      </div>
+
+                  <div
+                    className="h_p_start_process_form_btn_container"
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <button
+                      onClick={submitProcess}
+                      className="h_p_start_process_form_btn"
+                      id="btn1"
+                    >
+                      Send Mail
+                    </button>
+                  </div>
+                  <div id="alertBox" style={{ display: "none" }}>
+                    <Alert severity="success" style={{ marginTop: "20px" }}>
+                      Mail Sent Successfully
+                    </Alert>
+                  </div>
                 </div>
               </Row>
             </DialogContent>

@@ -45,13 +45,7 @@ function Pilot_approved3d() {
   let [pilotId, setPilotId] = useState("")
 
   useEffect(() => {
-    axios.post(`${domain}/api/image/getApproved3d`, config).then((response) => {
-      console.log(response.data);
-      setValue(response.data);
-      if (response.data.length === 0) {
-        document.getElementById("toHide").style.display = "block";
-      }
-    });
+    
     axios.post(`${domain}/api/user/pilotDetails`, config)
       .then((res) => {
         console.log(res.data)

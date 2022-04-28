@@ -12,6 +12,7 @@ import Dialog from "@material-ui/core/Dialog";
 import Close from "../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
+import payment_success from "../images/payment_success.png";
 
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
@@ -37,6 +38,8 @@ function Checkout() {
   const param = useParams();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
+  const [payment_creation_failed, setPaymentCreationFailed] = useState(false);
+  const [payment_failed, setPaymentFailed] = useState(false);
   const [years, setYears] = useState([
     2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033,
   ]);
@@ -66,7 +69,7 @@ function Checkout() {
   };
 
   let [test, setTest] = useState([]);
-  let [payment_success, setPayment_success] = useState(false);
+  let [paymentSuccess, setPaymentSuccess] = useState(false);
 
   useEffect(() => {
     const config = {
@@ -84,7 +87,7 @@ function Checkout() {
         }));
         var country = {};
         for (var i = 0; i < Countries.length; i++) {
-          if (Countries[i].name === res.data.country) {
+          if (Countries[i].name === res.data.country || Countries[i].code === res.data.country) {
             country = { value: Countries[i].code, label: Countries[i].name };
             break;
           }
@@ -278,6 +281,7 @@ function Checkout() {
         })
         .catch(err => {
           setLoading(false)
+          setPaymentCreationFailed(true)
         })
     } else {
       document.getElementById(focusField).focus();
@@ -353,9 +357,9 @@ function Checkout() {
           status: result.error.payment_intent.last_payment_error.decline_code
         },config).then(res=>{
           console.log(res)
+          setPaymentFailed(true)
         })
         setCheckoutLoading(false)
-        alert("Payment failed")
       } else {
         console.log(result)
         const config = {
@@ -372,7 +376,7 @@ function Checkout() {
         },config).then(res=>{
           console.log(res)
         })
-        setPayment_success(true);
+        setPaymentSuccess(true);
         setCheckoutLoading(false)
         axios.post(`${domain}/api/pilotSubscription/createSubscription`, {
           plan: data.name,
@@ -735,12 +739,13 @@ function Checkout() {
           </Row>
         </Container>
         <Dialog
-          open={payment_success}
+          open={paymentSuccess}
           onClose={closePaymentPopup}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
           fullWidth={true}
+          style ={{textAlign: "center"}}
         >
           <DialogContent
             className={All.PopupBody}
@@ -754,19 +759,101 @@ function Checkout() {
                 style={{ cursor: "pointer" }}
               />
             </div>
-            <Row style={{ marginTop: "30px" }}>
-              <img src={payment_success} alt="" style={{ margin: "auto" }} />
-              <div className="u_p_v_popup_title">Thank you</div>
-              <div className="u_p_v_popup_content">
+            <div style={{ marginTop: "30px" }}>
+              <img src={payment_success} alt="" style={{ margin: "auto", height: "200px" }} />
+              <div className="u_p_v_popup_title" style = {{fontFamily: "muli-bold", fontSize: "24px"}}>Thank you</div>
+              <div className="u_p_v_popup_content" style = {{marginBottom: "20px"}}>
                 We have recieved your payment
               </div>
               <button
-                className="u_p_v_popup_close_btn"
+                className="c_cBtn3"
                 onClick={closePaymentPopup}
+              >
+                Go to Dashboard
+              </button>
+              <button
+                className="c_cBtn4"
+                onClick={()=>history.push("/UploadFile")}
+              >
+                Go to Upload Files
+              </button>
+            </div>
+          </DialogContent>
+        </Dialog>
+        <Dialog
+          open={payment_failed}
+          onClose={()=>history.push("/pilot_dashboard/account/payments")}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+          style ={{textAlign: "center"}}
+          PaperProps={{
+            style: {
+              maxWidth: "600px",
+              borderRadius: "10px",
+            },
+          }}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={()=>history.push("/pilot_dashboard/account/payments")}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <div style={{ marginTop: "30px" }}>
+              <div className="u_p_v_popup_title" style = {{fontFamily: "muli-bold", fontSize: "24px", marginBottom: "10px"}}>Payment failed. Try again later.</div>
+              <button
+                className="c_cBtn3"
+                onClick={()=>history.push("/pilot_dashboard/account/payments")}
               >
                 Close
               </button>
-            </Row>
+            </div>
+          </DialogContent>
+        </Dialog>
+        <Dialog
+          open={payment_creation_failed}
+          onClose={()=>history.push("/DownloadSubscription")}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+          style ={{textAlign: "center"}}
+          PaperProps={{
+            style: {
+              maxWidth: "600px",
+              borderRadius: "10px",
+            },
+          }}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={()=>history.push("/DownloadSubscription")}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <div style={{ marginTop: "30px" }}>
+              <div className="u_p_v_popup_title" style = {{fontFamily: "muli-bold", fontSize: "24px", marginBottom: "10px"}}>Something went wrong. Try again later.</div>
+              <button
+                className="c_cBtn3"
+                onClick={()=>history.push("/DownloadSubscription")}
+              >
+                Close
+              </button>
+            </div>
           </DialogContent>
         </Dialog>
       </div>

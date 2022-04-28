@@ -274,7 +274,7 @@ class DownloadSubscription extends Component {
                     <div className="subscription_inner_circle2"></div>
                   </div>
                   <div className="subscription_plan_title">
-                    {this.state.data[1].name}
+                    {this.state.subYearly ? "Gold Yearly" : "Gold Monthly"}
                   </div>
                   <div className="subscription_plan_description">
                     {this.state.subYearly
@@ -288,7 +288,7 @@ class DownloadSubscription extends Component {
                   </div>
 
                   <div className="subscription_plan_btn_container">
-                    {this.state.myPlan === "gold" ? (
+                    {(this.state.myPlan === "Gold Monthly" && !this.state.subYearly) || (this.state.myPlan === "Gold Yearly" && this.state.subYearly) ? (
                       <button className="subscription_plan_btn2">
                         Current Plan
                       </button>
@@ -428,7 +428,7 @@ class DownloadSubscription extends Component {
                     <div className="subscription_inner_circle1"></div>
                   </div>
                   <div className="subscription_plan_title">
-                    {this.state.data[2].name}
+                    {this.state.subYearly ? "Platinum Yearly" : "Platinum Monthly"}
                   </div>
                   <div className="subscription_plan_description">
                   {this.state.subYearly
@@ -442,7 +442,7 @@ class DownloadSubscription extends Component {
                   </div>
 
                   <div className="subscription_plan_btn_container">
-                    {this.state.myPlan === "platinum" ? (
+                    {(this.state.myPlan === "Platinum Monthly" && !this.state.subYearly) || (this.state.myPlan === "Platinum Yearly" && this.state.subYearly) ? (
                       <button className="subscription_plan_btn1">
                         Current Plan
                       </button>
@@ -575,125 +575,7 @@ class DownloadSubscription extends Component {
               </Col>
             </Row>
           ) : (
-            <Row gutterWidth={19}>
-              <Col>
-                <div
-                  className="subscription_plan_container"
-                  style={{ border: "1px solid #c6c6c6", borderRadius: "20px" }}
-                >
-                  <div className="subscription_circle1">
-                    <div className="subscription_inner_circle1"></div>
-                  </div>
-                  <div className="subscription_plan_title">Plan name</div>
-                  <div className="subscription_plan_description">
-                    This plan for free to every users
-                  </div>
-                  <div className="subscription_plan_price">$9.99</div>
-                  <div className="subscription_plan_price_description">
-                    This plan for free to every users
-                  </div>
-                  <div className="subscription_plan_btn_container">
-                    <button
-                      className="subscription_plan_btn1"
-                      onClick={() => this.subscribe(9.99, 1)}
-                    >
-                      Upgrade plan
-                    </button>
-                  </div>
-                  <div className="subscription_plan_features">
-                    <div className="subscription_plan_feature">
-                      <i class="fa fa-check" aria-hidden="true"></i> This plan
-                      for free to every users
-                    </div>
-                    <div className="subscription_plan_feature">
-                      <i class="fa fa-check" aria-hidden="true"></i> This plan
-                      for free to every users
-                    </div>
-                    <div className="subscription_plan_feature">
-                      <i class="fa fa-check" aria-hidden="true"></i> This plan
-                      for free to every users
-                    </div>
-                  </div>
-                </div>
-              </Col>
-              <Col>
-                <div className="subscription_plan_container subscription_plan_container_selected">
-                  <div className="subscription_circle2">
-                    <div className="subscription_inner_circle2"></div>
-                  </div>
-                  <div className="subscription_plan_title">Silver</div>
-                  <div className="subscription_plan_description">
-                    This plan for free to every users
-                  </div>
-                  <div className="subscription_plan_price">$99.99</div>
-                  <div className="subscription_plan_price_description">
-                    This plan for free to every users
-                  </div>
-                  <div className="subscription_plan_btn_container">
-                    <button
-                      className="subscription_plan_btn2"
-                      onClick={() => this.subscribe(99.99, 2)}
-                    >
-                      Upgrade plan
-                    </button>
-                  </div>
-                  <div className="subscription_plan_features">
-                    <div className="subscription_plan_feature">
-                      <i class="fa fa-check" aria-hidden="true"></i> This plan
-                      for free to every users
-                    </div>
-                    <div className="subscription_plan_feature">
-                      <i class="fa fa-check" aria-hidden="true"></i> This plan
-                      for free to every users
-                    </div>
-                    <div className="subscription_plan_feature">
-                      <i class="fa fa-check" aria-hidden="true"></i> This plan
-                      for free to every users
-                    </div>
-                  </div>
-                </div>
-              </Col>
-              <Col>
-                <div
-                  className="subscription_plan_container"
-                  style={{ border: "1px solid #c6c6c6", borderRadius: "20px" }}
-                >
-                  <div className="subscription_circle1">
-                    <div className="subscription_inner_circle1"></div>
-                  </div>
-                  <div className="subscription_plan_title">Silver</div>
-                  <div className="subscription_plan_description">
-                    This plan for free to every users
-                  </div>
-                  <div className="subscription_plan_price">$499.99</div>
-                  <div className="subscription_plan_price_description">
-                    This plan for free to every users
-                  </div>
-                  <div className="subscription_plan_btn_container">
-                    <button
-                      className="subscription_plan_btn1"
-                      onClick={() => this.subscribe(499.99, 3)}
-                    >
-                      Upgrade plan
-                    </button>
-                  </div>
-                  <div className="subscription_plan_features">
-                    <div className="subscription_plan_feature">
-                      <i class="fa fa-check" aria-hidden="true"></i> This plan
-                      for free to every users
-                    </div>
-                    <div className="subscription_plan_feature">
-                      <i class="fa fa-check" aria-hidden="true"></i> This plan
-                      for free to every users
-                    </div>
-                    <div className="subscription_plan_feature">
-                      <i class="fa fa-check" aria-hidden="true"></i> This plan
-                      for free to every users
-                    </div>
-                  </div>
-                </div>
-              </Col>
-            </Row>
+            ""
           )}
         </Container>
         <Dialog

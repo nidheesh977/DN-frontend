@@ -48,7 +48,7 @@ function RearrangeFiles(props) {
           console.log(res.data)
           if (res.data.rearranged3d.length === 0) {
             axios
-            .post(`${domain}/api/image/getApproveded`, config)
+            .post(`${domain}/api/image/getApproved3d`, config)
             .then((response) => {
               console.log(response.data);
               setItems(response.data);
@@ -115,7 +115,6 @@ function RearrangeFiles(props) {
 
   return (
     <div>
-      <div style = {{textAlign: "right"}} onClick = {submit}>{props.saveButton}</div>
       <SortableGallery
         items={items}
         onSortEnd={onSortEnd}
