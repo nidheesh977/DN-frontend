@@ -351,10 +351,17 @@ function Checkout() {
         };
         axios.post(`${domain}/api/payment/createPayment`, {
           userRole: "pilot",
-          plan:"Gold Monthly",
+          plan:data.name,
           transactionId: result.error.payment_intent.id,
-          price: result.error.payment_intent.amount/100,
-          status: result.error.payment_intent.last_payment_error.decline_code
+          price: result.error.payment_intent.amount,
+          status: result.error.payment_intent.last_payment_error.decline_code,
+          name: formData.name,
+          line1:formData.line1,
+          line2: formData.line2,
+          city: formData.city,
+          country: formData.country,
+          pinCode: formData.pin_code,
+          state: formData.state
         },config).then(res=>{
           console.log(res)
           setPaymentFailed(true)
@@ -369,10 +376,17 @@ function Checkout() {
         };
         axios.post(`${domain}/api/payment/createPayment`, {
           userRole: "pilot",
-          plan:"Gold Monthly",
+          plan:data.name,
           transactionId: result.paymentIntent.id,
-          price: result.paymentIntent.amount/100,
-          status: result.paymentIntent.status
+          price: result.paymentIntent.amount,
+          status: result.paymentIntent.status,
+          name: formData.name,
+          line1:formData.line1,
+          line2: formData.line2,
+          city: formData.city,
+          country: formData.country,
+          pinCode: formData.pin_code,
+          state: formData.state
         },config).then(res=>{
           console.log(res)
         })
