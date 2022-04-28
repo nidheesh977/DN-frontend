@@ -124,6 +124,7 @@ function Checkout() {
   const options = {
     clientSecret: secret,
   };
+  const [subId, setSubId] = useState("")
 
   const submitStep1 = () => {
     const validateEmail = (email) => {
@@ -271,6 +272,7 @@ function Checkout() {
           setLoading(false)
           console.log(res.data);
           setSecret(res.data.clientSecret);
+          setSubId(res.data.subscriptionId)
           setStep(2);
           window.scrollTo(0, 150);
         })
@@ -372,6 +374,12 @@ function Checkout() {
         })
         setPayment_success(true);
         setCheckoutLoading(false)
+        axios.post(`${domain}/api/pilotSubscription/createSubscription`, {
+          plan: data.name,
+          paymentId: subId,
+        }, config).then(res=>{
+          console.log(res)
+        })
       }
     };
 
