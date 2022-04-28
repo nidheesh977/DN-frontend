@@ -160,6 +160,8 @@ export default function PilotDetails(props) {
       if (rearranged3d.length !== 0){
         setFiles(rearranged3d)
       }
+    }else{
+      setFiles(allFiles)
     }
   };
 
@@ -709,13 +711,13 @@ export default function PilotDetails(props) {
                   className="p_d_tab_filter"
                   onChange={selectCategoryDropdown}
                 >
-                  <option value={1}>All</option>
-                  <option value={2}>Images</option>
-                  <option value={3}>Video</option>
-                  <option value={4}>3D Models</option>
-                  <option value={5}>About</option>
-                  <option value={6}>Followers</option>
-                  <option value={7}>Following</option>
+                  <option value={1} selected = {category === 1}>All</option>
+                  <option value={2} selected = {category === 2}>Images</option>
+                  <option value={3} selected = {category === 3}>Video</option>
+                  <option value={4} selected = {category === 4}>3D Models</option>
+                  <option value={5} selected = {category === 5}>About</option>
+                  <option value={6} selected = {category === 6}>Followers</option>
+                  <option value={7} selected = {category === 7}>Following</option>
                 </select>
               </Visible>
             </div>
