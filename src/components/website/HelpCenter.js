@@ -1,29 +1,23 @@
-import React, { useState, useEffect } from 'react'
-import "./css/HelpCenter.css"
+import React, {useEffect, useState} from 'react'
+import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
+import All from "./All.module.css";
 import { styled } from '@mui/material/styles';
+import SearchBar from "material-ui-search-bar";
+
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import { Row, Col } from "react-grid-system";
 import Alert from '@mui/material/Alert';
-import { useHistory } from "react-router-dom";
-import All from "../../website/All.module.css";
+import axios from 'axios';
 import Dialog from "@material-ui/core/Dialog";
-import Close from "../../images/close.svg";
+import { useHistory } from 'react-router-dom';
+import Close from "../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
-import axios from "axios";
-
 const domain = process.env.REACT_APP_MY_API;
 
-const DialogContent = withStyles((theme) => ({
-    root: {
-      padding: theme.spacing(2),
-    },
-  }))(MuiDialogContent);
-  
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
   ))(({ theme }) => ({
@@ -36,6 +30,11 @@ const Accordion = styled((props) => (
     },
   }));
   
+const DialogContent = withStyles((theme) => ({
+    root: {
+      padding: theme.spacing(2),
+    },
+  }))(MuiDialogContent);
   const AccordionSummary = styled((props) => (
     <MuiAccordionSummary
       expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
@@ -61,19 +60,18 @@ const Accordion = styled((props) => (
   }));
   
 function HelpCenter() {
-  const history = useHistory()
-    const [myData, setMyData] = useState({
-        name: "",
-        emailId: "",
-        query:"Payment Not Working",
-        description: ''
-    })
-    let config = {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      };
+    const history = useHistory()
+    const [data, setData] = useState([])
+    useEffect(()=>{
+        axios.post(`${domain}/api/faq/getFaqs`).then(res=>{
+            console.log(res)
+            setData(res.data)
+            if(res.data.length !== 0){
 
+                setExpanded(res.data[0]._id)
+            }
+        })
+    },[])
     useEffect(() => {
         axios.get(`${domain}/api/user/getUserData`, config).then((res) => {
           console.log(res);
@@ -86,19 +84,41 @@ function HelpCenter() {
      
         });
       }, []);
-    const changeHandler1 = (e) =>{
+    const [expanded, setExpanded] = useState('panel1');
+    const [myData, setMyData] = useState({
+        name: "",
+        emailId: "",
+        query:"Payment Not Working",
+        description: ''
+    })
+    const [keywords, setKeywords] = useState("")
+    let config = {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      };
+      const [loginErrorPopup, setLoginErrorPopup] = useState(false)
+      const loginErrorPopupClose = () =>{
+          setLoginErrorPopup(false)
+      }
+      const changeHandler1 = (e) =>{
         setMyData({
         ...myData,
         [e.target.id]: e.target.value,
       });
       console.log(myData);
     }
-    const [addQuestion, setaddQuestion] = useState(false)
-    const [expanded, setExpanded] = useState('panel1');
-
+    const addPopup = () =>{
+        if(!localStorage.getItem("access_token")){
+            setLoginErrorPopup(true)
+        }else{
+            setaddQuestion(true)
+        }
+    }
     const handleChange = (panel) => (event, newExpanded) => {
       setExpanded(newExpanded ? panel : false);
     };
+    const [addQuestion, setaddQuestion] = useState(false)
     const closeAddFolder = () =>{
         setaddQuestion(false)
     }
@@ -130,63 +150,62 @@ function HelpCenter() {
               }, 2000)
         })
     }
+    const searchFaq = () =>{
+     
+            axios.post(`${domain}/api/faq/searchFaqs`,{keyword: keywords}).then(res=>{
+                console.log(res)
+                setData(res.data)
+            })
+        
+    }
   return (
     <div>
-        <div id="alert" style={{display: 'none'}}>
-              <Alert severity="info" style={{marginBottom: "10px"}}>Your Query has been submitted Successfully!</Alert>
+          <div className="h_p_container" style={{ overflowX: "hidden", paddingBottom:"30px" }}>
+          <Container className={All.Container}>
+         
+              <div className='hc_searchtitle'>Seach your query</div>
+              <SearchBar
+    value={keywords}
+    onChange={(newValue) => setKeywords(newValue)}
+    style={{marginBottom:"20px"}}
+    onRequestSearch={searchFaq}
+  />
+              <div className='h_p_title'>Search from FAQs or write a query of your own</div>
+             
+              <div style={{margin: "20px 0px"}}>
+              <div className='h_p_create_job_title' style={{display: "inline"}}>Frequently Asked Questions</div>
+              <div className='hc_askQuestion' onClick={addPopup}>Ask Query</div>
               </div>
-        <div>
-        <div className='hc_askQuestion'onClick={()=>setaddQuestion(true)}>Ask Question</div>
-
-        <div className='hc_titleHead '>Frequently Asked Questions</div>
-        </div>
-
-        <div  className="hc_acc_div">
-      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-          <Typography>Payment Pending, What to do?</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
-            sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-            sit amet blandit leo lobortis eget.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-          <Typography>Amount debited and no active Status</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
-            sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-            sit amet blandit leo lobortis eget.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-        <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
-          <Typography>Does recurring mean we should pay our whole life??</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
-            sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-            sit amet blandit leo lobortis eget.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <center>
-
-      <div className='hc_showMore' onClick={()=>history.push("/help-center")}>Show more</div>
-      </center>
-    </div>
-    <Dialog
+              <div id="alert" style={{display: 'none'}}>
+              <Alert severity="info" style={{marginBottom: "10px"}}>Your Query has been submitted Successfully! Track in your dashboard to get answers</Alert>
+              </div>
+              {
+                data.length === 0?  <div>No Searches Matched Try Asking a question</div> : 
+                <div  className="hc_acc_div">
+                {
+                    data.map((item, i)=>{
+                        return(
+<Accordion expanded={expanded === item._id} onChange={handleChange(item._id)}>
+      <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+        <Typography>{item.query}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Typography>
+      {item.answer}
+        </Typography>
+      </AccordionDetails>
+    </Accordion>
+                        )
+                    })
+                }
+    
+   
+  </div>
+              }
+             
+          </Container>
+          </div>
+          <Dialog
         open={addQuestion}
         onClose={closeAddFolder}
         aria-labelledby="alert-dialog-title"
@@ -277,6 +296,51 @@ function HelpCenter() {
           </div>
         </DialogContent>
       </Dialog>
+      <Dialog
+              open={loginErrorPopup}
+              onClose={loginErrorPopupClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+              PaperProps={{ style: { borderRadius: 10, width: "820px" } }}
+            >
+              <DialogContent
+                className={All.PopupBody}
+                style={{ marginBottom: "50px" }}
+              >
+                <div
+                  style={{ position: "absolute", top: "20px", right: "20px" }}
+                >
+                  <img
+                    src={Close}
+                    alt=""
+                    onClick={loginErrorPopupClose}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div
+                    className="a_j_popup_title"
+                    style={{ padding: "0px 60px" }}
+                  >
+                    You aren't logged into DroneZone. Please login to continue?
+                  </div>
+                  <div
+                    className="u_f_popup_btn_container"
+                    style={{ marginTop: "8px" }}
+                  >
+                    <div
+                      className="j_l_applyJobLoginBtn"
+                      style={{ width: "fit-content" }}
+                      onClick={() => history.push("/login")}
+                    >
+                      Login / Sign Up
+                    </div>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
     </div>
   )
 }

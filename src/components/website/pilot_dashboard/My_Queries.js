@@ -56,7 +56,10 @@ function My_Queries() {
   useEffect(()=>{
     axios.post(`${domain}/api/query/getQueries`, config).then(res=>{
 setData(res.data)
-setExpanded(res.data[0]._id)    })
+if(res.data.length !== 0){
+  setExpanded(res.data[0]._id)
+}
+    })
   },[])
     const [expanded, setExpanded] = useState('panel1');
 
@@ -70,33 +73,38 @@ setExpanded(res.data[0]._id)    })
 
         <div className='hc_titleHead '>Your Questions</div>
         </div>
+{
+  data.length === 0 ? <div id="tohide" >
+  <div>You haven't asked any questions yet</div>
+</div> : 
+ <div  className="hc_acc_div">
+ {
+   data.map((item, i)=>{
+     return(
+       <>
+       <Accordion expanded={expanded === item._id} onChange={handleChange(item._id)}>
+<AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+ <Typography>{item.query} <span className='mq_badge'>{item.status}</span></Typography>
+</AccordionSummary>
+<AccordionDetails>
+ <Typography>
+   <div className='mq_desc'>{item.description}</div>
+   <div className='mq_ans'>
+   {
+     item.answer? item.answer : "No answer yet"
+   }
+   </div>
+ </Typography>
+</AccordionDetails>
+</Accordion>
+       </>
+     )
+   })
+ }
 
-        <div  className="hc_acc_div">
-          {
-            data.map((item, i)=>{
-              return(
-                <>
-                <Accordion expanded={expanded === item._id} onChange={handleChange(item._id)}>
-        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-          <Typography>{item.query} <span className='mq_badge'>{item.status}</span></Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            <div className='mq_desc'>{item.description}</div>
-            <div className='mq_ans'>
-            {
-              item.answer? item.answer : "No answer yet"
-            }
-            </div>
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-                </>
-              )
-            })
-          }
-     
-    </div>
+</div>
+}
+       
     </div>
   )
 }

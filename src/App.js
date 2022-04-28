@@ -53,6 +53,7 @@ import "./App.css"
 import CompanyRoute from "./companyRoute";
 import TextEditor from "./components/website/textEditor";
 import Checkout from "./components/website/Checkout";
+import HelpCenter from "./components/website/HelpCenter";
 
 function App(){
 
@@ -163,6 +164,7 @@ function App(){
             <Route component={Admin_dashboard} path="/Admin_dashboard" />
             <Route component={CreatePilot} path="/createPilot" />
             <Route component={Categories} path="/choose-categories" />
+            <Route component={HelpCenter} path="/help-center" />
             <Route component={EmailVerification} path="/verify-email" />
             <Route component={VerifiedEmail} path="/users/:id/verify/:token" />
             <Route component={RecoverPassword} path="/users/:id/forgetPassword/:token" />
