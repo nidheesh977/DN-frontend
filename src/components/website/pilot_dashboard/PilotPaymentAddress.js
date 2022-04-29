@@ -258,7 +258,6 @@ function PilotPaymentAddress() {
         .then((res) => {
           console.log(res.data);
           setAddressSaved(true);
-          window.scrollTo(0, 0);
         })
         .catch((err) => {
           console.log(err);
@@ -299,82 +298,7 @@ function PilotPaymentAddress() {
     <div>
       <div style={{ overflowX: "hidden" }}>
         <Container className={All.Container}>
-          <Row className="sub_det_container">
-            <Col xxl={12} className="sub_det_col1">
-              <div className="sub_det_plan">Gold Monthly</div>
-            </Col>
-            <Col className="sub_det_col2">
-              {/* <div style={{ textAlign: "center" }}>
-                <img
-                  src={profilePic}
-                  alt="profile pic"
-                  style={{ borderRadius: "200px" }}
-                />
-              </div> */}
-              <div>
-                <div className="sub_det_title">Price :</div>
-                <div className="sub_det_content" id="sub_det_price">
-                  $10.00
-                </div>
-              </div>
-              <div>
-                <div className="sub_det_title">Status :</div>
-                <div className="sub_det_content" id="sub_det_status">
-                  Active
-                </div>
-              </div>
-              <div>
-                <div className="sub_det_title">Start date :</div>
-                <div className="sub_det_content" id="sub_det_start_date">
-                  28/4/2022
-                </div>
-              </div>
-              <div>
-                <div className="sub_det_title">End date :</div>
-                <div className="sub_det_content" id="sub_det_end_date">
-                  28/5/2022
-                </div>
-              </div>
-              <div>
-                <div className="sub_det_title">Image Limit :</div>
-                <div className="sub_det_content" id="sub_det_start_date">
-                  15 Images
-                </div>
-              </div>
-            </Col>
-            <Col className="sub_det_col3">
-              <div>
-                <div className="sub_det_title">Uploaded images :</div>
-                <div className="sub_det_content" id="sub_det_start_date">
-                  15 Images
-                </div>
-              </div>
-              <div>
-                <div className="sub_det_title">Video Limit :</div>
-                <div className="sub_det_content" id="sub_det_start_date">
-                  3 Videos
-                </div>
-              </div>
-              <div>
-                <div className="sub_det_title">Uploaded videos :</div>
-                <div className="sub_det_content" id="sub_det_start_date">
-                  3 Videos
-                </div>
-              </div>
-              <div>
-                <div className="sub_det_title">3dimages Limit :</div>
-                <div className="sub_det_content" id="sub_det_start_date">
-                  3 3dimages
-                </div>
-              </div>
-              <div>
-                <div className="sub_det_title">Uploaded 3dimages :</div>
-                <div className="sub_det_content" id="sub_det_start_date">
-                  3 3dimages
-                </div>
-              </div>
-            </Col>
-          </Row>
+          
           <Row gutterWidth={40}>
             <Col>
               <div className="c_title" style={{ marginBottom: "20px" }}>

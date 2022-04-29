@@ -84,7 +84,7 @@ class UploadFiles extends Component {
             });
           }else{
             this.setState({
-              imageLimit: 5 - res.data.images,
+              imageLimit: 6 - res.data.images,
               videoLimit: 0 - res.data.videos,
               img3dLimit: 0 - res.data.images3d
             });

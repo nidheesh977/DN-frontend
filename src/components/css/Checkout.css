@@ -126,7 +126,8 @@ float: right;}
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     padding: 20px;
     margin-bottom: 30px;
-    background: #e8e8e8;
+    background: #E5E4E291;
+    border-radius: 10px;
 }
 
 .sub_det_col1{
