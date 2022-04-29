@@ -84,7 +84,7 @@ if(res.data.length !== 0){
        <>
        <Accordion expanded={expanded === item._id} onChange={handleChange(item._id)}>
 <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
- <Typography>{item.query} <span className='mq_badge'>{item.status}</span></Typography>
+ <Typography>{item.query} <span className='mq_badge' style={{backgroundColor: item.status === "pending" ? "#00e7fc" : "#4ffea3"}}>{item.status}</span></Typography>
 </AccordionSummary>
 <AccordionDetails>
  <Typography>
