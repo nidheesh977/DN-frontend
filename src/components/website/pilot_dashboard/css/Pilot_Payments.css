@@ -1,0 +1,31 @@
+.u_i_file_container{
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.u_i_trash{
+    position: absolute;
+    top: 0px;
+    left: calc(100% - 34px);
+    color: red;
+    background: rgba(0, 0, 0, 0.692);
+    padding: 5px 10px;
+    border-radius: 5px 10px 5px 5px;
+    cursor: pointer;
+}
+
+.u_i_trash:hover{
+    background: rgba(0, 0, 0);
+}
+
+.u_f_popup_title2{
+    font-family: muli-bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.u_f_popup_title3{
+    font-family: muli-regular;
+    font-size: 16px;
+    margin-bottom: 10px;
+}

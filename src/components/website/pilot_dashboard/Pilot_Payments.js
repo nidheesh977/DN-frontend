@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Row, Col } from "react-grid-system";
+import { Container, Row, Col } from "react-grid-system";
 import "./css/HireProposal.css";
 import { jsPDF } from "jspdf";
 import Dialog from "@material-ui/core/Dialog";
@@ -8,6 +8,7 @@ import Close from "../../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
 import All from "../All.module.css";
+import { useHistory } from "react-router-dom";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -18,6 +19,7 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent);
 
 function Pilot_Payments() {
+  const history = useHistory();
   let config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -26,7 +28,9 @@ function Pilot_Payments() {
   let [data, setData] = useState([]);
   let [cancelSubscriptionPopup, setCancelSubscriptionPopup] = useState(false);
 
-  let [subscriptionDetails, setSubscriptionDetails] = useState({});
+  let [subscriptionDetails, setSubscriptionDetails] =
+    useState("No Subscription");
+  let [subscriptionCancelled, setSubscriptionCancelled] = useState(false);
 
   let [uploadedImages, setUploadedImages] = useState([]);
   let [uploaded3d, setUploaded3d] = useState([]);
@@ -153,107 +157,182 @@ function Pilot_Payments() {
       },
     });
   };
+
+  const deleteImage = (id, path) => {
+    axios.post(`${domain}/api/image/deleteImage/${id}`, config).then((res) => {
+      axios.post(`${domain}/api/image/${path}`, config).then((response) => {
+        console.log(response.data);
+        if (path === "getApprovedImages") {
+          setUploadedImages(response.data);
+        } else if (path === "getPendingImages") {
+          setPendingImages(response.data);
+        } else if (path === "getApprovedVideos") {
+          setUploadedVideos(response.data);
+        } else if (path === "getPendingVideos") {
+          setPendingVideos(response.data);
+        } else if (path === "getApproved3d") {
+          setUploaded3d(response.data);
+        } else if (path === "getPending3d") {
+          setPending3d(response.data);
+        }
+      });
+    });
+  };
+
+  const confirmCancelSubscription = () => {
+    console.log("Subscription cancelled");
+    setCancelSubscriptionPopup(false);
+    axios.post(`${domain}/api/pilotSubscription/endSubscription`, config)
+    .then(res => {
+      setSubscriptionCancelled(true);
+      axios.get(`${domain}/api/payment/getPayments`, config).then((res) => {
+        console.log(res);
+        setData(res.data);
+      });
+      axios
+        .get(`${domain}/api/pilotSubscription/getMySubscriptionData`, config)
+        .then((res) => {
+          setSubscriptionDetails(res.data);
+          console.log(res.data);
+        });
+    })
+    .catch(err => {
+      alert("Something went wrong.")
+      console.log(err)
+    })
+
+  };
+
   return (
     <div>
-      <Row className="sub_det_container">
-        <Col xxl={12} className="sub_det_col1">
-          <div className="sub_det_plan">
-            {subscriptionDetails.sub ? subscriptionDetails.sub.plan : "Plan"}
-          </div>
-        </Col>
-        <Col className="sub_det_col2">
-          {/* <div style={{ textAlign: "center" }}>
+      {subscriptionDetails !== "No Subscription" ? (
+        <Row className="sub_det_container">
+          <Col xxl={12} className="sub_det_col1">
+            <div className="sub_det_plan">
+              {subscriptionDetails.sub ? subscriptionDetails.sub.plan : "Plan"}
+            </div>
+          </Col>
+          <Col xxl={6} xl={6} lg={6} md={6} className="sub_det_col2">
+            {/* <div style={{ textAlign: "center" }}>
                 <img
                   src={profilePic}
                   alt="profile pic"
                   style={{ borderRadius: "200px" }}
                 />
               </div> */}
-          <div>
-            <div className="sub_det_title">Price :</div>
-            <div className="sub_det_content" id="sub_det_price">
-              {subscriptionDetails.currency === "inr" ? "INR " : "US $"}
-              {subscriptionDetails.price / 100}
+            <div>
+              <div className="sub_det_title">Price :</div>
+              <div className="sub_det_content" id="sub_det_price">
+                {subscriptionDetails.currency === "inr" ? "INR " : "US $"}
+                {subscriptionDetails.price / 100}
+              </div>
             </div>
-          </div>
-          <div>
-            <div className="sub_det_title">Status :</div>
-            <div
-              className="sub_det_content"
-              id="sub_det_status"
-              style={{ textTransform: "capitalize" }}
-            >
-              {subscriptionDetails.status}
+            <div>
+              <div className="sub_det_title">Status :</div>
+              <div
+                className="sub_det_content"
+                id="sub_det_status"
+                style={{ textTransform: "capitalize" }}
+              >
+                {subscriptionDetails.status}
+              </div>
             </div>
-          </div>
-          <div>
-            <div className="sub_det_title">Current start date :</div>
-            <div className="sub_det_content" id="sub_det_start_date">
-              {subscriptionDetails.startDate
-                ? new Date(subscriptionDetails.startDate * 1e3)
-                    .toISOString()
-                    .slice(0, 10)
-                : ""}
+            <div>
+              <div className="sub_det_title">Current start date :</div>
+              <div className="sub_det_content" id="sub_det_start_date">
+                {subscriptionDetails.startDate
+                  ? new Date(subscriptionDetails.startDate * 1e3)
+                      .toISOString()
+                      .slice(0, 10)
+                  : ""}
+              </div>
             </div>
-          </div>
-          <div>
-            <div className="sub_det_title">Current end date :</div>
-            <div className="sub_det_content" id="sub_det_end_date">
-              {subscriptionDetails.endDate
-                ? new Date(subscriptionDetails.endDate * 1e3)
-                    .toISOString()
-                    .slice(0, 10)
-                : ""}
+            <div>
+              <div className="sub_det_title">Current end date :</div>
+              <div className="sub_det_content" id="sub_det_end_date">
+                {subscriptionDetails.endDate
+                  ? new Date(subscriptionDetails.endDate * 1e3)
+                      .toISOString()
+                      .slice(0, 10)
+                  : ""}
+              </div>
             </div>
-          </div>
-          <div>
-            <div className="sub_det_title">Image Limit :</div>
-            <div className="sub_det_content" id="sub_det_start_date">
-              {subscriptionDetails.sub ? subscriptionDetails.sub.images : ""}{" "}
-              Images
+            <div>
+              <div className="sub_det_title">Image Limit :</div>
+              <div className="sub_det_content" id="sub_det_start_date">
+                {subscriptionDetails.sub ? subscriptionDetails.sub.images : ""}{" "}
+                Images
+              </div>
             </div>
-          </div>
-        </Col>
-        <Col className="sub_det_col3">
-          <div>
-            <div className="sub_det_title">Uploaded images :</div>
-            <div className="sub_det_content" id="sub_det_start_date">
-              {subscriptionDetails.images} Images
+          </Col>
+          <Col className="sub_det_col3">
+            <div>
+              <div className="sub_det_title">Uploaded images :</div>
+              <div className="sub_det_content" id="sub_det_start_date">
+                {subscriptionDetails.images} Images
+              </div>
             </div>
-          </div>
-          <div>
-            <div className="sub_det_title">Video Limit :</div>
-            <div className="sub_det_content" id="sub_det_start_date">
-              {subscriptionDetails.sub ? subscriptionDetails.sub.videos : ""}{" "}
-              Videos
+            <div>
+              <div className="sub_det_title">Video Limit :</div>
+              <div className="sub_det_content" id="sub_det_start_date">
+                {subscriptionDetails.sub ? subscriptionDetails.sub.videos : ""}{" "}
+                Videos
+              </div>
             </div>
-          </div>
-          <div>
-            <div className="sub_det_title">Uploaded videos :</div>
-            <div className="sub_det_content" id="sub_det_start_date">
-              {subscriptionDetails.videos} Videos
+            <div>
+              <div className="sub_det_title">Uploaded videos :</div>
+              <div className="sub_det_content" id="sub_det_start_date">
+                {subscriptionDetails.videos} Videos
+              </div>
             </div>
-          </div>
-          <div>
-            <div className="sub_det_title">3dimages Limit :</div>
-            <div className="sub_det_content" id="sub_det_start_date">
-              {subscriptionDetails.sub ? subscriptionDetails.sub.images3d : ""}{" "}
-              3dimages
+            <div>
+              <div className="sub_det_title">3dimages Limit :</div>
+              <div className="sub_det_content" id="sub_det_start_date">
+                {subscriptionDetails.sub
+                  ? subscriptionDetails.sub.images3d
+                  : ""}{" "}
+                3dimages
+              </div>
             </div>
-          </div>
-          <div>
-            <div className="sub_det_title">Uploaded 3dimages :</div>
-            <div className="sub_det_content" id="sub_det_start_date">
-              {subscriptionDetails.images3d} 3dimages
+            <div>
+              <div className="sub_det_title">Uploaded 3dimages :</div>
+              <div className="sub_det_content" id="sub_det_start_date">
+                {subscriptionDetails.images3d} 3dimages
+              </div>
             </div>
+          </Col>
+          <div
+            style={{ textAlign: "center", width: "100%", marginTop: "30px" }}
+          >
+            {subscriptionDetails.sub && (
+              <>
+                {subscriptionDetails.sub.plan.includes("Gold") && (
+                  <button
+                    className="c_cBtn3"
+                    onClick={() => history.push("/DownloadSubscription")}
+                  >
+                    Upgrade to Platinum
+                  </button>
+                )}
+              </>
+            )}
+            <button className="c_cBtn4" onClick={cancelSubscription}>
+              Cancel Subscription
+            </button>
           </div>
-        </Col>
-        <Col xxl={12} style={{ textAlign: "right", marginTop: "20px" }}>
-          <button className="c_cBtn3" onClick={cancelSubscription}>
-            Cancel Subscription
+        </Row>
+      ) : (
+        <div id="tohide" style={{ textAlign: "center" }}>
+          <div>No Subscriptions yet please Upgrade</div>
+          <button
+            className="c_cBtn3"
+            onClick={() => history.push("/DownloadSubscription")}
+          >
+            Upgrade
           </button>
-        </Col>
-      </Row>
+        </div>
+      )}
+
       <div className="box0">
         <Row gutterWidth={5}>
           <Col>
@@ -461,54 +540,224 @@ function Pilot_Payments() {
             />
           </div>
           <Row style={{ marginTop: "30px" }}>
-            {uploadedImages.length + pendingImages >
-              5 ||
-            uploaded3d.length + pending3d > 0 ||
-            uploadedVideos.length + pendingVideos >
-              0 ? (
+            {uploadedImages.length + pendingImages.length > 6 ||
+            uploaded3d.length + pending3d.length > 0 ||
+            uploadedVideos.length + pendingVideos.length > 0 ? (
               <>
-                <div className="u_f_popup_title" style={{ width: "100%" }}>
+                <div
+                  className="u_f_popup_title"
+                  style={{ width: "100%", marginBottom: "0px" }}
+                >
                   Delete some files to cancel subscription
                 </div>
-                <div className="u_f_popup_title2" style={{ width: "100%" }}>
-                  Images (Maximum 6) :
+                <div
+                  className="u_f_popup_title"
+                  style={{ width: "100%", fontSize: "20px" }}
+                >
+                  All draft files will be deleted
                 </div>
-                <div className="u_f_popup_title3" style={{ width: "100%" }}>
-                  Uploaded Images :
-                </div>
-                <Row>
-                  {uploadedImages.map((image, index) => {
-                    return(
-                      <Col>
-                        <div>
-                          <img src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`} alt="uploaded image" width = {"200px"} style = {{borderRadius: "10px"}}/>
-                        </div>
-                      </Col>
-                    )
-                  })}
-                </Row>
-                <div className="u_f_popup_title3" style={{ width: "100%" }}>
-                  Pending Images :
-                </div>
-                <Row>
-                  {pendingImages.map((image, index) => {
-                    return(
-                      <Col>
-                        <div>
-                          <img src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`} alt="uploaded image" width = {"200px"} style = {{borderRadius: "10px"}}/>
-                        </div>
-                      </Col>
-                    )
-                  })}
-                </Row>
-                <div className="u_f_popup_btn_container">
-                  <button
-                    className="u_f_popup_btn2"
-                    onClick={() => setCancelSubscriptionPopup(false)}
-                  >
-                    Confirm
-                  </button>
-                </div>
+                {uploadedImages.length + pendingImages.length > 6 ? (
+                  <>
+                    <div className="u_f_popup_title2" style={{ width: "100%" }}>
+                      Images (Maximum 6) :
+                    </div>
+                    <div className="u_f_popup_title3" style={{ width: "100%" }}>
+                      {uploadedImages.length > 0 ? "Uploaded Images :" : ""}
+                    </div>
+                    <Row style={{ width: "100%" }}>
+                      {uploadedImages.map((image, index) => {
+                        return (
+                          <>
+                            <Col md={3} sm={4} xs={6}>
+                              <div className="u_i_file_container">
+                                <img
+                                  src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`}
+                                  alt="uploaded image"
+                                  width={"100%"}
+                                  style={{ borderRadius: "10px" }}
+                                />
+                                <div
+                                  className="u_i_trash"
+                                  onClick={() =>
+                                    deleteImage(image._id, "getApprovedImages")
+                                  }
+                                >
+                                  <i class="fas fa-trash-alt"></i>
+                                </div>
+                              </div>
+                            </Col>
+                          </>
+                        );
+                      })}
+                    </Row>
+                    <div className="u_f_popup_title3" style={{ width: "100%" }}>
+                      {pendingImages.length ? "Pending Images :" : ""}
+                    </div>
+                    <Row style={{ width: "100%" }}>
+                      {pendingImages.map((image, index) => {
+                        return (
+                          <>
+                            <Col md={3} sm={4} xs={6}>
+                              <div className="u_i_file_container">
+                                <img
+                                  src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`}
+                                  alt="pending image"
+                                  width={"100%"}
+                                  style={{ borderRadius: "10px" }}
+                                />
+                                <div
+                                  className="u_i_trash"
+                                  onClick={() =>
+                                    deleteImage(image._id, "getPendingImages")
+                                  }
+                                >
+                                  <i class="fas fa-trash-alt"></i>
+                                </div>
+                              </div>
+                            </Col>
+                          </>
+                        );
+                      })}
+                    </Row>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                {uploadedVideos.length + pendingVideos.length !== 0 ? (
+                  <>
+                    <div className="u_f_popup_title2" style={{ width: "100%" }}>
+                      Videos (Remove all) :
+                    </div>
+                    <div className="u_f_popup_title3" style={{ width: "100%" }}>
+                      {uploadedVideos.length > 0 ? "Uploaded Videos :" : ""}
+                    </div>
+                    <Row style={{ width: "100%" }}>
+                      {uploadedVideos.map((image, index) => {
+                        return (
+                          <>
+                            <Col md={3} sm={4} xs={6}>
+                              <div className="u_i_file_container">
+                                <video
+                                  src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`}
+                                  width={"100%"}
+                                  style={{ borderRadius: "10px" }}
+                                ></video>
+                                <div
+                                  className="u_i_trash"
+                                  onClick={() =>
+                                    deleteImage(image._id, "getApprovedVideos")
+                                  }
+                                >
+                                  <i class="fas fa-trash-alt"></i>
+                                </div>
+                              </div>
+                            </Col>
+                          </>
+                        );
+                      })}
+                    </Row>
+                    <div className="u_f_popup_title3" style={{ width: "100%" }}>
+                      {pendingVideos.length > 0 ? "Pending Videos :" : ""}
+                    </div>
+                    <Row style={{ width: "100%" }}>
+                      {pendingVideos.map((image, index) => {
+                        return (
+                          <>
+                            <Col md={3} sm={4} xs={6}>
+                              <div className="u_i_file_container">
+                                <video
+                                  src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`}
+                                  alt="pending image"
+                                  width={"100%"}
+                                  style={{ borderRadius: "10px" }}
+                                ></video>
+                                <div
+                                  className="u_i_trash"
+                                  onClick={() =>
+                                    deleteImage(image._id, "getPendingVideos")
+                                  }
+                                >
+                                  <i class="fas fa-trash-alt"></i>
+                                </div>
+                              </div>
+                            </Col>
+                          </>
+                        );
+                      })}
+                    </Row>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                {uploaded3d.length + pending3d.length !== 0 ? (
+                  <>
+                    <div className="u_f_popup_title2" style={{ width: "100%" }}>
+                      3d Images (Remove all) :
+                    </div>
+                    <div className="u_f_popup_title3" style={{ width: "100%" }}>
+                      {uploaded3d.length > 0 ? "Uploaded 3d Images :" : ""}
+                    </div>
+                    <Row style={{ width: "100%" }}>
+                      {uploaded3d.map((image, index) => {
+                        return (
+                          <>
+                            <Col md={3} sm={4} xs={6}>
+                              <div className="u_i_file_container">
+                                <img
+                                  src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`}
+                                  alt="uploaded image"
+                                  width={"100%"}
+                                  style={{ borderRadius: "10px" }}
+                                />
+                                <div
+                                  className="u_i_trash"
+                                  onClick={() =>
+                                    deleteImage(image._id, "getApproved3d")
+                                  }
+                                >
+                                  <i class="fas fa-trash-alt"></i>
+                                </div>
+                              </div>
+                            </Col>
+                          </>
+                        );
+                      })}
+                    </Row>
+                    <div className="u_f_popup_title3" style={{ width: "100%" }}>
+                      {pending3d.length > 0 ? "Pending 3d Images :" : ""}
+                    </div>
+                    <Row style={{ width: "100%" }}>
+                      {pending3d.map((image, index) => {
+                        return (
+                          <>
+                            <Col md={3} sm={4} xs={6}>
+                              <div className="u_i_file_container">
+                                <img
+                                  src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`}
+                                  alt="pending image"
+                                  width={"100%"}
+                                  style={{ borderRadius: "10px" }}
+                                />
+                                <div
+                                  className="u_i_trash"
+                                  onClick={() =>
+                                    deleteImage(image._id, "getPending3d")
+                                  }
+                                >
+                                  <i class="fas fa-trash-alt"></i>
+                                </div>
+                              </div>
+                            </Col>
+                          </>
+                        );
+                      })}
+                    </Row>
+                  </>
+                ) : (
+                  ""
+                )}
               </>
             ) : (
               <>
@@ -518,13 +767,49 @@ function Pilot_Payments() {
                 <div className="u_f_popup_btn_container">
                   <button
                     className="u_f_popup_btn2"
-                    onClick={() => setCancelSubscriptionPopup(false)}
+                    onClick={confirmCancelSubscription}
                   >
                     Confirm
                   </button>
                 </div>
               </>
             )}
+          </Row>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={subscriptionCancelled}
+        onClose={() => setSubscriptionCancelled(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+            <img
+              src={Close}
+              alt=""
+              onClick={() => setSubscriptionCancelled(false)}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <Row style={{ marginTop: "30px" }}>
+            <div className="u_f_popup_title">
+              Subscription cancelled successfully.
+            </div>
+            <div className="u_f_popup_btn_container">
+              <button
+                className="u_f_popup_btn2"
+                onClick={() => setSubscriptionCancelled(false)}
+              >
+                Close
+              </button>
+            </div>
           </Row>
         </DialogContent>
       </Dialog>

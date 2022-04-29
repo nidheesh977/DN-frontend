@@ -29,6 +29,15 @@ class DownloadSubscription extends Component {
       data: [],
       myPlan: "",
       subYearly: false,
+      uploadedImages: [],
+      uploaded3d: [],
+      uploadedVideos: [],
+      pendingImages: [],
+      pending3d: [],
+      pendingVideos: [],
+      cancelSubscriptionPopup: false,
+      subscriptionCancelled: false,
+      subscriptionDetails: false,
     };
   }
 
@@ -64,6 +73,7 @@ class DownloadSubscription extends Component {
       msg_sent_success: false,
     });
   };
+
   config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -93,10 +103,116 @@ class DownloadSubscription extends Component {
   }
 
   changeSubscription = () => {
-      this.setState({
-          subYearly: !this.state.subYearly
-      })
-  }
+    this.setState({
+      subYearly: !this.state.subYearly,
+    });
+  };
+
+  upgradeGold = () => {
+    console.log(this.state.data);
+      if (this.state.myPlan.includes("Platinum") || this.state.myPlan.includes("platinum")) {
+        axios
+          .post(`${domain}/api/image/getApprovedImages`, this.config)
+          .then((response) => {
+            console.log(response.data);
+            this.setState({
+              uploadedImages: response.data,
+            });
+          });
+        axios
+          .post(`${domain}/api/image/getApprovedVideos`, this.config)
+          .then((response) => {
+            console.log(response.data);
+            this.setState({
+              uploadedVideos: response.data,
+            });
+          });
+        axios
+          .post(`${domain}/api/image/getApproved3d`, this.config)
+          .then((response) => {
+            console.log(response.data);
+            this.setState({
+              uploaded3d: response.data,
+            });
+          });
+        axios
+          .post(`${domain}/api/image/getPendingImages`, this.config)
+          .then((response) => {
+            console.log(response.data);
+            this.setState({
+              pendingImages: response.data,
+            });
+          });
+        axios
+          .post(`${domain}/api/image/getPendingVideos`, this.config)
+          .then((response) => {
+            console.log(response.data);
+            this.setState({
+              pendingVideos: response.data,
+            });
+          });
+        axios
+          .post(`${domain}/api/image/getPending3d`, this.config)
+          .then((response) => {
+            console.log(response.data);
+            this.setState({
+              pending3d: response.data,
+            });
+          });
+
+        this.setState({
+          cancelSubscriptionPopup: true,
+        });
+      }else{
+        this.props.history.push(
+          `checkout/${this.state.data[this.state.subYearly ? 3 : 1]._id}`
+        );
+      }
+    
+  };
+
+  deleteImage = (id, path) => {
+    axios
+      .post(`${domain}/api/image/deleteImage/${id}`, this.config)
+      .then((res) => {
+        axios
+          .post(`${domain}/api/image/${path}`, this.config)
+          .then((response) => {
+            console.log(response.data);
+            if (path === "getApprovedImages") {
+              this.setState({
+                uploadedImages: response.data,
+              });
+            } else if (path === "getPendingImages") {
+              this.setState({
+                pendingImages: response.data,
+              });
+            } else if (path === "getApprovedVideos") {
+              this.setState({
+                uploadedVideos: response.data,
+              });
+            } else if (path === "getPendingVideos") {
+              this.setState({
+                pendingVideos: response.data,
+              });
+            } else if (path === "getApproved3d") {
+              this.setState({
+                uploaded3d: response.data,
+              });
+            } else if (path === "getPending3d") {
+              this.setState({
+                pending3d: response.data,
+              });
+            }
+          });
+      });
+  };
+
+  confirmCancelSubscription = () => {
+    this.props.history.push(
+      `checkout/${this.state.data[this.state.subYearly ? 3 : 1]._id}`
+    );
+  };
 
   render() {
     return (
@@ -116,10 +232,22 @@ class DownloadSubscription extends Component {
               dolore esse optio ea quaerat adipisci.
             </div>
           </div>
-          <div style = {{display: "flex", marginBottom: "20px", justifyContent: "center", alignItems: "center"}}>
+          <div
+            style={{
+              display: "flex",
+              marginBottom: "20px",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <div className="subs_plan">Monthly</div>
             <label class="switch">
-              <input type="checkbox" checked = {this.state.subYearly} onChange = {this.changeSubscription} id = "test"/>
+              <input
+                type="checkbox"
+                checked={this.state.subYearly}
+                onChange={this.changeSubscription}
+                id="test"
+              />
               <span class="slider round"></span>
             </label>
             <div className="subs_plan">Yearly</div>
@@ -278,26 +406,36 @@ class DownloadSubscription extends Component {
                   </div>
                   <div className="subscription_plan_description">
                     {this.state.subYearly
-                    ?this.state.data[3].description
-                    :this.state.data[1].description}
+                      ? this.state.data[3].description
+                      : this.state.data[1].description}
                   </div>
                   <div className="subscription_plan_price">
-                  {this.state.subYearly
-                    ?`$${this.state.data[3].price}.00`
-                    :`$${this.state.data[1].price}.00`}
+                    {this.state.subYearly
+                      ? `$${this.state.data[3].price}.00`
+                      : `$${this.state.data[1].price}.00`}
                   </div>
 
                   <div className="subscription_plan_btn_container">
-                    {(this.state.myPlan === "Gold Monthly" && !this.state.subYearly) || (this.state.myPlan === "Gold Yearly" && this.state.subYearly) ? (
+                    {(this.state.myPlan === "Gold Monthly" &&
+                      !this.state.subYearly) ||
+                    (this.state.myPlan === "Gold Yearly" &&
+                      this.state.subYearly) ? (
                       <button className="subscription_plan_btn2">
                         Current Plan
                       </button>
                     ) : (
-                      <Link to={`checkout/${this.state.data[this.state.subYearly?3:1]._id}`}>
-                        <button className="subscription_plan_btn2">
+                      <div
+                      // to={`checkout/${
+                      //   this.state.data[this.state.subYearly ? 3 : 1]._id
+                      // }`}
+                      >
+                        <button
+                          className="subscription_plan_btn2"
+                          onClick={this.upgradeGold}
+                        >
                           Upgrade plan
                         </button>
-                      </Link>
+                      </div>
                     )}
                   </div>
                   <div className="subscription_plan_features">
@@ -428,26 +566,35 @@ class DownloadSubscription extends Component {
                     <div className="subscription_inner_circle1"></div>
                   </div>
                   <div className="subscription_plan_title">
-                    {this.state.subYearly ? "Platinum Yearly" : "Platinum Monthly"}
+                    {this.state.subYearly
+                      ? "Platinum Yearly"
+                      : "Platinum Monthly"}
                   </div>
                   <div className="subscription_plan_description">
-                  {this.state.subYearly
-                    ?this.state.data[4].description
-                    :this.state.data[2].description}
+                    {this.state.subYearly
+                      ? this.state.data[4].description
+                      : this.state.data[2].description}
                   </div>
                   <div className="subscription_plan_price">
-                  {this.state.subYearly
-                    ?`$${this.state.data[4].price}.00`
-                    :`$${this.state.data[2].price}.00`}
+                    {this.state.subYearly
+                      ? `$${this.state.data[4].price}.00`
+                      : `$${this.state.data[2].price}.00`}
                   </div>
 
                   <div className="subscription_plan_btn_container">
-                    {(this.state.myPlan === "Platinum Monthly" && !this.state.subYearly) || (this.state.myPlan === "Platinum Yearly" && this.state.subYearly) ? (
+                    {(this.state.myPlan === "Platinum Monthly" &&
+                      !this.state.subYearly) ||
+                    (this.state.myPlan === "Platinum Yearly" &&
+                      this.state.subYearly) ? (
                       <button className="subscription_plan_btn1">
                         Current Plan
                       </button>
                     ) : (
-                      <Link to={`checkout/${this.state.data[this.state.subYearly?4:2]._id}`}>
+                      <Link
+                        to={`checkout/${
+                          this.state.data[this.state.subYearly ? 4 : 2]._id
+                        }`}
+                      >
                         <button className="subscription_plan_btn1">
                           Upgrade plan
                         </button>
@@ -578,9 +725,14 @@ class DownloadSubscription extends Component {
             ""
           )}
         </Container>
+
         <Dialog
-          open={this.state.payment_success}
-          onClose={this.closePaymentPopup}
+          open={this.state.cancelSubscriptionPopup}
+          onClose={() =>
+            this.setState({
+              cancelSubscriptionPopup: false,
+            })
+          }
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
@@ -594,46 +746,324 @@ class DownloadSubscription extends Component {
               <img
                 src={Close}
                 alt=""
-                onClick={this.closePaymentPopup}
+                onClick={() =>
+                  this.setState({
+                    cancelSubscriptionPopup: false,
+                  })
+                }
                 style={{ cursor: "pointer" }}
               />
             </div>
             <Row style={{ marginTop: "30px" }}>
-              <img src={payment_success} alt="" style={{ margin: "auto" }} />
-              <div className="u_p_v_popup_title">Thank you</div>
-              <div className="u_p_v_popup_content">
-                We have recieved your payment
-              </div>
-              <button
-                className="u_p_v_popup_close_btn"
-                onClick={this.closePaymentPopup}
-              >
-                Close
-              </button>
+              {this.state.uploadedImages.length +
+                this.state.pendingImages.length >
+                15 ||
+              this.state.uploaded3d.length + this.state.pending3d.length > 3 ||
+              this.state.uploadedVideos.length +
+                this.state.pendingVideos.length >
+                3 ? (
+                <>
+                  <div
+                    className="u_f_popup_title"
+                    style={{ width: "100%", marginBottom: "0px" }}
+                  >
+                    Delete some files to subscription Gold
+                  </div>
+                  <div
+                    className="u_f_popup_title"
+                    style={{ width: "100%", fontSize: "20px" }}
+                  >
+                    All draft files will be deleted
+                  </div>
+                  {this.state.uploadedImages.length +
+                    this.state.pendingImages.length >
+                  15 ? (
+                    <>
+                      <div
+                        className="u_f_popup_title2"
+                        style={{ width: "100%" }}
+                      >
+                        Images (Maximum 15) :
+                      </div>
+                      <div
+                        className="u_f_popup_title3"
+                        style={{ width: "100%" }}
+                      >
+                        {this.state.uploadedImages.length > 0
+                          ? "Uploaded Images :"
+                          : ""}
+                      </div>
+                      <Row style={{ width: "100%" }}>
+                        {this.state.uploadedImages.map((image, index) => {
+                          return (
+                            <>
+                              <Col md={3} sm={4} xs={6}>
+                                <div className="u_i_file_container">
+                                  <img
+                                    src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`}
+                                    alt="uploaded image"
+                                    width={"100%"}
+                                    style={{ borderRadius: "10px" }}
+                                  />
+                                  <div
+                                    className="u_i_trash"
+                                    onClick={() =>
+                                      this.deleteImage(
+                                        image._id,
+                                        "getApprovedImages"
+                                      )
+                                    }
+                                  >
+                                    <i class="fas fa-trash-alt"></i>
+                                  </div>
+                                </div>
+                              </Col>
+                            </>
+                          );
+                        })}
+                      </Row>
+                      <div
+                        className="u_f_popup_title3"
+                        style={{ width: "100%" }}
+                      >
+                        {this.state.pendingImages.length
+                          ? "Pending Images :"
+                          : ""}
+                      </div>
+                      <Row style={{ width: "100%" }}>
+                        {this.state.pendingImages.map((image, index) => {
+                          return (
+                            <>
+                              <Col md={3} sm={4} xs={6}>
+                                <div className="u_i_file_container">
+                                  <img
+                                    src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`}
+                                    alt="pending image"
+                                    width={"100%"}
+                                    style={{ borderRadius: "10px" }}
+                                  />
+                                  <div
+                                    className="u_i_trash"
+                                    onClick={() =>
+                                      this.deleteImage(
+                                        image._id,
+                                        "getPendingImages"
+                                      )
+                                    }
+                                  >
+                                    <i class="fas fa-trash-alt"></i>
+                                  </div>
+                                </div>
+                              </Col>
+                            </>
+                          );
+                        })}
+                      </Row>
+                    </>
+                  ) : (
+                    ""
+                  )}
+
+                  {this.state.uploadedVideos.length +
+                    this.state.pendingVideos.length >
+                  3 ? (
+                    <>
+                      <div
+                        className="u_f_popup_title2"
+                        style={{ width: "100%" }}
+                      >
+                        Videos (Maximum 3) :
+                      </div>
+                      <div
+                        className="u_f_popup_title3"
+                        style={{ width: "100%" }}
+                      >
+                        {this.state.uploadedVideos.length > 0
+                          ? "Uploaded Videos :"
+                          : ""}
+                      </div>
+                      <Row style={{ width: "100%" }}>
+                        {this.state.uploadedVideos.map((image, index) => {
+                          return (
+                            <>
+                              <Col md={3} sm={4} xs={6}>
+                                <div className="u_i_file_container">
+                                  <video
+                                    src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`}
+                                    width={"100%"}
+                                    style={{ borderRadius: "10px" }}
+                                  ></video>
+                                  <div
+                                    className="u_i_trash"
+                                    onClick={() =>
+                                      this.deleteImage(
+                                        image._id,
+                                        "getApprovedVideos"
+                                      )
+                                    }
+                                  >
+                                    <i class="fas fa-trash-alt"></i>
+                                  </div>
+                                </div>
+                              </Col>
+                            </>
+                          );
+                        })}
+                      </Row>
+                      <div
+                        className="u_f_popup_title3"
+                        style={{ width: "100%" }}
+                      >
+                        {this.state.pendingVideos.length > 0
+                          ? "Pending Videos :"
+                          : ""}
+                      </div>
+                      <Row style={{ width: "100%" }}>
+                        {this.state.pendingVideos.map((image, index) => {
+                          return (
+                            <>
+                              <Col md={3} sm={4} xs={6}>
+                                <div className="u_i_file_container">
+                                  <video
+                                    src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`}
+                                    alt="pending image"
+                                    width={"100%"}
+                                    style={{ borderRadius: "10px" }}
+                                  ></video>
+                                  <div
+                                    className="u_i_trash"
+                                    onClick={() =>
+                                      this.deleteImage(
+                                        image._id,
+                                        "getPendingVideos"
+                                      )
+                                    }
+                                  >
+                                    <i class="fas fa-trash-alt"></i>
+                                  </div>
+                                </div>
+                              </Col>
+                            </>
+                          );
+                        })}
+                      </Row>
+                    </>
+                  ) : (
+                    ""
+                  )}
+
+                  {this.state.uploaded3d.length + this.state.pending3d.length >
+                  3 ? (
+                    <>
+                      <div
+                        className="u_f_popup_title2"
+                        style={{ width: "100%" }}
+                      >
+                        3d Images (Maximum 3) :
+                      </div>
+                      <div
+                        className="u_f_popup_title3"
+                        style={{ width: "100%" }}
+                      >
+                        {this.state.uploaded3d.length > 0
+                          ? "Uploaded 3d Images :"
+                          : ""}
+                      </div>
+                      <Row style={{ width: "100%" }}>
+                        {this.state.uploaded3d.map((image, index) => {
+                          return (
+                            <>
+                              <Col md={3} sm={4} xs={6}>
+                                <div className="u_i_file_container">
+                                  <img
+                                    src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`}
+                                    alt="uploaded image"
+                                    width={"100%"}
+                                    style={{ borderRadius: "10px" }}
+                                  />
+                                  <div
+                                    className="u_i_trash"
+                                    onClick={() =>
+                                      this.deleteImage(
+                                        image._id,
+                                        "getApproved3d"
+                                      )
+                                    }
+                                  >
+                                    <i class="fas fa-trash-alt"></i>
+                                  </div>
+                                </div>
+                              </Col>
+                            </>
+                          );
+                        })}
+                      </Row>
+                      <div
+                        className="u_f_popup_title3"
+                        style={{ width: "100%" }}
+                      >
+                        {this.state.pending3d.length > 0
+                          ? "Pending 3d Images :"
+                          : ""}
+                      </div>
+                      <Row style={{ width: "100%" }}>
+                        {this.state.pending3d.map((image, index) => {
+                          return (
+                            <>
+                              <Col md={3} sm={4} xs={6}>
+                                <div className="u_i_file_container">
+                                  <img
+                                    src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${image.file}`}
+                                    alt="pending image"
+                                    width={"100%"}
+                                    style={{ borderRadius: "10px" }}
+                                  />
+                                  <div
+                                    className="u_i_trash"
+                                    onClick={() =>
+                                      this.deleteImage(
+                                        image._id,
+                                        "getPending3d"
+                                      )
+                                    }
+                                  >
+                                    <i class="fas fa-trash-alt"></i>
+                                  </div>
+                                </div>
+                              </Col>
+                            </>
+                          );
+                        })}
+                      </Row>
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="u_f_popup_title" style={{ width: "100%", marginBottom: "0px" }}>
+                    Are you sure. Do you want to subscription Gold?
+                  </div>
+                  <div
+                    className="u_f_popup_title"
+                    style={{ width: "100%", fontSize: "20px" }}
+                  >
+                    All draft files will be deleted
+                  </div>
+                  <div className="u_f_popup_btn_container">
+                    <button
+                      className="u_f_popup_btn2"
+                      onClick={this.confirmCancelSubscription}
+                    >
+                      Confirm
+                    </button>
+                  </div>
+                </>
+              )}
             </Row>
           </DialogContent>
         </Dialog>
-        {/* <Dialog
-          open={this.state.msg_sent_success}
-          onClose={this.closeMsgSentSuccess}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          maxWidth={"md"}
-          fullWidth={true}
-        >
-
-          <DialogContent className={All.PopupBody} style={{ marginBottom: "50px" }}>
-            <div style={{ position: "absolute", top: '20px', right: '20px' }}>
-              <img src={Close} alt="" onClick={this.closeMsgSentSuccess} style={{ cursor: "pointer" }} />
-            </div>
-            <Row style={{ marginTop: "30px" }}>
-              <div className="u_p_v_msg_popup_title">Your message has been sent to pilot Successfully</div>
-              <div className="u_p_v_msg_popup_close_btn_container">
-                <button className="u_p_v_msg_popup_close_btn" onClick={this.closeMsgSentSuccess}>Open Dashboard</button>
-              </div>
-            </Row>
-          </DialogContent>
-        </Dialog> */}
       </section>
     );
   }

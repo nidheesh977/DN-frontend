@@ -71,22 +71,29 @@ class UploadFiles extends Component {
       .get(`${domain}/api/pilotSubscription/getMySubscription`, config)
       .then((res) => {
         console.log(res.data);
-        this.setState({
-          subscription: "platinum",
-        });
+        if (res.data.subscription.plan.includes("Platinum")){
+          this.setState({
+            subscription: "platinum",
+          });
+        }
+        else if (res.data.subscription.plan.includes("Gold")){
+          this.setState({
+            subscription: "gold",
+          });
+        }
         if (typeof res.data.images === "number") {
           console.log("ImagesThere");
-          if (res.data.subscription){
+          if (res.data.subscription) {
             this.setState({
               imageLimit: res.data.subscription.images - res.data.images,
               videoLimit: res.data.subscription.videos - res.data.videos,
               img3dLimit: res.data.subscription.images3d - res.data.images3d,
             });
-          }else{
+          } else {
             this.setState({
               imageLimit: 6 - res.data.images,
               videoLimit: 0 - res.data.videos,
-              img3dLimit: 0 - res.data.images3d
+              img3dLimit: 0 - res.data.images3d,
             });
           }
         }
@@ -802,7 +809,7 @@ class UploadFiles extends Component {
   };
 
   saveFiles = (type) => {
-    console.log(this.state);
+    console.log(this.state.subscription);
     if (!this.state.subscribed && type === "draft") {
       this.setState({
         subscription_popup: true,
@@ -815,9 +822,9 @@ class UploadFiles extends Component {
       let selected_files = this.state.selected_files_details;
       for (let i = selected_files.length - 1; i >= 0; i--) {
         if (
-          ((selected_files[i].row.type[0] === "v" &&
+          ((selected_files[i].type[0] === "v" &&
             selected_files[i].size / 1000000 <= 20) ||
-            (selected_files[i].row.type[0] !== "v" &&
+            (selected_files[i].type[0] !== "v" &&
               selected_files[i].size / 1000000 <= 5)) &&
           selected_files[i].resolution_satisfied === true &&
           selected_files[i].upload_status !== "uploaded"
@@ -1106,9 +1113,12 @@ class UploadFiles extends Component {
                       "Bearer " + localStorage.getItem("access_token"),
                   },
                 };
-            
+
                 axios
-                  .get(`${domain}/api/pilotSubscription/getMySubscription`, config)
+                  .get(
+                    `${domain}/api/pilotSubscription/getMySubscription`,
+                    config
+                  )
                   .then((res) => {
                     console.log(res.data);
                     this.setState({
@@ -1116,21 +1126,24 @@ class UploadFiles extends Component {
                     });
                     if (typeof res.data.images === "number") {
                       console.log("ImagesThere");
-                      if (res.data.subscription){
+                      if (res.data.subscription) {
                         this.setState({
-                          imageLimit: res.data.subscription.images - res.data.images,
-                          videoLimit: res.data.subscription.videos - res.data.videos,
-                          img3dLimit: res.data.subscription.images3d - res.data.images3d,
+                          imageLimit:
+                            res.data.subscription.images - res.data.images,
+                          videoLimit:
+                            res.data.subscription.videos - res.data.videos,
+                          img3dLimit:
+                            res.data.subscription.images3d - res.data.images3d,
                         });
-                      }else{
+                      } else {
                         this.setState({
                           imageLimit: 5 - res.data.images,
                           videoLimit: 0 - res.data.videos,
-                          img3dLimit: 0 - res.data.images3d
+                          img3dLimit: 0 - res.data.images3d,
                         });
                       }
                     }
-            
+
                     console.log(res);
                     // console.log(res.data.subscription.videos)
                     // console.log(res.data.subscription.)
@@ -1158,9 +1171,12 @@ class UploadFiles extends Component {
                             "Bearer " + localStorage.getItem("access_token"),
                         },
                       };
-                  
+
                       axios
-                        .get(`${domain}/api/pilotSubscription/getMySubscription`, config)
+                        .get(
+                          `${domain}/api/pilotSubscription/getMySubscription`,
+                          config
+                        )
                         .then((res) => {
                           console.log(res.data);
                           this.setState({
@@ -1168,21 +1184,27 @@ class UploadFiles extends Component {
                           });
                           if (typeof res.data.images === "number") {
                             console.log("ImagesThere");
-                            if (res.data.subscription){
+                            if (res.data.subscription) {
                               this.setState({
-                                imageLimit: res.data.subscription.images - res.data.images,
-                                videoLimit: res.data.subscription.videos - res.data.videos,
-                                img3dLimit: res.data.subscription.images3d - res.data.images3d,
+                                imageLimit:
+                                  res.data.subscription.images -
+                                  res.data.images,
+                                videoLimit:
+                                  res.data.subscription.videos -
+                                  res.data.videos,
+                                img3dLimit:
+                                  res.data.subscription.images3d -
+                                  res.data.images3d,
                               });
-                            }else{
+                            } else {
                               this.setState({
                                 imageLimit: 5 - res.data.images,
                                 videoLimit: 0 - res.data.videos,
-                                img3dLimit: 0 - res.data.images3d
+                                img3dLimit: 0 - res.data.images3d,
                               });
                             }
                           }
-                  
+
                           console.log(res);
                           // console.log(res.data.subscription.videos)
                           // console.log(res.data.subscription.)
@@ -1264,9 +1286,12 @@ class UploadFiles extends Component {
                             "Bearer " + localStorage.getItem("access_token"),
                         },
                       };
-                  
+
                       axios
-                        .get(`${domain}/api/pilotSubscription/getMySubscription`, config)
+                        .get(
+                          `${domain}/api/pilotSubscription/getMySubscription`,
+                          config
+                        )
                         .then((res) => {
                           console.log(res.data);
                           this.setState({
@@ -1274,21 +1299,27 @@ class UploadFiles extends Component {
                           });
                           if (typeof res.data.images === "number") {
                             console.log("ImagesThere");
-                            if (res.data.subscription){
+                            if (res.data.subscription) {
                               this.setState({
-                                imageLimit: res.data.subscription.images - res.data.images,
-                                videoLimit: res.data.subscription.videos - res.data.videos,
-                                img3dLimit: res.data.subscription.images3d - res.data.images3d,
+                                imageLimit:
+                                  res.data.subscription.images -
+                                  res.data.images,
+                                videoLimit:
+                                  res.data.subscription.videos -
+                                  res.data.videos,
+                                img3dLimit:
+                                  res.data.subscription.images3d -
+                                  res.data.images3d,
                               });
-                            }else{
+                            } else {
                               this.setState({
                                 imageLimit: 5 - res.data.images,
                                 videoLimit: 0 - res.data.videos,
-                                img3dLimit: 0 - res.data.images3d
+                                img3dLimit: 0 - res.data.images3d,
                               });
                             }
                           }
-                  
+
                           console.log(res);
                           // console.log(res.data.subscription.videos)
                           // console.log(res.data.subscription.)
@@ -2459,6 +2490,19 @@ class UploadFiles extends Component {
                       >
                         Cancel
                       </button>
+                      {this.state.subscription === "Gold" ||
+                      this.state.subscription === "gold" ? (
+                        <button
+                          className="u_f_popup_btn2"
+                          onClick={() =>
+                            this.props.history.push("/DownloadSubscription")
+                          }
+                        >
+                          Upgrade
+                        </button>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </Row>
                 </DialogContent>

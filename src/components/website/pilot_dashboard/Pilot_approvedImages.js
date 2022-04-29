@@ -13,6 +13,7 @@ import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
 import "./css/Pilot_custom.css";
 import RearrangeFiles from "./RearrangeFiles";
+import "./css/Pilot_Payments.css"
 
 const domain = process.env.REACT_APP_MY_API;
 
