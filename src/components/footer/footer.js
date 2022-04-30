@@ -19,7 +19,7 @@ class Footer extends Component{
                   <Link className="footer_link">Explore your Drone work</Link>
                 </li>
                 <li>
-                  <Link className="footer_link">Droner Blog</Link>
+                  <Link className="footer_link" to="/DownloadSubscription">Pro Pilot</Link>
                 </li>
               </ul>
             </Col>
@@ -35,6 +35,7 @@ class Footer extends Component{
                 <li>
                   <Link className="footer_link" to="/help-center">Help Center</Link>
                 </li>
+                
               </ul>
             </Col>
             <Col xl={2} md={4} sm = {6} xs={6}>
