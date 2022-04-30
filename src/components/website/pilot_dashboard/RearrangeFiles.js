@@ -5,7 +5,7 @@ import Photo from "./Photo";
 import { SortableContainer, SortableElement, arrayMove } from "react-sortable-hoc";
 import axios from "axios";
 import "./css/RearrangeFiles.css";
-import { config } from "dotenv";
+import { Container } from "react-grid-system";
 
 const domain = process.env.REACT_APP_MY_API;
 

@@ -127,9 +127,10 @@ function Pilot_approvedVideos() {
       ) : (
         ""
       )}
-      <Row gutterWidth={12}>
+      
         {!rearrange ? (
           <>
+          <Row gutterWidth={12}>
             {value.map((item) => {
               return (
                 <Col xl={4} lg={6} md={4} sm={6} xs={12}>
@@ -209,22 +210,22 @@ function Pilot_approvedVideos() {
                 </Col>
               );
             })}
+            </Row>
           </>
         ) : (
-          <RearrangeFiles
-            type="videos"
-            cancelButton={
-              <button className="r_f_cancel_btn" onClick={cancelRearrange}>
-                Cancel
-              </button>
-            }
-            saveButton = {
-              <button className="r_f_save_btn" onClick = {cancelRearrange}>Save</button>
-            }
-            changeValue = {setValue}
-          />
+            <RearrangeFiles
+              type="videos"
+              cancelButton={
+                <button className="r_f_cancel_btn" onClick={cancelRearrange}>
+                  Cancel
+                </button>
+              }
+              saveButton = {
+                <button className="r_f_save_btn" onClick = {cancelRearrange}>Save</button>
+              }
+              changeValue = {setValue}
+            />
         )}
-      </Row>
       {/* <div className="a_j_load_div" style={{margin: "40px 0px"}}>
         <button className="a_j_loadMore_btn">
           <img src={loadMore} className="a_j_location_logo" />

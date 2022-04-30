@@ -129,39 +129,54 @@ export default function PilotDetails(props) {
 
   const selectCategory = (new_category) => {
     setCategory(new_category);
-    if (new_category === 2){
+    if (new_category === 1){
+      setFiles(allFiles)
+    }else if (new_category === 2){
       console.log(rearrangedImages)
-      if (rearrangedImages.length){
+      if (rearrangedImages.length !== 0){
         setFiles(rearrangedImages)
+      }
+      else{
+        setFiles(allFiles)
       }
     }else if (new_category === 3){
       if (rearrangedVideos.length !== 0){
         setFiles(rearrangedVideos)
+      }else{
+        setFiles(allFiles)
       }
     }else if (new_category === 4){
       if (rearranged3d.length !== 0){
         setFiles(rearranged3d)
+      }else{
+        setFiles(allFiles)
       }
     }
   };
 
   const selectCategoryDropdown = (e) => {
     setCategory(Number(e.target.value));
-    if (e.target.value === "2"){
+    if (e.target.value === "1"){
+      setFiles(allFiles)
+    }else if (e.target.value === "2"){
       console.log(rearrangedImages)
       if (rearrangedImages.length){
         setFiles(rearrangedImages)
+      }else{
+        setFiles(allFiles)
       }
     }else if (e.target.value === "3"){
       if (rearrangedVideos.length !== 0){
         setFiles(rearrangedVideos)
+      }else{
+        setFiles(allFiles)
       }
     }else if (e.target.value === "4"){
       if (rearranged3d.length !== 0){
         setFiles(rearranged3d)
+      }else{
+        setFiles(allFiles)
       }
-    }else{
-      setFiles(allFiles)
     }
   };
 

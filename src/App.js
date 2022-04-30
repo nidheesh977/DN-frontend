@@ -54,6 +54,9 @@ import CompanyRoute from "./companyRoute";
 import TextEditor from "./components/website/textEditor";
 import Checkout from "./components/website/Checkout";
 import HelpCenter from "./components/website/HelpCenter";
+import Blog from "./components/website/Blog";
+import BlogDetails from "./components/website/BlogDetails";
+import BlogCategories from "./components/website/BlogCategories";
 
 function App(){
 
@@ -171,6 +174,9 @@ function App(){
             <BoosterRoute component={Booster_dashboard} path="/booster_dashboard" />
             <Route exact path="/textEditor" component={TextEditor} />
             <Route exact path="/checkout/:id" component={Checkout} />
+            <Route exact path="/blog" component={Blog} />
+            <Route exact path="/blog_details" component={BlogDetails} />
+            <Route exact path="/blog_categories" component={BlogCategories} />
 
             <Route exact path="/NoComponent" component={NoPageFound} />
 
