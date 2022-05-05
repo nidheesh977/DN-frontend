@@ -2,25 +2,45 @@ import React, {Component} from "react"
 import { Link } from "react-router-dom"
 import "./footer.css"
 import { Container, Row, Col } from "react-grid-system";
+import axios from "axios";
+const domain = process.env.REACT_APP_MY_API
 
 
 class Footer extends Component{
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      categories : []
+    };
+
+  }
+  componentDidMount() {
+    axios.get(`${domain}/api/category/getCategories`).then(res=>{
+      console.log(res.data)
+
+this.setState({
+  categories: res.data
+})    })
+  }
   render(){
     return(
       <div id = "footer">
           <Row>
             <Col xl={2} md={3.8} sm = {6} xs={6}>
               <ul>
-                <li className="footer_title">For Droners</li>
-                <li>
-                  <Link className="footer_link" style={{fontSize: "30px"}}>Upgrade pro version</Link>
+                <li className="footer_title">Blogs</li>
+                {
+                  this.state.categories.map((item, i)=>{
+                    return(
+                      <li>
+                  <Link className="footer_link" style={{fontSize: "30px"}} to={`/blogs/${item.slug}`}>{item.category}</Link>
                 </li>
-                <li>
-                  <Link className="footer_link">Explore your Drone work</Link>
-                </li>
-                <li>
-                  <Link className="footer_link" to="/DownloadSubscription">Pro Pilot</Link>
-                </li>
+                    )
+                  })
+                }
+                
+               
               </ul>
             </Col>
             <Col xl={2} md={4.2} sm = {6} xs={6}>
@@ -35,7 +55,9 @@ class Footer extends Component{
                 <li>
                   <Link className="footer_link" to="/help-center">Help Center</Link>
                 </li>
-                
+                <li>
+                  <Link className="footer_link" to="/DownloadSubscription">Pro Pilot</Link>
+                </li>
               </ul>
             </Col>
             <Col xl={2} md={4} sm = {6} xs={6}>

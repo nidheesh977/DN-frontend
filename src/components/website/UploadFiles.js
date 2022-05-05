@@ -71,16 +71,19 @@ class UploadFiles extends Component {
       .get(`${domain}/api/pilotSubscription/getMySubscription`, config)
       .then((res) => {
         console.log(res.data);
-        if (res.data.subscription.plan.includes("Platinum")){
-          this.setState({
-            subscription: "platinum",
-          });
+        if(res.data.subscription){
+          if (res.data.subscription.plan.includes("Platinum")){
+            this.setState({
+              subscription: "platinum",
+            });
+          }
+          else if (res.data.subscription.plan.includes("Gold")){
+            this.setState({
+              subscription: "gold",
+            });
+          }
         }
-        else if (res.data.subscription.plan.includes("Gold")){
-          this.setState({
-            subscription: "gold",
-          });
-        }
+        
         if (typeof res.data.images === "number") {
           console.log("ImagesThere");
           if (res.data.subscription) {
@@ -95,6 +98,7 @@ class UploadFiles extends Component {
               videoLimit: 0 - res.data.videos,
               img3dLimit: 0 - res.data.images3d,
             });
+            console.log(this.state.imageLimit)
           }
         }
 
@@ -104,6 +108,7 @@ class UploadFiles extends Component {
       })
       .catch((err) => {
         console.log(err);
+        
       });
 
     axios

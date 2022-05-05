@@ -12,16 +12,21 @@ import axios from "axios";
 import Header from "../header/Header";
 import DroneImg from "../images/drone-img.svg";
 const API_URL = "https://demo-nexevo.in/vijay";
+const domain = process.env.REACT_APP_MY_API;
 
 export default class Blog extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      metaTitle: "",
+      metaDescription: "",
+      metaKeywords: "",
       blog: [],
       blogcategories: [],
       visible: 6,
       error: false,
+      trendingBlogs : []
     };
 
     this.loadMore = this.loadMore.bind(this);
@@ -35,21 +40,38 @@ export default class Blog extends React.Component {
 
   componentDidMount() {
     const url = `${API_URL}/blog`;
-    const urls = `${API_URL}/blogcategories`;
-    axios
-      .get(url)
-      .then((res) => res.data)
-      .then((data) => {
-        this.setState({ blog: data });
-      });
+    axios.post(`${domain}/api/category/getOneCategory`,{slug: this.props.match.params.slug}).then(res=>{
+      console.log(res)
+      this.setState({
+        metaTitle: res.data.metaTitle,
+        metaDescription: res.data.metaDescription,
+        metaKeywords: res.data.metaKeywords,
+      })
+      axios
+      .post(`${domain}/api/blog/getBlogs`, {category: res.data.category})
+      .then((res) => {
+        console.log(res)
+        this.setState({ blog: res.data });
+      }).catch(err=>{
+        console.log(err)
+      })
+      axios.get(`${domain}/api/blog/getBlogsTrending`).then(res=>{
+        console.log(res)
+        this.setState({
+          trendingBlogs: res.data
+        })
+    })
 
+    })
+   
     axios
-      .get(urls)
-      .then((res) => res.data)
-      .then((datas) => {
-        this.setState({ blogcategories: datas });
+      .get(`${domain}/api/category/getCategories`)
+  
+      .then((res) => {
+        this.setState({ blogcategories: res.data });
       });
   }
+  
 
   render() {
     // const onSubmit = (data) => {
@@ -61,12 +83,12 @@ export default class Blog extends React.Component {
     return (
       <>
         <Helmet>
-          <title>Blog</title>
+          <title>{this.state.metaTitle}</title>
           <meta charSet="utf-8" />
-          <meta name="description" content="Nested component" />
+          <meta name="description" content={this.state.metaDescription} />
+          <meta name="keywords" content={this.state.metaKeywords} />
         </Helmet>
 
-        <Header />
         <section className={All.BlogDeatail}>
           <Box p={4} textAlign={"center"}>
             <h2 className={All.BlogDeatailTitle}>Our Blog</h2>
@@ -77,12 +99,12 @@ export default class Blog extends React.Component {
               <Col md={8}>
                 <Row>
                   {this.state.blog
-                    .slice(0, this.state.visible)
+                    // .slice(0, this.state.visible)
                     .map((item, index) => {
                       return (
                         <>
                           <Col md={6} className={All.Blog}>
-                            <Link to="/BlogDetail" id={item.id}>
+                            <Link to={`/blog/${item.slug}`} id={item.id}>
                               <div className={All.ListBlogs}>
                                 <img
                                   class={All.BlogImage}
@@ -92,13 +114,13 @@ export default class Blog extends React.Component {
                                 <div
                                   className={`${All.Bgcolordynamic} ${All.Content}`}
                                 >
-                                  <h6>{item.blogtitle}</h6>
+                                  <h6>{item.category}</h6>
                                   <p className={All.BlogDesc}>
-                                    {item.blogsubtitle}
+                                    {item.title}
                                   </p>
                                   <span className={All.PublishedDate}>
                                     {" "}
-                                    <img src={Calendar}></img> {item.createdby}
+                                    <img src={Calendar}></img> {item.createdAt.slice(0,10)}
                                   </span>
                                   <span className={All.Location}>
                                     {" "}
@@ -175,12 +197,12 @@ export default class Blog extends React.Component {
                       .map((item, index) => {
                         return (
                           <>
-                            <Link to="/">
+                            <Link to={`/blogs/${item.slug}`}>
                               {" "}
                               <span
                                 className={`${All.BtnStyle_4} ${All.BlogBtn}`}
                               >
-                                {item.blogcategories}{" "}
+                                {item.category}{" "}
                               </span>
                             </Link>
                           </>
@@ -191,19 +213,18 @@ export default class Blog extends React.Component {
                   <Box pb={2} className={All.Trending}>
                     <h4 className={All.BorderBottom}>Trending</h4>
 
-                    {this.state.blog
-                      .slice(0, this.state.visible)
+                    {this.state.trendingBlogs
                       .map((item, index) => {
                         return (
                           <>
-                            <Link to="/">
+                            <Link to={`/blog/${item.slug}`}>
                               <div className={All.posts}>
                                 <div className={All.ImageDiv}>
                                   <img src={Placeholder}></img>
                                 </div>
                                 <div className={All.ContentDiv}>
-                                  <h6>{item.blogtitle}</h6>
-                                  <p>{item.blogsubtitle}</p>
+                                  <h6>{item.category}</h6>
+                                  <p>{item.title}</p>
                                 </div>
                               </div>
                             </Link>

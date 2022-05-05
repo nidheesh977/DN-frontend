@@ -174,8 +174,8 @@ function App(){
             <BoosterRoute component={Booster_dashboard} path="/booster_dashboard" />
             <Route exact path="/textEditor" component={TextEditor} />
             <Route exact path="/checkout/:id" component={Checkout} />
-            <Route exact path="/blog" component={Blog} />
-            <Route exact path="/blog_details" component={BlogDetails} />
+            <Route exact path="/blogs/:slug" component={Blog} />
+            <Route exact path="/blog/:slug" component={BlogDetails} />
             <Route exact path="/blog_categories" component={BlogCategories} />
 
             <Route exact path="/NoComponent" component={NoPageFound} />
