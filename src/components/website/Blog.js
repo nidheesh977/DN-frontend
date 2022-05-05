@@ -232,6 +232,7 @@ export default class Blog extends React.Component {
                         );
                       })}
                   </Box>
+                  
                 </div>
               </Col>
             </Row>
