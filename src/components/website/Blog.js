@@ -72,7 +72,25 @@ export default class Blog extends React.Component {
       });
   }
   
-
+  categoryClicked = (slug, category)=>{
+    axios.post(`${domain}/api/category/getOneCategory`,{slug: slug}).then(res=>{
+      console.log(res)
+      this.setState({
+        metaTitle: res.data.metaTitle,
+        metaDescription: res.data.metaDescription,
+        metaKeywords: res.data.metaKeywords,
+      })
+      axios
+      .post(`${domain}/api/blog/getBlogs`, {category: res.data.category})
+      .then((res) => {
+        console.log(res)
+        this.setState({ blog: res.data });
+      }).catch(err=>{
+        console.log(err)
+      })
+    })
+    
+  }
   render() {
     // const onSubmit = (data) => {
     //     console.log(data);
@@ -108,8 +126,8 @@ export default class Blog extends React.Component {
                               <div className={All.ListBlogs}>
                                 <img
                                   class={All.BlogImage}
-                                  src={Placeholder}
-                                  width="100%"
+                                  src={item.image ? `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${item.image}` : Placeholder}
+                                  width="100%" style={{height: "240px"}}
                                 ></img>
                                 <div
                                   className={`${All.Bgcolordynamic} ${All.Content}`}
@@ -197,7 +215,7 @@ export default class Blog extends React.Component {
                       .map((item, index) => {
                         return (
                           <>
-                            <Link to={`/blogs/${item.slug}`}>
+                            <Link to={`/blogs/${item.slug}`} onClick={()=>this.categoryClicked(item.slug, item.category)}>
                               {" "}
                               <span
                                 className={`${All.BtnStyle_4} ${All.BlogBtn}`}
@@ -220,7 +238,7 @@ export default class Blog extends React.Component {
                             <Link to={`/blog/${item.slug}`}>
                               <div className={All.posts}>
                                 <div className={All.ImageDiv}>
-                                  <img src={Placeholder}></img>
+                                  <img src={item.image ? `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${item.image}` : Placeholder} style={{height: "65px"}}></img>
                                 </div>
                                 <div className={All.ContentDiv}>
                                   <h6>{item.category}</h6>
