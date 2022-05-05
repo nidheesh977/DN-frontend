@@ -13,6 +13,7 @@ import Close from "../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
 import Select from "react-select";
+import Loader from "../Loader/loader";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -43,14 +44,16 @@ function CreatePilot() {
       history.push("/NoComponent");
     }
   });
+  let [loading, setLoading] = useState(false)
   let [data, setData] = useState({
-    full_name: "",
+    username: "",
     email: "",
     phone: "+91",
     dob: "",
     gender: "Male",
     address: "",
     city: "",
+    preferred_location: "",
     country: "",
     postal: "",
     bio: "",
@@ -91,6 +94,7 @@ function CreatePilot() {
       ...data,
       [e.target.id]: e.target.value,
     });
+    console.log(data[e.target.id]);
   };
 
   const selectSkill = (id) => {
@@ -118,35 +122,18 @@ function CreatePilot() {
     setSuggestedSkills(suggestedSkillsList);
   };
 
-  const phoneChangeHandler = (e) => {
-    document.getElementById(`phone_error`).style.visibility = "hidden";
-    try {
-      if (e.length >= 1) {
-        setData({
-          ...data,
-          phone: e,
-        });
-      } else {
-        setData({
-          ...data,
-          phone: "",
-        });
-      }
-    } catch {
-      setData({
-        ...data,
-        phone: "",
-      });
-    }
-  };
+  const saveChanges = () => {
 
-  const saveChanges = () => { 
-    var year = new Date().getFullYear()
+    setLoading(true)
+
+    var year = new Date().getFullYear();
     let month = new Date().getMonth();
     var fields = [
+      "username",
       "dob",
       "gender",
       "city",
+      "preferred_location",
       "drone_id",
       "attachment",
       "monthly_pay",
@@ -156,6 +143,20 @@ function CreatePilot() {
       "completed_year",
       "skills",
     ];
+
+    function isUserNameValid(username) {
+      /* 
+        Usernames can only have: 
+        - Lowercase, Uppercase Letters (a-z), (A-Z) 
+        - Numbers (0-9)
+        - Underscores (_)
+        - Hyphen (-)
+      */
+      const res = /^[a-z0-9_-]+$/.exec(username);
+      const valid = !!res;
+      return valid;
+    }
+
     var error = false;
     var focusField = "";
     for (var i = 0; i < fields.length; i++) {
@@ -163,6 +164,7 @@ function CreatePilot() {
         data[fields[i]] === "" &&
         fields[i] !== "drone_id" &&
         fields[i] !== "attachment" &&
+        fields[i] !== "preferred_location" &&
         fields[i] !== "monthly_pay" &&
         fields[i] !== "hourly_pay" &&
         fields[i] !== "training_center_name" &&
@@ -171,27 +173,82 @@ function CreatePilot() {
         document.getElementById(`${fields[i]}_error`).style.visibility =
           "visible";
         error = true;
-        if (focusField === "") {  
+        if (focusField === "") {
           focusField = fields[i];
         }
       }
-
-      if (fields[i] === "dob" && data[fields[i]].slice(0,4) > year - 10){
-        error=true
-        focusField = "dob";
-        document.getElementById("dob_error").innerText = "Age must be minimum 10 years."
-        document.getElementById("dob_error").style.visibility = "visible"
+      if (fields[i] === "username") {
+        if (data[fields[i]].length === 0) {
+          document.getElementById("username_error").innerText =
+            "Username is required";
+          error = true;
+          if (focusField === "") {
+            focusField = fields[i];
+          }
+          document.getElementById(`${fields[i]}_error`).style.visibility =
+          "visible";
+        } else if (data[fields[i]].length < 2) {
+          document.getElementById("username_error").innerText =
+            "Username should have atleast 2 characters";
+          error = true;
+          if (focusField === "") {
+            focusField = fields[i];
+          }
+          document.getElementById(`${fields[i]}_error`).style.visibility =
+          "visible";
+        } else if (data[fields[i]].length > 100) {
+          document.getElementById("username_error").innerText =
+            "Username should not exceed 100 characters";
+          error = true;
+          if (focusField === "") {
+            focusField = fields[i];
+          }
+          document.getElementById(`${fields[i]}_error`).style.visibility =
+          "visible";
+        } else if (!isUserNameValid(data.username)) {
+          document.getElementById("username_error").innerText =
+            "Username is not valid. You can use only integers, characters(small letters), '-' and '_'.";
+          error = true;
+          if (focusField === "") {
+            focusField = fields[i];
+          }
+          document.getElementById(`${fields[i]}_error`).style.visibility =
+          "visible";
+        }
       }
 
-      if (fields[i] === "completed_year" && data[fields[i]] !== ""){
-        if (Number(data.completed_year.slice(0,4)) > year || (Number(data.completed_year.slice(0,4)) === year && Number(data.completed_year.slice(5,7))> month + 1 )){
-          error = true
+      if (fields[i] === "dob" && data[fields[i]].slice(0, 4) > year - 10) {
+        error = true;
+        focusField = "dob";
+        document.getElementById("dob_error").innerText =
+          "Age must be minimum 10 years.";
+        document.getElementById("dob_error").style.visibility = "visible";
+      }
+
+      if (fields[i] === "completed_year" && data[fields[i]] !== "") {
+        if (
+          Number(data.completed_year.slice(0, 4)) > year ||
+          (Number(data.completed_year.slice(0, 4)) === year &&
+            Number(data.completed_year.slice(5, 7)) > month + 1)
+        ) {
+          error = true;
           if (focusField === "") {
             focusField = "completed_year";
           }
-          document.getElementById("completed_year_error").innerText = "Invalid year"
-          document.getElementById("completed_year_error").style.visibility = "visible"
+          document.getElementById("completed_year_error").innerText =
+            "Invalid year";
+          document.getElementById("completed_year_error").style.visibility =
+            "visible";
         }
+      }
+
+      if (fields[i] === "preferred_location" && data.preferred_location.length>100){
+        error = true;
+          if (focusField === "") {
+            focusField = "preferred_location";
+          }
+          document.getElementById("preferred_location_error").innerText = "Preferred location should not exceed 100 characters";
+          document.getElementById("preferred_location_error").style.visibility = "visible";
       }
 
       if (
@@ -280,6 +337,7 @@ function CreatePilot() {
       }
     }
     if (error) {
+      setLoading(false)
       if (focusField === "attachment") {
         document.getElementById("pilot_type").scrollIntoView();
       } else {
@@ -293,39 +351,42 @@ function CreatePilot() {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       };
-      let formData = new FormData
-      formData.append("dob", data.dob)
-      formData.append("gender", data.gender,)
-      formData.append("city", data.city,)
-      formData.append("pilotType", data.pilot_type,)
+      let formData = new FormData();
+      formData.append("dob", data.dob);
+      formData.append("gender", data.gender);
+      formData.append("city", data.city);
+      formData.append("pilotType", data.pilot_type);
       // formData.append("certificates", data.attachment,)
-      formData.append("droneId", data.drone_id,)
-      formData.append("droneType", data.drone_type,)
-      formData.append("workType", data.work_type,)
-      if (data.hourly_pay != 0){
-        formData.append("hourlyPayment", data.hourly_pay,)
-      }else{
-        formData.append("monthlyPayment", data.monthly_pay,)
+      formData.append("droneId", data.drone_id);
+      formData.append("droneType", data.drone_type);
+      formData.append("workType", data.work_type);
+      if (data.hourly_pay != 0) {
+        formData.append("hourlyPayment", data.hourly_pay);
+      } else {
+        formData.append("monthlyPayment", data.monthly_pay);
       }
-      formData.append("industry", data.industry,)
-      formData.append("drones", data.drones,)
-      formData.append("skills", data.skills,)
-      formData.append("trainingCenter", data.training_center_name,)
-      formData.append("completedYear", data.completed_year,)
-      formData.append("file", data.attachment,)
+      formData.append("industry", data.industry);
+      formData.append("drones", data.drones);
+      formData.append("skills", data.skills);
+      formData.append("trainingCenter", data.training_center_name);
+      formData.append("completedYear", data.completed_year);
+      formData.append("file", data.attachment);
+      formData.append("userName", data.username)
+      formData.append("preferredLocation", data.preferred_location)
 
-      console.log(data)
-      
-      Axios.post(
-        `${domain}/api/pilot/registerPilot`,formData ,
-        config
-      )
+      console.log(data);
+
+      Axios.post(`${domain}/api/pilot/checkUserName`,{userName: data.username})
+      .then(res => {
+        Axios.post(`${domain}/api/pilot/registerPilot`, formData, config)
         .then((res) => {
+          setLoading(false)
           console.log(res.data);
           setAccountCreateSuccess(true);
           localStorage.setItem("role", "pilot");
         })
         .catch((err) => {
+          setLoading(false)
           try {
             if (err.response.status !== 500) {
               setServerError(true);
@@ -335,7 +396,15 @@ function CreatePilot() {
             setServerError(true);
           }
         });
-      console.log(data)
+      }).catch(err=>{
+        setLoading(false)
+        document.getElementById("username_error").style.visibility = "visible"
+        document.getElementById("username_error").innerText = "Username already exists"
+        document.getElementById("username").focus()
+      })
+
+      
+      console.log(data);
     }
   };
 
@@ -366,7 +435,7 @@ function CreatePilot() {
   const closeSuccessPopup = () => {
     setAccountCreateSuccess(false);
     window.scrollTo(0, 0);
-        history.push("/pilot_dashboard/account/");
+    history.push("/pilot_dashboard/account/");
   };
   const addSkill = (e) => {
     if (e.key === "Enter" && e.target.value !== "") {
@@ -405,28 +474,22 @@ function CreatePilot() {
   };
 
   const industryChange = (value) => {
-    var industries = []
-    for (var i = 0; i < value.length; i++){
-      if (!industries.includes(value[i].value)){
-        industries.push(value[i].value)
+    var industries = [];
+    for (var i = 0; i < value.length; i++) {
+      if (!industries.includes(value[i].value)) {
+        industries.push(value[i].value);
       }
     }
 
     setData({
-        ...data,
-        industry: industries,
-      });
+      ...data,
+      industry: industries,
+    });
 
-    console.log(value)
+    console.log(value);
     document.getElementById(`industry_error`).style.visibility = "hidden";
   };
 
-  const editHandler = () => {
-    setEdit(true);
-    setTimeout(() => {
-      document.getElementById(`full_name`).focus();
-    }, 10);
-  };
   const handleChange = (e) => {
     setData({
       ...data,
@@ -444,24 +507,20 @@ function CreatePilot() {
   const chooseFile = (e) => {
     try {
       if (e.target.files[0]) {
-        if(e.target.files[0].size/1000000 <= 5){
+        if (e.target.files[0].size / 1000000 <= 5) {
           setData({
-          ...data,
-          attachment: e.target.files[0],
-          attachment_selected: true,
-        });
-        }else{
-          setCertificateSizeExceed(true)
+            ...data,
+            attachment: e.target.files[0],
+            attachment_selected: true,
+          });
+        } else {
+          setCertificateSizeExceed(true);
         }
-        
       }
     } catch {}
     document.getElementById("attachment_error").style.visibility = "hidden";
   };
-  const clickEdit = () => {
-    setEdit(true);
-    setTimeout(() => document.getElementById("name").focus(), 10);
-  };
+
   const changePilotType = (e) => {
     setData({
       ...data,
@@ -509,6 +568,27 @@ function CreatePilot() {
                 </div>
               </Col>
             </Row>
+            <div>
+              <label htmlFor="city">
+                <div
+                  className="pd_b_i_profile_head"
+                  style={{ cursor: "pointer" }}
+                >
+                  Username
+                </div>
+              </label>
+              <input
+                type="text"
+                className="pd_b_i_profile_input"
+                value={data.username}
+                id="username"
+                onChange={changeHandler}
+                disabled={!edit}
+              />
+              <div className="input_error_msg" id="username_error">
+                Username is required
+              </div>
+            </div>
             <Row>
               <Col>
                 <div>
@@ -581,6 +661,25 @@ function CreatePilot() {
               />
               <div className="input_error_msg" id="city_error">
                 City is required
+              </div>
+            </div>
+            <div>
+              <label htmlFor="city">
+                <div
+                  className="pd_b_i_profile_head"
+                  style={{ cursor: "pointer" }}
+                >
+                  Preferred Location
+                </div>
+              </label>
+              <input
+                type="text"
+                className="pd_b_i_profile_input"
+                value={data.preferred_location}
+                id="preferred_location"
+                onChange={changeHandler}
+              />
+              <div className="input_error_msg" id="preferred_location_error">
               </div>
             </div>
 
@@ -672,7 +771,7 @@ function CreatePilot() {
                         style={{ cursor: "pointer" }}
                       >
                         {data.attachment_selected
-                          ? data.attachment.name.slice(0,50).replace(" ", "")
+                          ? data.attachment.name.slice(0, 50).replace(" ", "")
                           : "Attach your DGCA certificate"}
                       </span>
                     </div>
@@ -681,7 +780,7 @@ function CreatePilot() {
                     </div>
                     <input
                       type="file"
-                      accept = "image/png, image/jpg, image/jpeg, application/pdf"
+                      accept="image/png, image/jpg, image/jpeg, application/pdf"
                       id="pd_p_i_hidden"
                       onChange={chooseFile}
                       disabled={!edit}
@@ -690,7 +789,11 @@ function CreatePilot() {
                 </React.Fragment>
               ) : (
                 <div>
-                  <label className="pd_b_i_profile_head" htmlFor="drone_id" style = {{cursor: "pointer"}}>
+                  <label
+                    className="pd_b_i_profile_head"
+                    htmlFor="drone_id"
+                    style={{ cursor: "pointer" }}
+                  >
                     Drone ID
                   </label>
                   <input
@@ -771,7 +874,11 @@ function CreatePilot() {
               )}
               {data.work_type === "full_time" && (
                 <div>
-                  <label htmlFor="monthly_pay" className="pd_b_i_profile_head" style = {{cursor: "pointer"}}>
+                  <label
+                    htmlFor="monthly_pay"
+                    className="pd_b_i_profile_head"
+                    style={{ cursor: "pointer" }}
+                  >
                     Monthly Payment ($)
                   </label>
                   <input
@@ -803,14 +910,19 @@ function CreatePilot() {
                   options={industries}
                   onChange={industryChange}
                   styles={customStyles}
-                  className="u_f_category_dropdown" isMulti
+                  className="u_f_category_dropdown"
+                  isMulti
                 />
                 <div className="input_error_msg" id="industry_error">
                   Industry is required
                 </div>
               </div>
               <div>
-                <label htmlFor="years" className="pd_b_i_profile_head" style = {{cursor: "pointer"}}>
+                <label
+                  htmlFor="years"
+                  className="pd_b_i_profile_head"
+                  style={{ cursor: "pointer" }}
+                >
                   Experience
                 </label>
                 <Row>
@@ -854,8 +966,8 @@ function CreatePilot() {
                   <div>
                     <label
                       htmlFor="training_center_name"
-                      className="pd_b_i_profile_head" 
-                      style = {{cursor: "pointer"}}
+                      className="pd_b_i_profile_head"
+                      style={{ cursor: "pointer" }}
                     >
                       Training Center Name
                     </label>
@@ -879,7 +991,7 @@ function CreatePilot() {
                     <label
                       htmlFor="completed_year"
                       className="pd_b_i_profile_head"
-                      style = {{cursor: "pointer"}}
+                      style={{ cursor: "pointer" }}
                     >
                       Completed Term
                     </label>
@@ -900,7 +1012,11 @@ function CreatePilot() {
                 </React.Fragment>
               )}
               <div>
-                <label htmlFor="skills" className="pd_b_i_profile_head" style = {{cursor: "pointer"}}>
+                <label
+                  htmlFor="skills"
+                  className="pd_b_i_profile_head"
+                  style={{ cursor: "pointer" }}
+                >
                   Add Your Skills
                 </label>
                 <input
@@ -928,7 +1044,10 @@ function CreatePilot() {
               </div>
               {suggestedSkills.length !== 0 && (
                 <div>
-                  <div className="pd_b_i_profile_head" style = {{cursor: "default"}}>
+                  <div
+                    className="pd_b_i_profile_head"
+                    style={{ cursor: "default" }}
+                  >
                     Suggested Skills
                   </div>
                   {suggestedSkills.map((skill, index) => {
@@ -969,13 +1088,18 @@ function CreatePilot() {
                 </div>
               )}
               <div className="pd_b_i_notifications_save">
-                <button className="common_backBtn" onClick={()=>history.push("/choose-categories")}>
+                <button
+                  className="common_backBtn"
+                  onClick={() => history.push("/choose-categories")}
+                >
                   Back
                 </button>
                 <button
                   className="pd_b_i_notifications_saveBtn"
                   onClick={saveChanges}
                 >
+                  {loading?<Loader />:""}
+                  
                   Complete Profile
                 </button>
               </div>

@@ -58,6 +58,7 @@ function Pilot_BasicInfo() {
       localStorage.setItem("oldEmail", response.data.emailId);
       setData({
         full_name: data.name,
+        userName: data.userName,
         email: data.emailId,
         phone: data.phoneNo,
         dob: data.dob,
@@ -69,11 +70,13 @@ function Pilot_BasicInfo() {
         bio: data.bio,
         profile: `${data.profilePic}`,
         cover: `${data.coverPic}`,
+        preferredLocation: data.preferredLocation
       });
     });
   }, []);
   let [data, setData] = useState({
     full_name: "",
+    username: "",
     email: "",
     phone: "+91",
     dob: "",
@@ -85,6 +88,7 @@ function Pilot_BasicInfo() {
     bio: "",
     profile: Pilot,
     cover: Cover,
+    preferredLocation: "",
   });
   let [edit, setEdit] = useState(false);
   let [profileSuccess, setProfileSuccess] = useState(false);
@@ -392,22 +396,44 @@ function Pilot_BasicInfo() {
           Edit
         </div>
       </div>
-      <div>
-        <label htmlFor="full_name">
-          <div className="pd_b_i_profile_head">Name</div>
-        </label>
-        <input
-          type="text"
-          className="pd_b_i_profile_input"
-          value={data.full_name}
-          id="full_name"
-          onChange={changeHandler}
-          disabled={!edit}
-        />
-        <div className="input_error_msg" id="full_name_error">
-          Full name is required
-        </div>
-      </div>
+      <Row>
+        <Col>
+          <div>
+            <label htmlFor="full_name">
+              <div className="pd_b_i_profile_head">Name</div>
+            </label>
+            <input
+              type="text"
+              className="pd_b_i_profile_input"
+              value={data.full_name}
+              id="full_name"
+              onChange={changeHandler}
+              disabled={!edit}
+            />
+            <div className="input_error_msg" id="full_name_error">
+              Full name is required
+            </div>
+          </div>
+        </Col>
+        <Col>
+          <div>
+            <label htmlFor="full_name">
+              <div className="pd_b_i_profile_head">Username</div>
+            </label>
+            <input
+              type="text"
+              className="pd_b_i_profile_input"
+              value={data.userName}
+              id="userName"
+              onChange={changeHandler}
+              disabled={!edit}
+            />
+            <div className="input_error_msg" id="full_name_error">
+              Username is required
+            </div>
+          </div>
+        </Col>
+      </Row>
       <Row>
         <Col>
           <div>
@@ -527,7 +553,25 @@ function Pilot_BasicInfo() {
           </div>
         </Col>
         <Col xl={6}>
-          <div>
+        <div>
+            <label htmlFor = "city">
+            <div className="pd_b_i_profile_head">Preferred Location</div>
+            </label>
+            <input
+              type="text"
+              className="pd_b_i_profile_input"
+              value={data.preferredLocation}
+              id="preferredLocation"
+              onChange={changeHandler}
+              disabled={!edit}
+            />
+            <div className="input_error_msg" id="preferred_location_error">
+              Preferred Location should not exceed 100 characters
+            </div>
+          </div>
+        </Col>
+      </Row>
+      <div>
             <label htmlFor = "country">
             <div className="pd_b_i_profile_head">Country</div>
             </label>
@@ -543,8 +587,6 @@ function Pilot_BasicInfo() {
               Country is required
             </div>
           </div>
-        </Col>
-      </Row>
       <div>
         <label htmlFor = "bio">
         <div className="pd_b_i_profile_head">Bio</div>
