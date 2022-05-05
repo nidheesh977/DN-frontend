@@ -176,7 +176,11 @@ function App(){
             <Route exact path="/checkout/:id" component={Checkout} />
             <Route exact path="/blogs/:slug" component={Blog} />
             <Route exact path="/blog/:slug" component={BlogDetails} />
+
             <Route exact path="/blog_categories" component={BlogCategories} />
+            {/* <Route exact path="/blog_categories" component={BlogCategories} />
+            <Route exact path="/blog_categories" component={BlogCategories} />
+            <Route exact path="/blog_categories" component={BlogCategories} /> */}
 
             <Route exact path="/NoComponent" component={NoPageFound} />
 
