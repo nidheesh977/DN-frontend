@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios'
 import Header from '../header/Header'
 const API_URL = 'https://demo-nexevo.in/vijay';
+const domain = process.env.REACT_APP_MY_API;
+
   
 export default class BlogDetails extends React.Component { 
     
@@ -19,7 +21,9 @@ export default class BlogDetails extends React.Component {
           blog: [],
           blogcategories: [],
           visible: 6,
-          error: false
+          error: false,
+          data: {},
+          trendingBlogs: []
         };
     
         this.loadMore = this.loadMore.bind(this);
@@ -45,10 +49,34 @@ export default class BlogDetails extends React.Component {
            this.setState({ blogcategories: datas }) 
           })
 
-      
+      axios.post(`${domain}/api/blog/blogDetails`, {slug: this.props.match.params.slug}).then(res=>{
+          console.log(res)
+          this.setState({
+              data: res.data
+          })
+      })
+      axios
+      .get(`${domain}/api/category/getCategories`)
+  
+      .then((res) => {
+        this.setState({ blogcategories: res.data });
+      });
+      axios.get(`${domain}/api/blog/getBlogsTrending`).then(res=>{
+        console.log(res)
+        this.setState({
+          trendingBlogs: res.data
+        })
+    })
       } 
  
-      
+      trendingClicked = (slug)=>{
+        axios.post(`${domain}/api/blog/blogDetails`, {slug: slug}).then(res=>{
+            console.log(res)
+            this.setState({
+                data: res.data
+            })
+        })
+      }
     render() { 
 
     // const onSubmit = (data) => {
@@ -66,17 +94,17 @@ export default class BlogDetails extends React.Component {
             </Helmet>
 
             <section className={All.BlogDeatail}>
-                <Box p={4} textAlign={'center'}>
+                {/* <Box p={4} textAlign={'center'}>
                     <h2 className = {All.BlogDeatailTitle}>What is Lorem Ipsum?</h2> 
-                </Box> 
+                </Box>  */}
 
                 <Container className={All.Container}>               
                     <Row>
                         <Col md={8}>
                             <div className={All.BlogDeatailContent}>
-                                <img src={Placeholder} alt=""/> 
-                                <h4 className = {All.BlogDeatailSubTitle}>Ipsum has been the industry's standard dummy text ever since the 1500s.</h4>
-                                <p className= {All.FSize_16} >Description</p>
+                                <img src={this.state.data.image ? `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${this.state.data.image}` : Placeholder} alt="" style={{borderRadius: "10px"}}/> 
+                                <h4 className = {All.BlogDeatailSubTitle}>{this.state.data.title}</h4>
+                                <p className= {All.FSize_16} >{this.state.data.description}</p>
                             </div>
                         </Col>
 
@@ -96,7 +124,14 @@ export default class BlogDetails extends React.Component {
                                             {errors.email && errors.email.message  && <p class="error">Invalid email address</p>}
                                         </div>  */}
  
-                                        <div className={All.FormGroup}> 
+                                        <div className={All.FormGroup}>
+                                        <input
+                          type="email"
+                          name="email"
+                          className={All.FormControl}
+                          id="subscription"
+                          placeholder="E-mail Address"
+                        /> 
                                             <Button variant="contained" color="default" type="submit"  className={All.BtnStyle_3}>Subscribe</Button>   
                                         </div>   
 
@@ -109,7 +144,7 @@ export default class BlogDetails extends React.Component {
 
                                     return (
                                         <> 
-                                            <Link to="/"> <span className= {`${All.BtnStyle_4} ${All.BlogBtn}`} >{item.blogcategories} </span></Link>       
+                                            <Link to={`/blogs/${item.slug}`}> <span className= {`${All.BtnStyle_4} ${All.BlogBtn}`} >{item.category} </span></Link>       
                                             </> 
                                             );
                                     })}                                       
@@ -119,16 +154,16 @@ export default class BlogDetails extends React.Component {
                                 <Box pb={2} className={All.Trending} > 
                                     <h4 className={All.BorderBottom}>Trending</h4>
 
-                                    {this.state.blog.slice(0, this.state.visible).map((item, index) => {
+                                    {this.state.trendingBlogs.slice(0, this.state.visible).map((item, index) => {
                 return (
                     <> 
 
-                                    <Link to="/"> 
+                                    <Link to={`/blog/${item.slug}`} onClick={()=>this.trendingClicked(item.slug)}> 
                                         <div className={All.posts}>
-                                            <div className={All.ImageDiv}><img src={Placeholder}></img></div>
+                                            <div className={All.ImageDiv}><img src={item.image? `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${item.image}` : Placeholder} style={{height: "65px"}}></img></div>
                                             <div className={All.ContentDiv}>
-                                                <h6>{item.blogtitle}</h6>
-                                                <p>{item.blogsubtitle}</p>
+                                                <h6>{item.category}</h6>
+                                                <p>{item.title}</p>
                                             </div>
                                         </div>
                                     </Link>
