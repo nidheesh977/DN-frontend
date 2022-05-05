@@ -26,7 +26,7 @@ export default class Blog extends React.Component {
       blogcategories: [],
       visible: 6,
       error: false,
-      trendingBlogs : []
+      trendingBlogs: [],
     };
 
     this.loadMore = this.loadMore.bind(this);
@@ -40,57 +40,63 @@ export default class Blog extends React.Component {
 
   componentDidMount() {
     const url = `${API_URL}/blog`;
-    axios.post(`${domain}/api/category/getOneCategory`,{slug: this.props.match.params.slug}).then(res=>{
-      console.log(res)
-      this.setState({
-        metaTitle: res.data.metaTitle,
-        metaDescription: res.data.metaDescription,
-        metaKeywords: res.data.metaKeywords,
+    axios
+      .post(`${domain}/api/category/getOneCategory`, {
+        slug: this.props.match.params.slug,
       })
-      axios
-      .post(`${domain}/api/blog/getBlogs`, {category: res.data.category})
       .then((res) => {
-        console.log(res)
-        this.setState({ blog: res.data });
-      }).catch(err=>{
-        console.log(err)
-      })
-      axios.get(`${domain}/api/blog/getBlogsTrending`).then(res=>{
-        console.log(res)
+        console.log(res);
         this.setState({
-          trendingBlogs: res.data
-        })
-    })
+          metaTitle: res.data.metaTitle,
+          metaDescription: res.data.metaDescription,
+          metaKeywords: res.data.metaKeywords,
+        });
+        axios
+          .post(`${domain}/api/blog/getBlogs`, { category: res.data.category })
+          .then((res) => {
+            console.log(res);
+            this.setState({ blog: res.data });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        axios.get(`${domain}/api/blog/getBlogsTrending`).then((res) => {
+          console.log(res);
+          this.setState({
+            trendingBlogs: res.data,
+          });
+        });
+      });
 
-    })
-   
     axios
       .get(`${domain}/api/category/getCategories`)
-  
+
       .then((res) => {
         this.setState({ blogcategories: res.data });
       });
   }
-  
-  categoryClicked = (slug, category)=>{
-    axios.post(`${domain}/api/category/getOneCategory`,{slug: slug}).then(res=>{
-      console.log(res)
-      this.setState({
-        metaTitle: res.data.metaTitle,
-        metaDescription: res.data.metaDescription,
-        metaKeywords: res.data.metaKeywords,
-      })
-      axios
-      .post(`${domain}/api/blog/getBlogs`, {category: res.data.category})
+
+  categoryClicked = (slug, category) => {
+    axios
+      .post(`${domain}/api/category/getOneCategory`, { slug: slug })
       .then((res) => {
-        console.log(res)
-        this.setState({ blog: res.data });
-      }).catch(err=>{
-        console.log(err)
-      })
-    })
-    
-  }
+        console.log(res);
+        this.setState({
+          metaTitle: res.data.metaTitle,
+          metaDescription: res.data.metaDescription,
+          metaKeywords: res.data.metaKeywords,
+        });
+        axios
+          .post(`${domain}/api/blog/getBlogs`, { category: res.data.category })
+          .then((res) => {
+            console.log(res);
+            this.setState({ blog: res.data });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+  };
   render() {
     // const onSubmit = (data) => {
     //     console.log(data);
@@ -115,43 +121,53 @@ export default class Blog extends React.Component {
           <Container className={All.Container}>
             <Row>
               <Col md={8}>
-                <Row>
-                  {this.state.blog
-                    // .slice(0, this.state.visible)
-                    .map((item, index) => {
-                      return (
-                        <>
-                          <Col md={6} className={All.Blog}>
-                            <Link to={`/blog/${item.slug}`} id={item.id}>
-                              <div className={All.ListBlogs}>
-                                <img
-                                  class={All.BlogImage}
-                                  src={item.image ? `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${item.image}` : Placeholder}
-                                  width="100%" style={{height: "240px"}}
-                                ></img>
-                                <div
-                                  className={`${All.Bgcolordynamic} ${All.Content}`}
-                                >
-                                  <h6>{item.category}</h6>
-                                  <p className={All.BlogDesc}>
-                                    {item.title}
-                                  </p>
-                                  <span className={All.PublishedDate}>
-                                    {" "}
-                                    <img src={Calendar}></img> {item.createdAt.slice(0,10)}
-                                  </span>
-                                  <span className={All.Location}>
-                                    {" "}
-                                    <img src={Pin}></img> {item.location}{" "}
-                                  </span>
+                {this.state.blog.length <= 0 ? (
+                  <h2 style={{ textAlign: "center" }}>
+                    No blogs yet on this category
+                  </h2>
+                ) : (
+                  <Row>
+                    {this.state.blog
+                      // .slice(0, this.state.visible)
+                      .map((item, index) => {
+                        return (
+                          <>
+                            <Col md={6} className={All.Blog}>
+                              <Link to={`/blog/${item.slug}`} id={item.id}>
+                                <div className={All.ListBlogs}>
+                                  <img
+                                    class={All.BlogImage}
+                                    src={
+                                      item.image
+                                        ? `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${item.image}`
+                                        : Placeholder
+                                    }
+                                    width="100%"
+                                    style={{ height: "240px" }}
+                                  ></img>
+                                  <div
+                                    className={`${All.Bgcolordynamic} ${All.Content}`}
+                                  >
+                                    <h6>{item.category}</h6>
+                                    <p className={All.BlogDesc}>{item.title}</p>
+                                    <span className={All.PublishedDate}>
+                                      {" "}
+                                      <img src={Calendar}></img>{" "}
+                                      {item.createdAt.slice(0, 10)}
+                                    </span>
+                                    <span className={All.Location}>
+                                      {" "}
+                                      <img src={Pin}></img> {item.location}{" "}
+                                    </span>
+                                  </div>
                                 </div>
-                              </div>
-                            </Link>
-                          </Col>
-                        </>
-                      );
-                    })}
-                </Row>
+                              </Link>
+                            </Col>
+                          </>
+                        );
+                      })}
+                  </Row>
+                )}
 
                 {this.state.visible < this.state.blog.length && (
                   <Box py={6} textAlign={"center"}>
@@ -215,7 +231,12 @@ export default class Blog extends React.Component {
                       .map((item, index) => {
                         return (
                           <>
-                            <Link to={`/blogs/${item.slug}`} onClick={()=>this.categoryClicked(item.slug, item.category)}>
+                            <Link
+                              to={`/blogs/${item.slug}`}
+                              onClick={() =>
+                                this.categoryClicked(item.slug, item.category)
+                              }
+                            >
                               {" "}
                               <span
                                 className={`${All.BtnStyle_4} ${All.BlogBtn}`}
@@ -231,26 +252,31 @@ export default class Blog extends React.Component {
                   <Box pb={2} className={All.Trending}>
                     <h4 className={All.BorderBottom}>Trending</h4>
 
-                    {this.state.trendingBlogs
-                      .map((item, index) => {
-                        return (
-                          <>
-                            <Link to={`/blog/${item.slug}`}>
-                              <div className={All.posts}>
-                                <div className={All.ImageDiv}>
-                                  <img src={item.image ? `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${item.image}` : Placeholder} style={{height: "65px"}}></img>
-                                </div>
-                                <div className={All.ContentDiv}>
-                                  <h6>{item.category}</h6>
-                                  <p>{item.title}</p>
-                                </div>
+                    {this.state.trendingBlogs.map((item, index) => {
+                      return (
+                        <>
+                          <Link to={`/blog/${item.slug}`}>
+                            <div className={All.posts}>
+                              <div className={All.ImageDiv}>
+                                <img
+                                  src={
+                                    item.image
+                                      ? `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${item.image}`
+                                      : Placeholder
+                                  }
+                                  style={{ height: "65px" }}
+                                ></img>
                               </div>
-                            </Link>
-                          </>
-                        );
-                      })}
+                              <div className={All.ContentDiv}>
+                                <h6>{item.category}</h6>
+                                <p>{item.title}</p>
+                              </div>
+                            </div>
+                          </Link>
+                        </>
+                      );
+                    })}
                   </Box>
-                  
                 </div>
               </Col>
             </Row>

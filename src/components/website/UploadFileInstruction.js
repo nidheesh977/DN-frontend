@@ -6,6 +6,7 @@ import MuiDialogContent from "@material-ui/core/DialogContent";
 import Close from "../images/close.svg";
 import All from "../website/All.module.css";
 import { withStyles } from "@material-ui/core/styles";
+import { Redirect } from "react-router-dom";
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -18,12 +19,29 @@ class UploadFileInstruction extends Component {
     super(props);
     this.state = {
       instructions: true,
+      redirect: false
     };
+  }
+
+  componentWillMount(){
+    var date = new Date()
+    var today = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`
+     var lsd = localStorage.getItem("lsd")
+     if (lsd === today){
+       this.setState({
+         instructions: false,
+         redirect: true
+       })
+     }
+     else{
+       localStorage.setItem("lsd", today)
+     }
   }
 
   render() {
     return (
       <div>
+        {this.state.redirect&&<Redirect to = "/UploadFile" />}
         <Dialog
           open={this.state.instructions}
           onClose={this.props.closePopup}

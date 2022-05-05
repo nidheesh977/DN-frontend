@@ -76,7 +76,7 @@ function Pilot_BasicInfo() {
   }, []);
   let [data, setData] = useState({
     full_name: "",
-    username: "",
+    userName: "",
     email: "",
     phone: "+91",
     dob: "",
@@ -220,6 +220,7 @@ function Pilot_BasicInfo() {
   const saveChanges = () => {
     var fields = [
       "full_name",
+      "userName",
       "email",
       "phone",
       "dob",
@@ -238,6 +239,20 @@ function Pilot_BasicInfo() {
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         );
     };
+
+    function isUserNameValid(username) {
+      /* 
+        Usernames can only have: 
+        - Lowercase, Uppercase Letters (a-z), (A-Z) 
+        - Numbers (0-9)
+        - Underscores (_)
+        - Hyphen (-)
+      */
+      const res = /^[a-z0-9_-]+$/.exec(username);
+      const valid = !!res;
+      return valid;
+    }
+
     for (var i = 0; i < fields.length; i++) {
       if (fields[i] === "bio") {
         if (data.bio === "") {
@@ -249,7 +264,37 @@ function Pilot_BasicInfo() {
           error = true;
           break;
         }
-      } else if (fields[i] === "email") {
+      }else if (fields[i] === "userName"){
+        if (fields[i] === "userName") {
+          if (data[fields[i]].length === 0) {
+            document.getElementById("userName_error").innerText =
+              "Username is required";
+            error = true;
+            document.getElementById(`${fields[i]}_error`).style.visibility =
+            "visible";
+          } else if (data[fields[i]].length < 2) {
+            document.getElementById("userName_error").innerText =
+              "Username should have atleast 2 characters";
+            error = true;
+            document.getElementById(`${fields[i]}_error`).style.visibility =
+            "visible";
+          } else if (data[fields[i]].length > 100) {
+            document.getElementById("userName_error").innerText =
+              "Username should not exceed 100 characters";
+            error = true;
+            document.getElementById(`${fields[i]}_error`).style.visibility =
+            "visible";
+          } else if (!isUserNameValid(data.userName)) {
+            document.getElementById("userName_error").innerText =
+              "Username is not valid. You can use only integers, characters(small letters), '-' and '_'.";
+            error = true;
+            document.getElementById(`userName`).focus();
+            document.getElementById(`${fields[i]}_error`).style.visibility =
+            "visible";
+          }
+        }
+      }
+       else if (fields[i] === "email") {
         if (data.email === "") {
           document.getElementById(`email_error`).innerHTML =
             "Email ID is Required";
@@ -428,7 +473,7 @@ function Pilot_BasicInfo() {
               onChange={changeHandler}
               disabled={!edit}
             />
-            <div className="input_error_msg" id="full_name_error">
+            <div className="input_error_msg" id="userName_error">
               Username is required
             </div>
           </div>
