@@ -52,13 +52,13 @@ function Pilot_BasicInfo() {
   useEffect(() => {
     axios.post(`${domain}/api/user/pilotDetails`, config).then((response) => {
       var result = Countries.filter((obj) => obj.name == response.data.country);
-      // console.log(result[0].dial_code);
+      console.log(response.data);
       // setCode(result[0].dial_code);
       let data = response.data;
       localStorage.setItem("oldEmail", response.data.emailId);
       setData({
         full_name: data.name,
-        userName: data.userName,
+        userName: data.userName?data.userName:"",
         email: data.emailId,
         phone: data.phoneNo,
         dob: data.dob,
@@ -70,7 +70,7 @@ function Pilot_BasicInfo() {
         bio: data.bio,
         profile: `${data.profilePic}`,
         cover: `${data.coverPic}`,
-        preferredLocation: data.preferredLocation
+        preferredLocation: data.preferredLocation?data.preferredLocation:"",
       });
     });
   }, []);
@@ -270,18 +270,21 @@ function Pilot_BasicInfo() {
             document.getElementById("userName_error").innerText =
               "Username is required";
             error = true;
+            document.getElementById(`userName`).focus();
             document.getElementById(`${fields[i]}_error`).style.visibility =
             "visible";
           } else if (data[fields[i]].length < 2) {
             document.getElementById("userName_error").innerText =
               "Username should have atleast 2 characters";
             error = true;
+            document.getElementById(`userName`).focus();
             document.getElementById(`${fields[i]}_error`).style.visibility =
             "visible";
           } else if (data[fields[i]].length > 100) {
             document.getElementById("userName_error").innerText =
               "Username should not exceed 100 characters";
             error = true;
+            document.getElementById(`userName`).focus();
             document.getElementById(`${fields[i]}_error`).style.visibility =
             "visible";
           } else if (!isUserNameValid(data.userName)) {
@@ -340,7 +343,7 @@ function Pilot_BasicInfo() {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       };
-      console.log(data);
+      console.log(data.userName);
 
       if (data.email !== localStorage.getItem("oldEmail")) {
         console.log("Emails Differ");
@@ -350,6 +353,8 @@ function Pilot_BasicInfo() {
         .post(
           `${domain}/api/pilot/updateBasicInfo`,
           {
+            userName: data.userName,
+            preferredLocation: data.preferredLocation,
             name: data.full_name,
             emailId: data.email,
             phoneNo: data.phone,

@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import $, { data } from "jquery";
 import SearchResults from "react-filter-search";
 import nofoundresult from "../images/noresultfound.svg";
-// import Like from "../Like";  
+// import Like from "../Like";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import LanguageIcon from "@material-ui/icons/Language";
@@ -366,8 +366,8 @@ class GalleryFilter extends React.Component {
     };
     this.setState({
       loading: true,
-      listing: []
-    })
+      listing: [],
+    });
     await this.setState({
       followingDropdown: e.target.value,
     });
@@ -378,13 +378,13 @@ class GalleryFilter extends React.Component {
           console.log(res);
           this.setState({
             listing: res.data,
-            loading: false
+            loading: false,
           });
         })
-        .catch(err=>{
+        .catch((err) => {
           this.setState({
-            loading: false
-          })
+            loading: false,
+          });
         });
     } else {
       axios
@@ -402,7 +402,6 @@ class GalleryFilter extends React.Component {
           });
         });
     }
-    
   };
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
@@ -427,14 +426,12 @@ class GalleryFilter extends React.Component {
           loading: false,
         });
       });
-    axios
-      .post(`${domain}/api/user/checkUser`, config)
-      .then((res) => {
-        console.log(res.data);
-        this.setState({
-          liked_list: res.data.likedMedia,
-        });
-      })
+    axios.post(`${domain}/api/user/checkUser`, config).then((res) => {
+      console.log(res.data);
+      this.setState({
+        liked_list: res.data.likedMedia,
+      });
+    });
   }
 
   dropdown_open = (id) => {
@@ -469,8 +466,8 @@ class GalleryFilter extends React.Component {
   dropdownChanged = async (e) => {
     this.setState({
       listing: [],
-      loading: true
-    })
+      loading: true,
+    });
     await this.setState({
       dropdown: e.target.value,
     });
@@ -484,13 +481,13 @@ class GalleryFilter extends React.Component {
         console.log(res);
         this.setState({
           listing: res.data,
-          loading: false
+          loading: false,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         this.setState({
-          loading: false
-        })
+          loading: false,
+        });
       });
   };
 
@@ -505,8 +502,8 @@ class GalleryFilter extends React.Component {
     e.preventDefault();
     this.setState({
       listing: [],
-      loading: true
-    })
+      loading: true,
+    });
     await axios
       .post(
         `${domain}/api/image/imageFilters`,
@@ -517,19 +514,19 @@ class GalleryFilter extends React.Component {
         console.log(res);
         this.setState({
           listing: res.data,
-          loading: false
+          loading: false,
         });
       });
     this.setState({
-      loading: false
-    })
+      loading: false,
+    });
   };
 
   render() {
     const { links, activeLink } = this.state;
     const { listing, value } = this.state;
-    const { valuees} = this.state;
-    const { loading} = this.state;
+    const { valuees } = this.state;
+    const { loading } = this.state;
 
     const { classes } = this.props;
 
@@ -606,7 +603,7 @@ class GalleryFilter extends React.Component {
                   </Col>
 
                   <Col lg={8} xs={12} className="categories">
-                    <div className="Filters" id = "mainFilter">
+                    <div className="Filters" id="mainFilter">
                       <form className="GalleryForm">
                         <ul>
                           {links.map((link, index) => {
@@ -665,7 +662,11 @@ class GalleryFilter extends React.Component {
                   <Container>
                     <Row
                       gutterWidth={0}
-                      style={{ margin: "auto", maxWidth: "80%", marginTop: "35px" }}
+                      style={{
+                        margin: "auto",
+                        maxWidth: "80%",
+                        marginTop: "35px",
+                      }}
                     >
                       <Col lg={2} xs={2}>
                         <select
@@ -1011,9 +1012,12 @@ class GalleryFilter extends React.Component {
                                                               <Checkbox
                                                                 icon={
                                                                   <>
-                                                                    {(this.state.liked_list.includes(
+                                                                    {this.state.liked_list.includes(
                                                                       user._id
-                                                                    ) && localStorage.getItem("access_token")) ? (
+                                                                    ) &&
+                                                                    localStorage.getItem(
+                                                                      "access_token"
+                                                                    ) ? (
                                                                       <Favorite />
                                                                     ) : (
                                                                       <FavoriteBorder />
@@ -1022,9 +1026,12 @@ class GalleryFilter extends React.Component {
                                                                 }
                                                                 checkedIcon={
                                                                   <>
-                                                                    {(this.state.liked_list.includes(
+                                                                    {this.state.liked_list.includes(
                                                                       user._id
-                                                                    ) && localStorage.getItem("access_token")) ? (
+                                                                    ) &&
+                                                                    localStorage.getItem(
+                                                                      "access_token"
+                                                                    ) ? (
                                                                       <Favorite />
                                                                     ) : (
                                                                       <FavoriteBorder />

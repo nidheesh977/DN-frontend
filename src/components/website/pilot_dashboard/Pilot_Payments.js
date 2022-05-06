@@ -49,8 +49,8 @@ function Pilot_Payments() {
       .get(`${domain}/api/pilotSubscription/getMySubscriptionData`, config)
       .then((res) => {
         setSubscriptionDetails(res.data);
-        console.log(res.data);
-      });
+        console.log(res);
+      })
   }, []);
   let [pdfData, setPdfData] = useState({
     name: "",
@@ -305,7 +305,7 @@ function Pilot_Payments() {
             style={{ textAlign: "center", width: "100%", marginTop: "30px" }}
           >
             {subscriptionDetails.sub && (
-              <>
+              subscriptionDetails.sub.plan&&<>
                 {subscriptionDetails.sub.plan.includes("Gold") && (
                   <button
                     className="c_cBtn3"

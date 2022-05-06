@@ -84,12 +84,19 @@ function Navbar(props) {
 
   const uploadInstructions = () => {
     if(!localStorage.getItem("access_token")){
-     history.push("/login")
+      history.push("/login")
+    }else{
+      var date = new Date()
+      var today = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`
+      var lsd = localStorage.getItem("lsd")
+       if (lsd === today){
+         history.push("/UploadFile")
+       }
+       else{
+         localStorage.setItem("lsd", today)
+         setInstructions(true)
+       }
     }
-    else{
-      setInstructions(true)
-    }
-
   }
 
   const accountLogout = () => {

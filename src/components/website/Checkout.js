@@ -44,6 +44,7 @@ function Checkout() {
     2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033,
   ]);
   const [secret, setSecret] = useState("");
+  const [saveAddress, setSaveAddress] = useState(false);
 
   const history = useHistory();
 
@@ -98,7 +99,7 @@ function Checkout() {
           email: res.data.email?res.data.email:"",
           line1: res.data.line1?res.data.line1:"",
           line2: res.data.line2?res.data.line2:"",
-          pin_code: res.data.postalAddress?res.data.postalAddress:"",
+          pin_code: res.data.postal_code?Number(res.data.postal_code):"",
           city: res.data.city?res.data.city:"",
           state: res.data.state?res.data.state:"",
           country: country.label,
@@ -272,6 +273,10 @@ function Checkout() {
       axios
         .post(`${domain}/api/payment/startPaymentProcess`, submitData, config)
         .then((res) => {
+          if (saveAddress){
+            axios.post(`${domain}/api/pilot/updateBillingAddress`, submitData, config)
+            .then(res => console.log(res.data))
+          }
           setLoading(false)
           console.log(res.data);
           setSecret(res.data.clientSecret);
@@ -717,6 +722,10 @@ function Checkout() {
                       </div>
                     </Col>
                   </Row>
+                  <label style = {{width: "fit-content", cursor: "pointer"}}>
+                    <input type="checkbox" name="save_address" id="save_address" checked = {saveAddress} style = {{marginRight: "10px"}} onChange = {()=>setSaveAddress(!saveAddress)}/>
+                    Save address for future payments.
+                  </label>
                   <div style={{ textAlign: "right", marginBottom: "250px" }}>
                     <button
                       className="c_cBtn"
