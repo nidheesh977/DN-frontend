@@ -115,6 +115,11 @@ export default class Blog extends React.Component {
           <Container className={All.Container}>
             <Row>
               <Col md={8}>
+              {this.state.blog.length <= 0 ? (
+                  <h2 style={{ textAlign: "center" }}>
+                    No blogs yet on this category
+                  </h2>
+                ) : (
                 <Row>
                   {this.state.blog
                     // .slice(0, this.state.visible)
@@ -152,7 +157,8 @@ export default class Blog extends React.Component {
                       );
                     })}
                 </Row>
-
+                )}
+  
                 {this.state.visible < this.state.blog.length && (
                   <Box py={6} textAlign={"center"}>
                     <Button
