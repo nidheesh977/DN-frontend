@@ -6,7 +6,7 @@ import MuiDialogContent from "@material-ui/core/DialogContent";
 import Close from "../images/close.svg";
 import All from "../website/All.module.css";
 import { withStyles } from "@material-ui/core/styles";
-import { Redirect } from "react-router-dom";
+import {Redirect} from "react-router-dom"
 
 const DialogContent = withStyles((theme) => ({
   root: {

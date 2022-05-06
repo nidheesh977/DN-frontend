@@ -57,6 +57,7 @@ import HelpCenter from "./components/website/HelpCenter";
 import Blog from "./components/website/Blog";
 import BlogDetails from "./components/website/BlogDetails";
 import BlogCategories from "./components/website/BlogCategories";
+import Shoots from "./components/website/Shoots";
 
 function App(){
 
@@ -176,6 +177,7 @@ function App(){
             <Route exact path="/checkout/:id" component={Checkout} />
             <Route exact path="/blogs/:slug" component={Blog} />
             <Route exact path="/blog/:slug" component={BlogDetails} />
+            <Route exact path="/shoot-of-the-week" component={Shoots} />
 
             <Route exact path="/blog_categories" component={BlogCategories} />
             {/* <Route exact path="/blog_categories" component={BlogCategories} />

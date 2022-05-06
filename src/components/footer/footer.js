@@ -50,7 +50,7 @@ this.setState({
                   <Link className="footer_link">Post job vacancy</Link>
                 </li>
                 <li>
-                  <Link className="footer_link">Post Freelancer Requirement</Link>
+                  <Link className="footer_link" to="/shoot-of-the-week">Shoot of week</Link>
                 </li>
                 <li>
                   <Link className="footer_link" to="/help-center">Help Center</Link>

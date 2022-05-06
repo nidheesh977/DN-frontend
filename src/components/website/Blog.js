@@ -121,11 +121,16 @@ export default class Blog extends React.Component {
           <Container className={All.Container}>
             <Row>
               <Col md={8}>
+<<<<<<< HEAD
                 {this.state.blog.length <= 0 ? (
+=======
+              {this.state.blog.length <= 0 ? (
+>>>>>>> 14d94699055bffeadd899bfe205834cef8c998e5
                   <h2 style={{ textAlign: "center" }}>
                     No blogs yet on this category
                   </h2>
                 ) : (
+<<<<<<< HEAD
                   <Row>
                     {this.state.blog
                       // .slice(0, this.state.visible)
@@ -169,6 +174,47 @@ export default class Blog extends React.Component {
                   </Row>
                 )}
 
+=======
+                <Row>
+                  {this.state.blog
+                    // .slice(0, this.state.visible)
+                    .map((item, index) => {
+                      return (
+                        <>
+                          <Col md={6} className={All.Blog}>
+                            <Link to={`/blog/${item.slug}`} id={item.id}>
+                              <div className={All.ListBlogs}>
+                                <img
+                                  class={All.BlogImage}
+                                  src={item.image ? `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${item.image}` : Placeholder}
+                                  width="100%" style={{height: "240px"}}
+                                ></img>
+                                <div
+                                  className={`${All.Bgcolordynamic} ${All.Content}`}
+                                >
+                                  <h6>{item.category}</h6>
+                                  <p className={All.BlogDesc}>
+                                    {item.title}
+                                  </p>
+                                  <span className={All.PublishedDate}>
+                                    {" "}
+                                    <img src={Calendar}></img> {item.createdAt.slice(0,10)}
+                                  </span>
+                                  <span className={All.Location}>
+                                    {" "}
+                                    <img src={Pin}></img> {item.location}{" "}
+                                  </span>
+                                </div>
+                              </div>
+                            </Link>
+                          </Col>
+                        </>
+                      );
+                    })}
+                </Row>
+                )}
+  
+>>>>>>> 14d94699055bffeadd899bfe205834cef8c998e5
                 {this.state.visible < this.state.blog.length && (
                   <Box py={6} textAlign={"center"}>
                     <Button
