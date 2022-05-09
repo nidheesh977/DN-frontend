@@ -246,10 +246,11 @@ export default class TagBasedListing extends Component {
                         <span className="LikeIcon MuliLight">
                           {" "}
                           <FormControlLabel
-                            onClick={() => this.likeFile(file._id, index)}
+                            
                             className="MuliLight"
                             control={
                               <Checkbox
+                                onClick={() => this.likeFile(file._id, index)}
                                 icon={
                                   <>
                                     {this.state.liked_list.includes(file._id) &&

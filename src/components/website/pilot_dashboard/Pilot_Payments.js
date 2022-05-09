@@ -238,66 +238,37 @@ function Pilot_Payments() {
               </div>
             </div>
             <div>
-              <div className="sub_det_title">Current start date :</div>
+              <div className="sub_det_title">Duration :</div>
               <div className="sub_det_content" id="sub_det_start_date">
                 {subscriptionDetails.startDate
                   ? new Date(subscriptionDetails.startDate * 1e3)
                       .toISOString()
-                      .slice(0, 10)
-                  : ""}
-              </div>
-            </div>
-            <div>
-              <div className="sub_det_title">Current end date :</div>
-              <div className="sub_det_content" id="sub_det_end_date">
-                {subscriptionDetails.endDate
-                  ? new Date(subscriptionDetails.endDate * 1e3)
+                      .slice(0, 10) + " -> " + new Date(subscriptionDetails.endDate * 1e3)
                       .toISOString()
                       .slice(0, 10)
                   : ""}
-              </div>
-            </div>
-            <div>
-              <div className="sub_det_title">Image Limit :</div>
-              <div className="sub_det_content" id="sub_det_start_date">
-                {subscriptionDetails.sub ? subscriptionDetails.sub.images : ""}{" "}
-                Images
               </div>
             </div>
           </Col>
           <Col className="sub_det_col3">
             <div>
-              <div className="sub_det_title">Uploaded images :</div>
+              <div className="sub_det_title">Remaining images :</div>
               <div className="sub_det_content" id="sub_det_start_date">
-                {subscriptionDetails.images} Images
+                {subscriptionDetails.sub ? subscriptionDetails.sub.images-subscriptionDetails.images : ""}{" "} Images
               </div>
             </div>
             <div>
-              <div className="sub_det_title">Video Limit :</div>
+              <div className="sub_det_title">Remaining videos :</div>
               <div className="sub_det_content" id="sub_det_start_date">
-                {subscriptionDetails.sub ? subscriptionDetails.sub.videos : ""}{" "}
-                Videos
+                {subscriptionDetails.sub ? subscriptionDetails.sub.videos-subscriptionDetails.videos : ""} Videos
               </div>
             </div>
             <div>
-              <div className="sub_det_title">Uploaded videos :</div>
+              <div className="sub_det_title">Remaining 3dimages :</div>
               <div className="sub_det_content" id="sub_det_start_date">
-                {subscriptionDetails.videos} Videos
-              </div>
-            </div>
-            <div>
-              <div className="sub_det_title">3dimages Limit :</div>
-              <div className="sub_det_content" id="sub_det_start_date">
-                {subscriptionDetails.sub
-                  ? subscriptionDetails.sub.images3d
-                  : ""}{" "}
-                3dimages
-              </div>
-            </div>
-            <div>
-              <div className="sub_det_title">Uploaded 3dimages :</div>
-              <div className="sub_det_content" id="sub_det_start_date">
-                {subscriptionDetails.images3d} 3dimages
+              {subscriptionDetails.sub
+                  ? subscriptionDetails.sub.images3d - subscriptionDetails.images3d
+                  : ""} 3dimages
               </div>
             </div>
           </Col>

@@ -86,21 +86,21 @@ class Account_Sidebar extends React.Component {
                   <div id="pd_filter1_checkbox_label">
                     {" "}
                     <NavLink
-                      to="/pilot_dashboard/account/payments"
+                      to="/pilot_dashboard/account/my_subscription"
                       activeClassName="h_p_sidebar_active"
                       className="h_p_filter1_checkbox_label"
                     >
-                      My Payments
+                      My Subscription
                     </NavLink>
                   </div>
                   <div id="pd_filter1_checkbox_label">
                     {" "}
                     <NavLink
-                      to="/pilot_dashboard/account/payment_address"
+                      to="/pilot_dashboard/account/billing_address"
                       activeClassName="h_p_sidebar_active"
                       className="h_p_filter1_checkbox_label"
                     >
-                      Payment Address
+                      Billing Address
                     </NavLink>
                   </div>
                   <div id="pd_filter1_checkbox_label">
@@ -138,11 +138,11 @@ class Account_Sidebar extends React.Component {
                 component={Pilot_ProfessionalInfo}
               />
               <Route
-                path="/pilot_dashboard/account/payments"
+                path="/pilot_dashboard/account/my_subscription"
                 component={Pilot_Payments}
               />
               <Route
-                path="/pilot_dashboard/account/payment_address"
+                path="/pilot_dashboard/account/billing_address"
                 component={PilotPaymentAddress}
               />
               <Route

@@ -51,29 +51,6 @@ class Footer extends Component {
               })}
             </ul>
           </Col>
-          <Col xl={2} md={4.2} sm={6} xs={6}>
-            <ul>
-              <li className="footer_title">Hire Droners</li>
-              <li>
-                <Link className="footer_link">Post job vacancy</Link>
-              </li>
-              <li>
-                <Link className="footer_link" to="/shoot-of-the-week">
-                  Shoot of week
-                </Link>
-              </li>
-              <li>
-                <Link className="footer_link" to="/help-center">
-                  Help Center
-                </Link>
-              </li>
-              <li>
-                <Link className="footer_link" to="/DownloadSubscription">
-                  Pro Pilot
-                </Link>
-              </li>
-            </ul>
-          </Col>
           <Col xl={2} md={4} sm={6} xs={6}>
             <ul>
               <li className="footer_title">Shoots</li>
@@ -88,23 +65,59 @@ class Footer extends Component {
               }
             </ul>
           </Col>
+          <Col xl={2} md={4.2} sm={6} xs={6}>
+            <ul>
+              <li className="footer_title">Useful Links</li>
+              <li>
+                <Link className="footer_link" to="/help-center">
+                  Help Center
+                </Link>
+              </li>
+              <li>
+                <Link to = "/" className="footer_link">How it works</Link>
+              </li>
+              <li>
+                <Link to = "/" className="footer_link">Advertise with us</Link>
+              </li>
+              <li>
+                <Link className="footer_link" to="/shoot-of-the-week">
+                  Shoot of week
+                </Link>
+              </li>
+              
+              <li>
+                <Link className="footer_link" to="/DownloadSubscription">
+                  Pilot Pro
+                </Link>
+              </li>
+              
+              <li>
+                <Link className="footer_link" to="/HireSubscription">
+                  Company Pro
+                </Link>
+              </li>
+              <li>
+                <Link className="footer_link" to="/">
+                  Our team
+                </Link>
+              </li>
+            </ul>
+          </Col>
+        
           <Col xl={2.5} md={4.7} sm={6} xs={6}>
             <ul>
-              <li className="footer_title">Top Drone Manufacturers</li>
+              <li className="footer_title">Social Media</li>
               <li>
-                <Link className="footer_link">Nexevo Technologies</Link>
+                <Link to = "/" className="footer_link">Facebook</Link>
               </li>
               <li>
-                <Link className="footer_link">Drone Zone</Link>
+                <Link to = "/" className="footer_link">Instagram</Link>
               </li>
               <li>
-                <Link className="footer_link">Droners.com</Link>
+                <Link to = "/" className="footer_link">Twitter</Link>
               </li>
               <li>
-                <Link className="footer_link">thedroners.com</Link>
-              </li>
-              <li>
-                <Link className="footer_link">Drone Power</Link>
+                <Link to = "/" className="footer_link">LinkedIn</Link>
               </li>
             </ul>
           </Col>
@@ -115,36 +128,36 @@ class Footer extends Component {
               <Row>
                 <Col xl={6} lg={3.5} md={5} sm={4} xs={4}>
                   <li>
-                    <Link className="footer_link">DJI Mavic Air 2</Link>
+                    <Link to = "/" className="footer_link">DJI Mavic Air 2</Link>
                   </li>
                   <li>
-                    <Link className="footer_link">DJI Mavic 2 Pro</Link>
+                    <Link to = "/" className="footer_link">DJI Mavic 2 Pro</Link>
                   </li>
                   <li>
-                    <Link className="footer_link">DJI Mavic Mini</Link>
+                    <Link to = "/" className="footer_link">DJI Mavic Mini</Link>
                   </li>
                   <li>
-                    <Link className="footer_link">DJI Mavic 2 Zoom</Link>
+                    <Link to = "/" className="footer_link">DJI Mavic 2 Zoom</Link>
                   </li>
                   <li>
-                    <Link className="footer_link">DJI Phanton 4</Link>
+                    <Link to = "/" className="footer_link">DJI Phanton 4</Link>
                   </li>
                 </Col>
                 <Col>
                   <li>
-                    <Link className="footer_link">Parrot Anafi</Link>
+                    <Link to = "/" className="footer_link">Parrot Anafi</Link>
                   </li>
                   <li>
-                    <Link className="footer_link">DJI Mavic Pro</Link>
+                    <Link to = "/" className="footer_link">DJI Mavic Pro</Link>
                   </li>
                   <li>
-                    <Link className="footer_link">DJI Inspire 2</Link>
+                    <Link to = "/" className="footer_link">DJI Inspire 2</Link>
                   </li>
                   <li>
-                    <Link className="footer_link">DJI Inspire 1</Link>
+                    <Link to = "/" className="footer_link">DJI Inspire 1</Link>
                   </li>
                   <li>
-                    <Link className="footer_link">Parrot Bebop 2</Link>
+                    <Link to = "/" className="footer_link">Parrot Bebop 2</Link>
                   </li>
                 </Col>
               </Row>
@@ -162,7 +175,7 @@ class Footer extends Component {
           <Col>
             <ul>
               <li className="footer_copyright">
-                Designed &amp; Developed by Nexevo Technologies.
+                Designed &amp; Developed by <a style = {{color: "#00e7fc"}} href = "https://www.demo-nexevo.in/deva/nexevo/" target = "_blank">Nexevo Technologies</a>.
               </li>
             </ul>
           </Col>

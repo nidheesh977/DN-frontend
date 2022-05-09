@@ -48,6 +48,7 @@ function Pilot_nav() {
           >
             My Account
           </Link>
+          <Link to = "/DownloadSubscription" style = {{float: "right"}}><button style = {{height: "35px", backgroundColor: "#4ffea3", padding: "0px 20px", borderRadius: "20px", fontFamily: "muli-regular", fontSize: "16px", border: "1px solid #4ffea3"}} className = "p_n_upgrade_btn">Upgrade</button></Link>
         </Container>
       </div>
     </div>

@@ -384,7 +384,7 @@ class UploadFiles extends Component {
           }
 
           details.push({
-            file: "",
+            file: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fgithub.com%2Ffossasia%2Fphimpme-android%2Fissues%2F1294&psig=AOvVaw2EH6sNf78IOj9dUUhsnkWM&ust=1652163020708000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCNj4n4Th0fcCFQAAAAAdAAAAABAS",
             name: e.target.files[i].name,
             custom_name: "",
             type: e.target.files[i].type,

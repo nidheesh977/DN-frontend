@@ -45,7 +45,7 @@ import Box from "@material-ui/core/Box";
 import Skeleton from "react-loading-skeleton";
 import Close from "../images/close.svg";
 import { Redirect } from "react-router-dom";
-import ProImg from "../images/proIcon.png"
+import ProImg from "../images/proIcon.png";
 
 const styles = (theme) => ({
   root: {
@@ -93,11 +93,11 @@ function Imageview() {
   let param = useParams();
   let history = useHistory();
   // let [search, setSearch] = res
-  let [loginError, setLoginError] = useState(false)
+  let [loginError, setLoginError] = useState(false);
 
   const closeLoginError = () => {
-    setLoginError(false)
-  }
+    setLoginError(false);
+  };
 
   useEffect(() => {
     axios
@@ -128,28 +128,30 @@ function Imageview() {
       setLoading(false);
     });
   }, []);
-  useEffect(()=>{
-    axios.post(`${domain}/api/image/viewImage/${param.id}`).then((res)=>{
-      console.log(res.data)
-    })
-  }, [])
-  useEffect(()=>{
-    axios.post(`${domain}/api/image/getUser/${param.id}`).then((res)=>{
-      console.log(res)
-      setUserDetails(res.data)
-    })
-  }, [])
-  let [pilotId, setPilotId] = useState([])
-  useEffect(()=>{
-    console.log(param.user_id)
-    axios.post(`${domain}/api/hireProposal/sampleData`, {userId: param.user_id}).then((res)=>{
-      
-      console.log(res)
-      setPilotId(res.data[0])
-    }).catch(err=>{
-      console.log(err)
-    })
-  }, [])
+  useEffect(() => {
+    axios.post(`${domain}/api/image/viewImage/${param.id}`).then((res) => {
+      console.log(res.data);
+    });
+  }, []);
+  useEffect(() => {
+    axios.post(`${domain}/api/image/getUser/${param.id}`).then((res) => {
+      console.log(res);
+      setUserDetails(res.data);
+    });
+  }, []);
+  let [pilotId, setPilotId] = useState([]);
+  useEffect(() => {
+    console.log(param.user_id);
+    axios
+      .post(`${domain}/api/hireProposal/sampleData`, { userId: param.user_id })
+      .then((res) => {
+        console.log(res);
+        setPilotId(res.data[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   useEffect(() => {
     setShareLink(window.location.href);
     axios
@@ -196,19 +198,23 @@ function Imageview() {
   };
   const submitProcess = () => {
     if (hireForm.description !== "" && hireForm.description.length <= 200) {
-      axios.post(`${domain}/api/hireProposal/createProposal`, {pilotId: pilotId, message: hireForm.description}, config).then(res=>{
-        console.log(res)
-        setStartProcess(false);
-        setHireForm({
-          ...hireForm,
-          description: ""
-        })
-
-      })
-    }
-    else if(hireForm.description.length >= 200){
-      document.getElementById("hire_description").style.backgroundColor = "#FFCCCB"
-
+      axios
+        .post(
+          `${domain}/api/hireProposal/createProposal`,
+          { pilotId: pilotId, message: hireForm.description },
+          config
+        )
+        .then((res) => {
+          console.log(res);
+          setStartProcess(false);
+          setHireForm({
+            ...hireForm,
+            description: "",
+          });
+        });
+    } else if (hireForm.description.length >= 200) {
+      document.getElementById("hire_description").style.backgroundColor =
+        "#FFCCCB";
     } else {
       document.getElementById("description_error").style.display = "contents";
       document.getElementById("hire_description").style.marginBottom = "10px";
@@ -216,7 +222,7 @@ function Imageview() {
   };
 
   const hireDescChangeHandler = (e) => {
-    document.getElementById("hire_description").style.backgroundColor = "white"
+    document.getElementById("hire_description").style.backgroundColor = "white";
 
     document.getElementById("description_error").style.display = "none";
     document.getElementById("hire_description").style.marginBottom = "30px";
@@ -226,8 +232,7 @@ function Imageview() {
     });
   };
   let likeComment = (id) => {
-    if(localStorage.getItem("access_token")){
-
+    if (localStorage.getItem("access_token")) {
       axios
         .post(`${domain}/api/comments/likeComment`, { commentId: id }, config)
         .then((res) => {
@@ -244,8 +249,8 @@ function Imageview() {
               setLikedComments(res.data);
             });
         });
-    }else{
-      setLoginError(true)
+    } else {
+      setLoginError(true);
     }
   };
 
@@ -284,13 +289,16 @@ function Imageview() {
   }, []);
 
   let followMe = (userId) => {
-    if(localStorage.getItem("access_token")){
+    if (localStorage.getItem("access_token")) {
       axios
         .post(`${domain}/api/pilot/getPilotId`, { userId: userId })
         .then((res) => {
           console.log(res);
           axios
-            .post(`${domain}/api/follow/createFollow/${res.data[0]._id}`, config)
+            .post(
+              `${domain}/api/follow/createFollow/${res.data[0]._id}`,
+              config
+            )
             .then((response) => {
               axios
                 .post(`${domain}/api/follow/getMyFollowing`, config)
@@ -302,9 +310,8 @@ function Imageview() {
               console.log(response);
             });
         });
-    }
-    else{
-      setLoginError(true)
+    } else {
+      setLoginError(true);
     }
   };
   let unfollow = (userId) => {
@@ -334,7 +341,7 @@ function Imageview() {
 
   //yaseen
   const downloadImage = (id) => {
-    if(localStorage.getItem("access_token")){
+    if (localStorage.getItem("access_token")) {
       saveAs(
         `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${image.file}`,
         `${image.file}`
@@ -344,9 +351,8 @@ function Imageview() {
         .then((res) => {
           console.log(res.data);
         });
-    }
-    else{
-      setLoginError(true)
+    } else {
+      setLoginError(true);
     }
   };
   let commentChangeHandler = (e) => {
@@ -364,7 +370,7 @@ function Imageview() {
     // window.location.reload();
   };
   let likeImage = () => {
-    if(localStorage.getItem("access_token")){
+    if (localStorage.getItem("access_token")) {
       axios
         .post(`${domain}/api/image/likeImage/${image._id}`, config)
         .then((res) => {
@@ -373,9 +379,8 @@ function Imageview() {
             setLikedData(res.data.likedMedia);
           });
         });
-    }
-    else{
-      setLoginError(true)
+    } else {
+      setLoginError(true);
     }
   };
   let unlikeImage = () => {
@@ -407,35 +412,33 @@ function Imageview() {
   };
 
   let addComment = () => {
-
-      console.log(comment);
-      if (comment === "" || !localStorage.getItem("access_token")) {
-        if(comment === ""){
-          document.getElementById("hideComment").style.display = "none";
-        }
-        else{
-          setLoginError(true)
-        }
+    console.log(comment);
+    if (comment === "" || !localStorage.getItem("access_token")) {
+      if (comment === "") {
+        document.getElementById("hideComment").style.display = "none";
       } else {
-        axios
-          .post(
-            `${domain}/api/comments/createComment/${param.id}`,
-            { comment },
-            config
-          )
-          .then((res) => {
-            axios
-              .get(`${domain}/api/comments/getComments/${param.id}`)
-              .then((res) => {
-                console.log(res.data);
-                setComments(res.data);
-                document.getElementById("hideComment").style.display = "none";
-                formRef.current.value = "";
-                setComment("");
-                document.getElementById("commentToHide").style.display = "none";
-              });
-          });
+        setLoginError(true);
       }
+    } else {
+      axios
+        .post(
+          `${domain}/api/comments/createComment/${param.id}`,
+          { comment },
+          config
+        )
+        .then((res) => {
+          axios
+            .get(`${domain}/api/comments/getComments/${param.id}`)
+            .then((res) => {
+              console.log(res.data);
+              setComments(res.data);
+              document.getElementById("hideComment").style.display = "none";
+              formRef.current.value = "";
+              setComment("");
+              document.getElementById("commentToHide").style.display = "none";
+            });
+        });
+    }
   };
 
   let redirectPilot = (userId) => {
@@ -494,31 +497,47 @@ function Imageview() {
                 Your browser does not support the video tag.
               </video>
             ) : (
-                <img
-                  style={{
-                    width: "100%",
-                    margin: "32px 0px 45px 0px",
-                    borderRadius: "10px",
-                    boxShadow: "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
-                  }}
-                  className="mainImage"
-                  src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
-                />
-            )}
-
-            <div style = {{cursor: "pointer"}}>
-              {likedData.includes(image._id) ? (
-                <img src={Heart} className="likeImage" onClick={unlikeImage} />
-              ) : (
-                <img src={Like} className="likeImage" onClick={likeImage} />
-              )}
-            </div>
-            <div  style = {{cursor: "pointer"}}>
               <img
-                src={Share}
-                className="shareImage"
-                onClick={clickShareLink}
+                style={{
+                  width: "100%",
+                  margin: "32px 0px 45px 0px",
+                  borderRadius: "10px",
+                  boxShadow:
+                    "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset",
+                }}
+                className="mainImage"
+                src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
               />
+            )}
+            <div style={{ position: "absolute", top: "65px", right: "10px", backgroundColor: "#255,255,255,0.8", padding: "20px", borderRadius: "0px 0px 0px 30px" }}>
+              <div style={{ cursor: "pointer", display: "inline-block", padding: "0px 10px" }}>
+                {likedData.includes(image._id) ? (
+                  <div>
+                    <i
+                      class="fas fa-heart"
+                      onClick={unlikeImage}
+                      style={{ fontSize: "30px" }}
+                    ></i>
+                  </div>
+                ) : (
+                  // <img src={Heart} className="likeImage" onClick={unlikeImage} />
+                  <div>
+                    <i
+                      class="far fa-heart"
+                      onClick={likeImage}
+                      style={{ fontSize: "30px" }}
+                    ></i>
+                  </div>
+                  // <img src={Like} className="likeImage" onClick={likeImage} />
+                )}
+              </div>
+              <div style={{ cursor: "pointer", display: "inline-block", padding: "0px 10px" }}>
+                <img
+                  src={Share}
+                  onClick={clickShareLink}
+                  style={{ width: "30px" }}
+                />
+              </div>
             </div>
           </>
         )}
@@ -545,9 +564,21 @@ function Imageview() {
                 <div className="i_v_name">
                   <div
                     onClick={() => redirectPilot(image.userId)}
-                    style = {{display: "flex", alignItems: "center", cursor: "pointer" }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      cursor: "pointer",
+                    }}
                   >
-                    {image.name} {userDetails.pilotPro && <img src={ProImg} alt="Pro Img" height = "24px" style = {{marginLeft: "10px"}}/>}
+                    {image.name}{" "}
+                    {userDetails.pilotPro && (
+                      <img
+                        src={ProImg}
+                        alt="Pro Img"
+                        height="24px"
+                        style={{ marginLeft: "10px" }}
+                      />
+                    )}
                   </div>
                   {myFollowing.includes(image.userId) ? (
                     <div
@@ -574,7 +605,9 @@ function Imageview() {
             <div className="i_v_create">Wanna create something great?</div>
             <div className="i_v_contact">
               Feel Free to contact us{" "}
-              <a href="mailto: info@nexevo.in"><span className="i_v_email">info@nexevo.in</span></a>
+              <a href="mailto: info@nexevo.in">
+                <span className="i_v_email">info@nexevo.in</span>
+              </a>
             </div>
             <Row>
               <Col lg={9}>
@@ -651,8 +684,19 @@ function Imageview() {
                           />
                         </Col>
                         <Col>
-                          <div className="i_v_comment_pilotName" style = {{display: "flex", alignItems: "center"}}>
-                            {item.name} {item.userId.pilotPro && <img src={ProImg} alt="Pro Img" height = "20px" style = {{marginLeft: "10px"}}/>}
+                          <div
+                            className="i_v_comment_pilotName"
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            {item.name}{" "}
+                            {item.userId.pilotPro && (
+                              <img
+                                src={ProImg}
+                                alt="Pro Img"
+                                height="20px"
+                                style={{ marginLeft: "10px" }}
+                              />
+                            )}
                           </div>
                           <div style={{ float: "right" }}>
                             <Row gutterWidth={10}>
@@ -661,13 +705,13 @@ function Imageview() {
                                   <img
                                     src={Heart}
                                     onClick={() => unlikeComment(item._id)}
-                                    style = {{cursor: "pointer"}}
+                                    style={{ cursor: "pointer" }}
                                   />
                                 ) : (
                                   <img
                                     src={Like}
                                     onClick={() => likeComment(item._id)}
-                                    style = {{cursor: "pointer"}}
+                                    style={{ cursor: "pointer" }}
                                   />
                                 )}{" "}
                               </Col>
@@ -690,14 +734,17 @@ function Imageview() {
 
           {/* //right */}
           <Col lg={4}>
-
-            {userDetails.pilotPro
-            &&<>
-              <div className="i_v_text1">Like what you see?</div>
-              <div className="i_v_text2">This Droner is available for work</div>
-              <button className="hire_btn" onClick={clickHire}>Hire This Droner</button>
-            </>
-            }
+            {userDetails.pilotPro && (
+              <>
+                <div className="i_v_text1">Like what you see?</div>
+                <div className="i_v_text2">
+                  This Droner is available for work
+                </div>
+                <button className="hire_btn" onClick={clickHire}>
+                  Hire This Droner
+                </button>
+              </>
+            )}
 
             <div className="i_v_moreShots">More Shots from {image.name}</div>
             <Row>
@@ -714,7 +761,7 @@ function Imageview() {
                           height: "115px",
                           margin: "0px 0px 10px 0px",
                           borderRadius: "5px",
-                          cursor: "pointer"
+                          cursor: "pointer",
                         }}
                         controls
                         onClick={() => clicked(item._id, item.userId)}
@@ -736,7 +783,7 @@ function Imageview() {
                           margin: "0px 0px 10px 0px",
                           borderRadius: "5px",
                           objectFit: "cover",
-                          cursor: "pointer"
+                          cursor: "pointer",
                         }}
                         src={`https://dn-nexevo-thumbnail.s3.ap-south-1.amazonaws.com/${item.file}`}
                         onClick={() => clicked(item._id, item.userId)}
@@ -749,7 +796,7 @@ function Imageview() {
           </Col>
         </Row>
       </Container>
-      
+
       <Dialog
         open={share}
         onClose={handleShareClose}
@@ -851,56 +898,56 @@ function Imageview() {
         </DialogContent>
       </Dialog>
       <Dialog
-            open={startProcess}
-            onClose={closeProcess}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            maxWidth={"md"}
-            fullWidth={true}
-            PaperProps={{ style: { borderRadius: 20 } }}
-          >
-            <DialogContent
-              className={All.PopupBody}
-              style={{ marginBottom: "50px" }}
-            >
-              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
-                <img
-                  src={Close}
-                  alt=""
-                  onClick={closeProcess}
-                  style={{ cursor: "pointer" }}
-                />
+        open={startProcess}
+        onClose={closeProcess}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{ style: { borderRadius: 20 } }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+            <img
+              src={Close}
+              alt=""
+              onClick={closeProcess}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <Row style={{ marginTop: "30px" }}>
+            <div className="h_p_start_process_form">
+              <div className="h_p_start_process_form_title">Hire Pilot</div>
+              <label
+                htmlFor="hire_description"
+                className="h_p_start_process_form_label"
+              >
+                Description
+              </label>
+              <textarea
+                className="h_p_start_process_form_description"
+                id="hire_description"
+                onChange={hireDescChangeHandler}
+              ></textarea>
+              <div className="login_input_error_msg" id="description_error">
+                Description is required
               </div>
-              <Row style={{ marginTop: "30px" }}>
-                <div className="h_p_start_process_form">
-                  <div className="h_p_start_process_form_title">Hire Pilot</div>
-                  <label
-                    htmlFor="hire_description"
-                    className="h_p_start_process_form_label"
-                  >
-                    Description
-                  </label>
-                  <textarea
-                    className="h_p_start_process_form_description"
-                    id="hire_description"
-                    onChange={hireDescChangeHandler}
-                  ></textarea>
-                  <div className="login_input_error_msg" id="description_error">
-                    Description is required
-                  </div>
-                 
-                  <div className="h_p_start_process_form_btn_container">
-                    <button
-                      onClick={submitProcess}
-                      className="h_p_start_process_form_btn"
-                    >
-                      Send Mail
-                    </button>
-                  </div>
-                </div>
-              </Row>
-            </DialogContent>
-          </Dialog>
+
+              <div className="h_p_start_process_form_btn_container">
+                <button
+                  onClick={submitProcess}
+                  className="h_p_start_process_form_btn"
+                >
+                  Send Mail
+                </button>
+              </div>
+            </div>
+          </Row>
+        </DialogContent>
+      </Dialog>
     </Container>
   );
 }

@@ -33,3 +33,7 @@
     margin-top: 20px;
 }
 }
+
+.p_n_upgrade_btn:hover{
+    background-color: #ffffff !important;
+}

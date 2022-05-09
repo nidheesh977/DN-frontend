@@ -411,7 +411,7 @@ this.setState({
           }
           
         </Container>
-        <Dialog
+        {/* <Dialog
           open={this.state.payment_success}
           onClose={this.closePaymentPopup}
           aria-labelledby="alert-dialog-title"
@@ -431,7 +431,7 @@ this.setState({
               <button className="u_p_v_popup_close_btn" onClick={this.closePaymentPopup}>Close</button>
             </Row>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
         {/* <Dialog
           open={this.state.msg_sent_success}
           onClose={this.closeMsgSentSuccess}

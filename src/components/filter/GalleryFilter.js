@@ -886,15 +886,16 @@ class GalleryFilter extends React.Component {
                                                         <span className="LikeIcon MuliLight">
                                                           {" "}
                                                           <FormControlLabel
-                                                            onClick={() =>
-                                                              this.likeFile(
-                                                                user._id,
-                                                                index
-                                                              )
-                                                            }
+                                                            
                                                             className="MuliLight"
                                                             control={
                                                               <Checkbox
+                                                              onClick={() =>
+                                                                this.likeFile(
+                                                                  user._id,
+                                                                  index
+                                                                )
+                                                              }
                                                                 icon={
                                                                   <>
                                                                     {this.state.liked_list.includes(
@@ -1001,15 +1002,16 @@ class GalleryFilter extends React.Component {
                                                         <span className="LikeIcon MuliLight">
                                                           {" "}
                                                           <FormControlLabel
-                                                            onClick={() =>
-                                                              this.likeFile(
-                                                                user._id,
-                                                                index
-                                                              )
-                                                            }
+                                                            
                                                             className="MuliLight"
                                                             control={
                                                               <Checkbox
+                                                              onClick={() =>
+                                                                this.likeFile(
+                                                                  user._id,
+                                                                  index
+                                                                )
+                                                              }
                                                                 icon={
                                                                   <>
                                                                     {this.state.liked_list.includes(

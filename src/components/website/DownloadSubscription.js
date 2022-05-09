@@ -41,6 +41,15 @@ class DownloadSubscription extends Component {
     };
   }
 
+  componentWillMount() {
+    let role = localStorage.getItem("role");
+    if (!role) {
+      this.props.history.push("/login");
+    } else if (role === "company") {
+      this.props.history.push("/HireSubscription");
+    }
+  }
+
   loadScript = (src) => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -110,65 +119,67 @@ class DownloadSubscription extends Component {
 
   upgradeGold = () => {
     console.log(this.state.data);
-      if (this.state.myPlan.includes("Platinum") || this.state.myPlan.includes("platinum")) {
-        axios
-          .post(`${domain}/api/image/getApprovedImages`, this.config)
-          .then((response) => {
-            console.log(response.data);
-            this.setState({
-              uploadedImages: response.data,
-            });
+    if (
+      this.state.myPlan.includes("Platinum") ||
+      this.state.myPlan.includes("platinum")
+    ) {
+      axios
+        .post(`${domain}/api/image/getApprovedImages`, this.config)
+        .then((response) => {
+          console.log(response.data);
+          this.setState({
+            uploadedImages: response.data,
           });
-        axios
-          .post(`${domain}/api/image/getApprovedVideos`, this.config)
-          .then((response) => {
-            console.log(response.data);
-            this.setState({
-              uploadedVideos: response.data,
-            });
-          });
-        axios
-          .post(`${domain}/api/image/getApproved3d`, this.config)
-          .then((response) => {
-            console.log(response.data);
-            this.setState({
-              uploaded3d: response.data,
-            });
-          });
-        axios
-          .post(`${domain}/api/image/getPendingImages`, this.config)
-          .then((response) => {
-            console.log(response.data);
-            this.setState({
-              pendingImages: response.data,
-            });
-          });
-        axios
-          .post(`${domain}/api/image/getPendingVideos`, this.config)
-          .then((response) => {
-            console.log(response.data);
-            this.setState({
-              pendingVideos: response.data,
-            });
-          });
-        axios
-          .post(`${domain}/api/image/getPending3d`, this.config)
-          .then((response) => {
-            console.log(response.data);
-            this.setState({
-              pending3d: response.data,
-            });
-          });
-
-        this.setState({
-          cancelSubscriptionPopup: true,
         });
-      }else{
-        this.props.history.push(
-          `checkout/${this.state.data[this.state.subYearly ? 3 : 1]._id}`
-        );
-      }
-    
+      axios
+        .post(`${domain}/api/image/getApprovedVideos`, this.config)
+        .then((response) => {
+          console.log(response.data);
+          this.setState({
+            uploadedVideos: response.data,
+          });
+        });
+      axios
+        .post(`${domain}/api/image/getApproved3d`, this.config)
+        .then((response) => {
+          console.log(response.data);
+          this.setState({
+            uploaded3d: response.data,
+          });
+        });
+      axios
+        .post(`${domain}/api/image/getPendingImages`, this.config)
+        .then((response) => {
+          console.log(response.data);
+          this.setState({
+            pendingImages: response.data,
+          });
+        });
+      axios
+        .post(`${domain}/api/image/getPendingVideos`, this.config)
+        .then((response) => {
+          console.log(response.data);
+          this.setState({
+            pendingVideos: response.data,
+          });
+        });
+      axios
+        .post(`${domain}/api/image/getPending3d`, this.config)
+        .then((response) => {
+          console.log(response.data);
+          this.setState({
+            pending3d: response.data,
+          });
+        });
+
+      this.setState({
+        cancelSubscriptionPopup: true,
+      });
+    } else {
+      this.props.history.push(
+        `checkout/${this.state.data[this.state.subYearly ? 3 : 1]._id}`
+      );
+    }
   };
 
   deleteImage = (id, path) => {
@@ -1042,7 +1053,10 @@ class DownloadSubscription extends Component {
                 </>
               ) : (
                 <>
-                  <div className="u_f_popup_title" style={{ width: "100%", marginBottom: "0px" }}>
+                  <div
+                    className="u_f_popup_title"
+                    style={{ width: "100%", marginBottom: "0px" }}
+                  >
                     Are you sure. Do you want to subscription Gold?
                   </div>
                   <div
