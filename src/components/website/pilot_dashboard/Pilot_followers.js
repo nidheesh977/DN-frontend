@@ -39,7 +39,7 @@ if(role === "pilot"){
     console.log("i m a pilot")
     axios.post(`${domain}/api/pilot/getPilotId`,{userId : userId}).then(res=>{
         console.log(res.data[0]._id)
-        history.push(`/pilot_details/${res.data[0]._id}`)
+        history.push(`/pilot/${res.data[0].userName}`)
     }).catch(err=>
         console.log(err))
 }    }

@@ -356,7 +356,7 @@ class HirePilot extends Component {
     }
   };
   pilotDetailPage = (id) => {
-    this.props.history.push("/pilot_details/" + id);
+    this.props.history.push("/pilot/" + id);
   };
 
   handleProcessFileChange = (e) => {
@@ -371,7 +371,7 @@ class HirePilot extends Component {
   };
 
   sendMessage = (id) => {
-    this.props.history.push("/pilot_details/" + id);
+    this.props.history.push("/pilot/" + id);
   };
 
   componentDidMount() {
@@ -1151,7 +1151,7 @@ class HirePilot extends Component {
                             <div className="h_p_others_container">
                               <div
                                 className="h_p_listing_name"
-                                onClick={() => this.pilotDetailPage(pilot._id)}
+                                onClick={() => this.pilotDetailPage(pilot.userName)}
                                 style = {{display: "flex", alignItem: "center"}}
                               >
                                 {pilot.name} { pilot.pilotPro && <img src={ProImg} alt="Pro Img" height = "24px" style = {{marginLeft: "10px"}}/>}
@@ -1274,7 +1274,7 @@ class HirePilot extends Component {
                                   <button
                                     className="h_p_start_process_btn"
                                     onClick={() =>
-                                      this.pilotDetailPage(pilot._id)
+                                      this.pilotDetailPage(pilot.userName)
                                     }
                                   >
                                     View Profile

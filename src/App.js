@@ -146,7 +146,7 @@ function App(){
             />
             <Route
               exact
-              path="/pilot_details/:id"
+              path="/pilot/:id"
               component={PilotDetails}
             />
             <Route component = {searchresult} path = "/searchresult" exact />
