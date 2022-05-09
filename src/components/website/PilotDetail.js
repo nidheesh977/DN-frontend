@@ -289,6 +289,7 @@ export default function PilotDetails(props) {
         setRearranged3d(response.data.rearranged3d)
       })
       .catch((err) => {
+        console.log(err.response)
         history.push("/no-page-found");
       });
     axios
