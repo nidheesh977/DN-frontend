@@ -261,7 +261,7 @@ class DownloadSubscription extends Component {
               />
               <span class="slider round"></span>
             </label>
-            <div className="subs_plan">Yearly</div>
+            <div className="subs_plan">Yearly (2 months free)</div>
           </div>
           {this.state.data.length > 0 ? (
             <Row gutterWidth={19}>

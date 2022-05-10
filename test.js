@@ -1,18 +1,32 @@
-let a1 = [4,7,2,10]
+class Node  {
+    constructor(value){
+        this.value = value,
+        this.next = null
 
-for(let i =0;i<=a1.length;i++){
-    let outerElement = a1[i]
-    for(let j= 0;j<=a1.length;j++){
-        let innerElement = a1[j]
-        if(innerElement>outerElement){
-            a1[i] = innerElement;
-            a1[j] = outerElement;
-
-            innerElement = a1[j]
-            outerElement = a1[i]
-        }
     }
 }
 
-console.log(a1)
-console.log("Min Value = " + a1[0])
+class LinkedList {
+    constructor(value){
+        const newNode = new Node(value)
+        this.head = newNode
+        this.tail = this.head
+        this.length = 1
+    }
+    push(value){
+        const newNode = new Node(value)
+        if(!this.head){
+            this.head = newNode
+            this.tail = newNode
+        }else{
+            this.tail.next = newNode
+            this.tail = newNode
+        }
+        this.length++;
+        return this
+    }
+}
+
+let myLinkedList = new LinkedList(4)
+myLinkedList.push(8)
+console.log(myLinkedList)
