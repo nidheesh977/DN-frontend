@@ -6,6 +6,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Placeholder from '../images/placeholder.png'
 import { Link } from 'react-router-dom'; 
+import parse from "html-react-parser"
 import axios from 'axios'
 import Header from '../header/Header'
 const API_URL = 'https://demo-nexevo.in/vijay';
@@ -48,6 +49,9 @@ export default class BlogDetails extends React.Component {
          .then((datas) => {
            this.setState({ blogcategories: datas }) 
           })
+          axios.post(`${domain}/api/blog/viewBlog`, {id: this.props.match.params.slug}).then(res=>{
+              console.log(res)
+          })
 
       axios.post(`${domain}/api/blog/blogDetails`, {slug: this.props.match.params.slug}).then(res=>{
           console.log(res)
@@ -59,6 +63,7 @@ export default class BlogDetails extends React.Component {
       .get(`${domain}/api/category/getCategories`)
   
       .then((res) => {
+          console.log(res)
         this.setState({ blogcategories: res.data });
       });
       axios.get(`${domain}/api/blog/getBlogsTrending`).then(res=>{
@@ -104,7 +109,7 @@ export default class BlogDetails extends React.Component {
                             <div className={All.BlogDeatailContent}>
                                 <img src={this.state.data.image ? `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${this.state.data.image}` : Placeholder} alt="" style={{borderRadius: "10px"}}/> 
                                 <h4 className = {All.BlogDeatailSubTitle}>{this.state.data.title}</h4>
-                                <p className= {All.FSize_16} >{this.state.data.description}</p>
+                                <p className= {All.FSize_16} >{parse(String(this.state.data.description))}</p>
                             </div>
                         </Col>
 
