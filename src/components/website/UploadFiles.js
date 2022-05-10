@@ -384,7 +384,7 @@ class UploadFiles extends Component {
           }
 
           details.push({
-            file: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fgithub.com%2Ffossasia%2Fphimpme-android%2Fissues%2F1294&psig=AOvVaw2EH6sNf78IOj9dUUhsnkWM&ust=1652163020708000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCNj4n4Th0fcCFQAAAAAdAAAAABAS",
+            file: "",
             name: e.target.files[i].name,
             custom_name: "",
             type: e.target.files[i].type,
@@ -1616,11 +1616,17 @@ class UploadFiles extends Component {
 
                                           {file.type[0] == "v" ? (
                                             <>
-                                              <video
-                                                src={file.file}
-                                                style={{ borderRadius: "9px" }}
-                                                id={`u_f_video_${index}`}
-                                              />
+                                            {file.file !== ""
+                                            ?<video
+                                            src={file.file}
+                                            style={{ borderRadius: "9px" }}
+                                            id={`u_f_video_${index}`}
+                                          />
+                                            :<img
+                                            src={"https://www.google.com/url?sa=i&url=https%3A%2F%2Fgithub.com%2Ffossasia%2Fphimpme-android%2Fissues%2F1294&psig=AOvVaw2EH6sNf78IOj9dUUhsnkWM&ust=1652163020708000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCNj4n4Th0fcCFQAAAAAdAAAAABAS"}
+                                            style={{ borderRadius: "9px" }}
+                                          />
+                                            }
                                               {file.upload_status ===
                                                 "uploading" && (
                                                 <>
@@ -1686,10 +1692,17 @@ class UploadFiles extends Component {
                                             </>
                                           ) : (
                                             <>
-                                              <img
-                                                src={file.file}
-                                                style={{ borderRadius: "9px" }}
-                                              />
+                                            {file.file !== ""
+                                            ?<img
+                                            src={file.file}
+                                            style={{ borderRadius: "9px" }}
+                                          />
+                                            :<img
+                                            src={"https://www.google.com/url?sa=i&url=https%3A%2F%2Fgithub.com%2Ffossasia%2Fphimpme-android%2Fissues%2F1294&psig=AOvVaw2EH6sNf78IOj9dUUhsnkWM&ust=1652163020708000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCNj4n4Th0fcCFQAAAAAdAAAAABAS"}
+                                            style={{ borderRadius: "9px" }}
+                                          />
+                                            }
+                                              
                                               {file.upload_status ===
                                                 "uploading" && (
                                                 <>

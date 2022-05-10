@@ -227,7 +227,6 @@ export default class Blog extends React.Component {
                   >
                     <h4 className={All.BorderBottom}>Categories</h4>
                     {this.state.blogcategories
-                      .slice(0, this.state.visible)
                       .map((item, index) => {
                         return (
                           <>
@@ -239,7 +238,8 @@ export default class Blog extends React.Component {
                             >
                               {" "}
                               <span
-                                className={`${All.BtnStyle_4} ${All.BlogBtn}`}
+                                className={`tag-listing-tag`}
+                                style = {item.slug === this.props.match.params.slug ? {backgroundColor: "#4ffea3"} :{}}
                               >
                                 {item.category}{" "}
                               </span>

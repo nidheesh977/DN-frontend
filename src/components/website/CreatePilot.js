@@ -54,6 +54,7 @@ function CreatePilot() {
     address: "",
     city: "",
     preferred_location: "",
+    preferred_locations: [],
     country: "",
     postal: "",
     bio: "",
@@ -82,14 +83,21 @@ function CreatePilot() {
   let [certificateSizeExceed, setCertificateSizeExceed] = useState(false);
 
   const changeHandler = (e) => {
-    if (e.target.id === "bio") {
-      document.getElementById(`${e.target.id}_error`).style.visibility =
-        "hidden";
-      document.getElementById(`${e.target.id}_error`).style.display = "none";
-    } else {
-      document.getElementById(`${e.target.id}_error`).style.visibility =
-        "hidden";
+    if (e.target.id !== "preferred_location"){
+      if (e.target.id === "bio") {
+        document.getElementById(`${e.target.id}_error`).style.visibility =
+          "hidden";
+        document.getElementById(`${e.target.id}_error`).style.display = "none";
+      } else {
+        document.getElementById(`${e.target.id}_error`).style.visibility =
+          "hidden";
+      }
     }
+    else{
+      document.getElementById(`preferred_locations_error`).style.visibility =
+          "hidden";
+    }
+
     setData({
       ...data,
       [e.target.id]: e.target.value,
@@ -133,7 +141,7 @@ function CreatePilot() {
       "dob",
       "gender",
       "city",
-      "preferred_location",
+      "preferred_locations",
       "drone_id",
       "attachment",
       "monthly_pay",
@@ -164,7 +172,7 @@ function CreatePilot() {
         data[fields[i]] === "" &&
         fields[i] !== "drone_id" &&
         fields[i] !== "attachment" &&
-        fields[i] !== "preferred_location" &&
+        fields[i] !== "preferred_locations" &&
         fields[i] !== "monthly_pay" &&
         fields[i] !== "hourly_pay" &&
         fields[i] !== "training_center_name" &&
@@ -372,9 +380,7 @@ function CreatePilot() {
       formData.append("completedYear", data.completed_year);
       formData.append("file", data.attachment);
       formData.append("userName", data.username)
-      formData.append("preferredLocation", data.preferred_location)
-
-      console.log(data);
+      formData.append("preferredLocation", data.preferred_locations)
 
       Axios.post(`${domain}/api/pilot/checkUserName`,{userName: data.username})
       .then(res => {
@@ -503,6 +509,36 @@ function CreatePilot() {
       work_type: e.target.name,
     });
   };
+
+  const add_location = (e) => {
+    if (e.key === "Enter"){
+      if (data.preferred_locations.length >= 5){
+        document.getElementById("preferred_locations_error").innerText = "You cannot add more than 5 locations"
+        document.getElementById("preferred_locations_error").style.visibility = "visible"
+      }else if (data.preferred_location.length > 100){
+        document.getElementById("preferred_locations_error").innerText = "Location cannot exceed 100 characters."
+        document.getElementById("preferred_locations_error").style.visibility = "visible"
+      }else{
+        let new_locations = data.preferred_locations
+        new_locations.push(data.preferred_location)
+        setData({
+          ...data,
+          preferred_locations: new_locations,
+          preferred_location: "",
+        })
+      }
+    }
+  }
+
+  const removePreferredLocation = (id) => {
+    let new_locations = data.preferred_locations
+    new_locations.splice(id, 1)
+    setData({
+      ...data,
+      preferred_locations: new_locations
+    })
+    document.getElementById("preferred_locations_error").style.visibility = "hidden"
+  }
 
   const chooseFile = (e) => {
     try {
@@ -678,8 +714,21 @@ function CreatePilot() {
                 value={data.preferred_location}
                 id="preferred_location"
                 onChange={changeHandler}
+                onKeyDown = {add_location}
               />
-              <div className="input_error_msg" id="preferred_location_error">
+              {data.preferred_locations.map((drone, index) => {
+                return (
+                  <div
+                    className="pd_i_skill"
+                    key={index}
+                    onClick={()=>removePreferredLocation(index)}
+                  >
+                    {drone} <i class="fa fa-times" aria-hidden="true"></i>
+                  </div>
+                );
+              })}
+              <div className="input_error_msg" id="preferred_locations_error">
+                You cannot add more than 5 locations
               </div>
             </div>
 

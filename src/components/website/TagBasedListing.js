@@ -158,7 +158,11 @@ export default class TagBasedListing extends Component {
                 {this.state.tags.map((tag, index) => {
                   return (
                     <Link to={"/shoots/" + tag.slug} onClick={()=>this.tagChanged(tag.slug)}>
-                      <div className="tag-listing-tag">{tag.tag}</div>
+                      {tag.slug === this.props.match.params.tag
+                      ?<div className="tag-listing-tag" style = {{backgroundColor: "#4ffea3"}}>{tag.tag}</div>
+                      :<div className="tag-listing-tag">{tag.tag}</div>
+                      }
+                      
                     </Link>
                   );
                 })}

@@ -57,6 +57,7 @@ function Pilot_BasicInfo() {
       let data = response.data;
       localStorage.setItem("oldEmail", response.data.emailId);
       setData({
+        ...data,
         full_name: data.name,
         userName: data.userName?data.userName:"",
         email: data.emailId,
@@ -71,6 +72,7 @@ function Pilot_BasicInfo() {
         profile: `${data.profilePic}`,
         cover: `${data.coverPic}`,
         preferredLocation: data.preferredLocation?data.preferredLocation:"",
+        preferredLocationInput: ""
       });
     });
   }, []);
@@ -89,6 +91,7 @@ function Pilot_BasicInfo() {
     profile: Pilot,
     cover: Cover,
     preferredLocation: "",
+    preferredLocationInput: "",
   });
   let [edit, setEdit] = useState(false);
   let [profileSuccess, setProfileSuccess] = useState(false);
@@ -216,6 +219,10 @@ function Pilot_BasicInfo() {
       }
     };
   };
+
+  const removePreferredLocation = (id) => {
+    console.log(id)
+  }
 
   const saveChanges = () => {
     var fields = [
@@ -610,11 +617,22 @@ function Pilot_BasicInfo() {
             <input
               type="text"
               className="pd_b_i_profile_input"
-              value={data.preferredLocation}
-              id="preferredLocation"
+              value={data.preferredLocationInput}
+              id="preferredLocationInput"
               onChange={changeHandler}
               disabled={!edit}
             />
+            {data.preferredLocation.split(",").map((drone, index) => {
+                return (
+                  <div
+                    className="pd_i_skill"
+                    key={index}
+                    onClick={()=>removePreferredLocation(index)}
+                  >
+                    {drone} <i class="fa fa-times" aria-hidden="true"></i>
+                  </div>
+                );
+              })}
             <div className="input_error_msg" id="preferred_location_error">
               Preferred Location should not exceed 100 characters
             </div>

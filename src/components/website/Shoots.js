@@ -3,7 +3,7 @@ import { Container, Row, Col, Visible, Hidden } from "react-grid-system";
 import All from "./All.module.css";
 import { Helmet } from "react-helmet";
 import First from "../images/1stPlace.png";
-import Alert from '@material-ui/lab/Alert';
+import Alert from "@material-ui/lab/Alert";
 
 import Second from "../images/2ndPlace.png";
 import Third from "../images/3rdPlace.png";
@@ -63,8 +63,8 @@ function Shoots() {
   let param = useParams();
   let history = useHistory();
   const [data, setData] = useState([]);
-  const [myFollowing, setMyFollowing] = useState([])
-  let [loginError, setLoginError] = useState(false)
+  const [myFollowing, setMyFollowing] = useState([]);
+  let [loginError, setLoginError] = useState(false);
 
   let config = {
     headers: {
@@ -75,35 +75,37 @@ function Shoots() {
     axios.get(`${domain}/api/shoot/getShoots`).then((res) => {
       console.log(res);
       setData(res.data);
-    })
+    });
     axios.post(`${domain}/api/follow/getMyFollowing`, config).then((res) => {
       const folowers = res.data;
       console.log(folowers);
       setMyFollowing(folowers);
     });
   }, []);
-    useEffect(()=>{
-axios.get(`${domain}/api/user/checkPilotPro`, config).then(res=>{
-  console.log(res)
-  if(res.data === false){
-document.getElementById("alertToShow").style.display = "flex"
-  }
+  useEffect(() => {
+    axios.get(`${domain}/api/user/checkPilotPro`, config).then((res) => {
+      console.log(res);
+      if (res.data === false) {
+        document.getElementById("alertToShow").style.display = "flex";
+      }
 
-  setTimeout(()=>{
-    document.getElementById("alertToShow").style.display = "none"
+      setTimeout(() => {
+        document.getElementById("alertToShow").style.display = "none";
+      }, 5000);
+    });
+  }, []);
 
-  }, 5000)
-})
-    },[])
-  
   let followMe = (userId) => {
-    if(localStorage.getItem("access_token")){
+    if (localStorage.getItem("access_token")) {
       axios
         .post(`${domain}/api/pilot/getPilotId`, { userId: userId })
         .then((res) => {
           console.log(res);
           axios
-            .post(`${domain}/api/follow/createFollow/${res.data[0]._id}`, config)
+            .post(
+              `${domain}/api/follow/createFollow/${res.data[0]._id}`,
+              config
+            )
             .then((response) => {
               axios
                 .post(`${domain}/api/follow/getMyFollowing`, config)
@@ -115,15 +117,14 @@ document.getElementById("alertToShow").style.display = "flex"
               console.log(response);
             });
         });
-    }
-    else{
-      setLoginError(true)
-      console.log("login first")
+    } else {
+      setLoginError(true);
+      console.log("login first");
     }
   };
   const closeLoginError = () => {
-    setLoginError(false)
-  }
+    setLoginError(false);
+  };
 
   let unfollow = (userId) => {
     axios
@@ -157,69 +158,93 @@ document.getElementById("alertToShow").style.display = "flex"
           className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}
         >
           <Container>
-          <Alert severity="info" style={{border: "1px solid lightBlue", marginBottom:"10px", display:"none"}} id="alertToShow">Upgrade to PilotPro for a chance to get your shoots here</Alert>
-
-            
+            <Alert
+              severity="info"
+              style={{
+                border: "1px solid lightBlue",
+                marginBottom: "10px",
+                display: "none",
+              }}
+              id="alertToShow"
+            >
+              Upgrade to PilotPro for a chance to get your shoots here
+            </Alert>
             <div
               class="MuiBox-root MuiBox-root-11"
               style={{ textAlign: "center" }}
             >
-              <h2 className="All_BlogDeatailTitle__3XrbQ">Shoots of The Week</h2>
+              <h2 className="All_BlogDeatailTitle__3XrbQ">
+                Shoots of The Week
+              </h2>
             </div>{" "}
             {data.map((item, i) => {
               return (
                 <>
-                
                   <div style={{ position: "relative" }}>
+                    {/* {item.imageId.fileType[0] !== "v" ? (
+                      <img
+                        src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${item.imageId.file}`}
+                        style={{ width: "100%", borderRadius: "10px" }}
+                      />
+                    ) : (
+                      <video
+                        src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${item.imageId.file}`}
+                        style={{ width: "100%", borderRadius: "10px" }}
+                      ></video>
+                    )} */}
                     <img
                       src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${item.imageId.file}`}
                       style={{ width: "100%", borderRadius: "10px" }}
                     />
-                    {
-                      item.place === 1 ?   <div
-                      style={{
-                        position: "absolute",
-                        top: "20px",
-                        right: "30px",
-                        backgroundColor: "#0000007F",
-                        padding: "10px",
-                        borderRadius: "90px",
-                      }}
-                    >
-                      <img src={First} />
-                    </div>
-                   : <></>
-                    }
-                    {
-                      item.place === 2 ?   <div
-                      style={{
-                        position: "absolute",
-                        top: "20px",
-                        right: "30px",
-                        backgroundColor: "#0000007F",
-                        padding: "10px",
-                        borderRadius: "90px",
-                      }}
-                    >
-                      <img src={Second} />
-                    </div>
-                   : <></>
-                    }
-                    {
-                      item.place === 3 ?   <div
-                      style={{
-                        position: "absolute",
-                        top: "20px",
-                        right: "30px",
-                        backgroundColor: "#0000007F",
-                        padding: "10px",
-                        borderRadius: "90px",
-                      }}
-                    >
-                      <img src={Third} />
-                    </div>
-                   : <></>
-                    }
+
+                    {item.place === 1 ? (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "20px",
+                          right: "30px",
+                          backgroundColor: "#0000007F",
+                          padding: "10px",
+                          borderRadius: "90px",
+                        }}
+                      >
+                        <img src={First} />
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                    {item.place === 2 ? (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "20px",
+                          right: "30px",
+                          backgroundColor: "#0000007F",
+                          padding: "10px",
+                          borderRadius: "90px",
+                        }}
+                      >
+                        <img src={Second} />
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                    {item.place === 3 ? (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "20px",
+                          right: "30px",
+                          backgroundColor: "#0000007F",
+                          padding: "10px",
+                          borderRadius: "90px",
+                        }}
+                      >
+                        <img src={Third} />
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                   <div
                     style={{
@@ -277,20 +302,21 @@ document.getElementById("alertToShow").style.display = "flex"
                             {item.pilotId.name}
                           </div>
                           {myFollowing.includes(item.pilotId._id) ? (
-                    <div
-                      className="i_v_follow"
-                      onClick={() => unfollow(item.pilotId._id)}
-                    >
-                      Followed
-                    </div>
-                  ) : (
-                    <div
-                      className="i_v_follow"
-                      onClick={() => followMe(item.pilotId._id)}
-                    >
-                      Follow
-                    </div>
-                  )}                        </div>
+                            <div
+                              className="i_v_follow"
+                              onClick={() => unfollow(item.pilotId._id)}
+                            >
+                              Followed
+                            </div>
+                          ) : (
+                            <div
+                              className="i_v_follow"
+                              onClick={() => followMe(item.pilotId._id)}
+                            >
+                              Follow
+                            </div>
+                          )}{" "}
+                        </div>
                       </Col>
                     </Row>
                   </div>
