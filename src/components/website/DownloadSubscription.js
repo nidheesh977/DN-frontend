@@ -274,13 +274,15 @@ class DownloadSubscription extends Component {
                     <div className="subscription_inner_circle1"></div>
                   </div>
                   <div className="subscription_plan_title">
-                    {this.state.data[0].name}
+                    {/* {this.state.data[0].name} */}
+                    Basic
                   </div>
                   <div className="subscription_plan_description">
                     {this.state.data[0].description}
                   </div>
                   <div className="subscription_plan_price">
-                    ${this.state.data[0].price}.00
+                    {/* ${this.state.data[0].price}.00 */}
+                    Free
                   </div>
 
                   <div className="subscription_plan_btn_container">

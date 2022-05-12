@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import Cover from "./images/cover.jpg";
 import "./css/Pilot_BasicInfo.css";
@@ -14,6 +14,7 @@ import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
 import Countries from "../../../apis/country.json";
 import Select from "react-select";
+import AvatarEditor from "react-avatar-editor";
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -34,6 +35,10 @@ function Pilot_BasicInfo() {
   let [test, setTest] = useState([]);
   let [codes, setCodes] = useState([]);
   let [code, setCode] = useState("");
+  const [cropZoom, setCropZoom] = useState(1000);
+  const [CroppedCoverPic, setCroppedCoverPic] = useState("");
+
+  const coverPicCropRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -59,7 +64,7 @@ function Pilot_BasicInfo() {
       setData({
         ...data,
         full_name: data.name,
-        userName: data.userName?data.userName:"",
+        userName: data.userName ? data.userName : "",
         email: data.emailId,
         phone: data.phoneNo,
         dob: data.dob,
@@ -71,8 +76,8 @@ function Pilot_BasicInfo() {
         bio: data.bio,
         profile: `${data.profilePic}`,
         cover: `${data.coverPic}`,
-        preferredLocation: data.preferredLocation?data.preferredLocation:"",
-        preferredLocationInput: ""
+        preferredLocation: data.preferredLocation ? data.preferredLocation : "",
+        preferredLocationInput: "",
       });
     });
   }, []);
@@ -97,6 +102,7 @@ function Pilot_BasicInfo() {
   let [profileSuccess, setProfileSuccess] = useState(false);
   let [coverSuccess, setCoverSuccess] = useState(false);
   let [infoSuccess, setInfoSuccess] = useState(false);
+  let [coverPicCrop, setCoverPicCrop] = useState(false);
 
   const changeHandler = (e) => {
     if (e.target.id === "bio") {
@@ -152,10 +158,7 @@ function Pilot_BasicInfo() {
       ) {
         setData({
           ...data,
-          phone: e.target.value.slice(
-            code.length + 1,
-            10 + code.length + 1
-          ),
+          phone: e.target.value.slice(code.length + 1, 10 + code.length + 1),
         });
         document.getElementById(e.target.name + "_error").style.display =
           "none";
@@ -163,7 +166,7 @@ function Pilot_BasicInfo() {
     } catch {
       console.log("Not number");
     }
-    console.log(data.phone)
+    console.log(data.phone);
   };
 
   const updateCoverImg = (e) => {
@@ -221,8 +224,8 @@ function Pilot_BasicInfo() {
   };
 
   const removePreferredLocation = (id) => {
-    console.log(id)
-  }
+    console.log(id);
+  };
 
   const saveChanges = () => {
     var fields = [
@@ -271,7 +274,7 @@ function Pilot_BasicInfo() {
           error = true;
           break;
         }
-      }else if (fields[i] === "userName"){
+      } else if (fields[i] === "userName") {
         if (fields[i] === "userName") {
           if (data[fields[i]].length === 0) {
             document.getElementById("userName_error").innerText =
@@ -279,32 +282,31 @@ function Pilot_BasicInfo() {
             error = true;
             document.getElementById(`userName`).focus();
             document.getElementById(`${fields[i]}_error`).style.visibility =
-            "visible";
+              "visible";
           } else if (data[fields[i]].length < 2) {
             document.getElementById("userName_error").innerText =
               "Username should have atleast 2 characters";
             error = true;
             document.getElementById(`userName`).focus();
             document.getElementById(`${fields[i]}_error`).style.visibility =
-            "visible";
+              "visible";
           } else if (data[fields[i]].length > 100) {
             document.getElementById("userName_error").innerText =
               "Username should not exceed 100 characters";
             error = true;
             document.getElementById(`userName`).focus();
             document.getElementById(`${fields[i]}_error`).style.visibility =
-            "visible";
+              "visible";
           } else if (!isUserNameValid(data.userName)) {
             document.getElementById("userName_error").innerText =
               "Username is not valid. You can use only integers, characters(small letters), '-' and '_'.";
             error = true;
             document.getElementById(`userName`).focus();
             document.getElementById(`${fields[i]}_error`).style.visibility =
-            "visible";
+              "visible";
           }
         }
-      }
-       else if (fields[i] === "email") {
+      } else if (fields[i] === "email") {
         if (data.email === "") {
           document.getElementById(`email_error`).innerHTML =
             "Email ID is Required";
@@ -391,6 +393,18 @@ function Pilot_BasicInfo() {
     }, 10);
   };
 
+  const zoomChanged = (e) => {
+    setCropZoom(Number(e.target.value))
+  }
+
+  const saveCroppedCoverPic = () => {
+    console.log("Save cover picture.")
+    const canvasScaled = coverPicCropRef.getImageScaledToCanvas();
+    const croppedImg = canvasScaled.toDataURL();
+    setCroppedCoverPic(croppedImg)
+    console.log(croppedImg)
+  }
+
   return (
     <div className="pd_b_i_main">
       <div className="pd_b_i_images">
@@ -449,6 +463,20 @@ function Pilot_BasicInfo() {
       </div>
       <div className="pd_b_i_profile_titleBox">
         <div className="pd_b_i_profile_title">Basic Information</div>
+        <div></div>
+        <AvatarEditor
+          ref = {coverPicCropRef}
+          image={"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/A_Sunflower.jpg/1200px-A_Sunflower.jpg"}
+          width={200}
+          height={200}
+          border={50}
+          color={[255, 255, 255, 0.6]}
+          scale={Number(cropZoom)/1000}
+        />
+        <input onChange = {zoomChanged} value = {cropZoom} type="range" id="vol" name="vol" min="1000" max="10000" />
+        <button onClick = {saveCroppedCoverPic}>Submit</button>
+        {/* <img src="" alt="" /> */}
+        
         <div className="pd_b_i_profile_edit" onClick={editHandler}>
           Edit
         </div>
@@ -496,7 +524,7 @@ function Pilot_BasicInfo() {
           <div>
             <div>
               <div style={{ marginBottom: "15px" }}>
-                <label htmlFor = "email">
+                <label htmlFor="email">
                   <div className="pd_b_i_profile_head1">Email ID</div>
                 </label>
                 {localStorage.getItem("email") == "true" ? (
@@ -548,7 +576,7 @@ function Pilot_BasicInfo() {
       <Row>
         <Col>
           <div>
-            <label htmlFor = "dob">
+            <label htmlFor="dob">
               <div className="pd_b_i_profile_head">DOB</div>
             </label>
             <input
@@ -567,8 +595,8 @@ function Pilot_BasicInfo() {
         </Col>
         <Col>
           <div>
-            <label htmlFor = "gender">
-            <div className="pd_b_i_profile_head">Gender</div>
+            <label htmlFor="gender">
+              <div className="pd_b_i_profile_head">Gender</div>
             </label>
             <select
               name="gender"
@@ -593,8 +621,8 @@ function Pilot_BasicInfo() {
       <Row>
         <Col xl={6}>
           <div>
-            <label htmlFor = "city">
-            <div className="pd_b_i_profile_head">City</div>
+            <label htmlFor="city">
+              <div className="pd_b_i_profile_head">City</div>
             </label>
             <input
               type="text"
@@ -610,9 +638,9 @@ function Pilot_BasicInfo() {
           </div>
         </Col>
         <Col xl={6}>
-        <div>
-            <label htmlFor = "city">
-            <div className="pd_b_i_profile_head">Preferred Location</div>
+          <div>
+            <label htmlFor="city">
+              <div className="pd_b_i_profile_head">Preferred Location</div>
             </label>
             <input
               type="text"
@@ -623,16 +651,16 @@ function Pilot_BasicInfo() {
               disabled={!edit}
             />
             {data.preferredLocation.split(",").map((drone, index) => {
-                return (
-                  <div
-                    className="pd_i_skill"
-                    key={index}
-                    onClick={()=>removePreferredLocation(index)}
-                  >
-                    {drone} <i class="fa fa-times" aria-hidden="true"></i>
-                  </div>
-                );
-              })}
+              return (
+                <div
+                  className="pd_i_skill"
+                  key={index}
+                  onClick={() => removePreferredLocation(index)}
+                >
+                  {drone} <i class="fa fa-times" aria-hidden="true"></i>
+                </div>
+              );
+            })}
             <div className="input_error_msg" id="preferred_location_error">
               Preferred Location should not exceed 100 characters
             </div>
@@ -640,24 +668,24 @@ function Pilot_BasicInfo() {
         </Col>
       </Row>
       <div>
-            <label htmlFor = "country">
-            <div className="pd_b_i_profile_head">Country</div>
-            </label>
-            <Select
-              styles={customStyles}
-              options={test}
-              value={{ label: data.country, value: data.country }}
-              onChange={changeCountry}
-              isDisabled={!edit}
-              id = "country"
-            />
-            <div className="input_error_msg" id="country_error">
-              Country is required
-            </div>
-          </div>
+        <label htmlFor="country">
+          <div className="pd_b_i_profile_head">Country</div>
+        </label>
+        <Select
+          styles={customStyles}
+          options={test}
+          value={{ label: data.country, value: data.country }}
+          onChange={changeCountry}
+          isDisabled={!edit}
+          id="country"
+        />
+        <div className="input_error_msg" id="country_error">
+          Country is required
+        </div>
+      </div>
       <div>
-        <label htmlFor = "bio">
-        <div className="pd_b_i_profile_head">Bio</div>
+        <label htmlFor="bio">
+          <div className="pd_b_i_profile_head">Bio</div>
         </label>
         <textarea
           type="text"

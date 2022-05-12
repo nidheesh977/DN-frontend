@@ -107,7 +107,7 @@ export default class Blog extends React.Component {
     return (
       <>
         <Helmet>
-          <title>{this.state.metaTitle}</title>
+          <title>{this.props.match.params.slug}</title>
           <meta charSet="utf-8" />
           <meta name="description" content={this.state.metaDescription} />
           <meta name="keywords" content={this.state.metaKeywords} />

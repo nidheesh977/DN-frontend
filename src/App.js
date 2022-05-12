@@ -59,6 +59,7 @@ import BlogDetails from "./components/website/BlogDetails";
 import BlogCategories from "./components/website/BlogCategories";
 import Shoots from "./components/website/Shoots";
 import TagBasedListing from "./components/website/TagBasedListing";
+import CompanyCheckout from "./components/website/CompanyCheckout";
 
 function App(){
 
@@ -176,6 +177,7 @@ function App(){
             <BoosterRoute component={Booster_dashboard} path="/booster_dashboard" />
             <Route exact path="/textEditor" component={TextEditor} />
             <Route exact path="/checkout/:id" component={Checkout} />
+            <Route exact path="/company-checkout/:plan" component={CompanyCheckout} />
             <Route exact path="/blogs/:slug" component={Blog} />
             <Route exact path="/blog/:slug" component={BlogDetails} />
             <Route exact path="/shoot-of-the-week" component={Shoots} />

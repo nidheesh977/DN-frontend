@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Row, Col, Container } from "react-grid-system";
 import "../css/TagBasedListing.css";
+import { Helmet } from "react-helmet";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -23,6 +24,9 @@ export default class TagBasedListing extends Component {
         { slug: "drone", tag: "Drone" },
         { slug: "nature", tag: "Nature" },
       ],
+      metaTitle: "meta-title",
+      metaDescription: "meta-description",
+      metaKeywords: "meta-keywords",
     };
   }
 
@@ -94,18 +98,23 @@ export default class TagBasedListing extends Component {
       },
     };
 
-    axios.get(`${domain}/api/tag/getTags`)
-    .then(res => {
-        this.setState({
-            tags: res.data
-        })
-    })
+    axios.get(`${domain}/api/tag/getTags`).then((res) => {
+      this.setState({
+        tags: res.data,
+      });
+    });
 
-    console.log(this.props.match.params.tag)
+    this.setState({
+      metaTitle: "meta-title",
+      metaDescription: "meta-description",
+      metaKeywords: "meta-keywords",
+    });
+
+    console.log(this.props.match.params.tag);
     axios
       .post(
         `${domain}/api/tag/imageFilters`,
-        { data: this.props.match.params.tag , type: "all"},
+        { data: this.props.match.params.tag, type: "all" },
         this.config
       )
       .then((res) => {
@@ -126,43 +135,63 @@ export default class TagBasedListing extends Component {
       });
     });
   }
-  tagChanged = (slug) =>{
+  tagChanged = (slug) => {
     axios
-    .post(
-      `${domain}/api/tag/imageFilters`,
-      { data: slug , type: "all"},
-      this.config
-    )
-    .then((res) => {
-      console.log(res.data);
-      this.setState({
-        files: res.data,
+      .post(
+        `${domain}/api/tag/imageFilters`,
+        { data: slug, type: "all" },
+        this.config
+      )
+      .then((res) => {
+        console.log(res.data);
+        this.setState({
+          files: res.data,
+        });
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false,
+        });
       });
-    })
-    .catch((err) => {
-      this.setState({
-        loading: false,
-      });
-    });
-  }
+  };
   render() {
     return (
       <section style={{ background: "#fff" }}>
+        <Helmet>
+          <title>{this.props.match.params.tag}</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content={this.state.metaDescription} />
+          <meta name="keywords" content={this.state.metaKeywords} />
+        </Helmet>
         <Container style={{ paddingTop: "50px" }}>
           <Row>
             <Col xxl={3} xl={3} lg={4}>
-              <h2 style={{ textAlign: "center", fontFamily: "muli-regular", marginBottom: "15px" }}>
+              <h2
+                style={{
+                  textAlign: "center",
+                  fontFamily: "muli-regular",
+                  marginBottom: "15px",
+                }}
+              >
                 Tags
               </h2>
               <div>
                 {this.state.tags.map((tag, index) => {
                   return (
-                    <Link to={"/shoots/" + tag.slug} onClick={()=>this.tagChanged(tag.slug)}>
-                      {tag.slug === this.props.match.params.tag
-                      ?<div className="tag-listing-tag" style = {{backgroundColor: "#4ffea3"}}>{tag.tag}</div>
-                      :<div className="tag-listing-tag">{tag.tag}</div>
-                      }
-                      
+                    <Link
+                      to={"/shoots/" + tag.slug}
+                      onClick={() => this.tagChanged(tag.slug)}
+                    >
+                      {tag.slug === this.props.match.params.tag ? (
+                        <div
+                          className="tag-listing-tag"
+                          style={{ backgroundColor: "#4ffea3" }}
+                        >
+                          {tag.tag}
+                        </div>
+                      ) : (
+                        <div className="tag-listing-tag">{tag.tag}</div>
+                      )}
                     </Link>
                   );
                 })}
@@ -170,121 +199,137 @@ export default class TagBasedListing extends Component {
             </Col>
             <Col>
               <Row gutterWidth={12}>
-                {this.state.files.length <= 0 && <h2 style = {{textAlign: "center", width: "100%", margin: "100px 0px 300px 0px"}}>No shoots based on this tag.</h2>}
+                {this.state.files.length <= 0 && (
+                  <h2
+                    style={{
+                      textAlign: "center",
+                      width: "100%",
+                      margin: "100px 0px 300px 0px",
+                    }}
+                  >
+                    No shoots based on this tag.
+                  </h2>
+                )}
                 <>
-                {this.state.files.map((file, index) => {
-                  return (
-                    <Col
-                      xxl={4}
-                      xl={4}
-                      lg={6}
-                      md={4}
-                      xm={6}
-                      xs={6}
-                      style={{ marginBottom: "12px" }}
-                    >
-                      <Link
-                        to={{
-                          pathname: `/Imageview/${file._id}/${file.userId}`,
-                          data: file,
-                          state: { foo: "bar" },
-                        }}
+                  {this.state.files.map((file, index) => {
+                    return (
+                      <Col
+                        xxl={4}
+                        xl={4}
+                        lg={6}
+                        md={4}
+                        xm={6}
+                        xs={6}
+                        style={{ marginBottom: "12px" }}
                       >
-                      <div style={{ position: "relative" }}>
-                        <div
-                          class="content-overlay"
-                          style={{ width: "100%" }}
-                        ></div>
-                        {file.fileType[0] === "v"
-                        ?<video className="thumbnail GalleryImg" style={{ width: "100%" }}>
-                        <source
-                          src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
-                          type="video/mp4"
-                        />
-                      </video>
-                        :<img
-                        src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
-                        style={{ width: "100%", borderRadius: "10px" }}
-                        className="thumbnail GalleryImg"
-                      />
-                        
-                        }
-                      </div>
-                      </Link>
-
-                      <figcaption
-                        id={"file_details_" + index}
-                        className=""
-                        style={{
-                          position: "absolute",
-                          bottom: "10px",
-                          width: "85%",
-                          marginLeft: "5%",
-                        }}
-                      >
-                        {file.user_id == this.state.usersid ? (
-                          <Link className={All.White} to="/Profile/">
-                            <span className="FSize_14 Profile_icon">
-                              {file.author}{" "}
-                            </span>
-                          </Link>
-                        ) : (
-                          <div
-                            className={All.White}
-                            // to={{
-                            //   pathname: `/pilot_details/${file.userId}`,
-                            // }}
-                            style={{
-                              display: "inline-block",
-                              cursor: "pointer",
-                            }}
-                            onClick={() =>
-                              this.redirectPilotLanding(file.userId)
-                            }
-                          >
-                            <span className="FSize_14 Profile_icon">
-                              {file.name}{" "}
-                            </span>
-                          </div>
-                        )}
-                        <span className="LikeIcon MuliLight">
-                          {" "}
-                          <FormControlLabel
-                            
-                            className="MuliLight"
-                            control={
-                              <Checkbox
-                                onClick={() => this.likeFile(file._id, index)}
-                                icon={
-                                  <>
-                                    {this.state.liked_list.includes(file._id) &&
-                                    localStorage.getItem("access_token") ? (
-                                      <Favorite />
-                                    ) : (
-                                      <FavoriteBorder />
-                                    )}
-                                  </>
-                                }
-                                checkedIcon={
-                                  <>
-                                    {this.state.liked_list.includes(file._id) &&
-                                    localStorage.getItem("access_token") ? (
-                                      <Favorite />
-                                    ) : (
-                                      <FavoriteBorder />
-                                    )}
-                                  </>
-                                }
-                                name="checkedH"
+                        <Link
+                          to={{
+                            pathname: `/Imageview/${file._id}/${file.userId}`,
+                            data: file,
+                            state: { foo: "bar" },
+                          }}
+                        >
+                          <div style={{ position: "relative" }}>
+                            <div
+                              class="content-overlay"
+                              style={{ width: "100%" }}
+                            ></div>
+                            {file.fileType[0] === "v" ? (
+                              <video
+                                className="thumbnail GalleryImg"
+                                style={{ width: "100%" }}
+                              >
+                                <source
+                                  src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
+                                  type="video/mp4"
+                                />
+                              </video>
+                            ) : (
+                              <img
+                                src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
+                                style={{ width: "100%", borderRadius: "10px" }}
+                                className="thumbnail GalleryImg"
                               />
-                            }
-                            label={file.likes.length}
-                          />
-                        </span>
-                      </figcaption>
-                    </Col>
-                  );
-                })}
+                            )}
+                          </div>
+                        </Link>
+
+                        <figcaption
+                          id={"file_details_" + index}
+                          className=""
+                          style={{
+                            position: "absolute",
+                            bottom: "10px",
+                            width: "85%",
+                            marginLeft: "5%",
+                          }}
+                        >
+                          {file.user_id == this.state.usersid ? (
+                            <Link className={All.White} to="/Profile/">
+                              <span className="FSize_14 Profile_icon">
+                                {file.author}{" "}
+                              </span>
+                            </Link>
+                          ) : (
+                            <div
+                              className={All.White}
+                              // to={{
+                              //   pathname: `/pilot_details/${file.userId}`,
+                              // }}
+                              style={{
+                                display: "inline-block",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                this.redirectPilotLanding(file.userId)
+                              }
+                            >
+                              <span className="FSize_14 Profile_icon">
+                                {file.name}{" "}
+                              </span>
+                            </div>
+                          )}
+                          <span className="LikeIcon MuliLight">
+                            {" "}
+                            <FormControlLabel
+                              className="MuliLight"
+                              control={
+                                <Checkbox
+                                  onClick={() => this.likeFile(file._id, index)}
+                                  icon={
+                                    <>
+                                      {this.state.liked_list.includes(
+                                        file._id
+                                      ) &&
+                                      localStorage.getItem("access_token") ? (
+                                        <Favorite />
+                                      ) : (
+                                        <FavoriteBorder />
+                                      )}
+                                    </>
+                                  }
+                                  checkedIcon={
+                                    <>
+                                      {this.state.liked_list.includes(
+                                        file._id
+                                      ) &&
+                                      localStorage.getItem("access_token") ? (
+                                        <Favorite />
+                                      ) : (
+                                        <FavoriteBorder />
+                                      )}
+                                    </>
+                                  }
+                                  name="checkedH"
+                                />
+                              }
+                              label={file.likes.length}
+                            />
+                          </span>
+                        </figcaption>
+                      </Col>
+                    );
+                  })}
                 </>
               </Row>
             </Col>
