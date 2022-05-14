@@ -11,7 +11,9 @@ import Close from "../../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
 import { saveAs } from "file-saver";
-
+import Select from "react-select";
+import AvatarEditor from "react-avatar-editor";
+import { Button, Box, Slider } from "@material-ui/core";
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -73,6 +75,7 @@ function Pilot_ProfessionalInfo() {
   let [profileSuccess, setProfileSuccess] = useState(false)
   let [coverSuccess, setCoverSuccess] = useState(false)
   let [infoSuccess, setInfoSuccess] = useState(false)
+  let [coverUpdateLoading, setCoverUpdateLoading] = useState(false);
 
   const clickEdit = () => {
     setEdit(true);
@@ -323,6 +326,157 @@ function Pilot_ProfessionalInfo() {
     }
   };
 
+
+  // Cover picture Crop
+  
+  var editor = "";
+  const [picture, setPicture] = useState({
+    cropperOpen: false,
+    img: null,
+    zoom: 1,
+    croppedImg:
+      "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"
+  });
+
+  const handleSlider = (event, value) => {
+    setPicture({
+      ...picture,
+      zoom: value
+    });
+  };
+
+  const handleCancel = () => {
+    setPicture({
+      ...picture,
+      cropperOpen: false
+    });
+  };
+
+  const setEditorRef = (ed) => {
+    editor = ed;
+  };
+
+  const handleSave = (e) => {
+    if (setEditorRef) {
+      setCoverUpdateLoading(true)
+      const canvasScaled = editor.getImageScaledToCanvas();
+      const croppedImg = canvasScaled.toDataURL();
+      console.log(croppedImg)
+      let formData = new FormData();
+        formData.append("file", croppedImg);
+        formData.append("test", "Hello");
+        axios
+          .post(`${domain}/api/user/updateCoverPic`, formData, config)
+          .then((res) => {
+            setCoverUpdateLoading(false)
+            setPicture({
+              ...picture,
+              img: null,
+              cropperOpen: false,
+              croppedImg: croppedImg
+            });
+            console.log(res.data);
+            setCoverSuccess(true);
+            axios.post(`${domain}/api/user/pilotDetails`, config).then((response) => {
+              console.log(response.data.coverPic)
+              setData({
+                ...data,
+                cover: `${response.data.coverPic}`,
+              });
+            });
+          })
+          .catch((err) => {
+            setCoverUpdateLoading(false)
+            console.log(err.response);
+          });
+
+      
+    }
+  };
+
+  const handleFileChange = (e) => {
+    let url = URL.createObjectURL(e.target.files[0]);
+    console.log(url);
+    setPicture({
+      ...picture,
+      img: url,
+      cropperOpen: true
+    });
+  };
+
+  
+  var editor2 = "";
+  const [picture2, setPicture2] = useState({
+    cropperOpen: false,
+    img: null,
+    zoom: 1,
+    croppedImg:
+      "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"
+  });
+
+  const handleSlider2 = (event, value) => {
+    setPicture2({
+      ...picture2,
+      zoom: value
+    });
+  };
+
+  const handleCancel2 = () => {
+    setPicture2({
+      ...picture,
+      cropperOpen: false
+    });
+  };
+
+  const setEditorRef2 = (ed) => {
+    editor2 = ed;
+  };
+
+  const handleSave2 = (e) => {
+    if (setEditorRef2) {
+      setCoverUpdateLoading(true)
+      const canvasScaled = editor2.getImageScaledToCanvas();
+      const croppedImg = canvasScaled.toDataURL();
+      console.log(croppedImg)
+      let formData = new FormData();
+        formData.append("file", croppedImg);
+        axios
+          .post(`${domain}/api/user/updateProfilePic`, formData, config)
+          .then((res) => {
+            setCoverUpdateLoading(false)
+            setPicture2({
+              ...picture2,
+              img: null,
+              cropperOpen: false,
+              croppedImg: croppedImg
+            });
+            console.log(res.data);
+            setProfileSuccess(true);
+            axios.post(`${domain}/api/user/pilotDetails`, config).then((response) => {
+              console.log(response.data.coverPic)
+              setData({
+                ...data,
+                profile: `${response.data.profilePic}`,
+              });
+            });
+          })
+          .catch((err) => {
+            setCoverUpdateLoading(false)
+            console.log(err.response);
+          });
+    }
+  };
+
+  const handleFileChange2 = (e) => {
+    let url = URL.createObjectURL(e.target.files[0]);
+    console.log(url);
+    setPicture2({
+      ...picture,
+      img: url,
+      cropperOpen: true
+    });
+  };
+
   return (
     <div className="pd_b_i_main">
       <div className="pd_b_i_images">
@@ -338,10 +492,10 @@ function Pilot_ProfessionalInfo() {
                   alt="profile-img"
                   accept="image/*"
                   style={{ display: "none" }}
-                  onChange={updateProfile}
+                  onChange={handleFileChange2}
                   disabled = {!edit}
                 />
-                {edit?<img src={Edit} alt="" className="pd_b_i_edit" />: <img src={Edit} alt="" className="pd_b_i_edit" style = {{opacity: "0.5"}}/>}
+                <img src={Edit} alt="" className="pd_b_i_edit" />
               </label>
             </div>
           </div>
@@ -354,10 +508,10 @@ function Pilot_ProfessionalInfo() {
               alt="profile-img"
               accept="image/*"
               style={{ display: "none" }}
-              onChange={updateCover}
+              onChange={handleFileChange}
               disabled = {!edit}
             />
-            {edit?<img src={Edit} alt="" className="pd_b_i_edit1" />: <img src={Edit} alt="" className="pd_b_i_edit1" style = {{opacity: "0.5"}}/>}
+            <img src={Edit} alt="" className="pd_b_i_edit1" />
           </label>
         </div>
       </div>
@@ -757,6 +911,101 @@ function Pilot_ProfessionalInfo() {
               </button>
             </div>
           </Row>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={picture.cropperOpen}
+        onClose={() => setInfoSuccess(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{ style: { width: "820px", borderRadius: "10px", paddingTop: "50px" } }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          {picture.cropperOpen && (
+              <Box display="block">
+                <center>
+                  <AvatarEditor
+                    ref={setEditorRef}
+                    image={picture.img}
+                    width={1170}
+                    height={310}
+                    border={50}
+                    color={[0,0,0,0.7]} // RGBA
+                    rotate={0}
+                    scale={picture.zoom}
+                    style = {{width: "100%", height: "100%"}}
+                  />
+                </center>
+                <Slider
+                  aria-label="raceSlider"
+                  value={picture.zoom}
+                  min={1}
+                  max={10}
+                  step={0.1}
+                  onChange={handleSlider}
+                ></Slider>
+                <Box>
+                  <Button style = {{marginRight: "10px"}} variant="contained" onClick={handleCancel}>
+                    Cancel
+                  </Button>
+                  {coverUpdateLoading?<Button>Saving</Button>:<Button onClick={handleSave}>Save</Button>}
+                  
+                </Box>
+              </Box>
+            )}
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={picture2.cropperOpen}
+        onClose={() => setInfoSuccess(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{ style: { width: "820px", borderRadius: "10px", paddingTop: "50px" } }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          {picture2.cropperOpen && (
+              <Box display="block">
+                <center>
+                  <AvatarEditor
+                    ref={setEditorRef2}
+                    image={picture2.img}
+                    width={180}
+                    height={180}
+                    border = {50}
+                    borderRadius={150}
+                    color={[0,0,0,0.7]} // RGBA
+                    rotate={0}
+                    scale={picture2.zoom}
+                    style = {{width: "50%", height: "50%"}}
+                  />
+                </center>
+                <Slider
+                  aria-label="raceSlider"
+                  value={picture2.zoom}
+                  min={1}
+                  max={10}
+                  step={0.1}
+                  onChange={handleSlider2}
+                ></Slider>
+                <Box>
+                  <Button style = {{marginRight: "10px"}} variant="contained" onClick={handleCancel2}>
+                    Cancel
+                  </Button>
+                  {coverUpdateLoading?<Button>Saving</Button>:<Button onClick={handleSave2}>Save</Button>}
+                  
+                </Box>
+              </Box>
+            )}
         </DialogContent>
       </Dialog>
     </div>

@@ -322,7 +322,7 @@ class ServiceCenterAccount extends Component {
 
                   </div>
                   <div className="pd_b_i_profile_titleBox">
-                    <div className='pd_b_i_profile_title'>Basic Information</div>
+                    <div className='pd_b_i_profile_title'>Bassic Information</div>
                     <div className='pd_b_i_profile_edit' onClick = {() => this.clickEdit("service_center_name")}>Edit</div>
                   </div>
                   <Row>

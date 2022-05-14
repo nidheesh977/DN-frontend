@@ -10,6 +10,9 @@ import { Route, Switch, NavLink } from "react-router-dom";
 import Company_basicInfo from "./Company_basicInfo";
 import Company_professionalInfo from "./Company_professionalInfo";
 import Company_notifications from "./Company_notifications";
+import CompanyPayments from "./company_Payments";
+import CompanyPaymentAddress from "./CompanyPaymentAddress";
+import CompanyHelpCenter from "./CompanyHelpCenter"
 
 class Account_Sidebar extends React.Component {
   constructor(props) {
@@ -84,6 +87,36 @@ class Account_Sidebar extends React.Component {
                   <div id="pd_filter1_checkbox_label">
                     {" "}
                     <NavLink
+                      to="/company_dashboard/account/my_subscription"
+                      activeClassName="h_p_sidebar_active"
+                      className="h_p_filter1_checkbox_label"
+                    >
+                      My Subscription
+                    </NavLink>
+                  </div>
+                  <div id="pd_filter1_checkbox_label">
+                    {" "}
+                    <NavLink
+                      to="/company_dashboard/account/billing_address"
+                      activeClassName="h_p_sidebar_active"
+                      className="h_p_filter1_checkbox_label"
+                    >
+                      Billing Address
+                    </NavLink>
+                  </div>
+                  <div id="pd_filter1_checkbox_label">
+                    {" "}
+                    <NavLink
+                      to="/company_dashboard/account/help-center"
+                      activeClassName="h_p_sidebar_active"
+                      className="h_p_filter1_checkbox_label"
+                    >
+                      Help Center
+                    </NavLink>
+                  </div>
+                  <div id="pd_filter1_checkbox_label">
+                    {" "}
+                    <NavLink
                       to="/company_dashboard/account/notifications"
                       activeClassName="h_p_sidebar_active"
                       className="h_p_filter1_checkbox_label"
@@ -110,12 +143,27 @@ class Account_Sidebar extends React.Component {
                 path="/company_dashboard/account/notifications"
                 component={Company_notifications}
               />
+
+               <Route
+                path="/company_dashboard/account/my_subscription"
+                component={CompanyPayments}
+              />
+               <Route
+                path="/company_dashboard/account/billing_address"
+                component={CompanyPaymentAddress}
+              />
+               <Route
+                path="/company_dashboard/account/help-center"
+                component={CompanyHelpCenter}
+              />
               
               <Route
                 index
                 path="/company_dashboard/account/"
                 component={Company_basicInfo}
               />
+              
+              
             </Switch>{" "}
           </Col>
         </Row>

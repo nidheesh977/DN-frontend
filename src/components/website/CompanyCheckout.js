@@ -35,7 +35,6 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent);
 
 function CompanyCheckout() {
-
   let { plan } = useParams();
 
   const param = useParams();
@@ -264,8 +263,6 @@ function CompanyCheckout() {
         },
       };
 
-      
-
       let submitData = {
         name: formData.name,
         email: formData.email,
@@ -275,7 +272,9 @@ function CompanyCheckout() {
         city: formData.city,
         state: formData.state,
         country: formData.country_code,
-        planName: (plan.includes("gold")?"Gold ":"Platinum ") + (plan.includes("monthly")?"Monthly":"Yearly"),
+        planName:
+          (plan.includes("gold") ? "Gold " : "Platinum ") +
+          (plan.includes("monthly") ? "Monthly" : "Yearly"),
       };
       console.log(submitData);
       axios
@@ -359,43 +358,45 @@ function CompanyCheckout() {
         // },
         redirect: "if_required",
       });
-
-      if (result.error && result.error.payment_intent){
-        console.log(result);
-        const config = {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-        };
-        console.log(result.error)
-        axios
-          .post(
-            `${domain}/api/payment/createPayment`,
-            {
-              userRole: "pilot",
-              plan: (plan.includes("gold")?"Gold ":"Platinum ") + (plan.includes("monthly")?"Monthly":"Yearly"),
-              transactionId: result.error.payment_intent.id,
-              price: result.error.payment_intent.amount,
-              status:
-                result.error.payment_intent.last_payment_error.decline_code,
-              name: formData.name,
-              line1: formData.line1,
-              line2: formData.line2,
-              city: formData.city,
-              country: formData.country,
-              pinCode: formData.pin_code,
-              state: formData.state,
+      if (result.error) {
+        if (result.error.payment_intent) {
+          console.log(result);
+          const config = {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
             },
-            config
-          )
-          .then((res) => {
-            console.log(res);
-            setPaymentFailed(true);
-          });
-        setCheckoutLoading(false);
-      }
-      else if (result.error){
-        setCheckoutLoading(false);
+          };
+          console.log(result.error);
+          axios
+            .post(
+              `${domain}/api/payment/createPayment`,
+              {
+                userRole: "pilot",
+                plan:
+                  (plan.includes("gold") ? "Gold " : "Platinum ") +
+                  (plan.includes("monthly") ? "Monthly" : "Yearly"),
+                transactionId: result.error.payment_intent.id,
+                price: result.error.payment_intent.amount,
+                status:
+                  result.error.payment_intent.last_payment_error.decline_code,
+                name: formData.name,
+                line1: formData.line1,
+                line2: formData.line2,
+                city: formData.city,
+                country: formData.country,
+                pinCode: formData.pin_code,
+                state: formData.state,
+              },
+              config
+            )
+            .then((res) => {
+              console.log(res);
+              setPaymentFailed(true);
+            });
+          setCheckoutLoading(false);
+        } else {
+          setCheckoutLoading(false);
+        }
       } else {
         console.log(result);
         const config = {
@@ -408,7 +409,9 @@ function CompanyCheckout() {
             `${domain}/api/payment/createPayment`,
             {
               userRole: "pilot",
-              plan: (plan.includes("gold")?"Gold ":"Platinum ") + (plan.includes("monthly")?"Monthly":"Yearly"),
+              plan:
+                (plan.includes("gold") ? "Gold " : "Platinum ") +
+                (plan.includes("monthly") ? "Monthly" : "Yearly"),
               transactionId: result.paymentIntent.id,
               price: result.paymentIntent.amount,
               status: result.paymentIntent.status,
@@ -424,9 +427,10 @@ function CompanyCheckout() {
           )
           .then((res) => {
             console.log(res);
-          }).catch(err=>{
-            console.log(err.response)
           })
+          .catch((err) => {
+            console.log(err.response);
+          });
         setPaymentSuccess(true);
         setCheckoutLoading(false);
         // axios
@@ -460,7 +464,7 @@ function CompanyCheckout() {
       </form>
     );
   };
-  
+
   return (
     <div>
       <div className="h_p_container" style={{ overflowX: "hidden" }}>
@@ -475,30 +479,32 @@ function CompanyCheckout() {
                       icon={faThumbsUp}
                       style={{ color: "#4ffea3", fontSize: "22px" }}
                     />
-                    <span className="c_sideSpan">No of active Jobs : {
-                      plan.includes("gold")
-                      ? plan.includes("monthly")
-                        ? "5"
-                        : "60"
-                      : plan.includes("monthly")
-                      ? "10"
-                      : "120"
-                    }</span>
+                    <span className="c_sideSpan">
+                      No of active Jobs :{" "}
+                      {plan.includes("gold")
+                        ? plan.includes("monthly")
+                          ? "5"
+                          : "60"
+                        : plan.includes("monthly")
+                        ? "10"
+                        : "120"}
+                    </span>
                   </div>
                   <div className="c_sideFeaturesDiv">
                     <FontAwesomeIcon
                       icon={faThumbsUp}
                       style={{ color: "#4ffea3", fontSize: "22px" }}
                     />
-                    <span className="c_sideSpan">Profile View Count : {
-                      plan.includes("gold")
-                      ? plan.includes("monthly")
-                        ? "50"
-                        : "600"
-                      : plan.includes("monthly")
-                      ? "100"
-                      : "1200"
-                    }</span>
+                    <span className="c_sideSpan">
+                      Profile View Count :{" "}
+                      {plan.includes("gold")
+                        ? plan.includes("monthly")
+                          ? "50"
+                          : "600"
+                        : plan.includes("monthly")
+                        ? "100"
+                        : "1200"}
+                    </span>
                   </div>
                   <div className="c_sideFeaturesDiv">
                     <FontAwesomeIcon
@@ -513,15 +519,14 @@ function CompanyCheckout() {
                       style={{ color: "#4ffea3", fontSize: "22px" }}
                     />
                     <span className="c_sideSpan">
-                      Email proposals (Direct Hire) : {
-                      plan.includes("gold")
-                      ? plan.includes("monthly")
-                        ? "100"
-                        : "1200"
-                      : plan.includes("monthly")
-                      ? "200"
-                      : "2400"
-                    }
+                      Email proposals (Direct Hire) :{" "}
+                      {plan.includes("gold")
+                        ? plan.includes("monthly")
+                          ? "100"
+                          : "1200"
+                        : plan.includes("monthly")
+                        ? "200"
+                        : "2400"}
                     </span>
                   </div>
                   <div className="c_sideFeaturesDiv">
@@ -613,11 +618,8 @@ function CompanyCheckout() {
                   : plan.includes("monthly")
                   ? "100.00 USD"
                   : "1000.00 USD "}
-                immediately. You will be charged every {
-                      plan.includes("monthly")
-                        ? "30"
-                        : "365"
-                    } days thereafter while
+                immediately. You will be charged every{" "}
+                {plan.includes("monthly") ? "30" : "365"} days thereafter while
                 the subscription is active. Cancel any time. Exchange rates are
                 estimated based on our most recent conversion data and may not
                 reflect the full charge value.

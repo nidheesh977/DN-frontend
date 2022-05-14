@@ -20,6 +20,9 @@ import PlacesAutocomplete, {
   getLatLng,
 } from "react-autocomplete-places";
 
+import AvatarEditor from "react-avatar-editor";
+import { Button, Box, Slider } from "@material-ui/core";
+
 const DialogContent = withStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -138,6 +141,7 @@ function Center_BasicInfo() {
   let [saving, setSaving] = useState(false);
   let [updateSuccess, setUpdateSuccess] = useState(false);
   let [updateFailed, setUpdateFailed] = useState(false);
+  let [coverUpdateLoading, setCoverUpdateLoading] = useState(false);
 
   const changeHandler = (e) => {
     document.getElementById(`${e.target.id}_error`).style.display = "none";
@@ -676,6 +680,175 @@ function Center_BasicInfo() {
     }
   };
   
+  
+  var editor = "";
+  const [picture, setPicture] = useState({
+    cropperOpen: false,
+    img: null,
+    zoom: 1,
+    croppedImg:
+      "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
+  });
+
+  const handleSlider = (event, value) => {
+    setPicture({
+      ...picture,
+      zoom: value,
+    });
+  };
+
+  const handleCancel = () => {
+    setPicture({
+      ...picture,
+      cropperOpen: false,
+    });
+  };
+
+  const setEditorRef = (ed) => {
+    editor = ed;
+  };
+
+  const handleSave = (e) => {
+    if (setEditorRef) {
+      setCoverUpdateLoading(true);
+      const canvasScaled = editor.getImageScaledToCanvas();
+      const croppedImg = canvasScaled.toDataURL();
+      console.log(croppedImg);
+      let formData = new FormData();
+      formData.append("file", croppedImg);
+      formData.append("test", "Hello");
+      axios.post(`${domain}/api/user/updateCoverPupdateCoverPicServiceCenteric`, formData, config)
+        .then((res) => {
+          setCoverUpdateLoading(false);
+          setPicture({
+            ...picture,
+            img: null,
+            cropperOpen: false,
+            croppedImg: croppedImg,
+          });
+          console.log(res.data);
+          setCoverSuccess(true);
+          axios.get(`${domain}/api/company/companyData`, config)
+            .then((res) => {
+              setData({
+                ...data,
+                coverPic: res.data.coverPic,
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          setCoverUpdateLoading(false);
+          console.log(err.response);
+        });
+    }
+  };
+
+  const handleFileChange = (e) => {
+    let file = e.target.files[0];
+    let img = new Image();
+    img.src = window.URL.createObjectURL(file);
+    img.onload = () => {
+      if (img.width >= 1170 && img.height >= 310) {
+        let url = URL.createObjectURL(file);
+        console.log(url);
+        setPicture({
+          ...picture,
+          img: url,
+          cropperOpen: true,
+        });
+      } else {
+        alert("Cover Image size must be minimum 1700x310");
+      }
+    };
+  };
+
+  var editor2 = "";
+  const [picture2, setPicture2] = useState({
+    cropperOpen: false,
+    img: null,
+    zoom: 1,
+    croppedImg:
+      "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
+  });
+
+  const handleSlider2 = (event, value) => {
+    setPicture2({
+      ...picture2,
+      zoom: value,
+    });
+  };
+
+  const handleCancel2 = () => {
+    setPicture2({
+      ...picture,
+      cropperOpen: false,
+    });
+  };
+
+  const setEditorRef2 = (ed) => {
+    editor2 = ed;
+  };
+
+  const handleSave2 = (e) => {
+    if (setEditorRef2) {
+      setCoverUpdateLoading(true);
+      const canvasScaled = editor2.getImageScaledToCanvas();
+      const croppedImg = canvasScaled.toDataURL();
+      console.log(croppedImg);
+      let formData = new FormData();
+      formData.append("file", croppedImg);
+      axios.post(`${domain}/api/user/updateProfilePicServiceCenter`, formData, config)
+        .then((res) => {
+          setCoverUpdateLoading(false);
+          setPicture2({
+            ...picture2,
+            img: null,
+            cropperOpen: false,
+            croppedImg: croppedImg,
+          });
+          console.log(res.data);
+          setProfileSuccess(true);
+          axios.get(`${domain}/api/company/companyData`, config)
+            .then((res) => {
+              setData({
+                ...data,
+                profilePic: res.data.profilePic,
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          setCoverUpdateLoading(false);
+          console.log(err.response);
+        });
+    }
+  };
+
+  const handleFileChange2 = (e) => {
+    console.log("Hello")
+    let file = e.target.files[0];
+    let img = new Image();
+    img.src = window.URL.createObjectURL(file);
+    img.onload = () => {
+      if (img.width >= 180 && img.height >= 180) {
+        let url = URL.createObjectURL(file);
+        console.log(url);
+        setPicture2({
+          ...picture,
+          img: url,
+          cropperOpen: true,
+        });
+      }
+      else{
+        alert("Profile Image size must be minimum 180x180");
+      }
+    };
+  };
 
   return (
     <>
@@ -698,7 +871,7 @@ function Center_BasicInfo() {
                     alt="profile-img"
                     accept="image/*"
                     style={{ display: "none" }}
-                    onChange={updateProfileImg}
+                    onChange={handleFileChange2}
                     disabled={!edit}
                   />
                   {edit ? (
@@ -723,7 +896,7 @@ function Center_BasicInfo() {
                 alt="profile-img"
                 accept="image/*"
                 style={{ display: "none" }}
-                onChange={updateCoverImg}
+                onChange={handleFileChange}
                 disabled={!edit}
               />
               {edit ? (
@@ -1644,6 +1817,191 @@ function Center_BasicInfo() {
               </Row>
             </DialogContent>
           </Dialog>
+          <Dialog
+        open={profileSuccess}
+        onClose={() => setProfileSuccess(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+            <img
+              src={Close}
+              alt=""
+              onClick={() => setProfileSuccess(false)}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <Row style={{ marginTop: "30px" }}>
+            <div className="u_f_popup_title">
+              Profile image updated successfully.
+            </div>
+            <div className="u_f_popup_btn_container">
+              <button
+                className="u_f_popup_btn2"
+                onClick={() => setProfileSuccess(false)}
+              >
+                Close
+              </button>
+            </div>
+          </Row>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={coverSuccess}
+        onClose={() => setCoverSuccess(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+            <img
+              src={Close}
+              alt=""
+              onClick={() => setCoverSuccess(false)}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <Row style={{ marginTop: "30px" }}>
+            <div className="u_f_popup_title">
+              Cover image updated successfully.
+            </div>
+            <div className="u_f_popup_btn_container">
+              <button
+                className="u_f_popup_btn2"
+                onClick={() => setCoverSuccess(false)}
+              >
+                Close
+              </button>
+            </div>
+          </Row>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={picture.cropperOpen}
+        onClose={() => setInfoSuccess(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{
+          style: { width: "820px", borderRadius: "10px", paddingTop: "50px" },
+        }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          {picture.cropperOpen && (
+            <Box display="block">
+              <center>
+                <AvatarEditor
+                  ref={setEditorRef}
+                  image={picture.img}
+                  width={1170}
+                  height={310}
+                  border={50}
+                  color={[0, 0, 0, 0.7]} // RGBA
+                  rotate={0}
+                  scale={picture.zoom}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </center>
+              <Slider
+                aria-label="raceSlider"
+                value={picture.zoom}
+                min={1}
+                max={10}
+                step={0.1}
+                onChange={handleSlider}
+              ></Slider>
+              <Box>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </Button>
+                {coverUpdateLoading ? (
+                  <Button>Saving</Button>
+                ) : (
+                  <Button onClick={handleSave}>Save</Button>
+                )}
+              </Box>
+            </Box>
+          )}
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={picture2.cropperOpen}
+        onClose={() => setInfoSuccess(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{
+          style: { width: "820px", borderRadius: "10px", paddingTop: "50px" },
+        }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          {picture2.cropperOpen && (
+            <Box display="block">
+              <center>
+                <AvatarEditor
+                  ref={setEditorRef2}
+                  image={picture2.img}
+                  width={180}
+                  height={180}
+                  border={50}
+                  borderRadius={150}
+                  color={[0, 0, 0, 0.7]} // RGBA
+                  rotate={0}
+                  scale={picture2.zoom}
+                  style={{ width: "50%", height: "50%" }}
+                />
+              </center>
+              <Slider
+                aria-label="raceSlider"
+                value={picture2.zoom}
+                min={1}
+                max={10}
+                step={0.1}
+                onChange={handleSlider2}
+              ></Slider>
+              <Box>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  onClick={handleCancel2}
+                >
+                  Cancel
+                </Button>
+                {coverUpdateLoading ? (
+                  <Button>Saving</Button>
+                ) : (
+                  <Button onClick={handleSave2}>Save</Button>
+                )}
+              </Box>
+            </Box>
+          )}
+        </DialogContent>
+      </Dialog>
       </div>
     </>
   );

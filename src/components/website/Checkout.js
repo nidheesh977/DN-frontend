@@ -88,20 +88,23 @@ function Checkout() {
         }));
         var country = {};
         for (var i = 0; i < Countries.length; i++) {
-          if (Countries[i].name === res.data.country || Countries[i].code === res.data.country) {
+          if (
+            Countries[i].name === res.data.country ||
+            Countries[i].code === res.data.country
+          ) {
             country = { value: Countries[i].code, label: Countries[i].name };
             break;
           }
         }
         setFormData({
           ...formData,
-          name: res.data.name?res.data.name:"",
-          email: res.data.email?res.data.email:"",
-          line1: res.data.line1?res.data.line1:"",
-          line2: res.data.line2?res.data.line2:"",
-          pin_code: res.data.postal_code?Number(res.data.postal_code):"",
-          city: res.data.city?res.data.city:"",
-          state: res.data.state?res.data.state:"",
+          name: res.data.name ? res.data.name : "",
+          email: res.data.email ? res.data.email : "",
+          line1: res.data.line1 ? res.data.line1 : "",
+          line2: res.data.line2 ? res.data.line2 : "",
+          pin_code: res.data.postal_code ? Number(res.data.postal_code) : "",
+          city: res.data.city ? res.data.city : "",
+          state: res.data.state ? res.data.state : "",
           country: country.label,
           country_code: country.value,
           country_object: country,
@@ -128,7 +131,7 @@ function Checkout() {
   const options = {
     clientSecret: secret,
   };
-  const [subId, setSubId] = useState("")
+  const [subId, setSubId] = useState("");
 
   const submitStep1 = () => {
     const validateEmail = (email) => {
@@ -251,7 +254,7 @@ function Checkout() {
       }
     }
     if (!error) {
-      setLoading(true)
+      setLoading(true);
       const config = {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -267,27 +270,32 @@ function Checkout() {
         city: formData.city,
         state: formData.state,
         country: formData.country_code,
-        planName: data.name
+        planName: data.name,
       };
       console.log(submitData);
       axios
         .post(`${domain}/api/payment/startPaymentProcess`, submitData, config)
         .then((res) => {
-          if (saveAddress){
-            axios.post(`${domain}/api/pilot/updateBillingAddress`, submitData, config)
-            .then(res => console.log(res.data))
+          if (saveAddress) {
+            axios
+              .post(
+                `${domain}/api/pilot/updateBillingAddress`,
+                submitData,
+                config
+              )
+              .then((res) => console.log(res.data));
           }
-          setLoading(false)
+          setLoading(false);
           console.log(res.data);
           setSecret(res.data.clientSecret);
-          setSubId(res.data.subscriptionId)
+          setSubId(res.data.subscriptionId);
           setStep(2);
           window.scrollTo(0, 150);
         })
-        .catch(err => {
-          setLoading(false)
-          setPaymentCreationFailed(true)
-        })
+        .catch((err) => {
+          setLoading(false);
+          setPaymentCreationFailed(true);
+        });
     } else {
       document.getElementById(focusField).focus();
     }
@@ -309,7 +317,7 @@ function Checkout() {
   };
 
   const closePaymentPopup = () => {
-    history.push("/pilot_dashboard/activities/images");
+    history.push("/pilot_dashboard/account/my_subscription");
   };
 
   const countryChangeHandler = (country) => {
@@ -327,11 +335,11 @@ function Checkout() {
     const stripe = useStripe();
     const elements = useElements();
 
-    const [checkoutLoading, setCheckoutLoading] = useState(false)
+    const [checkoutLoading, setCheckoutLoading] = useState(false);
 
     const handleSubmit = async (event) => {
       event.preventDefault();
-      setCheckoutLoading(true)
+      setCheckoutLoading(true);
       if (!stripe || !elements) {
         console.log("Loading");
         return;
@@ -346,66 +354,86 @@ function Checkout() {
         // },
         redirect: "if_required",
       });
-
-      if (result.error.payment_intent) {
+      if (result.error) {
+        if (result.error.payment_intent) {
+          console.log(result);
+          const config = {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          };
+          axios
+            .post(
+              `${domain}/api/payment/createPayment`,
+              {
+                userRole: "pilot",
+                plan: data.name,
+                transactionId: result.error.payment_intent.id,
+                price: result.error.payment_intent.amount,
+                status:
+                  result.error.payment_intent.last_payment_error.decline_code,
+                name: formData.name,
+                line1: formData.line1,
+                line2: formData.line2,
+                city: formData.city,
+                country: formData.country,
+                pinCode: formData.pin_code,
+                state: formData.state,
+              },
+              config
+            )
+            .then((res) => {
+              console.log(res);
+              setPaymentFailed(true);
+            });
+          setCheckoutLoading(false);
+        } else {
+          console.log("Error");
+          setCheckoutLoading(false);
+        }
+      } else {
         console.log(result);
         const config = {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("access_token"),
           },
         };
-        axios.post(`${domain}/api/payment/createPayment`, {
-          userRole: "pilot",
-          plan:data.name,
-          transactionId: result.error.payment_intent.id,
-          price: result.error.payment_intent.amount,
-          status: result.error.payment_intent.last_payment_error.decline_code,
-          name: formData.name,
-          line1:formData.line1,
-          line2: formData.line2,
-          city: formData.city,
-          country: formData.country,
-          pinCode: formData.pin_code,
-          state: formData.state
-        },config).then(res=>{
-          console.log(res)
-          setPaymentFailed(true)
-        })
-        setCheckoutLoading(false)
-      }else if (result.error){
-        console.log("Error")
-        setCheckoutLoading(false)
-      } else {
-        console.log(result)
-        const config = {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-        };
-        axios.post(`${domain}/api/payment/createPayment`, {
-          userRole: "pilot",
-          plan:data.name,
-          transactionId: result.paymentIntent.id,
-          price: result.paymentIntent.amount,
-          status: result.paymentIntent.status,
-          name: formData.name,
-          line1:formData.line1,
-          line2: formData.line2,
-          city: formData.city,
-          country: formData.country,
-          pinCode: formData.pin_code,
-          state: formData.state
-        },config).then(res=>{
-          console.log(res)
-        })
+        axios
+          .post(
+            `${domain}/api/payment/createPayment`,
+            {
+              userRole: "pilot",
+              plan: data.name,
+              transactionId: result.paymentIntent.id,
+              price: result.paymentIntent.amount,
+              status: result.paymentIntent.status,
+              name: formData.name,
+              line1: formData.line1,
+              line2: formData.line2,
+              city: formData.city,
+              country: formData.country,
+              pinCode: formData.pin_code,
+              state: formData.state,
+            },
+            config
+          )
+          .then((res) => {
+            console.log(res);
+          });
         setPaymentSuccess(true);
-        setCheckoutLoading(false)
-        axios.post(`${domain}/api/pilotSubscription/createSubscription`, {
-          plan: data.name,
-          paymentId: subId,
-        }, config).then(res=>{
-          console.log(res)
-        })
+        setCheckoutLoading(false);
+        axios
+          .post(
+            `${domain}/api/pilotSubscription/createSubscription`,
+            {
+              plan: data.name,
+              paymentId: subId,
+            },
+            config
+          )
+          .then((res) => {
+            console.log(res);
+          });
       }
     };
 
@@ -418,7 +446,7 @@ function Checkout() {
             className="c_cBtn"
             style={{ display: "flex", marginLeft: "auto" }}
           >
-            {checkoutLoading?<Loader />:""}
+            {checkoutLoading ? <Loader /> : ""}
             Submit
           </button>
         </div>
@@ -571,7 +599,7 @@ function Checkout() {
                         <input
                           type="text"
                           className="a_j_filter_address"
-                          style = {{height: "40px"}}
+                          style={{ height: "40px" }}
                           id="name"
                           name="name"
                           value={formData.name}
@@ -590,7 +618,7 @@ function Checkout() {
                         <input
                           type="email"
                           className="a_j_filter_address"
-                          style = {{height: "40px"}}
+                          style={{ height: "40px" }}
                           id="email"
                           name="email"
                           value={formData.email}
@@ -611,7 +639,7 @@ function Checkout() {
                         <input
                           type="text"
                           className="a_j_filter_address"
-                          style = {{height: "40px"}}
+                          style={{ height: "40px" }}
                           id="line1"
                           name="line1"
                           value={formData.line1}
@@ -632,7 +660,7 @@ function Checkout() {
                         <input
                           type="text"
                           className="a_j_filter_address"
-                          style = {{height: "40px"}}
+                          style={{ height: "40px" }}
                           id="line2"
                           name="line2"
                           value={formData.line2}
@@ -651,7 +679,7 @@ function Checkout() {
                         <input
                           type="number"
                           className="a_j_filter_address"
-                          style = {{height: "40px"}}
+                          style={{ height: "40px" }}
                           id="pin_code"
                           name="pin_code"
                           value={formData.pin_code}
@@ -671,7 +699,7 @@ function Checkout() {
                         <input
                           type="text"
                           className="a_j_filter_address"
-                          style = {{height: "40px"}}
+                          style={{ height: "40px" }}
                           id="city"
                           name="city"
                           value={formData.city}
@@ -690,7 +718,7 @@ function Checkout() {
                         <input
                           type="text"
                           className="a_j_filter_address"
-                          style = {{height: "40px"}}
+                          style={{ height: "40px" }}
                           id="state"
                           name="state"
                           value={formData.state}
@@ -725,8 +753,15 @@ function Checkout() {
                       </div>
                     </Col>
                   </Row>
-                  <label style = {{width: "fit-content", cursor: "pointer"}}>
-                    <input type="checkbox" name="save_address" id="save_address" checked = {saveAddress} style = {{marginRight: "10px"}} onChange = {()=>setSaveAddress(!saveAddress)}/>
+                  <label style={{ width: "fit-content", cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      name="save_address"
+                      id="save_address"
+                      checked={saveAddress}
+                      style={{ marginRight: "10px" }}
+                      onChange={() => setSaveAddress(!saveAddress)}
+                    />
                     Save address for future payments.
                   </label>
                   <div style={{ textAlign: "right", marginBottom: "250px" }}>
@@ -735,7 +770,7 @@ function Checkout() {
                       style={{ display: "flex", marginLeft: "auto" }}
                       onClick={submitStep1}
                     >
-                      {loading? <Loader />:""}
+                      {loading ? <Loader /> : ""}
                       Continue
                     </button>
                   </div>
@@ -771,7 +806,7 @@ function Checkout() {
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
           fullWidth={true}
-          style ={{textAlign: "center"}}
+          style={{ textAlign: "center" }}
         >
           <DialogContent
             className={All.PopupBody}
@@ -786,20 +821,29 @@ function Checkout() {
               />
             </div>
             <div style={{ marginTop: "30px" }}>
-              <img src={payment_success} alt="" style={{ margin: "auto", height: "200px" }} />
-              <div className="u_p_v_popup_title" style = {{fontFamily: "muli-bold", fontSize: "24px"}}>Thank you</div>
-              <div className="u_p_v_popup_content" style = {{marginBottom: "20px"}}>
+              <img
+                src={payment_success}
+                alt=""
+                style={{ margin: "auto", height: "200px" }}
+              />
+              <div
+                className="u_p_v_popup_title"
+                style={{ fontFamily: "muli-bold", fontSize: "24px" }}
+              >
+                Thank you
+              </div>
+              <div
+                className="u_p_v_popup_content"
+                style={{ marginBottom: "20px" }}
+              >
                 We have recieved your payment
               </div>
-              <button
-                className="c_cBtn3"
-                onClick={closePaymentPopup}
-              >
+              <button className="c_cBtn3" onClick={closePaymentPopup}>
                 Go to Dashboard
               </button>
               <button
                 className="c_cBtn4"
-                onClick={()=>history.push("/UploadFile")}
+                onClick={() => history.push("/UploadFile")}
               >
                 Go to Upload Files
               </button>
@@ -808,12 +852,12 @@ function Checkout() {
         </Dialog>
         <Dialog
           open={payment_failed}
-          onClose={()=>history.push("/pilot_dashboard/account/payments")}
+          onClose={() => history.push("/pilot_dashboard/account/payments")}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
           fullWidth={true}
-          style ={{textAlign: "center"}}
+          style={{ textAlign: "center" }}
           PaperProps={{
             style: {
               maxWidth: "600px",
@@ -829,15 +873,28 @@ function Checkout() {
               <img
                 src={Close}
                 alt=""
-                onClick={()=>history.push("/pilot_dashboard/account/payments")}
+                onClick={() =>
+                  history.push("/pilot_dashboard/account/payments")
+                }
                 style={{ cursor: "pointer" }}
               />
             </div>
             <div style={{ marginTop: "30px" }}>
-              <div className="u_p_v_popup_title" style = {{fontFamily: "muli-bold", fontSize: "24px", marginBottom: "10px"}}>Payment failed. Try again later.</div>
+              <div
+                className="u_p_v_popup_title"
+                style={{
+                  fontFamily: "muli-bold",
+                  fontSize: "24px",
+                  marginBottom: "10px",
+                }}
+              >
+                Payment failed. Try again later.
+              </div>
               <button
                 className="c_cBtn3"
-                onClick={()=>history.push("/pilot_dashboard/account/payments")}
+                onClick={() =>
+                  history.push("/pilot_dashboard/account/payments")
+                }
               >
                 Close
               </button>
@@ -846,12 +903,12 @@ function Checkout() {
         </Dialog>
         <Dialog
           open={payment_creation_failed}
-          onClose={()=>history.push("/DownloadSubscription")}
+          onClose={() => history.push("/DownloadSubscription")}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
           fullWidth={true}
-          style ={{textAlign: "center"}}
+          style={{ textAlign: "center" }}
           PaperProps={{
             style: {
               maxWidth: "600px",
@@ -867,15 +924,24 @@ function Checkout() {
               <img
                 src={Close}
                 alt=""
-                onClick={()=>history.push("/DownloadSubscription")}
+                onClick={() => history.push("/DownloadSubscription")}
                 style={{ cursor: "pointer" }}
               />
             </div>
             <div style={{ marginTop: "30px" }}>
-              <div className="u_p_v_popup_title" style = {{fontFamily: "muli-bold", fontSize: "24px", marginBottom: "10px"}}>Something went wrong. Try again later.</div>
+              <div
+                className="u_p_v_popup_title"
+                style={{
+                  fontFamily: "muli-bold",
+                  fontSize: "24px",
+                  marginBottom: "10px",
+                }}
+              >
+                Something went wrong. Try again later.
+              </div>
               <button
                 className="c_cBtn3"
-                onClick={()=>history.push("/DownloadSubscription")}
+                onClick={() => history.push("/DownloadSubscription")}
               >
                 Close
               </button>

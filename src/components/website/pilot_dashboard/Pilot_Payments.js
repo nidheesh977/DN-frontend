@@ -28,8 +28,8 @@ function Pilot_Payments() {
   let [data, setData] = useState([]);
   let [cancelSubscriptionPopup, setCancelSubscriptionPopup] = useState(false);
 
-  let [subscriptionDetails, setSubscriptionDetails] =
-    useState("No Subscription");
+  let [subscriptionDetails, setSubscriptionDetails] = useState("No Subscription");
+  let [subscriptionDetailsLoading, setSubscriptionDetailsLoading] = useState(true);
   let [subscriptionCancelled, setSubscriptionCancelled] = useState(false);
 
   let [uploadedImages, setUploadedImages] = useState([]);
@@ -41,6 +41,7 @@ function Pilot_Payments() {
   let [pendingVideos, setPendingVideos] = useState([]);
 
   useEffect(() => {
+    setSubscriptionDetailsLoading(true)
     axios.get(`${domain}/api/payment/getPayments`, config).then((res) => {
       console.log(res);
       setData(res.data);
@@ -48,6 +49,7 @@ function Pilot_Payments() {
     axios
       .get(`${domain}/api/pilotSubscription/getMySubscriptionData`, config)
       .then((res) => {
+        setSubscriptionDetailsLoading(false)
         setSubscriptionDetails(res.data);
         console.log(res);
       })
@@ -205,7 +207,8 @@ function Pilot_Payments() {
 
   return (
     <div>
-      {subscriptionDetails !== "No Subscription" ? (
+      {!subscriptionDetailsLoading ?
+      <>{subscriptionDetails !== "No Subscription" ? (
         <Row className="sub_det_container">
           <Col xxl={12} className="sub_det_col1">
             <div className="sub_det_plan">
@@ -302,7 +305,11 @@ function Pilot_Payments() {
             Upgrade
           </button>
         </div>
-      )}
+      )}</> 
+      :<div id="tohide" style={{ textAlign: "center" }}>
+      <div>Loading ...</div>
+    </div>
+      }
 
       <div className="box0">
         <Row gutterWidth={5}>
@@ -323,7 +330,7 @@ function Pilot_Payments() {
           </Col>
         </Row>
       </div>
-      {data.length == 0 ? (
+      {data.length === 0 ? (
         <div id="tohide">
           <div>No Payments yet please Upgrade</div>
         </div>
