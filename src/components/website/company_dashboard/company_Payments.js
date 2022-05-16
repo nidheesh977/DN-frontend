@@ -187,24 +187,21 @@ function CompanyPayments() {
   const confirmCancelSubscription = () => {
     console.log("Subscription cancelled");
     setCancelSubscriptionPopup(false);
-    axios.post(`${domain}/api/pilotSubscription/endSubscription`, config)
-    .then(res => {
-      setSubscriptionCancelled(true);
-      axios.get(`${domain}/api/payment/getPayments`, config).then((res) => {
-        console.log(res);
-        setData(res.data);
-      });
-      axios
-        .get(`${domain}/api/pilotSubscription/getMySubscriptionData`, config)
-        .then((res) => {
-          setSubscriptionDetails(res.data);
-          console.log(res.data);
-        });
+    
+   axios.post(`${domain}/api/companySubscription/cancelSubscription`, config).then(res=>{
+    axios
+    .post(`${domain}/api/companySubscription/getSubscriptionCompany`, config)
+    .then((res) => {
+      setSubscriptionDetailsLoading(false)
+      setSubscriptionDetails(res.data);
+      console.log(res);
     })
-    .catch(err => {
-      alert("Something went wrong.")
-      console.log(err)
+    .catch((err) => {
+      setSubscriptionDetailsLoading(false)
     })
+   }).catch(err=>{
+     console.log(err)
+   })
 
   };
 
