@@ -75,7 +75,7 @@ function Navbar(props) {
   const [activeLink, setActiveLink] = useState("")
 
   useEffect(()=>{
-
+    setActiveLink(window.location.href)
   },[])
 
   const goToPage = () => {
@@ -165,22 +165,31 @@ let AccountButton = () =>{
               
                 <li className="nav-item">
                   <NavLink
+                    exact
                     to="/apply_job"
-                    className={activeLink.includes("apply_job")?"nav-links nav-links-active": "nav-links"}
-                    // activeStyle={{ color: "blue!important" }}
+                    className="nav-links"
+                    activeClassName="nav-links-active"
                   >
                     Apply jobs
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <Link to="/hire_pilots" className="nav-links">
+                  <NavLink 
+                  exact
+                  to="/hire_pilots" 
+                  className="nav-links"
+                  activeClassName="nav-links-active"
+                  >
                     Hire Pilots
-                  </Link>
+                  </NavLink>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-links" to="/service_centers">
+                  <NavLink
+                   className="nav-links"
+                   activeClassName="nav-links-active"
+                   to="/service_centers">
                     Find Service Centers
-                  </Link>
+                  </NavLink>
                 </li>
 
                 {/* ============================== testing ================================ */}
@@ -312,6 +321,22 @@ let AccountButton = () =>{
                     >
                       <img style={{ paddingRight: 10 }} src={UploadFile} />{" "}
                       Upload file
+                    </Button>
+                  </div>
+                </li>
+                }
+                {(localStorage.getItem("role") === "company") && <li className="nav-item">
+                  <div className="nav-links">
+                    <Button
+                      variant="contained"
+                      color="default"
+                      id="first"
+                      className="nav_upload_img"
+                      onClick = {()=>history.push("/create_job")}
+                      style = {{textTransform: "initial", bottom: "2px", padding: "6px 20px 6px 20px"}}
+                    >
+                      <img style={{ paddingRight: 10 }} src={UploadFile} />{" "}
+                      CreateJob
                     </Button>
                   </div>
                 </li>

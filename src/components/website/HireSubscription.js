@@ -113,7 +113,7 @@ class HireSubscription extends Component {
   };
 
   componentDidMount() {
-    axios.get(`${domain}/api/subscription/getSubscriptions`).then((res) => {
+    axios.get(`${domain}/api/company/getCompanySubscription`).then((res) => {
       console.log(res);
       this.setState({
         data: res.data,
