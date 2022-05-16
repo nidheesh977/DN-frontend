@@ -1021,8 +1021,8 @@ class ApplyJob extends Component {
                             {item.jobTitle} {item.userId.companyPlatinum ? <img src={Trusted} style={{height:"25px", marginLeft: "10px"}}/> : ""}
                           </div>
                         </div>
-                        <div className="pd_a_j_data_subTitle">
-                          {item.companyName}
+                        <div className="pd_a_j_data_subTitle" style={{cursor: "pointer"}} onClick={()=>console.log(item.userId._id)}>
+                          {item.companyId ? item.companyId.companyName : ""}
                         </div>
                         <div>
                           <div className="a_j_container1">
