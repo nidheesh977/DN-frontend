@@ -468,19 +468,33 @@ class ApplyJob extends Component {
             <Row gutterWidth={40}>
               <Visible xxl xl>
                 <Col xxl={3.5} xl={3.3} lg={4.15} md={5.4}>
-                  <div id="h_p_create_job_container">
-                    <div className="h_p_create_job_title">Show your talent</div>
-                    <div className="h_p_create_job_desc">
-                      Upload your Ariel shots and get paid
-                    </div>
-                    <button
-                      className="h_p_create_job_btn"
-                      onClick={() => this.props.history.push("/UploadFile")}
-                    >
-                      Upload Now
-                    </button>
+                {localStorage.getItem("role") !== "company"
+                  ?<div id="h_p_create_job_container">
+                  <div className="h_p_create_job_title">Show your talent</div>
+                  <div className="h_p_create_job_desc">
+                    Upload your Ariel shots and get paid
                   </div>
-
+                  <button
+                    className="h_p_create_job_btn"
+                    onClick={() => this.props.history.push("/UploadFile")}
+                  >
+                    Upload Now
+                  </button>
+                </div>
+                  :<div id="h_p_create_job_container">
+                  <div className="h_p_create_job_title">Create Job Alert</div>
+                  <div className="h_p_create_job_desc">
+                    Create a job alert now, Click below button
+                  </div>
+                  <button
+                    className="h_p_create_job_btn"
+                    onClick={() => this.props.history.push("/create_job")}
+                  >
+                    Create a job
+                  </button>
+                </div>
+                  }
+                  
                   <div className="h_p_filter1_title1">
                     Keywords
                     <div

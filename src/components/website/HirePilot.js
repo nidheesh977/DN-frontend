@@ -16,7 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import close from "../images/close.svg";
 import { Helmet } from "react-helmet";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 import Close from "../images/close.svg";
 import axios from "axios";
@@ -28,7 +28,7 @@ import PlacesAutocomplete, {
   getLatLng,
 } from "react-autocomplete-places";
 import { data } from "jquery";
-import ProImg from "../images/proIcon.png"
+import ProImg from "../images/proIcon.png";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -106,7 +106,7 @@ const customStyles = {
       ...styles,
       backgroundColor: isFocused ? "#999999" : null,
       color: "#333333",
-      zIndex: 1000
+      zIndex: 1000,
     };
   },
 };
@@ -152,7 +152,7 @@ class HirePilot extends Component {
       selected_drones: [],
       keyword: "",
       location: "",
-      selected_drones_value: []
+      selected_drones_value: [],
     };
   }
 
@@ -261,21 +261,17 @@ class HirePilot extends Component {
         )
         .then((res) => {
           console.log(res);
-          document.getElementById("alertBox").style.display = "block"
-          document.getElementById("tomakered").style.background = "#F5F5F7"
+          document.getElementById("alertBox").style.display = "block";
+          document.getElementById("tomakered").style.background = "#F5F5F7";
           this.setState({
-     
             message: "",
           });
-          setTimeout(()=>{
-            document.getElementById("alertBox").style.display = "none"
+          setTimeout(() => {
+            document.getElementById("alertBox").style.display = "none";
             this.setState({
               startProcess: false,
-             
             });
-          }, 2000)
-
-          
+          }, 2000);
         });
     }
   };
@@ -412,15 +408,18 @@ class HirePilot extends Component {
     axios
       .get(`${domain}/api/brand/getBrands`)
       .then((res) => {
-        var suggestions = []
+        var suggestions = [];
         console.log(res.data);
-        for (var i = 0; i < res.data.length; i++){
-          suggestions.push({label: res.data[i].brand, value: res.data[i].brand})
+        for (var i = 0; i < res.data.length; i++) {
+          suggestions.push({
+            label: res.data[i].brand,
+            value: res.data[i].brand,
+          });
         }
         this.setState({
-          suggestions: suggestions
-        })
-        console.log(suggestions)
+          suggestions: suggestions,
+        });
+        console.log(suggestions);
       })
       .catch((err) => {
         console.log(err);
@@ -494,7 +493,7 @@ class HirePilot extends Component {
     var result = values.map((x) => x.value);
     this.setState({
       selected_drones: result,
-      selected_drones_value: values
+      selected_drones_value: values,
     });
     console.log(this.state.selected_drones);
   };
@@ -513,23 +512,24 @@ class HirePilot extends Component {
   searchFilter = () => {
     this.setState({
       loading: true,
-      pilot_list: []
-    })
-    var work_type = []
-    if(this.state.lisenced){
-      work_type.push("licensed")
+      pilot_list: [],
+    });
+    var work_type = [];
+    if (this.state.lisenced) {
+      work_type.push("licensed");
     }
-    if(this.state.unlisenced){
-      work_type.push("unlicensed")
+    if (this.state.unlisenced) {
+      work_type.push("unlicensed");
     }
-    var employee_type = []
-    if(this.state.full_time){
-      employee_type.push("full_time")
+    var employee_type = [];
+    if (this.state.full_time) {
+      employee_type.push("full_time");
     }
-    if(this.state.part_time){
-      employee_type.push("part_time")
-    }    console.log(work_type)
-    console.log(employee_type)
+    if (this.state.part_time) {
+      employee_type.push("part_time");
+    }
+    console.log(work_type);
+    console.log(employee_type);
     console.log(this.state.filter_salary);
     console.log(this.state.selected_drones);
     console.log(this.state.keyword);
@@ -540,21 +540,20 @@ class HirePilot extends Component {
       address: this.state.location,
       workType: work_type,
       employeeType: employee_type,
-      drones: this.state.selected_drones
+      drones: this.state.selected_drones,
+    };
+    if (this.state.filter_salary) {
+      data.price = this.state.price_range;
     }
-    if(this.state.filter_salary){
-      data.price = this.state.price_range
-    }
-    axios.post(`${domain}/api/pilot/pilotFilters`, data).then(res=>{
-      console.log(res)
+    axios.post(`${domain}/api/pilot/pilotFilters`, data).then((res) => {
+      console.log(res);
       this.setState({
-        pilot_list: res.data
-      })
+        pilot_list: res.data,
+      });
       this.setState({
         loading: false,
-      })
-    })
-    
+      });
+    });
   };
 
   clearFilter = () => {
@@ -567,9 +566,9 @@ class HirePilot extends Component {
       selected_drones: [],
       keyword: "",
       location: "",
-      selected_drones_value: []
-    })
-  }
+      selected_drones_value: [],
+    });
+  };
 
   render() {
     return (
@@ -584,20 +583,50 @@ class HirePilot extends Component {
             <Row gutterWidth={40}>
               <Visible xxl xl>
                 <Col xxl={3.5} xl={3.3}>
-                  <div id="h_p_create_job_container">
-                    <div className="h_p_create_job_title">Create Job Alert</div>
-                    <div className="h_p_create_job_desc">
-                      Create a job alert now, Click below button
-                    </div>
-                    <button
-                      className="h_p_create_job_btn"
-                      onClick={() => this.props.history.push("/create_job")}
-                    >
-                      Create a job
-                    </button>
+                  {localStorage.getItem("role") !== "pilot"
+                  ?<div id="h_p_create_job_container">
+                  <div className="h_p_create_job_title">Show your talent</div>
+                  <div className="h_p_create_job_desc">
+                    Upload your Ariel shots and get paid
                   </div>
+                  <button
+                    className="h_p_create_job_btn"
+                    onClick={() => this.props.history.push("/UploadFile")}
+                  >
+                    Upload Now
+                  </button>
+                </div>
+                  :<div id="h_p_create_job_container">
+                  <div className="h_p_create_job_title">Create Job Alert</div>
+                  <div className="h_p_create_job_desc">
+                    Create a job alert now, Click below button
+                  </div>
+                  <button
+                    className="h_p_create_job_btn"
+                    onClick={() => this.props.history.push("/create_job")}
+                  >
+                    Create a job
+                  </button>
+                </div>
+                  }
+
                   <div id="h_p_filters1_container">
-                    <div className="h_p_filter1_heading">Filters <div style = {{fontSize: "16px", fontFamily: "muli-light", textDecoration: "underline", display: "inline-block", float: "right", cursor: "pointer"}} onClick = {this.clearFilter}>Clear</div></div>
+                    <div className="h_p_filter1_heading">
+                      Filters{" "}
+                      <div
+                        style={{
+                          fontSize: "16px",
+                          fontFamily: "muli-light",
+                          textDecoration: "underline",
+                          display: "inline-block",
+                          float: "right",
+                          cursor: "pointer",
+                        }}
+                        onClick={this.clearFilter}
+                      >
+                        Clear
+                      </div>
+                    </div>
                     <div
                       className="h_p_filter1_title"
                       onClick={() => this.dropdown(1)}
@@ -626,7 +655,7 @@ class HirePilot extends Component {
                           type="checkbox"
                           className="h_p_filter1_checkbox"
                           onChange={() => this.selectFilter("lisenced")}
-                          checked = {this.state.lisenced}
+                          checked={this.state.lisenced}
                         />
                         <div className="h_p_filter1_checkbox_label">
                           Licensed Pilots
@@ -637,7 +666,7 @@ class HirePilot extends Component {
                           type="checkbox"
                           className="h_p_filter1_checkbox"
                           onChange={() => this.selectFilter("unlisenced")}
-                          checked = {this.state.unlisenced}
+                          checked={this.state.unlisenced}
                         />
                         <div className="h_p_filter1_checkbox_label">
                           Unlicensed Pilots
@@ -672,7 +701,7 @@ class HirePilot extends Component {
                           type="checkbox"
                           className="h_p_filter1_checkbox"
                           onChange={() => this.selectFilter("full_time")}
-                          checked = {this.state.full_time}
+                          checked={this.state.full_time}
                         />
                         <div className="h_p_filter1_checkbox_label">
                           Full Time
@@ -683,7 +712,7 @@ class HirePilot extends Component {
                           type="checkbox"
                           className="h_p_filter1_checkbox"
                           onChange={() => this.selectFilter("part_time")}
-                          checked = {this.state.part_time}
+                          checked={this.state.part_time}
                         />
                         <div className="h_p_filter1_checkbox_label">
                           Part Time
@@ -718,7 +747,7 @@ class HirePilot extends Component {
                           type="checkbox"
                           style={{ marginLeft: "0px" }}
                           onChange={() => this.selectFilter("filter_salary")}
-                          checked = {this.state.filter_salary}
+                          checked={this.state.filter_salary}
                         />{" "}
                         <div
                           style={{
@@ -777,7 +806,7 @@ class HirePilot extends Component {
                         styles={customStyles}
                         className="u_f_category_dropdown"
                         isMulti
-                        value = {this.state.selected_drones_value}
+                        value={this.state.selected_drones_value}
                       />
                     </div>
                     <div
@@ -975,7 +1004,7 @@ class HirePilot extends Component {
                         styles={customStyles}
                         className="u_f_category_dropdown"
                         isMulti
-                        value = {this.state.selected_drones_value}
+                        value={this.state.selected_drones_value}
                       />
                       {/* {this.state.type_of_drones.map((drone, index) => {
                         return (
@@ -1015,9 +1044,12 @@ class HirePilot extends Component {
                           type="text"
                           className="c_j_form_input"
                           onChange={this.industryChange}
-                          style={{ border: "1px solid #c1c1c1", backgroundColor: "white" }}
+                          style={{
+                            border: "1px solid #c1c1c1",
+                            backgroundColor: "white",
+                          }}
                           placeholder="Search Industry / Skills"
-                          value = {this.state.keyword}
+                          value={this.state.keyword}
                         />
                       </div>
                     </Col>
@@ -1121,11 +1153,20 @@ class HirePilot extends Component {
                     </Col>
                   </Row>
                 </div>
-                {
-                  this.state.pilot_list.length == 0 ? <div id="noSearchFound" style={{textAlign : "center", fontSize:"24px", fontFamily:"muli-regular"}}>No Pilots Found as per your search</div> : <></>
-                }
-                
-
+                {this.state.pilot_list.length == 0 ? (
+                  <div
+                    id="noSearchFound"
+                    style={{
+                      textAlign: "center",
+                      fontSize: "24px",
+                      fontFamily: "muli-regular",
+                    }}
+                  >
+                    No Pilots Found as per your search
+                  </div>
+                ) : (
+                  <></>
+                )}
 
                 <Visible xxl xl lg md>
                   {this.state.loading && !this.state.pilot_list.length && (
@@ -1151,10 +1192,20 @@ class HirePilot extends Component {
                             <div className="h_p_others_container">
                               <div
                                 className="h_p_listing_name"
-                                onClick={() => this.pilotDetailPage(pilot.userName)}
-                                style = {{display: "flex", alignItem: "center"}}
+                                onClick={() =>
+                                  this.pilotDetailPage(pilot.userName)
+                                }
+                                style={{ display: "flex", alignItem: "center" }}
                               >
-                                {pilot.name} { pilot.pilotPro && <img src={ProImg} alt="Pro Img" height = "24px" style = {{marginLeft: "10px"}}/>}
+                                {pilot.name}{" "}
+                                {pilot.pilotPro && (
+                                  <img
+                                    src={ProImg}
+                                    alt="Pro Img"
+                                    height="24px"
+                                    style={{ marginLeft: "10px" }}
+                                  />
+                                )}
                               </div>
                               <div className="h_p_listing_job">
                                 {pilot.pilotType === "unlicensed"
@@ -1305,9 +1356,17 @@ class HirePilot extends Component {
                               <div
                                 className="h_p_listing_name"
                                 onClick={() => this.pilotDetailPage(1)}
-                                style = {{display: "flex", alignItem: "center"}}
+                                style={{ display: "flex", alignItem: "center" }}
                               >
-                                {pilot.name} { pilot.pilotPro && <img src={ProImg} alt="Pro Img" height = "24px" style = {{marginLeft: "10px"}}/>}
+                                {pilot.name}{" "}
+                                {pilot.pilotPro && (
+                                  <img
+                                    src={ProImg}
+                                    alt="Pro Img"
+                                    height="24px"
+                                    style={{ marginLeft: "10px" }}
+                                  />
+                                )}
                               </div>
                               <div className="h_p_listing_job">
                                 {pilot.pilotType === "unlicensed"
@@ -1370,18 +1429,17 @@ class HirePilot extends Component {
                                     <span className="h_p_hour_time">/hr</span>{" "}
                                   </div>
                                 </div>
-                                
                               </div>
                               <div className="h_p_listing_btn-container">
-                                  <button
-                                    className="h_p_start_process_btn"
-                                    onClick={() =>
-                                      this.pilotDetailPage(pilot._id)
-                                    }
-                                  >
-                                    View Profile
-                                  </button>
-                                </div>
+                                <button
+                                  className="h_p_start_process_btn"
+                                  onClick={() =>
+                                    this.pilotDetailPage(pilot._id)
+                                  }
+                                >
+                                  View Profile
+                                </button>
+                              </div>
                             </div>
                           </Col>
                         </Row>
@@ -1436,11 +1494,12 @@ class HirePilot extends Component {
                       >
                         Send Mail
                       </button>
-                      <div id="alertBox" style={{display: "none"}}>
-                      <Alert severity="success" style={{marginTop: "20px"}}>Mail Sent Successfully</Alert>
+                      <div id="alertBox" style={{ display: "none" }}>
+                        <Alert severity="success" style={{ marginTop: "20px" }}>
+                          Mail Sent Successfully
+                        </Alert>
                       </div>
                     </div>
-                    
                   </div>
                 </Row>
               </DialogContent>
