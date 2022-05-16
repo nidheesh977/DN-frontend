@@ -72,6 +72,11 @@ function Navbar(props) {
 
 
   const [instructions, setInstructions] = useState(false)
+  const [activeLink, setActiveLink] = useState("")
+
+  useEffect(()=>{
+
+  },[])
 
   const goToPage = () => {
       setInstructions(false)
@@ -161,8 +166,8 @@ let AccountButton = () =>{
                 <li className="nav-item">
                   <NavLink
                     to="/apply_job"
-                    className="nav-links"
-                    activeStyle={{ color: "blue!important" }}
+                    className={activeLink.includes("apply_job")?"nav-links nav-links-active": "nav-links"}
+                    // activeStyle={{ color: "blue!important" }}
                   >
                     Apply jobs
                   </NavLink>

@@ -64,7 +64,7 @@ function CompanyPaymentAddress() {
       },
     };
     axios
-      .post(`${domain}/api/pilot/sendBillingAddress`, config)
+      .post(`${domain}/api/company/getCompanyAddress`, config)
       .then((res) => {
         console.log(res.data);
         const options = Countries.map((d) => ({
@@ -86,7 +86,7 @@ function CompanyPaymentAddress() {
           ...formData,
           line1: res.data.line1 ? res.data.line1 : "",
           line2: res.data.line2 ? res.data.line2 : "",
-          pin_code: res.data.postal_code ? Number(res.data.postal_code) : "",
+          pin_code: res.data.pin_code ? Number(res.data.pin_code) : "",
           city: res.data.city ? res.data.city : "",
           state: res.data.state ? res.data.state : "",
           country: country.label ? country.label : "",
@@ -106,15 +106,15 @@ function CompanyPaymentAddress() {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-    axios
-      .post(`${domain}/api/subscription/getSubscription`, { id: param.id })
-      .then((res) => {
-        console.log(res);
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // axios
+    //   .post(`${domain}/api/subscription/getSubscription`, { id: param.id })
+    //   .then((res) => {
+    //     console.log(res);
+    //     setData(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
     const options = Countries.map((d) => ({
       value: d.code,
       label: d.name,
@@ -254,7 +254,7 @@ function CompanyPaymentAddress() {
       };
 
       axios
-        .post(`${domain}/api/pilot/updateBillingAddress`, submitData, config)
+        .post(`${domain}/api/company/updateCompanyAddress`, submitData, config)
         .then((res) => {
           console.log(res.data);
           setAddressSaved(true);
@@ -407,6 +407,7 @@ function CompanyPaymentAddress() {
                           ...customStyles,
                           border: "1px solid grey",
                         }}
+                        isDisabled = {true}
                         options={country_list}
                         value={formData.country_object}
                         onChange={countryChangeHandler}

@@ -879,3 +879,7 @@ button.swal-button.swal-button--confirm{
   text-decoration: none;
   padding: 0rem 20px;
 }
+
+.nav-links-active{
+  color: #00e7fc !important
+}

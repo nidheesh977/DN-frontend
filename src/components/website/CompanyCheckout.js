@@ -81,7 +81,7 @@ function CompanyCheckout() {
       },
     };
     axios
-      .post(`${domain}/api/pilot/sendBillingAddress`, config)
+      .post(`${domain}/api/company/getCompanyAddress`, config)
       .then((res) => {
         console.log(res.data);
         const options = Countries.map((d) => ({
@@ -104,7 +104,7 @@ function CompanyCheckout() {
           email: res.data.email ? res.data.email : "",
           line1: res.data.line1 ? res.data.line1 : "",
           line2: res.data.line2 ? res.data.line2 : "",
-          pin_code: res.data.postal_code ? Number(res.data.postal_code) : "",
+          pin_code: res.data.pin_code ? Number(res.data.pin_code) : "",
           city: res.data.city ? res.data.city : "",
           state: res.data.state ? res.data.state : "",
           country: country.label,
@@ -115,20 +115,21 @@ function CompanyCheckout() {
       .catch((err) => {
         console.log(err);
       });
-    axios
-      .post(`${domain}/api/subscription/getSubscription`, { id: param.id })
-      .then((res) => {
-        console.log(res);
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    const options = Countries.map((d) => ({
-      value: d.code,
-      label: d.name,
-    }));
-    setTest(options);
+      const countries = Countries.map((d) => ({
+        value: d.code,
+        label: d.name,
+      }));
+      setTest(countries);
+    // axios
+    //   .post(`${domain}/api/subscription/getSubscription`, { id: param.id })
+    //   .then((res) => {
+    //     console.log(res);
+    //     setData(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+   
   }, []);
   const options = {
     clientSecret: secret,
@@ -283,7 +284,7 @@ function CompanyCheckout() {
           if (saveAddress) {
             axios
               .post(
-                `${domain}/api/pilot/updateBillingAddress`,
+                `${domain}/api/company/updateCompanyAddress`,
                 submitData,
                 config
               )
@@ -321,7 +322,7 @@ function CompanyCheckout() {
   };
 
   const closePaymentPopup = () => {
-    history.push("/pilot_dashboard/activities/images");
+    history.push("/company_dashboard/account/my_subscription");
   };
 
   const countryChangeHandler = (country) => {
@@ -433,18 +434,18 @@ function CompanyCheckout() {
           });
         setPaymentSuccess(true);
         setCheckoutLoading(false);
-        // axios
-        //   .post(
-        //     `${domain}/api/pilotSubscription/createSubscription`,
-        //     {
-        //       plan: data.name,
-        //       paymentId: subId,
-        //     },
-        //     config
-        //   )
-        //   .then((res) => {
-        //     console.log(res);
-        //   });
+        axios
+          .post(
+            `${domain}/api/companySubscription/createCompanySubscription`,
+            {
+              plan: plan,
+              paymentId: subId,
+            },
+            config
+          )
+          .then((res) => {
+            console.log(res);
+          });
       }
     };
 
@@ -641,6 +642,7 @@ function CompanyCheckout() {
                           name="name"
                           value={formData.name}
                           onChange={formChangeHandler}
+                          disabled
                         />
                       </div>
                       <div className="login_input_error_msg" id="name_error">
@@ -660,6 +662,7 @@ function CompanyCheckout() {
                           name="email"
                           value={formData.email}
                           onChange={formChangeHandler}
+                          disabled
                         />
                       </div>
                       <div className="login_input_error_msg" id="email_error">
@@ -779,6 +782,7 @@ function CompanyCheckout() {
                               ...customStyles,
                               border: "1px solid grey",
                             }}
+                            isDisabled
                             options={test}
                             value={formData.country_object}
                             onChange={countryChangeHandler}
@@ -880,9 +884,9 @@ function CompanyCheckout() {
               </button>
               <button
                 className="c_cBtn4"
-                onClick={() => history.push("/UploadFile")}
+                onClick={() => history.push("/create_job")} 
               >
-                Go to Upload Files
+                Go to Create Jobs
               </button>
             </div>
           </DialogContent>
