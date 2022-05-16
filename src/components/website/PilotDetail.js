@@ -651,8 +651,7 @@ export default function PilotDetails(props) {
                     Follow me
                   </button>
                 )}
-
-                <button className="p_d_hire_btn p_d_btn  " onClick={clickHire}>
+                {localStorage.getItem("role") === "company"&&<button className="p_d_hire_btn p_d_btn  " onClick={clickHire}>
                   <img
                     className="p_d_soc_icon2"
                     src={hireBtnIcon}
@@ -660,7 +659,8 @@ export default function PilotDetails(props) {
                     height={"20px"}
                   />{" "}
                   Hire me
-                </button>
+                </button>}
+                
               </div>
             </Col>
             <Col
@@ -1011,11 +1011,11 @@ export default function PilotDetails(props) {
                 <div className="p_d_about_skills_container">
                   <div className="p_d_about_title">Skills:</div>
                   <div className="p_d_about_skills_keyword_container">
-                    {pilotData.skills.map((skill, index) => {
+                    { pilotData.skills ? pilotData.skills.map((skill, index) => {
                       return (
                         <div className="p_d_about_skills_keyword">{skill}</div>
                       );
-                    })}
+                    }) : ""}
                   </div>
                 </div>
               </Col>
@@ -1091,20 +1091,6 @@ export default function PilotDetails(props) {
                       </div>
                     </>
                   )}
-                </div>
-                <div className="p_d_hire_container">
-                  <div className="p_d_hire_content">
-                    If you want to hire this pilot, Click the below button
-                  </div>
-                  <button className="p_d_about_hire_btn">
-                    <img
-                      src={hirePilotIcon}
-                      alt=""
-                      height={"20px"}
-                      style={{ paddingTop: "2px", marginRight: "10px" }}
-                    />{" "}
-                    Hire Pilot
-                  </button>
                 </div>
               </Col>
             </Row>

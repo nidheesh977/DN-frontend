@@ -97,10 +97,10 @@ class CreateJob extends Component {
         console.log(res.data)
         if (res.data.subscription){
           this.setState ({
-            jobLimit: res.data.subscription.activeJobs-res.data.activeJobs-res.data.draftJob,
+            jobLimit: res.data.subscription.activeJobs-res.data.activeJobs-res.data.draftJobs,
             subscriptionPlan: res.data.subscription.plan
           })
-          console.log(res.data.subscription.activeJobs-res.data.activeJobs)
+          console.log(res.data.subscription.activeJobs-res.data.activeJobs-res.data.draftJobs)
         }
       })
 
@@ -165,7 +165,9 @@ class CreateJob extends Component {
 
   PostJob = () => {
     console.log(this.state.jobLimit)
-    if (this.state.jobLimit <= 0 && !this.state.subscriptionPlan.includes("platinum")){
+    console.log(this.state.subscriptionPlan.includes("platinum"))
+    if ((this.state.jobLimit <= 0 && !this.state.subscriptionPlan.includes("platinum"))){
+      console.log("Entered")
       this.setState({
         upgradePopup: true
       })

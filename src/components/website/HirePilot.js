@@ -229,10 +229,41 @@ class HirePilot extends Component {
   };
 
   clickStartProcess = (id1) => {
-    this.setState({
-      startProcess: true,
-      id2: id1,
-    });
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    if (this.state.subscription.subscription){
+      if ((this.state.subscription.subscription.proposals <= this.state.subscription.proposals && this.state.subscription.subscription.plan.includes("platinum"))){
+        this.setState({
+          limitExceededPopup: true
+        })
+      }else if ((this.state.subscription.subscription.proposals <= this.state.subscription.proposals && !this.state.subscription.subscription.plan.includes("platinum"))){
+        this.setState({
+          upgradePopup: true
+        })
+      }
+      else{
+        this.setState({
+          startProcess: true,
+          id2: id1,
+        });
+      }
+    }else{
+      this.setState({
+        upgradePopup: true
+      })
+    }
+    if(localStorage.getItem("role") === "company"){
+      axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
+        console.log(res.data)
+        this.setState({
+          subscription:res.data
+        })
+      })
+    }
+    
   };
 checkLoginandPush = () =>{
   if(localStorage.getItem("access_token")){
@@ -397,6 +428,7 @@ checkLoginandPush = () =>{
     };
     if(localStorage.getItem("role") === "company"){
       axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
+        console.log(res.data)
         this.setState({
           subscription:res.data
         })

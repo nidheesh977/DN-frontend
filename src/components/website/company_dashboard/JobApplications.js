@@ -99,7 +99,7 @@ let config = {
       
         }
       }else{
-        if (res.data.views>=10){
+        if (res.data.views>=20){
           setUpgradePopup(true)
         }
       }
