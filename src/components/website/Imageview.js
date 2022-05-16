@@ -206,6 +206,9 @@ function Imageview() {
         )
         .then((res) => {
           console.log(res);
+          axios.post(`${domain}/api/company/setProposals`, config).then(res=>{
+            console.log(res)
+          })
           setStartProcess(false);
           setHireForm({
             ...hireForm,
