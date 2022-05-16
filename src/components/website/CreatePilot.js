@@ -705,7 +705,7 @@ function CreatePilot() {
                   className="pd_b_i_profile_head"
                   style={{ cursor: "pointer" }}
                 >
-                  Preferred Location
+                  Preferred Work Location
                 </div>
               </label>
               <input
@@ -715,6 +715,7 @@ function CreatePilot() {
                 id="preferred_location"
                 onChange={changeHandler}
                 onKeyDown = {add_location}
+                placeholder="Type and click enter to add Work locations"
               />
               {data.preferred_locations.map((drone, index) => {
                 return (

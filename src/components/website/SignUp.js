@@ -470,7 +470,7 @@ function SignUp(props) {
                   </div>
                 </div>
 
-                <label style={{}} className = "signup_terms_conditions">
+                <label style={{cursor: "pointer"}} className = "signup_terms_conditions">
                   <input
                     type="checkbox"
                     onClick={AcceptCondition}
