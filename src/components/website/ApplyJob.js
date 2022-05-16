@@ -257,7 +257,9 @@ class ApplyJob extends Component {
   //       })
   //     });
   // };
-
+  setLoginSave = () =>{
+    localStorage.setItem("lastTab", "pilot")
+  }
   likePost = (id) => {
     let config = {
       headers: {
@@ -469,7 +471,7 @@ class ApplyJob extends Component {
               <Visible xxl xl>
                 <Col xxl={3.5} xl={3.3} lg={4.15} md={5.4}>
                 {localStorage.getItem("role") !== "company"
-                  ?<div id="h_p_create_job_container">
+                  ?<div id="h_p_create_job_container" onClick={this.setLoginSave}>
                   <div className="h_p_create_job_title">Show your talent</div>
                   <div className="h_p_create_job_desc">
                     Upload your Ariel shots and get paid

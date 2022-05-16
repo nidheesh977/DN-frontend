@@ -44,6 +44,16 @@ else if(localStorage.getItem("email") === "true" && localStorage.getItem("role")
       this.props.history.push("/NoComponent");
 
     }
+    if(localStorage.getItem("lastTab") === "company"){
+      this.setState({
+        user_category: "company",
+      });
+    }
+    else if(localStorage.getItem("lastTab") === "service_center"){
+      this.setState({
+        user_category: "service_center",
+      });
+    }
   }
 
   userCategoryDivClick = (val) => {

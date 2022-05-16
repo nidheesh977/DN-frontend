@@ -231,7 +231,14 @@ class HirePilot extends Component {
       id2: id1,
     });
   };
-
+checkLoginandPush = () =>{
+  if(localStorage.getItem("access_token")){
+    this.props.history.push("/create_job")
+  }else{
+    localStorage.setItem("lastTab", "company")
+    this.props.history.push("/login")
+  }
+}
   clickStartProcess1 = (id1) => {
     this.setState({
       savePilot: true,
@@ -596,7 +603,7 @@ class HirePilot extends Component {
                       </div>
                       <button
                         className="h_p_create_job_btn"
-                        onClick={() => this.props.history.push("/create_job")}
+                        onClick={this.checkLoginandPush}
                       >
                         Create a job
                       </button>

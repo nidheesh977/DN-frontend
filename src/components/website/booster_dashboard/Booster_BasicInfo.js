@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Cover from "./images/cover.jpg";
 import "./css/Pilot_BasicInfo.css";
 import Pilot from "./images/pilot.jpg";
@@ -37,6 +37,7 @@ const customStyles = {
 const domain = process.env.REACT_APP_MY_API;
 
 function Booster_BasicInfo() {
+  let params = useParams()
   let history = useHistory();
   let [test, setTest] = useState([]);
   let [codes, setCodes] = useState([]);
@@ -61,6 +62,7 @@ function Booster_BasicInfo() {
     },
   };
   useEffect(() => {
+
     axios.get(`${domain}/api/user/getBooster`, config).then((response) => {
       var result = Countries.filter((obj) => obj.name == response.data.country);
       console.log(result[0].dial_code);
@@ -917,7 +919,7 @@ function Booster_BasicInfo() {
                           border: "none",
                           backgroundColor: "#00e7fc",
                           fontFamily: "muli-light",
-                        }}
+                        }} onClick={()=>history.push("/createPilot")}
                       >
                         Upgrade to Pilot
                       </button>
@@ -946,7 +948,7 @@ function Booster_BasicInfo() {
                           border: "1px solid gray",
                           backgroundColor: "#4ffea3",
                           fontFamily: "muli-light",
-                        }}
+                        }} onClick={()=>history.push("/createServiceCenter")}
                       >
                         Complete Profile
                       </button>
@@ -975,7 +977,7 @@ function Booster_BasicInfo() {
                           border: "none",
                           backgroundColor: "#00e7fc",
                           fontFamily: "muli-light",
-                        }}
+                        }}onClick={()=>history.push("/createCompany")}
                       >
                         Complete Profile
                       </button>
