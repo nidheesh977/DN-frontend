@@ -18,6 +18,7 @@ import { styled } from "@mui/material/styles";
 import { Helmet } from "react-helmet";
 import heart from "../images/heart (3).svg";
 import heartLike from "../images/heart-blue.svg";
+import Trusted from "../images/trusted.png"
 import Skeleton from "react-loading-skeleton";
 import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
@@ -1017,7 +1018,7 @@ class ApplyJob extends Component {
                             </span>
                           </div>
                           <div className="pd_a_j_dataTitle">
-                            {item.jobTitle}
+                            {item.jobTitle} {item.userId.companyPlatinum ? <img src={Trusted} style={{height:"25px", marginLeft: "10px"}}/> : ""}
                           </div>
                         </div>
                         <div className="pd_a_j_data_subTitle">
