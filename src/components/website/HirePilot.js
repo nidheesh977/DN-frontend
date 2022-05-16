@@ -266,6 +266,9 @@ class HirePilot extends Component {
           this.setState({
             message: "",
           });
+          axios.post(`${domain}/api/company/setProposals`, config).then(res=>{
+            console.log(res)
+          })
           setTimeout(() => {
             document.getElementById("alertBox").style.display = "none";
             this.setState({

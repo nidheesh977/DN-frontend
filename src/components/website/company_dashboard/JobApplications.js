@@ -28,12 +28,18 @@ const DialogContent = withStyles((theme) => ({
 const domain = process.env.REACT_APP_MY_API;
 
 function JobApplications() {
+
   let history = useHistory();
   let param = useParams();
   let goToPreviousPath = () => {
     history.goBack();
   };
-
+let config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
+  
   const [job, setJob] = useState({});
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -59,6 +65,9 @@ function JobApplications() {
     phoneNo: "",
   });
   let showPersonalData = (phNo, email) => {
+    axios.post(`${domain}/api/company/setViews`, config).then(res=>{
+      console.log(res)
+    })
     setPersonalData({
       email: email,
       phoneNo: phNo,

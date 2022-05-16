@@ -223,7 +223,7 @@ export default function PilotDetails(props) {
       axios
         .post(
           `${domain}/api/hireProposal/createProposal`,
-          { pilotId: param.id, message: hireForm.description },
+          { pilotId: pilotData._id, message: hireForm.description },
           config
         )
         .then((res) => {
@@ -232,6 +232,7 @@ export default function PilotDetails(props) {
             ...hireForm,
             description: "",
           });
+
           //test
           if (res.status === 200) {
             document.getElementById("alertBox").style.display = "block";
@@ -239,6 +240,9 @@ export default function PilotDetails(props) {
             document.querySelector(
               ".h_p_start_process_form_description"
             ).style.backgroundColor = "#f5f5f7";
+            axios.post(`${domain}/api/company/setProposals`, config).then(res=>{
+              console.log(res)
+            })
           }
           setTimeout(() => {
             return (
