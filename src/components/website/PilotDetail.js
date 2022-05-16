@@ -120,6 +120,9 @@ export default function PilotDetails(props) {
   const messages = [1, 2, 3, 4, 5, 6];
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
+  const [subscription, setSubscription] = useState({});
+  const [upgradePopup, setUpgradePopup] = useState(false)
+  const [limitExceededPopup, setLimitExceededPopup] = useState(false)
   
 
   const handleErrorClose = () => {
@@ -216,7 +219,30 @@ export default function PilotDetails(props) {
   };
   const clickHire = () => {
     console.log("Hire me clicked");
-    setStartProcess(true);
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    if (subscription.subscription){
+      if ((subscription.subscription.proposals <= subscription.proposals && subscription.subscription.plan.includes("platinum"))){
+        setLimitExceededPopup(true)
+      }else if ((subscription.subscription.proposals <= subscription.proposals && !subscription.subscription.plan.includes("platinum"))){
+        setUpgradePopup(true)
+      }
+      else{
+        setStartProcess(true);
+      }
+    }else{
+      setUpgradePopup(true)
+    }
+    if(localStorage.getItem("role") === "company"){
+      axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
+        console.log(res.data)
+        setSubscription(res.data)
+      })
+    }
+    
   };
   const submitProcess = () => {
     if (hireForm.description !== "" && hireForm.description.length <= 200) {
@@ -280,6 +306,12 @@ export default function PilotDetails(props) {
   };
   
   useEffect(() => {
+    if(localStorage.getItem("role") === "company"){
+      axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
+        console.log(res.data)
+        setSubscription(res.data)
+      })
+    }
     axios
       .get(`${domain}/api/pilot/pilotDetails/${props.match.params.id}`)
       .then((response) => {
@@ -1494,6 +1526,98 @@ export default function PilotDetails(props) {
               </Row>
             </DialogContent>
           </Dialog>
+          <Dialog
+                open={upgradePopup}
+                onClose={()=>setUpgradePopup(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                  style={{ marginBottom: "50px" }}
+                >
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>setUpgradePopup(false)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      You exceeded your limit. Upgrade to comtinue.
+                    </div>
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={()=>setUpgradePopup(false)}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="u_f_popup_btn2"
+                        onClick={()=>history.push("/HireSubscription")}
+                      >
+                        Upgrade
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
+        <Dialog
+                open={limitExceededPopup}
+                onClose={()=>setLimitExceededPopup(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                  style={{ marginBottom: "50px" }}
+                >
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>setLimitExceededPopup(false)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      You exceeded your limit.
+                    </div>
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={()=>setLimitExceededPopup(false)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
         </Container>
       </section>
     </>
