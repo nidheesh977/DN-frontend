@@ -47,7 +47,7 @@ function CompanyPayments() {
       setData(res.data);
     });
     axios
-      .get(`${domain}/api/pilotSubscription/getMySubscriptionData`, config)
+      .post(`${domain}/api/companySubscription/getSubscriptionCompany`, config)
       .then((res) => {
         setSubscriptionDetailsLoading(false)
         setSubscriptionDetails(res.data);
@@ -214,8 +214,8 @@ function CompanyPayments() {
       <>{subscriptionDetails !== "No Subscription" ? (
         <Row className="sub_det_container">
           <Col xxl={12} className="sub_det_col1">
-            <div className="sub_det_plan">
-              {subscriptionDetails.sub ? subscriptionDetails.sub.plan : "Plan"}
+            <div className="sub_det_plan" style = {{textTransform: "capitalize"}}>
+              {subscriptionDetails.subscription ? subscriptionDetails.subscription.plan : "Plan"}
             </div>
           </Col>
           <Col xxl={6} xl={6} lg={6} md={6} className="sub_det_col2">
@@ -260,13 +260,13 @@ function CompanyPayments() {
             <div>
               <div className="sub_det_title">No of active jobs :</div>
               <div className="sub_det_content" id="sub_det_start_date">
-                {/* {subscriptionDetails.sub ? subscriptionDetails.sub.images-subscriptionDetails.images : ""}{" "} Images */}10
+                {subscriptionDetails.subscription.activeJobs}
               </div>
             </div>
             <div>
               <div className="sub_det_title">Profile View Count :</div>
               <div className="sub_det_content" id="sub_det_start_date">
-                {/* {subscriptionDetails.sub ? subscriptionDetails.sub.videos-subscriptionDetails.videos : ""} Videos */} 100
+                {/* {subscriptionDetails.sub ? subscriptionDetails.sub.videos-subscriptionDetails.videos : ""} Videos */} {subscriptionDetails.subscription.views}
               </div>
             </div>
             <div>
@@ -274,7 +274,7 @@ function CompanyPayments() {
               <div className="sub_det_content" id="sub_det_start_date">
               {/* {subscriptionDetails.sub
                   ? subscriptionDetails.sub.images3d - subscriptionDetails.images3d
-                  : ""} 3dimages */} 200
+                  : ""} 3dimages */} {subscriptionDetails.subscription.proposals}
               </div>
             </div>
           </Col>

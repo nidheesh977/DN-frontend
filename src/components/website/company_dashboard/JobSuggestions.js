@@ -38,7 +38,15 @@ function JobSuggestions() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewDetails, setViewDetails] = useState(false);
- 
+
+  const [upgradePopup, setUpgradePopup] = useState(false);
+  const [limitExceededPopup, setLimitExceededPopup] = useState(false);
+
+  const config = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+    },
+  };
   useEffect(() => {
     axios.get(`${domain}/api/jobs/jobLanding/${param.id}`).then((res) => {
       console.log(res.data);
@@ -60,11 +68,36 @@ function JobSuggestions() {
     phoneNo: "",
   });
   let showPersonalData = (phNo, email) => {
-    setPersonalData({
-      email: email,
-      phoneNo: phNo,
-    });
-    setViewDetails(true);
+    axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
+      console.log(res)
+      if (res.data.subscription){
+        if(res.data.subscription.views <= res.data.views){
+          if (res.data.subscription.plan.includes("platinum")){
+            setLimitExceededPopup(true)
+          }
+          else{
+            setUpgradePopup(true)
+          }
+        }
+         else{
+     
+         
+         axios.post(`${domain}/api/company/setViews`, config).then(res=>{
+           console.log(res)
+         })
+         setPersonalData({
+           email: email,
+           phoneNo: phNo,
+         });
+         setViewDetails(true);
+      
+        }
+      }else{
+        if (res.data.views>=10){
+          setUpgradePopup(true)
+        }
+      }
+  })
   };
   return (
     <div>
@@ -219,6 +252,98 @@ function JobSuggestions() {
           </Row>
         </DialogContent>
       </Dialog>
+      <Dialog
+                open={upgradePopup}
+                onClose={()=>setUpgradePopup(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                  style={{ marginBottom: "50px" }}
+                >
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>setUpgradePopup(false)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      You exceeded your view limit. Upgrade to comtinue.
+                    </div>
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={()=>setUpgradePopup(false)}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="u_f_popup_btn2"
+                        onClick={()=>history.push("/HireSubscription")}
+                      >
+                        Upgrade
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
+        <Dialog
+                open={limitExceededPopup}
+                onClose={()=>setLimitExceededPopup(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                  style={{ marginBottom: "50px" }}
+                >
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>setLimitExceededPopup(false)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      You exceeded your View limit.
+                    </div>
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={()=>setLimitExceededPopup(false)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
     </div>
   );
 }

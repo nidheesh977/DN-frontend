@@ -113,7 +113,7 @@ class HireSubscription extends Component {
   };
 
   componentDidMount() {
-    axios.get(`${domain}/api/company/getCompanySubscription`).then((res) => {
+    axios.get(`${domain}/api/subscription/getSubscriptions`).then((res) => {
       console.log(res);
       this.setState({
         data: res.data,
@@ -121,13 +121,18 @@ class HireSubscription extends Component {
     });
     axios
       .get(
-        `${domain}/api/pilotSubscription/getMySubscription
+        `${domain}/api/company/getCompanySubscription
   `,
         this.config
-      )
+      ) 
       .then((res) => {
         console.log(res);
         if (res.data.subscription !== null) {
+          if (res.data.subscription.plan.includes("yearly")){
+            this.setState({
+              subYearly: true
+            })
+          }
           this.setState({
             myPlan: res.data.subscription.plan,
           });
@@ -266,11 +271,17 @@ class HireSubscription extends Component {
                     {this.state.subYearly ? "$500.00" : "$50.00"}
                   </div>
                   <div className="subscription_plan_btn_container">
-                    <Link to = {this.state.subYearly ? "/company-checkout/gold-yearly" : "/company-checkout/gold-monthly"}>
+                    {((this.state.myPlan === "gold-monthly" && !this.state.subYearly) || (this.state.myPlan === "gold-yearly" && this.state.subYearly)) ? (
+                      <button className="subscription_plan_btn2">
+                        Current Plan
+                      </button>
+                    ) : (
+                      <Link to = {this.state.subYearly ? "/company-checkout/gold-yearly" : "/company-checkout/gold-monthly"}>
                       <button className="subscription_plan_btn2">
                         Upgrade Plan
                       </button>
                     </Link>
+                    )}
                   </div>
                   <div className="subscription_plan_features">
                     <div
@@ -358,7 +369,7 @@ class HireSubscription extends Component {
                   </div>
 
                   <div className="subscription_plan_btn_container">
-                    {this.state.myPlan === "platinum" ? (
+                    {(this.state.myPlan === "platinum-monthly" && !this.state.subYearly) || (this.state.myPlan === "platinum-yearly" && this.state.subYearly) ? (
                       <button className="subscription_plan_btn1">
                         Current Plan
                       </button>

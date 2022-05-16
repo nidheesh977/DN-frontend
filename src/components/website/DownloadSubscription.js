@@ -104,6 +104,11 @@ class DownloadSubscription extends Component {
       .then((res) => {
         console.log(res);
         if (res.data.subscription !== null) {
+          if (res.data.subscription.plan.includes("Yearly")){
+            this.setState({
+              subYearly: true
+            })
+          }
           this.setState({
             myPlan: res.data.subscription.plan,
           });

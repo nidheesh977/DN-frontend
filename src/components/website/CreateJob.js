@@ -25,6 +25,7 @@ import PlacesAutocomplete, {
 } from "react-autocomplete-places";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { Helmet } from "react-helmet";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -73,6 +74,10 @@ class CreateJob extends Component {
       deleteDraftId: "",
       deleteDraftIndex: "",
       deleteDraftPopup: false,
+      jobLimit: 1,
+      subscriptionPlan: "basic",
+      upgradePopup: false,
+      limitExceededPopup: false
     };
   }
 
@@ -82,6 +87,23 @@ class CreateJob extends Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
+
+    Axios.get(
+        `${domain}/api/company/getCompanySubscription
+  `,
+        config
+      )
+      .then(res => {
+        console.log(res.data)
+        if (res.data.subscription){
+          this.setState ({
+            jobLimit: res.data.subscription.activeJobs-res.data.activeJobs-res.data.draftJob,
+            subscriptionPlan: res.data.subscription.plan
+          })
+          console.log(res.data.subscription.activeJobs-res.data.activeJobs)
+        }
+      })
+
     console.log("Helo");
     $("html,body").scrollTop(0);
     Axios.get(`${domain}/api/industry/getIndustries`).then((res) => {
@@ -142,167 +164,179 @@ class CreateJob extends Component {
   };
 
   PostJob = () => {
-    var fields = [
-      "job_title",
-      "industry",
-      "min_salary",
-      "max_salary",
-      "openings",
-      "location",
-      "description",
-    ];
-
-    var error = false;
-    var focusField = "";
-
-    for (var i = 0; i < fields.length; i++) {
-      if (
-        fields[i] !== "min_salary" &&
-        fields[i] !== "max_salary" &&
-        fields[i] !== "openings"&&
-        fields[i] !== "description"
-      ) {
-        if (this.state[fields[i]] === "") {
-          error = true;
-          document.getElementById(fields[i] + "_error").style.display =
-            "contents";
-          if (focusField === "" && fields[i] !== "location") {
-            focusField = fields[i];
-          }
-        }
-        if (
-          fields[i] === "job_title" &&
-          this.state.job_title !== "" &&
-          (this.state.job_title.length > 100 || this.state.job_title.length < 2)
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("job_title_error").innerText =
-            "Job title must be between 2 and 100 characters";
-          document.getElementById("job_title_error").style.display = "contents";
-        }
-        
-      } else {
-        if (
-          fields[i] === "min_salary" &&
-          this.state.max_salary !== "" &&
-          this.state.min_salary === ""
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("min_salary_error").innerText =
-            "Mention minimum salary";
-          document.getElementById("min_salary_error").style.display =
-            "contents";
-        }
-        if (
-          fields[i] === "max_salary" &&
-          this.state.min_salary !== "" &&
-          this.state.max_salary === ""
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("max_salary_error").innerText =
-            "Mention maximum salary";
-          document.getElementById("max_salary_error").style.display =
-            "contents";
-        }
-        if (
-          fields[i] === "max_salary" &&
-          Number(this.state.min_salary) > Number(this.state.max_salary)
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("max_salary_error").innerText =
-            "Maximum salary should not be less than minimum salary";
-          document.getElementById("max_salary_error").style.display =
-            "contents";
-        }
-        if (fields[i] === "openings" && Number(this.state.openings) > 1000) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("openings_error").innerText =
-            "Maximum openings is 1000";
-          document.getElementById("openings_error").style.display = "contents";
-        }
-        if (
-          fields[i] === "description" &&
-          this.state.description === ""
-        ) {
-          error = true;
-          document.getElementById("description_error").innerText =
-            "Description is required";
-          document.getElementById("description_error").style.display =
-            "contents";
-        }
-        if (
-          fields[i] === "description" &&
-          this.state.description !== "" &&
-          (this.state.description.length > 1500 ||
-            this.state.description.length < 200)
-        ) {
-          error = true;
-          document.getElementById("description_error").innerText =
-            "Description must be between 200 and 1500 characters";
-          document.getElementById("description_error").style.display =
-            "contents";
-        }
-      }
+    console.log(this.state.jobLimit)
+    if (this.state.jobLimit <= 0 && !this.state.subscriptionPlan.includes("platinum")){
+      this.setState({
+        upgradePopup: true
+      })
+    }else if (this.state.jobLimit <= 0 && this.state.subscriptionPlan.includes("platinum")){
+      this.setState({
+        limitExceededPopup: true
+      })
     }
-
-    if (error) {
-      if (focusField !== "") {
-        if (focusField === "industry") {
-          document.getElementById("job_title").scrollIntoView();
+    else{
+      var fields = [
+        "job_title",
+        "industry",
+        "min_salary",
+        "max_salary",
+        "openings",
+        "location",
+        "description",
+      ];
+  
+      var error = false;
+      var focusField = "";
+  
+      for (var i = 0; i < fields.length; i++) {
+        if (
+          fields[i] !== "min_salary" &&
+          fields[i] !== "max_salary" &&
+          fields[i] !== "openings"&&
+          fields[i] !== "description"
+        ) {
+          if (this.state[fields[i]] === "") {
+            error = true;
+            document.getElementById(fields[i] + "_error").style.display =
+              "contents";
+            if (focusField === "" && fields[i] !== "location") {
+              focusField = fields[i];
+            }
+          }
+          if (
+            fields[i] === "job_title" &&
+            this.state.job_title !== "" &&
+            (this.state.job_title.length > 100 || this.state.job_title.length < 2)
+          ) {
+            error = true;
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+            document.getElementById("job_title_error").innerText =
+              "Job title must be between 2 and 100 characters";
+            document.getElementById("job_title_error").style.display = "contents";
+          }
+          
         } else {
-          document.getElementById(focusField).focus();
+          if (
+            fields[i] === "min_salary" &&
+            this.state.max_salary !== "" &&
+            this.state.min_salary === ""
+          ) {
+            error = true;
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+            document.getElementById("min_salary_error").innerText =
+              "Mention minimum salary";
+            document.getElementById("min_salary_error").style.display =
+              "contents";
+          }
+          if (
+            fields[i] === "max_salary" &&
+            this.state.min_salary !== "" &&
+            this.state.max_salary === ""
+          ) {
+            error = true;
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+            document.getElementById("max_salary_error").innerText =
+              "Mention maximum salary";
+            document.getElementById("max_salary_error").style.display =
+              "contents";
+          }
+          if (
+            fields[i] === "max_salary" &&
+            Number(this.state.min_salary) > Number(this.state.max_salary)
+          ) {
+            error = true;
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+            document.getElementById("max_salary_error").innerText =
+              "Maximum salary should not be less than minimum salary";
+            document.getElementById("max_salary_error").style.display =
+              "contents";
+          }
+          if (fields[i] === "openings" && Number(this.state.openings) > 1000) {
+            error = true;
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+            document.getElementById("openings_error").innerText =
+              "Maximum openings is 1000";
+            document.getElementById("openings_error").style.display = "contents";
+          }
+          if (
+            fields[i] === "description" &&
+            this.state.description === ""
+          ) {
+            error = true;
+            document.getElementById("description_error").innerText =
+              "Description is required";
+            document.getElementById("description_error").style.display =
+              "contents";
+          }
+          if (
+            fields[i] === "description" &&
+            this.state.description !== "" &&
+            (this.state.description.length > 1500 ||
+              this.state.description.length < 200)
+          ) {
+            error = true;
+            document.getElementById("description_error").innerText =
+              "Description must be between 200 and 1500 characters";
+            document.getElementById("description_error").style.display =
+              "contents";
+          }
         }
       }
-      console.log(focusField);
-    } else {
-      const config = {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      };
-
-      $("html,body").scrollTop(0);
-      Axios.post(
-        `${domain}/api/jobs/createJob`,
-        {
-          jobTitle: this.state.job_title,
-          industry: this.state.industry,
-          jobType: this.state.job_type,
-          employeeType: this.state.employee_type,
-          minSalary: this.state.min_salary,
-          maxSalary: this.state.max_salary,
-          salaryType: this.state.rate,
-          workLocation: this.state.location,
-          jobDesc: this.state.description,
-          noOfOpenings: this.state.openings,
-        },
-        config
-      )
-        .then((res) => {
-          console.log(res);
-          localStorage.setItem("job_created", "true")
-          this.clearForm();
-          this.props.history.push("/company_dashboard/activities/jobs");
-          
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+  
+      if (error) {
+        if (focusField !== "") {
+          if (focusField === "industry") {
+            document.getElementById("job_title").scrollIntoView();
+          } else {
+            document.getElementById(focusField).focus();
+          }
+        }
+        console.log(focusField);
+      } else {
+        const config = {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        };
+  
+        $("html,body").scrollTop(0);
+        Axios.post(
+          `${domain}/api/jobs/createJob`,
+          {
+            jobTitle: this.state.job_title,
+            industry: this.state.industry,
+            jobType: this.state.job_type,
+            employeeType: this.state.employee_type,
+            minSalary: this.state.min_salary,
+            maxSalary: this.state.max_salary,
+            salaryType: this.state.rate,
+            workLocation: this.state.location,
+            jobDesc: this.state.description,
+            noOfOpenings: this.state.openings,
+          },
+          config
+        )
+          .then((res) => {
+            console.log(res);
+            localStorage.setItem("job_created", "true")
+            this.clearForm();
+            this.props.history.push("/company_dashboard/activities/jobs");
+            
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
   };
 
@@ -403,158 +437,165 @@ class CreateJob extends Component {
   };
 
   saveDraft = () => {
-    var fields = [
-      "job_title",
-      "industry",
-      "min_salary",
-      "max_salary",
-      "openings",
-      "location",
-      "description",
-    ];
+    if (this.state.subscriptionPlan!== "basic"){
 
-    var error = false;
-    var focusField = "";
-
-    for (var i = 0; i < fields.length; i++) {
-      if (
-        fields[i] !== "min_salary" &&
-        fields[i] !== "max_salary" &&
-        fields[i] !== "openings"
-      ) {
-        if (fields[i] === "job_title" && this.state.job_title === "") {
-          error = true;
-          document.getElementById("job_title_error").style.display = "contents";
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-        }
+      var fields = [
+        "job_title",
+        "industry",
+        "min_salary",
+        "max_salary",
+        "openings",
+        "location",
+        "description",
+      ];
+  
+      var error = false;
+      var focusField = "";
+  
+      for (var i = 0; i < fields.length; i++) {
         if (
-          fields[i] === "job_title" &&
-          this.state.job_title !== "" &&
-          (this.state.job_title.length > 100 || this.state.job_title.length < 2)
+          fields[i] !== "min_salary" &&
+          fields[i] !== "max_salary" &&
+          fields[i] !== "openings"
         ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("job_title_error").innerText =
-            "Job title must be between 2 and 100 characters";
-          document.getElementById("job_title_error").style.display = "contents";
-        }
-        if (
-          fields[i] === "description" &&
-          this.state.description !== "" &&
-          (this.state.description.length > 1500 ||
-            this.state.description.length < 200)
-        ) {
-          error = true;
-          
-          document.getElementById("description_error").innerText =
-            "Description must be between 200 and 1500 characters";
-          document.getElementById("description_error").style.display =
-            "contents";
-        }
-      } else {
-        if (
-          fields[i] === "min_salary" &&
-          this.state.max_salary !== "" &&
-          this.state.min_salary === ""
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("min_salary_error").innerText =
-            "Mention minimum salary";
-          document.getElementById("min_salary_error").style.display =
-            "contents";
-        }
-        if (
-          fields[i] === "max_salary" &&
-          this.state.min_salary !== "" &&
-          this.state.max_salary === ""
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("max_salary_error").innerText =
-            "Mention maximum salary";
-          document.getElementById("max_salary_error").style.display =
-            "contents";
-        }
-        if (
-          fields[i] === "max_salary" &&
-          Number(this.state.min_salary) > Number(this.state.max_salary)
-        ) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("max_salary_error").innerText =
-            "Maximum salary should not be less than minimum salary";
-          document.getElementById("max_salary_error").style.display =
-            "contents";
-        }
-        if (fields[i] === "openings" && Number(this.state.openings) > 1000) {
-          error = true;
-          if (focusField === "") {
-            focusField = fields[i];
-          }
-          document.getElementById("openings_error").innerText =
-            "Maximum openings is 1000";
-          document.getElementById("openings_error").style.display = "contents";
-        }
-      }
-    }
-
-    if (error) {
-      if (focusField !== "") {
-        document.getElementById(focusField).focus();
-      }
-      console.log(focusField);
-    } else {
-      const config = {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-      };
-
-      Axios.post(
-        `${domain}/api/draftJob/createDraft`,
-        {
-          jobTitle: this.state.job_title,
-          industry: this.state.industry,
-          jobType: this.state.job_type,
-          employeeType: this.state.employee_type,
-          minSalary: this.state.min_salary,
-          maxSalary: this.state.max_salary,
-          salaryType: this.state.rate,
-          workLocation: this.state.location,
-          jobDesc: this.state.description,
-          noOfOpenings: this.state.openings,
-        },
-        config
-      )
-        .then((res) => {
-          console.log(res);
-          this.state.dialog = true;
-          this.clearForm();
-          $("html,body").scrollTop(0);
-          Axios.post(`${domain}/api/draftJob/getMyDrafts`, config).then(
-            (res) => {
-              console.log(res);
-              this.setState({
-                draftJobs: res.data,
-                main_tab: 2,
-              });
+          if (fields[i] === "job_title" && this.state.job_title === "") {
+            error = true;
+            document.getElementById("job_title_error").style.display = "contents";
+            if (focusField === "") {
+              focusField = fields[i];
             }
-          );
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+          }
+          if (
+            fields[i] === "job_title" &&
+            this.state.job_title !== "" &&
+            (this.state.job_title.length > 100 || this.state.job_title.length < 2)
+          ) {
+            error = true;
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+            document.getElementById("job_title_error").innerText =
+              "Job title must be between 2 and 100 characters";
+            document.getElementById("job_title_error").style.display = "contents";
+          }
+          if (
+            fields[i] === "description" &&
+            this.state.description !== "" &&
+            (this.state.description.length > 1500 ||
+              this.state.description.length < 200)
+          ) {
+            error = true;
+            
+            document.getElementById("description_error").innerText =
+              "Description must be between 200 and 1500 characters";
+            document.getElementById("description_error").style.display =
+              "contents";
+          }
+        } else {
+          if (
+            fields[i] === "min_salary" &&
+            this.state.max_salary !== "" &&
+            this.state.min_salary === ""
+          ) {
+            error = true;
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+            document.getElementById("min_salary_error").innerText =
+              "Mention minimum salary";
+            document.getElementById("min_salary_error").style.display =
+              "contents";
+          }
+          if (
+            fields[i] === "max_salary" &&
+            this.state.min_salary !== "" &&
+            this.state.max_salary === ""
+          ) {
+            error = true;
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+            document.getElementById("max_salary_error").innerText =
+              "Mention maximum salary";
+            document.getElementById("max_salary_error").style.display =
+              "contents";
+          }
+          if (
+            fields[i] === "max_salary" &&
+            Number(this.state.min_salary) > Number(this.state.max_salary)
+          ) {
+            error = true;
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+            document.getElementById("max_salary_error").innerText =
+              "Maximum salary should not be less than minimum salary";
+            document.getElementById("max_salary_error").style.display =
+              "contents";
+          }
+          if (fields[i] === "openings" && Number(this.state.openings) > 1000) {
+            error = true;
+            if (focusField === "") {
+              focusField = fields[i];
+            }
+            document.getElementById("openings_error").innerText =
+              "Maximum openings is 1000";
+            document.getElementById("openings_error").style.display = "contents";
+          }
+        }
+      }
+  
+      if (error) {
+        if (focusField !== "") {
+          document.getElementById(focusField).focus();
+        }
+        console.log(focusField);
+      } else {
+        const config = {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        };
+  
+        Axios.post(
+          `${domain}/api/draftJob/createDraft`,
+          {
+            jobTitle: this.state.job_title,
+            industry: this.state.industry,
+            jobType: this.state.job_type,
+            employeeType: this.state.employee_type,
+            minSalary: this.state.min_salary,
+            maxSalary: this.state.max_salary,
+            salaryType: this.state.rate,
+            workLocation: this.state.location,
+            jobDesc: this.state.description,
+            noOfOpenings: this.state.openings,
+          },
+          config
+        )
+          .then((res) => {
+            console.log(res);
+            this.state.dialog = true;
+            this.clearForm();
+            $("html,body").scrollTop(0);
+            Axios.post(`${domain}/api/draftJob/getMyDrafts`, config).then(
+              (res) => {
+                console.log(res);
+                this.setState({
+                  draftJobs: res.data,
+                  main_tab: 2,
+                });
+              }
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }else{
+      this.setState({
+        upgradePopup: true
+      })
     }
   };
 
@@ -1304,6 +1345,98 @@ class CreateJob extends Component {
             </Row>
           </DialogContent>
         </Dialog>
+        <Dialog
+                open={this.state.upgradePopup}
+                onClose={()=>this.setState({upgradePopup: false})}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                  style={{ marginBottom: "50px" }}
+                >
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>this.setState({upgradePopup: false})}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      You exceeded your active job limit. Upgrade to comtinue.
+                    </div>
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={()=>this.setState({upgradePopup: false})}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="u_f_popup_btn2"
+                        onClick={()=>this.props.history.push("/HireSubscription")}
+                      >
+                        Upgrade
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
+        <Dialog
+                open={this.state.limitExceededPopup}
+                onClose={()=>this.setState({limitExceededPopup: false})}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                  style={{ marginBottom: "50px" }}
+                >
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>this.setState({limitExceededPopup: false})}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      You exceeded your active job limit.
+                    </div>
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={()=>this.setState({limitExceededPopup: false})}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
       </section>
     );
   }

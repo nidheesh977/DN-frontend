@@ -153,6 +153,9 @@ class HirePilot extends Component {
       keyword: "",
       location: "",
       selected_drones_value: [],
+      subscription: {},
+      upgradePopup: false,
+      limitExceededPopup: false
     };
   }
 
@@ -240,10 +243,16 @@ checkLoginandPush = () =>{
   }
 }
   clickStartProcess1 = (id1) => {
-    this.setState({
-      savePilot: true,
-      selectedPilot: id1,
-    });
+    if (this.state.subscription.subscription){
+      this.setState({
+        savePilot: true,
+        selectedPilot: id1,
+      });
+    }else{
+      this.setState({
+        upgradePopup:true
+      })
+    }
   };
   closeProcess1 = () => {
     this.setState({
@@ -386,6 +395,16 @@ checkLoginandPush = () =>{
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
+    if(localStorage.getItem("role") === "company"){
+      axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
+        this.setState({
+          subscription:res.data
+        })
+      })
+    }
+
+    
+
     axios
       .get(`${domain}/api/pilot/hirePilots?${this.state.page}`)
       .then((res) => {
@@ -1309,7 +1328,6 @@ checkLoginandPush = () =>{
                                   >
                                     HirePilot
                                   </button>
-
                                   {this.state.mySavedPilots.includes(
                                     pilot._id
                                   ) ? (
@@ -1720,6 +1738,98 @@ checkLoginandPush = () =>{
                 </div>
               </DialogContent>
             </Dialog>
+            <Dialog
+                open={this.state.upgradePopup}
+                onClose={()=>this.setState({upgradePopup: false})}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                  style={{ marginBottom: "50px" }}
+                >
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>this.setState({upgradePopup: false})}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      You exceeded your active job limit. Upgrade to comtinue.
+                    </div>
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={()=>this.setState({upgradePopup: false})}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="u_f_popup_btn2"
+                        onClick={()=>this.props.history.push("/HireSubscription")}
+                      >
+                        Upgrade
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
+        <Dialog
+                open={this.state.limitExceededPopup}
+                onClose={()=>this.setState({limitExceededPopup: false})}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                  style={{ marginBottom: "50px" }}
+                >
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>this.setState({limitExceededPopup: false})}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      You exceeded your active job limit.
+                    </div>
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={()=>this.setState({limitExceededPopup: false})}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
           </Container>
         </div>
       </>

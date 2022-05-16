@@ -34,6 +34,13 @@ function JobApplications() {
   let goToPreviousPath = () => {
     history.goBack();
   };
+  let [sub ,setSub] = useState({})
+  useEffect(()=>{
+    axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
+      console.log(res)
+setSub(res.data)
+    })
+  },[])
 let config = {
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -44,6 +51,8 @@ let config = {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewDetails, setViewDetails] = useState(false);
+  const [upgradePopup, setUpgradePopup] = useState(false);
+  const [limitExceededPopup, setLimitExceededPopup] = useState(false);
 
   useEffect(() => {
     axios.get(`${domain}/api/jobs/jobLanding/${param.id}`).then((res) => {
@@ -65,15 +74,39 @@ let config = {
     phoneNo: "",
   });
   let showPersonalData = (phNo, email) => {
-    axios.post(`${domain}/api/company/setViews`, config).then(res=>{
+    axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
       console.log(res)
-    })
-    setPersonalData({
-      email: email,
-      phoneNo: phNo,
-    });
-    setViewDetails(true);
-  };
+      if (res.data.subscription){
+        if(res.data.subscription.views <= res.data.views){
+          if (res.data.subscription.plan.includes("platinum")){
+            setLimitExceededPopup(true)
+          }
+          else{
+            setUpgradePopup(true)
+          }
+        }
+         else{
+     
+         
+         axios.post(`${domain}/api/company/setViews`, config).then(res=>{
+           console.log(res)
+         })
+         setPersonalData({
+           email: email,
+           phoneNo: phNo,
+         });
+         setViewDetails(true);
+      
+        }
+      }else{
+        if (res.data.views>=10){
+          setUpgradePopup(true)
+        }
+      }
+  })
+  }
+    console.log(sub)
+  
   return (
     <div>
       <div style={{ padding: "30px 20px 10px 20px" }}>
@@ -89,7 +122,8 @@ let config = {
           </Col>
           <Col xl={3}></Col>
           <Col xl={2.5}>
-              <Link to={`/company_dashboard/activities/jobs/applications/${param.id}/suggestions`}>
+            
+              <Link to={`/company_dashboard/activities/jobs/applications/${param.id}/suggestions`} style={{display: sub.subscription ? "block" : "none"}}>
             <div className="c_r_startProcessBtn" style={{ color: "black", padding: "5px 10px" }}>
               Show Suggested
             </div>
@@ -231,6 +265,98 @@ let config = {
           </Row>
         </DialogContent>
       </Dialog>
+      <Dialog
+                open={upgradePopup}
+                onClose={()=>setUpgradePopup(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                  style={{ marginBottom: "50px" }}
+                >
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>setUpgradePopup(false)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      You exceeded your view limit. Upgrade to comtinue.
+                    </div>
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={()=>setUpgradePopup(false)}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="u_f_popup_btn2"
+                        onClick={()=>history.push("/HireSubscription")}
+                      >
+                        Upgrade
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
+        <Dialog
+                open={limitExceededPopup}
+                onClose={()=>setLimitExceededPopup(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "820px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                  style={{ marginBottom: "50px" }}
+                >
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>setLimitExceededPopup(false)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      You exceeded your View limit.
+                    </div>
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={()=>setLimitExceededPopup(false)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
     </div>
   );
 }
