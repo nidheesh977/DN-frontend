@@ -231,7 +231,9 @@ class ServiceCenters extends Component {
       }
     });
   }
-
+  saveLastTab = () =>{
+    localStorage.setItem("lastTab", "service_center")
+  }
   closeDropDown = () => {
     this.setState({
       dropdown_selected: null,
@@ -635,7 +637,7 @@ class ServiceCenters extends Component {
             className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}
           >
             {!localStorage.getItem("access_token") ? (
-              <div className="s_c_list_btn_container">
+              <div className="s_c_list_btn_container" onClick={this.saveLastTab}>
                 <button
                   className="s_c_list_btn"
                   onClick={() => this.props.history.push("/login")}

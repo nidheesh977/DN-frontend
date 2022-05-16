@@ -40,9 +40,8 @@ function CreatePilot() {
       history.push("/login");
     } else if (localStorage.getItem("email") !== "true") {
       history.push("/verify-email");
-    } else if (localStorage.getItem("role") !== "undefined") {
-      history.push("/NoComponent");
-    }
+    
+    } 
   });
   let [loading, setLoading] = useState(false)
   let [data, setData] = useState({
