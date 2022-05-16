@@ -23,8 +23,8 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-autocomplete-places";
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Helmet } from "react-helmet";
 
 const domain = process.env.REACT_APP_MY_API;
@@ -77,7 +77,7 @@ class CreateJob extends Component {
       jobLimit: 1,
       subscriptionPlan: "basic",
       upgradePopup: false,
-      limitExceededPopup: false
+      limitExceededPopup: false,
     };
   }
 
@@ -89,25 +89,30 @@ class CreateJob extends Component {
     };
 
     Axios.get(
-        `${domain}/api/company/getCompanySubscription
+      `${domain}/api/company/getCompanySubscription
   `,
-        config
-      )
-      .then(res => {
-        console.log(res.data)
-        if (res.data.subscription){
-          this.setState ({
-            jobLimit: res.data.subscription.activeJobs-res.data.activeJobs-res.data.draftJobs,
-            subscriptionPlan: res.data.subscription.plan
-          })
-          console.log(res.data.subscription.activeJobs-res.data.activeJobs-res.data.draftJobs)
-        }
-        else{
-          this.setState ({
-            jobLimit: 1-res.data.activeJobs,
-          })
-        }
-      })
+      config
+    ).then((res) => {
+      console.log(res.data);
+      if (res.data.subscription) {
+        this.setState({
+          jobLimit:
+            res.data.subscription.activeJobs -
+            res.data.activeJobs -
+            res.data.draftJobs,
+          subscriptionPlan: res.data.subscription.plan,
+        });
+        console.log(
+          res.data.subscription.activeJobs -
+            res.data.activeJobs -
+            res.data.draftJobs
+        );
+      } else {
+        this.setState({
+          jobLimit: 1 - res.data.activeJobs,
+        });
+      }
+    });
 
     console.log("Helo");
     $("html,body").scrollTop(0);
@@ -169,19 +174,24 @@ class CreateJob extends Component {
   };
 
   PostJob = () => {
-    console.log(this.state.jobLimit)
-    console.log(this.state.subscriptionPlan.includes("platinum"))
-    if ((this.state.jobLimit <= 0 && !this.state.subscriptionPlan.includes("platinum"))){
-      console.log("Entered")
+    console.log(this.state.jobLimit);
+    console.log(this.state.subscriptionPlan.includes("platinum"));
+    if (
+      this.state.jobLimit <= 0 &&
+      !this.state.subscriptionPlan.includes("platinum")
+    ) {
+      console.log("Entered");
       this.setState({
-        upgradePopup: true
-      })
-    }else if (this.state.jobLimit <= 0 && this.state.subscriptionPlan.includes("platinum")){
+        upgradePopup: true,
+      });
+    } else if (
+      this.state.jobLimit <= 0 &&
+      this.state.subscriptionPlan.includes("platinum")
+    ) {
       this.setState({
-        limitExceededPopup: true
-      })
-    }
-    else{
+        limitExceededPopup: true,
+      });
+    } else {
       var fields = [
         "job_title",
         "industry",
@@ -191,15 +201,15 @@ class CreateJob extends Component {
         "location",
         "description",
       ];
-  
+
       var error = false;
       var focusField = "";
-  
+
       for (var i = 0; i < fields.length; i++) {
         if (
           fields[i] !== "min_salary" &&
           fields[i] !== "max_salary" &&
-          fields[i] !== "openings"&&
+          fields[i] !== "openings" &&
           fields[i] !== "description"
         ) {
           if (this.state[fields[i]] === "") {
@@ -213,7 +223,8 @@ class CreateJob extends Component {
           if (
             fields[i] === "job_title" &&
             this.state.job_title !== "" &&
-            (this.state.job_title.length > 100 || this.state.job_title.length < 2)
+            (this.state.job_title.length > 100 ||
+              this.state.job_title.length < 2)
           ) {
             error = true;
             if (focusField === "") {
@@ -221,9 +232,9 @@ class CreateJob extends Component {
             }
             document.getElementById("job_title_error").innerText =
               "Job title must be between 2 and 100 characters";
-            document.getElementById("job_title_error").style.display = "contents";
+            document.getElementById("job_title_error").style.display =
+              "contents";
           }
-          
         } else {
           if (
             fields[i] === "min_salary" &&
@@ -273,12 +284,10 @@ class CreateJob extends Component {
             }
             document.getElementById("openings_error").innerText =
               "Maximum openings is 1000";
-            document.getElementById("openings_error").style.display = "contents";
+            document.getElementById("openings_error").style.display =
+              "contents";
           }
-          if (
-            fields[i] === "description" &&
-            this.state.description === ""
-          ) {
+          if (fields[i] === "description" && this.state.description === "") {
             error = true;
             document.getElementById("description_error").innerText =
               "Description is required";
@@ -299,7 +308,7 @@ class CreateJob extends Component {
           }
         }
       }
-  
+
       if (error) {
         if (focusField !== "") {
           if (focusField === "industry") {
@@ -315,7 +324,7 @@ class CreateJob extends Component {
             Authorization: "Bearer " + localStorage.getItem("access_token"),
           },
         };
-  
+
         $("html,body").scrollTop(0);
         Axios.post(
           `${domain}/api/jobs/createJob`,
@@ -335,10 +344,9 @@ class CreateJob extends Component {
         )
           .then((res) => {
             console.log(res);
-            localStorage.setItem("job_created", "true")
+            localStorage.setItem("job_created", "true");
             this.clearForm();
             this.props.history.push("/company_dashboard/activities/jobs");
-            
           })
           .catch((err) => {
             console.log(err);
@@ -444,8 +452,24 @@ class CreateJob extends Component {
   };
 
   saveDraft = () => {
-    if (this.state.subscriptionPlan!== "basic"){
-
+    console.log(this.state.jobLimit);
+    console.log(this.state.subscriptionPlan.includes("platinum"));
+    if (
+      this.state.jobLimit <= 0 &&
+      !this.state.subscriptionPlan.includes("platinum")
+    ) {
+      console.log("Entered");
+      this.setState({
+        upgradePopup: true,
+      });
+    } else if (
+      this.state.jobLimit <= 0 &&
+      this.state.subscriptionPlan.includes("platinum")
+    ) {
+      this.setState({
+        limitExceededPopup: true,
+      });
+    } else if (this.state.subscriptionPlan !== "basic") {
       var fields = [
         "job_title",
         "industry",
@@ -455,10 +479,10 @@ class CreateJob extends Component {
         "location",
         "description",
       ];
-  
+
       var error = false;
       var focusField = "";
-  
+
       for (var i = 0; i < fields.length; i++) {
         if (
           fields[i] !== "min_salary" &&
@@ -467,7 +491,8 @@ class CreateJob extends Component {
         ) {
           if (fields[i] === "job_title" && this.state.job_title === "") {
             error = true;
-            document.getElementById("job_title_error").style.display = "contents";
+            document.getElementById("job_title_error").style.display =
+              "contents";
             if (focusField === "") {
               focusField = fields[i];
             }
@@ -475,7 +500,8 @@ class CreateJob extends Component {
           if (
             fields[i] === "job_title" &&
             this.state.job_title !== "" &&
-            (this.state.job_title.length > 100 || this.state.job_title.length < 2)
+            (this.state.job_title.length > 100 ||
+              this.state.job_title.length < 2)
           ) {
             error = true;
             if (focusField === "") {
@@ -483,7 +509,8 @@ class CreateJob extends Component {
             }
             document.getElementById("job_title_error").innerText =
               "Job title must be between 2 and 100 characters";
-            document.getElementById("job_title_error").style.display = "contents";
+            document.getElementById("job_title_error").style.display =
+              "contents";
           }
           if (
             fields[i] === "description" &&
@@ -492,7 +519,7 @@ class CreateJob extends Component {
               this.state.description.length < 200)
           ) {
             error = true;
-            
+
             document.getElementById("description_error").innerText =
               "Description must be between 200 and 1500 characters";
             document.getElementById("description_error").style.display =
@@ -547,11 +574,12 @@ class CreateJob extends Component {
             }
             document.getElementById("openings_error").innerText =
               "Maximum openings is 1000";
-            document.getElementById("openings_error").style.display = "contents";
+            document.getElementById("openings_error").style.display =
+              "contents";
           }
         }
       }
-  
+
       if (error) {
         if (focusField !== "") {
           document.getElementById(focusField).focus();
@@ -563,7 +591,7 @@ class CreateJob extends Component {
             Authorization: "Bearer " + localStorage.getItem("access_token"),
           },
         };
-  
+
         Axios.post(
           `${domain}/api/draftJob/createDraft`,
           {
@@ -581,6 +609,43 @@ class CreateJob extends Component {
           config
         )
           .then((res) => {
+            Axios.get(
+              `${domain}/api/company/getCompanySubscription
+        `,
+              config
+            ).then((res) => {
+              console.log(res.data);
+              if (res.data.subscription) {
+                this.setState({
+                  jobLimit:
+                    res.data.subscription.activeJobs -
+                    res.data.activeJobs -
+                    res.data.draftJobs,
+                  subscriptionPlan: res.data.subscription.plan,
+                });
+                console.log(
+                  res.data.subscription.activeJobs -
+                    res.data.activeJobs -
+                    res.data.draftJobs
+                );
+              } else {
+                this.setState({
+                  jobLimit: 1 - res.data.activeJobs,
+                });
+              }
+            });
+
+            console.log("Helo");
+            $("html,body").scrollTop(0);
+            Axios.get(`${domain}/api/industry/getIndustries`).then((res) => {
+              const options = res.data.map((d) => ({
+                value: d.industry,
+                label: d.industry,
+              }));
+              this.setState({
+                industries: options,
+              });
+            });
             console.log(res);
             this.state.dialog = true;
             this.clearForm();
@@ -599,10 +664,10 @@ class CreateJob extends Component {
             console.log(err);
           });
       }
-    }else{
+    } else {
       this.setState({
-        upgradePopup: true
-      })
+        upgradePopup: true,
+      });
     }
   };
 
@@ -1016,37 +1081,40 @@ class CreateJob extends Component {
                     </div>
                   </label>
                   {/* <label className="c_j_input_label"> */}
-                    <div
-                      className="c_j_form_input_title"
-                      style={{ cursor: "pointer" }}
-                    >
-                      Job description
-                    </div>
-                    
-                    <CKEditor
-                      className="c_j_form_textarea"
-                      editor={ClassicEditor}
-                      config={ {
-                        toolbar: [ 'bold', 'italic', "bulletedList", "numberedList", "undo", "redo" ]
-                    } }
-                      data={this.state.description}
-                      onReady={(editor) => {
-                        console.log("Editor is ready to use!", editor);
-                      }}
-                      id="description"
-                      onChange={(event, editor) => {
-                        const data = editor.getData();
-                        this.descriptionChange(data)
-                      }}
-                      
-                    />
+                  <div
+                    className="c_j_form_input_title"
+                    style={{ cursor: "pointer" }}
+                  >
+                    Job description
+                  </div>
 
-                    <div
-                      className="login_input_error_msg"
-                      id="description_error"
-                    >
-                      Job description is required
-                    </div>
+                  <CKEditor
+                    className="c_j_form_textarea"
+                    editor={ClassicEditor}
+                    config={{
+                      toolbar: [
+                        "bold",
+                        "italic",
+                        "bulletedList",
+                        "numberedList",
+                        "undo",
+                        "redo",
+                      ],
+                    }}
+                    data={this.state.description}
+                    onReady={(editor) => {
+                      console.log("Editor is ready to use!", editor);
+                    }}
+                    id="description"
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      this.descriptionChange(data);
+                    }}
+                  />
+
+                  <div className="login_input_error_msg" id="description_error">
+                    Job description is required
+                  </div>
                   {/* </label> */}
                 </div>
               </Row>
@@ -1353,97 +1421,93 @@ class CreateJob extends Component {
           </DialogContent>
         </Dialog>
         <Dialog
-                open={this.state.upgradePopup}
-                onClose={()=>this.setState({upgradePopup: false})}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                maxWidth={"md"}
-                fullWidth={true}
-                PaperProps={{
-                  style: {
-                    maxWidth: "820px",
-                    borderRadius: "10px",
-                  },
-                }}
-              >
-                <DialogContent
-                  className={All.PopupBody}
-                  style={{ marginBottom: "50px" }}
+          open={this.state.upgradePopup}
+          onClose={() => this.setState({ upgradePopup: false })}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+          PaperProps={{
+            style: {
+              maxWidth: "820px",
+              borderRadius: "10px",
+            },
+          }}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={() => this.setState({ upgradePopup: false })}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="u_f_popup_title">
+                You exceeded your active job limit. Upgrade to comtinue.
+              </div>
+              <div className="u_f_popup_btn_container">
+                <button
+                  className="u_f_popup_btn1"
+                  onClick={() => this.setState({ upgradePopup: false })}
                 >
-                  <div
-                    style={{ position: "absolute", top: "20px", right: "20px" }}
-                  >
-                    <img
-                      src={Close}
-                      alt=""
-                      onClick={()=>this.setState({upgradePopup: false})}
-                      style={{ cursor: "pointer" }}
-                    />
-                  </div>
-                  <Row style={{ marginTop: "30px" }}>
-                    <div className="u_f_popup_title">
-                      You exceeded your active job limit. Upgrade to comtinue.
-                    </div>
-                    <div className="u_f_popup_btn_container">
-                      <button
-                        className="u_f_popup_btn1"
-                        onClick={()=>this.setState({upgradePopup: false})}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        className="u_f_popup_btn2"
-                        onClick={()=>this.props.history.push("/HireSubscription")}
-                      >
-                        Upgrade
-                      </button>
-                    </div>
-                  </Row>
-                </DialogContent>
-              </Dialog>
+                  Cancel
+                </button>
+                <button
+                  className="u_f_popup_btn2"
+                  onClick={() => this.props.history.push("/HireSubscription")}
+                >
+                  Upgrade
+                </button>
+              </div>
+            </Row>
+          </DialogContent>
+        </Dialog>
         <Dialog
-                open={this.state.limitExceededPopup}
-                onClose={()=>this.setState({limitExceededPopup: false})}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                maxWidth={"md"}
-                fullWidth={true}
-                PaperProps={{
-                  style: {
-                    maxWidth: "820px",
-                    borderRadius: "10px",
-                  },
-                }}
-              >
-                <DialogContent
-                  className={All.PopupBody}
-                  style={{ marginBottom: "50px" }}
+          open={this.state.limitExceededPopup}
+          onClose={() => this.setState({ limitExceededPopup: false })}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth={"md"}
+          fullWidth={true}
+          PaperProps={{
+            style: {
+              maxWidth: "820px",
+              borderRadius: "10px",
+            },
+          }}
+        >
+          <DialogContent
+            className={All.PopupBody}
+            style={{ marginBottom: "50px" }}
+          >
+            <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+              <img
+                src={Close}
+                alt=""
+                onClick={() => this.setState({ limitExceededPopup: false })}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <Row style={{ marginTop: "30px" }}>
+              <div className="u_f_popup_title">
+                You exceeded your active job limit.
+              </div>
+              <div className="u_f_popup_btn_container">
+                <button
+                  className="u_f_popup_btn1"
+                  onClick={() => this.setState({ limitExceededPopup: false })}
                 >
-                  <div
-                    style={{ position: "absolute", top: "20px", right: "20px" }}
-                  >
-                    <img
-                      src={Close}
-                      alt=""
-                      onClick={()=>this.setState({limitExceededPopup: false})}
-                      style={{ cursor: "pointer" }}
-                    />
-                  </div>
-                  <Row style={{ marginTop: "30px" }}>
-                    <div className="u_f_popup_title">
-                      You exceeded your active job limit.
-                    </div>
-                    <div className="u_f_popup_btn_container">
-                      <button
-                        className="u_f_popup_btn1"
-                        onClick={()=>this.setState({limitExceededPopup: false})}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </Row>
-                </DialogContent>
-              </Dialog>
+                  Cancel
+                </button>
+              </div>
+            </Row>
+          </DialogContent>
+        </Dialog>
       </section>
     );
   }
