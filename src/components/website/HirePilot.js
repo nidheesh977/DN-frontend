@@ -1800,7 +1800,7 @@ checkLoginandPush = () =>{
                   </div>
                   <Row style={{ marginTop: "30px" }}>
                     <div className="u_f_popup_title">
-                      You exceeded your active job limit. Upgrade to comtinue.
+                      You exceeded your limit. Upgrade to continue.
                     </div>
                     <div className="u_f_popup_btn_container">
                       <button
