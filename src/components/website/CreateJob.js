@@ -102,6 +102,11 @@ class CreateJob extends Component {
           })
           console.log(res.data.subscription.activeJobs-res.data.activeJobs-res.data.draftJobs)
         }
+        else{
+          this.setState ({
+            jobLimit: 1-res.data.activeJobs,
+          })
+        }
       })
 
     console.log("Helo");
