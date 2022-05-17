@@ -125,9 +125,7 @@ function HelpCenter() {
                 });
            
               });
-              setTimeout(()=>{
-                  document.getElementById("alert").style.display = "none"
-              }, 2000)
+              
         })
     }
   return (

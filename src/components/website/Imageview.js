@@ -237,6 +237,12 @@ function Imageview() {
         )
         .then((res) => {
           console.log(res);
+          if(localStorage.getItem("role") === "company"){
+            axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
+              console.log(res.data)
+              setSubscription(res.data)
+            })
+          }
           axios.post(`${domain}/api/company/setProposals`, config).then(res=>{
             console.log(res)
           })

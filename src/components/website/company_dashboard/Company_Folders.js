@@ -166,7 +166,7 @@ export class Company_savedPilots extends Component {
     // }
   };
   pilotDetailPage = (id) => {
-    this.props.history.push("/pilot_details/" + id)
+    this.props.history.push("/pilot/" + id)
   }
 
   unsavePilot = (id) =>{
@@ -211,7 +211,7 @@ export class Company_savedPilots extends Component {
                           <img src={pilot.pilotId.profilePic} alt="" className='h_p_listing_img' style={{borderRadius: "50px"}} />
                         </div>
                         <div className="h_p_others_container">
-                          <div className="h_p_listing_name" onClick={() => this.pilotDetailPage(pilot.pilotId._id)}>{pilot.pilotId.name}</div>
+                          <div className="h_p_listing_name" onClick={() => this.pilotDetailPage(pilot.pilotId.userName)}>{pilot.pilotId.name}</div>
                           <div className="h_p_listing_job">{pilot.pilotId.pilotType === "unlicensed"?"Professional Drone pilot":"Passionate Drone pilot"}</div>
                           <div className="h_p_listing_location"><img src={locationIcon} alt="" height={"13px"} style={{ marginRight: "4px" }} /> {pilot.pilotId.city}, {pilot.pilotId.country}</div>
                           <div className="h_p_listing_description">{pilot.pilotId.bio}</div>
@@ -237,7 +237,7 @@ export class Company_savedPilots extends Component {
                         
                         
                           <div className="h_p_listing_btn_container">
-                            <button className="h_p_start_process_btn" onClick={() => this.pilotDetailPage(pilot.pilotId._id)}>View Profile</button>
+                            <button className="h_p_start_process_btn" onClick={() => this.pilotDetailPage(pilot.pilotId.userName)}>View Profile</button>
                             <button className="h_p_save_pilot_btn" onClick={()=>this.unsavePilot(pilot.pilotId._id)}><i class="fa fa-heart" style={{color: "black"}}></i></button>
                           </div>
                          
