@@ -156,7 +156,7 @@ let config = {
                     </div>
                   </Col>
                   <Col xl={3}>
-                    <Link to={`/pilot_details/${application.pilotId._id}`}>
+                    <Link to={`/pilot/${application.pilotId.userName}`}>
                       <div
                         className="c_r_startProcessBtn"
                         style={{ color: "black" }}

@@ -253,6 +253,12 @@ export default function PilotDetails(props) {
           config
         )
         .then((res) => {
+          if(localStorage.getItem("role") === "company"){
+            axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
+              console.log(res.data)
+              setSubscription(res.data)
+            })
+          }
           console.log(res);
           setHireForm({
             ...hireForm,

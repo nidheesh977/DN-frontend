@@ -307,6 +307,19 @@ checkLoginandPush = () =>{
           config
         )
         .then((res) => {
+          let config = {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          };
+          if(localStorage.getItem("role") === "company"){
+            axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
+              console.log(res.data)
+              this.setState({
+                subscription:res.data
+              })
+            })
+          }
           console.log(res);
           document.getElementById("alertBox").style.display = "block";
           document.getElementById("tomakered").style.background = "#F5F5F7";

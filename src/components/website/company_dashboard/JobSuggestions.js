@@ -143,7 +143,7 @@ function JobSuggestions() {
                     </div>
                   </Col>
                   <Col xl={3}>
-                    <Link to={`/pilot_details/${application._id}`}>
+                    <Link to={`/pilot/${application.userName}`}>
                       <div
                         className="c_r_startProcessBtn"
                         style={{ color: "black" }}
