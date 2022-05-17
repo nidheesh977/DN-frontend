@@ -98,7 +98,7 @@ let editJob = (id) => {
                   Posted on:
                   <span className="pd_a_j_dataDate">{items.postingDate.slice(0,10)}</span>
                 </div>
-                <Link to = {`/applyJobLanding/${items._id}`}><div className="pd_a_j_dataTitle">{items.jobTitle}</div></Link>
+                <div ><div className="pd_a_j_dataTitle">{items.jobTitle}</div></div>
               </div>
               <div className="pd_a_j_data_subTitle">{items.companyName}</div>
               <div>

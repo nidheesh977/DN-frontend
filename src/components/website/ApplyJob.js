@@ -18,7 +18,7 @@ import { styled } from "@mui/material/styles";
 import { Helmet } from "react-helmet";
 import heart from "../images/heart (3).svg";
 import heartLike from "../images/heart-blue.svg";
-import Trusted from "../images/trusted.png"
+import Trusted from "../images/trusted.png";
 import Skeleton from "react-loading-skeleton";
 import Close from "../images/close.svg";
 import { withStyles } from "@material-ui/core/styles";
@@ -258,9 +258,9 @@ class ApplyJob extends Component {
   //       })
   //     });
   // };
-  setLoginSave = () =>{
-    localStorage.setItem("lastTab", "pilot")
-  }
+  setLoginSave = () => {
+    localStorage.setItem("lastTab", "pilot");
+  };
   likePost = (id) => {
     let config = {
       headers: {
@@ -268,24 +268,26 @@ class ApplyJob extends Component {
       },
     };
     if (!localStorage.getItem("access_token")) {
+      console.log(localStorage.getItem("access_token"));
       this.setState({
         loginErrorPopup: true,
       });
     } else {
-      let liked = this.state.liked;
-      liked.push(id);
-      this.setState({
-        liked: liked,
-      });
-
       axios
         .post(`${domain}/api/jobs/likeJob/${id}`, config)
 
         .then((response) => {
+          console.log(response.data);
           if (response.data === "please Login") {
             // history.push("/pilot_dashboard/account")
             this.setState({
               loginErrorPopup: true,
+            });
+          } else {
+            let liked = this.state.liked;
+            liked.push(id);
+            this.setState({
+              liked: liked,
             });
           }
         })
@@ -298,14 +300,6 @@ class ApplyJob extends Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    console.log(config);
-    let index = this.state.liked.indexOf(id);
-    let liked_list = this.state.liked;
-    liked_list.splice(index, 1);
-    this.setState({
-      liked: liked_list,
-    });
-    console.log(liked_list);
 
     axios
       .post(`${domain}/api/jobs/unlikeJob/${id}`, config)
@@ -315,6 +309,13 @@ class ApplyJob extends Component {
           // history.push("/pilot_dashboard/account")
           this.setState({
             loginErrorPopup: true,
+          });
+        } else {
+          let index = this.state.liked.indexOf(id);
+          let liked_list = this.state.liked;
+          liked_list.splice(index, 1);
+          this.setState({
+            liked: liked_list,
           });
         }
       })
@@ -471,33 +472,41 @@ class ApplyJob extends Component {
             <Row gutterWidth={40}>
               <Visible xxl xl>
                 <Col xxl={3.5} xl={3.3} lg={4.15} md={5.4}>
-                {localStorage.getItem("role") !== "company"
-                  ?<div id="h_p_create_job_container" onClick={this.setLoginSave}>
-                  <div className="h_p_create_job_title">Show your talent</div>
-                  <div className="h_p_create_job_desc">
-                    Upload your Ariel shots and get paid
-                  </div>
-                  <button
-                    className="h_p_create_job_btn"
-                    onClick={() => this.props.history.push("/UploadFile")}
-                  >
-                    Upload Now
-                  </button>
-                </div>
-                  :<div id="h_p_create_job_container">
-                  <div className="h_p_create_job_title">Create Job Alert</div>
-                  <div className="h_p_create_job_desc">
-                    Create a job alert now, Click below button
-                  </div>
-                  <button
-                    className="h_p_create_job_btn"
-                    onClick={() => this.props.history.push("/create_job")}
-                  >
-                    Create a job
-                  </button>
-                </div>
-                  }
-                  
+                  {localStorage.getItem("role") !== "company" ? (
+                    <div
+                      id="h_p_create_job_container"
+                      onClick={this.setLoginSave}
+                    >
+                      <div className="h_p_create_job_title">
+                        Show your talent
+                      </div>
+                      <div className="h_p_create_job_desc">
+                        Upload your Ariel shots and get paid
+                      </div>
+                      <button
+                        className="h_p_create_job_btn"
+                        onClick={() => this.props.history.push("/UploadFile")}
+                      >
+                        Upload Now
+                      </button>
+                    </div>
+                  ) : (
+                    <div id="h_p_create_job_container">
+                      <div className="h_p_create_job_title">
+                        Create Job Alert
+                      </div>
+                      <div className="h_p_create_job_desc">
+                        Create a job alert now, Click below button
+                      </div>
+                      <button
+                        className="h_p_create_job_btn"
+                        onClick={() => this.props.history.push("/create_job")}
+                      >
+                        Create a job
+                      </button>
+                    </div>
+                  )}
+
                   <div className="h_p_filter1_title1">
                     Keywords
                     <div
@@ -1018,12 +1027,34 @@ class ApplyJob extends Component {
                             </span>
                           </div>
                           <div className="pd_a_j_dataTitle">
-                            {item.jobTitle} {item.userId.companyPlatinum ? <img src={Trusted} style={{height:"25px", marginLeft: "10px"}}/> : ""}
+                            {item.jobTitle}{" "}
+                            {item.userId.companyPlatinum ? (
+                              <img
+                                src={Trusted}
+                                style={{ height: "25px", marginLeft: "10px" }}
+                              />
+                            ) : (
+                              ""
+                            )}
                           </div>
                         </div>
-                        <div className="pd_a_j_data_subTitle" style={{cursor: "pointer"}} onClick={()=>console.log(item.userId._id)}>
-                          {item.companyId ? item.companyId.companyName : ""}
-                        </div>
+                        {item.companyId ? (
+                          <Link
+                            to={{
+                              pathname: `company-jobs/${item.userId._id}`,
+                              state: {
+                                company_name: item.companyId.companyName,
+                              },
+                            }}
+                            className="pd_a_j_data_subTitle"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => console.log(item.userId._id)}
+                          >
+                            {item.companyId.companyName}
+                          </Link>
+                        ) : (
+                          ""
+                        )}
                         <div>
                           <div className="a_j_container1">
                             <div className="a_j_listing_img1">
@@ -1068,19 +1099,24 @@ class ApplyJob extends Component {
                           >
                             View Job
                           </Link>{" "}
-                          {this.state.liked.includes(item._id) ? (
-                            <img
-                              src={heartLike}
-                              className="a_j_like"
-                              onClick={() => this.unlikePost(item._id)}
-                            />
-                          ) : (
-                            <img
-                              src={heart}
-                              className="a_j_like"
-                              onClick={() => this.likePost(item._id)}
-                            />
-                          )}
+                          {localStorage.getItem("role") === "pilot"
+                          &&
+                          <>
+                            {this.state.liked.includes(item._id) ? (
+                              <img
+                                src={heartLike}
+                                className="a_j_like"
+                                onClick={() => this.unlikePost(item._id)}
+                              />
+                            ) : (
+                              <img
+                                src={heart}
+                                className="a_j_like"
+                                onClick={() => this.likePost(item._id)}
+                              />
+                            )}
+                          </>
+                          }
                         </div>
                       </div>
                     );
@@ -1213,7 +1249,8 @@ class ApplyJob extends Component {
                     className="a_j_popup_title"
                     style={{ padding: "0px 60px" }}
                   >
-                    You aren't logged into DroneZone. Please login to continue?
+                    You aren't logged into DroneZone as Pilot. Please login to
+                    continue?
                   </div>
                   <div
                     className="u_f_popup_btn_container"

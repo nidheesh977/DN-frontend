@@ -222,34 +222,36 @@ function CreateCompany() {
               <label className="pd_b_i_profile_head">Company Type</label>
               <Row style={{ marginBottom: "20px" }}>
                 <Col>
-                  <div
+                  <label
                     className={
                       data.company_type === "company"
                         ? "c_c_profile_radio c_c_profile_radio_active"
                         : "c_c_profile_radio"
                     }
+                    style = {{display: "flex", alignItems: "center"}}
                     id="c_c_company"
                     onClick={() =>
                       setData({ ...data, company_type: "company" })
                     }
                   >
-                    Company
-                  </div>
+                    <input type="radio" checked = {data.company_type === "company"} className = "c_c_profile_radio_radio"/> Company
+                  </label>
                 </Col>
                 <Col>
-                  <div
+                  <label
                     className={
                       data.company_type === "consultant"
                         ? "c_c_profile_radio c_c_profile_radio_active"
                         : "c_c_profile_radio"
                     }
+                    style = {{display: "flex", alignItems: "center"}}
                     id="c_c_consultant"
                     onClick={() =>
                       setData({ ...data, company_type: "consultant" })
                     }
                   >
-                    Consultant
-                  </div>
+                    <input type="radio" checked = {data.company_type === "consultant"} className = "c_c_profile_radio_radio"/> Consultant
+                  </label>
                 </Col>
               </Row>
             </div>

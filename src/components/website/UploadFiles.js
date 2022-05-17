@@ -71,19 +71,18 @@ class UploadFiles extends Component {
       .get(`${domain}/api/pilotSubscription/getMySubscription`, config)
       .then((res) => {
         console.log(res.data);
-        if(res.data.subscription){
-          if (res.data.subscription.plan.includes("Platinum")){
+        if (res.data.subscription) {
+          if (res.data.subscription.plan.includes("Platinum")) {
             this.setState({
               subscription: "platinum",
             });
-          }
-          else if (res.data.subscription.plan.includes("Gold")){
+          } else if (res.data.subscription.plan.includes("Gold")) {
             this.setState({
               subscription: "gold",
             });
           }
         }
-        
+
         if (typeof res.data.images === "number") {
           console.log("ImagesThere");
           if (res.data.subscription) {
@@ -98,7 +97,7 @@ class UploadFiles extends Component {
               videoLimit: 0 - res.data.videos,
               img3dLimit: 0 - res.data.images3d,
             });
-            console.log(this.state.imageLimit)
+            console.log(this.state.imageLimit);
           }
         }
 
@@ -108,7 +107,6 @@ class UploadFiles extends Component {
       })
       .catch((err) => {
         console.log(err);
-        
       });
 
     axios
@@ -1616,17 +1614,24 @@ class UploadFiles extends Component {
 
                                           {file.type[0] == "v" ? (
                                             <>
-                                            {file.file !== ""
-                                            ?<video
-                                            src={file.file}
-                                            style={{ borderRadius: "9px" }}
-                                            id={`u_f_video_${index}`}
-                                          />
-                                            :<img
-                                            src={"https://www.google.com/url?sa=i&url=https%3A%2F%2Fgithub.com%2Ffossasia%2Fphimpme-android%2Fissues%2F1294&psig=AOvVaw2EH6sNf78IOj9dUUhsnkWM&ust=1652163020708000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCNj4n4Th0fcCFQAAAAAdAAAAABAS"}
-                                            style={{ borderRadius: "9px" }}
-                                          />
-                                            }
+                                              {file.file !== "" ? (
+                                                <video
+                                                  src={file.file}
+                                                  style={{
+                                                    borderRadius: "9px",
+                                                  }}
+                                                  id={`u_f_video_${index}`}
+                                                />
+                                              ) : (
+                                                <img
+                                                  src={
+                                                    "https://www.google.com/url?sa=i&url=https%3A%2F%2Fgithub.com%2Ffossasia%2Fphimpme-android%2Fissues%2F1294&psig=AOvVaw2EH6sNf78IOj9dUUhsnkWM&ust=1652163020708000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCNj4n4Th0fcCFQAAAAAdAAAAABAS"
+                                                  }
+                                                  style={{
+                                                    borderRadius: "9px",
+                                                  }}
+                                                />
+                                              )}
                                               {file.upload_status ===
                                                 "uploading" && (
                                                 <>
@@ -1692,17 +1697,24 @@ class UploadFiles extends Component {
                                             </>
                                           ) : (
                                             <>
-                                            {file.file !== ""
-                                            ?<img
-                                            src={file.file}
-                                            style={{ borderRadius: "9px" }}
-                                          />
-                                            :<img
-                                            src={"https://www.google.com/url?sa=i&url=https%3A%2F%2Fgithub.com%2Ffossasia%2Fphimpme-android%2Fissues%2F1294&psig=AOvVaw2EH6sNf78IOj9dUUhsnkWM&ust=1652163020708000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCNj4n4Th0fcCFQAAAAAdAAAAABAS"}
-                                            style={{ borderRadius: "9px" }}
-                                          />
-                                            }
-                                              
+                                              {file.file !== "" ? (
+                                                <img
+                                                  src={file.file}
+                                                  style={{
+                                                    borderRadius: "9px",
+                                                  }}
+                                                />
+                                              ) : (
+                                                <img
+                                                  src={
+                                                    "https://www.google.com/url?sa=i&url=https%3A%2F%2Fgithub.com%2Ffossasia%2Fphimpme-android%2Fissues%2F1294&psig=AOvVaw2EH6sNf78IOj9dUUhsnkWM&ust=1652163020708000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCNj4n4Th0fcCFQAAAAAdAAAAABAS"
+                                                  }
+                                                  style={{
+                                                    borderRadius: "9px",
+                                                  }}
+                                                />
+                                              )}
+
                                               {file.upload_status ===
                                                 "uploading" && (
                                                 <>
@@ -1793,15 +1805,15 @@ class UploadFiles extends Component {
                                             <img src={moreIcon} alt="" />
                                           </div>
                                           {this.state.showEditOptions ===
-                                            index &&
-                                            file.upload_status ===
-                                              "selected" && (
-                                              <div
-                                                className="u_f_edit_content"
-                                                onMouseLeave={() =>
-                                                  this.hideEditOptions(index)
-                                                }
-                                              >
+                                            index && (
+                                            <div
+                                              className="u_f_edit_content"
+                                              onMouseLeave={() =>
+                                                this.hideEditOptions(index)
+                                              }
+                                            >
+                                              {file.upload_status ===
+                                                "selected" && (
                                                 <label>
                                                   <input
                                                     type="file"
@@ -1817,19 +1829,21 @@ class UploadFiles extends Component {
                                                     Change
                                                   </div>
                                                 </label>
-                                                <div
-                                                  className="u_f_edit_content_title"
-                                                  onClick={() =>
-                                                    this.removeFile(
-                                                      index,
-                                                      file.id
-                                                    )
-                                                  }
-                                                >
-                                                  Remove
-                                                </div>
+                                              )}
+
+                                              <div
+                                                className="u_f_edit_content_title"
+                                                onClick={() =>
+                                                  this.removeFile(
+                                                    index,
+                                                    file.id
+                                                  )
+                                                }
+                                              >
+                                                Remove
                                               </div>
-                                            )}
+                                            </div>
+                                          )}
                                         </div>
                                       </Col>
                                     )}

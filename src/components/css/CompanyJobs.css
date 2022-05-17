@@ -1,0 +1,30 @@
+.top_recruiters_container{
+
+}
+
+.top_recruiters_title{
+    font-family: muli-bold;
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 30px;
+}
+
+.top_recruiter{
+    display: inline-block;
+    padding: 5px 20px;
+    margin: 5px;
+    border: 1px solid grey;
+    border-radius: 30px;
+    font-family: muli-regular;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.top_recruiter:hover{
+    background-color: #efefef;
+}
+
+.top_recruiter_active{
+    background-color: #00e7fc;
+}

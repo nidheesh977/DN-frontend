@@ -82,9 +82,9 @@ function Company_applications() {
                       <span className="pd_a_j_dataDate">06 Jan 2022</span>
                     </div>
                   </div>
-                  <Link to = {"/applyJobLanding/"+job._id}>
+                  <div >
                     <div className="pd_a_j_dataTitle">{job.jobTitle}</div>
-                  </Link>
+                  </div>
                 </div>
                 <div className="pd_a_j_data_subTitle1">{job.industry}</div>
                 <div>

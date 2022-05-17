@@ -119,8 +119,6 @@ function ApplyJobLanding(props) {
     if (!localStorage.getItem("access_token")) {
       setApplyFailure(true);
     } else {
-      liked.push(id);
-
       axios
         .post(`${domain}/api/jobs/likeJob/${id}`, config)
 
@@ -128,6 +126,8 @@ function ApplyJobLanding(props) {
           if (response.data === "please Login") {
             // history.push("/pilot_dashboard/account")
             alert("loginFirst");
+          } else {
+            liked.push(id);
           }
           axios.get(`${domain}/api/jobs/jobLanding/${param.id}`).then(
             (response) => {
@@ -165,9 +165,6 @@ function ApplyJobLanding(props) {
   let unlikePost = (id) => {
     console.log(config);
 
-    let index = liked.indexOf(id);
-    liked.splice(index, 1);
-
     axios
       .post(`${domain}/api/jobs/unlikeJob/${id}`, config)
 
@@ -175,6 +172,9 @@ function ApplyJobLanding(props) {
         if (response.data === "please Login") {
           // history.push("/pilot_dashboard/account")
           alert("loginFirst");
+        } else {
+          let index = liked.indexOf(id);
+          liked.splice(index, 1);
         }
         axios.get(`${domain}/api/jobs/jobLanding/${param.id}`).then(
           (response) => {
@@ -267,36 +267,40 @@ function ApplyJobLanding(props) {
               <div className="j_l_producer">{list.industry}</div>
             </Col>
             <Col>
-              <div className="j_l_right">
-                {myAppliedJobs.includes(list._id) ? (
-                  <div
-                    className="j_l_applyJobBtn"
-                    style={{ opacity: "0.5", pointerEvents: "none" }}
-                  >
-                    Already Applied{" "}
+              {localStorage.getItem("role") === "pilot" && (
+                <>
+                  <div className="j_l_right">
+                    {myAppliedJobs.includes(list._id) ? (
+                      <div
+                        className="j_l_applyJobBtn"
+                        style={{ opacity: "0.5", pointerEvents: "none" }}
+                      >
+                        Already Applied{" "}
+                      </div>
+                    ) : (
+                      <div
+                        className="j_l_applyJobBtn"
+                        onClick={() => applyNow(list._id)}
+                      >
+                        Apply Now{" "}
+                      </div>
+                    )}
+                    {liked.includes(list._id) ? (
+                      <img
+                        src={heartLike}
+                        className="a_j_like"
+                        onClick={() => unlikePost(list._id)}
+                      />
+                    ) : (
+                      <img
+                        src={heart}
+                        className="a_j_like"
+                        onClick={() => likePost(list._id)}
+                      />
+                    )}{" "}
                   </div>
-                ) : (
-                  <div
-                    className="j_l_applyJobBtn"
-                    onClick={() => applyNow(list._id)}
-                  >
-                    Apply Now{" "}
-                  </div>
-                )}
-                {liked.includes(list._id) ? (
-                  <img
-                    src={heartLike}
-                    className="a_j_like"
-                    onClick={() => unlikePost(list._id)}
-                  />
-                ) : (
-                  <img
-                    src={heart}
-                    className="a_j_like"
-                    onClick={() => likePost(list._id)}
-                  />
-                )}{" "}
-              </div>
+                </>
+              )}
             </Col>
           </Row>
         </div>

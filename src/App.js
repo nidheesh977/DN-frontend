@@ -60,6 +60,7 @@ import BlogCategories from "./components/website/BlogCategories";
 import Shoots from "./components/website/Shoots";
 import TagBasedListing from "./components/website/TagBasedListing";
 import CompanyCheckout from "./components/website/CompanyCheckout";
+import CompanyJobs from "./components/website/CompanyJobs";
 
 function App(){
 
@@ -182,6 +183,7 @@ function App(){
             <Route exact path="/blog/:slug" component={BlogDetails} />
             <Route exact path="/shoot-of-the-week" component={Shoots} />
             <Route component={TagBasedListing} path = "/shoots/:tag"/>
+            <Route component={CompanyJobs} path = "/company-jobs/:id"/>
 
             <Route exact path="/blog_categories" component={BlogCategories} />
             {/* <Route exact path="/blog_categories" component={BlogCategories} />
