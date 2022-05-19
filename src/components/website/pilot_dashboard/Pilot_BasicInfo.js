@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import Cover from "./images/cover.jpg";
 import "./css/Pilot_BasicInfo.css";
 import Pilot from "./images/pilot.jpg";
@@ -31,6 +31,7 @@ const customStyles = {
 };
 
 const domain = process.env.REACT_APP_MY_API;
+const frontend_domain = process.env.REACT_APP_FRONTEND_DOMAIN;
 
 function Pilot_BasicInfo() {
   let [test, setTest] = useState([]);
@@ -76,7 +77,7 @@ function Pilot_BasicInfo() {
         bio: data.bio,
         profile: `${data.profilePic}`,
         cover: `${data.coverPic}`,
-        preferredLocation: data.preferredLocation ? data.preferredLocation : "",
+        preferredLocation: data.preferredLocation ? data.preferredLocation.split(",") : [],
         preferredLocationInput: "",
       });
     });
@@ -95,7 +96,7 @@ function Pilot_BasicInfo() {
     bio: "",
     profile: Pilot,
     cover: Cover,
-    preferredLocation: "",
+    preferredLocation: [],
     preferredLocationInput: "",
   });
   let [edit, setEdit] = useState(false);
@@ -110,6 +111,9 @@ function Pilot_BasicInfo() {
       document.getElementById(`${e.target.id}_error`).style.visibility =
         "hidden";
       document.getElementById(`${e.target.id}_error`).style.display = "none";
+    } else if (e.target.id === "preferredLocationInput"){
+      document.getElementById(`preferred_location_error`).style.visibility =
+        "hidden";
     } else {
       document.getElementById(`${e.target.id}_error`).style.visibility =
         "hidden";
@@ -225,8 +229,16 @@ function Pilot_BasicInfo() {
   };
 
   const removePreferredLocation = (id) => {
-    console.log(id);
-  };
+    if (edit){
+      let new_locations = data.preferredLocation
+      new_locations.splice(id, 1)
+      setData({
+        ...data,
+        preferredLocations: new_locations
+      })
+      document.getElementById("preferred_location_error").style.visibility = "hidden"
+    }
+  }
 
   const saveChanges = () => {
     var fields = [
@@ -420,6 +432,27 @@ function Pilot_BasicInfo() {
   const setEditorRef = (ed) => {
     editor = ed;
   };
+
+  const addPreferredLocation = (e) => {
+    console.log(e.key)
+    if (e.key === "Enter"){
+      if (data.preferredLocation.length >= 5){
+        document.getElementById("preferred_location_error").innerText = "You cannot add more than 5 locations"
+        document.getElementById("preferred_location_error").style.visibility = "visible"
+      }else if (data.preferredLocation.length > 100){
+        document.getElementById("preferred_location_error").innerText = "Location cannot exceed 100 characters."
+        document.getElementById("preferred_location_error").style.visibility = "visible"
+      }else{
+        let new_locations = data.preferredLocation
+        new_locations.push(data.preferredLocationInput)
+        setData({
+          ...data,
+          preferredLocation: new_locations,
+          preferredLocationInput: "",
+        })
+      }
+    }
+  }
 
   const handleSave = (e) => {
     if (setEditorRef) {
@@ -627,7 +660,7 @@ function Pilot_BasicInfo() {
       </div>
       <div className="pd_b_i_profile_titleBox">
         <div className="pd_b_i_profile_title">Basic Information</div>
-        <div></div>
+        <div><span>Your Pilot Profile : </span><Link to = {`/pilot/${data.userName}`} style = {{color: "#00a7ff"}}>{`${frontend_domain}/pilot/${data.userName}`}</Link></div>
         {/* <div>
           <Box display="flex">
             <Box width="35%">
@@ -823,9 +856,10 @@ function Pilot_BasicInfo() {
               value={data.preferredLocationInput}
               id="preferredLocationInput"
               onChange={changeHandler}
+              onKeyDown = {addPreferredLocation}
               disabled={!edit}
             />
-            {data.preferredLocation!=="" && data.preferredLocation.split(",").map((drone, index) => {
+            {data.preferredLocation!=="" && data.preferredLocation.map((drone, index) => {
               return (
                 <div
                   className="pd_i_skill"

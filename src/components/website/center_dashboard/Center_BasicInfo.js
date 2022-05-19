@@ -19,7 +19,7 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-autocomplete-places";
-
+import { Link } from "react-router-dom";
 import AvatarEditor from "react-avatar-editor";
 import { Button, Box, Slider } from "@material-ui/core";
 
@@ -30,6 +30,7 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent);
 
 const domain = process.env.REACT_APP_MY_API;
+const frontend_domain = process.env.REACT_APP_FRONTEND_DOMAIN;
 
 function Center_BasicInfo() {
   let config = {
@@ -914,6 +915,7 @@ function Center_BasicInfo() {
         </div>
         <div className="pd_b_i_profile_titleBox">
           <div className="pd_b_i_profile_title">Basic Information</div>
+          {/* <div><span>Your Center Profile : </span><Link to = {`/service_center/${data._id}`} style = {{color: "#00a7ff"}}>{`${frontend_domain}/service_center/${data._id}`}</Link></div> */}
           <div className="pd_b_i_profile_edit" onClick={editHandler}>
             Edit
           </div>
