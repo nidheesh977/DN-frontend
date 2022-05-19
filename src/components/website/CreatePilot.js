@@ -62,8 +62,8 @@ function CreatePilot() {
     drone_id: "",
     drone_type: "",
     work_type: "full_time",
-    hourly_pay: 0,
-    monthly_pay: 0,
+    hourly_pay: "",
+    monthly_pay: "",
     industry: [],
     attachment_selected: false,
     attachment: "",
@@ -388,8 +388,9 @@ function CreatePilot() {
         .then((res) => {
           setLoading(false)
           console.log(res.data);
-          setAccountCreateSuccess(true);
+          // setAccountCreateSuccess(true);
           localStorage.setItem("role", "pilot");
+          history.push("/pilot_dashboard/account/")
         })
         .catch((err) => {
           setLoading(false)
@@ -615,7 +616,7 @@ function CreatePilot() {
                   className="pd_b_i_profile_head"
                   style={{ cursor: "pointer" }}
                 >
-                  Username
+                  Username ( You can use only numbers, alphabets(small case), '-' and '_'.)
                 </div>
               </label>
               <input
