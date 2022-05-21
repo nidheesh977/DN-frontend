@@ -39,6 +39,7 @@ function Pilot_ProfessionalInfo() {
         pilot_type: data.pilotType,
         drone_id: data.droneId,
         work_type: data.workType,
+        drone_type: data.droneType,
         hourly_pay: data.hourlyPayment,
         monthly_pay: data.monthlyPayment,
         industry: data.industry,
@@ -48,7 +49,7 @@ function Pilot_ProfessionalInfo() {
         attachment: data.certificates,
         profile: `${data.profilePic}`,
         cover: `${data.coverPic}`,
-        certificateChanged: false
+        certificateChanged: false,
       });
     });
   }, []);
@@ -56,7 +57,8 @@ function Pilot_ProfessionalInfo() {
     name: "",
     pilot_type: "",
     drone_id: "",
-    drone_type: "",
+    drone_input: "",
+    drone_type: [],
     work_type: "",
     hourly_pay: 0,
     monthly_pay: 0,
@@ -68,13 +70,13 @@ function Pilot_ProfessionalInfo() {
     skills: [],
     profile: Pilot,
     cover: Cover,
-    fileChanged: false
+    fileChanged: false,
   });
 
   let [edit, setEdit] = useState(false);
-  let [profileSuccess, setProfileSuccess] = useState(false)
-  let [coverSuccess, setCoverSuccess] = useState(false)
-  let [infoSuccess, setInfoSuccess] = useState(false)
+  let [profileSuccess, setProfileSuccess] = useState(false);
+  let [coverSuccess, setCoverSuccess] = useState(false);
+  let [infoSuccess, setInfoSuccess] = useState(false);
   let [coverUpdateLoading, setCoverUpdateLoading] = useState(false);
 
   const clickEdit = () => {
@@ -107,16 +109,15 @@ function Pilot_ProfessionalInfo() {
   const chooseFile = (e) => {
     try {
       if (e.target.files[0]) {
-        if (e.target.files[0].size/1000000 <= 5){
+        if (e.target.files[0].size / 1000000 <= 5) {
           setData({
             ...data,
             attachment: e.target.files[0],
             attachment_selected: true,
-            fileChanged: true
+            fileChanged: true,
           });
-        }
-        else{
-          alert("File size should not exceed 5 MB")
+        } else {
+          alert("File size should not exceed 5 MB");
         }
       }
     } catch {}
@@ -128,7 +129,7 @@ function Pilot_ProfessionalInfo() {
       `https://dn-nexevo-pilotcertificates.s3.ap-south-1.amazonaws.com/${data.attachment}`,
       `PilotCertificate`
     );
-  }
+  };
 
   const addSkill = (e) => {
     if (e.key === "Enter" && e.target.value !== "") {
@@ -164,7 +165,7 @@ function Pilot_ProfessionalInfo() {
   };
 
   const updateProfile = (e) => {
-    let file = e.target.files[0]
+    let file = e.target.files[0];
     let img = new Image();
     img.src = window.URL.createObjectURL(file);
     img.onload = () => {
@@ -175,7 +176,7 @@ function Pilot_ProfessionalInfo() {
           .post(`${domain}/api/user/updateProfilePic`, formData, config)
           .then((res) => {
             console.log(res.data);
-            setProfileSuccess(true)
+            setProfileSuccess(true);
             setData({
               ...data,
               profile: `${res.data.Location}`,
@@ -184,15 +185,14 @@ function Pilot_ProfessionalInfo() {
           .catch((err) => {
             console.log(err.response);
           });
-      }
-      else{
-        alert("Profile Image size must be minimum 150x150")
+      } else {
+        alert("Profile Image size must be minimum 150x150");
       }
     };
   };
 
   const updateCover = (e) => {
-    let file = e.target.files[0]
+    let file = e.target.files[0];
     let img = new Image();
     img.src = window.URL.createObjectURL(file);
     img.onload = () => {
@@ -203,7 +203,7 @@ function Pilot_ProfessionalInfo() {
           .post(`${domain}/api/user/updateCoverPic`, formData, config)
           .then((res) => {
             console.log(res.data);
-            setCoverSuccess(true)
+            setCoverSuccess(true);
             setData({
               ...data,
               cover: `${res.data.Location}`,
@@ -212,36 +212,63 @@ function Pilot_ProfessionalInfo() {
           .catch((err) => {
             console.log(err.response);
           });
-      }
-      else{
-        alert("Cover Image size must be minimum 800x300")
+      } else {
+        alert("Cover Image size must be minimum 800x300");
       }
     };
   };
 
   const removeSkills = (id) => {
-    if(edit){
+    if (edit) {
       var skill_list = data.skills;
-      skill_list.splice(id,1);
+      skill_list.splice(id, 1);
       setData({
         ...data,
         skills: skill_list,
       });
       console.log(data.skills);
     }
-  }
+  };
 
   const removeIndustry = (id) => {
-    if(edit){
+    if (edit) {
       var industry_list = data.industry;
-      industry_list.splice(id,1);
+      industry_list.splice(id, 1);
       setData({
         ...data,
         industry: industry_list,
       });
       console.log(data.skills);
     }
-  }
+  };
+
+  const removeDrone = (id) => {
+    if (edit){
+      var new_drones = data.drone_type;
+          new_drones.splice(id, 1);
+          setData({
+            ...data,
+            drone_type: new_drones,
+          });
+    }
+  };
+
+  const addDroneType = (e) => {
+    if (e.key === "Enter") {
+      if (
+        data.drone_input.length !== 0 &&
+        !data.drone_type.includes(data.drone_input)
+      ) {
+        var new_drones = data.drone_type;
+        new_drones.push(data.drone_input);
+        setData({
+          ...data,
+          drone_type: new_drones,
+          drone_input: "",
+        });
+      }
+    }
+  };
 
   const saveChanges = () => {
     if (data.name === "") {
@@ -251,8 +278,6 @@ function Pilot_ProfessionalInfo() {
       document.getElementById(data.pilot_type).focus();
     } else if (data.pilot_type === "unlicensed" && data.drone_id === "") {
       showError("drone_id");
-    } else if (data.pilot_type === "unlicensed" && data.drone_type === "") {
-      showError("drone_type");
     } else if (data.work_type === "full_time" && data.monthly_pay === "") {
       showError("monthly_pay");
     } else if (data.work_type === "part_time" && data.hourly_pay === "") {
@@ -269,33 +294,34 @@ function Pilot_ProfessionalInfo() {
     } else if (data.skills.length === 0) {
       showError("skills");
     } else {
-      if (data.fileChanged){
-        console.log(data.industry)
-        let formData = new FormData()
-        formData.append("name", data.name)
-        formData.append("skills", data.skills,)
-        formData.append("pilotType", data.pilot_type,)
-        formData.append("droneId", data.drone_id,)
-        formData.append("workType", data.work_type,)
-        formData.append("hourlyPayment", data.hourly_pay,)
-        formData.append("monthlyPayment", data.monthly_pay,)
-        formData.append("industry", data.industry,)
-        formData.append("trainingCenter", data.training_center_name,)
-        formData.append("completedYear", data.completed_year,)
-        formData.append("file", data.attachment,)
-        formData.append("profile", `${domain}/${data.profilePic}`,)
-        formData.append("cover", `${domain}/${data.coverPic}`,)
+      if (data.fileChanged) {
+        console.log(data.industry);
+        let formData = new FormData();
+        formData.append("name", data.name);
+        formData.append("skills", data.skills);
+        formData.append("pilotType", data.pilot_type);
+        formData.append("droneId", data.drone_id);
+        formData.append("drones", data.drone_type);
+        formData.append("workType", data.work_type);
+        formData.append("hourlyPayment", data.hourly_pay);
+        formData.append("monthlyPayment", data.monthly_pay);
+        formData.append("industry", data.industry);
+        formData.append("trainingCenter", data.training_center_name);
+        formData.append("completedYear", data.completed_year);
+        formData.append("file", data.attachment);
+        formData.append("profile", `${domain}/${data.profilePic}`);
+        formData.append("cover", `${domain}/${data.coverPic}`);
 
         axios
-          .post(`${domain}/api/pilot/updateProfessionalInfo1`,formData, config)
-          .then((res)=>{
-            console.log(res)
-            setInfoSuccess(true)
+          .post(`${domain}/api/pilot/updateProfessionalInfo1`, formData, config)
+          .then((res) => {
+            console.log(res);
+            setInfoSuccess(true);
           })
-          .catch((err)=> {
-            alert("Update failed")
-          })
-      }else{
+          .catch((err) => {
+            alert("Update failed");
+          });
+      } else {
         axios
           .post(
             `${domain}/api/pilot/updateProfessionalInfo`,
@@ -304,6 +330,7 @@ function Pilot_ProfessionalInfo() {
               skills: data.skills,
               pilotType: data.pilot_type,
               droneId: data.drone_id,
+              drones: data.drone_type,
               workType: data.work_type,
               hourlyPayment: data.hourly_pay,
               monthlyPayment: data.monthly_pay,
@@ -317,38 +344,38 @@ function Pilot_ProfessionalInfo() {
             config
           )
           .then((res) => {
-            setInfoSuccess(true)
+            console.log(res);
+            setInfoSuccess(true);
           })
-          .catch((err)=> {
-            alert("Update failed")
-          })
+          .catch((err) => {
+            alert("Update failed");
+          });
       }
     }
   };
 
-
   // Cover picture Crop
-  
+
   var editor = "";
   const [picture, setPicture] = useState({
     cropperOpen: false,
     img: null,
     zoom: 1,
     croppedImg:
-      "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"
+      "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
   });
 
   const handleSlider = (event, value) => {
     setPicture({
       ...picture,
-      zoom: value
+      zoom: value,
     });
   };
 
   const handleCancel = () => {
     setPicture({
       ...picture,
-      cropperOpen: false
+      cropperOpen: false,
     });
   };
 
@@ -358,39 +385,39 @@ function Pilot_ProfessionalInfo() {
 
   const handleSave = (e) => {
     if (setEditorRef) {
-      setCoverUpdateLoading(true)
+      setCoverUpdateLoading(true);
       const canvasScaled = editor.getImageScaledToCanvas();
       const croppedImg = canvasScaled.toDataURL();
-      console.log(croppedImg)
+      console.log(croppedImg);
       let formData = new FormData();
-        formData.append("file", croppedImg);
-        formData.append("test", "Hello");
-        axios
-          .post(`${domain}/api/user/updateCoverPic`, formData, config)
-          .then((res) => {
-            setCoverUpdateLoading(false)
-            setPicture({
-              ...picture,
-              img: null,
-              cropperOpen: false,
-              croppedImg: croppedImg
-            });
-            console.log(res.data);
-            setCoverSuccess(true);
-            axios.post(`${domain}/api/user/pilotDetails`, config).then((response) => {
-              console.log(response.data.coverPic)
+      formData.append("file", croppedImg);
+      formData.append("test", "Hello");
+      axios
+        .post(`${domain}/api/user/updateCoverPic`, formData, config)
+        .then((res) => {
+          setCoverUpdateLoading(false);
+          setPicture({
+            ...picture,
+            img: null,
+            cropperOpen: false,
+            croppedImg: croppedImg,
+          });
+          console.log(res.data);
+          setCoverSuccess(true);
+          axios
+            .post(`${domain}/api/user/pilotDetails`, config)
+            .then((response) => {
+              console.log(response.data.coverPic);
               setData({
                 ...data,
                 cover: `${response.data.coverPic}`,
               });
             });
-          })
-          .catch((err) => {
-            setCoverUpdateLoading(false)
-            console.log(err.response);
-          });
-
-      
+        })
+        .catch((err) => {
+          setCoverUpdateLoading(false);
+          console.log(err.response);
+        });
     }
   };
 
@@ -400,31 +427,30 @@ function Pilot_ProfessionalInfo() {
     setPicture({
       ...picture,
       img: url,
-      cropperOpen: true
+      cropperOpen: true,
     });
   };
 
-  
   var editor2 = "";
   const [picture2, setPicture2] = useState({
     cropperOpen: false,
     img: null,
     zoom: 1,
     croppedImg:
-      "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"
+      "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png",
   });
 
   const handleSlider2 = (event, value) => {
     setPicture2({
       ...picture2,
-      zoom: value
+      zoom: value,
     });
   };
 
   const handleCancel2 = () => {
     setPicture2({
       ...picture,
-      cropperOpen: false
+      cropperOpen: false,
     });
   };
 
@@ -434,36 +460,38 @@ function Pilot_ProfessionalInfo() {
 
   const handleSave2 = (e) => {
     if (setEditorRef2) {
-      setCoverUpdateLoading(true)
+      setCoverUpdateLoading(true);
       const canvasScaled = editor2.getImageScaledToCanvas();
       const croppedImg = canvasScaled.toDataURL();
-      console.log(croppedImg)
+      console.log(croppedImg);
       let formData = new FormData();
-        formData.append("file", croppedImg);
-        axios
-          .post(`${domain}/api/user/updateProfilePic`, formData, config)
-          .then((res) => {
-            setCoverUpdateLoading(false)
-            setPicture2({
-              ...picture2,
-              img: null,
-              cropperOpen: false,
-              croppedImg: croppedImg
-            });
-            console.log(res.data);
-            setProfileSuccess(true);
-            axios.post(`${domain}/api/user/pilotDetails`, config).then((response) => {
-              console.log(response.data.coverPic)
+      formData.append("file", croppedImg);
+      axios
+        .post(`${domain}/api/user/updateProfilePic`, formData, config)
+        .then((res) => {
+          setCoverUpdateLoading(false);
+          setPicture2({
+            ...picture2,
+            img: null,
+            cropperOpen: false,
+            croppedImg: croppedImg,
+          });
+          console.log(res.data);
+          setProfileSuccess(true);
+          axios
+            .post(`${domain}/api/user/pilotDetails`, config)
+            .then((response) => {
+              console.log(response.data.coverPic);
               setData({
                 ...data,
                 profile: `${response.data.profilePic}`,
               });
             });
-          })
-          .catch((err) => {
-            setCoverUpdateLoading(false)
-            console.log(err.response);
-          });
+        })
+        .catch((err) => {
+          setCoverUpdateLoading(false);
+          console.log(err.response);
+        });
     }
   };
 
@@ -473,7 +501,7 @@ function Pilot_ProfessionalInfo() {
     setPicture2({
       ...picture,
       img: url,
-      cropperOpen: true
+      cropperOpen: true,
     });
   };
 
@@ -493,7 +521,7 @@ function Pilot_ProfessionalInfo() {
                   accept="image/*"
                   style={{ display: "none" }}
                   onChange={handleFileChange2}
-                  disabled = {!edit}
+                  disabled={!edit}
                 />
                 <img src={Edit} alt="" className="pd_b_i_edit" />
               </label>
@@ -509,7 +537,7 @@ function Pilot_ProfessionalInfo() {
               accept="image/*"
               style={{ display: "none" }}
               onChange={handleFileChange}
-              disabled = {!edit}
+              disabled={!edit}
             />
             <img src={Edit} alt="" className="pd_b_i_edit1" />
           </label>
@@ -568,15 +596,35 @@ function Pilot_ProfessionalInfo() {
         {data.pilot_type === "licensed" ? (
           <React.Fragment>
             <label for="pd_p_i_hidden" className="pd_p_i_attachnment_label">
-            <div className="pd_b_i_profile_head" style = {{cursor: "pointer"}}>Certificates </div>
+              <div
+                className="pd_b_i_profile_head"
+                style={{ cursor: "pointer" }}
+              >
+                Certificates{" "}
+              </div>
               <div>
                 <div className="pd_b_i_attachment">Attachments</div>
                 <span className="pd_p_i_profile_text">
                   {data.attachment[0]
-                    ? data.attachment[0].slice(0,50)
-                    : data.fileChanged?data.attachment.name.slice(0,50):"Attach your DGCA certificate"}
+                    ? data.attachment[0].slice(0, 50)
+                    : data.fileChanged
+                    ? data.attachment.name.slice(0, 50)
+                    : "Attach your DGCA certificate"}
                 </span>
-                <button style = {{backgroundColor: "", border: 0, paddingTop: "5px", paddingBottom: "5px", paddingRight: "10px", paddingLeft: "10px", borderRadius: "5px"}} onClick = {downloadFile}>Download</button>
+                <button
+                  style={{
+                    backgroundColor: "",
+                    border: 0,
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                    paddingRight: "10px",
+                    paddingLeft: "10px",
+                    borderRadius: "5px",
+                  }}
+                  onClick={downloadFile}
+                >
+                  Download
+                </button>
               </div>
               <div className="input_error_msg" id="certificate_error">
                 Certificate is required
@@ -586,55 +634,67 @@ function Pilot_ProfessionalInfo() {
                 id="pd_p_i_hidden"
                 onChange={chooseFile}
                 disabled={!edit}
-                accept = "image/jpg, image/jpeg, application/pdf"
+                accept="image/jpg, image/jpeg, application/pdf"
               />
             </label>
           </React.Fragment>
         ) : (
-          <div>
-            <label className="pd_b_i_profile_head" htmlFor="drone_id">
-              Drone ID
-            </label>
-            <input
-              type="text"
-              value={data.drone_id}
-              className="pd_b_i_profile_input"
-              placeholder="Enter your drone ID"
-              id="drone_id"
-              onChange={handleChange}
-              disabled={!edit}
-            />
-            <div className="input_error_msg" id="drone_id_error">
-              Drone ID is required
-            </div>
-            <label htmlFor="drone_type" className="pd_b_i_profile_head">
-              Drone Type
-            </label>
-            <input
-              type="text"
-              value={data.drone_type}
-              className="pd_b_i_profile_input"
-              name="drone_type"
-              id="drone_type"
-              onChange={handleChange}
-              disabled={!edit}
-            />
-            <div className="input_error_msg" id="drone_type_error">
-              Drone type is required
-            </div>
-          </div>
+          ""
         )}
-
         <div>
-          {/* <label htmlFor="drone_type" className="pd_b_i_profile_head">
+          <label className="pd_b_i_profile_head" htmlFor="drone_id">
+            Drone ID
+          </label>
+          <input
+            type="text"
+            value={data.drone_id}
+            className="pd_b_i_profile_input"
+            placeholder="Enter your drone ID"
+            id="drone_id"
+            onChange={handleChange}
+            disabled={!edit}
+          />
+          <div className="input_error_msg" id="drone_id_error">
+            Drone ID is required
+          </div>
+          <label htmlFor="drone_input" className="pd_b_i_profile_head">
             Drone Type
           </label>
           <input
             type="text"
-            value={data.drone_type}
+            value={data.drone_input}
             className="pd_b_i_profile_input"
-            name="drone_type"
-            id="drone_type"
+            name="drone_input"
+            id="drone_input"
+            onChange={handleChange}
+            onKeyDown={addDroneType}
+            disabled={!edit}
+          />
+          {data.drone_type.map((drone, index) => {
+            return (
+              <div
+                className="pd_i_skill"
+                key={index}
+                onClick={() => removeDrone(index)}
+              >
+                {drone} <i class="fas fa-times"></i>
+              </div>
+            );
+          })}
+          <div className="input_error_msg" id="drone_input_error">
+            Drone type is required
+          </div>
+        </div>
+        <div>
+          {/* <label htmlFor="drone_input" className="pd_b_i_profile_head">
+            Drone Type
+          </label>
+          <input
+            type="text"
+            value={data.drone_input}
+            className="pd_b_i_profile_input"
+            name="drone_input"
+            id="drone_input"
             onChange={handleChange}
           />
           <div className="input_error_msg" id="drone_type_error">
@@ -717,7 +777,11 @@ function Pilot_ProfessionalInfo() {
           />
           {data.industry.map((industry, index) => {
             return (
-              <div className="pd_i_skill" key={index} onClick = {()=>removeIndustry(index)}>
+              <div
+                className="pd_i_skill"
+                key={index}
+                onClick={() => removeIndustry(index)}
+              >
                 {industry} <i class="fas fa-times"></i>
               </div>
             );
@@ -758,7 +822,6 @@ function Pilot_ProfessionalInfo() {
                 onChange={handleChange}
                 value={data.completed_year}
                 disabled={!edit}
-                
               />
               <div className="input_error_msg" id="completed_year_error">
                 Completed year is required
@@ -779,7 +842,11 @@ function Pilot_ProfessionalInfo() {
           />
           {data.skills.map((skill, index) => {
             return (
-              <div className="pd_i_skill" key={index} onClick = {()=>removeSkills(index)}>
+              <div
+                className="pd_i_skill"
+                key={index}
+                onClick={() => removeSkills(index)}
+              >
                 {skill} <i class="fas fa-times"></i>
               </div>
             );
@@ -792,17 +859,16 @@ function Pilot_ProfessionalInfo() {
           className="pd_b_i_notifications_save"
           style={{ marginTop: "20px" }}
         >
-
-
-          {
-            edit ?    <button
-            className="pd_b_i_notifications_saveBtn"
-            onClick={saveChanges}
-          >
-            Save Changes
-          </button> : <></>
-          }
-       
+          {edit ? (
+            <button
+              className="pd_b_i_notifications_saveBtn"
+              onClick={saveChanges}
+            >
+              Save Changes
+            </button>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <Dialog
@@ -920,44 +986,53 @@ function Pilot_ProfessionalInfo() {
         aria-describedby="alert-dialog-description"
         maxWidth={"md"}
         fullWidth={true}
-        PaperProps={{ style: { width: "820px", borderRadius: "10px", paddingTop: "50px" } }}
+        PaperProps={{
+          style: { width: "820px", borderRadius: "10px", paddingTop: "50px" },
+        }}
       >
         <DialogContent
           className={All.PopupBody}
           style={{ marginBottom: "50px" }}
         >
           {picture.cropperOpen && (
-              <Box display="block">
-                <center>
-                  <AvatarEditor
-                    ref={setEditorRef}
-                    image={picture.img}
-                    width={1170}
-                    height={310}
-                    border={50}
-                    color={[0,0,0,0.7]} // RGBA
-                    rotate={0}
-                    scale={picture.zoom}
-                    style = {{width: "100%", height: "100%"}}
-                  />
-                </center>
-                <Slider
-                  aria-label="raceSlider"
-                  value={picture.zoom}
-                  min={1}
-                  max={10}
-                  step={0.1}
-                  onChange={handleSlider}
-                ></Slider>
-                <Box>
-                  <Button style = {{marginRight: "10px"}} variant="contained" onClick={handleCancel}>
-                    Cancel
-                  </Button>
-                  {coverUpdateLoading?<Button>Saving</Button>:<Button onClick={handleSave}>Save</Button>}
-                  
-                </Box>
+            <Box display="block">
+              <center>
+                <AvatarEditor
+                  ref={setEditorRef}
+                  image={picture.img}
+                  width={1170}
+                  height={310}
+                  border={50}
+                  color={[0, 0, 0, 0.7]} // RGBA
+                  rotate={0}
+                  scale={picture.zoom}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </center>
+              <Slider
+                aria-label="raceSlider"
+                value={picture.zoom}
+                min={1}
+                max={10}
+                step={0.1}
+                onChange={handleSlider}
+              ></Slider>
+              <Box>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </Button>
+                {coverUpdateLoading ? (
+                  <Button>Saving</Button>
+                ) : (
+                  <Button onClick={handleSave}>Save</Button>
+                )}
               </Box>
-            )}
+            </Box>
+          )}
         </DialogContent>
       </Dialog>
       <Dialog
@@ -967,45 +1042,54 @@ function Pilot_ProfessionalInfo() {
         aria-describedby="alert-dialog-description"
         maxWidth={"md"}
         fullWidth={true}
-        PaperProps={{ style: { width: "820px", borderRadius: "10px", paddingTop: "50px" } }}
+        PaperProps={{
+          style: { width: "820px", borderRadius: "10px", paddingTop: "50px" },
+        }}
       >
         <DialogContent
           className={All.PopupBody}
           style={{ marginBottom: "50px" }}
         >
           {picture2.cropperOpen && (
-              <Box display="block">
-                <center>
-                  <AvatarEditor
-                    ref={setEditorRef2}
-                    image={picture2.img}
-                    width={180}
-                    height={180}
-                    border = {50}
-                    borderRadius={150}
-                    color={[0,0,0,0.7]} // RGBA
-                    rotate={0}
-                    scale={picture2.zoom}
-                    style = {{width: "50%", height: "50%"}}
-                  />
-                </center>
-                <Slider
-                  aria-label="raceSlider"
-                  value={picture2.zoom}
-                  min={1}
-                  max={10}
-                  step={0.1}
-                  onChange={handleSlider2}
-                ></Slider>
-                <Box>
-                  <Button style = {{marginRight: "10px"}} variant="contained" onClick={handleCancel2}>
-                    Cancel
-                  </Button>
-                  {coverUpdateLoading?<Button>Saving</Button>:<Button onClick={handleSave2}>Save</Button>}
-                  
-                </Box>
+            <Box display="block">
+              <center>
+                <AvatarEditor
+                  ref={setEditorRef2}
+                  image={picture2.img}
+                  width={180}
+                  height={180}
+                  border={50}
+                  borderRadius={150}
+                  color={[0, 0, 0, 0.7]} // RGBA
+                  rotate={0}
+                  scale={picture2.zoom}
+                  style={{ width: "50%", height: "50%" }}
+                />
+              </center>
+              <Slider
+                aria-label="raceSlider"
+                value={picture2.zoom}
+                min={1}
+                max={10}
+                step={0.1}
+                onChange={handleSlider2}
+              ></Slider>
+              <Box>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  onClick={handleCancel2}
+                >
+                  Cancel
+                </Button>
+                {coverUpdateLoading ? (
+                  <Button>Saving</Button>
+                ) : (
+                  <Button onClick={handleSave2}>Save</Button>
+                )}
               </Box>
-            )}
+            </Box>
+          )}
         </DialogContent>
       </Dialog>
     </div>

@@ -62,12 +62,15 @@ function Pilot_BasicInfo() {
       let data = response.data;
       localStorage.setItem("oldEmail", response.data.emailId);
       let country = Countries.find(c => c.code===response.data.country || c.name===response.data.country)
+      console.log(country)
       setData({
         ...data,
         full_name: data.name,
+        stored_u_name: data.userName ? data.userName : "",
         userName: data.userName ? data.userName : "",
         email: data.emailId,
         phone: data.phoneNo,
+        code: country.dial_code,
         dob: data.dob,
         gender: data.gender,
         address: data.address,
@@ -84,9 +87,11 @@ function Pilot_BasicInfo() {
   }, []);
   let [data, setData] = useState({
     full_name: "",
+    stored_u_name: "",
     userName: "",
     email: "",
     phone: "+91",
+    code: "",
     dob: "",
     gender: "",
     address: "",
@@ -132,7 +137,11 @@ function Pilot_BasicInfo() {
     });
     var result = Countries.filter((obj) => obj.name == value.label);
     console.log(result[0].dial_code);
-    setCode(result[0].dial_code);
+    setData({
+      ...data,
+      country: value.label,
+      code: result[0].dial_code
+    })
   };
 
   const phoneChangeHandler = (e) => {
@@ -158,12 +167,12 @@ function Pilot_BasicInfo() {
     // console.log(data);
     try {
       if (
-        Number(e.target.value.slice(code.length + 1, 10 + code.length + 1)) ||
-        e.target.value.slice(code.length + 1, 10 + code.length + 1) === ""
+        Number(e.target.value.slice(data.code.length + 1, 10 + data.code.length + 1)) ||
+        e.target.value.slice(data.code.length + 1, 10 + data.code.length + 1) === ""
       ) {
         setData({
           ...data,
-          phone: e.target.value.slice(code.length + 1, 10 + code.length + 1),
+          phone: e.target.value.slice(data.code.length + 1, 10 + data.code.length + 1),
         });
         document.getElementById(e.target.name + "_error").style.display =
           "none";
@@ -366,17 +375,53 @@ function Pilot_BasicInfo() {
         },
       };
       console.log(data.userName);
+      if (data.userName !== data.stored_u_name){
 
-      if (data.email !== localStorage.getItem("oldEmail")) {
-        console.log("Emails Differ");
-        localStorage.setItem("email", "false");
-      }
-      axios
+        axios.post(`${domain}/api/pilot/checkUserName`,{userName: data.userName})
+        .then(res => {
+          axios
+          .post(
+            `${domain}/api/pilot/updateBasicInfo`,
+            {
+              userName: data.userName,
+              preferredLocation: data.preferredLocation.join(),
+              name: data.full_name,
+              emailId: data.email,
+              phoneNo: data.phone,
+              dob: data.dob,
+              gender: data.gender,
+              city: data.city,
+              country: data.country,
+              bio: data.bio,
+            },
+            config
+          )
+          .then(() => {
+            setInfoSuccess(true);
+            setEdit(false);
+            if (data.email !== localStorage.getItem("oldEmail")) {
+              console.log("Emails Differ");
+              localStorage.setItem("email", "false");
+            }
+          })
+          .catch((err) => {
+            alert("not successful");
+            console.log(err.response.data);
+          });
+        })
+        .catch(err => {
+          document.getElementById(`userName_error`).innerHTML =
+            "Username already exists.";
+          document.getElementById(`userName_error`).style.visibility = "visible";
+          document.getElementById(`userName`).focus();
+        })
+      }else{
+        axios
         .post(
           `${domain}/api/pilot/updateBasicInfo`,
           {
             userName: data.userName,
-            preferredLocation: data.preferredLocation,
+            preferredLocation: data.preferredLocation.join(),
             name: data.full_name,
             emailId: data.email,
             phoneNo: data.phone,
@@ -391,11 +436,16 @@ function Pilot_BasicInfo() {
         .then(() => {
           setInfoSuccess(true);
           setEdit(false);
+          if (data.email !== localStorage.getItem("oldEmail")) {
+            console.log("Emails Differ");
+            localStorage.setItem("email", "false");
+          }
         })
         .catch((err) => {
           alert("not successful");
           console.log(err.response.data);
         });
+      }
     }
   };
 
@@ -770,7 +820,7 @@ function Pilot_BasicInfo() {
               name="phone"
               className={All.Phonenumber + " s_c_d_phone_input"}
               id="phone"
-              value={`${code} ${data.phone}`}
+              value={`${data.code} ${data.phone}`}
               onChange={phoneChangeHandler}
               autoComplete={false}
               disabled={!edit}

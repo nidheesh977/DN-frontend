@@ -67,10 +67,10 @@ function PilotPaymentAddress() {
       .post(`${domain}/api/pilot/sendBillingAddress`, config)
       .then((res) => {
         console.log(res.data);
-        const options = Countries.map((d) => ({
-          value: d.code,
-          label: d.name,
-        }));
+        // const options = Countries.map((d) => ({
+        //   value: d.code,
+        //   label: d.name,
+        // }));
         var country = {};
         for (var i = 0; i < Countries.length; i++) {
           if (

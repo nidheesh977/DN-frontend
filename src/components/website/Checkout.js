@@ -109,6 +109,7 @@ function Checkout() {
           country_code: country.value,
           country_object: country,
         });
+        
       })
       .catch((err) => {
         console.log(err);
@@ -565,23 +566,23 @@ function Checkout() {
 
               <div className="c_costingDiv">
                 <div className="c_costingTitle">Basic Cost</div>
-                <div className="c_costingCost">${data.price}.00 USD</div>
+                <div className="c_costingCost">{formData.country === "India"?`${data.price*77}.00 INR`:`$${data.price}.00 USD`}</div>
               </div>
 
               <div className="c_costingDiv">
                 <div className="c_costingTitle">GST/Basic Tax</div>
-                <div className="c_costingCost">${data.gst}.00 USD</div>
+                <div className="c_costingCost">{formData.country === "India"?`${data.gst*77}.00 INR`:`$${data.gst}.00 USD`}</div>
               </div>
 
               <div className="c_costingDiv">
                 <div className="c_costingTitle">Total Payment</div>
                 <div className="c_costingCost">
-                  ${Number(data.price) + Number(data.gst)}.00 USD
+                {formData.country === "India"?`${(Number(data.price)*77) + (Number(data.gst)*77)}.00 INR `:`$${Number(data.price) + Number(data.gst)}.00 USD `}
                 </div>
               </div>
               <div className="c_disclaimer">
                 All sales are charged in USD and all sales are final. You will
-                be charged ${Number(data.price) + Number(data.gst)}.00 USD
+                be charged {formData.country === "India"?`${(Number(data.price)*77) + (Number(data.gst)*77)}.00 INR `:`$${Number(data.price) + Number(data.gst)}.00 USD `}
                 immediately. You will be charged every 30 days thereafter while
                 the subscription is active. Cancel any time. Exchange rates are
                 estimated based on our most recent conversion data and may not
@@ -604,6 +605,7 @@ function Checkout() {
                           name="name"
                           value={formData.name}
                           onChange={formChangeHandler}
+                          disabled
                         />
                       </div>
                       <div className="login_input_error_msg" id="name_error">
@@ -623,6 +625,7 @@ function Checkout() {
                           name="email"
                           value={formData.email}
                           onChange={formChangeHandler}
+                          disabled
                         />
                       </div>
                       <div className="login_input_error_msg" id="email_error">
@@ -723,6 +726,7 @@ function Checkout() {
                           name="state"
                           value={formData.state}
                           onChange={formChangeHandler}
+                          
                         />
                       </div>
                       <div
@@ -745,6 +749,7 @@ function Checkout() {
                             options={test}
                             value={formData.country_object}
                             onChange={countryChangeHandler}
+                            isDisabled
                           />
                         </div>
                       </div>
