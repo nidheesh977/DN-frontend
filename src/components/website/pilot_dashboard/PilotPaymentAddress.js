@@ -410,6 +410,7 @@ function PilotPaymentAddress() {
                         options={country_list}
                         value={formData.country_object}
                         onChange={countryChangeHandler}
+                        isDisabled
                       />
                     </div>
                   </div>

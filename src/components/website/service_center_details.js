@@ -962,8 +962,6 @@ export default function ServiceCenterDetails(props) {
                                 Like ({review.likes.length})
                               </div>
                             )}
-
-                            <div className="s_c_d_review_share">Share</div>
                           </div>
                         </div>
                         <hr style={{ border: "1px solid #eee" }} />

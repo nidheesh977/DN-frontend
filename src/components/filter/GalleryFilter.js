@@ -215,62 +215,33 @@ class GalleryFilter extends React.Component {
   // }
 
   // Categories filter axios api start
-  handleClick = (id) => {
+  handleClick = async (id) => {
     this.setState({ activeLink: id });
-    const config = {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("access_token"),
-      },
-    };
-    // switch (id) {
-    //   case 5:
-    //     axios
-    //       .get(`https://demo-nexevo.in/haj/auth-app/public/api/listingall`, config)
-    //       .then((response) => response.data)
-    //       .then(
-    //         (data) => {
-    //           this.setState({ listing: data, listing_length: data.length });
-    //         },
-    //         (err) => { }
-    //       );
-    //     break;
-    //   default:
-    //     axios
-    //       .get(
-    //         `https://demo-nexevo.in/haj/auth-app/public/api/categorylisting/${id}`,
-    //         config
-    //       )
-    //       .then((response) => response.data)
-    //       .then(
-    //         (data) => {
-    //           this.setState({ listing: data, listing_length: data.length });
-    //         },
-    //         (err) => { }
-    //       );
-    // }
+    this.setState({
+      listing: [],
+      loading: true,
+    });
+    
+    await axios
+      .post(
+        `${domain}/api/image/imageFilters`,
+        { data: "", type: id },
+        this.config
+      )
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          listing: res.data,
+          loading: false,
+        });
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false,
+        });
+      });
   };
-  // Categories filter axios api End
-
-  // handleChangeshot(e){
-  //   alert(e.target.id)
-  // }
-
-  //   handleChangeTime(e){
-  //   alert(e.target.id)
-  //   const config = {
-  //     headers: {
-  //         Authorization: 'Bearer ' + localStorage.getItem('access_token')
-  //     }
-  // }
-
-  //   axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/homepagelistingfillter?timeframe=${e.target.value}&type=${e.target.id}`, config).then(response => response.data)
-  //       .then(data => {
-  //           this.setState({ listing: data })
-  //       },
-  //           err => {
-  //               console.log(err);
-  //           })
-  //   }
+  
 
   handleChange = (event, valuees) => {
     this.setState({ valuees });
@@ -542,12 +513,12 @@ class GalleryFilter extends React.Component {
             >
               <BottomNavigationAction
                 label="All"
-                onClick={() => this.handleClick(5)}
+                onClick={() => this.handleClick("all")}
                 icon={<LanguageIcon />}
               />
               <BottomNavigationAction
                 label="Images"
-                onClick={() => this.handleClick(1)}
+                onClick={() => this.handleClick("image")}
                 icon={<ImageIcon />}
               />
               {/* <BottomNavigationAction
@@ -557,12 +528,12 @@ class GalleryFilter extends React.Component {
               /> */}
               <BottomNavigationAction
                 label="Video"
-                onClick={() => this.handleClick(3)}
+                onClick={() => this.handleClick("video")}
                 icon={<VideocamIcon />}
               />
               <BottomNavigationAction
                 label="3D"
-                onClick={() => this.handleClick(4)}
+                onClick={() => this.handleClick("3d")}
                 icon={<PanoramaIcon />}
               />
             </BottomNavigation>
