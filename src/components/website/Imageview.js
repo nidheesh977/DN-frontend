@@ -109,17 +109,17 @@ function Imageview() {
         setSubscription(res.data)
       })
     }
-    axios
-      .post(`${domain}/api/image/findImage`, {
-        userId: param.user_id,
-        imageId: param.id,
-      })
-      .then((res) => {
-        console.log(res.data);
-        if (res.data === "No Image") {
-          history.push("/NoComponent");
-        }
-      });
+    // axios
+    //   .post(`${domain}/api/image/findImage`, {
+    //     userId: param.user_id,
+    //     imageId: param.id,
+    //   })
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     if (res.data === "No Image") {
+    //       history.push("/NoComponent");
+    //     }
+    //   });
   }, []);
   let [image, setImage] = useState([]);
   let [otherImages, setOtherImages] = useState([]);
@@ -405,8 +405,13 @@ function Imageview() {
   };
 
   let clicked = (id, userId) => {
-    window.location.href = `/imageview/${id}/${userId}`;
-    // history.push(`/imageview/${id}/${userId}`);
+    axios.get(`${domain}/api/image/getImage/${id}`).then((res) => {
+      console.log(res);
+      setImage(res.data[0]);
+      setLoading(false);
+    });
+    // window.location.href = `/imageview/${id}/${userId}`;
+    history.push(`/imageview/${id}/${userId}`);
     // window.location.reload();
   };
   let likeImage = () => {
@@ -804,7 +809,7 @@ function Imageview() {
                           cursor: "pointer",
                         }}
                         controls
-                        onClick={() => clicked(item._id, item.userId)}
+                        onClick={() => clicked(item._id, item.userName)}
                       >
                         <source
                           src={`https://dn-nexevo-thumbnail.s3.ap-south-1.amazonaws.com/${item.file}`}
