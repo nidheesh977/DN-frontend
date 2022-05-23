@@ -86,6 +86,19 @@ class CreateServiceCenter extends Component {
         suggestedBrands: result,
       });
     });
+    axios.get(`${domain}/api/user/getUserData`, config).then((res) => {
+      console.log(res.data)
+      this.setState({
+        email: res.data.email,
+        phone: res.data.phoneNo
+      })
+      // setData({
+      //   ...data,
+      //   contact_no: res.data.phoneNo,
+      //   email: res.data.email,
+      //   name: res.data.name
+      // })
+    })
   }
 
   addPhoto = async (e) => {
@@ -544,6 +557,7 @@ class CreateServiceCenter extends Component {
                       name="email"
                       id="email"
                       onChange={(e) => this.handleChange(e, "email")}
+                      value={this.state.email}
                     />
                     <div className="login_input_error_msg" id="email_error">
                       Email ID is required
