@@ -42,7 +42,7 @@ class Footer extends Component {
                     <a
                       className="footer_link"
                       style={{ fontSize: "30px" }}
-                      href={`/#/blogs/${item.slug}`}
+                      onClick = {window.location.href = `/#/blogs/${item.slug}`}
                     >
                       {item.category}
                     </a>
@@ -58,7 +58,7 @@ class Footer extends Component {
                 this.state.tags.slice(0,5).map((tag, index) => {
                   return(
                     <li key = {index}>
-                      <a href = {`/#/shoots/${tag.slug}`} className="footer_link">{tag.tag}</a>
+                      <a onClick = {window.location.href = `/#/shoots/${tag.slug}`} className="footer_link">{tag.tag}</a>
                     </li>
                   )
                 })
