@@ -40,6 +40,7 @@ function Pilot_ProfessionalInfo() {
         drone_id: data.droneId,
         work_type: data.workType,
         drone_type: data.droneType,
+        drone_input: "",
         hourly_pay: data.hourlyPayment,
         monthly_pay: data.monthlyPayment,
         industry: data.industry,
@@ -254,6 +255,7 @@ function Pilot_ProfessionalInfo() {
   };
 
   const addDroneType = (e) => {
+    console.log(data.drone_input)
     if (e.key === "Enter") {
       if (
         data.drone_input.length !== 0 &&
@@ -672,13 +674,17 @@ function Pilot_ProfessionalInfo() {
           />
           {data.drone_type.map((drone, index) => {
             return (
-              <div
-                className="pd_i_skill"
-                key={index}
-                onClick={() => removeDrone(index)}
-              >
-                {drone} <i class="fas fa-times"></i>
-              </div>
+              <>
+                {drone !== "" &&
+                  <div
+                    className="pd_i_skill"
+                    key={index}
+                    onClick={() => removeDrone(index)}
+                  >
+                    {drone} <i class="fas fa-times"></i>
+                  </div>
+                }
+              </>
             );
           })}
           <div className="input_error_msg" id="drone_input_error">
