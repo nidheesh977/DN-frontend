@@ -1,6 +1,5 @@
 {
   "name": "dn-v1",
-  "homepage": "http://3.108.194.58/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
