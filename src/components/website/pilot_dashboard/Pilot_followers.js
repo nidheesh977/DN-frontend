@@ -44,6 +44,11 @@ if(role === "pilot"){
         console.log(err))
 }    }
 
+const viewCenter = (userId, role) =>{
+    axios.post(`${domain}/api/user/getCenterId`, {userId}).then(res=>{
+        history.push(`/service_center/${res.data}`)
+    })
+}
 
 const removeFollow = (userId) =>{
     axios.post(`${domain}/api/follow/unfollow/${userId}`, config).then(res=>{
@@ -109,10 +114,14 @@ const removeFollow = (userId) =>{
                                             {
                                                 item.role === "pilot" ?  
                                                 <button className="pd_followers_profileBtn" onClick={()=>viewProfile(item._id, item.role)}>View Profile</button>
+                                                 :
+                                                 item.role === "service_center" ?  
+                                                <button className="pd_followers_profileBtn" onClick={()=>viewCenter(item._id, item.role)}>View Profile</button>
                                                  :<div>
                                             <button className="pd_followers_profileBtn" style={{opacity: "0.5"}}>View Profile</button>
                                             </div>
                                             }
+
                                         
                                             <div className='pd_followers_profileUnfollow' onClick={()=>removeFollow(item._id)}>Remove</div>
                                         </div>

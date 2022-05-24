@@ -324,6 +324,10 @@ function Booster_BasicInfo() {
         .then(() => {
           setInfoSuccess(true);
           setEdit(false);
+          if (data.email !== localStorage.getItem("oldEmail")) {
+            console.log("Emails Differ");
+            localStorage.setItem("email", "false");
+          }
         })
         .catch((err) => {
           alert("not successful");
@@ -596,12 +600,7 @@ function Booster_BasicInfo() {
                 {localStorage.getItem("email") == "true" ? (
                   <></>
                 ) : (
-                  <div
-                    className="pd_b_i_profile_verify"
-                    onClick={() => history.push("/verify-email")}
-                  >
-                    Verify
-                  </div>
+                  <div className="pd_b_i_profile_verify">Verify</div>
                 )}
               </div>
             </div>

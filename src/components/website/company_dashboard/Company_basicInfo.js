@@ -257,6 +257,12 @@ function Company_BasicInfo() {
       Axios.post(`${domain}/api/company/editCompanyData`, { formData }, config)
         .then((res) => {
           console.log(res.data);
+          if (data.email !== localStorage.getItem("oldEmail")) {
+            console.log("Emails Differ");
+            localStorage.setItem("email", "false");
+          }
+          setInfoSuccess(true)
+          setEdit(false)
         })
         .catch((err) => {
           console.log(err);
@@ -601,7 +607,11 @@ function Company_BasicInfo() {
                 <label htmlFor="email" className="pd_b_i_profile_head1">
                   Email ID
                 </label>
-                <div className="pd_b_i_profile_verify">Verify</div>
+                {localStorage.getItem("email") == "true" ? (
+                  <></>
+                ) : (
+                  <div className="pd_b_i_profile_verify">Verify</div>
+                )}
               </div>
             </div>
             <input
@@ -624,7 +634,7 @@ function Company_BasicInfo() {
                 <label htmlFor="phone" className="pd_b_i_profile_head1">
                   Phone Number
                 </label>
-                <div className="pd_b_i_profile_verify">Verify</div>
+                
               </div>
             </div>
 
@@ -1017,6 +1027,42 @@ function Company_BasicInfo() {
               </Box>
             </Box>
           )}
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={infoSuccess}
+        onClose={() => setInfoSuccess(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{ style: { width: "820px", borderRadius: "10px" } }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+            <img
+              src={Close}
+              alt=""
+              onClick={() => setInfoSuccess(false)}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <Row style={{ marginTop: "30px" }}>
+            <div className="u_f_popup_title">
+              Your Information is successfully updated.
+            </div>
+            <div className="u_f_popup_btn_container">
+              <button
+                className="u_f_popup_btn2"
+                onClick={() => setInfoSuccess(false)}
+              >
+                Close
+              </button>
+            </div>
+          </Row>
         </DialogContent>
       </Dialog>
     </div>

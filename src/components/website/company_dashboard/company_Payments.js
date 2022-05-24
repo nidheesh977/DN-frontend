@@ -70,6 +70,7 @@ function CompanyPayments() {
     plan: "",
     status: "",
     price: "",
+    gstNo: "123"
   });
 
   let cancelSubscription = () => {
@@ -139,7 +140,8 @@ function CompanyPayments() {
     createdAt,
     status,
     price,
-    plan
+    plan,
+    gstNo
   ) => {
     setPdfData({
       transactionId: id,
@@ -154,6 +156,7 @@ function CompanyPayments() {
       status,
       price,
       plan,
+      gstNo
     });
     let doc = new jsPDF("portrait", "pt", "A4");
     doc.html(document.getElementById("pdf-view"), {
@@ -380,7 +383,8 @@ function CompanyPayments() {
                           item.createdAt,
                           item.status,
                           item.price,
-                          item.plan
+                          item.plan, 
+                          item.gstNo
                         )
                       }
                     >
@@ -446,6 +450,15 @@ function CompanyPayments() {
                   : `INR ${pdfData.price}`}
               </div>
             </Col>
+            {
+              pdfData.gstNo ? 
+              
+              <Col style={{ border: "1px solid gray", padding: "5px" }}>
+              <div className="pdf_client">GST No : </div>
+              <div>{pdfData.gstNo}</div>
+            </Col> : <></>
+            }
+            
           </Row>
           <div className="pdf_statusdiv">
             <div className="pdf_client">Payment Status : </div>

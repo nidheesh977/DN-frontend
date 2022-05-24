@@ -1,0 +1,48 @@
+.hc_titleHead{
+    font-size: 24px;
+    font-weight: 600;
+    font-family: muli-bold;
+    display: inline;
+
+}
+.hc_askQuestion{
+float: right;
+width: 230px;
+    padding: 9px 0px;
+    font-family: muli-bold;
+    font-size: 14px;
+    line-height: 20px;
+    background: #00e7fc;
+    border-radius: 5px;
+    border: 1px solid #00e7fc;
+    cursor: pointer;
+    text-align: center;    
+}
+.hc_acc_div{
+    margin: 20px 0px;
+}
+.mq_desc{
+    font-family: muli-bold;
+}
+.mq_ans{
+    font-family: muli-light;
+}
+.mq_badge{
+    background-color: #00e7fc;
+    font-family: muli-bold;
+    border-radius: 10px;
+    padding: 1px 15px;
+    margin-left: 8px;
+    text-transform: capitalize;
+}
+.hc_showMore{
+    text-align: center;
+    background-color: #F5F5F7;
+    width: 200px;
+    padding: 10px 0px;
+    border-radius: 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-family: muli-light;
+    border: 1px solid lightgray;
+}

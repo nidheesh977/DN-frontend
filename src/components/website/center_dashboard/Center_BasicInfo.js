@@ -672,6 +672,10 @@ function Center_BasicInfo() {
           setUpdateSuccess(true)
           setSaving(false)
           setEdit(false)
+          if (data.email !== localStorage.getItem("oldEmail")) {
+            console.log("Emails Differ");
+            localStorage.setItem("email", "false");
+          }
         })
         .catch(err=>{
           setSaving(false)
@@ -953,9 +957,11 @@ function Center_BasicInfo() {
                       Email ID
                     </div>
                   </label>
-                  {/* {data.email !== localStorage.getItem("oldEmail") ? (
-                    <div className="pd_b_i_profile_verify">Verify</div>
-                    ) : ( <></> )} */}
+                  {localStorage.getItem("email") == "true" ? (
+                  <></>
+                ) : (
+                  <div className="pd_b_i_profile_verify">Verify</div>
+                )}
                 </div>
               </div>
               <input

@@ -27,6 +27,7 @@ export default class Blog extends React.Component {
       visible: 6,
       error: false,
       trendingBlogs: [],
+      subscribeEmail: ""
     };
 
     this.loadMore = this.loadMore.bind(this);
@@ -97,6 +98,28 @@ export default class Blog extends React.Component {
           });
       });
   };
+  subscribeToNewsLetter = (e) =>{
+    e.preventDefault();
+    axios.post(`${domain}/api/newsletter/createNewsletter`, {emailId: this.state.subscribeEmail}).then(res=>{
+      console.log(res)
+      if(res.data === "successfull"){
+        document.getElementById("newsletterSuccess").innerHTML = "Thanks for Subscribing"
+        document.getElementById("newsletterSuccess").style.display = "block"
+      }else{
+        document.getElementById("newsletterSuccess").innerHTML = "Email is Already Subscribed"
+        document.getElementById("newsletterSuccess").style.display = "block"
+      }
+      this.setState({
+        subscribeEmail: ""
+      })
+    })
+    
+  }
+  newsletterChange = (e) =>{
+    this.setState({
+      subscribeEmail: e.target.value
+    })
+  }
   render() {
     // const onSubmit = (data) => {
     //     console.log(data);
@@ -195,15 +218,18 @@ export default class Blog extends React.Component {
                       Lorem Ipsum is simply dummy text of the printing
                     </p>
                     {/* <form className={All.form} onSubmit={handleSubmit(onSubmit)}> */}
-                    <form>
+                    <form onSubmit={this.subscribeToNewsLetter}>
                       <div className={All.FormGroup}>
                         <input
                           type="email"
                           name="email"
                           className={All.FormControl}
                           id="subscription"
+                          onChange={this.newsletterChange}
+                          value={this.state.subscribeEmail}
                           placeholder="E-mail Address"
                         />
+                        <div className={` ${All.FSize_14}`} style={{marginBottom: "10px", color: "red", display:"none"}} id="newsletterSuccess">Thanks for Subscribing</div>
                         {/* {errors.email && errors.email.type === "required" && <p class="error">This is required field</p>}
                                             {errors.email && errors.email.type === "minLength" && <p class="error">This is field minLength 2</p>}
                                             {errors.email && errors.email.message  && <p class="error">Invalid email address</p>} */}
@@ -213,8 +239,9 @@ export default class Blog extends React.Component {
                         <Button
                           variant="contained"
                           color="default"
-                          type="submit"
+                          type="button"
                           className={All.BtnStyle_3}
+                          onClick={this.subscribeToNewsLetter}
                         >
                           Subscribe
                         </Button>

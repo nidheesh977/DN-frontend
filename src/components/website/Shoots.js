@@ -4,6 +4,7 @@ import All from "./All.module.css";
 import { Helmet } from "react-helmet";
 import First from "../images/1stPlace.png";
 import Alert from "@material-ui/lab/Alert";
+import Heart from "../images/heart-blue.svg";
 
 import Second from "../images/2ndPlace.png";
 import Third from "../images/3rdPlace.png";
@@ -81,17 +82,15 @@ function Shoots() {
       console.log(folowers);
       setMyFollowing(folowers);
     });
+    axios.post(`${domain}/api/user/checkUser`, config).then((res) => {
+      setLikedData(res.data.likedMedia);
+    });
   }, []);
+  let [likedData, setLikedData] = useState([])
   useEffect(() => {
     axios.get(`${domain}/api/user/checkPilotPro`, config).then((res) => {
       console.log(res);
-      if (res.data === false) {
-        document.getElementById("alertToShow").style.display = "flex";
-      }
-
-      setTimeout(() => {
-        document.getElementById("alertToShow").style.display = "none";
-      }, 5000);
+     
     });
   }, []);
 
@@ -146,6 +145,48 @@ function Shoots() {
           });
       });
   };
+  let goToImage = (imageId, userId) =>{
+    history.push(`/Imageview/${imageId}/${userId}`)
+  }
+  let viewPilot= (id)=>{
+    axios.post(`${domain}/api/pilot/getPilotId`, { userId: id }).then((res) => {
+      if (res.data[0]._id) {
+        history.push(`/pilot/${res.data[0].userName}`);
+      }
+    });
+  }
+  let likeImage = (id) => {
+    if (localStorage.getItem("access_token")) {
+      axios
+        .post(`${domain}/api/image/likeImage/${id}`, config)
+        .then((res) => {
+          console.log(res.data);
+          axios.post(`${domain}/api/user/checkUser`, config).then((res) => {
+            setLikedData(res.data.likedMedia);
+          });
+          axios.get(`${domain}/api/shoot/getShoots`).then((res) => {
+            console.log(res);
+            setData(res.data);
+          });
+        });
+    } else {
+      loginError(true);
+    }
+  };
+  let unlikeImage = (id) => {
+    axios
+      .post(`${domain}/api/image/unlikeImage/${id}`, config)
+      .then((res) => {
+        console.log(res.data);
+        axios.post(`${domain}/api/user/checkUser`, config).then((res) => {
+          setLikedData(res.data.likedMedia);
+        });
+        axios.get(`${domain}/api/shoot/getShoots`).then((res) => {
+          console.log(res);
+          setData(res.data);
+        });
+      });
+  };
   return (
     <div>
       <Helmet>
@@ -193,8 +234,9 @@ function Shoots() {
                       ></video>
                     )} */}
                     <img
-                      src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${item.imageId.file}`}
-                      style={{ width: "100%", borderRadius: "10px" }}
+                      src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${item.imageId.file}`}  
+                      onClick={()=>goToImage(item.imageId._id, item.pilotId._id)}
+                      style={{ width: "100%", borderRadius: "10px", cursor:"pointer" }}
                     />
 
                     {item.place === 1 ? (
@@ -253,10 +295,19 @@ function Shoots() {
                       alignItems: "center",
                     }}
                   >
-                    <img
-                      src={Like}
-                      style={{ height: "35px", marginLeft: "15px" }}
-                    />{" "}
+                    {
+                      likedData.includes(item.imageId._id) ? <img
+                      src={Heart}
+                      style={{ height: "25px", marginLeft: "15px" , cursor: "pointer"}}
+                      onClick={()=>unlikeImage(item.imageId._id)}
+                    />
+                     : <img
+                     src={Like}
+                     style={{ height: "35px", marginLeft: "15px" , cursor:"pointer"}}
+                     onClick={()=>likeImage(item.imageId._id)}
+                   />
+                    }
+                    
                     <span style={{ marginLeft: "10px" }}>
                       {item.imageId.likes.length}
                     </span>
@@ -287,6 +338,7 @@ function Shoots() {
                             borderRadius: "37.5px",
                             cursor: "pointer",
                           }}
+                          onClick={()=>viewPilot(item.pilotId._id)}
                         />
                       </Col>
                       <Col>
@@ -298,6 +350,7 @@ function Shoots() {
                               alignItems: "center",
                               cursor: "pointer",
                             }}
+                            onClick={()=>viewPilot(item.pilotId._id)}
                           >
                             {item.pilotId.name}
                           </div>

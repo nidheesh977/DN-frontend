@@ -10,6 +10,7 @@ import { Route, Switch, NavLink } from "react-router-dom";
 import Center_BasicInfo from "./Center_BasicInfo";
 import Center_notifications from "./Center_notifications";
 import Test from "./Test";
+import Center_helpCenter from "./Center_helpCenter";
 
 class Account_Sidebar extends React.Component {
   constructor(props) {
@@ -97,6 +98,9 @@ class Account_Sidebar extends React.Component {
                 path="/center_dashboard/account/test"
                 component={Test}
               />
+              <Route 
+              path="/center_dashboard/account/help-center"
+              component={Center_helpCenter} />
 
               <Route
                 
