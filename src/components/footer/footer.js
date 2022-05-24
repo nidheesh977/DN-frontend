@@ -40,7 +40,7 @@ class Footer extends Component {
                 return (
                   <li>
                     <Link
-                      to = {`/#/blogs/${item.slug}`}
+                      to = {`/blogs/${item.slug}`}
                       className="footer_link"
                       style={{ fontSize: "30px" }}
                       target = "_blank"
@@ -59,7 +59,7 @@ class Footer extends Component {
                 this.state.tags.slice(0,5).map((tag, index) => {
                   return(
                     <li key = {index}>
-                      <Link to = {`/#/shoots/${tag.slug}`} target = "_blank" className="footer_link">{tag.tag}</Link>
+                      <Link to = {`/shoots/${tag.slug}`} target = "_blank" className="footer_link">{tag.tag}</Link>
                     </li>
                   )
                 })
