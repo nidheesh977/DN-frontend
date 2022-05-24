@@ -24,7 +24,8 @@ export default class BlogDetails extends React.Component {
           visible: 6,
           error: false,
           data: {},
-          trendingBlogs: []
+          trendingBlogs: [],
+          subscribeEmail: ""
         };
     
         this.loadMore = this.loadMore.bind(this);
@@ -36,7 +37,28 @@ export default class BlogDetails extends React.Component {
         });
       }
  
-
+      subscribeToNewsLetter = (e) =>{
+        e.preventDefault();
+        axios.post(`${domain}/api/newsletter/createNewsletter`, {emailId: this.state.subscribeEmail}).then(res=>{
+          console.log(res)
+          if(res.data === "successfull"){
+            document.getElementById("newsletterSuccess").innerHTML = "Thanks for Subscribing"
+            document.getElementById("newsletterSuccess").style.display = "block"
+          }else{
+            document.getElementById("newsletterSuccess").innerHTML = "Email is Already Subscribed"
+            document.getElementById("newsletterSuccess").style.display = "block"
+          }
+          this.setState({
+            subscribeEmail: ""
+          })
+        })
+        
+      }
+      newsletterChange = (e) =>{
+        this.setState({
+          subscribeEmail: e.target.value
+        })
+      }
       componentDidMount() {
         const url = `${API_URL}/blog`;
         const urls = `${API_URL}/blogcategories`;
@@ -120,7 +142,7 @@ export default class BlogDetails extends React.Component {
                                 <Box className={All.Subscription}>
                                     <h4>Subscribe Info for Latest Update</h4>
                                     <p className= {` ${All.FSize_14} ${All.SubscribeDesc} `} >Lorem Ipsum is simply dummy text of the printing</p>
-                                    <form>
+                                    <form onSubmit={this.subscribeToNewsLetter}>
                                     {/* <form className={All.form} onSubmit={handleSubmit(onSubmit)}>
                                         <div className={All.FormGroup}>
                                         <input type="email" name="email" className={All.FormControl} id="subscription" placeholder="E-mail Address" ref={register ({ required : true ,pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,  message: "invalid email address"  }}) } />
@@ -135,9 +157,13 @@ export default class BlogDetails extends React.Component {
                           name="email"
                           className={All.FormControl}
                           id="subscription"
+                          onChange={this.newsletterChange}
+                          value={this.state.subscribeEmail}
                           placeholder="E-mail Address"
                         /> 
-                                            <Button variant="contained" color="default" type="submit"  className={All.BtnStyle_3}>Subscribe</Button>   
+                        <div className={` ${All.FSize_14}`} style={{marginBottom: "10px", color: "red", display:"none"}} id="newsletterSuccess">Thanks for Subscribing</div>
+                                            <Button variant="contained" color="default" type="submit"  className={All.BtnStyle_3}
+                                            onClick={this.subscribeToNewsLetter}>Subscribe</Button>   
                                         </div>   
 
                                     </form>

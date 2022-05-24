@@ -7,6 +7,7 @@ import "./css/Activities_Sidebar.css";
 import { Route, Switch, NavLink } from "react-router-dom";
 import Booster_BasicInfo from "./Booster_BasicInfo";
 import Booster_notifications from "./Booster_notifications";
+import Booster_helpCenter from "./Booster_helpCenter";
 
 class Account_Sidebar extends React.Component {
   constructor(props) {
@@ -106,6 +107,10 @@ class Account_Sidebar extends React.Component {
                <Route
                 path="/booster_dashboard/account/notifications"
                 component={Booster_notifications}
+              />
+              <Route
+                path="/booster_dashboard/account/help-center"
+                component={Booster_helpCenter}
               />
                 <Route
                 index

@@ -1108,6 +1108,12 @@ export default function PilotDetails(props) {
                       return <>{industry}, </>;
                     })}
                   </div>
+                  <div className="p_d_about_details_title">Drones</div>
+                  <div className="p_d_about_details_content">
+                    {pilotData.droneType.length !==0 ?  pilotData.droneType.map((item, index) => {
+                      return <>{item}, </>;
+                    }) : ""}
+                  </div>
                   {pilotData.trainingCenter && (
                     <>
                       <div className="p_d_about_details_title">

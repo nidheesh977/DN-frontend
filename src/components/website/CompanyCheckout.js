@@ -62,6 +62,7 @@ function CompanyCheckout() {
     country: "",
     country_code: "",
     country_object: "",
+    gstNo: ""
   });
 
   const customStyles = {
@@ -153,6 +154,7 @@ function CompanyCheckout() {
       "city",
       "state",
       "country",
+ 
     ];
 
     let error = false;
@@ -307,6 +309,7 @@ function CompanyCheckout() {
   };
 
   const formChangeHandler = (e) => {
+    console.log(e.target)
     if (e.target.name === "pin_code") {
       setFormData({
         ...formData,
@@ -387,6 +390,7 @@ function CompanyCheckout() {
                 country: formData.country,
                 pinCode: formData.pin_code,
                 state: formData.state,
+                gstNo: formData.gstNo
               },
               config
             )
@@ -423,6 +427,7 @@ function CompanyCheckout() {
               country: formData.country,
               pinCode: formData.pin_code,
               state: formData.state,
+              gstNo: formData.gstNo
             },
             config
           )
@@ -793,6 +798,32 @@ function CompanyCheckout() {
                         Country is required
                       </div>
                     </Col>
+                    {
+                      formData.country_code === "IN" ? 
+                      <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
+                      <div style={{ marginBottom: "10px" }}>
+                        <label htmlFor="gstNo">
+                          <div className="pd_b_i_profile_head">GSTNO (optional)</div>
+                        </label>
+                        <input
+                          type="text"
+                          className="a_j_filter_address"
+                          style={{ height: "40px" }}
+                          id="gstNo"
+                          name="gstNo"
+                          value={formData.gstNo}
+                          onChange={formChangeHandler}
+                        />
+                      </div>
+                      <div
+                        className="login_input_error_msg"
+                        id="gstNo_error"
+                      ></div>
+                    </Col> : <></>
+                    }
+                    
+
+                    
                   </Row>
                   <label style={{ width: "fit-content", cursor: "pointer" }}>
                     <input
