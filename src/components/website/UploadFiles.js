@@ -1653,6 +1653,21 @@ class UploadFiles extends Component {
                                                   </div>
                                                 </>
                                               )}
+                                              {file.upload_status ===
+                                                "upload_failed" && (
+                                                <i
+                                                  class="fa fa-times-circle"
+                                                  aria-hidden="true"
+                                                  style={{
+                                                    position: "absolute",
+                                                    top: "calc(50% - 50px)",
+                                                    left: "calc(50% - 50px)",
+                                                    color: "red",
+                                                    fontSize: "100px",
+                                                    opacity: "0.7",
+                                                  }}
+                                                ></i>
+                                              )}
                                               {file.size / 1000000 > 20 && (
                                                 <>
                                                   <div className="u_f_size_exceed_border"></div>

@@ -1154,7 +1154,7 @@ checkLoginandPush = () =>{
                           <div style={{ position: "relative" }}>
                             <input
                               {...getInputProps({
-                                placeholder: "Search Places ...",
+                                placeholder: "Search City / Country ...",
                                 className:
                                   "location-search-input c_j_form_input ",
                               })}
@@ -1512,7 +1512,7 @@ checkLoginandPush = () =>{
                                 <button
                                   className="h_p_start_process_btn"
                                   onClick={() =>
-                                    this.pilotDetailPage(pilot._id)
+                                    this.pilotDetailPage(pilot.userName)
                                   }
                                 >
                                   View Profile

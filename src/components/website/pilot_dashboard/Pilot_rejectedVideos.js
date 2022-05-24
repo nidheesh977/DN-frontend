@@ -12,9 +12,19 @@ import { Item } from "semantic-ui-react";
 import videoIcon from '../../images/video-icon.svg'
 import axios from 'axios'
 import {Link} from "react-router-dom"
+import All from "../../website/All.module.css";
+import Dialog from "@material-ui/core/Dialog";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import Close from "../../images/close.svg";
+import { withStyles } from "@material-ui/core/styles";
 
+const domain = process.env.REACT_APP_MY_API;
 
-const domain = process.env.REACT_APP_MY_API
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
 
 
 function mouseGotIN(id) {
@@ -46,8 +56,8 @@ console.log(response.data)
       }
     );
   }, []);
-  const deleteImage = (id) =>{
-    axios.post(`${domain}/api/image/deleteImage/${id}`, config).then((res)=>{
+  const deleteImage = () =>{
+    axios.post(`${domain}/api/image/deleteImage/${deleteId}`, config).then((res)=>{
       axios.post(`${domain}/api/image/getRejectedVideos`,config).then(
         (response) => {
   console.log(response.data)       
@@ -55,7 +65,15 @@ console.log(response.data)
         }
       ); })
   }
+
+  const deleteImageConfirmation = (id) => {
+    setDeleteId(id)
+    setConfirmDelete(true)
+  }
+
   let [value, setValue] = useState([]);
+  let [deleteId, setDeleteId] = useState("");
+  let [confirmDelete, setConfirmDelete] = useState(false)
 
   let removeVideoIcon = (id) =>{
     document.getElementById(`videoIcon-${id}`).style.display = "none"
@@ -107,7 +125,7 @@ console.log(response.data)
                     id={"pd_images_more/" + item._id}
                   >
                     <Link to = {`/edit-file/${item._file}`}><div className="pd_images_moreOption">Edit</div></Link>
-                    <div className="pd_images_moreOption" onClick={()=>deleteImage(item._id)}>Remove</div>
+                    <div className="pd_images_moreOption" onClick={()=>deleteImageConfirmation(item._id)}>Remove</div>
                   </div>
                   {/* tags */}
                   <div className="pd_images_tags">
@@ -126,6 +144,56 @@ console.log(response.data)
           <span className="a_j_location_text">Load More</span>
         </button>{" "}
       </div> */}
+      <Dialog
+        open={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{
+          style: {
+            maxWidth: "700px",
+            borderRadius: "10px",
+          },
+        }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+            <img
+              src={Close}
+              alt=""
+              onClick={() => setConfirmDelete(false)
+              }
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <Row style={{ marginTop: "30px" }}>
+            <div className="u_f_popup_title">Are you sure?</div>
+            <div className="u_f_popup_btn_container">
+              <button
+                className="u_f_popup_btn1"
+                onClick={() =>
+                  setConfirmDelete(false)
+                }
+              >
+                Cancel
+              </button>
+              
+                <button
+                  className="u_f_popup_btn2"
+                  onClick={ deleteImage }
+                >
+                  Delete
+                </button>
+              
+            </div>
+          </Row>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

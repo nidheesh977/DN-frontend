@@ -86,7 +86,7 @@ function App(){
 
     return (
       <div className="selectColor">
-      <Router>
+      <Router basename="/">
         <Header loginStatus = {loginStatus} updateLoginStatus = {updateLoginStatus}/>
         {/* <Message /> */}
         <UserContext.Provider>

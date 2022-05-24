@@ -360,12 +360,14 @@ class ServiceCenters extends Component {
     });
     this.closeDropDown();
   };
+
   changeMessage = (e) => {
     this.setState({
       message: e.target.value,
     });
     document.getElementById("message_error").style.display = "none";
   };
+
   enquiryChange = (e) => {
     if (e.target.name !== "phoneNo") {
       this.setState({
@@ -403,6 +405,7 @@ class ServiceCenters extends Component {
       }
     }
   };
+
   selectBrand = (brand) => {
     this.setState({
       selected_brand: brand,

@@ -39,13 +39,13 @@ class Footer extends Component {
               {this.state.categories.map((item, i) => {
                 return (
                   <li>
-                    <Link
+                    <a
                       className="footer_link"
                       style={{ fontSize: "30px" }}
-                      to={`/blogs/${item.slug}`}
+                      href={`/blogs/${item.slug}`}
                     >
                       {item.category}
-                    </Link>
+                    </a>
                   </li>
                 );
               })}
@@ -58,7 +58,7 @@ class Footer extends Component {
                 this.state.tags.slice(0,5).map((tag, index) => {
                   return(
                     <li key = {index}>
-                      <Link to = {`/shoots/${tag.slug}`} className="footer_link">{tag.tag}</Link>
+                      <a href = {`/shoots/${tag.slug}`} className="footer_link">{tag.tag}</a>
                     </li>
                   )
                 })

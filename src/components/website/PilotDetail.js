@@ -573,16 +573,19 @@ export default function PilotDetails(props) {
           <div id="div1">
             <div>
               <MuiThemeProvider>
-                {pilotData.profilePic ? (
+                {pilotData.coverPic ? (
                   <img
                     src={`${pilotData.coverPic}`}
                     className="avatar_coverPic"
+                    onError={()=>setPilotData({...pilotData,coverPic : ""})}
+                    // onError={(event) => event.target.src = 'https://www.tarkettsee.com/media/img/M/THH_25121917_25131917_25126917_25136917_001.jpg'}
                   />
                 ) : (
-                  <Avatar
-                    src={`https://cdn-icons-png.flaticon.com/512/149/149071.png`}
-                    className={All.BackgroundcoverImg}
-                    size={100}
+                  <Skeleton 
+                    height = {"310px"}
+                    width = {"100%"}
+                    count = {1}
+                    style = {{border: "1px solid #cfcfcf"}}
                   />
                 )}
               </MuiThemeProvider>
@@ -594,12 +597,15 @@ export default function PilotDetails(props) {
                     <img
                       src={`${pilotData.profilePic}`}
                       className="avatar_profilePic"
+                      onError={()=>setPilotData({...pilotData,profilePic : ""})}
                     />
                   ) : (
-                    <Avatar
-                      src={`https://cdn-icons-png.flaticon.com/512/149/149071.png`}
-                      size={100}
-                    />
+                    <Skeleton 
+                    height = {"100px"}
+                    width = {"100px"}
+                    count = {1}
+                    style = {{borderRadius: "50px", border: "1px solid #cfcfcf"}}
+                  />
                   )}
                 </div>
               </MuiThemeProvider>

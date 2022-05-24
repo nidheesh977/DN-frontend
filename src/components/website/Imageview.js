@@ -552,9 +552,10 @@ function Imageview() {
                 }}
                 className="mainImage"
                 src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${image.file}`}
+                onError = {(e) => e.target.src = "https://qawerk.com/wp-content/uploads/2021/07/no-image-available-icon-6.png"}
               />
             )}
-            <div style={{ position: "absolute", top: "65px", right: "10px", backgroundColor: "#255,255,255,0.8", padding: "20px", borderRadius: "0px 0px 0px 30px" }}>
+            <div style={{ position: "absolute", top: "65px", right: "10px", backgroundColor: "rgba(255,255,255,0.6)", padding: "20px", borderRadius: "0px 0px 0px 30px" }}>
               <div style={{ cursor: "pointer", display: "inline-block", padding: "0px 10px" }}>
                 {likedData.includes(image._id) ? (
                   <div>

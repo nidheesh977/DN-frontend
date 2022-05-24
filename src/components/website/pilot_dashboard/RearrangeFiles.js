@@ -5,7 +5,7 @@ import Photo from "./Photo";
 import { SortableContainer, SortableElement, arrayMove } from "react-sortable-hoc";
 import axios from "axios";
 import "./css/RearrangeFiles.css";
-import { Container } from "react-grid-system";
+import { Container, Row } from "react-grid-system";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -115,20 +115,20 @@ function RearrangeFiles(props) {
 
   return (
     <div>
-      <SortableGallery
-        items={items}
-        onSortEnd={onSortEnd}
-        axis={"xy"}
-        type={props.type}
-      />
-      {items.length > 0 ? (
-        <div>
-          {props.cancelButton}
-          <div style = {{display: "inline-block"}} onClick = {submit}>{props.saveButton}</div>
-        </div>
-      ) : (
-        ""
-      )}
+        <SortableGallery
+          items={items}
+          onSortEnd={onSortEnd}
+          axis={"xy"}
+          type={props.type}
+        />
+        {items.length > 0 ? (
+          <div>
+            {props.cancelButton}
+            <div style = {{display: "inline-block"}} onClick = {submit}>{props.saveButton}</div>
+          </div>
+        ) : (
+          ""
+        )}
     </div>
   );
 }

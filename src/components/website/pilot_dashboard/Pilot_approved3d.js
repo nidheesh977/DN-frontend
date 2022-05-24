@@ -12,8 +12,18 @@ import All from "../../website/All.module.css";
 import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
 import RearrangeFiles from "./RearrangeFiles";
+import Dialog from "@material-ui/core/Dialog";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import Close from "../../images/close.svg";
+import { withStyles } from "@material-ui/core/styles";
 
 const domain = process.env.REACT_APP_MY_API;
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
 
 function mouseGotIN(_id) {
   document.getElementById("pd_likes/" + _id).style.display = "block";
@@ -43,6 +53,8 @@ function Pilot_approved3d() {
   let [proPilot, setProPilot] = useState(false);
   let [value, setValue] = useState([]);
   let [pilotId, setPilotId] = useState("")
+  let [deleteId, setDeleteId] = useState("");
+  let [confirmDelete, setConfirmDelete] = useState(false)
 
   useEffect(() => {
     
@@ -72,7 +84,8 @@ function Pilot_approved3d() {
   }, []);
 
   const deleteImage = (id) => {
-    axios.post(`${domain}/api/image/deleteImage/${id}`, config).then((res) => {
+    setConfirmDelete(false)
+    axios.post(`${domain}/api/image/deleteImage/${deleteId}`, config).then((res) => {
       axios
         .post(`${domain}/api/image/getApproved3d`, config)
         .then((response) => {
@@ -84,6 +97,11 @@ function Pilot_approved3d() {
         });
     });
   };
+
+  const deleteImageConfirmation = (id) => {
+    setDeleteId(id)
+    setConfirmDelete(true)
+  }
 
   const cancelRearrange = () => {
     setRearrange(false);
@@ -187,7 +205,7 @@ function Pilot_approved3d() {
                       </Link>
                       <div
                         className="pd_images_moreOption"
-                        onClick={() => deleteImage(item._id)}
+                        onClick={() => deleteImageConfirmation(item._id)}
                       >
                         Remove
                       </div>
@@ -218,6 +236,56 @@ function Pilot_approved3d() {
           <span className="a_j_location_text">Load More</span>
         </button>{" "}
       </div> */}
+      <Dialog
+        open={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth={"md"}
+        fullWidth={true}
+        PaperProps={{
+          style: {
+            maxWidth: "700px",
+            borderRadius: "10px",
+          },
+        }}
+      >
+        <DialogContent
+          className={All.PopupBody}
+          style={{ marginBottom: "50px" }}
+        >
+          <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+            <img
+              src={Close}
+              alt=""
+              onClick={() => setConfirmDelete(false)
+              }
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <Row style={{ marginTop: "30px" }}>
+            <div className="u_f_popup_title">Are you sure?</div>
+            <div className="u_f_popup_btn_container">
+              <button
+                className="u_f_popup_btn1"
+                onClick={() =>
+                  setConfirmDelete(false)
+                }
+              >
+                Cancel
+              </button>
+              
+                <button
+                  className="u_f_popup_btn2"
+                  onClick={ deleteImage }
+                >
+                  Delete
+                </button>
+              
+            </div>
+          </Row>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

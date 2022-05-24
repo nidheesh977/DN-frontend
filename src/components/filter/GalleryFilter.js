@@ -31,6 +31,7 @@ import Search from "../images/search123.png";
 import Close from "../images/close.svg";
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogContent from "@material-ui/core/DialogContent";
+import { Redirect } from "react-router-dom";
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -132,6 +133,8 @@ class GalleryFilter extends React.Component {
       activeLink: "all",
       liked_list: [],
       loginError: false,
+      redirectToPilot: false,
+      redirectToPilotPath: ""
     };
     this.loadMore = this.loadMore.bind(this);
     // this.handleChanges = this.handleChanges.bind(this);
@@ -325,9 +328,13 @@ class GalleryFilter extends React.Component {
     console.log(id);
     axios.post(`${domain}/api/pilot/getPilotId`, { userId: id }).then((res) => {
       if (res.data[0]._id) {
-        window.location.href = `/pilot/${res.data[0].userName}`;
+        this.setState({
+          redirectToPilot: true,
+          redirectToPilotPath: `/pilot/${res.data[0].userName}`
+        })
       }
     });
+    
   };
   followingChanged = async (e) => {
     let config = {
@@ -504,6 +511,7 @@ class GalleryFilter extends React.Component {
     return (
       <>
         <section className={All.Filter} id="main_div">
+          {this.state.redirectToPilot && <Redirect to = {this.state.redirectToPilotPath}/>}
           <div className={All.mobileBottomMenu}>
             <BottomNavigation
               value={valuees}
