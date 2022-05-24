@@ -410,6 +410,12 @@ function Imageview() {
       setImage(res.data[0]);
       setLoading(false);
     });
+    axios
+          .get(`${domain}/api/comments/getComments/${id}`)
+          .then((res) => {
+            console.log(res.data);
+            setComments(res.data);
+          });
     // window.location.href = `/imageview/${id}/${userId}`;
     history.push(`/imageview/${id}/${userId}`);
     // window.location.reload();
