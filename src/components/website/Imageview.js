@@ -209,9 +209,9 @@ function Imageview() {
       },
     };
     if (subscription.subscription){
-      if ((subscription.subscription.proposals <= subscription.proposals && subscription.subscription.plan.includes("platinum"))){
+      if (((subscription.subscription.proposals <= subscription.proposals) && (subscription.subscription.plan.includes("platinum")))){
         setLimitExceededPopup(true)
-      }else if ((subscription.subscription.proposals <= subscription.proposals && !subscription.subscription.plan.includes("platinum"))){
+      }else if (((subscription.subscription.proposals <= subscription.proposals) && (!subscription.subscription.plan.includes("platinum")))){
         setUpgradePopup(true)
       }
       else{
@@ -786,7 +786,7 @@ function Imageview() {
 
           {/* //right */}
           <Col lg={4}>
-            {userDetails.pilotPro && (
+            {userDetails.pilotPro && localStorage.getItem("role") === "company" && (
               <>
                 <div className="i_v_text1">Like what you see?</div>
                 <div className="i_v_text2">
