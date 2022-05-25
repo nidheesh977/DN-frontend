@@ -15,3 +15,31 @@
     text-align: center;
     margin-bottom: 20px;
 }
+
+.folderDelEditContainer{
+    height: 30px;
+}
+
+.folderDelEdit{
+    margin: 0px 5px;
+    cursor: pointer;
+}
+
+.folderDelEdit:hover{
+    opacity: 0.5;
+}
+
+.savePilotFolderContainer .MuiCardContent-root:last-child {
+    padding-bottom: 0px !important;
+}
+
+.savePilotFolderContainer{
+    position: relative;
+}
+
+.folderDelEditBtn{
+    position: absolute;
+    text-align: right;
+    width: 100%;
+    bottom: 5px;
+}

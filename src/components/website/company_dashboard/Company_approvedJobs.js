@@ -200,7 +200,7 @@ let editJob = (id) => {
           </div>
         </DialogContent>
       </Dialog>
-<Dialog
+      <Dialog
         open={editPopup}
         onClose={()=>setEditPopup(false)}
         aria-labelledby="alert-dialog-title"
