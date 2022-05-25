@@ -81,7 +81,8 @@ function CompanyCheckout() {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    axios
+    if(localStorage.getItem("role") === "company"){
+      axios
       .post(`${domain}/api/company/getCompanyAddress`, config)
       .then((res) => {
         console.log(res.data);
@@ -120,7 +121,9 @@ function CompanyCheckout() {
         value: d.code,
         label: d.name,
       }));
-      setTest(countries);
+      setTest(countries)
+    }
+    
     // axios
     //   .post(`${domain}/api/subscription/getSubscription`, { id: param.id })
     //   .then((res) => {
