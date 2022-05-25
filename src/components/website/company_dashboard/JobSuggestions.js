@@ -67,7 +67,7 @@ function JobSuggestions() {
     email: "",
     phoneNo: "",
   });
-  let showPersonalData = (phNo, email) => {
+  let showPersonalData = (phNo, email, userId) => {
     axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
       console.log(res)
       if (res.data.subscription){
@@ -82,7 +82,7 @@ function JobSuggestions() {
          else{
      
          
-         axios.post(`${domain}/api/company/setViews`, config).then(res=>{
+         axios.post(`${domain}/api/company/setViews`,{userId}, config).then(res=>{
            console.log(res)
          })
          setPersonalData({
@@ -158,7 +158,8 @@ function JobSuggestions() {
                       onClick={() =>
                         showPersonalData(
                           application.phoneNo,
-                          application.emailId
+                          application.emailId,
+                          application._id
                         )
                       }
                     >

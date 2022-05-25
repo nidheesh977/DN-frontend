@@ -119,7 +119,8 @@ class HireSubscription extends Component {
         data: res.data,
       });
     });
-    axios
+    if(localStorage.getItem("role") === "company"){
+      axios
       .get(
         `${domain}/api/company/getCompanySubscription
   `,
@@ -138,6 +139,8 @@ class HireSubscription extends Component {
           });
         }
       });
+    }
+    
   }
   render() {
     return (

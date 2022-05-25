@@ -73,7 +73,7 @@ let config = {
     email: "",
     phoneNo: "",
   });
-  let showPersonalData = (phNo, email) => {
+  let showPersonalData = (phNo, email, userId) => {
     axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
       console.log(res)
       if (res.data.subscription){
@@ -88,7 +88,7 @@ let config = {
          else{
      
          
-         axios.post(`${domain}/api/company/setViews`, config).then(res=>{
+         axios.post(`${domain}/api/company/setViews`,{userId}, config).then(res=>{
            console.log(res)
          })
          setPersonalData({
@@ -171,7 +171,8 @@ let config = {
                       onClick={() =>
                         showPersonalData(
                           application.pilotId.userId.phoneNo,
-                          application.pilotId.userId.email
+                          application.pilotId.userId.email,
+                          application.pilotId.userId._id
                         )
                       }
                     >
