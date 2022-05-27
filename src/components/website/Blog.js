@@ -53,10 +53,10 @@ export default class Blog extends React.Component {
           metaKeywords: res.data.metaKeywords,
         });
         axios
-          .post(`${domain}/api/blog/getBlogs`, { category: res.data.category })
+          .post(`${domain}/api/blog/getBlogs?page=1`, { category: res.data.category })
           .then((res) => {
             console.log(res);
-            this.setState({ blog: res.data });
+            this.setState({ blog: res.data.results });
           })
           .catch((err) => {
             console.log(err);
@@ -88,10 +88,10 @@ export default class Blog extends React.Component {
           metaKeywords: res.data.metaKeywords,
         });
         axios
-          .post(`${domain}/api/blog/getBlogs`, { category: res.data.category })
+          .post(`${domain}/api/blog/getBlogs?page=1`, { category: res.data.category })
           .then((res) => {
             console.log(res);
-            this.setState({ blog: res.data });
+            this.setState({ blog: res.data.results });
           })
           .catch((err) => {
             console.log(err);
@@ -150,7 +150,7 @@ export default class Blog extends React.Component {
                   </h2>
                 ) : (
                   <Row>
-                    {this.state.blog
+                    {this.state.blog && this.state.blog
                       // .slice(0, this.state.visible)
                       .map((item, index) => {
                         return (

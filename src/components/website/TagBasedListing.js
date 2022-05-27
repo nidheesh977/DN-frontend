@@ -113,14 +113,14 @@ export default class TagBasedListing extends Component {
     console.log(this.props.match.params.tag);
     axios
       .post(
-        `${domain}/api/tag/imageFilters`,
+        `${domain}/api/tag/imageFilters?page=1`,
         { data: this.props.match.params.tag, type: "all" },
         this.config
       )
       .then((res) => {
         console.log(res.data);
         this.setState({
-          files: res.data,
+          files: res.data.results,
         });
       })
       .catch((err) => {
@@ -138,14 +138,14 @@ export default class TagBasedListing extends Component {
   tagChanged = (slug) => {
     axios
       .post(
-        `${domain}/api/tag/imageFilters`,
+        `${domain}/api/tag/imageFilters?page=1`,
         { data: slug, type: "all" },
         this.config
       )
       .then((res) => {
         console.log(res.data);
         this.setState({
-          files: res.data,
+          files: res.data.results,
         });
       })
       .catch((err) => {
