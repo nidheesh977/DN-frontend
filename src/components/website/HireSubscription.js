@@ -32,6 +32,13 @@ class HireSubscription extends Component {
     };
   }
 
+  componentWillMount() {
+    let role = localStorage.getItem("role");
+    if (role === "pilot") {
+      this.props.history.push("/DownloadSubscription");
+    }
+  }
+
   loadScript = (src) => {
     return new Promise((resolve) => {
       const script = document.createElement("script");

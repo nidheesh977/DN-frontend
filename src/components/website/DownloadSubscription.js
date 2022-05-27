@@ -43,9 +43,7 @@ class DownloadSubscription extends Component {
 
   componentWillMount() {
     let role = localStorage.getItem("role");
-    if (!role) {
-      this.props.history.push("/login");
-    } else if (role === "company") {
+    if (role === "company") {
       this.props.history.push("/HireSubscription");
     }
   }

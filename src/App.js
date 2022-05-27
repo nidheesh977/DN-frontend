@@ -79,8 +79,10 @@ function App(){
     let access_token = localStorage.getItem("access_token")
     if (access_token){
       setLoginStatus(true)
+      console.log("Login status True")
     }else{
       setLoginStatus(false)
+      console.log("Login status False")
     }
   }
 
@@ -177,8 +179,8 @@ function App(){
             <Route component={RecoverPassword} path="/users/:id/forgetPassword/:token" />
             <BoosterRoute component={Booster_dashboard} path="/booster_dashboard" />
             <Route exact path="/textEditor" component={TextEditor} />
-            <Route exact path="/checkout/:id" component={Checkout} />
-            <Route exact path="/company-checkout/:plan" component={CompanyCheckout} />
+            <Route exact path="/checkout/:id" component={routeProps => <Checkout updateLoginStatus = {updateLoginStatus}/>} />
+            <Route exact path="/company-checkout/:plan" component={routeProps => <CompanyCheckout updateLoginStatus = {updateLoginStatus}/>} />
             <Route exact path="/blogs/:slug" component={Blog} />
             <Route exact path="/blog/:slug" component={BlogDetails} />
             <Route exact path="/shoot-of-the-week" component={Shoots} />

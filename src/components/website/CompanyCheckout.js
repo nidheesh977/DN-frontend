@@ -34,7 +34,7 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-function CompanyCheckout() {
+function CompanyCheckout(props) {
   let { plan } = useParams();
 
   const param = useParams();
@@ -47,6 +47,7 @@ function CompanyCheckout() {
   ]);
   const [secret, setSecret] = useState("");
   const [saveAddress, setSaveAddress] = useState(false);
+  const [code, setCode] = useState("");
 
   const history = useHistory();
 
@@ -54,6 +55,7 @@ function CompanyCheckout() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     line1: "",
     line2: "",
     pin_code: "",
@@ -62,7 +64,7 @@ function CompanyCheckout() {
     country: "",
     country_code: "",
     country_object: "",
-    gstNo: ""
+    gstNo: "",
   });
 
   const customStyles = {
@@ -76,54 +78,65 @@ function CompanyCheckout() {
   let [paymentSuccess, setPaymentSuccess] = useState(false);
 
   useEffect(() => {
+    let role = localStorage.getItem("role");
+    if (role === "pilot") {
+      history.push("/DownloadSubscription");
+    }else if (role === "halfCompany"){
+      history.push("/createCompany")
+    }else if (role === "halfPilot"){
+      history.push("/createPilot")
+    }
+  }, []);
+
+  useEffect(() => {
     const config = {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    if(localStorage.getItem("role") === "company"){
+    if (localStorage.getItem("role") === "company") {
       axios
-      .post(`${domain}/api/company/getCompanyAddress`, config)
-      .then((res) => {
-        console.log(res.data);
-        const options = Countries.map((d) => ({
-          value: d.code,
-          label: d.name,
-        }));
-        var country = {};
-        for (var i = 0; i < Countries.length; i++) {
-          if (
-            Countries[i].name === res.data.country ||
-            Countries[i].code === res.data.country
-          ) {
-            country = { value: Countries[i].code, label: Countries[i].name };
-            break;
+        .post(`${domain}/api/company/getCompanyAddress`, config)
+        .then((res) => {
+          console.log(res.data);
+          const options = Countries.map((d) => ({
+            value: d.code,
+            label: d.name,
+          }));
+          var country = {};
+          for (var i = 0; i < Countries.length; i++) {
+            if (
+              Countries[i].name === res.data.country ||
+              Countries[i].code === res.data.country
+            ) {
+              country = { value: Countries[i].code, label: Countries[i].name };
+              break;
+            }
           }
-        }
-        setFormData({
-          ...formData,
-          name: res.data.name ? res.data.name : "",
-          email: res.data.email ? res.data.email : "",
-          line1: res.data.line1 ? res.data.line1 : "",
-          line2: res.data.line2 ? res.data.line2 : "",
-          pin_code: res.data.pin_code ? Number(res.data.pin_code) : "",
-          city: res.data.city ? res.data.city : "",
-          state: res.data.state ? res.data.state : "",
-          country: country.label,
-          country_code: country.value,
-          country_object: country,
+          setFormData({
+            ...formData,
+            name: res.data.name ? res.data.name : "",
+            email: res.data.email ? res.data.email : "",
+            line1: res.data.line1 ? res.data.line1 : "",
+            line2: res.data.line2 ? res.data.line2 : "",
+            pin_code: res.data.pin_code ? Number(res.data.pin_code) : "",
+            city: res.data.city ? res.data.city : "",
+            state: res.data.state ? res.data.state : "",
+            country: country.label,
+            country_code: country.value,
+            country_object: country,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-      const countries = Countries.map((d) => ({
-        value: d.code,
-        label: d.name,
-      }));
-      setTest(countries)
     }
-    
+    const countries = Countries.map((d) => ({
+      value: d.code,
+      label: d.name,
+    }));
+    setTest(countries);
+
     // axios
     //   .post(`${domain}/api/subscription/getSubscription`, { id: param.id })
     //   .then((res) => {
@@ -133,7 +146,6 @@ function CompanyCheckout() {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-   
   }, []);
   const options = {
     clientSecret: secret,
@@ -149,16 +161,28 @@ function CompanyCheckout() {
         );
     };
 
-    var fields = [
-      "name",
-      "email",
-      "line1",
-      "line2",
-      "city",
-      "state",
-      "country",
- 
-    ];
+    if (localStorage.getItem("role") === "company") {
+      var fields = [
+        "name",
+        "email",
+        "line1",
+        "line2",
+        "city",
+        "state",
+        "country",
+      ];
+    } else {
+      var fields = [
+        "name",
+        "email",
+        "phone",
+        "line1",
+        "line2",
+        "city",
+        "state",
+        "country",
+      ];
+    }
 
     let error = false;
     let focusField = "";
@@ -205,6 +229,16 @@ function CompanyCheckout() {
               if (focusField === "") {
                 focusField = fields[i];
               }
+            }
+          }
+          if (fields[i] === "phone" && formData.phone.length < 10) {
+            error = true;
+            document.getElementById(`${fields[i]}_error`).innerText =
+              "Phone number should have 10 numbers";
+            document.getElementById(`${fields[i]}_error`).style.display =
+              "contents";
+            if (focusField === "") {
+              focusField = fields[i];
             }
           }
           if (fields[i] === "line1" && formData.line1.length > 100) {
@@ -283,36 +317,122 @@ function CompanyCheckout() {
           (plan.includes("monthly") ? "Monthly" : "Yearly"),
       };
       console.log(submitData);
-      axios
-        .post(`${domain}/api/payment/startCompanyPayment`, submitData, config)
-        .then((res) => {
-          if (saveAddress) {
+      if (localStorage.getItem("role") === "company") {
+        axios
+          .post(`${domain}/api/payment/startCompanyPayment`, submitData, config)
+          .then((res) => {
+            if (saveAddress) {
+              axios
+                .post(
+                  `${domain}/api/company/updateCompanyAddress`,
+                  submitData,
+                  config
+                )
+                .then((res) => console.log(res.data));
+            }
+            setLoading(false);
+            console.log(res.data);
+            setSecret(res.data.clientSecret);
+            setSubId(res.data.subscriptionId);
+            setStep(2);
+            window.scrollTo(0, 150);
+          })
+          .catch((err) => {
+            setLoading(false);
+            setPaymentCreationFailed(true);
+          });
+      } else {
+        axios
+          .post(`${domain}/api/user/createNewUser`, {
+            name: formData.name,
+            email: formData.email,
+            phoneNo: formData.phone,
+            country: formData.country,
+            role: "halfCompany",
+          })
+          .then((res) => {
+            console.log(res.data);
+            localStorage.setItem("access_token", res.data.token);
+            localStorage.setItem("role", res.data.role);
+            localStorage.setItem("email", res.data.verify)
+            const config_temp = {
+              headers: {
+                Authorization: "Bearer " + res.data.token,
+              },
+            };
             axios
               .post(
-                `${domain}/api/company/updateCompanyAddress`,
+                `${domain}/api/payment/startCompanyPayment`,
                 submitData,
-                config
+                config_temp
               )
-              .then((res) => console.log(res.data));
-          }
-          setLoading(false);
-          console.log(res.data);
-          setSecret(res.data.clientSecret);
-          setSubId(res.data.subscriptionId);
-          setStep(2);
-          window.scrollTo(0, 150);
-        })
-        .catch((err) => {
-          setLoading(false);
-          setPaymentCreationFailed(true);
-        });
+              .then((res) => {
+                if (saveAddress) {
+                  axios
+                    .post(
+                      `${domain}/api/company/updateCompanyAddress`,
+                      submitData,
+                      config
+                    )
+                    .then((res) => console.log(res.data));
+                }
+                setLoading(false);
+                console.log(res.data);
+                setSecret(res.data.clientSecret);
+                setSubId(res.data.subscriptionId);
+                setStep(2);
+                window.scrollTo(0, 150);
+              })
+              .catch((err) => {
+                setLoading(false);
+                setPaymentCreationFailed(true);
+              });
+          })
+          .catch((err) => {
+            try {
+              if (err.response.data === "User already exists") {
+                document.getElementById(`email_error`).innerText =
+                  "EmailId already exists";
+                document.getElementById(`email_error`).style.display =
+                  "contents";
+                document.getElementById(`email`).focus();
+                setLoading(false);
+              } else {
+                alert("Something went wrong. Try again later.");
+              }
+            } catch {
+              alert("Something went wrong. Try again later.");
+            }
+          });
+      }
     } else {
       document.getElementById(focusField).focus();
     }
   };
 
+  const phoneChangeHandler = (e) => {
+    try {
+      if (
+        Number(e.target.value.slice(code.length + 1, 10 + code.length + 1)) ||
+        e.target.value.slice(code.length + 1, 10 + code.length + 1) === ""
+      ) {
+        setFormData({
+          ...formData,
+          ["phone"]: e.target.value.slice(
+            code.length + 1,
+            10 + code.length + 1
+          ),
+        });
+        document.getElementById(e.target.name + "_error").style.display =
+          "none";
+      }
+    } catch {
+      console.log("Not number");
+    }
+  };
+
   const formChangeHandler = (e) => {
-    console.log(e.target)
+    console.log(e.target);
     if (e.target.name === "pin_code") {
       setFormData({
         ...formData,
@@ -328,10 +448,20 @@ function CompanyCheckout() {
   };
 
   const closePaymentPopup = () => {
-    history.push("/company_dashboard/account/my_subscription");
+    if (localStorage.getItem("role") === "company") {
+      history.push("/company_dashboard/account/my_subscription");
+    } else {
+      history.push("/createCompany");
+      props.updateLoginStatus();
+    }
   };
 
   const countryChangeHandler = (country) => {
+    var result = Countries.filter(
+      (obj) => obj.code == country.value || obj.label == country.value
+    );
+    console.log(result[0].dial_code);
+    setCode(result[0].dial_code);
     console.log(country);
     setFormData({
       ...formData,
@@ -393,7 +523,7 @@ function CompanyCheckout() {
                 country: formData.country,
                 pinCode: formData.pin_code,
                 state: formData.state,
-                gstNo: formData.gstNo
+                gstNo: formData.gstNo,
               },
               config
             )
@@ -430,7 +560,7 @@ function CompanyCheckout() {
               country: formData.country,
               pinCode: formData.pin_code,
               state: formData.state,
-              gstNo: formData.gstNo
+              gstNo: formData.gstNo,
             },
             config
           )
@@ -650,7 +780,10 @@ function CompanyCheckout() {
                           name="name"
                           value={formData.name}
                           onChange={formChangeHandler}
-                          disabled
+                          disabled={
+                            localStorage.getItem("role") === "pilot" ||
+                            localStorage.getItem("role") === "company"
+                          }
                         />
                       </div>
                       <div className="login_input_error_msg" id="name_error">
@@ -670,13 +803,47 @@ function CompanyCheckout() {
                           name="email"
                           value={formData.email}
                           onChange={formChangeHandler}
-                          disabled
+                          disabled={
+                            localStorage.getItem("role") === "pilot" ||
+                            localStorage.getItem("role") === "company"
+                          }
                         />
                       </div>
                       <div className="login_input_error_msg" id="email_error">
                         EmailID is required
                       </div>
                     </Col>
+                    {!(
+                      localStorage.getItem("role") ||
+                      localStorage.getItem("role") === "undefined"
+                    ) && (
+                      <Col>
+                        <div className={All.FormGroup}>
+                          <label for="phone">
+                            <div className="pd_b_i_profile_head">
+                              Phone Number{" "}
+                            </div>
+                          </label>
+                          {/* <PhoneInput defaultCountry="IN" className={All.Phonenumber} name="phone" id="phone" value={value} onChange={setValue}/> */}
+                          <input
+                            type="text"
+                            name="phone"
+                            className="a_j_filter_address"
+                            id="phone"
+                            style={{ height: "40px" }}
+                            value={`${code} ${formData.phone}`}
+                            onChange={phoneChangeHandler}
+                            autoComplete={false}
+                          />
+                          <div
+                            className="login_input_error_msg"
+                            id="phone_error"
+                          >
+                            Phone number is required
+                          </div>
+                        </div>
+                      </Col>
+                    )}
                     <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
                       <div style={{ marginBottom: "10px" }}>
                         <label htmlFor="line1">
@@ -789,8 +956,12 @@ function CompanyCheckout() {
                             styles={{
                               ...customStyles,
                               border: "1px solid grey",
+                              cursor: "pointer",
                             }}
-                            isDisabled
+                            isDisabled={
+                              localStorage.getItem("role") === "pilot" ||
+                              localStorage.getItem("role") === "company"
+                            }
                             options={test}
                             value={formData.country_object}
                             onChange={countryChangeHandler}
@@ -801,44 +972,46 @@ function CompanyCheckout() {
                         Country is required
                       </div>
                     </Col>
-                    {
-                      formData.country_code === "IN" ? 
+                    {formData.country_code === "IN" ? (
                       <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
-                      <div style={{ marginBottom: "10px" }}>
-                        <label htmlFor="gstNo">
-                          <div className="pd_b_i_profile_head">GSTNO (optional)</div>
-                        </label>
-                        <input
-                          type="text"
-                          className="a_j_filter_address"
-                          style={{ height: "40px" }}
-                          id="gstNo"
-                          name="gstNo"
-                          value={formData.gstNo}
-                          onChange={formChangeHandler}
-                        />
-                      </div>
-                      <div
-                        className="login_input_error_msg"
-                        id="gstNo_error"
-                      ></div>
-                    </Col> : <></>
-                    }
-                    
-
-                    
+                        <div style={{ marginBottom: "10px" }}>
+                          <label htmlFor="gstNo">
+                            <div className="pd_b_i_profile_head">
+                              GSTNO (optional)
+                            </div>
+                          </label>
+                          <input
+                            type="text"
+                            className="a_j_filter_address"
+                            style={{ height: "40px" }}
+                            id="gstNo"
+                            name="gstNo"
+                            value={formData.gstNo}
+                            onChange={formChangeHandler}
+                          />
+                        </div>
+                        <div
+                          className="login_input_error_msg"
+                          id="gstNo_error"
+                        ></div>
+                      </Col>
+                    ) : (
+                      <></>
+                    )}
                   </Row>
-                  <label style={{ width: "fit-content", cursor: "pointer" }}>
-                    <input
-                      type="checkbox"
-                      name="save_address"
-                      id="save_address"
-                      checked={saveAddress}
-                      style={{ marginRight: "10px" }}
-                      onChange={() => setSaveAddress(!saveAddress)}
-                    />
-                    Save address for future payments.
-                  </label>
+                  {localStorage.getItem("role") === "company" && (
+                    <label style={{ width: "fit-content", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="save_address"
+                        id="save_address"
+                        checked={saveAddress}
+                        style={{ marginRight: "10px" }}
+                        onChange={() => setSaveAddress(!saveAddress)}
+                      />
+                      Save address for future payments.
+                    </label>
+                  )}
                   <div style={{ textAlign: "right", marginBottom: "250px" }}>
                     <button
                       className="c_cBtn"
@@ -913,21 +1086,35 @@ function CompanyCheckout() {
               >
                 We have recieved your payment
               </div>
-              <button className="c_cBtn3" onClick={closePaymentPopup}>
-                Go to Dashboard
-              </button>
-              <button
-                className="c_cBtn4"
-                onClick={() => history.push("/create_job")} 
-              >
-                Go to Create Jobs
-              </button>
+              {localStorage.getItem("role") === "company" ? (
+                <>
+                  <button className="c_cBtn3" onClick={closePaymentPopup}>
+                    Go to Dashboard
+                  </button>
+                  <button
+                    className="c_cBtn4"
+                    onClick={() => history.push("/create_job")}
+                  >
+                    Go to Create Jobs
+                  </button>
+                </>
+              ) : (
+                <button
+                  className="c_cBtn4"
+                  onClick={() => {
+                    history.push("/createCompany");
+                    props.updateLoginStatus();
+                  }}
+                >
+                  Complete profile
+                </button>
+              )}
             </div>
           </DialogContent>
         </Dialog>
         <Dialog
           open={payment_failed}
-          onClose={() => history.push("/pilot_dashboard/account/payments")}
+          onClose={closePaymentPopup}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
@@ -948,9 +1135,7 @@ function CompanyCheckout() {
               <img
                 src={Close}
                 alt=""
-                onClick={() =>
-                  history.push("/pilot_dashboard/account/payments")
-                }
+                onClick={closePaymentPopup}
                 style={{ cursor: "pointer" }}
               />
             </div>
@@ -967,9 +1152,7 @@ function CompanyCheckout() {
               </div>
               <button
                 className="c_cBtn3"
-                onClick={() =>
-                  history.push("/pilot_dashboard/account/payments")
-                }
+                onClick={closePaymentPopup}
               >
                 Close
               </button>
@@ -978,7 +1161,7 @@ function CompanyCheckout() {
         </Dialog>
         <Dialog
           open={payment_creation_failed}
-          onClose={() => history.push("/DownloadSubscription")}
+          onClose={() => history.push("/HireSubscription")}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           maxWidth={"md"}
@@ -999,7 +1182,7 @@ function CompanyCheckout() {
               <img
                 src={Close}
                 alt=""
-                onClick={() => history.push("/DownloadSubscription")}
+                onClick={() => history.push("/HireSubscription")}
                 style={{ cursor: "pointer" }}
               />
             </div>
@@ -1016,7 +1199,7 @@ function CompanyCheckout() {
               </div>
               <button
                 className="c_cBtn3"
-                onClick={() => history.push("/DownloadSubscription")}
+                onClick={() => history.push("/HireSubscription")}
               >
                 Close
               </button>

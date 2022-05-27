@@ -104,7 +104,13 @@ float: right;}
     background: white !important;
     border: 1px solid #e8e8e8 !important;
     width: 90% !important;
+    cursor: pointer;
 }
+
+#checkout_page_country .css-1s2u09g-control:hover{
+    border: 1px solid #4ffea3 !important;
+}
+
 
 @media only screen and (min-width: 992px) {
     #checkout_page_country .css-1s2u09g-control{

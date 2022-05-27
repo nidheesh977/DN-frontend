@@ -41,7 +41,6 @@ function CreatePilot() {
       history.push("/login");
     } else if (localStorage.getItem("email") !== "true") {
       history.push("/verify-email");
-    
     } 
   });
   let [loading, setLoading] = useState(false)

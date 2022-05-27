@@ -123,7 +123,14 @@ let AccountButton = () =>{
   }
   else if(localStorage.getItem("role") === "company"){
     history.push("/company_dashboard/account/")
-  }else{
+  }
+  else if (localStorage.getItem("role") === "halfCompany"){
+    history.push("/createCompany")
+  }
+  else if (localStorage.getItem("role") === "halfPilot"){
+    history.push("/createPilot")
+  }
+  else{
     history.push("/booster_dashboard/account/")
   }
 }

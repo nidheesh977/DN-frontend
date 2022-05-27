@@ -34,7 +34,7 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-function Checkout() {
+function Checkout(props) {
   const param = useParams();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -49,9 +49,12 @@ function Checkout() {
   const history = useHistory();
 
   const [step, setStep] = useState(1);
+  const [code, setCode] = useState("");
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     line1: "",
     line2: "",
     pin_code: "",
@@ -71,6 +74,17 @@ function Checkout() {
 
   let [test, setTest] = useState([]);
   let [paymentSuccess, setPaymentSuccess] = useState(false);
+
+  useEffect(() => {
+    let role = localStorage.getItem("role");
+    if (role === "company") {
+      history.push("/HireSubscription");
+    } else if (role === "halfCompany") {
+      history.push("/createCompany");
+    } else if (role === "halfPilot") {
+      history.push("/createPilot");
+    }
+  }, []);
 
   useEffect(() => {
     const config = {
@@ -109,7 +123,6 @@ function Checkout() {
           country_code: country.value,
           country_object: country,
         });
-        
       })
       .catch((err) => {
         console.log(err);
@@ -143,15 +156,28 @@ function Checkout() {
         );
     };
 
-    var fields = [
-      "name",
-      "email",
-      "line1",
-      "line2",
-      "city",
-      "state",
-      "country",
-    ];
+    if (localStorage.getItem("role") === "pilot") {
+      var fields = [
+        "name",
+        "email",
+        "line1",
+        "line2",
+        "city",
+        "state",
+        "country",
+      ];
+    } else {
+      var fields = [
+        "name",
+        "email",
+        "phone",
+        "line1",
+        "line2",
+        "city",
+        "state",
+        "country",
+      ];
+    }
 
     let error = false;
     let focusField = "";
@@ -198,6 +224,16 @@ function Checkout() {
               if (focusField === "") {
                 focusField = fields[i];
               }
+            }
+          }
+          if (fields[i] === "phone" && formData.phone.length < 10) {
+            error = true;
+            document.getElementById(`${fields[i]}_error`).innerText =
+              "Phone number should have 10 numbers";
+            document.getElementById(`${fields[i]}_error`).style.display =
+              "contents";
+            if (focusField === "") {
+              focusField = fields[i];
             }
           }
           if (fields[i] === "line1" && formData.line1.length > 100) {
@@ -274,31 +310,115 @@ function Checkout() {
         planName: data.name,
       };
       console.log(submitData);
-      axios
-        .post(`${domain}/api/payment/startPaymentProcess`, submitData, config)
-        .then((res) => {
-          if (saveAddress) {
+      if (localStorage.getItem("role") === "pilot"){
+
+        axios
+          .post(`${domain}/api/payment/startPaymentProcess`, submitData, config)
+          .then((res) => {
+            if (saveAddress) {
+              axios
+                .post(
+                  `${domain}/api/pilot/updateBillingAddress`,
+                  submitData,
+                  config
+                )
+                .then((res) => console.log(res.data));
+            }
+            setLoading(false);
+            console.log(res.data);
+            setSecret(res.data.clientSecret);
+            setSubId(res.data.subscriptionId);
+            setStep(2);
+            window.scrollTo(0, 150);
+          })
+          .catch((err) => {
+            setLoading(false);
+            setPaymentCreationFailed(true);
+          });
+      }
+      else{
+        axios
+          .post(`${domain}/api/user/createNewUser`, {
+            name: formData.name,
+            email: formData.email,
+            phoneNo: formData.phone,
+            country: formData.country,
+            role: "halfPilot",
+          })
+          .then((res) => {
+            console.log(res.data);
+            localStorage.setItem("access_token", res.data.token);
+            localStorage.setItem("role", res.data.role);
+            localStorage.setItem("email", res.data.verify)
+            const config_temp = {
+              headers: {
+                Authorization: "Bearer " + res.data.token,
+              },
+            };
             axios
-              .post(
-                `${domain}/api/pilot/updateBillingAddress`,
-                submitData,
-                config
-              )
-              .then((res) => console.log(res.data));
-          }
-          setLoading(false);
-          console.log(res.data);
-          setSecret(res.data.clientSecret);
-          setSubId(res.data.subscriptionId);
-          setStep(2);
-          window.scrollTo(0, 150);
-        })
-        .catch((err) => {
-          setLoading(false);
-          setPaymentCreationFailed(true);
-        });
+          .post(`${domain}/api/payment/startPaymentProcess`, submitData, config_temp)
+          .then((res) => {
+            if (saveAddress) {
+              axios
+                .post(
+                  `${domain}/api/pilot/updateBillingAddress`,
+                  submitData,
+                  config
+                )
+                .then((res) => console.log(res.data));
+            }
+            setLoading(false);
+            console.log(res.data);
+            setSecret(res.data.clientSecret);
+            setSubId(res.data.subscriptionId);
+            setStep(2);
+            window.scrollTo(0, 150);
+          })
+          .catch((err) => {
+            setLoading(false);
+            setPaymentCreationFailed(true);
+          });
+          })
+          .catch(err => {
+            try {
+              if (err.response.data === "User already exists") {
+                document.getElementById(`email_error`).innerText =
+                  "EmailId already exists";
+                document.getElementById(`email_error`).style.display =
+                  "contents";
+                document.getElementById(`email`).focus();
+                setLoading(false);
+              } else {
+                alert("Something went wrong. Try again later.");
+              }
+            } catch {
+              alert("Something went wrong. Try again later.");
+            }
+          })
+      }
     } else {
       document.getElementById(focusField).focus();
+    }
+  };
+
+  const phoneChangeHandler = (e) => {
+    try {
+      if (
+        Number(e.target.value.slice(code.length + 1, 10 + code.length + 1)) ||
+        e.target.value.slice(code.length + 1, 10 + code.length + 1) === ""
+      ) {
+        setFormData({
+          ...formData,
+          ["phone"]: e.target.value.slice(
+            code.length + 1,
+            10 + code.length + 1
+          ),
+        });
+        document.getElementById(e.target.name + "_error").style.display =
+          "none";
+      }
+    } catch {
+      console.log("Not number");
     }
   };
 
@@ -318,11 +438,20 @@ function Checkout() {
   };
 
   const closePaymentPopup = () => {
-    history.push("/pilot_dashboard/account/my_subscription");
+    if (localStorage.getItem("role") === "company") {
+      history.push("/pilot_dashboard/account/my_subscription");
+    } else {
+      history.push("/createPilot");
+      props.updateLoginStatus();
+    }
   };
 
   const countryChangeHandler = (country) => {
-    console.log(country);
+    var result = Countries.filter(
+      (obj) => obj.code == country.value || obj.label == country.value
+    );
+    console.log(result[0].dial_code);
+    setCode(result[0].dial_code);
     setFormData({
       ...formData,
       country: country.label,
@@ -566,23 +695,38 @@ function Checkout() {
 
               <div className="c_costingDiv">
                 <div className="c_costingTitle">Basic Cost</div>
-                <div className="c_costingCost">{formData.country === "India"?`${data.price*77}.00 INR`:`$${data.price}.00 USD`}</div>
+                <div className="c_costingCost">
+                  {formData.country === "India"
+                    ? `${data.price * 77}.00 INR`
+                    : `$${data.price}.00 USD`}
+                </div>
               </div>
 
               <div className="c_costingDiv">
                 <div className="c_costingTitle">GST/Basic Tax</div>
-                <div className="c_costingCost">{formData.country === "India"?`${data.gst*77}.00 INR`:`$${data.gst}.00 USD`}</div>
+                <div className="c_costingCost">
+                  {formData.country === "India"
+                    ? `${data.gst * 77}.00 INR`
+                    : `$${data.gst}.00 USD`}
+                </div>
               </div>
 
               <div className="c_costingDiv">
                 <div className="c_costingTitle">Total Payment</div>
                 <div className="c_costingCost">
-                {formData.country === "India"?`${(Number(data.price)*77) + (Number(data.gst)*77)}.00 INR `:`$${Number(data.price) + Number(data.gst)}.00 USD `}
+                  {formData.country === "India"
+                    ? `${
+                        Number(data.price) * 77 + Number(data.gst) * 77
+                      }.00 INR `
+                    : `$${Number(data.price) + Number(data.gst)}.00 USD `}
                 </div>
               </div>
               <div className="c_disclaimer">
                 All sales are charged in USD and all sales are final. You will
-                be charged {formData.country === "India"?`${(Number(data.price)*77) + (Number(data.gst)*77)}.00 INR `:`$${Number(data.price) + Number(data.gst)}.00 USD `}
+                be charged{" "}
+                {formData.country === "India"
+                  ? `${Number(data.price) * 77 + Number(data.gst) * 77}.00 INR `
+                  : `$${Number(data.price) + Number(data.gst)}.00 USD `}
                 immediately. You will be charged every 30 days thereafter while
                 the subscription is active. Cancel any time. Exchange rates are
                 estimated based on our most recent conversion data and may not
@@ -605,7 +749,10 @@ function Checkout() {
                           name="name"
                           value={formData.name}
                           onChange={formChangeHandler}
-                          disabled
+                          disabled={
+                            localStorage.getItem("role") === "pilot" ||
+                            localStorage.getItem("role") === "company"
+                          }
                         />
                       </div>
                       <div className="login_input_error_msg" id="name_error">
@@ -625,13 +772,47 @@ function Checkout() {
                           name="email"
                           value={formData.email}
                           onChange={formChangeHandler}
-                          disabled
+                          disabled={
+                            localStorage.getItem("role") === "pilot" ||
+                            localStorage.getItem("role") === "company"
+                          }
                         />
                       </div>
                       <div className="login_input_error_msg" id="email_error">
                         EmailID is required
                       </div>
                     </Col>
+                    {!(
+                      localStorage.getItem("role") ||
+                      localStorage.getItem("role") === "undefined"
+                    ) && (
+                      <Col>
+                        <div className={All.FormGroup}>
+                          <label for="phone">
+                            <div className="pd_b_i_profile_head">
+                              Phone Number{" "}
+                            </div>
+                          </label>
+                          {/* <PhoneInput defaultCountry="IN" className={All.Phonenumber} name="phone" id="phone" value={value} onChange={setValue}/> */}
+                          <input
+                            type="text"
+                            name="phone"
+                            className="a_j_filter_address"
+                            id="phone"
+                            style={{ height: "40px" }}
+                            value={`${code} ${formData.phone}`}
+                            onChange={phoneChangeHandler}
+                            autoComplete={false}
+                          />
+                          <div
+                            className="login_input_error_msg"
+                            id="phone_error"
+                          >
+                            Phone number is required
+                          </div>
+                        </div>
+                      </Col>
+                    )}
                     <Col xxl={6} xl={6} lg={6} md={6} sm={12} xs={12}>
                       <div style={{ marginBottom: "10px" }}>
                         <label htmlFor="line1">
@@ -726,7 +907,6 @@ function Checkout() {
                           name="state"
                           value={formData.state}
                           onChange={formChangeHandler}
-                          
                         />
                       </div>
                       <div
@@ -749,7 +929,10 @@ function Checkout() {
                             options={test}
                             value={formData.country_object}
                             onChange={countryChangeHandler}
-                            isDisabled
+                            isDisabled={
+                              localStorage.getItem("role") === "pilot" ||
+                              localStorage.getItem("role") === "company"
+                            }
                           />
                         </div>
                       </div>
@@ -758,17 +941,19 @@ function Checkout() {
                       </div>
                     </Col>
                   </Row>
-                  <label style={{ width: "fit-content", cursor: "pointer" }}>
-                    <input
-                      type="checkbox"
-                      name="save_address"
-                      id="save_address"
-                      checked={saveAddress}
-                      style={{ marginRight: "10px" }}
-                      onChange={() => setSaveAddress(!saveAddress)}
-                    />
-                    Save address for future payments.
-                  </label>
+                  {localStorage.getItem("role") === "pilot" && (
+                    <label style={{ width: "fit-content", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="save_address"
+                        id="save_address"
+                        checked={saveAddress}
+                        style={{ marginRight: "10px" }}
+                        onChange={() => setSaveAddress(!saveAddress)}
+                      />
+                      Save address for future payments.
+                    </label>
+                  )}
                   <div style={{ textAlign: "right", marginBottom: "250px" }}>
                     <button
                       className="c_cBtn"
@@ -843,7 +1028,9 @@ function Checkout() {
               >
                 We have recieved your payment
               </div>
-              <button className="c_cBtn3" onClick={closePaymentPopup}>
+              {localStorage.getItem("role") === "pilot" ? (
+                <>
+                <button className="c_cBtn3" onClick={closePaymentPopup}>
                 Go to Dashboard
               </button>
               <button
@@ -852,6 +1039,18 @@ function Checkout() {
               >
                 Go to Upload Files
               </button>
+                </>)
+                :<button
+                className="c_cBtn4"
+                onClick={() => {
+                  history.push("/createPilot");
+                  props.updateLoginStatus();
+                }}
+              >
+                Complete profile
+              </button>
+                }
+              
             </div>
           </DialogContent>
         </Dialog>
