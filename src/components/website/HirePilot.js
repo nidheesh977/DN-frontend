@@ -131,6 +131,7 @@ class HirePilot extends Component {
       pilot_list: [],
       page: 1,
       next_page: false,
+      filter: false,
       loading: true,
       after_response: false,
       message: "",
@@ -155,7 +156,7 @@ class HirePilot extends Component {
       selected_drones_value: [],
       subscription: {},
       upgradePopup: false,
-      limitExceededPopup: false
+      limitExceededPopup: false,
     };
   }
 
@@ -234,55 +235,63 @@ class HirePilot extends Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    if (this.state.subscription.subscription){
-      if ((this.state.subscription.subscription.proposals <= this.state.subscription.proposals && this.state.subscription.subscription.plan.includes("platinum"))){
+    if (this.state.subscription.subscription) {
+      if (
+        this.state.subscription.subscription.proposals <=
+          this.state.subscription.proposals &&
+        this.state.subscription.subscription.plan.includes("platinum")
+      ) {
         this.setState({
-          limitExceededPopup: true
-        })
-      }else if ((this.state.subscription.subscription.proposals <= this.state.subscription.proposals && !this.state.subscription.subscription.plan.includes("platinum"))){
+          limitExceededPopup: true,
+        });
+      } else if (
+        this.state.subscription.subscription.proposals <=
+          this.state.subscription.proposals &&
+        !this.state.subscription.subscription.plan.includes("platinum")
+      ) {
         this.setState({
-          upgradePopup: true
-        })
-      }
-      else{
+          upgradePopup: true,
+        });
+      } else {
         this.setState({
           startProcess: true,
           id2: id1,
         });
       }
-    }else{
+    } else {
       this.setState({
-        upgradePopup: true
-      })
+        upgradePopup: true,
+      });
     }
-    if(localStorage.getItem("role") === "company"){
-      axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
-        console.log(res.data)
-        this.setState({
-          subscription:res.data
-        })
-      })
+    if (localStorage.getItem("role") === "company") {
+      axios
+        .get(`${domain}/api/company/getCompanySubscription`, config)
+        .then((res) => {
+          console.log(res.data);
+          this.setState({
+            subscription: res.data,
+          });
+        });
     }
-    
   };
-checkLoginandPush = () =>{
-  if(localStorage.getItem("access_token")){
-    this.props.history.push("/create_job")
-  }else{
-    localStorage.setItem("lastTab", "company")
-    this.props.history.push("/login")
-  }
-}
+  checkLoginandPush = () => {
+    if (localStorage.getItem("access_token")) {
+      this.props.history.push("/create_job");
+    } else {
+      localStorage.setItem("lastTab", "company");
+      this.props.history.push("/login");
+    }
+  };
   clickStartProcess1 = (id1) => {
-    if (this.state.subscription.subscription){
+    if (this.state.subscription.subscription) {
       this.setState({
         savePilot: true,
         selectedPilot: id1,
       });
-    }else{
+    } else {
       this.setState({
-        upgradePopup:true
-      })
+        upgradePopup: true,
+      });
     }
   };
   closeProcess1 = () => {
@@ -312,13 +321,15 @@ checkLoginandPush = () =>{
               Authorization: "Bearer " + localStorage.getItem("access_token"),
             },
           };
-          if(localStorage.getItem("role") === "company"){
-            axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
-              console.log(res.data)
-              this.setState({
-                subscription:res.data
-              })
-            })
+          if (localStorage.getItem("role") === "company") {
+            axios
+              .get(`${domain}/api/company/getCompanySubscription`, config)
+              .then((res) => {
+                console.log(res.data);
+                this.setState({
+                  subscription: res.data,
+                });
+              });
           }
           console.log(res);
           document.getElementById("alertBox").style.display = "block";
@@ -326,9 +337,11 @@ checkLoginandPush = () =>{
           this.setState({
             message: "",
           });
-          axios.post(`${domain}/api/company/setProposals`, config).then(res=>{
-            console.log(res)
-          })
+          axios
+            .post(`${domain}/api/company/setProposals`, config)
+            .then((res) => {
+              console.log(res);
+            });
           setTimeout(() => {
             document.getElementById("alertBox").style.display = "none";
             this.setState({
@@ -433,6 +446,94 @@ checkLoginandPush = () =>{
     this.props.history.push("/pilot/" + id);
   };
 
+  loadMore1 = () => {
+    console.log(this.state.page);
+    window.removeEventListener("scroll", this.handleScroll);
+    if (this.state.filter) {
+      var work_type = [];
+      if (this.state.lisenced) {
+        work_type.push("licensed");
+      }
+      if (this.state.unlisenced) {
+        work_type.push("unlicensed");
+      }
+      var employee_type = [];
+      if (this.state.full_time) {
+        employee_type.push("full_time");
+      }
+      if (this.state.part_time) {
+        employee_type.push("part_time");
+      }
+      console.log(work_type);
+      console.log(employee_type);
+      console.log(this.state.filter_salary);
+      console.log(this.state.selected_drones);
+      console.log(this.state.keyword);
+      console.log(this.state.location);
+      console.log(this.state.price_range);
+      let data = {
+        keywords: this.state.keyword,
+        address: this.state.location,
+        workType: work_type,
+        employeeType: employee_type,
+        drones: this.state.selected_drones,
+      };
+      if (this.state.filter_salary) {
+        data.price = this.state.price_range;
+      }
+      axios
+        .post(`${domain}/api/pilot/pilotFilters?page=${this.state.page}`, data)
+        .then((res) => {
+          console.log(res);
+          if (res.data.next) {
+            this.setState({
+              next_page: true,
+              page: res.data.next.page,
+            });
+          } else {
+            this.setState({
+              next_page: false,
+            });
+          }
+          this.setState({
+            pilot_list: this.state.pilot_list.concat(res.data.results),
+          });
+          this.setState({
+            loading: false,
+          });
+          window.addEventListener("scroll", this.handleScroll);
+        }).catch(err => {
+          window.addEventListener("scroll", this.handleScroll);
+          this.setState({ loading: false });
+        })
+    } else {
+      axios
+        .get(`${domain}/api/pilot/hirePilots?page=${this.state.page}`)
+        .then((res) => {
+          if (res.data.next) {
+            this.setState({
+              next_page: true,
+              page: res.data.next.page,
+            });
+          } else {
+            this.setState({
+              next_page: false,
+            });
+          }
+          this.setState({
+            pilot_list: this.state.pilot_list.concat(res.data.results),
+            loading: false,
+          });
+          console.log(res);
+          window.addEventListener("scroll", this.handleScroll);
+        })
+        .catch((err) => {
+          this.setState({ loading: false });
+          window.addEventListener("scroll", this.handleScroll);
+        });
+    }
+  };
+
   handleScroll = () => {
     try {
       const wrappedElement = document.getElementById("main_div");
@@ -440,9 +541,9 @@ checkLoginandPush = () =>{
         wrappedElement.getBoundingClientRect().bottom <=
         window.innerHeight + 1
       ) {
-        if (this.state.next_page){
-          console.log(this.state.next_page)
-          this.loadMore1()
+        if (this.state.next_page) {
+          console.log(this.state.next_page);
+          this.loadMore1();
         }
       }
     } catch {
@@ -457,20 +558,30 @@ checkLoginandPush = () =>{
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    if(localStorage.getItem("role") === "company"){
-      axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
-        console.log(res.data)
-        this.setState({
-          subscription:res.data
-        })
-      })
+    if (localStorage.getItem("role") === "company") {
+      axios
+        .get(`${domain}/api/company/getCompanySubscription`, config)
+        .then((res) => {
+          console.log(res.data);
+          this.setState({
+            subscription: res.data,
+          });
+        });
     }
 
-    
-
     axios
-      .get(`${domain}/api/pilot/hirePilots?${this.state.page}`)
+      .get(`${domain}/api/pilot/hirePilots?page=${this.state.page}`)
       .then((res) => {
+        if (res.data.next) {
+          this.setState({
+            next_page: true,
+            page: res.data.next.page,
+          });
+        } else {
+          this.setState({
+            next_page: false,
+          });
+        }
         this.setState({
           pilot_list: res.data.results,
           loading: false,
@@ -518,6 +629,11 @@ checkLoginandPush = () =>{
       });
     console.log("Nothing");
   }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
+  }
+
   messageHandler = (e) => {
     document.getElementById("tomakered").style.backgroundColor = "white";
 
@@ -605,6 +721,9 @@ checkLoginandPush = () =>{
     this.setState({
       loading: true,
       pilot_list: [],
+      filter: true,
+      page: 1,
+      next_page: false,
     });
     var work_type = [];
     if (this.state.lisenced) {
@@ -637,15 +756,27 @@ checkLoginandPush = () =>{
     if (this.state.filter_salary) {
       data.price = this.state.price_range;
     }
-    axios.post(`${domain}/api/pilot/pilotFilters?page=1`, data).then((res) => {
-      console.log(res);
-      this.setState({
-        pilot_list: res.data.results,
+    axios
+      .post(`${domain}/api/pilot/pilotFilters?page=1`, data)
+      .then((res) => {
+        console.log(res);
+        if (res.data.next) {
+          this.setState({
+            next_page: true,
+            page: res.data.next.page,
+          });
+        } else {
+          this.setState({
+            next_page: false,
+          });
+        }
+        this.setState({
+          pilot_list: res.data.results,
+        });
+        this.setState({
+          loading: false,
+        });
       });
-      this.setState({
-        loading: false,
-      });
-    });
   };
 
   clearFilter = () => {
@@ -1273,151 +1404,294 @@ checkLoginandPush = () =>{
                       style={{ marginBottom: "20px" }}
                     />
                   )}
-                  {this.state.pilot_list.map((pilot, index) => {
-                    return (
-                      <div className="h_p_listing_container">
-                        <Row>
-                          <Col>
-                            <div className="h_p_listing_img_container">
-                              <img
-                                src={pilot.profilePic}
-                                alt=""
-                                className="h_p_listing_img"
-                                style={{ borderRadius: "50px" }}
-                              />
-                            </div>
-                            <div className="h_p_others_container">
-                              <div
-                                className="h_p_listing_name"
-                                onClick={() =>
-                                  this.pilotDetailPage(pilot.userName)
-                                }
-                                style={{ display: "flex", alignItem: "center" }}
-                              >
-                                {pilot.name}{" "}
-                                {pilot.pilotPro && (
-                                  <img
-                                    src={ProImg}
-                                    alt="Pro Img"
-                                    height="24px"
-                                    style={{ marginLeft: "10px" }}
-                                  />
-                                )}
-                              </div>
-                              <div className="h_p_listing_job">
-                                {pilot.pilotType === "unlicensed"
-                                  ? "Professional Drone pilot"
-                                  : "Passionate Drone pilot"}
-                              </div>
-                              <div className="h_p_listing_location">
+                  <div id="main_div">
+                    {this.state.pilot_list.map((pilot, index) => {
+                      return (
+                        <div className="h_p_listing_container">
+                          <Row>
+                            <Col>
+                              <div className="h_p_listing_img_container">
                                 <img
-                                  src={locationIcon}
+                                  src={pilot.profilePic}
                                   alt=""
-                                  height={"13px"}
-                                  style={{ marginRight: "4px" }}
-                                />{" "}
-                                {pilot.city}, {pilot.country}
+                                  className="h_p_listing_img"
+                                  style={{ borderRadius: "50px" }}
+                                />
                               </div>
-                              <div className="h_p_listing_description">
-                                {pilot.bio}
-                              </div>
-                              <div className="h_p_listing_keywords_container">
-                                {pilot.skills
-                                  .slice(0, pilot.keyswordsVisible)
-                                  .map((keyword, index) => {
-                                    return (
-                                      <div className="h_p_listing_keyword">
-                                        {keyword}
-                                      </div>
-                                    );
-                                  })}
-                                {pilot.skills.length > 3 && (
-                                  <>
-                                    {pilot.keyswordsVisible <= 3 ? (
-                                      <div
-                                        className="h_p_listing_keyword h_p_listing_keyword_more"
-                                        onClick={() =>
-                                          this.handleMoreKeyword(index)
-                                        }
-                                      >
-                                        + {pilot.skills.length - 3} more
-                                      </div>
-                                    ) : (
-                                      <div
-                                        className="h_p_listing_keyword h_p_listing_keyword_more"
-                                        onClick={() =>
-                                          this.handleMoreKeyword(index)
-                                        }
-                                      >
-                                        - Show less
-                                      </div>
-                                    )}
-                                  </>
-                                )}
-                              </div>
-                            </div>
-                            <div className="h_p_listing_pricing_rating">
-                              <div
-                                className="h_p_listing_price_container"
-                                style={{ marginBottom: "15px" }}
-                              >
-                                {pilot.hourlyPayment ? (
-                                  <>
-                                    <div className="h_p_listing_price">
-                                      ${pilot.hourlyPayment}
-                                    </div>
-                                    <div className="h_p_listing_price_per">
-                                      /hour
-                                    </div>
-                                  </>
-                                ) : (
-                                  <>
-                                    <div className="h_p_listing_price">
-                                      ${pilot.monthlyPayment}
-                                    </div>
-                                    <div className="h_p_listing_price_per">
-                                      /month
-                                    </div>
-                                  </>
-                                )}
-                              </div>
-                              {localStorage.getItem("role") === "company" ? (
-                                <div className="h_p_listing_btn_container">
-                                  <button
-                                    className="h_p_start_process_btn"
-                                    onClick={() =>
-                                      this.clickStartProcess(pilot._id)
-                                    }
-                                  >
-                                    HirePilot
-                                  </button>
-                                  {this.state.mySavedPilots.includes(
-                                    pilot._id
-                                  ) ? (
-                                    <button
-                                      className="h_p_save_pilot_btn"
-                                      onClick={() =>
-                                        this.unsavePilot(pilot._id)
-                                      }
-                                    >
-                                      <i
-                                        class="fa fa-heart"
-                                        style={{ color: "black" }}
-                                      ></i>
-                                    </button>
-                                  ) : (
-                                    <button
-                                      className="h_p_save_pilot_btn"
-                                      onClick={() =>
-                                        this.clickStartProcess1(pilot._id)
-                                      }
-                                    >
-                                      <i class="fa fa-heart"></i>
-                                    </button>
+                              <div className="h_p_others_container">
+                                <div
+                                  className="h_p_listing_name"
+                                  onClick={() =>
+                                    this.pilotDetailPage(pilot.userName)
+                                  }
+                                  style={{
+                                    display: "flex",
+                                    alignItem: "center",
+                                  }}
+                                >
+                                  {pilot.name}{" "}
+                                  {pilot.pilotPro && (
+                                    <img
+                                      src={ProImg}
+                                      alt="Pro Img"
+                                      height="24px"
+                                      style={{ marginLeft: "10px" }}
+                                    />
                                   )}
                                 </div>
-                              ) : (
-                                <div className="h_p_listing_btn_container">
+                                <div className="h_p_listing_job">
+                                  {pilot.pilotType === "unlicensed"
+                                    ? "Professional Drone pilot"
+                                    : "Passionate Drone pilot"}
+                                </div>
+                                <div className="h_p_listing_location">
+                                  <img
+                                    src={locationIcon}
+                                    alt=""
+                                    height={"13px"}
+                                    style={{ marginRight: "4px" }}
+                                  />{" "}
+                                  {pilot.city}, {pilot.country}
+                                </div>
+                                <div className="h_p_listing_description">
+                                  {pilot.bio}
+                                </div>
+                                <div className="h_p_listing_keywords_container">
+                                  {pilot.skills
+                                    .slice(0, pilot.keyswordsVisible)
+                                    .map((keyword, index) => {
+                                      return (
+                                        <div className="h_p_listing_keyword">
+                                          {keyword}
+                                        </div>
+                                      );
+                                    })}
+                                  {pilot.skills.length > 3 && (
+                                    <>
+                                      {pilot.keyswordsVisible <= 3 ? (
+                                        <div
+                                          className="h_p_listing_keyword h_p_listing_keyword_more"
+                                          onClick={() =>
+                                            this.handleMoreKeyword(index)
+                                          }
+                                        >
+                                          + {pilot.skills.length - 3} more
+                                        </div>
+                                      ) : (
+                                        <div
+                                          className="h_p_listing_keyword h_p_listing_keyword_more"
+                                          onClick={() =>
+                                            this.handleMoreKeyword(index)
+                                          }
+                                        >
+                                          - Show less
+                                        </div>
+                                      )}
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="h_p_listing_pricing_rating">
+                                <div
+                                  className="h_p_listing_price_container"
+                                  style={{ marginBottom: "15px" }}
+                                >
+                                  {pilot.hourlyPayment ? (
+                                    <>
+                                      <div className="h_p_listing_price">
+                                        ${pilot.hourlyPayment}
+                                      </div>
+                                      <div className="h_p_listing_price_per">
+                                        /hour
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div className="h_p_listing_price">
+                                        ${pilot.monthlyPayment}
+                                      </div>
+                                      <div className="h_p_listing_price_per">
+                                        /month
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                                {localStorage.getItem("role") === "company" ? (
+                                  <div className="h_p_listing_btn_container">
+                                    <button
+                                      className="h_p_start_process_btn"
+                                      onClick={() =>
+                                        this.clickStartProcess(pilot._id)
+                                      }
+                                    >
+                                      HirePilot
+                                    </button>
+                                    {this.state.mySavedPilots.includes(
+                                      pilot._id
+                                    ) ? (
+                                      <button
+                                        className="h_p_save_pilot_btn"
+                                        onClick={() =>
+                                          this.unsavePilot(pilot._id)
+                                        }
+                                      >
+                                        <i
+                                          class="fa fa-heart"
+                                          style={{ color: "black" }}
+                                        ></i>
+                                      </button>
+                                    ) : (
+                                      <button
+                                        className="h_p_save_pilot_btn"
+                                        onClick={() =>
+                                          this.clickStartProcess1(pilot._id)
+                                        }
+                                      >
+                                        <i class="fa fa-heart"></i>
+                                      </button>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div className="h_p_listing_btn_container">
+                                    <button
+                                      className="h_p_start_process_btn"
+                                      onClick={() =>
+                                        this.pilotDetailPage(pilot.userName)
+                                      }
+                                    >
+                                      View Profile
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </Col>
+                          </Row>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {this.state.next_page ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        fontFamily: "muli-regular",
+                        fontSize: "18px",
+                      }}
+                    >
+                      Loading...
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        color: "gray",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      No more jobs.
+                    </div>
+                  )}
+                </Visible>
+                <Visible sm xs>
+                  <div id="main_div">
+                    {this.state.pilot_list.map((pilot, index) => {
+                      return (
+                        <div className="h_p_listing_container">
+                          <Row>
+                            <Col>
+                              <div className="h_p_listing_img_container_sm">
+                                <img
+                                  src={pilot.profilePic}
+                                  alt=""
+                                  className="h_p_listing_img"
+                                />
+                              </div>
+                              <div className="h_p_others_container_sm">
+                                <div
+                                  className="h_p_listing_name"
+                                  onClick={() => this.pilotDetailPage(1)}
+                                  style={{
+                                    display: "flex",
+                                    alignItem: "center",
+                                  }}
+                                >
+                                  {pilot.name}{" "}
+                                  {pilot.pilotPro && (
+                                    <img
+                                      src={ProImg}
+                                      alt="Pro Img"
+                                      height="24px"
+                                      style={{ marginLeft: "10px" }}
+                                    />
+                                  )}
+                                </div>
+                                <div className="h_p_listing_job">
+                                  {pilot.pilotType === "unlicensed"
+                                    ? "Professional Drone pilot"
+                                    : "Passionate Drone pilot"}
+                                </div>
+                                <div className="h_p_listing_location">
+                                  <img
+                                    src={locationIcon}
+                                    alt=""
+                                    height={"13px"}
+                                    style={{ marginRight: "4px" }}
+                                  />{" "}
+                                  {pilot.city}, {pilot.country}
+                                </div>
+                                <div className="h_p_listing_description">
+                                  {pilot.bio}
+                                </div>
+                                <div className="h_p_listing_keywords_container">
+                                  {pilot.skills
+                                    .slice(0, pilot.keyswordsVisible)
+                                    .map((keyword, index) => {
+                                      return (
+                                        <div className="h_p_listing_keyword">
+                                          {keyword}
+                                        </div>
+                                      );
+                                    })}
+                                  {pilot.skills.length > 3 && (
+                                    <>
+                                      {pilot.keyswordsVisible <= 3 ? (
+                                        <div
+                                          className="h_p_listing_keyword h_p_listing_keyword_more"
+                                          onClick={() =>
+                                            this.handleMoreKeyword(index)
+                                          }
+                                        >
+                                          + {pilot.skills.length - 3} more
+                                        </div>
+                                      ) : (
+                                        <div
+                                          className="h_p_listing_keyword h_p_listing_keyword_more"
+                                          onClick={() =>
+                                            this.handleMoreKeyword(index)
+                                          }
+                                        >
+                                          - Show less
+                                        </div>
+                                      )}
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                              <hr
+                                style={{ borderBottom: "1px solid #dcdcdc" }}
+                              />
+                              <div className="h_p_listing_pricing_rating_sm">
+                                <div className="h_p_star-price_box">
+                                  <div className="h_p_price-container-1">
+                                    <div className="h_p_price-rate">
+                                      $20{" "}
+                                      <span className="h_p_hour_time">/hr</span>{" "}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="h_p_listing_btn-container">
                                   <button
                                     className="h_p_start_process_btn"
                                     onClick={() =>
@@ -1427,121 +1701,36 @@ checkLoginandPush = () =>{
                                     View Profile
                                   </button>
                                 </div>
-                              )}
-                            </div>
-                          </Col>
-                        </Row>
-                      </div>
-                    );
-                  })}
-                </Visible>
-                <Visible sm xs>
-                  {this.state.pilot_list.map((pilot, index) => {
-                    return (
-                      <div className="h_p_listing_container">
-                        <Row>
-                          <Col>
-                            <div className="h_p_listing_img_container_sm">
-                              <img
-                                src={pilot.profilePic}
-                                alt=""
-                                className="h_p_listing_img"
-                              />
-                            </div>
-                            <div className="h_p_others_container_sm">
-                              <div
-                                className="h_p_listing_name"
-                                onClick={() => this.pilotDetailPage(1)}
-                                style={{ display: "flex", alignItem: "center" }}
-                              >
-                                {pilot.name}{" "}
-                                {pilot.pilotPro && (
-                                  <img
-                                    src={ProImg}
-                                    alt="Pro Img"
-                                    height="24px"
-                                    style={{ marginLeft: "10px" }}
-                                  />
-                                )}
                               </div>
-                              <div className="h_p_listing_job">
-                                {pilot.pilotType === "unlicensed"
-                                  ? "Professional Drone pilot"
-                                  : "Passionate Drone pilot"}
-                              </div>
-                              <div className="h_p_listing_location">
-                                <img
-                                  src={locationIcon}
-                                  alt=""
-                                  height={"13px"}
-                                  style={{ marginRight: "4px" }}
-                                />{" "}
-                                {pilot.city}, {pilot.country}
-                              </div>
-                              <div className="h_p_listing_description">
-                                {pilot.bio}
-                              </div>
-                              <div className="h_p_listing_keywords_container">
-                                {pilot.skills
-                                  .slice(0, pilot.keyswordsVisible)
-                                  .map((keyword, index) => {
-                                    return (
-                                      <div className="h_p_listing_keyword">
-                                        {keyword}
-                                      </div>
-                                    );
-                                  })}
-                                {pilot.skills.length > 3 && (
-                                  <>
-                                    {pilot.keyswordsVisible <= 3 ? (
-                                      <div
-                                        className="h_p_listing_keyword h_p_listing_keyword_more"
-                                        onClick={() =>
-                                          this.handleMoreKeyword(index)
-                                        }
-                                      >
-                                        + {pilot.skills.length - 3} more
-                                      </div>
-                                    ) : (
-                                      <div
-                                        className="h_p_listing_keyword h_p_listing_keyword_more"
-                                        onClick={() =>
-                                          this.handleMoreKeyword(index)
-                                        }
-                                      >
-                                        - Show less
-                                      </div>
-                                    )}
-                                  </>
-                                )}
-                              </div>
-                            </div>
-                            <hr style={{ borderBottom: "1px solid #dcdcdc" }} />
-                            <div className="h_p_listing_pricing_rating_sm">
-                              <div className="h_p_star-price_box">
-                                <div className="h_p_price-container-1">
-                                  <div className="h_p_price-rate">
-                                    $20{" "}
-                                    <span className="h_p_hour_time">/hr</span>{" "}
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="h_p_listing_btn-container">
-                                <button
-                                  className="h_p_start_process_btn"
-                                  onClick={() =>
-                                    this.pilotDetailPage(pilot.userName)
-                                  }
-                                >
-                                  View Profile
-                                </button>
-                              </div>
-                            </div>
-                          </Col>
-                        </Row>
-                      </div>
-                    );
-                  })}
+                            </Col>
+                          </Row>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {this.state.next_page ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        fontFamily: "muli-regular",
+                        fontSize: "18px",
+                      }}
+                    >
+                      Loading...
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        color: "gray",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      No more pilots.
+                    </div>
+                  )}
                 </Visible>
               </Col>
             </Row>
@@ -1802,97 +1991,101 @@ checkLoginandPush = () =>{
               </DialogContent>
             </Dialog>
             <Dialog
-                open={this.state.upgradePopup}
-                onClose={()=>this.setState({upgradePopup: false})}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                maxWidth={"md"}
-                fullWidth={true}
-                PaperProps={{
-                  style: {
-                    maxWidth: "820px",
-                    borderRadius: "10px",
-                  },
-                }}
+              open={this.state.upgradePopup}
+              onClose={() => this.setState({ upgradePopup: false })}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+              PaperProps={{
+                style: {
+                  maxWidth: "820px",
+                  borderRadius: "10px",
+                },
+              }}
+            >
+              <DialogContent
+                className={All.PopupBody}
+                style={{ marginBottom: "50px" }}
               >
-                <DialogContent
-                  className={All.PopupBody}
-                  style={{ marginBottom: "50px" }}
+                <div
+                  style={{ position: "absolute", top: "20px", right: "20px" }}
                 >
-                  <div
-                    style={{ position: "absolute", top: "20px", right: "20px" }}
-                  >
-                    <img
-                      src={Close}
-                      alt=""
-                      onClick={()=>this.setState({upgradePopup: false})}
-                      style={{ cursor: "pointer" }}
-                    />
+                  <img
+                    src={Close}
+                    alt=""
+                    onClick={() => this.setState({ upgradePopup: false })}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div className="u_f_popup_title">
+                    You exceeded your limit. Upgrade to continue.
                   </div>
-                  <Row style={{ marginTop: "30px" }}>
-                    <div className="u_f_popup_title">
-                      You exceeded your limit. Upgrade to continue.
-                    </div>
-                    <div className="u_f_popup_btn_container">
-                      <button
-                        className="u_f_popup_btn1"
-                        onClick={()=>this.setState({upgradePopup: false})}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        className="u_f_popup_btn2"
-                        onClick={()=>this.props.history.push("/HireSubscription")}
-                      >
-                        Upgrade
-                      </button>
-                    </div>
-                  </Row>
-                </DialogContent>
-              </Dialog>
-        <Dialog
-                open={this.state.limitExceededPopup}
-                onClose={()=>this.setState({limitExceededPopup: false})}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                maxWidth={"md"}
-                fullWidth={true}
-                PaperProps={{
-                  style: {
-                    maxWidth: "820px",
-                    borderRadius: "10px",
-                  },
-                }}
+                  <div className="u_f_popup_btn_container">
+                    <button
+                      className="u_f_popup_btn1"
+                      onClick={() => this.setState({ upgradePopup: false })}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="u_f_popup_btn2"
+                      onClick={() =>
+                        this.props.history.push("/HireSubscription")
+                      }
+                    >
+                      Upgrade
+                    </button>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
+            <Dialog
+              open={this.state.limitExceededPopup}
+              onClose={() => this.setState({ limitExceededPopup: false })}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth={"md"}
+              fullWidth={true}
+              PaperProps={{
+                style: {
+                  maxWidth: "820px",
+                  borderRadius: "10px",
+                },
+              }}
+            >
+              <DialogContent
+                className={All.PopupBody}
+                style={{ marginBottom: "50px" }}
               >
-                <DialogContent
-                  className={All.PopupBody}
-                  style={{ marginBottom: "50px" }}
+                <div
+                  style={{ position: "absolute", top: "20px", right: "20px" }}
                 >
-                  <div
-                    style={{ position: "absolute", top: "20px", right: "20px" }}
-                  >
-                    <img
-                      src={Close}
-                      alt=""
-                      onClick={()=>this.setState({limitExceededPopup: false})}
-                      style={{ cursor: "pointer" }}
-                    />
+                  <img
+                    src={Close}
+                    alt=""
+                    onClick={() => this.setState({ limitExceededPopup: false })}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+                <Row style={{ marginTop: "30px" }}>
+                  <div className="u_f_popup_title">
+                    You exceeded your active job limit.
                   </div>
-                  <Row style={{ marginTop: "30px" }}>
-                    <div className="u_f_popup_title">
-                      You exceeded your active job limit.
-                    </div>
-                    <div className="u_f_popup_btn_container">
-                      <button
-                        className="u_f_popup_btn1"
-                        onClick={()=>this.setState({limitExceededPopup: false})}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </Row>
-                </DialogContent>
-              </Dialog>
+                  <div className="u_f_popup_btn_container">
+                    <button
+                      className="u_f_popup_btn1"
+                      onClick={() =>
+                        this.setState({ limitExceededPopup: false })
+                      }
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </Row>
+              </DialogContent>
+            </Dialog>
           </Container>
         </div>
       </>
