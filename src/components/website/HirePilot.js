@@ -129,8 +129,8 @@ class HirePilot extends Component {
       selected_file: {},
       jobSaved: false,
       pilot_list: [],
-      page: "page1",
-      nextPage: false,
+      page: 1,
+      next_page: false,
       loading: true,
       after_response: false,
       message: "",
@@ -433,7 +433,25 @@ checkLoginandPush = () =>{
     this.props.history.push("/pilot/" + id);
   };
 
+  handleScroll = () => {
+    try {
+      const wrappedElement = document.getElementById("main_div");
+      if (
+        wrappedElement.getBoundingClientRect().bottom <=
+        window.innerHeight + 1
+      ) {
+        if (this.state.next_page){
+          console.log(this.state.next_page)
+          this.loadMore1()
+        }
+      }
+    } catch {
+      console.log("Error");
+    }
+  };
+
   componentDidMount() {
+    window.addEventListener("scroll", this.handleScroll);
     let config = {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
