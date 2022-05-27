@@ -439,11 +439,10 @@ class ApplyJob extends Component {
     if (document.getElementById("priceChecker").checked === true) {
       data.price = this.state.price_range;
     }
-    axios.post(`${domain}/api/jobs/filterJobs`, data).then((res) => {
-      console.log(res);
+    axios.post(`${domain}/api/jobs/filterJobs?page=1`, data).then((res) => {
       console.log(res);
       this.setState({
-        data: res.data,
+        data: res.data.results,
       });
       this.setState({ loading: false });
     });

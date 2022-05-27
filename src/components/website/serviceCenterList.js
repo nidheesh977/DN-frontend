@@ -182,10 +182,10 @@ class ServiceCenters extends Component {
       });
 
     axios
-      .get(`${domain}/api/center/getCenter`)
+      .get(`${domain}/api/center/getCenter?page=1`)
       .then((res) => {
-        const center = res.data;
-        console.log(res.data);
+        const center = res.data.results;
+        console.log(res);
         this.setState({
           data: center,
           loading: false,
@@ -608,14 +608,14 @@ class ServiceCenters extends Component {
       loading: true,
     });
     axios
-      .post(`${domain}/api/center/filterCenter`, {
+      .post(`${domain}/api/center/filterCenter?page=1`, {
         address: this.state.address.split(",")[0],
         brands: brands,
       })
       .then((res) => {
         console.log(res);
         this.setState({
-          data: res.data,
+          data: res.data.results,
           loading: false,
         });
       })
