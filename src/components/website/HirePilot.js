@@ -637,10 +637,10 @@ checkLoginandPush = () =>{
     if (this.state.filter_salary) {
       data.price = this.state.price_range;
     }
-    axios.post(`${domain}/api/pilot/pilotFilters`, data).then((res) => {
+    axios.post(`${domain}/api/pilot/pilotFilters?page=1`, data).then((res) => {
       console.log(res);
       this.setState({
-        pilot_list: res.data,
+        pilot_list: res.data.results,
       });
       this.setState({
         loading: false,
