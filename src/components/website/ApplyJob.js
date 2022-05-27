@@ -86,6 +86,7 @@ class ApplyJob extends Component {
       dialogOpen: false,
       dialogOpen1: false,
       authourised: false,
+      filter: false,
       filter_keyword: "",
       filter_country: "",
       filter_city: "",
@@ -93,7 +94,7 @@ class ApplyJob extends Component {
       work_type: [],
       price_range: [20, 40],
       next_page: false,
-      page: "page1",
+      page: 1,
       likeSuccess: false,
       likeFailed: false,
       dislikeSuccess: false,
@@ -146,10 +147,92 @@ class ApplyJob extends Component {
       show_more_filters: !this.state.show_more_filters,
     });
   };
+  
+  loadMore1 = () => {
+    console.log(this.state.page)
+    window.removeEventListener("scroll", this.handleScroll);
+    if (this.state.filter){
+    const data = {
+      keywords: this.state.filter_keyword,
+      employeeType: this.state.pilot_type,
+      jobType: this.state.work_type,
+
+      address: this.state.address,
+    };
+    if (document.getElementById("priceChecker").checked === true) {
+      data.price = this.state.price_range;
+    }
+    axios.post(`${domain}/api/jobs/filterJobs?page=${this.state.page}`, data).then((res) => {
+      console.log(res);
+      this.setState({
+        data: this.state.data.concat(res.data.results),
+        loading: false
+      });
+      if (res.data.next){
+        console.log(res.data.next.page)
+        this.setState({
+          next_page: true,
+          page: res.data.next.page
+        })
+      }else{
+        this.setState({
+          next_page: false
+        });
+      }
+      window.addEventListener("scroll", this.handleScroll);
+    })
+    .catch(err => {
+      this.setState({ loading: false });
+      window.addEventListener("scroll", this.handleScroll);
+    })
+    }else{
+    axios
+      .get(`${domain}/api/jobs/getJobs?page=${this.state.page}`)
+      .then((res) => {
+        console.log(res);
+        const persons = res.data;
+        console.log(persons.results);
+        this.setState({ data: this.state.data.concat(persons.results), loading: false });
+        if (res.data.next) {
+          this.setState({
+            next_page: true,
+            page: res.data.next.page,
+          });
+        } else {
+          this.setState({
+            next_page: false,
+          });
+        }
+        window.addEventListener("scroll", this.handleScroll);
+      })
+      .catch((err) => {
+        this.setState({ loading: false });
+        window.addEventListener("scroll", this.handleScroll);
+      });
+    }
+  };
+
+  handleScroll = () => {
+    try {
+      const wrappedElement = document.getElementById("main_div");
+      if (
+        wrappedElement.getBoundingClientRect().bottom <=
+        window.innerHeight + 1
+      ) {
+        if (this.state.next_page){
+          console.log(this.state.next_page)
+          this.loadMore1()
+        }
+      }
+    } catch {
+      console.log("Error");
+    }
+  };
 
   componentDidMount() {
+    window.addEventListener("scroll", this.handleScroll);
     axios
-      .get(`${domain}/api/jobs/getJobs?${this.state.page}`)
+      .get(`${domain}/api/jobs/getJobs?page=${this.state.page}`)
       .then((res) => {
         console.log(res);
         const persons = res.data;
@@ -158,7 +241,7 @@ class ApplyJob extends Component {
         if (res.data.next) {
           this.setState({
             next_page: true,
-            next_page: res.data.next,
+            page: res.data.next.page,
           });
         } else {
           this.setState({
@@ -351,7 +434,6 @@ class ApplyJob extends Component {
     });
   };
 
-  loadMore = () => {};
 
   filterPilotTypeChangeHandler = (type) => {
     let pilot_type = this.state.pilot_type;
@@ -428,7 +510,7 @@ class ApplyJob extends Component {
     // pilot_type: [],
     // work_type: [],
     // price_range: [20, 40],
-    this.setState({ loading: true });
+    this.setState({ loading: true, page:1, next_page: false, filter: true });
     const data = {
       keywords: this.state.filter_keyword,
       employeeType: this.state.pilot_type,
@@ -444,6 +526,16 @@ class ApplyJob extends Component {
       this.setState({
         data: res.data.results,
       });
+      if (res.data.next){
+        this.setState({
+          page: res.data.next.page,
+          next_page: true
+        })
+      }else{
+        this.setState({
+          next_page: false
+        })
+      }
       this.setState({ loading: false });
     });
   };
@@ -457,6 +549,10 @@ class ApplyJob extends Component {
     });
     document.getElementById("priceChecker").checked = false;
   };
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
+  }
 
   render() {
     return (
@@ -1012,6 +1108,7 @@ class ApplyJob extends Component {
                       </Box>
                     </div>
                   )}
+                  <div  id = "main_div">
                   {this.state.data.map((item, i) => {
                     return (
                       <div
@@ -1120,8 +1217,10 @@ class ApplyJob extends Component {
                       </div>
                     );
                   })}
+                  </div>
+                  {this.state.next_page? <div style = {{textAlign: "center", marginTop: "20px", fontFamily: "muli-regular", fontSize: "18px"}}>Loading...</div>:<div style = {{textAlign: "center", marginTop: "20px", color: "gray"}}>No more jobs.</div>}
                 </div>
-                {this.state.next_page && (
+                {/* {this.state.next_page && (
                   <div
                     className="a_j_load_div"
                     style={{ marginBottom: "40px" }}
@@ -1134,7 +1233,7 @@ class ApplyJob extends Component {
                       <span className="a_j_location_text">Load More</span>
                     </button>{" "}
                   </div>
-                )}
+                )} */}
               </Col>
             </Row>
             <Dialog
