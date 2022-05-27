@@ -149,13 +149,103 @@ class ServiceCenters extends Component {
       showNumber: false,
       after_data_fetch: false,
       next_page: false,
+      page: 1,
+      filter: false,
       showBrandFilter: false,
       address: "",
       latLng: "",
     };
   }
 
+  loadMore1 = () => {
+    console.log(this.state.page)
+    window.removeEventListener("scroll", this.handleScroll);
+    console.log(this.state.filter)
+    if (this.state.filter){
+      var brands = this.state.selected_brands.map(x => x.brand)
+
+    console.log(brands);
+    axios
+      .post(`${domain}/api/center/filterCenter?page=${this.state.page}`, {
+        address: this.state.address.split(",")[0],
+        brands: brands,
+      })
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          data: this.state.data.concat(res.data.results),
+          loading: false,
+        });
+        if (res.data.next){
+          this.setState({
+            next_page: true,
+            page: res.data.next.page
+          })
+        }else{
+          this.setState({
+            next_page: false,
+          })
+        }
+        window.addEventListener("scroll", this.handleScroll);
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false,
+        });
+        window.addEventListener("scroll", this.handleScroll);
+      });
+    }
+    else{
+      axios
+      .get(`${domain}/api/center/getCenter?page=${this.state.page}`)
+      .then((res) => {
+        const center = res.data.results;
+        console.log(res);
+        this.setState({
+          data: this.state.data.concat(center),
+          after_data_fetch: true,
+        });
+        if (res.data.next) {
+          this.setState({
+            next_page: true,
+            page: res.data.next.page
+          });
+        }else{
+          this.setState({
+            next_page: false,
+          });
+        }
+        window.addEventListener("scroll", this.handleScroll);
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false,
+          after_data_fetch: true,
+        });
+        window.addEventListener("scroll", this.handleScroll);
+      });
+    }
+  }
+
+  handleScroll = () => {
+    try {
+      const wrappedElement = document.getElementById("main_div");
+      if (
+        wrappedElement.getBoundingClientRect().bottom <=
+        window.innerHeight + 1
+      ) {
+        if (this.state.next_page){
+          console.log(this.state.next_page)
+          this.loadMore1()
+        }
+      }
+    } catch {
+      console.log("Error");
+    }
+  };
+
   componentDidMount() {
+    window.addEventListener("scroll", this.handleScroll);
     axios
       .get(`${domain}/api/brand/getBrands`)
       .then((res) => {
@@ -194,6 +284,7 @@ class ServiceCenters extends Component {
         if (res.data.next) {
           this.setState({
             next_page: true,
+            page: res.data.next.page
           });
         }
       })
@@ -231,6 +322,11 @@ class ServiceCenters extends Component {
       }
     });
   }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
+  }
+
   saveLastTab = () =>{
     localStorage.setItem("lastTab", "service_center")
   }
@@ -606,6 +702,7 @@ class ServiceCenters extends Component {
     this.setState({
       data: [],
       loading: true,
+      filter: true,
     });
     axios
       .post(`${domain}/api/center/filterCenter?page=1`, {
@@ -618,6 +715,16 @@ class ServiceCenters extends Component {
           data: res.data.results,
           loading: false,
         });
+        if (res.data.next){
+          this.setState({
+            page: res.data.next.page,
+            next_page: true,
+          })
+        }else{
+          this.setState({
+            next_page: false
+          })
+        }
       })
       .catch((err) => {
         this.setState({
@@ -907,101 +1014,87 @@ class ServiceCenters extends Component {
             </Row>
             {this.state.data.length !== 0 && (
               <>
-                <Row>
-                  {this.state.data.map((item, index) => {
-                    return (
-                      <Col lg={6} md={12}>
-                        <div className="service_center_list">
-                          <div className="s_c_profile_container">
-                            <img
-                              src={item.profilePic}
-                              alt=""
-                              width="35px"
-                              height="35px"
-                            />
-                          </div>
-                          <span
-                            className="service_center_name"
-                            onClick={() => this.serviceCenterDetails(item._id)}
-                          >
-                            {item.centerName}
-                          </span>
-                          <div className="rating_request_md_xl">
-                            <div className="service_center_rating_md_xl">
-                              <span
-                                className={
-                                  item.rating >= 1
-                                    ? "star_checked"
-                                    : "star_unchecked"
-                                }
-                              >
-                                &#9733;
-                              </span>
-                              <span
-                                className={
-                                  item.rating >= 2
-                                    ? "star_checked"
-                                    : "star_unchecked"
-                                }
-                              >
-                                &#9733;
-                              </span>
-                              <span
-                                className={
-                                  item.rating >= 3
-                                    ? "star_checked"
-                                    : "star_unchecked"
-                                }
-                              >
-                                &#9733;
-                              </span>
-                              <span
-                                className={
-                                  item.rating >= 4
-                                    ? "star_checked"
-                                    : "star_unchecked"
-                                }
-                              >
-                                &#9733;
-                              </span>
-                              <span
-                                className={
-                                  item.rating >= 5
-                                    ? "star_checked"
-                                    : "star_unchecked"
-                                }
-                              >
-                                &#9733;
-                              </span>
+                <Row id = "main_div">
+                    {this.state.data.map((item, index) => {
+                      return (
+                        <Col lg={6} md={12}>
+                          <div className="service_center_list">
+                            <div className="s_c_profile_container">
+                              <img
+                                src={item.profilePic}
+                                alt=""
+                                width="35px"
+                                height="35px"
+                              />
                             </div>
-                            <div></div>
-                          </div>
-                          <div className="s_c_other_details">
-                            <div className="s_c_other_details_title">
-                              Working time:
-                            </div>
-                            <div className="s_c_other_details_content">
-                              {item.workingHours}
-                            </div>
-                            <div className="s_c_other_details_title">
-                              Phone Number:
-                            </div>
-                            <div className="s_c_other_details_content s_c_other_details_phone">
-                              <a href={`tel:${item.phoneNo}`}>
-                                {" "}
-                                <div
-                                  className="s_c_other_details_phone"
-                                  style={{
-                                    fontSize: "14px",
-                                    display: "inline-block",
-                                  }}
+                            <span
+                              className="service_center_name"
+                              onClick={() => this.serviceCenterDetails(item._id)}
+                            >
+                              {item.centerName}
+                            </span>
+                            <div className="rating_request_md_xl">
+                              <div className="service_center_rating_md_xl">
+                                <span
+                                  className={
+                                    item.rating >= 1
+                                      ? "star_checked"
+                                      : "star_unchecked"
+                                  }
                                 >
-                                  {item.phoneNo}{" "}
-                                </div>
-                              </a>
-                              {item.secondaryNumber && ", "}
-                              {item.secondaryNumber ? (
-                                <a href={`tel:${item.secondaryNumber}`}>
+                                  &#9733;
+                                </span>
+                                <span
+                                  className={
+                                    item.rating >= 2
+                                      ? "star_checked"
+                                      : "star_unchecked"
+                                  }
+                                >
+                                  &#9733;
+                                </span>
+                                <span
+                                  className={
+                                    item.rating >= 3
+                                      ? "star_checked"
+                                      : "star_unchecked"
+                                  }
+                                >
+                                  &#9733;
+                                </span>
+                                <span
+                                  className={
+                                    item.rating >= 4
+                                      ? "star_checked"
+                                      : "star_unchecked"
+                                  }
+                                >
+                                  &#9733;
+                                </span>
+                                <span
+                                  className={
+                                    item.rating >= 5
+                                      ? "star_checked"
+                                      : "star_unchecked"
+                                  }
+                                >
+                                  &#9733;
+                                </span>
+                              </div>
+                              <div></div>
+                            </div>
+                            <div className="s_c_other_details">
+                              <div className="s_c_other_details_title">
+                                Working time:
+                              </div>
+                              <div className="s_c_other_details_content">
+                                {item.workingHours}
+                              </div>
+                              <div className="s_c_other_details_title">
+                                Phone Number:
+                              </div>
+                              <div className="s_c_other_details_content s_c_other_details_phone">
+                                <a href={`tel:${item.phoneNo}`}>
                                   {" "}
                                   <div
                                     className="s_c_other_details_phone"
@@ -1010,90 +1103,127 @@ class ServiceCenters extends Component {
                                       display: "inline-block",
                                     }}
                                   >
-                                    {item.secondaryNumber}
+                                    {item.phoneNo}{" "}
                                   </div>
                                 </a>
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                            <div className="s_c_other_details_title">
-                              Location:
-                            </div>
-                            <div className="s_c_other_details_content">
-                              {
-                                item.address ? item.address.split(",")[0]  : ""
-                              }
-                              {
-                                item.address ? item.address.split(",")[1] ? "," + item.address.split(",")[1] : "" : ""
-                              }
-                            
-                            </div>
-                            <div className="s_c_other_details_title">
-                              Brands:
-                            </div>
-                            <div className="s_c_other_details_content">
-                              {item.brandOfDrones
-                                .slice(0, 3)
-                                .map((brand, index) => {
-                                  return (
+                                {item.secondaryNumber && ", "}
+                                {item.secondaryNumber ? (
+                                  <a href={`tel:${item.secondaryNumber}`}>
+                                    {" "}
                                     <div
-                                      className="service_center_brand_list"
-                                      key={index}
+                                      className="s_c_other_details_phone"
+                                      style={{
+                                        fontSize: "14px",
+                                        display: "inline-block",
+                                      }}
                                     >
-                                      {brand}
-                                      {index + 1 <
-                                        item.brandOfDrones.slice(0, 4).length &&
-                                        ","}{" "}
-                                      &nbsp;{" "}
+                                      {item.secondaryNumber}
                                     </div>
-                                  );
-                                })}{" "}
-                              {item.brandOfDrones.length > 4 && `. . .`}
+                                  </a>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                              <div className="s_c_other_details_title">
+                                Location:
+                              </div>
+                              <div className="s_c_other_details_content">
+                                {
+                                  item.address ? item.address.split(",")[0]  : ""
+                                }
+                                {
+                                  item.address ? item.address.split(",")[1] ? "," + item.address.split(",")[1] : "" : ""
+                                }
+                              
+                              </div>
+                              <div className="s_c_other_details_title">
+                                Brands:
+                              </div>
+                              <div className="s_c_other_details_content">
+                                {item.brandOfDrones
+                                  .slice(0, 3)
+                                  .map((brand, index) => {
+                                    return (
+                                      <div
+                                        className="service_center_brand_list"
+                                        key={index}
+                                      >
+                                        {brand}
+                                        {index + 1 <
+                                          item.brandOfDrones.slice(0, 4).length &&
+                                          ","}{" "}
+                                        &nbsp;{" "}
+                                      </div>
+                                    );
+                                  })}{" "}
+                                {item.brandOfDrones.length > 4 && `. . .`}
+                              </div>
+                            </div>
+                            <hr style={{ border: "1px solid #efefef" }} />
+                            <div style={{ display: "flex", height: "30px" }}>
+                              <button
+                                className="s_c_button2"
+                                onClick={() => this.enquireNow(item._id)}
+                              >
+                                Enquire Now
+                              </button>
+
+                              {item.whatsappNo ? (
+                                <a
+                                  href={
+                                    "https://api.whatsapp.com/send/?phone=+91 " +
+                                    item.whatsappNo +
+                                    "&text=Hello"
+                                  }
+                                  target="_blank"
+                                >
+                                  <img
+                                    src={whatsapp_icon}
+                                    alt=""
+                                    height={"27px"}
+                                    style={{ marginTop: "3px" }}
+                                  />
+                                </a>
+                              ) : (
+                                <></>
+                              )}
+
+                              <img
+                                src={share2}
+                                alt=""
+                                className="s_c_share"
+                                onClick={() => this.shareLinkChange(item.id)}
+                                style={{ cursor: "pointer" }}
+                              />
                             </div>
                           </div>
-                          <hr style={{ border: "1px solid #efefef" }} />
-                          <div style={{ display: "flex", height: "30px" }}>
-                            <button
-                              className="s_c_button2"
-                              onClick={() => this.enquireNow(item._id)}
-                            >
-                              Enquire Now
-                            </button>
-
-                            {item.whatsappNo ? (
-                              <a
-                                href={
-                                  "https://api.whatsapp.com/send/?phone=+91 " +
-                                  item.whatsappNo +
-                                  "&text=Hello"
-                                }
-                                target="_blank"
-                              >
-                                <img
-                                  src={whatsapp_icon}
-                                  alt=""
-                                  height={"27px"}
-                                  style={{ marginTop: "3px" }}
-                                />
-                              </a>
-                            ) : (
-                              <></>
-                            )}
-
-                            <img
-                              src={share2}
-                              alt=""
-                              className="s_c_share"
-                              onClick={() => this.shareLinkChange(item.id)}
-                              style={{ cursor: "pointer" }}
-                            />
-                          </div>
-                        </div>
-                      </Col>
-                    );
-                  })}
+                        </Col>
+                      );
+                    })}
                 </Row>
+                {this.state.next_page ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        fontFamily: "muli-regular",
+                        fontSize: "18px",
+                      }}
+                    >
+                      Loading...
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        color: "gray",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      No more Service centers.
+                    </div>
+                  )}
                 <Dialog
                   open={this.state.enquiry}
                   onClose={this.closeEnquiry1}
@@ -1341,14 +1471,6 @@ class ServiceCenters extends Component {
                   </DialogContent>
                 </Dialog>
               </>
-            )}
-            {this.state.next_page && (
-              <div className="a_j_load_div" style={{ margin: "40px 0px" }}>
-                <button className="a_j_loadMore_btn">
-                  <img src={loadMore} className="a_j_location_logo" />
-                  <span className="a_j_location_text">Load More</span>
-                </button>{" "}
-              </div>
             )}
             {this.state.data.length === 0 &&
               !this.state.loading &&
