@@ -351,11 +351,11 @@ class GalleryFilter extends React.Component {
     });
     if (this.state.followingDropdown == 2) {
       await axios
-        .post(`${domain}/api/image/getFollowersMedia`, config)
+        .post(`${domain}/api/image/getFollowersMedia?page=1`, config)
         .then((res) => {
           console.log(res);
           this.setState({
-            listing: res.data,
+            listing: res.data.results,
             loading: false,
           });
         })
@@ -366,11 +366,11 @@ class GalleryFilter extends React.Component {
         });
     } else {
       axios
-        .get(`${domain}/api/image/getImages`, config)
+        .get(`${domain}/api/image/getImages?page=1`, config)
         .then((res) => {
           console.log(res.data);
           this.setState({
-            listing: res.data,
+            listing: res.data.results,
             loading: false,
           });
         })
@@ -391,11 +391,11 @@ class GalleryFilter extends React.Component {
       },
     };
     axios
-      .get(`${domain}/api/image/getImages`, config)
+      .get(`${domain}/api/image/getImages?page=1`, config)
       .then((res) => {
         console.log(res.data);
         this.setState({
-          listing: res.data,
+          listing: res.data.results,
           loading: false,
         });
       })
@@ -451,14 +451,14 @@ class GalleryFilter extends React.Component {
     });
     await axios
       .post(
-        `${domain}/api/image/imageFilters`,
+        `${domain}/api/image/imageFilters?page=1`,
         { data: this.state.keywords, type: this.state.dropdown },
         this.config
       )
       .then((res) => {
         console.log(res);
         this.setState({
-          listing: res.data,
+          listing: res.data.results,
           loading: false,
         });
       })
@@ -484,14 +484,14 @@ class GalleryFilter extends React.Component {
     });
     await axios
       .post(
-        `${domain}/api/image/imageFilters`,
+        `${domain}/api/image/imageFilters?page=1`,
         { data: this.state.keywords, type: this.state.dropdown },
         this.config
       )
       .then((res) => {
         console.log(res);
         this.setState({
-          listing: res.data,
+          listing: res.data.results,
           loading: false,
         });
       });
