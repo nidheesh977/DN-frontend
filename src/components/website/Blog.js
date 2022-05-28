@@ -24,22 +24,75 @@ export default class Blog extends React.Component {
       metaKeywords: "",
       blog: [],
       blogcategories: [],
-      visible: 6,
+      visible: 2,
       error: false,
       trendingBlogs: [],
-      subscribeEmail: ""
+      subscribeEmail: "",
+      next_page: true,
+      page: 1,
     };
-
-    this.loadMore = this.loadMore.bind(this);
   }
 
-  loadMore() {
-    this.setState((prev) => {
-      return { visible: prev.visible + 8 };
-    });
+  loadMore = () => {
+    console.log("load more")
+    window.removeEventListener("scroll", this.handleScroll);
+    axios
+      .post(`${domain}/api/category/getOneCategory`, {
+        slug: this.props.match.params.slug,
+      })
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          metaTitle: res.data.metaTitle,
+          metaDescription: res.data.metaDescription,
+          metaKeywords: res.data.metaKeywords,
+        });
+        axios
+          .post(`${domain}/api/blog/getBlogs?page=${this.state.page}`, { category: res.data.category })
+          .then((res) => {
+            console.log(res);
+            this.setState({ blog: this.state.blog.concat(res.data.results) });
+            window.addEventListener("scroll", this.handleScroll);
+            if (res.data.next){
+              this.setState({
+                next_page: true,
+                page: res.data.next.page
+              })
+            }else{
+              this.setState({
+                next_page: false
+              })
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            window.addEventListener("scroll", this.handleScroll);
+          });
+      })
+      .catch(err => {
+        window.addEventListener("scroll", this.handleScroll);
+      })
   }
+
+  handleScroll = () => {
+    try {
+      const wrappedElement = document.getElementById("main_div");
+      if (
+        wrappedElement.getBoundingClientRect().bottom <=
+        window.innerHeight + 1
+      ) {
+        if (this.state.next_page){
+          console.log(this.state.next_page)
+          this.loadMore()
+        }
+      }
+    } catch {
+      console.log("Error");
+    }
+  };
 
   componentDidMount() {
+    window.addEventListener("scroll", this.handleScroll);
     const url = `${API_URL}/blog`;
     axios
       .post(`${domain}/api/category/getOneCategory`, {
@@ -57,6 +110,16 @@ export default class Blog extends React.Component {
           .then((res) => {
             console.log(res);
             this.setState({ blog: res.data.results });
+            if (res.data.next){
+              this.setState({
+                next_page: true,
+                page: res.data.next.page
+              })
+            }else{
+              this.setState({
+                next_page: false
+              })
+            }
           })
           .catch((err) => {
             console.log(err);
@@ -78,6 +141,10 @@ export default class Blog extends React.Component {
   }
 
   categoryClicked = (slug, category) => {
+    this.setState({
+      next_page: false,
+      page: 1
+    })
     axios
       .post(`${domain}/api/category/getOneCategory`, { slug: slug })
       .then((res) => {
@@ -92,6 +159,16 @@ export default class Blog extends React.Component {
           .then((res) => {
             console.log(res);
             this.setState({ blog: res.data.results });
+            if (res.data.next){
+              this.setState({
+                next_page: true,
+                page: res.data.next.data
+              })
+            }else{
+              this.setState({
+                next_page: false
+              })
+            }
           })
           .catch((err) => {
             console.log(err);
@@ -149,62 +226,71 @@ export default class Blog extends React.Component {
                     No blogs yet on this category
                   </h2>
                 ) : (
-                  <Row>
-                    {this.state.blog && this.state.blog
-                      // .slice(0, this.state.visible)
-                      .map((item, index) => {
-                        return (
-                          <>
-                            <Col md={6} className={All.Blog}>
-                              <Link to={`/blog/${item.slug}`} id={item.id}>
-                                <div className={All.ListBlogs}>
-                                  <img
-                                    class={All.BlogImage}
-                                    src={
-                                      item.image
-                                        ? `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${item.image}`
-                                        : Placeholder
-                                    }
-                                    width="100%"
-                                    style={{ height: "240px" }}
-                                  ></img>
-                                  <div
-                                    className={`${All.Bgcolordynamic} ${All.Content}`}
-                                  >
-                                    <h6>{item.category}</h6>
-                                    <p className={All.BlogDesc}>{item.title}</p>
-                                    <span className={All.PublishedDate}>
-                                      {" "}
-                                      <img src={Calendar}></img>{" "}
-                                      {item.createdAt.slice(0, 10)}
-                                    </span>
-                                    <span className={All.Location}>
-                                      {" "}
-                                      <img src={Pin}></img> {item.location}{" "}
-                                    </span>
+                  <>
+                    <Row id = "main_div">
+                      {this.state.blog && this.state.blog.map((item, index) => {
+                          return (
+                            <>
+                              <Col md={6} className={All.Blog}>
+                                <Link to={`/blog/${item.slug}`} id={item.id}>
+                                  <div className={All.ListBlogs}>
+                                    <img
+                                      class={All.BlogImage}
+                                      src={
+                                        item.image
+                                          ? `https://dn-nexevo-original-files.s3.ap-south-1.amazonaws.com/${item.image}`
+                                          : Placeholder
+                                      }
+                                      width="100%"
+                                      style={{ height: "240px" }}
+                                    ></img>
+                                    <div
+                                      className={`${All.Bgcolordynamic} ${All.Content}`}
+                                    >
+                                      <h6>{item.category}</h6>
+                                      <p className={All.BlogDesc}>{item.title}</p>
+                                      <span className={All.PublishedDate}>
+                                        {" "}
+                                        <img src={Calendar}></img>{" "}
+                                        {item.createdAt.slice(0, 10)}
+                                      </span>
+                                      <span className={All.Location}>
+                                        {" "}
+                                        <img src={Pin}></img> {item.location}{" "}
+                                      </span>
+                                    </div>
                                   </div>
-                                </div>
-                              </Link>
-                            </Col>
-                          </>
-                        );
-                      })}
-                  </Row>
-                )}
-
-                {this.state.visible < this.state.blog.length && (
-                  <Box py={6} textAlign={"center"}>
-                    <Button
-                      variant="contained"
-                      color="default"
-                      type="submit"
-                      onClick={this.loadMore}
-                      className={`${All.BtnStyle_5} ${All.LoadMore} ${All.W_sm_70} ${All.Bold}`}
+                                </Link>
+                              </Col>
+                            </>
+                          );
+                        })}
+                    </Row>
+                    {this.state.next_page ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        fontFamily: "muli-regular",
+                        fontSize: "18px",
+                      }}
                     >
-                      <img style={{ paddingRight: 10 }} src={DroneImg} />
-                      Load More
-                    </Button>
-                  </Box>
+                      Loading...
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        color: "gray",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      No more Blogs.
+                    </div>
+                  )}
+                  </>
+                  
                 )}
               </Col>
 

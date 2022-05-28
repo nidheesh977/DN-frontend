@@ -501,7 +501,7 @@ function Imageview() {
       });
   };
   return (
-    <Container className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}>
+    <Container className={`${All.Container}`}>
       <Container>
         <div style={{ marginTop: "35px" }}>
           <div
@@ -561,21 +561,21 @@ function Imageview() {
                 onError = {(e) => e.target.src = "https://qawerk.com/wp-content/uploads/2021/07/no-image-available-icon-6.png"}
               />
             )}
-            <div style={{ position: "absolute", top: "65px", right: "10px", backgroundColor: "rgba(255,255,255,0.6)", padding: "20px", borderRadius: "0px 0px 0px 30px" }}>
-              <div style={{ cursor: "pointer", display: "inline-block", padding: "0px 10px" }}>
+            <div style={{ position: "absolute", top: "65px", right: "10px", backgroundColor: "rgba(255,255,255,0.6)", padding: "5px", borderRadius: "0px 0px 0px 15px" }}>
+              <div style={{ cursor: "pointer", display: "inline-block", padding: "0px 10px" }} className = "like-share-icons-container">
                 {likedData.includes(image._id) ? (
                   <div>
                     <i
-                      class="fas fa-heart"
+                      class="fas fa-heart like-share-icons"
                       onClick={unlikeImage}
                       style={{ fontSize: "30px" }}
                     ></i>
                   </div>
                 ) : (
                   // <img src={Heart} className="likeImage" onClick={unlikeImage} />
-                  <div>
+                  <div className = "like-share-icons-container">
                     <i
-                      class="far fa-heart"
+                      class="far fa-heart like-share-icons"
                       onClick={likeImage}
                       style={{ fontSize: "30px" }}
                     ></i>
@@ -583,11 +583,12 @@ function Imageview() {
                   // <img src={Like} className="likeImage" onClick={likeImage} />
                 )}
               </div>
-              <div style={{ cursor: "pointer", display: "inline-block", padding: "0px 10px" }}>
+              <div style={{ cursor: "pointer", display: "inline-block", padding: "0px 10px" }} className = "like-share-icons-container">
                 <img
                   src={Share}
                   onClick={clickShareLink}
                   style={{ width: "30px" }}
+                  className = "like-share-icons"
                 />
               </div>
             </div>
@@ -598,7 +599,7 @@ function Imageview() {
           {/* left */}
           <Col lg={8}>
             <Row>
-              <Col lg={1.4} xs={3}>
+              <Col lg={1.5} md={2} xs={3.5}>
                 {" "}
                 <img
                   onClick={() => redirectPilot(image.userId)}

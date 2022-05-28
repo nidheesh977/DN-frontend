@@ -27,6 +27,9 @@ export default class TagBasedListing extends Component {
       metaTitle: "meta-title",
       metaDescription: "meta-description",
       metaKeywords: "meta-keywords",
+      next_page: true,
+      page: 1,
+      slug: '',
     };
   }
 
@@ -91,7 +94,62 @@ export default class TagBasedListing extends Component {
     }
   };
 
+  loadMore1 = () => {
+    window.removeEventListener("scroll", this.handleScroll);
+    console.log("Load more")
+    axios
+      .post(
+        `${domain}/api/tag/imageFilters?page=${this.state.page}`,
+        { data: this.state.slug, type: "all" },
+        this.config
+      )
+      .then((res) => {
+        console.log(res.data);
+        this.setState({
+          files: this.state.files.concat(res.data.results),
+        });
+        if (res.data.next){
+          this.setState({
+            next_page: true,
+            page: res.data.next.page
+          })
+        }else{
+          this.setState({
+            next_page: false
+          })
+        }
+        window.addEventListener("scroll", this.handleScroll);
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false,
+        });
+        window.addEventListener("scroll", this.handleScroll);
+      });
+  }
+
+  handleScroll = () => {
+    try {
+      const wrappedElement = document.getElementById("main_div");
+      if (
+        wrappedElement.getBoundingClientRect().bottom <=
+        window.innerHeight + 1
+      ) {
+        if (this.state.next_page){
+          console.log(this.state.next_page)
+          this.loadMore1()
+        }
+      }
+    } catch {
+      console.log("Error");
+    }
+  };
+
   componentDidMount() {
+    this.setState({
+      slug: this.props.match.params.tag
+    })
+    window.addEventListener("scroll", this.handleScroll);
     const config = {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -122,6 +180,16 @@ export default class TagBasedListing extends Component {
         this.setState({
           files: res.data.results,
         });
+        if (res.data.next){
+          this.setState({
+            next_page: true,
+            page: res.data.next.page
+          })
+        }else{
+          this.setState({
+            next_page: false
+          })
+        }
       })
       .catch((err) => {
         this.setState({
@@ -136,6 +204,11 @@ export default class TagBasedListing extends Component {
     });
   }
   tagChanged = (slug) => {
+    this.setState({
+      next_page: false,
+      page: 1,
+      slug: slug
+    })
     axios
       .post(
         `${domain}/api/tag/imageFilters?page=1`,
@@ -147,6 +220,16 @@ export default class TagBasedListing extends Component {
         this.setState({
           files: res.data.results,
         });
+        if (res.data.next){
+          this.setState({
+            next_page: true,
+            page: res.data.next.page
+          })
+        }else{
+          this.setState({
+            next_page: false
+          })
+        }
       })
       .catch((err) => {
         this.setState({
@@ -198,7 +281,7 @@ export default class TagBasedListing extends Component {
               </div>
             </Col>
             <Col>
-              <Row gutterWidth={12}>
+              <Row gutterWidth={12}  id = "main_div">
                 {this.state.files.length <= 0 && (
                   <h2
                     style={{
@@ -332,6 +415,29 @@ export default class TagBasedListing extends Component {
                   })}
                 </>
               </Row>
+              {this.state.next_page ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        fontFamily: "muli-regular",
+                        fontSize: "18px",
+                      }}
+                    >
+                      Loading...
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        color: "gray",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      No more Shoots.
+                    </div>
+                  )}
             </Col>
           </Row>
         </Container>

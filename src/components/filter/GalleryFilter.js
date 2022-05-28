@@ -91,7 +91,7 @@ class GalleryFilter extends React.Component {
       dropdown: "all",
       userlogin: "",
       listing: [],
-      visible: 20,
+      visible: 10,
       valuees: 0,
       users: "",
       usersid: "",
@@ -227,14 +227,14 @@ class GalleryFilter extends React.Component {
     
     await axios
       .post(
-        `${domain}/api/image/imageFilters`,
+        `${domain}/api/image/imageFilters?page=1`,
         { data: "", type: id },
         this.config
       )
       .then((res) => {
         console.log(res);
         this.setState({
-          listing: res.data,
+          listing: res.data.results,
           loading: false,
         });
       })
@@ -547,7 +547,7 @@ class GalleryFilter extends React.Component {
             </BottomNavigation>
           </div>
           <Container
-            className={`${All.Container} ${All.pl_xs_50} ${All.pr_xs_50} `}
+            className={`${All.Container}`}
           >
             <Row>
               <Col lg={12}>

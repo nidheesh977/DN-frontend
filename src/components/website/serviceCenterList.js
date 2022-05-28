@@ -148,7 +148,7 @@ class ServiceCenters extends Component {
       },
       showNumber: false,
       after_data_fetch: false,
-      next_page: false,
+      next_page: true,
       page: 1,
       filter: false,
       showBrandFilter: false,
@@ -286,6 +286,10 @@ class ServiceCenters extends Component {
             next_page: true,
             page: res.data.next.page
           });
+        }else{
+          this.setState({
+            next_page: false
+          })
         }
       })
       .catch((err) => {
@@ -744,7 +748,7 @@ class ServiceCenters extends Component {
         </Helmet>
         <div id="service_centers">
           <Container
-            className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}
+            className={`${All.Container}`}
           >
             {!localStorage.getItem("access_token") ? (
               <div className="s_c_list_btn_container" onClick={this.saveLastTab}>
