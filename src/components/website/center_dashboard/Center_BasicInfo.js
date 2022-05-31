@@ -877,18 +877,8 @@ function Center_BasicInfo() {
                     accept="image/*"
                     style={{ display: "none" }}
                     onChange={handleFileChange2}
-                    disabled={!edit}
                   />
-                  {edit ? (
                     <img src={Edit} alt="" className="pd_b_i_edit" />
-                  ) : (
-                    <img
-                      src={Edit}
-                      alt=""
-                      className="pd_b_i_edit"
-                      style={{ opacity: "0.5" }}
-                    />
-                  )}
                 </label>
               </div>
             </div>
@@ -902,18 +892,8 @@ function Center_BasicInfo() {
                 accept="image/*"
                 style={{ display: "none" }}
                 onChange={handleFileChange}
-                disabled={!edit}
               />
-              {edit ? (
                 <img src={Edit} alt="" className="pd_b_i_edit1" />
-              ) : (
-                <img
-                  src={Edit}
-                  alt=""
-                  className="pd_b_i_edit1"
-                  style={{ opacity: "0.5" }}
-                />
-              )}
             </label>
           </div>
         </div>
