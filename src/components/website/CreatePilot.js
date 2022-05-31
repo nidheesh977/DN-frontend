@@ -85,6 +85,7 @@ function CreatePilot() {
   let [suggestedSkills, setSuggestedSkills] = useState([]);
   let [showSuggestedSkills, setShowSuggestedSkills] = useState("less");
   let [certificateSizeExceed, setCertificateSizeExceed] = useState(false);
+  let [willWork, setWillWork] = useState(false)
 
   const changeHandler = (e) => {
     if (e.target.id !== "preferred_location"){
@@ -140,21 +141,38 @@ function CreatePilot() {
 
     var year = new Date().getFullYear();
     let month = new Date().getMonth();
-    var fields = [
-      "username",
-      "dob",
-      "gender",
-      "city",
-      "preferred_locations",
-      "drone_id",
-      "attachment",
-      "monthly_pay",
-      "hourly_pay",
-      "industry",
-      "training_center_name",
-      "completed_year",
-      "skills",
-    ];
+    if (willWork){
+
+      var fields = [
+        "username",
+        "dob",
+        "gender",
+        "city",
+        "preferred_locations",
+        "drone_id",
+        "attachment",
+        "monthly_pay",
+        "hourly_pay",
+        "industry",
+        "training_center_name",
+        "completed_year",
+        "skills",
+      ];
+    }
+    else{
+      var fields = [
+        "username",
+        "dob",
+        "gender",
+        "city",
+        "drone_id",
+        "attachment",
+        "industry",
+        "training_center_name",
+        "completed_year",
+        "skills",
+      ];
+    }
 
     function isUserNameValid(username) {
       /* 
@@ -385,6 +403,9 @@ function CreatePilot() {
       formData.append("file", data.attachment);
       formData.append("userName", data.username)
       formData.append("preferredLocation", data.preferred_locations)
+      if (!willWork){
+        formData.append("status", false)
+      }
 
       Axios.post(`${domain}/api/pilot/checkUserName`,{userName: data.username})
       .then(res => {
@@ -470,7 +491,6 @@ function CreatePilot() {
           drones: skill_list,
         });
         document.getElementById(e.target.id).value = "";
-        document.getElementById("skills_error").style.visibility = "hidden";
       }
     }
   };
@@ -534,23 +554,24 @@ let handleChange1 = (e) =>{
   })
 }
   const add_location = (e) => {
-    if (e.key === "Enter"){
       if (data.preferred_locations.length >= 5){
         document.getElementById("preferred_locations_error").innerText = "You cannot add more than 5 locations"
         document.getElementById("preferred_locations_error").style.visibility = "visible"
-      }else if (data.preferred_location.length > 100){
+      }else if (data.address1.length > 100){
         document.getElementById("preferred_locations_error").innerText = "Location cannot exceed 100 characters."
         document.getElementById("preferred_locations_error").style.visibility = "visible"
       }else{
         let new_locations = data.preferred_locations
-        new_locations.push(data.preferred_location)
+        if (!new_locations.includes(e.split(",")[0])){
+          new_locations.push(e.split(",")[0])
+        }
         setData({
           ...data,
           preferred_locations: new_locations,
-          preferred_location: "",
+          address1: "",
         })
       }
-    }
+    
   }
 
   const removePreferredLocation = (id) => {
@@ -728,14 +749,347 @@ let handleChange1 = (e) =>{
               </div>
             </div>
             <div>
+              <label
+                htmlFor="drones"
+                className="pd_b_i_profile_head"
+                style={{ cursor: "pointer" }}
+              >
+                Do you own a Drone? (if Yes, Specify the drone models)
+              </label>
+              <input
+                type="text"
+                className="pd_b_i_profile_input"
+                id="drones"
+                onKeyUp={addDrones}
+                disabled={!edit}
+                placeholder="Type and click Enter to add"
+              />
+              {data.drones.map((drone, index) => {
+                return (
+                  <div
+                    className="pd_i_skill"
+                    key={index}
+                    onClick={removeDrones}
+                  >
+                    {drone} <i class="fa fa-times" aria-hidden="true"></i>
+                  </div>
+                );
+              })}
+              <div style={{ marginBottom: "10px" }}></div>
+            </div>
+            <div style={{ marginBottom: "30px" }}>
+              <div
+                className="pd_b_i_profile_head"
+                id="pilot_type"
+                style={{ cursor: "default" }}
+              >
+                Pilot type
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  name="licensed"
+                  checked={data.pilot_type === "licensed"}
+                  id="licensed"
+                  onClick={changePilotType}
+                  disabled={!edit}
+                />{" "}
+                <label
+                  htmlFor="licensed"
+                  className="pd_p_i_profile_text"
+                  style={{ cursor: "pointer" }}
+                >
+                  Licensed Pilots
+                </label>
+                <input
+                  type="radio"
+                  name="unlicensed"
+                  id="unlicensed"
+                  checked={data.pilot_type === "unlicensed"}
+                  onClick={changePilotType}
+                  disabled={!edit}
+                />{" "}
+                <label
+                  htmlFor="unlicensed"
+                  className="pd_p_i_profile_text"
+                  style={{ cursor: "pointer" }}
+                >
+                  Unlicensed Pilots
+                </label>
+              </div>
+            </div>
+            {data.pilot_type === "licensed" ? (
+                <React.Fragment>
+                  <div className="pd_b_i_profile_head" id="attachment">
+                    Certificate{" "}
+                  </div>
+                  <label
+                    for="pd_p_i_hidden"
+                    className="pd_p_i_attachnment_label"
+                  >
+                    <div>
+                      <div className="pd_b_i_attachment">Attachments</div>
+                      <span
+                        className="pd_p_i_profile_text"
+                        style={{ cursor: "pointer" }}
+                      >
+                        {data.attachment_selected
+                          ? data.attachment.name.slice(0, 50).replace(" ", "")
+                          : "Attach your DGCA certificate"}
+                      </span>
+                    </div>
+                    <div className="input_error_msg" id="attachment_error">
+                      Certificate is required
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/png, image/jpg, image/jpeg, application/pdf"
+                      id="pd_p_i_hidden"
+                      onChange={chooseFile}
+                      disabled={!edit}
+                    />
+                  </label>
+                </React.Fragment>
+              ) : (
+                <div>
+                  <label
+                    className="pd_b_i_profile_head"
+                    htmlFor="drone_id"
+                    style={{ cursor: "pointer" }}
+                  >
+                    Drone ID
+                  </label>
+                  <input
+                    type="text"
+                    value={data.drone_id}
+                    className="pd_b_i_profile_input"
+                    placeholder="Enter your drone ID"
+                    id="drone_id"
+                    onChange={handleChange}
+                    disabled={!edit}
+                  />
+                  <div className="input_error_msg" id="drone_id_error">
+                    Drone ID is required
+                  </div>
+                </div>
+              )}
+              {data.pilot_type === "licensed" && (
+                <React.Fragment>
+                  <div>
+                    <label
+                      htmlFor="training_center_name"
+                      className="pd_b_i_profile_head"
+                      style={{ cursor: "pointer" }}
+                    >
+                      Training Center Name
+                    </label>
+                    <input
+                      type="text"
+                      value={data.training_center_name}
+                      className="pd_b_i_profile_input"
+                      id="training_center_name"
+                      name="training_center_name"
+                      onChange={handleChange}
+                      disabled={!edit}
+                    />
+                    <div
+                      className="input_error_msg"
+                      id="training_center_name_error"
+                    >
+                      Training center name is required
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="completed_year"
+                      className="pd_b_i_profile_head"
+                      style={{ cursor: "pointer" }}
+                    >
+                      Completed Term
+                    </label>
+                    <input
+                      type="month"
+                      max="2022-03"
+                      className="pd_b_i_profile_input"
+                      id="completed_year"
+                      name="completed_year"
+                      onChange={handleChange}
+                      value={data.completed_year}
+                      disabled={!edit}
+                    />
+                    <div className="input_error_msg" id="completed_year_error">
+                      Completed year is required
+                    </div>
+                  </div>
+                </React.Fragment>
+              )}
+              <div>
+                <label htmlFor="industry" className="pd_b_i_profile_head">
+                  Industry
+                </label>
+                {/* <input
+                  type="text"
+                  className="pd_b_i_profile_input"
+                  id="industry"
+                  onChange={handleChange}
+                  value={data.industry}
+                  disabled={!edit}
+                /> */}
+                <Select
+                  options={industries}
+                  onChange={industryChange}
+                  styles={customStyles}
+                  className="u_f_category_dropdown"
+                  isMulti
+                />
+                <div className="input_error_msg" id="industry_error">
+                  Industry is required
+                </div>
+              </div>
+              <div>
+                <label
+                  htmlFor="years"
+                  className="pd_b_i_profile_head"
+                  style={{ cursor: "pointer" }}
+                >
+                  Experience
+                </label>
+                <Row>
+                  <Col>
+                    <div>
+                      <input
+                        type="number"
+                        className="pd_b_i_profile_input"
+                        value={data.years}
+                        id="years"
+                        onChange={changeHandler}
+                        placeholder="Years"
+                        disabled={!edit}
+                      />
+                      <div className="input_error_msg" id="years_error">
+                        Year of experience is required
+                      </div>
+                    </div>
+                  </Col>
+                  <Col>
+                    <div>
+                      <input
+                        type="number"
+                        name="months"
+                        className="pd_b_i_profile_input"
+                        value={data.months}
+                        onChange={changeHandler}
+                        id="months"
+                        disabled={!edit}
+                        placeholder="Months"
+                      />
+                      <div className="input_error_msg" id="months_error">
+                        Months of experience is required
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+              <div>
+                <label
+                  htmlFor="skills"
+                  className="pd_b_i_profile_head"
+                  style={{ cursor: "pointer" }}
+                >
+                  Add Your Skills
+                </label>
+                <input
+                  type="text"
+                  className="pd_b_i_profile_input"
+                  id="skills"
+                  onKeyUp={addSkill}
+                  disabled={!edit}
+                  placeholder="Type and click Enter to add"
+                />
+                {data.skills.map((skill, index) => {
+                  return (
+                    <div
+                      className="pd_i_skill"
+                      key={index}
+                      onClick={() => removeSelectedSkill(index)}
+                    >
+                      {skill} <i class="fa fa-times" aria-hidden="true"></i>
+                    </div>
+                  );
+                })}
+                <div className="input_error_msg" id="skills_error">
+                  Add atleast one skill
+                </div>
+              </div>
+              {suggestedSkills.length !== 0 && (
+                <div>
+                  <div
+                    className="pd_b_i_profile_head"
+                    style={{ cursor: "default" }}
+                  >
+                    Suggested Skills
+                  </div>
+                  {suggestedSkills.map((skill, index) => {
+                    return (
+                      <>
+                        {(showSuggestedSkills === "all" || index < 5) && (
+                          <div
+                            className="pd_i_skill"
+                            key={index}
+                            onClick={() => selectSkill(index)}
+                          >
+                            {skill} <i class="fas fa-plus"></i>
+                          </div>
+                        )}
+                      </>
+                    );
+                  })}
+                  {showSuggestedSkills === "all" && suggestedSkills.length > 5 && (
+                    <div
+                      className="pd_i_skill"
+                      onClick={showLessSuggestions}
+                      style={{ fontFamily: "muli-bold" }}
+                    >
+                      Show less
+                    </div>
+                  )}
+                  {showSuggestedSkills === "less" &&
+                    suggestedSkills.length > 5 && (
+                      <div
+                        className="pd_i_skill"
+                        onClick={showMoreSuggestions}
+                        style={{ fontFamily: "muli-bold" }}
+                      >
+                        Show more
+                      </div>
+                    )}
+                  <div className="input_error_msg">&nbsp;</div>
+                </div>
+              )}
+            <div style = {{display: "flex", alignItems: "center",  marginBottom:"20px"}}>
+              <div style = {{display: "inline-block", fontFamily: "muli-bold", fontSize: "20px", marginRight: "20px"}}>Willing to work : </div>
+            <label class="switch">
+              <input
+                type="checkbox"
+                checked={willWork}
+                onChange = {()=>setWillWork(!willWork)}
+                id="test"
+              />
+              <span class="slider round"></span>
+            </label>
+            </div>
+            
+            {
+              willWork && <>
+                <div>
                 <label htmlFor="address" className="pd_b_i_profile_head">
-                  Address
+                  Preferred work location
                 </label>
 
                 <PlacesAutocomplete
                   value={data.address1}
                   onChange={handleChange1}
-                  onSelect={handleSelect}
+                  onSelect={add_location}
                 >
                   {({
                     getInputProps,
@@ -746,7 +1100,7 @@ let handleChange1 = (e) =>{
                     <div style={{ position: "relative" }}>
                       <input
                         {...getInputProps({
-                          placeholder: "Search Places ...",
+                          placeholder: "Work location ...",
                           className:
                             "location-search-input pd_b_i_profile_input",
                         })}
@@ -811,29 +1165,7 @@ let handleChange1 = (e) =>{
                     </div>
                   )}
                 </PlacesAutocomplete>
-                <div className="login_input_error_msg" id="address_error">
-                  Address is required
-                </div>
-              </div>
-            <div>
-              <label htmlFor="city">
-                <div
-                  className="pd_b_i_profile_head"
-                  style={{ cursor: "pointer" }}
-                >
-                  Preferred Work Location
-                </div>
-              </label>
-              <input
-                type="text"
-                className="pd_b_i_profile_input"
-                value={data.preferred_location}
-                id="preferred_location"
-                onChange={changeHandler}
-                onKeyDown = {add_location}
-                placeholder="Type and click enter to add Work locations"
-              />
-              {data.preferred_locations.map((drone, index) => {
+                {data.preferred_locations.map((drone, index) => {
                 return (
                   <div
                     className="pd_i_skill"
@@ -844,138 +1176,10 @@ let handleChange1 = (e) =>{
                   </div>
                 );
               })}
-              <div className="input_error_msg" id="preferred_locations_error">
+                <div className="input_error_msg" id="preferred_locations_error">
                 You cannot add more than 5 locations
               </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="drones"
-                className="pd_b_i_profile_head"
-                style={{ cursor: "pointer" }}
-              >
-                Do you own a Drone? (if Yes, Specify the drone models)
-              </label>
-              <input
-                type="text"
-                className="pd_b_i_profile_input"
-                id="drones"
-                onKeyUp={addDrones}
-                disabled={!edit}
-                placeholder="Type and click Enter to add"
-              />
-              {data.drones.map((drone, index) => {
-                return (
-                  <div
-                    className="pd_i_skill"
-                    key={index}
-                    onClick={removeDrones}
-                  >
-                    {drone} <i class="fa fa-times" aria-hidden="true"></i>
-                  </div>
-                );
-              })}
-              <div style={{ marginBottom: "10px" }}></div>
-            </div>
-
-            <div style={{ marginBottom: "30px" }}>
-              <div
-                className="pd_b_i_profile_head"
-                id="pilot_type"
-                style={{ cursor: "default" }}
-              >
-                Pilot type
               </div>
-              <div>
-                <input
-                  type="radio"
-                  name="licensed"
-                  checked={data.pilot_type === "licensed"}
-                  id="licensed"
-                  onClick={changePilotType}
-                  disabled={!edit}
-                />{" "}
-                <label
-                  htmlFor="licensed"
-                  className="pd_p_i_profile_text"
-                  style={{ cursor: "pointer" }}
-                >
-                  Licensed Pilots
-                </label>
-                <input
-                  type="radio"
-                  name="unlicensed"
-                  id="unlicensed"
-                  checked={data.pilot_type === "unlicensed"}
-                  onClick={changePilotType}
-                  disabled={!edit}
-                />{" "}
-                <label
-                  htmlFor="unlicensed"
-                  className="pd_p_i_profile_text"
-                  style={{ cursor: "pointer" }}
-                >
-                  Unlicensed Pilots
-                </label>
-              </div>
-            </div>
-            <div>
-              {data.pilot_type === "licensed" ? (
-                <React.Fragment>
-                  <div className="pd_b_i_profile_head" id="attachment">
-                    Certificate{" "}
-                  </div>
-                  <label
-                    for="pd_p_i_hidden"
-                    className="pd_p_i_attachnment_label"
-                  >
-                    <div>
-                      <div className="pd_b_i_attachment">Attachments</div>
-                      <span
-                        className="pd_p_i_profile_text"
-                        style={{ cursor: "pointer" }}
-                      >
-                        {data.attachment_selected
-                          ? data.attachment.name.slice(0, 50).replace(" ", "")
-                          : "Attach your DGCA certificate"}
-                      </span>
-                    </div>
-                    <div className="input_error_msg" id="attachment_error">
-                      Certificate is required
-                    </div>
-                    <input
-                      type="file"
-                      accept="image/png, image/jpg, image/jpeg, application/pdf"
-                      id="pd_p_i_hidden"
-                      onChange={chooseFile}
-                      disabled={!edit}
-                    />
-                  </label>
-                </React.Fragment>
-              ) : (
-                <div>
-                  <label
-                    className="pd_b_i_profile_head"
-                    htmlFor="drone_id"
-                    style={{ cursor: "pointer" }}
-                  >
-                    Drone ID
-                  </label>
-                  <input
-                    type="text"
-                    value={data.drone_id}
-                    className="pd_b_i_profile_input"
-                    placeholder="Enter your drone ID"
-                    id="drone_id"
-                    onChange={handleChange}
-                    disabled={!edit}
-                  />
-                  <div className="input_error_msg" id="drone_id_error">
-                    Drone ID is required
-                  </div>
-                </div>
-              )}
 
               <div>
                 {/* <label htmlFor="drone_type" className="pd_b_i_profile_head">
@@ -1060,199 +1264,10 @@ let handleChange1 = (e) =>{
                   </div>
                 </div>
               )}
-              <div>
-                <label htmlFor="industry" className="pd_b_i_profile_head">
-                  Industry
-                </label>
-                {/* <input
-                  type="text"
-                  className="pd_b_i_profile_input"
-                  id="industry"
-                  onChange={handleChange}
-                  value={data.industry}
-                  disabled={!edit}
-                /> */}
-                <Select
-                  options={industries}
-                  onChange={industryChange}
-                  styles={customStyles}
-                  className="u_f_category_dropdown"
-                  isMulti
-                />
-                <div className="input_error_msg" id="industry_error">
-                  Industry is required
-                </div>
-              </div>
-              <div>
-                <label
-                  htmlFor="years"
-                  className="pd_b_i_profile_head"
-                  style={{ cursor: "pointer" }}
-                >
-                  Experience
-                </label>
-                <Row>
-                  <Col>
-                    <div>
-                      <input
-                        type="number"
-                        className="pd_b_i_profile_input"
-                        value={data.years}
-                        id="years"
-                        onChange={changeHandler}
-                        placeholder="Years"
-                        disabled={!edit}
-                      />
-                      <div className="input_error_msg" id="years_error">
-                        Year of experience is required
-                      </div>
-                    </div>
-                  </Col>
-                  <Col>
-                    <div>
-                      <input
-                        type="number"
-                        name="months"
-                        className="pd_b_i_profile_input"
-                        value={data.months}
-                        onChange={changeHandler}
-                        id="months"
-                        disabled={!edit}
-                        placeholder="Months"
-                      />
-                      <div className="input_error_msg" id="months_error">
-                        Months of experience is required
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-              {data.pilot_type === "licensed" && (
-                <React.Fragment>
-                  <div>
-                    <label
-                      htmlFor="training_center_name"
-                      className="pd_b_i_profile_head"
-                      style={{ cursor: "pointer" }}
-                    >
-                      Training Center Name
-                    </label>
-                    <input
-                      type="text"
-                      value={data.training_center_name}
-                      className="pd_b_i_profile_input"
-                      id="training_center_name"
-                      name="training_center_name"
-                      onChange={handleChange}
-                      disabled={!edit}
-                    />
-                    <div
-                      className="input_error_msg"
-                      id="training_center_name_error"
-                    >
-                      Training center name is required
-                    </div>
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="completed_year"
-                      className="pd_b_i_profile_head"
-                      style={{ cursor: "pointer" }}
-                    >
-                      Completed Term
-                    </label>
-                    <input
-                      type="month"
-                      max="2022-03"
-                      className="pd_b_i_profile_input"
-                      id="completed_year"
-                      name="completed_year"
-                      onChange={handleChange}
-                      value={data.completed_year}
-                      disabled={!edit}
-                    />
-                    <div className="input_error_msg" id="completed_year_error">
-                      Completed year is required
-                    </div>
-                  </div>
-                </React.Fragment>
-              )}
-              <div>
-                <label
-                  htmlFor="skills"
-                  className="pd_b_i_profile_head"
-                  style={{ cursor: "pointer" }}
-                >
-                  Add Your Skills
-                </label>
-                <input
-                  type="text"
-                  className="pd_b_i_profile_input"
-                  id="skills"
-                  onKeyUp={addSkill}
-                  disabled={!edit}
-                  placeholder="Type and click Enter to add"
-                />
-                {data.skills.map((skill, index) => {
-                  return (
-                    <div
-                      className="pd_i_skill"
-                      key={index}
-                      onClick={() => removeSelectedSkill(index)}
-                    >
-                      {skill} <i class="fa fa-times" aria-hidden="true"></i>
-                    </div>
-                  );
-                })}
-                <div className="input_error_msg" id="skills_error">
-                  Add atleast one skill
-                </div>
-              </div>
-              {suggestedSkills.length !== 0 && (
-                <div>
-                  <div
-                    className="pd_b_i_profile_head"
-                    style={{ cursor: "default" }}
-                  >
-                    Suggested Skills
-                  </div>
-                  {suggestedSkills.map((skill, index) => {
-                    return (
-                      <>
-                        {(showSuggestedSkills === "all" || index < 5) && (
-                          <div
-                            className="pd_i_skill"
-                            key={index}
-                            onClick={() => selectSkill(index)}
-                          >
-                            {skill} <i class="fas fa-plus"></i>
-                          </div>
-                        )}
-                      </>
-                    );
-                  })}
-                  {showSuggestedSkills === "all" && suggestedSkills.length > 5 && (
-                    <div
-                      className="pd_i_skill"
-                      onClick={showLessSuggestions}
-                      style={{ fontFamily: "muli-bold" }}
-                    >
-                      Show less
-                    </div>
-                  )}
-                  {showSuggestedSkills === "less" &&
-                    suggestedSkills.length > 5 && (
-                      <div
-                        className="pd_i_skill"
-                        onClick={showMoreSuggestions}
-                        style={{ fontFamily: "muli-bold" }}
-                      >
-                        Show more
-                      </div>
-                    )}
-                  <div className="input_error_msg">&nbsp;</div>
-                </div>
-              )}
+              </>
+            }
+            
+            <div style = {{marginTop: "30px"}}>
               <div className="pd_b_i_notifications_save">
                 <button
                   className="common_backBtn"

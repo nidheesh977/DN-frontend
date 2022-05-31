@@ -279,29 +279,6 @@ export default function PersistentDrawerLeft(props) {
         <Divider />
 
         <Link
-          to="/Searchresult"
-          onClick={handleDrawerClose}
-          style={{ marginLeft: "10px" }}
-        >
-          <List>
-            <ListItem button>
-              <ListItemIcon>
-                <SearchIcon />
-              </ListItemIcon>
-              <div
-                style={{
-                  fontFamily: "muli-bold",
-                  display: "inline-block",
-                  fontSize: "13px",
-                }}
-              >
-                Search
-              </div>
-            </ListItem>
-          </List>
-        </Link>
-
-        <Link
           to="/apply_job"
           onClick={handleDrawerClose}
           style={{ marginLeft: "10px" }}
@@ -412,7 +389,7 @@ export default function PersistentDrawerLeft(props) {
           </List>
         </Link> */}
 
-        {userlogin === false && (
+        {!props.loginStatus && (
           <>
             <Link
               to="/login"
@@ -461,7 +438,7 @@ export default function PersistentDrawerLeft(props) {
           </>
         )}
 
-        {userlogin === true && (
+        {props.loginStatus && (
           <>
             <Link
               to="pilot_dashboard/activities/images"

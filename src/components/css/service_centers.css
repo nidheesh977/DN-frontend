@@ -396,6 +396,12 @@
   font-family: muli-regular;
 }
 
+@media only screen and (max-width: 992px) {
+  .s_c_Search{
+    width: 110%;
+  }
+}
+
 .s_c_Search:hover{
   border: 0 !important;
 }
