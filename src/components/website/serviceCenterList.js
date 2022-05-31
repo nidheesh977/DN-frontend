@@ -793,7 +793,12 @@ class ServiceCenters extends Component {
                   className="s_c_filter_container"
                   onMouseOver={() => this.setState({ showBrandFilter: true })}
                 >
-                  Choose Models
+                  <div className="s_c_dropdown_txt1">
+                    Choose
+                  </div>
+                  <div className="s_c_dropdown_txt2">
+                    &nbsp;Models
+                  </div>
                   <img
                     src={DropDownPng}
                     alt=""
@@ -885,7 +890,7 @@ class ServiceCenters extends Component {
                   alt="search bar"
                   style={{
                     position: "absolute",
-                    left: "calc(85% - 20px)",
+                    left: "calc(85% - 30px)",
                     height: "30px",
                     width: "30px",
                     top: "10px",

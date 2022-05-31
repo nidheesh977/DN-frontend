@@ -364,6 +364,7 @@
   margin: auto;
   border-radius: 25px;
   overflow: hidden;
+  background-color: white;
 }
 
 .s_c_filter_container{
@@ -411,7 +412,7 @@
 }
 
 .s_c_filters_list{
-  width: 400px;
+  max-width: 400px;
   max-height: 400px;
   position: absolute;
   top: 52px;
@@ -422,6 +423,12 @@
   border-radius: 20px;
   padding: 10px 20px;
   overflow-y: auto;
+}
+
+@media only screen and (max-width: 992px) {
+  .s_c_filters_list{
+    top: 50px;
+  }
 }
 
 .s_c_filter_brand{
@@ -437,4 +444,23 @@
 
 .s_c_filter_brand:hover{
   opacity: 0.8;
+}
+
+.s_c_dropdown_txt1{
+  display: inline-block;
+}
+.s_c_dropdown_txt2{
+  display: inline-block;
+}
+
+@media only screen and (max-width: 768px) {
+  .s_c_dropdown_txt2{
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .s_c_dropdown_txt1{
+    display: none;
+  }
 }
