@@ -644,8 +644,9 @@ class GalleryFilter extends React.Component {
                         maxWidth: "80%",
                         marginTop: "35px",
                       }}
+                      id="filterRow"
                     >
-                      <Col lg={2} xs={2}>
+                      <Col lg={2} xs={4}>
                         <select
                           className="g_f_searchBox1"
                           style={{ width: "100%" }}
@@ -663,14 +664,16 @@ class GalleryFilter extends React.Component {
                             className="g_f_searchBox2"
                             type="text"
                             style={{ width: "105%" }}
+                            id="main_search"
                             placeholder="Enter Keywords to match your search"
                             onChange={this.keywordsClicked}
                           />
                         </form>
                       </Col>
-                      <Col lg={0.5}>
+                      <Col lg={0.5} xs={0.5}>
                         <img
                           src={Search}
+                          id="main_search_mag"
                           style={{ cursor: "pointer" }}
                           onClick={this.submitted}
                         />
