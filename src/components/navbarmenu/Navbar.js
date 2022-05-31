@@ -294,7 +294,6 @@ let AccountButton = () =>{
                       style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
                       onClick={AccountButton}
                       onMouseOver = {() => setShowLogout(true)}
-                      
                     >
                       <img
                         style={{

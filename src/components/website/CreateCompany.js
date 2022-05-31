@@ -221,7 +221,7 @@ function CreateCompany() {
             <div>
               <label className="pd_b_i_profile_head">Company Type</label>
               <Row style={{ marginBottom: "20px" }}>
-                <Col>
+                <Col sm = {6}>
                   <label
                     className={
                       data.company_type === "company"
@@ -237,7 +237,7 @@ function CreateCompany() {
                     <input type="radio" checked = {data.company_type === "company"} className = "c_c_profile_radio_radio"/> Company
                   </label>
                 </Col>
-                <Col>
+                <Col sm = {6}>
                   <label
                     className={
                       data.company_type === "consultant"
@@ -277,7 +277,7 @@ function CreateCompany() {
               </div>
             </div>
             <Row>
-              <Col>
+              <Col md = {6}>
                 <div>
                   <label
                     htmlFor="contact_no"
@@ -300,7 +300,7 @@ function CreateCompany() {
                   </div>
                 </div>
               </Col>
-              <Col>
+              <Col md = {6}>
                 <div>
                   <label
                     htmlFor="email"

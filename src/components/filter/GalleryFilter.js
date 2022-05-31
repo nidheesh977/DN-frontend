@@ -91,7 +91,7 @@ class GalleryFilter extends React.Component {
       dropdown: "all",
       userlogin: "",
       listing: [],
-      visible: 10,
+      visible: 20,
       valuees: 0,
       users: "",
       usersid: "",
@@ -134,7 +134,7 @@ class GalleryFilter extends React.Component {
       liked_list: [],
       loginError: false,
       redirectToPilot: false,
-      redirectToPilotPath: ""
+      redirectToPilotPath: "",
     };
     this.loadMore = this.loadMore.bind(this);
     // this.handleChanges = this.handleChanges.bind(this);
@@ -145,7 +145,7 @@ class GalleryFilter extends React.Component {
 
   loadMore() {
     this.setState((prev) => {
-      return { visible: prev.visible + 8 };
+      return { visible: prev.visible + 20 };
     });
   }
 
@@ -224,7 +224,7 @@ class GalleryFilter extends React.Component {
       listing: [],
       loading: true,
     });
-    
+
     await axios
       .post(
         `${domain}/api/image/imageFilters?page=1`,
@@ -244,7 +244,6 @@ class GalleryFilter extends React.Component {
         });
       });
   };
-  
 
   handleChange = (event, valuees) => {
     this.setState({ valuees });
@@ -330,11 +329,10 @@ class GalleryFilter extends React.Component {
       if (res.data[0]._id) {
         this.setState({
           redirectToPilot: true,
-          redirectToPilotPath: `/pilot/${res.data[0].userName}`
-        })
+          redirectToPilotPath: `/pilot/${res.data[0].userName}`,
+        });
       }
     });
-    
   };
   followingChanged = async (e) => {
     let config = {
@@ -510,8 +508,10 @@ class GalleryFilter extends React.Component {
 
     return (
       <>
-        <section className={All.Filter} id="main_div">
-          {this.state.redirectToPilot && <Redirect to = {this.state.redirectToPilotPath}/>}
+        <section className={All.Filter}>
+          {this.state.redirectToPilot && (
+            <Redirect to={this.state.redirectToPilotPath} />
+          )}
           <div className={All.mobileBottomMenu}>
             <BottomNavigation
               value={valuees}
@@ -546,9 +546,7 @@ class GalleryFilter extends React.Component {
               />
             </BottomNavigation>
           </div>
-          <Container
-            className={`${All.Container}`}
-          >
+          <Container className={`${All.Container}`}>
             <Row>
               <Col lg={12}>
                 <Row>
@@ -789,7 +787,7 @@ class GalleryFilter extends React.Component {
                               Check the talent of other droners
                             </h5>
                           </Box>
-                          <div className="Filters">
+                          <div className="Filters" id="main_div">
                             <SearchResults
                               value={value}
                               data={listing}
@@ -865,16 +863,15 @@ class GalleryFilter extends React.Component {
                                                         <span className="LikeIcon MuliLight">
                                                           {" "}
                                                           <FormControlLabel
-                                                            
                                                             className="MuliLight"
                                                             control={
                                                               <Checkbox
-                                                              onClick={() =>
-                                                                this.likeFile(
-                                                                  user._id,
-                                                                  index
-                                                                )
-                                                              }
+                                                                onClick={() =>
+                                                                  this.likeFile(
+                                                                    user._id,
+                                                                    index
+                                                                  )
+                                                                }
                                                                 icon={
                                                                   <>
                                                                     {this.state.liked_list.includes(
@@ -981,16 +978,15 @@ class GalleryFilter extends React.Component {
                                                         <span className="LikeIcon MuliLight">
                                                           {" "}
                                                           <FormControlLabel
-                                                            
                                                             className="MuliLight"
                                                             control={
                                                               <Checkbox
-                                                              onClick={() =>
-                                                                this.likeFile(
-                                                                  user._id,
-                                                                  index
-                                                                )
-                                                              }
+                                                                onClick={() =>
+                                                                  this.likeFile(
+                                                                    user._id,
+                                                                    index
+                                                                  )
+                                                                }
                                                                 icon={
                                                                   <>
                                                                     {this.state.liked_list.includes(
@@ -1046,6 +1042,29 @@ class GalleryFilter extends React.Component {
                               )}
                             />
                           </div>
+                          {this.state.visible < listing.length ? (
+                            <div
+                              style={{
+                                textAlign: "center",
+                                marginTop: "20px",
+                                fontFamily: "muli-regular",
+                                fontSize: "18px",
+                              }}
+                            >
+                              Loading...
+                            </div>
+                          ) : (
+                            <div
+                              style={{
+                                textAlign: "center",
+                                marginTop: "20px",
+                                color: "gray",
+                                marginBottom: "20px",
+                              }}
+                            >
+                              No more Shoots.
+                            </div>
+                          )}
                         </>
                       )}
                     </div>

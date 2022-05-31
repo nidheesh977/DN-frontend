@@ -267,11 +267,11 @@ function Pilot_Payments() {
               </div>
             </div>
             <div>
-              <div className="sub_det_title">Remaining 3dimages :</div>
+              <div className="sub_det_title">Remaining 3Dimages :</div>
               <div className="sub_det_content" id="sub_det_start_date">
               {subscriptionDetails.sub
                   ? subscriptionDetails.sub.images3d - subscriptionDetails.images3d
-                  : ""} 3dimages
+                  : ""} 3Dimages
               </div>
             </div>
           </Col>

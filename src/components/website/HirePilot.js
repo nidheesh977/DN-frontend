@@ -1590,7 +1590,7 @@ class HirePilot extends Component {
                         marginBottom: "20px",
                       }}
                     >
-                      No more jobs.
+                      No more Pilots.
                     </div>
                   )}
                 </Visible>
@@ -1606,6 +1606,7 @@ class HirePilot extends Component {
                                   src={pilot.profilePic}
                                   alt=""
                                   className="h_p_listing_img"
+                                  style={{ borderRadius: "50px" }}
                                 />
                               </div>
                               <div className="h_p_others_container_sm">
@@ -1682,16 +1683,66 @@ class HirePilot extends Component {
                               <hr
                                 style={{ borderBottom: "1px solid #dcdcdc" }}
                               />
-                              <div className="h_p_listing_pricing_rating_sm">
-                                <div className="h_p_star-price_box">
-                                  <div className="h_p_price-container-1">
-                                    <div className="h_p_price-rate">
-                                      $20{" "}
-                                      <span className="h_p_hour_time">/hr</span>{" "}
-                                    </div>
-                                  </div>
+                              <div>
+                                    <div className="h_p_price-rate" style = {{display: "inline-block", marginRight: "50px"}}>
+                                    {pilot.hourlyPayment ? (
+                                    <>
+                                      <div className="h_p_listing_price" style = {{display: "inline-block"}}>
+                                        ${pilot.hourlyPayment}
+                                      </div>
+                                      <div className="h_p_listing_price_per" style = {{display: "inline-block"}}>
+                                        /hour
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div className="h_p_listing_price" style = {{display: "inline-block"}}>
+                                        ${pilot.monthlyPayment}
+                                      </div>
+                                      <div className="h_p_listing_price_per" style = {{display: "inline-block"}}>
+                                        /month
+                                      </div>
+                                    </>
+                                  )}
                                 </div>
-                                <div className="h_p_listing_btn-container">
+                                
+                                {localStorage.getItem("role") === "company" ? (
+                                  <div style = {{display: "inline-block"}}>
+                                    <button
+                                      className="h_p_start_process_btn"
+                                      onClick={() =>
+                                        this.clickStartProcess(pilot._id)
+                                      }
+                                    >
+                                      HirePilot
+                                    </button>
+                                    {this.state.mySavedPilots.includes(
+                                      pilot._id
+                                    ) ? (
+                                      <button
+                                        className="h_p_save_pilot_btn"
+                                        onClick={() =>
+                                          this.unsavePilot(pilot._id)
+                                        }
+                                      >
+                                        <i
+                                          class="fa fa-heart"
+                                          style={{ color: "black" }}
+                                        ></i>
+                                      </button>
+                                    ) : (
+                                      <button
+                                        className="h_p_save_pilot_btn"
+                                        onClick={() =>
+                                          this.clickStartProcess1(pilot._id)
+                                        }
+                                      >
+                                        <i class="fa fa-heart"></i>
+                                      </button>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div className="h_p_listing_btn-container"  style = {{display: "inline-block"}}>
                                   <button
                                     className="h_p_start_process_btn"
                                     onClick={() =>
@@ -1701,6 +1752,7 @@ class HirePilot extends Component {
                                     View Profile
                                   </button>
                                 </div>
+                                )}
                               </div>
                             </Col>
                           </Row>

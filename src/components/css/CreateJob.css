@@ -208,3 +208,20 @@
 .ck-editor__editable_inline {
   min-height: 400px;
 }
+
+@media only screen and (max-width: 600px) {
+  .c_j_form_container{
+    padding: 50px 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .c_j_title_container{
+    padding: 17px 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .c_j_btn_container{
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}

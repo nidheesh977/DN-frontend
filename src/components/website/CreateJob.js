@@ -744,6 +744,7 @@ class CreateJob extends Component {
                     ? "s_c_db_main_tab s_c_db_main_tab_selected"
                     : "s_c_db_main_tab"
                 }
+                style = {{marginRight: "0px"}}
                 onClick={() => this.selectMainTab(2)}
               >
                 Draft Jobs
@@ -752,7 +753,7 @@ class CreateJob extends Component {
           </Container>
         </div>
         <Container
-          className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}
+          className={`${All.Container}`}
         >
           {this.state.main_tab === 1 && (
             <>
@@ -878,7 +879,7 @@ class CreateJob extends Component {
 
                   <div>
                     <Row>
-                      <Col>
+                      <Col md = {4}>
                         <label className="c_j_input_label">
                           <div
                             className="c_j_salery_input_label_title"
@@ -911,7 +912,7 @@ class CreateJob extends Component {
                           to
                         </div>
                       </Visible> */}
-                      <Col>
+                      <Col md = {4}>
                         <label className="c_j_input_label">
                           <div
                             className="c_j_salery_input_label_title"
@@ -937,7 +938,7 @@ class CreateJob extends Component {
                           </div>
                         </label>
                       </Col>
-                      <Col>
+                      <Col md = {4}>
                         <label className="c_j_input_label">
                           <div className="c_j_salery_input_label_title">
                             Rate

@@ -444,11 +444,6 @@ button.swal-button.swal-button--confirm{
     cursor: pointer;
   }
 
-  .fa-times {
-    color: #fff;
-    font-size: 2rem;
-  }
-
   .nav-links-mobile {
     display: block;
     text-align: center;
@@ -550,11 +545,6 @@ button.swal-button.swal-button--confirm{
     cursor: pointer;
   }
 
-  .fa-times {
-    color: #fff;
-    font-size: 2rem;
-  }
-
   .nav-links-mobile {
     display: block;
     text-align: center;
@@ -646,11 +636,6 @@ button.swal-button.swal-button--confirm{
     cursor: pointer;
   }
 
-  .fa-times {
-    color: #fff;
-    font-size: 2rem;
-  }
-
   .nav-links-mobile {
     display: block;
     text-align: center;
@@ -673,16 +658,6 @@ button.swal-button.swal-button--confirm{
   /* button {
     display: none;
   } */
- }
-
-
-@media (min-width: 992px) and (max-width: 1199.98px) { 
-
- }
-
-
-@media (min-width: 1200px) { 
-
  }
 
  .header {

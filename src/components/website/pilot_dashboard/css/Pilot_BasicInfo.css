@@ -243,3 +243,10 @@
   margin: 10px 10px 0 0;
   cursor: pointer;
 }
+
+
+@media only screen and (max-width: 992px) {
+  .pd_b_i_profile_input, .pd_b_i_profile_inputDesc{
+    width: 100% !important;
+  }
+}

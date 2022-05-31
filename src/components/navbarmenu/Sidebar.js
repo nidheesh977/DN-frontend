@@ -164,7 +164,6 @@ export default function PersistentDrawerLeft(props) {
             <Link
               className="NavLink NavLinkUploadFile2"
               onClick={uploadInstructions}
-              style = {{padding: "0px 8px 5px 15px !important"}}
             >
               <img src={UploadFile} alt="" height={"23px"} width={"23px"} style = {{paddingTop: "5px"}} />{" "}
               <React.Fragment >
@@ -419,15 +418,15 @@ export default function PersistentDrawerLeft(props) {
         <span style={{ marginTop: "auto" }} onClick={handleDrawerClose}>
           <List style={{ margin: "0px 0px 10px 10px", width: "fit-content" }}>
             <ListItem button>
-              <Link
+              <div
                 className="NavLink NavLinkUploadFile"
                 onClick={uploadInstructions}
               >
                 <img src={UploadFile} alt="" height={"18px"} width={"18px"} />{" "}
-                <React.Fragment style={{ color: "black !important" }}>
+                <React.Fragment>
                   Upload file
                 </React.Fragment>
-              </Link>
+              </div>
             </ListItem>
           </List>
         </span>
