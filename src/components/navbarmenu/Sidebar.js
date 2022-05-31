@@ -24,6 +24,9 @@ import All from "../website/All.module.css";
 import JobIcon from "@material-ui/icons/Work";
 import UploadFile from "../images/UploadFile.svg";
 import UploadFileInstruction from "../website/UploadFileInstruction";
+import Button from "@material-ui/core/Button";
+import ProfileIcon from "../images/person.svg";
+import { width } from "@mui/system";
 
 const drawerWidth = 240;
 
@@ -92,6 +95,7 @@ export default function PersistentDrawerLeft(props) {
   const [open, setOpen] = React.useState(false);
   const [userlogin, Setuserlogin] = useState(false);
   const [instructions, setInstructions] = useState(false);
+  const [showLogout, setShowLogout] = useState(false)
 
   const goToPage = () => {
     setInstructions(false);
@@ -103,7 +107,20 @@ export default function PersistentDrawerLeft(props) {
   };
 
   const uploadInstructions = () => {
-    setInstructions(true);
+    if(!localStorage.getItem("access_token")){
+      history.push("/login")
+    }else{
+      var date = new Date()
+      var today = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`
+      var lsd = localStorage.getItem("lsd")
+       if (lsd === today){
+         history.push("/UploadFile")
+       }
+       else{
+         localStorage.setItem("lsd", today)
+         setInstructions(true)
+       }
+    }
   };
 
   const handleDrawerOpen = () => {
@@ -145,6 +162,37 @@ export default function PersistentDrawerLeft(props) {
     // }
   }, [])
 
+  const accountLogout = () => {
+    localStorage.clear()
+    props.updateLoginStatus()
+    history.push("/")
+  }
+
+  let AccountButton = () =>{
+    if(localStorage.getItem("email")=== "false"){
+      history.push("/verify-email")
+    }else if(localStorage.getItem("role") === "undefined"){
+      history.push("/choose-categories")
+    }else if(localStorage.getItem("role") === "pilot"){
+      history.push("/pilot_dashboard/account/")
+    }
+    else if(localStorage.getItem("role") === "service_center"){
+      history.push("/center_dashboard/account/")
+    }
+    else if(localStorage.getItem("role") === "company"){
+      history.push("/company_dashboard/account/")
+    }
+    else if (localStorage.getItem("role") === "halfCompany"){
+      history.push("/createCompany")
+    }
+    else if (localStorage.getItem("role") === "halfPilot"){
+      history.push("/createPilot")
+    }
+    else{
+      history.push("/booster_dashboard/account/")
+    }
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -160,16 +208,40 @@ export default function PersistentDrawerLeft(props) {
             aria-label="open drawer"
             edge="start"
             className={clsx(classes.menuButton, open && classes.hide)}
+            // style = {{paddingRight: "20px"}}
           >
-            <Link
-              className="NavLink NavLinkUploadFile2"
-              onClick={uploadInstructions}
-            >
-              <img src={UploadFile} alt="" height={"23px"} width={"23px"} style = {{paddingTop: "5px"}} />{" "}
-              <React.Fragment >
-                Upload file
-              </React.Fragment>
-            </Link>
+            {(!props.loginStatus || localStorage.getItem("role") === "pilot") && <li className="nav-item">
+                  <div className="nav-links">
+                    <Button
+                      variant="contained"
+                      color="default"
+                      id="first"
+                      className="nav_upload_img"
+                      onClick = {uploadInstructions}
+                      style = {{textTransform: "initial", bottom: "2px", padding: "6px 20px 6px 20px"}}
+                    >
+                      <img style={{ paddingRight: 10 }} src={UploadFile} />{" "}
+                      Upload file
+                    </Button>
+                  </div>
+                </li>
+                }
+                {(localStorage.getItem("role") === "company") && <li className="nav-item">
+                  <div className="nav-links">
+                    <Button
+                      variant="contained"
+                      color="default"
+                      id="first"
+                      className="nav_upload_img"
+                      onClick = {()=>history.push("/create_job")}
+                      style = {{textTransform: "initial", bottom: "2px", padding: "6px 20px 6px 20px"}}
+                    >
+                      <img style={{ paddingRight: 10 }} src={UploadFile} />{" "}
+                      CreateJob
+                    </Button>
+                  </div>
+                </li>
+                }
             <MenuIcon onClick={handleDrawerOpen}/>
           </IconButton>
           <Typography variant="h6" noWrap>
@@ -398,38 +470,87 @@ export default function PersistentDrawerLeft(props) {
             >
               <List>
                 <ListItem button>
-                  <ListItemIcon>
-                    <PersonIcon />
-                  </ListItemIcon>
-                  <div
-                    style={{
-                      fontFamily: "muli-bold",
-                      display: "inline-block",
-                      fontSize: "13px",
-                    }}
-                  >
-                    My account
-                  </div>
+                <li
+                  className="nav-item"
+                  style={{
+                    display: props.loginStatus
+                      ? "block"
+                      : "none",
+                    marginTop: "15px",
+                  }}
+                  id="myAccount"
+                >
+                  <span onMouseLeave = {() => setShowLogout(false)}>
+
+                    <div
+                      className="nav-links my_account_btn"
+                      style={{ display: "flex", alignItems: "center", cursor: "pointer", justifyContent: "center", width: "100%" }}
+                      onClick={AccountButton}
+                      onMouseOver = {() => setShowLogout(true)}
+                    >
+                      <img
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          borderRadius: "100%",
+                        }}
+                        src={ProfileIcon}
+                      />
+
+                      <span style={{ paddingLeft: "10px", fontSize: "17px" }}>
+                        My account
+                      </span>
+                    </div>
+                    {showLogout && 
+                      <div class="dropdown-content" onClick = {accountLogout}>
+                        <div className="logout_btn" style = {{color: "black", fontSize: "14px"}}>Logout</div>
+                      </div>
+                    }
+                  </span>
+                </li>
                 </ListItem>
               </List>
             </Link>
           </>
         )}
-        <span style={{ marginTop: "auto" }} onClick={handleDrawerClose}>
+        {/* <span style={{ marginTop: "auto" }} onClick={handleDrawerClose}>
           <List style={{ margin: "0px 0px 10px 10px", width: "fit-content" }}>
             <ListItem button>
-              <div
-                className="NavLink NavLinkUploadFile"
-                onClick={uploadInstructions}
-              >
-                <img src={UploadFile} alt="" height={"18px"} width={"18px"} />{" "}
-                <React.Fragment>
-                  Upload file
-                </React.Fragment>
-              </div>
+            {(!props.loginStatus || localStorage.getItem("role") === "pilot") && <li className="nav-item">
+                  <div className="nav-links">
+                    <Button
+                      variant="contained"
+                      color="default"
+                      id="first"
+                      className="nav_upload_img"
+                      onClick = {uploadInstructions}
+                      style = {{textTransform: "initial", bottom: "2px", padding: "6px 20px 6px 20px"}}
+                    >
+                      <img style={{ paddingRight: 10 }} src={UploadFile} />{" "}
+                      Upload file
+                    </Button>
+                  </div>
+                </li>
+                }
+                {(localStorage.getItem("role") === "company") && <li className="nav-item">
+                  <div className="nav-links">
+                    <Button
+                      variant="contained"
+                      color="default"
+                      id="first"
+                      className="nav_upload_img"
+                      onClick = {()=>history.push("/create_job")}
+                      style = {{textTransform: "initial", bottom: "2px", padding: "6px 20px 6px 20px"}}
+                    >
+                      <img style={{ paddingRight: 10 }} src={UploadFile} />{" "}
+                      CreateJob
+                    </Button>
+                  </div>
+                </li>
+                }
             </ListItem>
           </List>
-        </span>
+        </span> */}
       </Drawer>
 
       <main

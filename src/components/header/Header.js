@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from '../navbarmenu/Navbar' 
-import Sidebar from '../navbarmenu/Sidebar'  
+import Sidebar from '../navbarmenu/Sidebar'
  
 
 class Header extends React.Component {
@@ -40,7 +40,7 @@ class Header extends React.Component {
           {isDesktop ? (
             <Navbar auth ={this.props.auth} loginStatus = {this.props.loginStatus} updateLoginStatus = {this.props.updateLoginStatus}/>
           ) : (
-            <Sidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
+            <Sidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} loginStatus = {this.props.loginStatus} updateLoginStatus = {this.props.updateLoginStatus}/>
           )}
         </div>
       );
