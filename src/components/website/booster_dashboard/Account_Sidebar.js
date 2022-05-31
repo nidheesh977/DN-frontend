@@ -84,6 +84,16 @@ class Account_Sidebar extends React.Component {
                       Notifications Settings
                     </NavLink>
                   </div>
+                  <div id="pd_filter1_checkbox_label">
+                    {" "}
+                    <NavLink
+                      to="/booster_dashboard/account/help-center"
+                      activeClassName="h_p_sidebar_active"
+                      className="h_p_filter1_checkbox_label"
+                    >
+                      Help Center
+                    </NavLink>
+                  </div>
                 </div>
               </div>
             </div>
