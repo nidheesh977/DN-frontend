@@ -470,16 +470,26 @@ function Booster_BasicInfo() {
           });
           console.log(res.data);
           setProfileSuccess(true);
-          axios.get(`${domain}/api/company/companyData`, config)
-            .then((res) => {
-              setData({
-                ...data,
-                profilePic: res.data.profilePic,
-              });
-            })
-            .catch((err) => {
-              console.log(err);
+          axios.get(`${domain}/api/user/getBooster`, config).then((response) => {
+            var result = Countries.filter((obj) => obj.name == response.data.country);
+            console.log(result[0].dial_code);
+            setCode(result[0].dial_code);
+            let data = response.data;
+            localStorage.setItem("oldEmail", response.data.email);
+            setData({
+              full_name: data.name,
+              email: data.email,
+              phone: data.phoneNo,
+              dob: data.dob,
+              gender: data.gender,
+              address: data.address,
+              city: data.city,
+              country: data.country,
+              bio: data.bio,
+              profile: `${data.profilePic}`,
+              cover: `${data.coverPic}`,
             });
+          });
         })
         .catch((err) => {
           setCoverUpdateLoading(false);
@@ -527,18 +537,8 @@ function Booster_BasicInfo() {
                   accept="image/*"
                   style={{ display: "none" }}
                   onChange={handleFileChange2}
-                  disabled={!edit}
                 />
-                {edit ? (
                   <img src={Edit} alt="" className="pd_b_i_edit" />
-                ) : (
-                  <img
-                    src={Edit}
-                    alt=""
-                    className="pd_b_i_edit"
-                    style={{ opacity: "0.5" }}
-                  />
-                )}
               </label>
             </div>
           </div>
@@ -552,18 +552,8 @@ function Booster_BasicInfo() {
               accept="image/*"
               style={{ display: "none" }}
               onChange={handleFileChange}
-              disabled={!edit}
             />
-            {edit ? (
               <img src={Edit} alt="" className="pd_b_i_edit1" />
-            ) : (
-              <img
-                src={Edit}
-                alt=""
-                className="pd_b_i_edit1"
-                style={{ opacity: "0.5" }}
-              />
-            )}
           </label>
         </div>
       </div>

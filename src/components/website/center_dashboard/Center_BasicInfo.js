@@ -733,16 +733,63 @@ function Center_BasicInfo() {
           });
           console.log(res.data);
           setCoverSuccess(true);
-          axios.get(`${domain}/api/company/companyData`, config)
-            .then((res) => {
-              setData({
-                ...data,
-                coverPic: res.data.coverPic,
-              });
-            })
-            .catch((err) => {
-              console.log(err);
+          axios
+      .post(`${domain}/api/center/getCenterData`, config)
+      .then((response) => {
+        let center_data = response.data;
+        console.log(center_data);
+        localStorage.setItem("oldEmail", response.data.userEmail)
+        setData({
+          full_name: center_data.userName,
+          email: center_data.userEmail,
+          centerEmail: center_data.centerData.email,
+          phone: center_data.userPhoneNo,
+          centerPhone: center_data.centerData.phoneNo,
+          secondaryPhoneNo: center_data.centerData.secondaryNumber
+            ? center_data.centerData.secondaryNumber
+            : "",
+          whatsappNo: center_data.centerData.whatsappNo
+            ? center_data.centerData.whatsappNo
+            : "",
+          website: center_data.centerData.website
+            ? center_data.centerData.website
+            : "",
+          code: "+91",
+          address: center_data.centerData.address,
+          description: center_data.centerData.description,
+          profile: `${center_data.centerData.profilePic}`,
+          cover: `${center_data.centerData.coverPic}`,
+          week_days: [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+          ],
+          holidays: center_data.centerData.holidays,
+          brand: "",
+          brands: center_data.centerData.brandOfDrones,
+          photo_row: center_data.centerData.images,
+          newPhotos: [],
+          center_name: center_data.centerData.centerName,
+          streetName: center_data.centerData.streetName,
+          establishedYear: center_data.centerData.establishedYear,
+          workingFrom: center_data.centerData.workingHours.slice(0, 5),
+          workingTill: center_data.centerData.workingHours.slice(8, 13),
+        });
+      })
+      .then(() => {
+        setTimeout(() => {
+          axios.get(`${domain}/api/brand/getBrands`).then((res) => {
+            var result = res.data.map(function (brand) {
+              return brand.brand;
             });
+            setSuggestedBrands(result);
+          });
+        });
+      }, 100);
         })
         .catch((err) => {
           setCoverUpdateLoading(false);
@@ -816,16 +863,63 @@ function Center_BasicInfo() {
           });
           console.log(res.data);
           setProfileSuccess(true);
-          axios.get(`${domain}/api/company/companyData`, config)
-            .then((res) => {
-              setData({
-                ...data,
-                profilePic: res.data.profilePic,
-              });
-            })
-            .catch((err) => {
-              console.log(err);
+          axios
+      .post(`${domain}/api/center/getCenterData`, config)
+      .then((response) => {
+        let center_data = response.data;
+        console.log(center_data);
+        localStorage.setItem("oldEmail", response.data.userEmail)
+        setData({
+          full_name: center_data.userName,
+          email: center_data.userEmail,
+          centerEmail: center_data.centerData.email,
+          phone: center_data.userPhoneNo,
+          centerPhone: center_data.centerData.phoneNo,
+          secondaryPhoneNo: center_data.centerData.secondaryNumber
+            ? center_data.centerData.secondaryNumber
+            : "",
+          whatsappNo: center_data.centerData.whatsappNo
+            ? center_data.centerData.whatsappNo
+            : "",
+          website: center_data.centerData.website
+            ? center_data.centerData.website
+            : "",
+          code: "+91",
+          address: center_data.centerData.address,
+          description: center_data.centerData.description,
+          profile: `${center_data.centerData.profilePic}`,
+          cover: `${center_data.centerData.coverPic}`,
+          week_days: [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+          ],
+          holidays: center_data.centerData.holidays,
+          brand: "",
+          brands: center_data.centerData.brandOfDrones,
+          photo_row: center_data.centerData.images,
+          newPhotos: [],
+          center_name: center_data.centerData.centerName,
+          streetName: center_data.centerData.streetName,
+          establishedYear: center_data.centerData.establishedYear,
+          workingFrom: center_data.centerData.workingHours.slice(0, 5),
+          workingTill: center_data.centerData.workingHours.slice(8, 13),
+        });
+      })
+      .then(() => {
+        setTimeout(() => {
+          axios.get(`${domain}/api/brand/getBrands`).then((res) => {
+            var result = res.data.map(function (brand) {
+              return brand.brand;
             });
+            setSuggestedBrands(result);
+          });
+        });
+      }, 100);
         })
         .catch((err) => {
           setCoverUpdateLoading(false);
