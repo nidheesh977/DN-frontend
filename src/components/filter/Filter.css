@@ -671,4 +671,23 @@ li.slide {
       
     }
 
-    
+    @media only screen and (max-width: 1000px) {
+      #main_search {
+height: 50px;
+width: 120px;
+background: none;
+      }
+      #main_search_mag{
+        /* height:  30px !important; */
+        margin-left: -30px
+      }
+      #filterRow{
+        max-width: 100%;
+      }
+    }
+    @media only screen and (max-width: 500px) {
+      #main_search_mag{
+        height: 35px;
+        margin-top: 10px;
+      }
+    }
