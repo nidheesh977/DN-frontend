@@ -3,6 +3,10 @@ import Cover from "./pilot_dashboard/images/cover.jpg";
 import "./pilot_dashboard/css/Pilot_BasicInfo.css";
 import Pilot from "./pilot_dashboard/images/pilot.jpg";
 import { Row, Col, Container, Hidden } from "react-grid-system";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-autocomplete-places";
 import All from "./All.module.css";
 import Axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -72,6 +76,7 @@ function CreatePilot() {
     drones: [],
     years: null,
     months: null,
+    address1: ""
   });
   let [edit, setEdit] = useState(true);
   let [accountCreateSuccess, setAccountCreateSuccess] = useState(false);
@@ -509,7 +514,25 @@ function CreatePilot() {
       work_type: e.target.name,
     });
   };
+  let handleSelect = (address) => {
+    console.log(address);
+    setData({
+      ...data,
+      address1: address
+    })
 
+    geocodeByAddress(address)
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => console.log("Success", latLng))
+      .catch((error) => console.error("Error", error));
+    document.getElementById(`address_error`).style.display = "none";
+  };
+let handleChange1 = (e) =>{
+  setData({
+    ...data,
+    address1 : e
+  })
+}
   const add_location = (e) => {
     if (e.key === "Enter"){
       if (data.preferred_locations.length >= 5){
@@ -704,6 +727,94 @@ function CreatePilot() {
                 City is required
               </div>
             </div>
+            <div>
+                <label htmlFor="address" className="pd_b_i_profile_head">
+                  Address
+                </label>
+
+                <PlacesAutocomplete
+                  value={data.address1}
+                  onChange={handleChange1}
+                  onSelect={handleSelect}
+                >
+                  {({
+                    getInputProps,
+                    suggestions,
+                    getSuggestionItemProps,
+                    loading,
+                  }) => (
+                    <div style={{ position: "relative" }}>
+                      <input
+                        {...getInputProps({
+                          placeholder: "Search Places ...",
+                          className:
+                            "location-search-input pd_b_i_profile_input",
+                        })}
+                        style={{
+                          height: "38px",
+                          backgroundColor: "#f5f5f7",
+                          borderRadius: "5px",
+                          border: "1px solid white",
+                          outline: "none",
+                          fontSize: "16px",
+                        }}
+                      />
+                      {suggestions.length > 0 && (
+                        <div
+                          className="autocomplete-dropdown-container"
+                          style={{
+                            width: "calc(100% - 40px)",
+
+                            position: "absolute",
+                            top: "calc(100% - 30px)",
+                            zIndex: 1000,
+                            fontFamily: "muli-light",
+                            fontSize: "16px",
+                            border:
+                              suggestions.length === 0 ? "" : "1px solid grey",
+                            overflow: "hidden",
+                            borderEndStartRadius: "10px",
+                            borderEndEndRadius: "10px",
+                            background: "white",
+                          }}
+                        >
+                          {loading && <div>Loading...</div>}
+                          {suggestions.map((suggestion) => {
+                            const className = suggestion.active
+                              ? "suggestion-item--active"
+                              : "suggestion-item";
+                            // inline style for demonstration purpose
+                            const style = suggestion.active
+                              ? {
+                                  backgroundColor: "#e1e1e1",
+                                  cursor: "pointer",
+                                  padding: "10px 20px",
+                                }
+                              : {
+                                  backgroundColor: "#ffffff",
+                                  cursor: "pointer",
+                                  padding: "10px 20px",
+                                };
+                            return (
+                              <div
+                                {...getSuggestionItemProps(suggestion, {
+                                  className,
+                                  style,
+                                })}
+                              >
+                                <span>{suggestion.description}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </PlacesAutocomplete>
+                <div className="login_input_error_msg" id="address_error">
+                  Address is required
+                </div>
+              </div>
             <div>
               <label htmlFor="city">
                 <div
