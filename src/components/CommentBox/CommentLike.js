@@ -23,11 +23,11 @@ class CommentLike extends React.Component {
       }
     }
 
-    axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/user`, config)
+    axios.get(``, config)
       .then(res => {
         try {
           if (res.data.id){
-            axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/commentcheck/${id}/${res.data.id}`, config).then(res => res.data)
+            axios.get(``, config).then(res => res.data)
             .then((res) => {
               if(res.data.status){
                 this.setState({ liked: res.data.status })
@@ -40,7 +40,7 @@ class CommentLike extends React.Component {
         }
       })
 
-    axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/commentlikes/${id}`, config)
+    axios.get(``, config)
       .then(res => {
         try{
           this.setState({ likes: res.data.count })
@@ -57,7 +57,7 @@ class CommentLike extends React.Component {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     }
-    axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/comment/like/${id}`, config)
+    axios.get(``, config)
       .then(res => {
 
         this.setState({

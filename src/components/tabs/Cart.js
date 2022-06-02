@@ -5,7 +5,7 @@ import All from "../website/All.module.css";
 import Button from "@material-ui/core/Button";
 import Purchase from "../images/purchase.png";
 
-const API_URL = "https://demo-nexevo.in/vijay";
+const API_URL = "";
 
 export default function Cart() {
   return (

@@ -23,21 +23,7 @@ class Like extends React.Component {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
-    }  
- 
-          axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/user`, config)
-        .then(res => this.setState({ user: res.data }, () => { 
-                axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/likecheck/${id}/${res.data.id}`,config).then(res => res.data)
-                       .then((data) => { 
-                        this.setState({ liked: data.status }) 
-                        })    
-        })) 
-
- 
-    axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/postlikes/${id}`, config)
-    .then(res => {    
-      this.setState({likes:res.data.count }) 
-    })
+    }
   }
 
   updateLikes = num => {
@@ -47,11 +33,7 @@ class Like extends React.Component {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
-    } 
-    axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/post/like/${id}`, config)
-    .then(res => {  
-    })  
-
+    }
     this.setState({
       liked: !this.state.liked,
       likes: this.state.likes + num

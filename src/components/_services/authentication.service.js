@@ -13,7 +13,7 @@ export const authenticationService = {
 };
 
 function login(props, d) { 
-    axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/login', {
+    axios.post('', {
       email: d.email,
       password: d.password
     }).then(res => {      
@@ -25,7 +25,7 @@ function login(props, d) {
           Authorization: 'Bearer ' + localStorage.getItem('access_token')
         }
       } 
-      axios.get('https://demo-nexevo.in/haj/auth-app/public/api/auth/public/api/auth/user', config)
+      axios.get('', config)
         .then(user => {   
             localStorage.setItem('currentUser', JSON.stringify(user.data.role_id));
             currentUserSubject.next(user.data.role_id);  

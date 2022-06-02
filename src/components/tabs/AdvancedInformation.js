@@ -55,22 +55,6 @@ export default function AdvancedInformation() {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     }
-    axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/accountsettings', {
-      name: event.name,
-      company_website: event.company_website,
-    }, config)
-      .then(res => {
-        setSuccess(true);
-        setLoading(false);
-        setSuccessMessages(res.data.message);
-        swal(res.data.message, {
-          icon: "success",
-        });
-      })
-      .catch(error => {
-        setSuccess(true);
-        setLoading(false);
-      });
   }
 
   const { register, handleSubmit, errors, watch, control } = useForm();

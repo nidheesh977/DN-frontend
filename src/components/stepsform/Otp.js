@@ -21,46 +21,7 @@ export default function Otp(props) {
     const history = useHistory();
     password.current = watch("password", "");
     const onSubmit = (event) => {
-        setLoading(true); 
-        axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/password/reset', {
-            email: props.state.email,
-            code:   event.code, 
-            password: event.password,
-            password_confirmation: event.password_confirmation
-                })
-            .then(res => {
-                try{
-                    if (res.data.message){
-                        try{
-                            swal(res.data.message.password[0], {
-                                icon: "error"
-                            })
-                            setLoading(false);
-                        }
-
-                        catch{
-                            swal(res.data.message, {
-                                icon: "error"
-                            })
-                            setLoading(false);
-                        }
-                    }
-                    else{
-                        swal('Reset Password Successful', {
-                            icon: "success",
-                            });
-                            setLoading(false); 
-                            history.push("/Login");
-                    }
-                }
-                catch{
-                    swal('Reset Password Successful', {
-                        icon: "success",
-                        });
-                        setLoading(false); 
-                        history.push("/Login");
-                }
-            })                                                                                                               
+        setLoading(true);                                     
     }
 
     const [isLoading, setLoading] = useState(false);

@@ -135,6 +135,8 @@ class GalleryFilter extends React.Component {
       loginError: false,
       redirectToPilot: false,
       redirectToPilotPath: "",
+      page: 1,
+      next_page: false
     };
     this.loadMore = this.loadMore.bind(this);
     // this.handleChanges = this.handleChanges.bind(this);
@@ -144,9 +146,37 @@ class GalleryFilter extends React.Component {
   }
 
   loadMore() {
-    this.setState((prev) => {
-      return { visible: prev.visible + 20 };
-    });
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    };
+    console.log("Scroll")
+    window.removeEventListener("scroll", this.handleScroll);
+    axios
+      .get(`${domain}/api/image/getImages?page=${this.state.page}`, config)
+      .then((res) => {
+        console.log(res.data);
+        this.setState({
+          listing: this.state.listing.concat(res.data.results),
+        });
+        if (res.data.next){
+          this.setState({
+            page: res.data.next.page
+          })
+          window.addEventListener("scroll", this.handleScroll);
+        }
+        else{
+          this.setState({
+            next_page: false
+          })
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          next_page: false
+        });
+      });
   }
 
   clickMe(user) {
@@ -166,7 +196,7 @@ class GalleryFilter extends React.Component {
 
     // axios
     //   .post(
-    //     `https://demo-nexevo.in/haj/auth-app/public/api/homepagelistingfillter?type=${type}`,
+    //     ``,
     //     config
     //   )
     //   .then(
@@ -183,7 +213,7 @@ class GalleryFilter extends React.Component {
 
     // axios
     //   .post(
-    //     "https://demo-nexevo.in/haj/auth-app/public/api/homepagelistingfillter",
+    //     "",
     //     {
     //       timeframe: timeframe,
     //       keywords: keywords,
@@ -207,7 +237,7 @@ class GalleryFilter extends React.Component {
   //     }
   // }
 
-  // axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/homepagelistingfillter?type=${this.state.all_id}`, config).then(response => response.data)
+  // axios.get(``, config).then(response => response.data)
   //     .then(data => {
   //         this.setState({ listing: data })
   //     },
@@ -256,8 +286,10 @@ class GalleryFilter extends React.Component {
         wrappedElement.getBoundingClientRect().bottom <=
         window.innerHeight + 1
       ) {
-        if (this.state.visible < this.state.listing.length) {
+        if (this.state.next_page) {
           this.loadMore();
+        }else{
+          window.removeEventListener("scroll", this.handleScroll);
         }
       }
     } catch {
@@ -396,6 +428,16 @@ class GalleryFilter extends React.Component {
           listing: res.data.results,
           loading: false,
         });
+        if (res.data.next){
+          this.setState({
+            next_page: true,
+            page: res.data.next.page
+          })
+        }else{
+          this.setState({
+            next_page: false
+          })
+        }
       })
       .catch((err) => {
         this.setState({
@@ -798,7 +840,6 @@ class GalleryFilter extends React.Component {
                                 <ul>
                                   <>
                                     {results
-                                      .slice(0, this.state.visible)
                                       .map((user, index) => (
                                         <>
                                           {this.state.activeLink === "all" ||
@@ -1045,7 +1086,7 @@ class GalleryFilter extends React.Component {
                               )}
                             />
                           </div>
-                          {this.state.visible < listing.length ? (
+                          {this.state.next_page ? (
                             <div
                               style={{
                                 textAlign: "center",

@@ -19,7 +19,7 @@ class CommentBox extends React.Component {
       user_id: "",
       post_id: props.post_id,
       passedVal: "",
-      comments: [{"id":111,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"juyftr"},{"id":81,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"hello"},{"id":80,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"hello"},{"id":79,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"hi"},{"id":77,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"hello"},{"id":78,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"hello"},{"id":76,"name":"Nidheesh","profile":"https:\/\/demo-nexevo.in\/haj\/auth-app\/public\/uploads\/profile\/profile1643970630.png","parent_id":null,"body":"hi"}],
+      comments: [],
       comments_length : 0,
       comment_body: "",
       isLoading: false,
@@ -34,7 +34,7 @@ class CommentBox extends React.Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    const urls = `https://demo-nexevo.in/haj/auth-app/public/api/auth/commentlisting/${this.props.passedVal}`;
+    const urls = ``;
     axios
       .get(urls, config)
       .then(res => {
@@ -49,7 +49,7 @@ class CommentBox extends React.Component {
         }
       })
 
-    axios.get("https://demo-nexevo.in/haj/auth-app/public/api/auth/user", config).then(
+    axios.get("", config).then(
       (res) => {
         this.setState({ user_id: res.data.id });
       },
@@ -73,7 +73,7 @@ class CommentBox extends React.Component {
     };
     axios
       .post(
-        "https://demo-nexevo.in/haj/auth-app/public/api/auth/commentstore",
+        "",
         {
           body: this.state.comment_body,
           user_id: this.state.user_id,
@@ -90,7 +90,7 @@ class CommentBox extends React.Component {
         })
         console.log(res)
         axios
-        .get( `https://demo-nexevo.in/haj/auth-app/public/api/auth/commentlisting/${this.props.passedVal}`, config)
+        .get( ``, config)
         .then((res) => {
           this.setState({
             comments: res.data,
@@ -184,7 +184,7 @@ class CommentBox extends React.Component {
             return(
               <>
                 <Box textAlign={"Left"} className="comment">
-                  {comment.profile != "https://demo-nexevo.in/haj/auth-app/public/uploads/profile" && comment.profile
+                  {comment.profile != "https://auth-app/public/uploads/profile" && comment.profile
                     ?<img
                       class="alignleft"
                       src={comment.profile}

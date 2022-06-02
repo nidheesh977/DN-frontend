@@ -12,9 +12,6 @@ import nofoundresult from '../images/noresultfound.svg'
 import { userService } from '../_services/user.service';
 
 
-const API_URL = 'https://demo-nexevo.in/haj/auth-app/public/api/auth';
-
-
 var videos = document.querySelectorAll(".thumbnail");
 for (var i = 0; i < videos.length; i++) {
     videos[i].addEventListener('click', clickHandler, false);
@@ -51,15 +48,6 @@ export default class Alls extends React.Component {
                 Authorization: 'Bearer ' + localStorage.getItem('access_token')
             }
         }
-        axios.get(`https://demo-nexevo.in/haj/auth-app/public/api/auth/listing/${this.state.userId}`, config).then(response => response.data)
-            .then(data => {
-                this.setState({
-                    listing: data,
-                    loading: false,
-                })
-            },
-                err => {
-                })
 
         userService.User().then(res => {
             this.setState({ users: res.data })

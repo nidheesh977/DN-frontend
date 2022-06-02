@@ -38,24 +38,6 @@ class EndProfile extends React.Component {
           Authorization: 'Bearer ' + localStorage.getItem('access_token')
         }
       }
-  
-    
-      
-          axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/profilesingle', {
-      user_id: this.props.id,
-  }, config)
-            .then(res => {
-                this.setState({profile: res.data})
-                this.setState({croppedImg:res.data.profile})
-                console.log(res)
-            },
-              err => { 
-                console.log(err)
-              }
-            )
-   
-    
-
 
   }
   

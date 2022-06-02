@@ -39,27 +39,6 @@ export default function AccountSetting() {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
     }
-    axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/accountsettings', {
-      username: event.username,
-      phone: event.phonenumber,
-      // role: 1,
-      // password: event.password
-    }, config).then(res => {
-      swal(res.data.message, {
-        icon: "success",
-      });
-      setLoading(false);
-      // setSuccess(true);  
-      // setSuccessMessages(res.data.message); 
-    })
-
-
-      .catch(function (error) {
-        setLoading(false);
-        swal(error.response.data.message.username[0], {
-          icon: "error",
-        });
-      });
   }
 
   const [open, setOpen] = React.useState(false);

@@ -70,20 +70,6 @@ class Profile extends React.Component {
           Authorization: 'Bearer ' + localStorage.getItem('access_token')
         }
       }
-      axios.post('https://demo-nexevo.in/haj/auth-app/public/api/auth/updateprofileimage', {
-        profile: croppedImg,
-        user_id: this.state.user.id,
-        // role: 1,
-        // password: event.password
-      }, config)
-      .then(res => {
-        this.setState(state);
-        this.setState({ SuccessMessages: res.data.message })
-
-        swal(this.state.SuccessMessages, {
-          icon: "success",
-        });
-      })
     }
   }
   handleCancel() {
