@@ -106,9 +106,9 @@ margin-bottom: 30px;
     color: #00E7FC;
     border-bottom: 20px;
  }
- .mainImage{
+ /* .mainImage{
      position: relative;
- }
+ } */
 
  .likeImage{
      position: absolute;
