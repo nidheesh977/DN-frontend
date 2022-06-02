@@ -136,7 +136,8 @@ class GalleryFilter extends React.Component {
       redirectToPilot: false,
       redirectToPilotPath: "",
       page: 1,
-      next_page: false
+      next_page: false,
+      filter_type: null,
     };
     this.loadMore = this.loadMore.bind(this);
     // this.handleChanges = this.handleChanges.bind(this);
@@ -153,7 +154,64 @@ class GalleryFilter extends React.Component {
     };
     console.log("Scroll")
     window.removeEventListener("scroll", this.handleScroll);
-    axios
+    if (this.state.filter_type === "following"){
+      axios
+        .post(`${domain}/api/image/getFollowersMedia?page=${this.state.page}`, config)
+        .then((res) => {
+          console.log(res);
+          this.setState({
+            listing: this.state.listing.concat(res.data.results),
+          });
+          if (res.data.next){
+            this.setState({
+              next_page: true,
+              page: res.data.next.page
+            })
+            window.addEventListener("scroll", this.handleScroll);
+          }else{
+            this.setState({
+              next_page: false
+            })
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            loading: false,
+          });
+        });
+    }else if (this.state.filter_type === "filter"){
+      axios
+      .post(
+        `${domain}/api/image/imageFilters?page=${this.state.page}`,
+        { data: this.state.keywords, type: this.state.dropdown },
+        this.config
+      )
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          listing: this.state.listing.concat(res.data.results),
+          loading: false,
+        });
+        if (res.data.next){
+          this.setState({
+            next_page: true,
+            page: res.data.next.page
+          })
+          window.addEventListener("scroll", this.handleScroll);
+        }else{
+          this.setState({
+            next_page: false
+          })
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false,
+        });
+      });
+    }
+    else{
+      axios
       .get(`${domain}/api/image/getImages?page=${this.state.page}`, config)
       .then((res) => {
         console.log(res.data);
@@ -162,6 +220,7 @@ class GalleryFilter extends React.Component {
         });
         if (res.data.next){
           this.setState({
+            next_page: true,
             page: res.data.next.page
           })
           window.addEventListener("scroll", this.handleScroll);
@@ -177,6 +236,7 @@ class GalleryFilter extends React.Component {
           next_page: false
         });
       });
+    }
   }
 
   clickMe(user) {
@@ -249,16 +309,17 @@ class GalleryFilter extends React.Component {
 
   // Categories filter axios api start
   handleClick = async (id) => {
-    this.setState({ activeLink: id });
+    this.setState({ activeLink: id, filter_type: "filter" });
     this.setState({
       listing: [],
       loading: true,
+      dropdown: id
     });
 
     await axios
       .post(
         `${domain}/api/image/imageFilters?page=1`,
-        { data: "", type: id },
+        { data: this.state.keywords, type: id },
         this.config
       )
       .then((res) => {
@@ -267,6 +328,17 @@ class GalleryFilter extends React.Component {
           listing: res.data.results,
           loading: false,
         });
+        if (res.data.next){
+          this.setState({
+            next_page: true,
+            page: res.data.next.page
+          })
+          window.addEventListener("scroll", this.handleScroll);
+        }else{
+          this.setState({
+            next_page: false
+          })
+        }
       })
       .catch((err) => {
         this.setState({
@@ -280,6 +352,7 @@ class GalleryFilter extends React.Component {
   };
 
   handleScroll = () => {
+    console.log("Scrolling")
     try {
       const wrappedElement = document.getElementById("main_div");
       if (
@@ -375,11 +448,15 @@ class GalleryFilter extends React.Component {
     this.setState({
       loading: true,
       listing: [],
+      page: 1,
     });
     await this.setState({
       followingDropdown: e.target.value,
     });
     if (this.state.followingDropdown == 2) {
+      this.setState({
+        filter_type: "following"
+      })
       await axios
         .post(`${domain}/api/image/getFollowersMedia?page=1`, config)
         .then((res) => {
@@ -388,6 +465,17 @@ class GalleryFilter extends React.Component {
             listing: res.data.results,
             loading: false,
           });
+          if (res.data.next){
+            this.setState({
+              next_page: true,
+              page: res.data.next.page
+            })
+            window.addEventListener("scroll", this.handleScroll);
+          }else{
+            this.setState({
+              next_page: false
+            })
+          }
         })
         .catch((err) => {
           this.setState({
@@ -395,6 +483,9 @@ class GalleryFilter extends React.Component {
           });
         });
     } else {
+      this.setState({
+        filter_type: null
+      })
       axios
         .get(`${domain}/api/image/getImages?page=1`, config)
         .then((res) => {
@@ -403,6 +494,17 @@ class GalleryFilter extends React.Component {
             listing: res.data.results,
             loading: false,
           });
+          if (res.data.next){
+            this.setState({
+              next_page: true,
+              page: res.data.next.page
+            })
+            window.addEventListener("scroll", this.handleScroll);
+          }else{
+            this.setState({
+              next_page: false
+            })
+          }
         })
         .catch((err) => {
           this.setState({
@@ -485,6 +587,8 @@ class GalleryFilter extends React.Component {
     this.setState({
       listing: [],
       loading: true,
+      filter_type: "filter",
+      activeLink: e.target.value
     });
     await this.setState({
       dropdown: e.target.value,
@@ -501,6 +605,17 @@ class GalleryFilter extends React.Component {
           listing: res.data.results,
           loading: false,
         });
+        if (res.data.next){
+          this.setState({
+            next_page: true,
+            page: res.data.next.page
+          })
+          window.addEventListener("scroll", this.handleScroll);
+        }else{
+          this.setState({
+            next_page: false
+          })
+        }
       })
       .catch((err) => {
         this.setState({
@@ -516,6 +631,9 @@ class GalleryFilter extends React.Component {
   };
 
   submitted = async (e) => {
+    this.setState({
+      filter_type: "filter"
+    })
     console.log(this.state.keywords);
     e.preventDefault();
     this.setState({
@@ -534,6 +652,17 @@ class GalleryFilter extends React.Component {
           listing: res.data.results,
           loading: false,
         });
+        if (res.data.next){
+          this.setState({
+            next_page: true,
+            page: res.data.next.page
+          })
+          window.addEventListener("scroll", this.handleScroll);
+        }else{
+          this.setState({
+            next_page: false
+          })
+        }
       });
     this.setState({
       loading: false,
