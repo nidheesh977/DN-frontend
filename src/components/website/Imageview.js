@@ -281,6 +281,11 @@ function Imageview() {
             .then((res) => {
               console.log(res.data);
               setComments(res.data);
+              if (res.data.length === 0) {
+                try {
+                  document.getElementById("commentToHide").style.display = "block";
+                } catch {}
+              }
             });
           axios
             .post(`${domain}/api/comments/getMyComments`, config)
@@ -307,6 +312,11 @@ function Imageview() {
           .then((res) => {
             console.log(res.data);
             setComments(res.data);
+            if (res.data.length === 0) {
+              try {
+                document.getElementById("commentToHide").style.display = "block";
+              } catch {}
+            }
           });
         axios
           .post(`${domain}/api/comments/getMyComments`, config)
@@ -405,6 +415,7 @@ function Imageview() {
   };
 
   let clicked = (id, userId) => {
+    document.getElementById("commentToHide").style.display = "none";
     axios.get(`${domain}/api/image/getImage/${id}`).then((res) => {
       console.log(res);
       setImage(res.data[0]);
@@ -415,11 +426,95 @@ function Imageview() {
           .then((res) => {
             console.log(res.data);
             setComments(res.data);
+            if (res.data.length === 0) {
+              try {
+                document.getElementById("commentToHide").style.display = "block";
+              } catch {}
+            }
           });
+          
+         
     // window.location.href = `/imageview/${id}/${userId}`;
     history.push(`/imageview/${id}/${userId}`);
     // window.location.reload();
   };
+  let nextImage = () =>{
+    document.getElementById("commentToHide").style.display = "none";
+    document.getElementById("mainImageRight").style.display = "block"
+    document.getElementById("mainImageLeft").style.display = "block"
+    axios.post(`${domain}/api/image/getNextImage`, {currentId: image._id}).then(res=>{
+      console.log(res)
+      if(res.data !== "Last Image"){
+        axios.get(`${domain}/api/image/getImage/${res.data._id}`).then((res) => {
+          console.log(res);
+          setImage(res.data[0]);
+          setLoading(false);
+        });
+        axios
+              .get(`${domain}/api/comments/getComments/${res.data._id}`)
+              .then((res) => {
+                console.log(res.data);
+                setComments(res.data);
+                if (res.data.length === 0) {
+                  try {
+                    document.getElementById("commentToHide").style.display = "block";
+                  } catch {}
+                }
+              });
+              axios.get(`${domain}/api/image/getUserImages/${res.data.userId}`)
+              .then((res) => {
+                if (res.data.length > 5) {
+                  setOtherImages(res.data.slice(0, 6));
+                } else {
+                  setOtherImages(res.data);
+                }
+              });
+        history.push(`/imageview/${res.data._id}/${res.data.userId}`);
+      }else{
+        document.getElementById("mainImageRight").style.display = "none"
+      }
+      
+    })
+  }
+  let previousImage = () =>{
+    document.getElementById("commentToHide").style.display = "none";
+    document.getElementById("mainImageRight").style.display = "block"
+    document.getElementById("mainImageLeft").style.display = "block"
+
+    axios.post(`${domain}/api/image/getPreviousImage`, {currentId: image._id}).then(res=>{
+      console.log(res)
+      if(res.data !== "Last Image"){
+        axios.get(`${domain}/api/image/getImage/${res.data._id}`).then((res) => {
+          console.log(res);
+          setImage(res.data[0]);
+          setLoading(false);
+        });
+        axios
+              .get(`${domain}/api/comments/getComments/${res.data._id}`)
+              .then((res) => {
+                console.log(res.data);
+                setComments(res.data);
+                if (res.data.length === 0) {
+                  try {
+                    document.getElementById("commentToHide").style.display = "block";
+                  } catch {}
+                }
+              });
+              axios.get(`${domain}/api/image/getUserImages/${res.data.userId}`)
+              .then((res) => {
+                if (res.data.length > 5) {
+                  setOtherImages(res.data.slice(0, 6));
+                } else {
+                  setOtherImages(res.data);
+                }
+              });
+        history.push(`/imageview/${res.data._id}/${res.data.userId}`);
+      }else{
+        document.getElementById("mainImageLeft").style.display = "none"
+      }
+      
+    })
+  }
   let likeImage = () => {
     if (localStorage.getItem("access_token")) {
       axios
@@ -500,10 +595,14 @@ function Imageview() {
         history.push(`/pilot/${res.data[0].userName}`);
       });
   };
+  let keyPressed = (e) =>{
+    console.log(e.key)
+  }
+  
   return (
     <Container className={`${All.Container}`}>
       <Container>
-        <div style={{ marginTop: "35px" }}>
+        <div style={{ marginTop: "35px" }} onKeyDown={keyPressed}>
           <div
             className="i_v_back"
             style={{
@@ -521,6 +620,7 @@ function Imageview() {
             Download
           </button>
         </div>
+        <div style={{position:"relative"}} onKeyDown= {keyPressed}>
         {loading ? (
           <Skeleton style={{ height: "500px", borderRadius: "10px" }} />
         ) : (
@@ -561,7 +661,13 @@ function Imageview() {
                 onError = {(e) => e.target.src = "https://qawerk.com/wp-content/uploads/2021/07/no-image-available-icon-6.png"}
               />
             )}
-            <div style={{ position: "absolute", top: "65px", right: "10px", backgroundColor: "rgba(255,255,255,0.6)", padding: "5px", borderRadius: "0px 0px 0px 15px" }}>
+            <div style={{position:"absolute", top: "calc(50% - 30px)",right: "0px", cursor: "pointer", fontSize:"40px", padding: "5px", backgroundColor: "#eeeeee80"}} onClick={nextImage} id="mainImageRight">
+              <i class="fas fa-angle-right"></i>
+              </div>
+              <div style={{position:"absolute", top: "calc(50% - 30px)", cursor: "pointer", fontSize:"40px", padding: "5px", backgroundColor: "#eeeeee80"}} onClick={previousImage} id="mainImageLeft">
+              <i class="fas fa-angle-left"></i>
+              </div>
+            <div style={{ position: "absolute", top: "35px", right: "0px", backgroundColor: "rgba(255,255,255,0.6)", padding: "10px", borderRadius: "0px 0px 0px 15px" }}>
               <div style={{ cursor: "pointer", display: "inline-block", padding: "0px 10px" }} className = "like-share-icons-container">
                 {likedData.includes(image._id) ? (
                   <div>
@@ -583,6 +689,7 @@ function Imageview() {
                   // <img src={Like} className="likeImage" onClick={likeImage} />
                 )}
               </div>
+              
               <div style={{ cursor: "pointer", display: "inline-block", padding: "0px 10px" }} className = "like-share-icons-container">
                 <img
                   src={Share}
@@ -592,9 +699,10 @@ function Imageview() {
                 />
               </div>
             </div>
+            
           </>
         )}
-
+</div>
         <Row gutterWidth={45}>
           {/* left */}
           <Col lg={8}>
