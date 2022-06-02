@@ -592,7 +592,7 @@ export default function PilotDetails(props) {
             </div>
             <div id="div2">
               <MuiThemeProvider>
-                <div className={All.M_ProfileCenter}>
+                <div>
                   {pilotData.profilePic ? (
                     <img
                       src={`${pilotData.profilePic}`}
@@ -774,6 +774,7 @@ export default function PilotDetails(props) {
                 <select
                   className="p_d_tab_filter"
                   onChange={selectCategoryDropdown}
+                  style = {{cursor: "pointer"}}
                 >
                   <option value={1} selected = {category === 1}>All</option>
                   <option value={2} selected = {category === 2}>Images</option>

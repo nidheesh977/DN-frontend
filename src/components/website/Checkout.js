@@ -438,7 +438,7 @@ function Checkout(props) {
   };
 
   const closePaymentPopup = () => {
-    if (localStorage.getItem("role") === "company") {
+    if (localStorage.getItem("role") === "pilot") {
       history.push("/pilot_dashboard/account/my_subscription");
     } else {
       history.push("/createPilot");

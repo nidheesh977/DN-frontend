@@ -610,7 +610,7 @@ export default function ServiceCenterDetails(props) {
           <div style={{ position: "relative" }}>
             <img
               src={details.coverPic}
-              style={{ width: "100%", height: "300px", borderRadius: "10px" }}
+              style={{ width: "100%", borderRadius: "10px" }}
             />
             <img
               src={details.profilePic}
