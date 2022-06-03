@@ -41,6 +41,9 @@ import axios from "axios";
 import Avatar from "material-ui/Avatar";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import ProImg from "../images/proIcon.png";
+import OwlCarousel from "react-owl-carousel";
+import "owl.carousel/dist/assets/owl.carousel.css";
+import "owl.carousel/dist/assets/owl.theme.default.css";
 
 const styles = (theme) => ({
   root: {
@@ -103,9 +106,9 @@ export default function PilotDetails(props) {
   const [files, setFiles] = useState([]);
   let [pilotData, setPilotData] = useState({});
   let [fol, setFol] = useState([]);
-  let [rearrangedImages, setRearrangedImages] = useState([])
-  let [rearrangedVideos, setRearrangedVideos] = useState([])
-  let [rearranged3d, setRearranged3d] = useState([])
+  let [rearrangedImages, setRearrangedImages] = useState([]);
+  let [rearrangedVideos, setRearrangedVideos] = useState([]);
+  let [rearranged3d, setRearranged3d] = useState([]);
 
   const [allFileCount, setAllFileCount] = useState(0);
   const [imageFileCount, setImageFileCount] = useState(0);
@@ -121,9 +124,8 @@ export default function PilotDetails(props) {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [subscription, setSubscription] = useState({});
-  const [upgradePopup, setUpgradePopup] = useState(false)
-  const [limitExceededPopup, setLimitExceededPopup] = useState(false)
-  
+  const [upgradePopup, setUpgradePopup] = useState(false);
+  const [limitExceededPopup, setLimitExceededPopup] = useState(false);
 
   const handleErrorClose = () => {
     setErrorMsg("");
@@ -132,53 +134,52 @@ export default function PilotDetails(props) {
 
   const selectCategory = (new_category) => {
     setCategory(new_category);
-    if (new_category === 1){
-      setFiles(allFiles)
-    }else if (new_category === 2){
-      console.log(rearrangedImages)
-      if (rearrangedImages.length !== 0){
-        setFiles(rearrangedImages)
+    if (new_category === 1) {
+      setFiles(allFiles);
+    } else if (new_category === 2) {
+      console.log(rearrangedImages);
+      if (rearrangedImages.length !== 0) {
+        setFiles(rearrangedImages);
+      } else {
+        setFiles(allFiles);
       }
-      else{
-        setFiles(allFiles)
+    } else if (new_category === 3) {
+      if (rearrangedVideos.length !== 0) {
+        setFiles(rearrangedVideos);
+      } else {
+        setFiles(allFiles);
       }
-    }else if (new_category === 3){
-      if (rearrangedVideos.length !== 0){
-        setFiles(rearrangedVideos)
-      }else{
-        setFiles(allFiles)
-      }
-    }else if (new_category === 4){
-      if (rearranged3d.length !== 0){
-        setFiles(rearranged3d)
-      }else{
-        setFiles(allFiles)
+    } else if (new_category === 4) {
+      if (rearranged3d.length !== 0) {
+        setFiles(rearranged3d);
+      } else {
+        setFiles(allFiles);
       }
     }
   };
 
   const selectCategoryDropdown = (e) => {
     setCategory(Number(e.target.value));
-    if (e.target.value === "1"){
-      setFiles(allFiles)
-    }else if (e.target.value === "2"){
-      console.log(rearrangedImages)
-      if (rearrangedImages.length){
-        setFiles(rearrangedImages)
-      }else{
-        setFiles(allFiles)
+    if (e.target.value === "1") {
+      setFiles(allFiles);
+    } else if (e.target.value === "2") {
+      console.log(rearrangedImages);
+      if (rearrangedImages.length) {
+        setFiles(rearrangedImages);
+      } else {
+        setFiles(allFiles);
       }
-    }else if (e.target.value === "3"){
-      if (rearrangedVideos.length !== 0){
-        setFiles(rearrangedVideos)
-      }else{
-        setFiles(allFiles)
+    } else if (e.target.value === "3") {
+      if (rearrangedVideos.length !== 0) {
+        setFiles(rearrangedVideos);
+      } else {
+        setFiles(allFiles);
       }
-    }else if (e.target.value === "4"){
-      if (rearranged3d.length !== 0){
-        setFiles(rearranged3d)
-      }else{
-        setFiles(allFiles)
+    } else if (e.target.value === "4") {
+      if (rearranged3d.length !== 0) {
+        setFiles(rearranged3d);
+      } else {
+        setFiles(allFiles);
       }
     }
   };
@@ -224,25 +225,31 @@ export default function PilotDetails(props) {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    if (subscription.subscription){
-      if ((subscription.subscription.proposals <= subscription.proposals && subscription.subscription.plan.includes("platinum"))){
-        setLimitExceededPopup(true)
-      }else if ((subscription.subscription.proposals <= subscription.proposals && !subscription.subscription.plan.includes("platinum"))){
-        setUpgradePopup(true)
-      }
-      else{
+    if (subscription.subscription) {
+      if (
+        subscription.subscription.proposals <= subscription.proposals &&
+        subscription.subscription.plan.includes("platinum")
+      ) {
+        setLimitExceededPopup(true);
+      } else if (
+        subscription.subscription.proposals <= subscription.proposals &&
+        !subscription.subscription.plan.includes("platinum")
+      ) {
+        setUpgradePopup(true);
+      } else {
         setStartProcess(true);
       }
-    }else{
-      setUpgradePopup(true)
+    } else {
+      setUpgradePopup(true);
     }
-    if(localStorage.getItem("role") === "company"){
-      axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
-        console.log(res.data)
-        setSubscription(res.data)
-      })
+    if (localStorage.getItem("role") === "company") {
+      axios
+        .get(`${domain}/api/company/getCompanySubscription`, config)
+        .then((res) => {
+          console.log(res.data);
+          setSubscription(res.data);
+        });
     }
-    
   };
   const submitProcess = () => {
     if (hireForm.description !== "" && hireForm.description.length <= 200) {
@@ -253,11 +260,13 @@ export default function PilotDetails(props) {
           config
         )
         .then((res) => {
-          if(localStorage.getItem("role") === "company"){
-            axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
-              console.log(res.data)
-              setSubscription(res.data)
-            })
+          if (localStorage.getItem("role") === "company") {
+            axios
+              .get(`${domain}/api/company/getCompanySubscription`, config)
+              .then((res) => {
+                console.log(res.data);
+                setSubscription(res.data);
+              });
           }
           console.log(res);
           setHireForm({
@@ -272,9 +281,11 @@ export default function PilotDetails(props) {
             document.querySelector(
               ".h_p_start_process_form_description"
             ).style.backgroundColor = "#f5f5f7";
-            axios.post(`${domain}/api/company/setProposals`, config).then(res=>{
-              console.log(res)
-            })
+            axios
+              .post(`${domain}/api/company/setProposals`, config)
+              .then((res) => {
+                console.log(res);
+              });
           }
           setTimeout(() => {
             return (
@@ -310,13 +321,15 @@ export default function PilotDetails(props) {
       Authorization: "Bearer " + localStorage.getItem("access_token"),
     },
   };
-  
+
   useEffect(() => {
-    if(localStorage.getItem("role") === "company"){
-      axios.get(`${domain}/api/company/getCompanySubscription`, config).then(res=>{
-        console.log(res.data)
-        setSubscription(res.data)
-      })
+    if (localStorage.getItem("role") === "company") {
+      axios
+        .get(`${domain}/api/company/getCompanySubscription`, config)
+        .then((res) => {
+          console.log(res.data);
+          setSubscription(res.data);
+        });
     }
     axios
       .get(`${domain}/api/pilot/pilotDetails/${props.match.params.id}`)
@@ -326,12 +339,12 @@ export default function PilotDetails(props) {
         if (response.data.name === "CastError") {
           history.push("/no-page-found");
         }
-        setRearrangedImages(response.data.rearrangedImages)
-        setRearrangedVideos(response.data.rearrangedVideos)
-        setRearranged3d(response.data.rearranged3d)
+        setRearrangedImages(response.data.rearrangedImages);
+        setRearrangedVideos(response.data.rearrangedVideos);
+        setRearranged3d(response.data.rearranged3d);
       })
       .catch((err) => {
-        console.log(err.response)
+        console.log(err.response);
         history.push("/no-page-found");
       });
     axios
@@ -345,18 +358,16 @@ export default function PilotDetails(props) {
           setCategory(5);
         }
       });
-    
-      axios
-            .get(
-              `${domain}/api/image/getUserImagesOnly/${props.match.params.id}`
-            )
-            .then((res) => {
-              console.log(res.data);
-              setImageFileCount(res.data.length);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+
+    axios
+      .get(`${domain}/api/image/getUserImagesOnly/${props.match.params.id}`)
+      .then((res) => {
+        console.log(res.data);
+        setImageFileCount(res.data.length);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     axios
       .get(`${domain}/api/image/getUserVideosOnly/${props.match.params.id}`)
@@ -410,10 +421,7 @@ export default function PilotDetails(props) {
   let followMe = () => {
     if (localStorage.getItem("access_token")) {
       axios
-        .post(
-          `${domain}/api/follow/createFollow/${pilotData._id}`,
-          config
-        )
+        .post(`${domain}/api/follow/createFollow/${pilotData._id}`, config)
         .then((response) => {
           axios
             .post(`${domain}/api/follow/getMyFollowing`, config)
@@ -431,10 +439,7 @@ export default function PilotDetails(props) {
   };
   let unfollow = () => {
     axios
-      .post(
-        `${domain}/api/follow/removeFollow/${pilotData._id}`,
-        config
-      )
+      .post(`${domain}/api/follow/removeFollow/${pilotData._id}`, config)
       .then((response) => {
         axios
           .post(`${domain}/api/follow/getMyFollowing`, config)
@@ -577,15 +582,15 @@ export default function PilotDetails(props) {
                   <img
                     src={`${pilotData.coverPic}`}
                     className="avatar_coverPic"
-                    onError={()=>setPilotData({...pilotData,coverPic : ""})}
+                    onError={() => setPilotData({ ...pilotData, coverPic: "" })}
                     // onError={(event) => event.target.src = 'https://www.tarkettsee.com/media/img/M/THH_25121917_25131917_25126917_25136917_001.jpg'}
                   />
                 ) : (
-                  <Skeleton 
-                    height = {"310px"}
-                    width = {"100%"}
-                    count = {1}
-                    style = {{border: "1px solid #cfcfcf"}}
+                  <Skeleton
+                    height={"310px"}
+                    width={"100%"}
+                    count={1}
+                    style={{ border: "1px solid #cfcfcf" }}
                   />
                 )}
               </MuiThemeProvider>
@@ -597,21 +602,25 @@ export default function PilotDetails(props) {
                     <img
                       src={`${pilotData.profilePic}`}
                       className="avatar_profilePic"
-                      onError={()=>setPilotData({...pilotData,profilePic : ""})}
+                      onError={() =>
+                        setPilotData({ ...pilotData, profilePic: "" })
+                      }
                     />
                   ) : (
-                    <Skeleton 
-                    height = {"100px"}
-                    width = {"100px"}
-                    count = {1}
-                    style = {{borderRadius: "50px", border: "1px solid #cfcfcf"}}
-                  />
+                    <Skeleton
+                      height={"100px"}
+                      width={"100px"}
+                      count={1}
+                      style={{
+                        borderRadius: "50px",
+                        border: "1px solid #cfcfcf",
+                      }}
+                    />
                   )}
                 </div>
               </MuiThemeProvider>
             </div>
           </div>
-
           {error && (
             <Snackbar
               open={error}
@@ -695,16 +704,20 @@ export default function PilotDetails(props) {
                     Follow me
                   </button>
                 )}
-                {localStorage.getItem("role") === "company"&&<button className="p_d_hire_btn p_d_btn  " onClick={clickHire}>
-                  <img
-                    className="p_d_soc_icon2"
-                    src={hireBtnIcon}
-                    alt=""
-                    height={"20px"}
-                  />{" "}
-                  Hire me
-                </button>}
-                
+                {localStorage.getItem("role") === "company" && (
+                  <button
+                    className="p_d_hire_btn p_d_btn  "
+                    onClick={clickHire}
+                  >
+                    <img
+                      className="p_d_soc_icon2"
+                      src={hireBtnIcon}
+                      alt=""
+                      height={"20px"}
+                    />{" "}
+                    Hire me
+                  </button>
+                )}
               </div>
             </Col>
             <Col
@@ -774,15 +787,29 @@ export default function PilotDetails(props) {
                 <select
                   className="p_d_tab_filter"
                   onChange={selectCategoryDropdown}
-                  style = {{cursor: "pointer"}}
+                  style={{ cursor: "pointer" }}
                 >
-                  <option value={1} selected = {category === 1}>All</option>
-                  <option value={2} selected = {category === 2}>Images</option>
-                  <option value={3} selected = {category === 3}>Video</option>
-                  <option value={4} selected = {category === 4}>3D Models</option>
-                  <option value={5} selected = {category === 5}>About</option>
-                  <option value={6} selected = {category === 6}>Followers</option>
-                  <option value={7} selected = {category === 7}>Following</option>
+                  <option value={1} selected={category === 1}>
+                    All
+                  </option>
+                  <option value={2} selected={category === 2}>
+                    Images
+                  </option>
+                  <option value={3} selected={category === 3}>
+                    Video
+                  </option>
+                  <option value={4} selected={category === 4}>
+                    3D Models
+                  </option>
+                  <option value={5} selected={category === 5}>
+                    About
+                  </option>
+                  <option value={6} selected={category === 6}>
+                    Followers
+                  </option>
+                  <option value={7} selected={category === 7}>
+                    Following
+                  </option>
                 </select>
               </Visible>
             </div>
@@ -1039,7 +1066,6 @@ export default function PilotDetails(props) {
               </div> */}
             </Row>
           )}
-
           {category === 5 && (
             <Row>
               <Col xl={7} lg={7} md={6} sm={12}>
@@ -1056,11 +1082,15 @@ export default function PilotDetails(props) {
                 <div className="p_d_about_skills_container">
                   <div className="p_d_about_title">Skills:</div>
                   <div className="p_d_about_skills_keyword_container">
-                    { pilotData.skills ? pilotData.skills.map((skill, index) => {
-                      return (
-                        <div className="p_d_about_skills_keyword">{skill}</div>
-                      );
-                    }) : ""}
+                    {pilotData.skills
+                      ? pilotData.skills.map((skill, index) => {
+                          return (
+                            <div className="p_d_about_skills_keyword">
+                              {skill}
+                            </div>
+                          );
+                        })
+                      : ""}
                   </div>
                 </div>
               </Col>
@@ -1117,9 +1147,11 @@ export default function PilotDetails(props) {
                   </div>
                   <div className="p_d_about_details_title">Drones</div>
                   <div className="p_d_about_details_content">
-                    {pilotData.droneType.length !==0 ?  pilotData.droneType.map((item, index) => {
-                      return <>{item}, </>;
-                    }) : ""}
+                    {pilotData.droneType.length !== 0
+                      ? pilotData.droneType.map((item, index) => {
+                          return <>{item}, </>;
+                        })
+                      : ""}
                   </div>
                   {pilotData.trainingCenter && (
                     <>
@@ -1146,7 +1178,6 @@ export default function PilotDetails(props) {
               </Col>
             </Row>
           )}
-
           {category === 6 && (
             <div className="p_d_followers_container">
               {followersCount > 0 ? (
@@ -1295,7 +1326,6 @@ export default function PilotDetails(props) {
               </div> */}
             </div>
           )}
-
           {category === 7 && (
             <div className="p_d_followers_container">
               {followingCount > 0 ? (
@@ -1442,6 +1472,36 @@ export default function PilotDetails(props) {
               </div> */}
             </div>
           )}
+          {/* <OwlCarousel id = "next_prev_shoot_carousel" className="owl-theme" loop margin={10} nav dots = {false} height = "500px" startPosition={2} items = {1}>
+          {files.map((file, index) => {
+                    return (
+                        <div className="item"  style = {{height: "550px"}}>
+                          {file.fileType === "video" ? (
+                            <>
+                              <video
+                                src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
+                                alt=""
+                                style = {{maxHeight: "550px"}}
+                              />
+                              <img
+                                src={videoIcon}
+                                alt=""
+                                className="p_d_files_video_icon"
+                                style={{ top: "calc(50% - 30px)" }}
+                              />
+                            </>
+                          ) : (
+                              <img
+                                src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
+                                alt=""
+                                style = {{objectFit: "contain", width: "100%", height: "100%", margin: "auto", verticalAlign: "middle"}}
+
+                              />
+                          )}
+                        </div>
+                    );
+                  })}
+          </OwlCarousel> */}
           <Dialog
             open={startProcess}
             onClose={closeProcess}
@@ -1546,99 +1606,93 @@ export default function PilotDetails(props) {
             </DialogContent>
           </Dialog>
           <Dialog
-                open={upgradePopup}
-                onClose={()=>setUpgradePopup(false)}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                maxWidth={"md"}
-                fullWidth={true}
-                PaperProps={{
-                  style: {
-                    maxWidth: "820px",
-                    borderRadius: "10px",
-                  },
-                }}
-              >
-                <DialogContent
-                  className={All.PopupBody}
-                  style={{ marginBottom: "50px" }}
-                >
-                  <div
-                    style={{ position: "absolute", top: "20px", right: "20px" }}
+            open={upgradePopup}
+            onClose={() => setUpgradePopup(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{
+              style: {
+                maxWidth: "820px",
+                borderRadius: "10px",
+              },
+            }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={() => setUpgradePopup(false)}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div className="u_f_popup_title">
+                  You exceeded your limit. Upgrade to comtinue.
+                </div>
+                <div className="u_f_popup_btn_container">
+                  <button
+                    className="u_f_popup_btn1"
+                    onClick={() => setUpgradePopup(false)}
                   >
-                    <img
-                      src={Close}
-                      alt=""
-                      onClick={()=>setUpgradePopup(false)}
-                      style={{ cursor: "pointer" }}
-                    />
-                  </div>
-                  <Row style={{ marginTop: "30px" }}>
-                    <div className="u_f_popup_title">
-                      You exceeded your limit. Upgrade to comtinue.
-                    </div>
-                    <div className="u_f_popup_btn_container">
-                      <button
-                        className="u_f_popup_btn1"
-                        onClick={()=>setUpgradePopup(false)}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        className="u_f_popup_btn2"
-                        onClick={()=>history.push("/HireSubscription")}
-                      >
-                        Upgrade
-                      </button>
-                    </div>
-                  </Row>
-                </DialogContent>
-              </Dialog>
-        <Dialog
-                open={limitExceededPopup}
-                onClose={()=>setLimitExceededPopup(false)}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                maxWidth={"md"}
-                fullWidth={true}
-                PaperProps={{
-                  style: {
-                    maxWidth: "820px",
-                    borderRadius: "10px",
-                  },
-                }}
-              >
-                <DialogContent
-                  className={All.PopupBody}
-                  style={{ marginBottom: "50px" }}
-                >
-                  <div
-                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                    Cancel
+                  </button>
+                  <button
+                    className="u_f_popup_btn2"
+                    onClick={() => history.push("/HireSubscription")}
                   >
-                    <img
-                      src={Close}
-                      alt=""
-                      onClick={()=>setLimitExceededPopup(false)}
-                      style={{ cursor: "pointer" }}
-                    />
-                  </div>
-                  <Row style={{ marginTop: "30px" }}>
-                    <div className="u_f_popup_title">
-                      You exceeded your limit.
-                    </div>
-                    <div className="u_f_popup_btn_container">
-                      <button
-                        className="u_f_popup_btn1"
-                        onClick={()=>setLimitExceededPopup(false)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </Row>
-                </DialogContent>
-              </Dialog>
+                    Upgrade
+                  </button>
+                </div>
+              </Row>
+            </DialogContent>
+          </Dialog>
+          <Dialog
+            open={limitExceededPopup}
+            onClose={() => setLimitExceededPopup(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth={"md"}
+            fullWidth={true}
+            PaperProps={{
+              style: {
+                maxWidth: "820px",
+                borderRadius: "10px",
+              },
+            }}
+          >
+            <DialogContent
+              className={All.PopupBody}
+              style={{ marginBottom: "50px" }}
+            >
+              <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                <img
+                  src={Close}
+                  alt=""
+                  onClick={() => setLimitExceededPopup(false)}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <Row style={{ marginTop: "30px" }}>
+                <div className="u_f_popup_title">You exceeded your limit.</div>
+                <div className="u_f_popup_btn_container">
+                  <button
+                    className="u_f_popup_btn1"
+                    onClick={() => setLimitExceededPopup(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </Row>
+            </DialogContent>
+          </Dialog>
         </Container>
       </section>
     </>
-  );
+  )
 }

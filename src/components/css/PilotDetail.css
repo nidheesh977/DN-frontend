@@ -477,7 +477,6 @@
 .avatar_profilePic{
   width: 110px;
   border-radius: 55px;
-  
 }
 
 #div1{
@@ -485,6 +484,41 @@ position: relative;
 }
 
 #div2{
-position: absolute;
-left: 45px;
-top: calc(100% - 60px);}
+  position: absolute;
+  left: 45px;
+  top: calc(100% - 60px);
+}
+
+#next_prev_shoot_carousel .owl-nav .owl-prev{
+  float: left;
+  z-index: 1000;
+}
+
+#next_prev_shoot_carousel .owl-nav .owl-next{
+  float: right;
+  z-index: 1000;
+}
+
+#next_prev_shoot_carousel .owl-nav .owl-next span, #next_prev_shoot_carousel .owl-nav .owl-prev span{
+  font-size: 50px !important;
+  padding: 0px 10px 7px 10px;
+  border: 1px solid grey;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+#next_prev_shoot_carousel{
+  position: relative;
+}
+
+#next_prev_shoot_carousel .owl-nav{
+  position: absolute;
+  top: calc(50% - 41px);
+  width: 100%;
+  z-index: -1;
+  
+}
+
+#next_prev_shoot_carousel .owl-nav [class*='owl-']:hover {
+  background-color: #ffffff00;
+  color: #00E7FC;
+}
