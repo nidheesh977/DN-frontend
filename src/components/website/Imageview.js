@@ -130,12 +130,18 @@ function Imageview() {
   let [shareLink, setShareLink] = useState("");
   let [loading, setLoading] = useState(true);
   let [userDetails, setUserDetails] = useState({});
+  let [relatedImages, setRelatedImages] = useState([])
   useEffect(() => {
     axios.get(`${domain}/api/image/getImage/${param.id}`).then((res) => {
       console.log(res);
       setImage(res.data[0]);
       setLoading(false);
+      axios.post(`${domain}/api/image/getRelatedImages`, {category: res.data[0].category, keywords : res.data[0].keywords}).then(res=>{
+        console.log(res)
+        setRelatedImages(res.data)
+      })
     });
+    
   }, []);
   useEffect(() => {
     axios.post(`${domain}/api/image/viewImage/${param.id}`).then((res) => {
@@ -420,6 +426,19 @@ function Imageview() {
       console.log(res);
       setImage(res.data[0]);
       setLoading(false);
+      axios
+      .get(`${domain}/api/image/getUserImages/${res.data[0].userId}`)
+      .then((res) => {
+        if (res.data.length > 5) {
+          setOtherImages(res.data.slice(0, 6));
+        } else {
+          setOtherImages(res.data);
+        }
+      });
+      axios.post(`${domain}/api/image/getRelatedImages`, {category: res.data[0].category, keywords : res.data[0].keywords}).then(res=>{
+        console.log(res)
+        setRelatedImages(res.data)
+      })
     });
     axios
           .get(`${domain}/api/comments/getComments/${id}`)
@@ -449,6 +468,10 @@ function Imageview() {
           console.log(res);
           setImage(res.data[0]);
           setLoading(false);
+          axios.post(`${domain}/api/image/getRelatedImages`, {category: res.data[0].category, keywords : res.data[0].keywords}).then(res=>{
+            console.log(res)
+            setRelatedImages(res.data)
+          })
         });
         axios
               .get(`${domain}/api/comments/getComments/${res.data._id}`)
@@ -488,6 +511,10 @@ function Imageview() {
           console.log(res);
           setImage(res.data[0]);
           setLoading(false);
+          axios.post(`${domain}/api/image/getRelatedImages`, {category: res.data[0].category, keywords : res.data[0].keywords}).then(res=>{
+            console.log(res)
+            setRelatedImages(res.data)
+          })
         });
         axios
               .get(`${domain}/api/comments/getComments/${res.data._id}`)
@@ -598,7 +625,31 @@ function Imageview() {
   let keyPressed = (e) =>{
     console.log(e.key)
   }
+  const [ locationKeys, setLocationKeys ] = useState([])
+
+  useEffect(() => {
+    return history.listen(location => {
+      if (history.action === 'PUSH') {
+        setLocationKeys([ location.key ])
+      }
   
+      if (history.action === 'POP') {
+        if (locationKeys[1] === location.key) {
+          setLocationKeys(([ _, ...keys ]) => keys)
+  
+          // Handle forward event
+  
+        } else {
+          setLocationKeys((keys) => [ location.key, ...keys ])
+  
+          // Handle back event
+          history.push("/")
+          // console.log(window.location.pathname)
+  
+        }
+      }
+    })
+  }, [ locationKeys, ])
   return (
     <Container className={`${All.Container}`}>
       <Container>
@@ -909,7 +960,7 @@ function Imageview() {
 
             <div className="i_v_moreShots">More Shots from {image.name}</div>
             <Row>
-              {otherImages.map((item, i) => {
+              {otherImages && otherImages.map((item, i) => {
                 return (
                   <Col lg={6} xs={6}>
                     {" "}
@@ -956,7 +1007,63 @@ function Imageview() {
             </Row>
           </Col>
         </Row>
+        <div>
+        <div className="shoots_you_might_like">Shoots you might like</div>
+      </div>
+      <div>
+        <Row gutterWidth={15}>
+          {
+            relatedImages.map((item,i)=>{
+              return(
+                <Col lg={3} xl={3} md={4} xs={6}>
+         {item.fileType === "video" ? (
+              <video
+                
+                style={{
+                  backgroundColor: "black",
+                  objectFit: "cover",
+                  width: "100%",
+                  height: "221px",
+                  borderRadius: "10px",
+                  margin: "10px 0px",
+                  cursor: "pointer"
+                }}
+                
+                onClick={() => clicked(item._id, item.userId)}
+              >
+                <source
+                  src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`}
+                  type="video/mp4"
+                />
+                <source
+                  src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`}
+                  type="video/ogg"
+                />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <img
+                style={{
+                  width: "100%",
+                  borderRadius: "10px",
+                  margin: "10px 0px",
+                  cursor: "pointer"
+                }}
+                
+                src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${item.file}`}
+                onError = {(e) => e.target.src = "https://qawerk.com/wp-content/uploads/2021/07/no-image-available-icon-6.png"}
+                onClick={() => clicked(item._id, item.userId)}
+              />
+            )}
+          </Col>
+              )
+            })
+          }
+          
+        </Row>
+      </div>
       </Container>
+      
 
       <Dialog
         open={share}
