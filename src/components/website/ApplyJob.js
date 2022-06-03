@@ -79,7 +79,7 @@ class ApplyJob extends Component {
       view_work_filter: false,
       view_hourly_rate_filter: true,
       price_range_min: 0,
-      price_range_max: 200,
+      price_range_max: 2000,
       show_more_filters: false,
 
       liked: [],
@@ -92,7 +92,7 @@ class ApplyJob extends Component {
       filter_city: "",
       pilot_type: [],
       work_type: [],
-      price_range: [20, 40],
+      price_range: [200, 400],
       next_page: false,
       page: 1,
       likeSuccess: false,
@@ -103,6 +103,7 @@ class ApplyJob extends Component {
       priceCheck: true,
       address: "",
       latLng: "",
+      filter_salary: false
     };
   }
   handleChange = (address) => {
@@ -122,8 +123,12 @@ class ApplyJob extends Component {
           latLng: `${latLng.lat}, ${latLng.lng}`,
         });
         console.log(this.state.latLng);
+        setTimeout(()=>{
+          this.searchFilter()
+        },1000)
       })
       .catch((error) => console.error("Error", error));
+      
   };
 
   dropdown = (id) => {
@@ -136,10 +141,13 @@ class ApplyJob extends Component {
       [id]: !this.state[id],
     });
   };
-  handlePriceRange = (e, value) => {
-    this.setState({
+  handlePriceRange = async (e, value) => {
+    await this.setState({
       price_range: value,
     });
+    if (this.state.filter_salary){ 
+        this.searchFilter()
+    }
   };
 
   showMoreFilters = () => {
@@ -147,68 +155,73 @@ class ApplyJob extends Component {
       show_more_filters: !this.state.show_more_filters,
     });
   };
-  
-  loadMore1 = () => {
-    console.log(this.state.page)
-    window.removeEventListener("scroll", this.handleScroll);
-    if (this.state.filter){
-    const data = {
-      keywords: this.state.filter_keyword,
-      employeeType: this.state.pilot_type,
-      jobType: this.state.work_type,
 
-      address: this.state.address,
-    };
-    if (document.getElementById("priceChecker").checked === true) {
-      data.price = this.state.price_range;
-    }
-    axios.post(`${domain}/api/jobs/filterJobs?page=${this.state.page}`, data).then((res) => {
-      console.log(res);
-      this.setState({
-        data: this.state.data.concat(res.data.results),
-        loading: false
-      });
-      if (res.data.next){
-        console.log(res.data.next.page)
-        this.setState({
-          next_page: true,
-          page: res.data.next.page
-        })
-      }else{
-        this.setState({
-          next_page: false
-        });
+  loadMore1 = () => {
+    console.log(this.state.page);
+    window.removeEventListener("scroll", this.handleScroll);
+    if (this.state.filter) {
+      const data = {
+        keywords: this.state.filter_keyword,
+        employeeType: this.state.pilot_type,
+        jobType: this.state.work_type,
+
+        address: this.state.address,
+      };
+      if (this.state.filter_salary) {
+        data.price = this.state.price_range;
       }
-      window.addEventListener("scroll", this.handleScroll);
-    })
-    .catch(err => {
-      this.setState({ loading: false });
-      window.addEventListener("scroll", this.handleScroll);
-    })
-    }else{
-    axios
-      .get(`${domain}/api/jobs/getJobs?page=${this.state.page}`)
-      .then((res) => {
-        console.log(res);
-        const persons = res.data;
-        console.log(persons.results);
-        this.setState({ data: this.state.data.concat(persons.results), loading: false });
-        if (res.data.next) {
+      axios
+        .post(`${domain}/api/jobs/filterJobs?page=${this.state.page}`, data)
+        .then((res) => {
+          console.log(res);
           this.setState({
-            next_page: true,
-            page: res.data.next.page,
+            data: this.state.data.concat(res.data.results),
+            loading: false,
           });
-        } else {
+          if (res.data.next) {
+            console.log(res.data.next.page);
+            this.setState({
+              next_page: true,
+              page: res.data.next.page,
+            });
+          } else {
+            this.setState({
+              next_page: false,
+            });
+          }
+          window.addEventListener("scroll", this.handleScroll);
+        })
+        .catch((err) => {
+          this.setState({ loading: false });
+          window.addEventListener("scroll", this.handleScroll);
+        });
+    } else {
+      axios
+        .get(`${domain}/api/jobs/getJobs?page=${this.state.page}`)
+        .then((res) => {
+          console.log(res);
+          const persons = res.data;
+          console.log(persons.results);
           this.setState({
-            next_page: false,
+            data: this.state.data.concat(persons.results),
+            loading: false,
           });
-        }
-        window.addEventListener("scroll", this.handleScroll);
-      })
-      .catch((err) => {
-        this.setState({ loading: false });
-        window.addEventListener("scroll", this.handleScroll);
-      });
+          if (res.data.next) {
+            this.setState({
+              next_page: true,
+              page: res.data.next.page,
+            });
+          } else {
+            this.setState({
+              next_page: false,
+            });
+          }
+          window.addEventListener("scroll", this.handleScroll);
+        })
+        .catch((err) => {
+          this.setState({ loading: false });
+          window.addEventListener("scroll", this.handleScroll);
+        });
     }
   };
 
@@ -219,9 +232,9 @@ class ApplyJob extends Component {
         wrappedElement.getBoundingClientRect().bottom <=
         window.innerHeight + 1
       ) {
-        if (this.state.next_page){
-          console.log(this.state.next_page)
-          this.loadMore1()
+        if (this.state.next_page) {
+          console.log(this.state.next_page);
+          this.loadMore1();
         }
       }
     } catch {
@@ -420,6 +433,9 @@ class ApplyJob extends Component {
     this.setState({
       filter_keyword: e.target.value,
     });
+    setTimeout(()=>{
+      this.searchFilter()
+    },1000)
   };
 
   filterCountryChangeHandler = (e) => {
@@ -433,7 +449,6 @@ class ApplyJob extends Component {
       filter_city: e.target.value,
     });
   };
-
 
   filterPilotTypeChangeHandler = (type) => {
     let pilot_type = this.state.pilot_type;
@@ -450,6 +465,7 @@ class ApplyJob extends Component {
     }
     setTimeout(() => {
       console.log(this.state.pilot_type);
+      this.searchFilter()
     }, 100);
   };
 
@@ -468,6 +484,7 @@ class ApplyJob extends Component {
     }
     setTimeout(() => {
       console.log(this.state.work_type);
+      this.searchFilter()
     }, 100);
   };
 
@@ -510,7 +527,7 @@ class ApplyJob extends Component {
     // pilot_type: [],
     // work_type: [],
     // price_range: [20, 40],
-    this.setState({ loading: true, page:1, next_page: false, filter: true });
+    this.setState({ loading: true, page: 1, next_page: false, filter: true });
     const data = {
       keywords: this.state.filter_keyword,
       employeeType: this.state.pilot_type,
@@ -518,7 +535,7 @@ class ApplyJob extends Component {
 
       address: this.state.address,
     };
-    if (document.getElementById("priceChecker").checked === true) {
+    if (this.state.filter_salary) {
       data.price = this.state.price_range;
     }
     axios.post(`${domain}/api/jobs/filterJobs?page=1`, data).then((res) => {
@@ -526,28 +543,29 @@ class ApplyJob extends Component {
       this.setState({
         data: res.data.results,
       });
-      if (res.data.next){
+      if (res.data.next) {
         this.setState({
           page: res.data.next.page,
-          next_page: true
-        })
-      }else{
+          next_page: true,
+        });
+      } else {
         this.setState({
-          next_page: false
-        })
+          next_page: false,
+        });
       }
       this.setState({ loading: false });
     });
   };
 
-  clearFilter = () => {
-    this.setState({
+  clearFilter = async () => {
+    await this.setState({
       filter_keyword: "",
       pilot_type: [],
       work_type: [],
       address: "",
+      filter_salary: false
     });
-    document.getElementById("priceChecker").checked = false;
+    this.searchFilter()
   };
 
   componentWillUnmount() {
@@ -581,13 +599,12 @@ class ApplyJob extends Component {
                       <button
                         className="h_p_create_job_btn"
                         onClick={() => {
-                          if (localStorage.getItem("role") === "halfPilot"){
-                            this.props.history.push("/createPilot")
+                          if (localStorage.getItem("role") === "halfPilot") {
+                            this.props.history.push("/createPilot");
+                          } else {
+                            this.props.history.push("/UploadFile");
                           }
-                          else{
-                            this.props.history.push("/UploadFile")
-                          }
-                          }}
+                        }}
                       >
                         Upload Now
                       </button>
@@ -633,30 +650,7 @@ class ApplyJob extends Component {
                     value={this.state.filter_keyword}
                   />
                   <div className="h_p_filter1_title1">Location</div>
-                  <div style={{ display: "none" }}>
-                    <select
-                      className="a_j_select_dropdown"
-                      onChange={this.filterCountryChangeHandler}
-                    >
-                      <option>Select Country</option>
-                      <option value="India">India</option>
-                      <option value="China">China</option>
-                      <option value="Pakistan">Pakistan</option>
-                      <option value="Russia">Russia</option>
-                    </select>
-                    <div className="h_p_filter1_title1">City</div>
-                    <select
-                      className="a_j_select_dropdown"
-                      id="a_j_select_dropdown1"
-                      onChange={this.filterCityChangeHandler}
-                    >
-                      <option>Select City</option>
-                      <option value="Chennai">Chennai</option>
-                      <option value="Bangalore">Bangalore</option>
-                      <option value="Mumbai">Mumbai</option>
-                      <option value="Delhi">Delhi</option>
-                    </select>
-                  </div>
+
                   <div className="">
                     {/* <input type="text" className="s_c_Search"/> */}
                     <PlacesAutocomplete
@@ -833,10 +827,13 @@ class ApplyJob extends Component {
                       className="h_p_filter1_checkbox"
                       style={{ display: "inline" }}
                       id="priceChecker"
+                      checked = {this.state.filter_salary}
+                      onClick = {()=>this.setState({filter_salary: !this.state.filter_salary})}
                     />
                     <div
                       className="h_p_filter1_title"
                       style={{ display: "inline", marginBottom: "10px" }}
+                      onClick = {()=>this.setState({filter_salary: !this.state.filter_salary})}
                     >
                       Salary
                     </div>
@@ -877,7 +874,7 @@ class ApplyJob extends Component {
               <Hidden xxl xl>
                 <Col lg={12} md={12}>
                   <Row>
-                    <Col lg={4} md={4} sm={12}>
+                    <Col lg={6} md={6} sm={12}>
                       <div className="h_p_filter1_title1">Keywords</div>
                       <input
                         type="text"
@@ -886,32 +883,86 @@ class ApplyJob extends Component {
                       />
                     </Col>
                     <Hidden xs sm>
-                      <Col lg={4} md={4} sm={6} xs={6}>
-                        <div className="h_p_filter1_title1">Country</div>
-                        <select
-                          className="a_j_select_dropdown"
-                          onChange={this.filterCountryChangeHandler}
-                        >
-                          <option>Select Country</option>
-                          <option value="India">India</option>
-                          <option value="China">China</option>
-                          <option value="Pakistan">Pakistan</option>
-                          <option value="Russia">Russia</option>
-                        </select>
-                      </Col>
-                      <Col lg={4} md={4} sm={6} xs={6}>
-                        <div className="h_p_filter1_title1">City</div>
-                        <select
-                          className="a_j_select_dropdown"
-                          id="a_j_select_dropdown1"
-                          onChange={this.filterCityChangeHandler}
-                        >
-                          <option>Select City</option>
-                          <option value="Chennai">Chennai</option>
-                          <option value="Bangalore">Bangalore</option>
-                          <option value="Mumbai">Mumbai</option>
-                          <option value="Delhi">Delhi</option>
-                        </select>
+                      <Col lg={6} md={6} sm={6} xs={6}>
+                        <div className="h_p_filter1_title1">Location</div>
+
+                        <div className="">
+                          {/* <input type="text" className="s_c_Search"/> */}
+                          <PlacesAutocomplete
+                            value={this.state.address}
+                            onChange={this.handleChange}
+                            onSelect={this.handleSelect}
+                          >
+                            {({
+                              getInputProps,
+                              suggestions,
+                              getSuggestionItemProps,
+                              loading,
+                            }) => (
+                              <div>
+                                <input
+                                  style={{ height: "40px" }}
+                                  {...getInputProps({
+                                    placeholder: "Search Places ...",
+                                    className: "a_j_filter_address",
+                                  })}
+                                />
+                                {suggestions.length != 0 && (
+                                  <div
+                                    className="autocomplete-dropdown-container"
+                                    style={{
+                                      position: "absolute",
+                                      zIndex: "1000",
+                                      border: "1px solid gray",
+                                      borderRadius: "10px",
+                                      overflow: "hidden",
+                                    }}
+                                  >
+                                    {loading && <div>Loading...</div>}
+                                    {suggestions.map((suggestion) => {
+                                      const className = suggestion.active
+                                        ? "suggestion-item--active"
+                                        : "suggestion-item";
+
+                                      // inline style for demonstration purpose
+                                      const style = suggestion.active
+                                        ? {
+                                            backgroundColor: "#e1e1e1",
+                                            cursor: "pointer",
+                                            padding: "10px",
+                                          }
+                                        : {
+                                            backgroundColor: "#ffffff",
+                                            cursor: "pointer",
+                                            padding: "10px",
+                                          };
+                                      return (
+                                        <div
+                                          {...getSuggestionItemProps(
+                                            suggestion,
+                                            {
+                                              className,
+                                              style,
+                                            }
+                                          )}
+                                        >
+                                          <span
+                                            style={{
+                                              padding: "20px 10px",
+                                              marginBottom: "10px",
+                                            }}
+                                          >
+                                            {suggestion.description}
+                                          </span>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </PlacesAutocomplete>
+                        </div>
                       </Col>
                     </Hidden>
                   </Row>
@@ -934,150 +985,244 @@ class ApplyJob extends Component {
                     <div id="show_more_filter">
                       <Row>
                         <Hidden md lg>
-                          <Col sm={6} xs={6}>
-                            <div className="h_p_filter1_title1">Country</div>
-                            <select
-                              className="a_j_select_dropdown"
-                              onChange={this.filterCountryChangeHandler}
-                            >
-                              <option>Select Country</option>
-                              <option value="India">India</option>
-                              <option value="China">China</option>
-                              <option value="Pakistan">Pakistan</option>
-                              <option value="Russia">Russia</option>
-                            </select>
-                          </Col>
-                          <Col sm={6} xs={6}>
-                            <div className="h_p_filter1_title1">City</div>
-                            <select
-                              className="a_j_select_dropdown"
-                              id="a_j_select_dropdown1"
-                              onChange={this.filterCityChangeHandler}
-                            >
-                              <option>Select City</option>
-                              <option value="Chennai">Chennai</option>
-                              <option value="Bangalore">Bangalore</option>
-                              <option value="Mumbai">Mumbai</option>
-                              <option value="Delhi">Delhi</option>
-                            </select>
+                          <Col sm={12} xs={12}>
+                            <div className="h_p_filter1_title1">Location</div>
+
+                            <div className="">
+                              {/* <input type="text" className="s_c_Search"/> */}
+                              <PlacesAutocomplete
+                                value={this.state.address}
+                                onChange={this.handleChange}
+                                onSelect={this.handleSelect}
+                              >
+                                {({
+                                  getInputProps,
+                                  suggestions,
+                                  getSuggestionItemProps,
+                                  loading,
+                                }) => (
+                                  <div>
+                                    <input
+                                      style={{ height: "40px" }}
+                                      {...getInputProps({
+                                        placeholder: "Search Places ...",
+                                        className: "a_j_filter_address",
+                                      })}
+                                    />
+                                    {suggestions.length != 0 && (
+                                      <div
+                                        className="autocomplete-dropdown-container"
+                                        style={{
+                                          position: "absolute",
+                                          zIndex: "1000",
+                                          border: "1px solid gray",
+                                          borderRadius: "10px",
+                                          overflow: "hidden",
+                                        }}
+                                      >
+                                        {loading && <div>Loading...</div>}
+                                        {suggestions.map((suggestion) => {
+                                          const className = suggestion.active
+                                            ? "suggestion-item--active"
+                                            : "suggestion-item";
+
+                                          // inline style for demonstration purpose
+                                          const style = suggestion.active
+                                            ? {
+                                                backgroundColor: "#e1e1e1",
+                                                cursor: "pointer",
+                                                padding: "10px",
+                                              }
+                                            : {
+                                                backgroundColor: "#ffffff",
+                                                cursor: "pointer",
+                                                padding: "10px",
+                                              };
+                                          return (
+                                            <div
+                                              {...getSuggestionItemProps(
+                                                suggestion,
+                                                {
+                                                  className,
+                                                  style,
+                                                }
+                                              )}
+                                            >
+                                              <span
+                                                style={{
+                                                  padding: "20px 10px",
+                                                  marginBottom: "10px",
+                                                }}
+                                              >
+                                                {suggestion.description}
+                                              </span>
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </PlacesAutocomplete>
+                            </div>
                           </Col>
                         </Hidden>
                       </Row>
                       <div
-                        className="h_p_filter1_title"
-                        onClick={() => this.dropdown("pilot_type_filter")}
-                      >
-                        Pilot types{" "}
-                        <img
-                          src={dropdown}
-                          alt="dropdown img"
-                          className={
-                            this.state.view_pilot_type_filter
-                              ? "h_p_filter1_dropdown1 h_p_dropdown_selected1"
-                              : "h_p_filter1_dropdown1"
-                          }
-                        />
-                      </div>
-                      <div
-                        className={
-                          this.state.view_pilot_type_filter
-                            ? "h_p_filter1_content_container "
-                            : "h_p_filter1_content_container h_p_hide_filter"
+                    className="h_p_filter1_title"
+                    onClick={() => this.dropdown("pilot_type_filter")}
+                  >
+                    Pilot type{" "}
+                    <img
+                      src={dropdown}
+                      alt="dropdown img"
+                      className={
+                        this.state.view_pilot_type_filter
+                          ? "h_p_filter1_dropdown1 h_p_dropdown_selected1"
+                          : "h_p_filter1_dropdown1"
+                      }
+                    />
+                  </div>
+                  <div
+                    className={
+                      this.state.view_pilot_type_filter
+                        ? "h_p_filter1_content_container "
+                        : "h_p_filter1_content_container h_p_hide_filter"
+                    }
+                    id="h_p_pilot_type_filter"
+                  >
+                    <label className="h_p_filter1_filter1">
+                      <input
+                        type="checkbox"
+                        className="h_p_filter1_checkbox"
+                        onClick={() =>
+                          this.filterPilotTypeChangeHandler("Licensed Pilot")
                         }
-                        id="h_p_pilot_type_filter"
-                      >
-                        <label className="h_p_filter1_filter1">
-                          <input
-                            type="checkbox"
-                            className="h_p_filter1_checkbox"
-                          />
-                          <div className="h_p_filter1_checkbox_label">
-                            Licensed Pilots
-                          </div>
-                        </label>
-                        <label className="h_p_filter1_filter1">
-                          <input
-                            type="checkbox"
-                            className="h_p_filter1_checkbox"
-                          />
+                        checked={this.state.pilot_type.includes(
+                          "Licensed Pilot"
+                        )}
+                      />
+                      <div className="h_p_filter1_checkbox_label">
+                        Licensed Pilots
+                      </div>
+                    </label>
+                    <label className="h_p_filter1_filter1">
+                      <input
+                        type="checkbox"
+                        className="h_p_filter1_checkbox"
+                        onClick={() =>
+                          this.filterPilotTypeChangeHandler("Unlicensed Pilot")
+                        }
+                        checked={this.state.pilot_type.includes(
+                          "Unlicensed Pilot"
+                        )}
+                      />
 
-                          <div className="h_p_filter1_checkbox_label">
-                            Unlicensed Pilots
-                          </div>
-                        </label>
+                      <div className="h_p_filter1_checkbox_label">
+                        Unlicensed Pilots
                       </div>
-                      <div
-                        className="h_p_filter1_title"
-                        onClick={() => this.dropdown("work_filter")}
-                      >
-                        Work{" "}
-                        <img
-                          src={dropdown}
-                          alt="dropdown img"
-                          className={
-                            this.state.view_work_filter
-                              ? "h_p_dropdown_selected1 h_p_filter1_dropdown1"
-                              : "h_p_filter1_dropdown1"
-                          }
-                        />
-                      </div>
-                      <div
-                        className={
-                          this.state.view_work_filter
-                            ? "h_p_filter1_content_container "
-                            : "h_p_filter1_content_container h_p_hide_filter"
+                    </label>
+                  </div>
+                  <div
+                    className="h_p_filter1_title"
+                    onClick={() => this.dropdown("work_filter")}
+                  >
+                    Work{" "}
+                    <img
+                      src={dropdown}
+                      alt="dropdown img"
+                      className={
+                        this.state.view_work_filter
+                          ? "h_p_dropdown_selected1 h_p_filter1_dropdown1"
+                          : "h_p_filter1_dropdown1"
+                      }
+                    />
+                  </div>
+                  <div
+                    className={
+                      this.state.view_work_filter
+                        ? "h_p_filter1_content_container "
+                        : "h_p_filter1_content_container h_p_hide_filter"
+                    }
+                    id="h_p_work_filter"
+                  >
+                    <label className="h_p_filter1_filter1">
+                      <input
+                        type="checkbox"
+                        className="h_p_filter1_checkbox"
+                        onClick={() =>
+                          this.filterWorkTypeChangeHandler("Full-Time")
                         }
-                        id="h_p_work_filter"
-                      >
-                        <label className="h_p_filter1_filter1">
-                          <input
-                            type="checkbox"
-                            className="h_p_filter1_checkbox"
-                          />
-                          <div className="h_p_filter1_checkbox_label">
-                            Full Time
-                          </div>
-                        </label>
-                        <label className="h_p_filter1_filter1">
-                          <input
-                            type="checkbox"
-                            className="h_p_filter1_checkbox"
-                          />
-                          <div className="h_p_filter1_checkbox_label">
-                            Part Time
-                          </div>
-                        </label>
+                        checked={this.state.work_type.includes("Full-Time")}
+                      />
+                      <div className="h_p_filter1_checkbox_label">
+                        Full Time
                       </div>
-                      <input type="checkbox" className="h_p_filter1_checkbox" />
-                      <div className="h_p_filter1_title">Monthly Salary</div>
-                      <div
-                        className={
-                          this.state.view_hourly_rate_filter
-                            ? "h_p_filter1_content_container "
-                            : "h_p_filter1_content_container h_p_hide_filter"
+                    </label>
+                    <label className="h_p_filter1_filter1">
+                      <input
+                        type="checkbox"
+                        className="h_p_filter1_checkbox"
+                        onClick={() =>
+                          this.filterWorkTypeChangeHandler("Part-Time")
                         }
-                        id="h_p_hourly_rate_filter"
-                      >
-                        <div className="h_p_filter1_rate_content">
-                          {" "}
-                          ${this.state.price_range[0]} - $
-                          {this.state.price_range[1]}
-                        </div>
-                        <Box style={{ marginRight: "7px", marginLeft: "10px" }}>
-                          <AirbnbSlider
-                            getAriaLabel={(index) =>
-                              index === 0 ? "Minimum price" : "Maximum price"
-                            }
-                            value={this.state.price_range}
-                            onChange={this.handlePriceRange}
-                            min={this.state.price_range_min}
-                            max={this.state.price_range_max}
-                          />
-                        </Box>
+                        checked={this.state.work_type.includes("Part-Time")}
+                      />
+                      <div className="h_p_filter1_checkbox_label">
+                        Part Time
                       </div>
+                    </label>
+                  </div>
+                  <div style={{ marginBottom: "30px" }}>
+                    <input
+                      type="checkbox"
+                      className="h_p_filter1_checkbox"
+                      style={{ display: "inline" }}
+                      id="priceChecker"
+                      checked = {this.state.filter_salary}
+                      onClick = {()=>this.setState({filter_salary: !this.state.filter_salary})}
+                    />
+                    <div
+                      className="h_p_filter1_title"
+                      style={{ display: "inline", marginBottom: "10px" }}
+                      onClick = {()=>this.setState({filter_salary: !this.state.filter_salary})}
+                    >
+                      Salary
+                    </div>
+                  </div>
+                  <div
+                    className={
+                      this.state.view_hourly_rate_filter
+                        ? "h_p_filter1_content_container "
+                        : "h_p_filter1_content_container h_p_hide_filter"
+                    }
+                    id="h_p_hourly_rate_filter"
+                  >
+                    <div className="h_p_filter1_rate_content">
+                      {" "}
+                      ${this.state.price_range[0]} - $
+                      {this.state.price_range[1]}
+                    </div>
+                    <Box style={{ marginRight: "7px", marginLeft: "10px" }}>
+                      <AirbnbSlider
+                        getAriaLabel={(index) =>
+                          index === 0 ? "Minimum price" : "Maximum price"
+                        }
+                        value={this.state.price_range}
+                        onChange={this.handlePriceRange}
+                        min={this.state.price_range_min}
+                        max={this.state.price_range_max}
+                      />
+                    </Box>
+                  </div>
                     </div>
                   )}
-                  <div className="a_j_filter_search">Search</div>
+                  <div
+                    className="a_j_filter_search"
+                    onClick={this.searchFilter}
+                  >
+                    Search
+                  </div>
                 </Col>
               </Hidden>
               <Col xxl={8.5} xl={8.7} lg={12} md={12}>
@@ -1115,117 +1260,140 @@ class ApplyJob extends Component {
                       </Box>
                     </div>
                   )}
-                  <div  id = "main_div">
-                  {this.state.data.map((item, i) => {
-                    return (
-                      <div
-                        className="pd_a_j_data"
-                        style={{ margin: "20px 0px 0px 0px" }}
-                      >
-                        <div style={{ marginBottom: "10px" }}>
-                          <div className="pd_a_j_dataDateHead">
-                            Posted on:
-                            <span className="pd_a_j_dataDate">
-                              {item.postingDate.slice(0, 10)}
-                            </span>
+                  <div id="main_div">
+                    {this.state.data.map((item, i) => {
+                      return (
+                        <div
+                          className="pd_a_j_data"
+                          style={{ margin: "20px 0px 0px 0px" }}
+                        >
+                          <div style={{ marginBottom: "10px" }}>
+                            <div className="pd_a_j_dataDateHead">
+                              Posted on:
+                              <span className="pd_a_j_dataDate">
+                                {item.postingDate.slice(0, 10)}
+                              </span>
+                            </div>
+                            <div className="pd_a_j_dataTitle">
+                              {item.jobTitle}{" "}
+                              {item.userId.companyPlatinum ? (
+                                <img
+                                  src={Trusted}
+                                  style={{ height: "25px", marginLeft: "10px" }}
+                                />
+                              ) : (
+                                ""
+                              )}
+                            </div>
                           </div>
-                          <div className="pd_a_j_dataTitle">
-                            {item.jobTitle}{" "}
-                            {item.userId.companyPlatinum ? (
+                          {item.companyId ? (
+                            <Link
+                              to={{
+                                pathname: `company-jobs/${item.userId._id}`,
+                                state: {
+                                  company_name: item.companyId.companyName,
+                                },
+                              }}
+                              className="pd_a_j_data_subTitle"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => console.log(item.userId._id)}
+                            >
+                              {item.companyId.companyName}
+                            </Link>
+                          ) : (
+                            ""
+                          )}
+                          <div>
+                            <div className="a_j_container1">
+                              <div className="a_j_listing_img1">
+                                <img src={profileUser} />
+                              </div>
+                              <div className="a_j_listing_profileName">
+                                {item.employeeType}
+                              </div>
+                              <div className="a_j_listing_img2">
+                                <img src={money} />
+                              </div>
+                              <div className="a_j_listing_money">
+                                {item.minSalary
+                                  ? `${item.minSalary}.00 - ${item.maxSalary}.00`
+                                  : "Not Mentioned"}
+                              </div>
+                            </div>
+                            <hr className="a_j_listing_hr" />
+                          </div>
+                          <div className="a_j_listing_btns">
+                            <button
+                              className="a_j_location_btn"
+                              style={{ cursor: "default" }}
+                            >
                               <img
-                                src={Trusted}
-                                style={{ height: "25px", marginLeft: "10px" }}
+                                src={location}
+                                className="a_j_location_logo"
                               />
-                            ) : (
-                              ""
+                              <span className="a_j_location_text">
+                                {item.workLocation.split(",")[0]}
+                              </span>
+                            </button>{" "}
+                            <button
+                              className="a_j_location_btn"
+                              style={{ cursor: "default" }}
+                            >
+                              <img src={work} className="a_j_location_logo" />
+                              <span className="a_j_location_text">
+                                {item.jobType}
+                              </span>
+                            </button>
+                            <Link
+                              to={`/applyJobLanding/${item._id}`}
+                              id="a_j_job_btn"
+                            >
+                              View Job
+                            </Link>{" "}
+                            {localStorage.getItem("role") === "pilot" && (
+                              <>
+                                {this.state.liked.includes(item._id) ? (
+                                  <img
+                                    src={heartLike}
+                                    className="a_j_like"
+                                    onClick={() => this.unlikePost(item._id)}
+                                  />
+                                ) : (
+                                  <img
+                                    src={heart}
+                                    className="a_j_like"
+                                    onClick={() => this.likePost(item._id)}
+                                  />
+                                )}
+                              </>
                             )}
                           </div>
                         </div>
-                        {item.companyId ? (
-                          <Link
-                            to={{
-                              pathname: `company-jobs/${item.userId._id}`,
-                              state: {
-                                company_name: item.companyId.companyName,
-                              },
-                            }}
-                            className="pd_a_j_data_subTitle"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => console.log(item.userId._id)}
-                          >
-                            {item.companyId.companyName}
-                          </Link>
-                        ) : (
-                          ""
-                        )}
-                        <div>
-                          <div className="a_j_container1">
-                            <div className="a_j_listing_img1">
-                              <img src={profileUser} />
-                            </div>
-                            <div className="a_j_listing_profileName">
-                              {item.employeeType}
-                            </div>
-                            <div className="a_j_listing_img2">
-                              <img src={money} />
-                            </div>
-                            <div className="a_j_listing_money">
-                              {item.minSalary
-                                ? `${item.minSalary}.00 - ${item.maxSalary}.00`
-                                : "Not Mentioned"}
-                            </div>
-                          </div>
-                          <hr className="a_j_listing_hr" />
-                        </div>
-                        <div className="a_j_listing_btns">
-                          <button
-                            className="a_j_location_btn"
-                            style={{ cursor: "default" }}
-                          >
-                            <img src={location} className="a_j_location_logo" />
-                            <span className="a_j_location_text">
-                              {item.workLocation.split(",")[0]}
-                            </span>
-                          </button>{" "}
-                          <button
-                            className="a_j_location_btn"
-                            style={{ cursor: "default" }}
-                          >
-                            <img src={work} className="a_j_location_logo" />
-                            <span className="a_j_location_text">
-                              {item.jobType}
-                            </span>
-                          </button>
-                          <Link
-                            to={`/applyJobLanding/${item._id}`}
-                            id="a_j_job_btn"
-                          >
-                            View Job
-                          </Link>{" "}
-                          {localStorage.getItem("role") === "pilot"
-                          &&
-                          <>
-                            {this.state.liked.includes(item._id) ? (
-                              <img
-                                src={heartLike}
-                                className="a_j_like"
-                                onClick={() => this.unlikePost(item._id)}
-                              />
-                            ) : (
-                              <img
-                                src={heart}
-                                className="a_j_like"
-                                onClick={() => this.likePost(item._id)}
-                              />
-                            )}
-                          </>
-                          }
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                   </div>
-                  {this.state.next_page? <div style = {{textAlign: "center", marginTop: "20px", fontFamily: "muli-regular", fontSize: "18px"}}>Loading...</div>:<div style = {{textAlign: "center", marginTop: "20px", color: "gray"}}>No more jobs.</div>}
+                  {this.state.next_page ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        fontFamily: "muli-regular",
+                        fontSize: "18px",
+                      }}
+                    >
+                      Loading...
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: "20px",
+                        color: "gray",
+                      }}
+                    >
+                      No more jobs.
+                    </div>
+                  )}
                 </div>
                 {/* {this.state.next_page && (
                   <div

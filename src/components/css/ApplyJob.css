@@ -8,15 +8,15 @@
   font-size: 14px;
   font-family: muli-light;
   line-height: 20px;
-  padding: 10px 40px 10px 20px;
+  padding: 10px 20px;
   border-radius: 5px;
   border: 1px solid #e8e8e8;
-  background: url(/static/media/search2.036b2983.png), #fff;
+  /* background: url(/static/media/search2.036b2983.png), #fff;
   appearance: none;
   -webkit-appearance: none;
   background-repeat: no-repeat;
   background-size: 15px;
-  background-position: calc(100% - 15px);
+  background-position: calc(100% - 15px); */
   margin-bottom: 20px;
 }
 
@@ -132,6 +132,7 @@
   margin-top: 20px;
   width: 100%;
   text-align: center;
+  margin-bottom: 20px;
 }
 .j_l_applyJobLoginBtn {
   padding: 7px 15px;
@@ -256,6 +257,13 @@ textarea{
     padding: 0px 20px;
      width:  calc(99% - 40px);
 }
+
+@media only screen and (max-width: 991px) {
+  .a_j_filter_address {
+    width: calc(100%);
+  }
+}
+
 .hc_searchtitle{
   font-size: 20px;
   font-family: muli-regular;
