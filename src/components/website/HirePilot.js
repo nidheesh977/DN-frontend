@@ -691,10 +691,11 @@ class HirePilot extends Component {
     console.log(state);
   };
 
-  industryChange = (e) => {
-    this.setState({
+  industryChange = async (e) => {
+    await this.setState({
       keyword: e.target.value,
     });
+    this.searchFilter()
   };
 
   droneTypeChange = (values) => {
@@ -712,9 +713,10 @@ class HirePilot extends Component {
     });
   };
 
-  handleSelect = (address) => {
+  handleSelect = async (address) => {
     console.log(address);
-    this.setState({ location: address });
+    await this.setState({ location: address });
+    this.searchFilter()
   };
 
   searchFilter = () => {
@@ -779,8 +781,8 @@ class HirePilot extends Component {
       });
   };
 
-  clearFilter = () => {
-    this.setState({
+  clearFilter = async () => {
+    await this.setState({
       lisenced: false,
       unlisenced: false,
       full_time: false,
@@ -791,6 +793,7 @@ class HirePilot extends Component {
       location: "",
       selected_drones_value: [],
     });
+    this.searchFilter()
   };
 
   render() {
@@ -1056,7 +1059,22 @@ class HirePilot extends Component {
                 </div>
                 <Hidden xxl xl>
                   <div id="h_p_filters1_container">
-                    <div className="h_p_filter1_heading">Filters</div>
+                  <div className="h_p_filter1_heading">
+                      Filters{" "}
+                      <div
+                        style={{
+                          fontSize: "16px",
+                          fontFamily: "muli-light",
+                          textDecoration: "underline",
+                          display: "inline-block",
+                          float: "right",
+                          cursor: "pointer",
+                        }}
+                        onClick={this.clearFilter}
+                      >
+                        Clear
+                      </div>
+                    </div>
                     <div
                       className="h_p_filter1_title"
                       onClick={() => this.dropdown(1)}
