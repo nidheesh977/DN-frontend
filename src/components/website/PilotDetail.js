@@ -410,6 +410,7 @@ export default function PilotDetails(props) {
       });
   }, []);
   let [myFollowing, setMyFollowing] = useState([]);
+
   useEffect(() => {
     axios.post(`${domain}/api/follow/getMyFollowing`, config).then((res) => {
       const folowers = res.data;
@@ -456,7 +457,48 @@ export default function PilotDetails(props) {
   const loginErrorPopupClose = () => {
     setLoginErrorPopup(false);
   };
+  let [viewImages, setViewImages] = useState(false)
+  let [hoveredId, setHoveredId] = useState("")
+  let mouseMoviedIn = (id) =>{
+    setHoveredId(id)
+  }
+  let [popupImage, setPopupImage] = useState({})
+  let [popupType, setPopupType] = useState("")
+  let openPopupImageView = (id, type) =>{
+    setPopupType(type)
+    axios.post(`${domain}/api/image/getPopupImage`, {id}).then(res=>{
+      console.log(res)
+      setPopupImage(res.data)
+    })
+    setViewImages(true)
+  }
+  let viewNextImage = () =>{
+    document.getElementById("leftAngle").style.display = "block"
+    document.getElementById("rightAngle").style.display = "block"
+    axios.post(`${domain}/api/image/getNextPopupImage`, {currentId: popupImage._id, id: popupImage.userId}).then(res=>{
+      console.log(res)
+      if(res.data !== "Last Image"){
+        setPopupImage(res.data)
+      }
+      else{
+        document.getElementById("rightAngle").style.display = "none"
+      }
+    })
+  }
+  let viewPreviousImage = () =>{
+    document.getElementById("leftAngle").style.display = "block"
+    document.getElementById("rightAngle").style.display = "block"
+    axios.post(`${domain}/api/image/getPreviousPopupImage`, {currentId: popupImage._id, id: popupImage.userId}).then(res=>{
+      console.log(res)
+      if(res.data !== "Last Image"){
 
+        setPopupImage(res.data)
+      }else{
+        document.getElementById("leftAngle").style.display = "none"
+
+      }
+    })
+  }
   let followMeId = (id) => {
     if (localStorage.getItem("access_token")) {
       axios
@@ -844,7 +886,7 @@ export default function PilotDetails(props) {
                   {files.map((file, index) => {
                     return (
                       <Col xxl={3} xl={3} lg={4} md={6} sm={6} xs={12}>
-                        <div className="p_d_files_container">
+                        <div className="p_d_files_container" onMouseOver={()=>mouseMoviedIn(file._id)}>
                           {file.fileType === "video" ? (
                             <Link to={`/Imageview/${file._id}/${file.userId}`}>
                               <video
@@ -862,7 +904,11 @@ export default function PilotDetails(props) {
                               />
                             </Link>
                           ) : (
+                            <>
+                            <div>
+                              <i class="fas fa-eye" style={{position:"absolute", right: "10px", top: "5px", fontSize: "20px",backgroundColor: "#eeeeee80", padding: "5px 10px",cursor: "pointer", borderRadius: "50%", display: hoveredId == file._id ? "block" : "none"}} onClick={()=>openPopupImageView(file._id, "all")}></i>
                             <Link to={`/Imageview/${file._id}/${file.userId}`}>
+                              
                               <img
                                 className="p_d_files"
                                 src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${file.file}`}
@@ -870,7 +916,10 @@ export default function PilotDetails(props) {
                                 width={"100%"}
                                 height={"250px"}
                               />
+                              
                             </Link>
+                            </div>
+                            </>
                           )}
                         </div>
                       </Col>
@@ -1671,28 +1720,83 @@ export default function PilotDetails(props) {
               style={{ marginBottom: "50px" }}
             >
               <div style={{ position: "absolute", top: "20px", right: "20px" }}>
-                <img
-                  src={Close}
-                  alt=""
-                  onClick={() => setLimitExceededPopup(false)}
-                  style={{ cursor: "pointer" }}
-                />
-              </div>
-              <Row style={{ marginTop: "30px" }}>
-                <div className="u_f_popup_title">You exceeded your limit.</div>
-                <div className="u_f_popup_btn_container">
-                  <button
-                    className="u_f_popup_btn1"
-                    onClick={() => setLimitExceededPopup(false)}
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>setLimitExceededPopup(false)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row style={{ marginTop: "30px" }}>
+                    <div className="u_f_popup_title">
+                      You exceeded your limit.
+                    </div>
+                    <div className="u_f_popup_btn_container">
+                      <button
+                        className="u_f_popup_btn1"
+                        onClick={()=>setLimitExceededPopup(false)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </Row>
+                </DialogContent>
+              </Dialog>
+              <Dialog
+                open={viewImages}
+                onClose={()=>setViewImages(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "80%",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                >
+                  
+                  <i class="fas fa-angle-right" style={{ position: "absolute", top: "calc(50% - 20px)", right: "20px", fontSize: "40px", zIndex:"1000", cursor: "pointer"}} onClick={viewNextImage} id="rightAngle"></i>
+                  <i class="fas fa-angle-left" style={{ position: "absolute", top: "calc(50% - 20px)", left: "20px", fontSize: "40px", cursor: "pointer"}} onClick={viewPreviousImage} id="leftAngle"></i>
+                  
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
                   >
-                    Cancel
-                  </button>
-                </div>
-              </Row>
-            </DialogContent>
-          </Dialog>
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>setViewImages(false)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row>
+                    <Col xl={6}>
+                      <img src={`https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/${popupImage.file}`} style={{width: "100%", height:"350px", objectFit: "cover"}} />
+                    </Col>
+                    <Col xl={6}>
+                      <div style={{margin: "60px 0px"}}>
+                        {
+                          popupImage.postName ?  
+                          <>
+                          <div className="p_d_modal_title">Post Name</div>
+                          <div className="p_d_modal_detail">{popupImage.postName.slice(0,60)}...</div><div className="p_d_modal_title">Experience</div>
+                          <div className="p_d_modal_detail">{popupImage.experience.slice(0,50)}...</div><div className="p_d_modal_title">Industry</div>
+                          <div className="p_d_modal_detail">{popupImage.category}</div>
+                       
+                        </> : ""
+                        }
+                      </div>
+                    </Col>
+                  </Row>
+                </DialogContent>
+              </Dialog>
         </Container>
       </section>
+      
     </>
   )
 }

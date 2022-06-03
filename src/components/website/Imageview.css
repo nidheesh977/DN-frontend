@@ -182,3 +182,12 @@ margin-bottom: 30px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
+.p_d_modal_title{
+    font-size: 22px;
+    font-family: muli-bold;
+    margin: 10px 0px;
+}
+.p_d_modal_detail{
+    font-size: 20px;
+    font-family: muli-regular;
+}
