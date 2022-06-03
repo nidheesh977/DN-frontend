@@ -41,9 +41,6 @@ import axios from "axios";
 import Avatar from "material-ui/Avatar";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import ProImg from "../images/proIcon.png";
-import OwlCarousel from "react-owl-carousel";
-import "owl.carousel/dist/assets/owl.carousel.css";
-import "owl.carousel/dist/assets/owl.theme.default.css";
 
 const styles = (theme) => ({
   root: {
@@ -544,7 +541,26 @@ export default function PilotDetails(props) {
     });
   };
   //yaseen
+  const upHandler = ({ key }) => {
+    if(key === "ArrowRight"){
+      if(viewImages === true){
+        viewNextImage()
+      }
+    }else if(key === "ArrowLeft"){
+      if(viewImages === true){
+        viewPreviousImage()
+      }
+    }
+  };
+  React.useEffect(() => {
+    
+    window.addEventListener("keyup", upHandler);
 
+    return () => {
+
+      window.removeEventListener("keyup", upHandler);
+    };
+  });
   return (
     <>
       <Helmet>

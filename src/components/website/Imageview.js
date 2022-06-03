@@ -333,6 +333,24 @@ function Imageview() {
       });
   };
   //yaseen
+ 
+
+  const upHandler = ({ key }) => {
+    if(key === "ArrowRight"){
+      nextImage()
+    }else if(key === "ArrowLeft"){
+      previousImage()
+    }
+  };
+  React.useEffect(() => {
+    
+    window.addEventListener("keyup", upHandler);
+
+    return () => {
+
+      window.removeEventListener("keyup", upHandler);
+    };
+  });
   let [fol, setFol] = useState([]);
 
   let [myFollowing, setMyFollowing] = useState([]);
