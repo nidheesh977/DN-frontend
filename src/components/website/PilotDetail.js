@@ -399,6 +399,7 @@ export default function PilotDetails(props) {
       });
   }, []);
   let [myFollowing, setMyFollowing] = useState([]);
+
   useEffect(() => {
     axios.post(`${domain}/api/follow/getMyFollowing`, config).then((res) => {
       const folowers = res.data;
@@ -451,7 +452,7 @@ export default function PilotDetails(props) {
   const loginErrorPopupClose = () => {
     setLoginErrorPopup(false);
   };
-
+  let [viewImages, setViewImages] = useState(true)
   let followMeId = (id) => {
     if (localStorage.getItem("access_token")) {
       axios
@@ -1637,8 +1638,55 @@ export default function PilotDetails(props) {
                   </Row>
                 </DialogContent>
               </Dialog>
+              <Dialog
+                open={viewImages}
+                onClose={()=>setViewImages(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth={"md"}
+                fullWidth={true}
+                PaperProps={{
+                  style: {
+                    maxWidth: "80%",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogContent
+                  className={All.PopupBody}
+                >
+                  
+                  <i class="fas fa-angle-right" style={{ position: "absolute", top: "calc(50% - 20px)", right: "20px", fontSize: "40px", zIndex:"1000"}}></i>
+                  <i class="fas fa-angle-left" style={{ position: "absolute", top: "calc(50% - 20px)", left: "20px", fontSize: "40px"}}></i>
+                  
+                  <div
+                    style={{ position: "absolute", top: "20px", right: "20px" }}
+                  >
+                    <img
+                      src={Close}
+                      alt=""
+                      onClick={()=>setViewImages(false)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                  <Row>
+                    <Col xl={6}>
+                      <img src="https://dn-nexevo-landing.s3.ap-south-1.amazonaws.com/printer-test-12435602e5b0de1c608539e0ac6b2f2c5bacbbc1b75049aa146029eceb24276df7ee893aeb8ab0de17a6c7ffa5ee8259b631db21e5f68c4e3378c276adbd9cfb46680a6%20(1)47f40950dd4bd9f5189f4be59beeca019b97353f0df16b689b283efc1904c3b865985e96488a8e2c20318f52a63b3a1a213f2cca87c205cd74a2d73b3971bb9.jpg" style={{width: "100%", height:"350px", objectFit: "cover"}} />
+                    </Col>
+                    <Col xl={6}>
+                      <div style={{margin: "60px 0px"}}>
+                      <div className="p_d_modal_title">Post Name</div>
+                        <div className="p_d_modal_detail">ahscfoihwoifjwepogkeropkgorkpoheiphikrt...</div><div className="p_d_modal_title">Experience</div>
+                        <div className="p_d_modal_detail">wjvbriojvpv beruhvrebeherpbeb...</div><div className="p_d_modal_title">Industry</div>
+                        <div className="p_d_modal_detail">Marriage Shoots</div>
+                      </div>
+                    </Col>
+                  </Row>
+                </DialogContent>
+              </Dialog>
         </Container>
       </section>
+      
     </>
   );
 }
