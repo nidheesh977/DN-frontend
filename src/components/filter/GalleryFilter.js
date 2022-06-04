@@ -352,7 +352,6 @@ class GalleryFilter extends React.Component {
   };
 
   handleScroll = () => {
-    console.log("Scrolling")
     try {
       const wrappedElement = document.getElementById("main_div");
       if (
