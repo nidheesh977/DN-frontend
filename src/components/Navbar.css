@@ -226,7 +226,8 @@ ul.MuiList-root.MuiList-padding.Signout {
 }
 
 .nav-links {
-  color: white !important;
+  color: black !important;
+  font-family: muli-bold !important;
   text-decoration: none;
   padding: 0rem 20px;
 }
@@ -283,8 +284,9 @@ position: absolute !important;
 }
 
 .MuiAppBar-colorPrimary {
-  color: #fff;
-  background-color: #000000 !important;
+  color: #000000;
+  background: white!important;
+  box-shadow: 0px 0px 8px #00000029 !important;
 }
  
 
@@ -851,6 +853,7 @@ button.swal-button.swal-button--confirm{
 
 .nav-links2 {
   color: #4FFEA3 !important;
+  font-family: muli-bold !important;
   text-decoration: none;
   padding: 0rem 20px;
 }
