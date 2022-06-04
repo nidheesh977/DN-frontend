@@ -1206,7 +1206,7 @@ export default function PilotDetails(props) {
                   )}
                   <div className="p_d_about_details_title">Industry</div>
                   <div className="p_d_about_details_content">
-                    {pilotData.industry.map((industry, index) => {
+                    {pilotData.industry && pilotData.industry.map((industry, index) => {
                       return <>{industry}, </>;
                     })}
                   </div>
