@@ -351,8 +351,6 @@ function Imageview() {
       window.removeEventListener("keyup", upHandler);
     };
   });
-  let [fol, setFol] = useState([]);
-
   let [myFollowing, setMyFollowing] = useState([]);
   useEffect(() => {
     axios.post(`${domain}/api/follow/getMyFollowing`, config).then((res) => {
