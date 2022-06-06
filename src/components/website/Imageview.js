@@ -728,6 +728,7 @@ function Imageview() {
                 onError = {(e) => e.target.src = "https://qawerk.com/wp-content/uploads/2021/07/no-image-available-icon-6.png"}
               />
             )}
+            
             <div style={{position:"absolute", top: "calc(50% - 30px)",right: "0px", cursor: "pointer", fontSize:"40px", padding: "5px", backgroundColor: "#eeeeee80"}} onClick={nextImage} id="mainImageRight">
               <i class="fas fa-angle-right"></i>
               </div>
