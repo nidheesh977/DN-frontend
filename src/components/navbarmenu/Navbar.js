@@ -26,6 +26,7 @@ import { userService } from "../_services/user.service";
 import UploadFileInstruction from "../website/UploadFileInstruction";
 import "./Navbar.css"
 
+const domain = process.env.REACT_APP_MY_API;
 $(document).ready(function () {
   $(".SearchBoxIcon").click(function () {
     $(".search-box").toggle();
@@ -52,8 +53,19 @@ function Navbar(props) {
   const [showLogout, setShowLogout] = useState(false)
 
   const currentUser = useState(authenticationService.currentUserValue);
-
-
+ let config = {
+  headers: {
+    Authorization: "Bearer " + localStorage.getItem("access_token"),
+  },
+};
+useEffect(()=>{
+  axios.get(`${domain}/api/user/getUserData`, config).then(res=>{
+    localStorage.setItem("email", res.data.verify)
+    localStorage.setItem("role", res.data.role)
+  }
+  
+  )
+},[])
   const handleChange = (event) => {
     setAuth(event.target.checked);
   };

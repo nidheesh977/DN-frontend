@@ -16,6 +16,7 @@ const domain = process.env.REACT_APP_MY_API;
 
 function VerifiedEmail() {
   let param = useParams();
+  let [myRole, setMyRole] = useState(null)
   let [message, setMessage] = useState("");
   useEffect(() => {
     axios
@@ -23,6 +24,9 @@ function VerifiedEmail() {
       .then((response) => {
         console.log(response.data);
         setMessage(response.data);
+        if(response.data.role){
+          setMyRole(response.data.role)
+        }
         if (response.data.token){
           localStorage.setItem("access_token", response.data.token)
           localStorage.setItem("role", response.data.role)
@@ -55,7 +59,7 @@ function VerifiedEmail() {
 
 
                 {
-                    !localStorage.getItem("role") || localStorage.getItem("role") == "undefined" ?   <div>
+                    !localStorage.getItem("role") || myRole === null || localStorage.getItem("role") == "undefined" ?   <div>
                     <p>Click below to complete your Profile or go to home Page</p>
                     <div
                       className="u_f_popup_btn1"
