@@ -17,7 +17,7 @@ const domain = process.env.REACT_APP_MY_API;
 function VerifiedEmail() {
   let param = useParams();
   let [message, setMessage] = useState("");
-  let [role, setRole] = useEffect(null)
+  let [role, setRole] = useEffect("")
   useEffect(() => {
     axios
       .post(`${domain}/api/user/verifyMail/${param.id}/verify/${param.token}`)
@@ -60,7 +60,7 @@ function VerifiedEmail() {
 
 
                 {
-                    role === null ?   <div>
+                    role === "" ?   <div>
                     <p>Click below to complete your Profile or go to home Page</p>
                     <div
                       className="u_f_popup_btn1"
