@@ -152,7 +152,6 @@ class GalleryFilter extends React.Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
-    console.log("Scroll")
     window.removeEventListener("scroll", this.handleScroll);
     if (this.state.filter_type === "following"){
       axios

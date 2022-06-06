@@ -37,6 +37,9 @@ class HireSubscription extends Component {
     if (role === "pilot") {
       this.props.history.push("/DownloadSubscription");
     }
+    else if (role && role !== "company"){
+      this.props.history.push("/no-page-found");
+    }
   }
 
   loadScript = (src) => {
@@ -147,7 +150,6 @@ class HireSubscription extends Component {
         }
       });
     }
-    
   }
   render() {
     return (

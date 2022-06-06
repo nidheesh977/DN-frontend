@@ -45,6 +45,12 @@ class DownloadSubscription extends Component {
     let role = localStorage.getItem("role");
     if (role === "company") {
       this.props.history.push("/HireSubscription");
+    }else if (role === "halfCompany"){
+      this.props.history.push("/createCompany");
+    }else if (role === "halfPilot"){
+      this.props.history.push("/createPilot");
+    }else if (role === "booster" || role === "service_center"){
+      this.props.history.push("/no-page-found");
     }
   }
 
@@ -232,7 +238,7 @@ class DownloadSubscription extends Component {
     return (
       <section>
         <Helmet>
-          <title>Hire Subscription</title>
+          <title>Pilot Subscription</title>
           <meta charSet="utf-8" />
           <meta name="description" content="Nested component" />
         </Helmet>

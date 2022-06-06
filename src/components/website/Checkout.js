@@ -83,6 +83,8 @@ function Checkout(props) {
       history.push("/createCompany");
     } else if (role === "halfPilot") {
       history.push("/createPilot");
+    }else if (role === "service_center" || role === "booster"){
+      history.push("/no-page-found")
     }
   }, []);
 

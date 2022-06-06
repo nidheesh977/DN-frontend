@@ -49,7 +49,10 @@ function CreateCompany() {
   useEffect(()=>{
     if (!localStorage.getItem("role")) {
       history.push("/login");
-    } else if (localStorage.getItem("email") !== "true") {
+    } else if (localStorage.getItem("role") !== "company"){
+      history.push("/no-page-found");
+    }
+    else if (localStorage.getItem("email") !== "true") {
       history.push("/verify-email");
     } 
     Axios.get(`${domain}/api/industry/getIndustries`).then((res) => {

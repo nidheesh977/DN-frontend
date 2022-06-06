@@ -81,6 +81,16 @@ class CreateJob extends Component {
     };
   }
 
+  componentWillMount(){
+    var role = localStorage.getItem("role")
+    if (role === ""){
+      this.props.history.push("/login");
+    }
+    if (role !== "company"){
+      this.props.history.push("/no-page-found");
+    }
+  }
+
   componentDidMount() {
     const config = {
       headers: {

@@ -85,6 +85,8 @@ function CompanyCheckout(props) {
       history.push("/createCompany")
     }else if (role === "halfPilot"){
       history.push("/createPilot")
+    }else if (role === "booster" || role === "service_center"){
+      history.push("/no-page-found")
     }
   }, []);
 

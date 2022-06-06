@@ -33,7 +33,7 @@ const NoPageFound = () => (
               <Link to="/">
                 <Button className={All.BtnStyle_2}>Back to home</Button>
               </Link>
-              <Link to="/">
+              <Link to="/help-center">
                 <Button className={All.BtnStyle_3}>Report</Button>
               </Link>
             </Box>
