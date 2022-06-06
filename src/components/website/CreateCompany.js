@@ -49,12 +49,12 @@ function CreateCompany() {
   useEffect(()=>{
     if (!localStorage.getItem("role")) {
       history.push("/login");
-    }else if (localStorage.getItem("role") !== "company" && localStorage.getItem("role") !== "booster" && localStorage.getItem("role") !== "halfCompany"){
+    }else if (localStorage.getItem("role") !== "company" && localStorage.getItem("role") !== "booster" && localStorage.getItem("role") !== "halfCompany" && localStorage.getItem("role") !== "undefined"){
       history.push("/no-page-found");
     }
     else if (localStorage.getItem("email") !== "true") {
       history.push("/verify-email");
-    } 
+    }
     Axios.get(`${domain}/api/industry/getIndustries`).then((res) => {
       const options = res.data.map((d) => ({
         value: d.industry,
