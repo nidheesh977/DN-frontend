@@ -599,9 +599,12 @@ class ApplyJob extends Component {
                       <button
                         className="h_p_create_job_btn"
                         onClick={() => {
-                          if (localStorage.getItem("role") === "halfPilot") {
+                          if (localStorage.getItem("role") === "halfPilot" || localStorage.getItem("role") === "booster") {
                             this.props.history.push("/createPilot");
-                          } else {
+                          }else if (!localStorage.getItem("role")){
+                            this.props.history.push("/login");
+                          }
+                          else {
                             this.props.history.push("/UploadFile");
                           }
                         }}

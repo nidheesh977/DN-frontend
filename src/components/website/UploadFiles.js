@@ -382,7 +382,7 @@ class UploadFiles extends Component {
           }
 
           details.push({
-            file: "",
+            file: "https://www.lsf.ir/wp-content/uploads/2019/04/placeholder-image-160x160.jpg",
             name: e.target.files[i].name,
             custom_name: "",
             type: e.target.files[i].type,

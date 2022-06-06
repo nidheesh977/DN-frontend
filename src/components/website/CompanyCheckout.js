@@ -79,13 +79,7 @@ function CompanyCheckout(props) {
 
   useEffect(() => {
     let role = localStorage.getItem("role");
-    if (role === "pilot") {
-      history.push("/DownloadSubscription");
-    }else if (role === "halfCompany"){
-      history.push("/createCompany")
-    }else if (role === "halfPilot"){
-      history.push("/createPilot")
-    }else if (role === "booster" || role === "service_center"){
+    if (role && role !== "company") {
       history.push("/no-page-found")
     }
   }, []);

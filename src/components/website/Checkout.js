@@ -77,13 +77,7 @@ function Checkout(props) {
 
   useEffect(() => {
     let role = localStorage.getItem("role");
-    if (role === "company") {
-      history.push("/HireSubscription");
-    } else if (role === "halfCompany") {
-      history.push("/createCompany");
-    } else if (role === "halfPilot") {
-      history.push("/createPilot");
-    }else if (role === "service_center" || role === "booster"){
+    if (role && role !== "pilot") {
       history.push("/no-page-found")
     }
   }, []);

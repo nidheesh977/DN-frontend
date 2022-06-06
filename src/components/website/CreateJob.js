@@ -97,50 +97,53 @@ class CreateJob extends Component {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     };
+    var role = localStorage.getItem("role")
+    if (role === "company"){
 
-    Axios.get(
-      `${domain}/api/company/getCompanySubscription
-  `,
-      config
-    ).then((res) => {
-      console.log(res.data);
-      if (res.data.subscription) {
-        this.setState({
-          jobLimit:
+      Axios.get(
+        `${domain}/api/company/getCompanySubscription
+    `,
+        config
+      ).then((res) => {
+        console.log(res.data);
+        if (res.data.subscription) {
+          this.setState({
+            jobLimit:
+              res.data.subscription.activeJobs -
+              res.data.activeJobs -
+              res.data.draftJobs,
+            subscriptionPlan: res.data.subscription.plan,
+          });
+          console.log(
             res.data.subscription.activeJobs -
-            res.data.activeJobs -
-            res.data.draftJobs,
-          subscriptionPlan: res.data.subscription.plan,
-        });
-        console.log(
-          res.data.subscription.activeJobs -
-            res.data.activeJobs -
-            res.data.draftJobs
-        );
-      } else {
+              res.data.activeJobs -
+              res.data.draftJobs
+          );
+        } else {
+          this.setState({
+            jobLimit: 1 - res.data.activeJobs,
+          });
+        }
+      });
+  
+      console.log("Helo");
+      $("html,body").scrollTop(0);
+      Axios.get(`${domain}/api/industry/getIndustries`).then((res) => {
+        const options = res.data.map((d) => ({
+          value: d.industry,
+          label: d.industry,
+        }));
         this.setState({
-          jobLimit: 1 - res.data.activeJobs,
+          industries: options,
         });
-      }
-    });
-
-    console.log("Helo");
-    $("html,body").scrollTop(0);
-    Axios.get(`${domain}/api/industry/getIndustries`).then((res) => {
-      const options = res.data.map((d) => ({
-        value: d.industry,
-        label: d.industry,
-      }));
-      this.setState({
-        industries: options,
       });
-    });
-    Axios.post(`${domain}/api/draftJob/getMyDrafts`, config).then((res) => {
-      console.log(res);
-      this.setState({
-        draftJobs: res.data,
+      Axios.post(`${domain}/api/draftJob/getMyDrafts`, config).then((res) => {
+        console.log(res);
+        this.setState({
+          draftJobs: res.data,
+        });
       });
-    });
+    }
   }
 
   selectMainTab = (tab) => {

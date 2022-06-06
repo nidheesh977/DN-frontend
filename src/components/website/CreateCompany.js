@@ -49,7 +49,7 @@ function CreateCompany() {
   useEffect(()=>{
     if (!localStorage.getItem("role")) {
       history.push("/login");
-    } else if (localStorage.getItem("role") !== "company"){
+    } else if (localStorage.getItem("role") !== "company" && localStorage.getItem("role") !== "booster"){
       history.push("/no-page-found");
     }
     else if (localStorage.getItem("email") !== "true") {

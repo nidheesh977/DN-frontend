@@ -137,7 +137,7 @@ function Pilot_approvedVideos() {
           </Link>
         </center>
       </div>
-      {value.length > 0 && !rearrange && proPilot ? (
+      {value.length > 1 && !rearrange && proPilot ? (
         <div style={{ textAlign: "right" }}>
           <button className="rearrange_file" onClick={startRearrange}>
             Rearrange

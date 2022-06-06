@@ -275,11 +275,17 @@ class HirePilot extends Component {
     }
   };
   checkLoginandPush = () => {
-    if (localStorage.getItem("access_token")) {
+    if (localStorage.getItem("role") === "company") {
       this.props.history.push("/create_job");
-    } else {
+    }else if (localStorage.getItem("role") === "booster"){
+      this.props.history.push("/createCompany");
+    }
+    else if (!localStorage.getItem("role")) {
       localStorage.setItem("lastTab", "company");
       this.props.history.push("/login");
+    }
+    else{
+      this.props.history.push("/no-page-found");
     }
   };
   clickStartProcess1 = (id1) => {
