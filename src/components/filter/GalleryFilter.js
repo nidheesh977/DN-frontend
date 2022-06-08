@@ -998,10 +998,18 @@ class GalleryFilter extends React.Component {
                                                       >
                                                         <div className="content-overlay-video"></div>
                                                         <video className="thumbnail GalleryImg">
-                                                          <source
+                                                          {/* <source
                                                             src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${user.file}`}
                                                             type="video/mp4"
-                                                          />
+                                                          /> */}
+                                                          <source
+                  src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${user.file}`}
+                  type="video/mp4"
+                />
+                <source
+                  src={`https://dn-nexevo-home.s3.ap-south-1.amazonaws.com/${user.file}`}
+                  type="video/ogg"
+                />
                                                         </video>
                                                       </Link>
                                                       <figcaption
