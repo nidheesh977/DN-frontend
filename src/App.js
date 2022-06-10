@@ -61,6 +61,7 @@ import Shoots from "./components/website/Shoots";
 import TagBasedListing from "./components/website/TagBasedListing";
 import CompanyCheckout from "./components/website/CompanyCheckout";
 import CompanyJobs from "./components/website/CompanyJobs";
+import MailTemplates from "./components/website/MailTemplates";
 
 function App(){
 
@@ -183,6 +184,7 @@ function App(){
             <Route component={CompanyJobs} path = "/company-jobs/:id"/>
 
             <Route exact path="/blog_categories" component={BlogCategories} />
+            <Route exact path="/email" component={MailTemplates} />
             {/* <Route exact path="/blog_categories" component={BlogCategories} />
             <Route exact path="/blog_categories" component={BlogCategories} />
             <Route exact path="/blog_categories" component={BlogCategories} /> */}
