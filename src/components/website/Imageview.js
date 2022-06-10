@@ -671,6 +671,7 @@ function Imageview() {
 const [touchEnd, setTouchEnd] = React.useState(0);
 
 function handleTouchStart(e) {
+  console.log(e)
   console.log("started")
     setTouchStart(e.targetTouches[0].clientX);
 }
