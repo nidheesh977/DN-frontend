@@ -671,10 +671,12 @@ function Imageview() {
 const [touchEnd, setTouchEnd] = React.useState(0);
 
 function handleTouchStart(e) {
+  console.log("started")
     setTouchStart(e.targetTouches[0].clientX);
 }
 
 function handleTouchMove(e) {
+  console.log("moved")
     setTouchEnd(e.targetTouches[0].clientX);
 }
 
@@ -691,14 +693,18 @@ function handleTouchEnd() {
         // moveSliderLeft();
         console.log("left swiped")
         previousImage()
+        
     }
+    setTouchStart(0)
+    setTouchEnd(0)
+
 }
   return (
-    <Container className={`${All.Container}`}>
+    <Container className={`${All.Container}`} onTouchStart={touchStartEvent => handleTouchStart(touchStartEvent)}
+    onTouchMove={touchMoveEvent => handleTouchMove(touchMoveEvent)}
+    onTouchEnd={() => handleTouchEnd()}>
       <Container>
-        <div style={{ marginTop: "35px" }} onKeyDown={keyPressed} onTouchStart={touchStartEvent => handleTouchStart(touchStartEvent)}
-onTouchMove={touchMoveEvent => handleTouchMove(touchMoveEvent)}
-onTouchEnd={() => handleTouchEnd()}>
+        <div style={{ marginTop: "35px" }} onKeyDown={keyPressed} >
           <div
             className="i_v_back"
             style={{
