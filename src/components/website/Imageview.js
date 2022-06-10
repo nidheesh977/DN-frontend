@@ -683,12 +683,14 @@ function handleTouchEnd() {
         // do your stuff here for left swipe
         // moveSliderRight();
         console.log("right Swiped")
+        nextImage()
     }
 
     if (touchStart - touchEnd < -150) {
         // do your stuff here for right swipe
         // moveSliderLeft();
         console.log("left swiped")
+        previousImage()
     }
 }
   return (
