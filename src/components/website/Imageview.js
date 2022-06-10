@@ -682,20 +682,25 @@ function handleTouchMove(e) {
 }
 
 function handleTouchEnd() {
-    if (touchStart - touchEnd > 150) {
-        // do your stuff here for left swipe
-        // moveSliderRight();
-        console.log("right Swiped")
-        nextImage()
-    }
+  if(touchStart !== touchEnd){
+    if ((touchStart - touchEnd > 150) &&  (touchStart - touchEnd < 400)) {
+      // do your stuff here for left swipe
+      // moveSliderRight();
+      console.log("right Swiped")
+      nextImage()
+  }
 
-    if (touchStart - touchEnd < -150) {
-        // do your stuff here for right swipe
-        // moveSliderLeft();
-        console.log("left swiped")
-        previousImage()
-        
-    }
+  else if ((touchStart - touchEnd > -150) &&  (touchStart - touchEnd < 50)) {
+      // do your stuff here for right swipe
+      // moveSliderLeft();
+      console.log("left swiped")
+      previousImage()
+      
+  }
+  }else{
+    console.log("Same Co ordinates")
+  }
+    
     setTouchStart(0)
     setTouchEnd(0)
 
