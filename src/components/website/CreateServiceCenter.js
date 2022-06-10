@@ -17,6 +17,7 @@ import PlacesAutocomplete, {
   getLatLng,
 } from "react-autocomplete-places";
 import Loader from "../Loader/loader";
+import { Helmet } from "react-helmet";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -481,6 +482,11 @@ class CreateServiceCenter extends Component {
   render() {
     return (
       <>
+      <Helmet>
+          <title>Create service center</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
         <Container
           className={`${All.Container} ${All.pr_xs_30} ${All.pl_xs_50}`}
         >

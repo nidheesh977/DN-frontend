@@ -134,11 +134,6 @@ function App(){
               exact
             />
             <Route
-              path="/GoPremium"
-              component={GoPremium}
-              exact
-            />
-            <Route
               exact
               path={"/Imageview/:id/:user_id"}
               component={Imageview}

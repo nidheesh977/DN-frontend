@@ -12,6 +12,7 @@ import "../css/Common.css";
 import "../css/createCompany.css";
 import Axios from "axios";
 import Select from "react-select";
+import { Helmet } from "react-helmet";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -208,6 +209,11 @@ function CreateCompany() {
 
   return (
     <Container className={All.Container}>
+      <Helmet>
+          <title>Create company</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
       <Row>
         <Col lg={6} className={All.DronePerson}>
           <Hidden xs sm md>

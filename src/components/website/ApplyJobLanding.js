@@ -13,6 +13,7 @@ import Dialog from "@material-ui/core/Dialog";
 
 import heartLike from "../images/heart-blue.svg";
 import parse from "html-react-parser";
+import { Helmet } from "react-helmet";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -254,6 +255,11 @@ function ApplyJobLanding(props) {
   };
   return (
     <div className="j_l_containerMain" style={{ overflowX: "hidden" }}>
+      <Helmet>
+          <title>Job landing</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
       <Container className={All.Container}>
         <div style={{ marginTop: "30px" }}>
           <div id="j_l_backBtn" onClick={goToPreviousPath}>

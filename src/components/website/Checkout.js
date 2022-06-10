@@ -22,6 +22,7 @@ import {
   PaymentElement,
 } from "@stripe/react-stripe-js";
 import Loader from "../Loader/loader";
+import { Helmet } from "react-helmet";
 
 const domain = process.env.REACT_APP_MY_API;
 const stripePromise = loadStripe(
@@ -582,6 +583,11 @@ function Checkout(props) {
 
   return (
     <div>
+      <Helmet>
+          <title>Pilot checkout</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
       <div className="h_p_container" style={{ overflowX: "hidden" }}>
         <Container className={All.Container}>
           <Row gutterWidth={40}>

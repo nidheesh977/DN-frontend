@@ -4,6 +4,7 @@ import ServiceCenterActivities from './ServiceCenterActivities'
 import {Container, Row, Col, Visible, Hidden} from 'react-grid-system'
 import {NavLink, Switch, Route, Link} from 'react-router-dom'
 import ServiceCenterAccount from './ServiceCenterAccount'
+import { Helmet } from 'react-helmet'
 
 class ServiceCenterDashboard extends Component{
 
@@ -31,6 +32,11 @@ class ServiceCenterDashboard extends Component{
     // console.log(this.props.location)
     return(
       <>
+      <Helmet>
+          <title>Service center dashboard</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
         <div className="s_c_db_main_tabs">
           <Visible md>
             <div style ={{marginTop: "15px"}}></div>

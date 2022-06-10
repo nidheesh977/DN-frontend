@@ -8,6 +8,7 @@ import Dialog from "@material-ui/core/Dialog";
 import Close from "../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
+import { Helmet } from "react-helmet";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -126,6 +127,11 @@ else if(localStorage.getItem("email") === "true" && localStorage.getItem("role")
         className={`${All.Container} ${All.pr_xs_50} ${All.pl_xs_50}`}
         id="user_category_container"
       >
+        <Helmet>
+          <title>Categories</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
         <h2 className="user_categories_title">
           Choose what are you looking for?
         </h2>
