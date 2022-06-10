@@ -16,6 +16,7 @@ import { useHistory } from 'react-router-dom';
 import Close from "../images/close.svg";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { withStyles } from "@material-ui/core/styles";
+import { Helmet } from 'react-helmet';
 const domain = process.env.REACT_APP_MY_API;
 
 const Accordion = styled((props) => (
@@ -160,6 +161,11 @@ function HelpCenter() {
     }
   return (
     <div>
+      <Helmet>
+          <title>Help center</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
           <div className="h_p_container" style={{ overflowX: "hidden", paddingBottom:"30px" }}>
           <Container className={All.Container}>
          

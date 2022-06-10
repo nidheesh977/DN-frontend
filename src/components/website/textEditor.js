@@ -1,6 +1,7 @@
 import React from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { Helmet } from 'react-helmet';
 
 function TextEditor() {
     CKEditor.editorConfig = function( config ) {
@@ -39,6 +40,11 @@ function TextEditor() {
     };
   return (
      <div className="App">
+         <Helmet>
+          <title>Text editor</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
          
                 <h2>Using CKEditor 5 build in React</h2>
                 <CKEditor

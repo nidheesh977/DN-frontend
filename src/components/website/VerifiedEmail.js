@@ -12,6 +12,7 @@ import "../css/Common.css";
 import DronePerson from "../images/drone_person_new.png";
 import { useHistory, useParams } from "react-router-dom";
 import axios from "axios";
+import { Helmet } from "react-helmet";
 const domain = process.env.REACT_APP_MY_API;
 
 function VerifiedEmail() {
@@ -42,6 +43,11 @@ function VerifiedEmail() {
 
   return (
     <Container className={All.Container}>
+      <Helmet>
+          <title>Verify email</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
       <Row>
         <Col lg={7} className={All.DronePerson}>
           <div>

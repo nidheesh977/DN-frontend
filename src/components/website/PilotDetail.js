@@ -1212,7 +1212,7 @@ export default function PilotDetails(props) {
                   </div>
                   <div className="p_d_about_details_title">Drones</div>
                   <div className="p_d_about_details_content">
-                    {pilotData.droneType.length !== 0
+                    {pilotData.droneType && pilotData.droneType.length !== 0
                       ? pilotData.droneType.map((item, index) => {
                           return <>{item}, </>;
                         })

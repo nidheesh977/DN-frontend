@@ -12,6 +12,8 @@ import "../css/Common.css";
 import "../css/createCompany.css";
 import Axios from "axios";
 import Select from "react-select";
+import { Helmet } from "react-helmet";
+
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -49,12 +51,12 @@ function CreateCompany() {
   useEffect(()=>{
     if (!localStorage.getItem("role")) {
       history.push("/login");
-    } else if (localStorage.getItem("role") !== "company" && localStorage.getItem("role") !== "booster"){
+    }else if (localStorage.getItem("role") !== "company" && localStorage.getItem("role") !== "booster" && localStorage.getItem("role") !== "halfCompany" && localStorage.getItem("role") !== "undefined"){
       history.push("/no-page-found");
     }
     else if (localStorage.getItem("email") !== "true") {
       history.push("/verify-email");
-    } 
+    }
     Axios.get(`${domain}/api/industry/getIndustries`).then((res) => {
       const options = res.data.map((d) => ({
         value: d.industry,
@@ -208,6 +210,11 @@ function CreateCompany() {
 
   return (
     <Container className={All.Container}>
+      <Helmet>
+          <title>Create company</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
       <Row>
         <Col lg={6} className={All.DronePerson}>
           <Hidden xs sm md>

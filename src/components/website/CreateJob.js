@@ -729,6 +729,11 @@ class CreateJob extends Component {
   render() {
     return (
       <section style={{ backgroundColor: "#F8F8FB" }}>
+        <Helmet>
+          <title>Create Job</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
         <div className="s_c_db_main_tabs">
           <Visible md>
             <div style={{ marginTop: "15px" }}></div>

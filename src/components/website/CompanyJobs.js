@@ -15,6 +15,7 @@ import Dialog from "@material-ui/core/Dialog";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import All from "./All.module.css";
 import "../css/CompanyJobs.css"
+import { Helmet } from "react-helmet";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -166,6 +167,11 @@ export default class CompanyJobs extends Component {
   render() {
     return (
       <Container style={{ paddingTop: "30px", paddingBottom: "30px" }}>
+        <Helmet>
+          <title>Company Jobs</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
         <Row>
           <Visible xxl xl lg>
             <Col xxl = {3} xl = {3} lg = {4}>

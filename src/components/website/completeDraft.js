@@ -25,6 +25,7 @@ import PlacesAutocomplete, {
 } from "react-autocomplete-places";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Helmet } from "react-helmet";
 
 const domain = process.env.REACT_APP_MY_API;
 
@@ -457,6 +458,11 @@ class CompleteDraft extends Component {
   render() {
     return (
       <section style={{ backgroundColor: "#F8F8FB" }}>
+        <Helmet>
+          <title>Upload draft</title>
+          <meta charSet="utf-8" />
+          <meta name="description" content="Nested component" />
+        </Helmet>
         <div className="s_c_db_main_tabs">
           <Visible md>
             <div style={{ marginTop: "15px" }}></div>
