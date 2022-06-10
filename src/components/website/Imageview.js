@@ -701,10 +701,11 @@ function handleTouchEnd() {
 
 }
   return (
-    <Container className={`${All.Container}`} onTouchStart={touchStartEvent => handleTouchStart(touchStartEvent)}
+    <Container className={`${All.Container}`}>
+      <Container>
+        <div  onTouchStart={touchStartEvent => handleTouchStart(touchStartEvent)}
     onTouchMove={touchMoveEvent => handleTouchMove(touchMoveEvent)}
     onTouchEnd={() => handleTouchEnd()}>
-      <Container>
         <div style={{ marginTop: "35px" }} onKeyDown={keyPressed} >
           <div
             className="i_v_back"
@@ -1114,6 +1115,7 @@ function handleTouchEnd() {
           }
           
         </Row>
+      </div>
       </div>
       </Container>
       
