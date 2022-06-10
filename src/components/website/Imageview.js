@@ -682,15 +682,17 @@ function handleTouchMove(e) {
 }
 
 function handleTouchEnd() {
-  if(touchStart !== touchEnd){
-    if ((touchStart - touchEnd > 150) &&  (touchStart - touchEnd < 400)) {
+  if(touchStart !== 0 && touchEnd !== 0){
+    console.log(touchStart)
+    console.log(touchEnd)
+    if ((touchStart > touchEnd) && (touchStart - touchEnd > 50) ) {
       // do your stuff here for left swipe
       // moveSliderRight();
       console.log("right Swiped")
       nextImage()
   }
 
-  else if ((touchStart - touchEnd > -150) &&  (touchStart - touchEnd < 50)) {
+  else if ((touchStart < touchEnd) && (touchStart - touchEnd < -50)) {
       // do your stuff here for right swipe
       // moveSliderLeft();
       console.log("left swiped")
