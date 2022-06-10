@@ -666,10 +666,37 @@ function Imageview() {
       }
     })
   }, [ locationKeys, ])
+
+  const [touchStart, setTouchStart] = React.useState(0);
+const [touchEnd, setTouchEnd] = React.useState(0);
+
+function handleTouchStart(e) {
+    setTouchStart(e.targetTouches[0].clientX);
+}
+
+function handleTouchMove(e) {
+    setTouchEnd(e.targetTouches[0].clientX);
+}
+
+function handleTouchEnd() {
+    if (touchStart - touchEnd > 150) {
+        // do your stuff here for left swipe
+        // moveSliderRight();
+        console.log("right Swiped")
+    }
+
+    if (touchStart - touchEnd < -150) {
+        // do your stuff here for right swipe
+        // moveSliderLeft();
+        console.log("left swiped")
+    }
+}
   return (
     <Container className={`${All.Container}`}>
       <Container>
-        <div style={{ marginTop: "35px" }} onKeyDown={keyPressed}>
+        <div style={{ marginTop: "35px" }} onKeyDown={keyPressed} onTouchStart={touchStartEvent => handleTouchStart(touchStartEvent)}
+onTouchMove={touchMoveEvent => handleTouchMove(touchMoveEvent)}
+onTouchEnd={() => handleTouchEnd()}>
           <div
             className="i_v_back"
             style={{
