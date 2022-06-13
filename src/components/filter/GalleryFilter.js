@@ -1288,7 +1288,7 @@ class GalleryFilter extends React.Component {
                     <div
                       className="j_l_applyJobLoginBtn"
                       style={{ width: "fit-content" }}
-                      onClick={() => (window.location.href = "/login")}
+                      onClick={() => (window.location.href = "/#/login")}
                     >
                       Login / Sign Up
                     </div>
