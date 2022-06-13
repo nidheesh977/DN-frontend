@@ -1770,7 +1770,7 @@ class HirePilot extends Component {
                                   <button
                                     className="h_p_start_process_btn"
                                     onClick={() =>
-                                      this.pilotDetailPage(pilot.userName)
+                                      this.pilotDetailPage(pilot.userName) 
                                     }
                                   >
                                     View Profile
