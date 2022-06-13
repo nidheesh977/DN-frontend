@@ -1636,7 +1636,7 @@ class HirePilot extends Component {
                               <div className="h_p_others_container_sm">
                                 <div
                                   className="h_p_listing_name"
-                                  onClick={() => this.pilotDetailPage(1)}
+                                  onClick={() => this.pilotDetailPage(pilot.userName)}
                                   style={{
                                     display: "flex",
                                     alignItem: "center",
