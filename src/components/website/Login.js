@@ -141,6 +141,12 @@ const Login = (props) => {
     }
   };
 
+  const enterFormSubmit = (e) => {
+    if (e.key === "Enter"){
+      handleClick()
+    }
+  }
+
   return (
     <>
       <Helmet>
@@ -175,6 +181,7 @@ const Login = (props) => {
                     id="email"
                     value={email}
                     onChange={handleChange}
+                    onKeyUp = {enterFormSubmit}
                   />
                   <div className="login_input_error_msg" id="email_error">
                     Email ID is required
@@ -192,6 +199,7 @@ const Login = (props) => {
                       id="password"
                       value={password}
                       onChange={handleChange}
+                      onKeyUp = {enterFormSubmit}
                     />
                     <VisibilityIcon
                       className={All.VisibilityIcon}
@@ -199,16 +207,16 @@ const Login = (props) => {
                     />
                   </div>
                   <div className={All.FormGroup}>
-                    <Link to="/ForgotPassword" className={All.Black}>
+                    <div className={All.Black}>
                       <Box
                         className={`${All.Width_74}`}
                         style={{ textAlign: "right", width: "100% !important" }}
                       >
-                        <span className={`${All.FSize_12} ${All.MuliLight}`}>
+                        <Link to="/ForgotPassword" className={`${All.FSize_12} ${All.MuliLight}`}>
                           Forgot Password
-                        </span>
+                        </Link>
                       </Box>
-                    </Link>
+                    </div>
                   </div>
                   <div className="login_input_error_msg" id="password_error">
                     Password is required

@@ -667,7 +667,7 @@ function Imageview() {
     })
   }, [ locationKeys, ])
 
-  const [touchStart, setTouchStart] = React.useState(0);
+const [touchStart, setTouchStart] = React.useState(0);
 const [touchEnd, setTouchEnd] = React.useState(0);
 
 function handleTouchStart(e) {

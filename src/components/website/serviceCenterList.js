@@ -659,6 +659,7 @@ class ServiceCenters extends Component {
 
   handleChange = (address) => {
     this.setState({ address: address });
+    this.setState({ showBrandFilter: false })
   };
 
   handleSelect = (address) => {
@@ -788,7 +789,7 @@ class ServiceCenters extends Component {
               style={{ position: "relative" }}
               onMouseLeave={() => this.setState({ showBrandFilter: false })}
             >
-              <div className="s_c_search_filter_container">
+              <div className="s_c_search_filter_container" >
                 <div
                   className="s_c_filter_container"
                   onMouseOver={() => this.setState({ showBrandFilter: true })}
@@ -843,6 +844,7 @@ class ServiceCenters extends Component {
                             borderEndStartRadius: "10px",
                             borderEndEndRadius: "10px",
                           }}
+                          onMouseOver={() => this.setState({ showBrandFilter: false })}
                         >
                           {loading && <div>Loading...</div>}
                           {suggestions.map((suggestion) => {

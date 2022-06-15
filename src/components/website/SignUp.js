@@ -47,6 +47,8 @@ function SignUp(props) {
     setValue1(value);
     console.log(value);
 
+    document.getElementById(`country_error`).style.display = "none";
+
     setFormValues({
       ...formValues,
       ["country"]: value.label,
@@ -101,7 +103,7 @@ function SignUp(props) {
   const history = useHistory();
   const onSubmit = (event) => {
     if (value) {
-      if (accept_conditions) {
+      if (accept_conditions && !isLoading) {
         setLoading(true);
 
         axios
@@ -285,6 +287,10 @@ function SignUp(props) {
       } else {
         raiseError("email", "Email ID is not valid");
       }
+    }
+
+    if (formValues.country === ""){
+      raiseError("country", "Country is required");
     }
 
     if (

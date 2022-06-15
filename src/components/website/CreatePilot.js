@@ -53,7 +53,7 @@ function CreatePilot() {
     email: "",
     phone: "+91",
     dob: "",
-    gender: "Male",
+    gender: "",
     address: "",
     city: "",
     preferred_location: "",
@@ -713,7 +713,7 @@ let handleChange1 = (e) =>{
                     disabled={!edit}
                     style={{ width: "100%" }}
                   >
-                    <option selected disabled>
+                    <option selected value="" disabled = {data.gender !== ""}>
                       Select Gender
                     </option>
                     <option value="Male">Male</option>
@@ -909,7 +909,7 @@ let handleChange1 = (e) =>{
                     </label>
                     <input
                       type="month"
-                      max="2022-03"
+                      max={String(new Date().getFullYear())+"-"+(new Date().getMonth()+1 < 10?"0"+String(new Date().getMonth()+1):String(new Date().getMonth()+1))}
                       className="pd_b_i_profile_input"
                       id="completed_year"
                       name="completed_year"
@@ -952,7 +952,7 @@ let handleChange1 = (e) =>{
                   className="pd_b_i_profile_head"
                   style={{ cursor: "pointer" }}
                 >
-                  Experience
+                  Experience (if any)
                 </label>
                 <Row>
                   <Col>
