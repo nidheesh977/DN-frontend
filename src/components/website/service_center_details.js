@@ -624,6 +624,7 @@ export default function ServiceCenterDetails(props) {
                 border: "5px solid white",
                 boxShadow: "5px 5px 5px #ccc",
               }}
+              id="profile_s_c"
             />
           </div>
 
