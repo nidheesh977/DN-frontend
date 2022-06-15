@@ -772,10 +772,10 @@ function handleTouchEnd() {
               />
             )}
             
-            <div style={{position:"absolute", top: "calc(50% - 30px)",right: "0px", cursor: "pointer", fontSize:"40px", padding: "5px", backgroundColor: "#eeeeee80"}} onClick={nextImage} id="mainImageRight">
+            <div style={{position:"absolute", top: "calc(50% - 30px)",right: "-30px", cursor: "pointer", fontSize:"40px", padding: "5px", backgroundColor: "#eeeeee80"}} onClick={nextImage} id="mainImageRight">
               <i class="fas fa-angle-right"></i>
               </div>
-              <div style={{position:"absolute", top: "calc(50% - 30px)", cursor: "pointer", fontSize:"40px", padding: "5px", backgroundColor: "#eeeeee80"}} onClick={previousImage} id="mainImageLeft">
+              <div style={{position:"absolute", top: "calc(50% - 30px)",left: "-30px", cursor: "pointer", fontSize:"40px", padding: "5px", backgroundColor: "#eeeeee80"}} onClick={previousImage} id="mainImageLeft">
               <i class="fas fa-angle-left"></i>
               </div>
             <div style={{ position: "absolute", top: "35px", right: "0px", backgroundColor: "rgba(255,255,255,0.6)", padding: "10px", borderRadius: "0px 0px 0px 15px" }}>
