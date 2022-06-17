@@ -1,7 +1,6 @@
 {
   "name": "dn-v1",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.1.0",  "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@ckeditor/ckeditor5-build-classic": "^34.0.0",
