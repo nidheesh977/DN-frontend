@@ -851,7 +851,6 @@ class GalleryFilter extends React.Component {
                       gutterWidth={0}
                       style={{
                         margin: "auto",
-                        maxWidth: "80%",
                         marginTop: "35px",
                       }}
                       id="filterRow"
