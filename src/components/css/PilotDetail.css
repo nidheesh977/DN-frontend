@@ -565,4 +565,7 @@ position: relative;
 .p_d_btn{
   float: right
 }
+.p_d_about_name_container{
+  margin-top: 10px;
+}
 }
