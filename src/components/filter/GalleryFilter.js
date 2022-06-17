@@ -934,11 +934,6 @@ class GalleryFilter extends React.Component {
                         </div>
                       ) : (
                         <>
-                          <Box>
-                            <h5 className={All.Bold}>
-                              Check the talent of other droners
-                            </h5>
-                          </Box>
                           <div className="Filters" id="main_div">
                             <SearchResults
                               value={value}

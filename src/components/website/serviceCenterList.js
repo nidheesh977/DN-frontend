@@ -786,7 +786,7 @@ class ServiceCenters extends Component {
               </button>
             </div> */}
             <div
-              style={{ position: "relative" }}
+              style={{ position: "relative", marginTop: !localStorage.getItem("access_token")||localStorage.getItem("role") === "booster"?"0px":"20px" }}
               onMouseLeave={() => this.setState({ showBrandFilter: false })}
             >
               <div className="s_c_search_filter_container" >

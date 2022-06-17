@@ -195,10 +195,6 @@
   margin-bottom: 60px;
 }
 
-.p_d_about_name_container{
-  margin-top: 55px;
-}
-
 .p_d_about_details_title{
   font-size: 16px;
   font-family: muli-bold;
@@ -568,4 +564,30 @@ position: relative;
 .p_d_about_name_container{
   margin-top: 10px;
 }
+}
+
+.p_d_tab_mobile_container{
+  display: flex;
+  overflow-x: scroll;
+  
+}
+
+.p_d_tab_mobile_container::-webkit-scrollbar {
+  height: 3px;
+  width: 40px;
+}
+
+.p_d_tab_mobile_container::-webkit-scrollbar-thumb {
+  background: rgb(202, 202, 202);
+  border-radius: 10px;
+}
+
+.p_d_tab_mobile_container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+@media only screen and (max-width: 991px){
+  .p_d_tabs_left{
+    width: 100%;
+  }
 }

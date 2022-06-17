@@ -841,34 +841,71 @@ export default function PilotDetails(props) {
                 </div>
               </Visible>
               <Visible md sm xs>
-                <div className="p_d_tab_filter_title">Select Tab : </div>
-                <select
-                  className="p_d_tab_filter"
-                  onChange={selectCategoryDropdown}
-                  style={{ cursor: "pointer" }}
-                >
-                  <option value={1} selected={category === 1}>
+                <div className="p_d_tab_mobile_container">
+                  <div
+                    className={
+                      category === 1 ? "p_d_tab p_d_tab_selected" : "p_d_tab"
+                    }
+                    id="s_c_d_about_tab"
+                    onClick={() => selectCategory(1)}
+                  >
                     All
-                  </option>
-                  <option value={2} selected={category === 2}>
+                  </div>
+                  <div
+                    className={
+                      category === 2 ? "p_d_tab p_d_tab_selected" : "p_d_tab"
+                    }
+                    id="pd_brands_tab"
+                    onClick={() => selectCategory(2)}
+                  >
                     Images
-                  </option>
-                  <option value={3} selected={category === 3}>
-                    Video
-                  </option>
-                  <option value={4} selected={category === 4}>
-                    3D Models
-                  </option>
-                  <option value={5} selected={category === 5}>
+                  </div>
+                  <div
+                    className={
+                      category === 3 ? "p_d_tab p_d_tab_selected" : "p_d_tab"
+                    }
+                    id="pd_reviews_tab"
+                    onClick={() => selectCategory(3)}
+                  >
+                    Videos
+                  </div>
+                  <div
+                    className={
+                      category === 4 ? "p_d_tab p_d_tab_selected" : "p_d_tab"
+                    }
+                    id="pd_reviews_tab"
+                    onClick={() => selectCategory(4)}
+                  >
+                    3D
+                  </div>
+                  <div
+                    className={
+                      category === 5 ? "p_d_tab p_d_tab_selected" : "p_d_tab"
+                    }
+                    id="pd_reviews_tab"
+                    onClick={() => selectCategory(5)}
+                  >
                     About
-                  </option>
-                  <option value={6} selected={category === 6}>
+                  </div>
+                  <div
+                    className={
+                      category === 6 ? "p_d_tab p_d_tab_selected" : "p_d_tab"
+                    }
+                    id="pd_reviews_tab"
+                    onClick={() => selectCategory(6)}
+                  >
                     Followers
-                  </option>
-                  <option value={7} selected={category === 7}>
+                  </div>
+                  <div
+                    className={
+                      category === 7 ? "p_d_tab p_d_tab_selected" : "p_d_tab"
+                    }
+                    id="pd_reviews_tab"
+                    onClick={() => selectCategory(7)}
+                  >
                     Following
-                  </option>
-                </select>
+                  </div>
+                </div>
               </Visible>
             </div>
             <Visible xxl xl lg>
@@ -1485,6 +1522,7 @@ export default function PilotDetails(props) {
                               alt=""
                               height={"100px"}
                               width={"100px"}
+                              style = {{borderRadius: "50px"}}
                             />
                           </div>
                           <div className="p_d_followers_other_details_md">
