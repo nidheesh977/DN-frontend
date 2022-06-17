@@ -1,6 +1,6 @@
 import React from "react";
 import Filter from "../images/Filter.svg";
-import { Container, Row, Col } from "react-grid-system";
+import { Container, Row, Col, Visible } from "react-grid-system";
 import All from "../website/All.module.css";
 import Box from "@material-ui/core/Box";
 import axios from "axios";
@@ -799,13 +799,9 @@ class GalleryFilter extends React.Component {
                   </Col>
                 </Row>
                 <div id="FilterDropdowns" style={{ display: "none" }}>
-                  {/* <Row  gutterWidth={20}>
-                    <Col lg = {3}><div className="g_f_filter" onClick = {() => dropdown(1)}>Select Country <span className='g_f_dropdown_icon'><img src={DropDownPng} alt="" height={"14px"} id="g_f_dropdown_icon1" /></span></div></Col>
-                    <Col lg = {3}><div className="g_f_filter" onClick = {() => dropdown(2)}>Select City <span className='g_f_dropdown_icon'><img src={DropDownPng} alt="" height={"14px"} id="g_f_dropdown_icon2" /></span></div></Col>
-                    <Col lg = {3}><div className="g_f_filter" onClick = {() => dropdown(3)}>Select Industry <span className='g_f_dropdown_icon'><img src={DropDownPng} alt="" height={"14px"} id="g_f_dropdown_icon3" /></span></div></Col>
-                    <Col ><button className="g_f_btn1" style = {{margin: "10px 0", borderRadius: "20px !important"}}>Search</button></Col>
-                  </Row> */}
+                <Visible xl xxl>
                   <Container>
+                 
                     <Row
                       gutterWidth={0}
                       style={{
@@ -847,69 +843,53 @@ class GalleryFilter extends React.Component {
                           onClick={this.submitted}
                         />
                       </Col>
-
-                      {/* <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
-                      <select
-                        className="g_f_filter"
-                        id="g_f_filter1"
-                        onFocus={() => dropdown_open(1)}
-                        onBlur={() => dropdown_close(1)}
-                        onChange={() => dropdown_select(1)}
-                      >
-                        <option disabled selected>
-                          Select Country
-                        </option>
-                        <option>India</option>
-                        <option>China</option>
-                        <option>Russia</option>
-                      </select>
-                   
-                    </Col>
-                    <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
-                      <select
-                        className="g_f_filter"
-                        id="g_f_filter2"
-                        onFocus={() => dropdown_open(2)}
-                        onBlur={() => dropdown_close(2)}
-                        onChange={() => dropdown_select(2)}
-                      >
-                        <option disabled selected>
-                          Select City
-                        </option>
-                        <option>Bangalore</option>
-                        <option>Chennai</option>
-                        <option>Mumbai</option>
-                      </select>
-                    </Col>
-                    <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
-                      <select
-                        className="g_f_filter"
-                        id="g_f_filter3"
-                        onFocus={() => dropdown_open(3)}
-                        onBlur={() => dropdown_close(3)}
-                        onChange={() => dropdown_select(3)}
-                      >
-                        <option disabled selected>
-                          Select Industry
-                        </option>
-                        <option>Nexevo</option>
-                        <option>Nexevo technologies</option>
-                        <option>Nexevo tech</option>
-                      </select>
-                    </Col>
-                    <Col xxl={3} xl={3} lg={3} md={6} sm={6} xs={12}>
-                      <button
-                        className="g_f_btn1"
-                        style={{
-                          margin: "10px 0",
-                          borderRadius: "20px !important",
-                        }}
-                      >
-                        Search
-                      </button>
-                    </Col> */}
                     </Row>
                   </Container>
+                  </Visible>
+                  <Visible xs sm md lg >
+                  <Row
+                      gutterWidth={0}
+                      style={{
+                        margin: "auto",
+                        maxWidth: "80%",
+                        marginTop: "35px",
+                      }}
+                      id="filterRow"
+                    >
+                      <Col lg={2} xs={4}>
+                        <select
+                          className="g_f_searchBox1"
+                          style={{ width: "100%" }}
+                          onChange={this.dropdownChanged}
+                        >
+                          <option value="all">All Media</option>
+                          <option value="image">Images</option>
+                          <option value="video">Videos</option>
+                          <option value="3d">3D Videos</option>
+                        </select>
+                      </Col>
+                      <Col>
+                        <form onSubmit={this.submitted}>
+                          <input
+                            className="g_f_searchBox2"
+                            type="text"
+                            style={{ width: "105%" }}
+                            id="main_search"
+                            placeholder="Enter Keywords to match your search"
+                            onChange={this.keywordsClicked}
+                          />
+                        </form>
+                      </Col>
+                      <Col lg={0.5} xs={0.5}>
+                        <img
+                          src={Search}
+                          id="main_search_mag"
+                          style={{ cursor: "pointer" }}
+                          onClick={this.submitted}
+                        />
+                      </Col>
+                    </Row>
+                  </Visible>
                 </div>
 
                 <div className="GalleryTitle">

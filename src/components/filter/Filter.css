@@ -690,4 +690,7 @@ background: none;
         height: 35px;
         margin-top: 10px;
       }
+      #filterRow{
+        max-width: 100% !important;
+      }
     }
