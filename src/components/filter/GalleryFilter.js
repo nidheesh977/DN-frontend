@@ -842,7 +842,7 @@ class GalleryFilter extends React.Component {
                           style={{ cursor: "pointer" }}
                           onClick={this.submitted}
                         />
-                      </Col>
+                      </Col> 
                     </Row>
                   </Container>
                   </Visible>
