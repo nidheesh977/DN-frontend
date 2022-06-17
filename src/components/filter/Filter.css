@@ -685,6 +685,7 @@ background: none;
         max-width: 100%;
       }
     }
+    
     @media only screen and (max-width: 500px) {
       #main_search_mag{
         height: 35px;
