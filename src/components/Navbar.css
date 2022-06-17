@@ -1,7 +1,7 @@
 .navbar {
   background: linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%);
   /* background: black; */
-  height: 25px;
+  height: 10px;
   display: flex;
   justify-content: left;
   align-items: center;
@@ -22,7 +22,7 @@ nav ul a {
 }
 
 .navbar_sticky{
-  padding-bottom: 75px;
+  padding-bottom: 50px;
 }
 
 .MuiFab-primary {
